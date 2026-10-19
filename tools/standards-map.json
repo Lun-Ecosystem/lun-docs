@@ -1,5 +1,5 @@
 {
-  "lun-ecosysteme": ["vision.md", "standards/essentiel.md"],
+  "lun-ecosysteme": ["vision.md", "standards/essentiel.md", "standards/contrat-satellite.md"],
   "lun-design": ["standards/design.md"],
   "lun-chantier": ["standards/workflow.md", "standards/essentiel.md"],
   "lun-inbox": ["standards/workflow.md"],

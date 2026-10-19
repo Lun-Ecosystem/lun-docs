@@ -46,3 +46,9 @@ l'historique. Ces valeurs vivent dans des `.env` non versionnés.
 ## 7. La doc suit le code
 
 Toute modification visible met à jour `docs/` dans le même commit.
+
+## 8. Un satellite opère, le core relaie
+
+Un satellite porte sa logique métier et fonctionne seul ; le core s'y branche par le
+[contrat satellite](contrat-satellite.md) et ne réimplémente jamais ce qu'il fait. Une vue métier
+n'existe qu'en un exemplaire, publiée par le satellite qui la possède.

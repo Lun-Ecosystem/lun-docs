@@ -20,6 +20,9 @@ et peuvent être câblés au core.**
   passe par son contrat. Une boîte mail, un agent ou une logique de tri en double est un défaut, pas
   une option.
 - Une surface (panel, mobile) **affiche et pilote** ; elle ne porte pas de logique métier propre.
+- Le branchement passe par le contrat commun : `references/contrat-satellite.md` (routes `/lun/v1`,
+  appairage, pause, coûts, événements SSE, vues publiées en paquet). Un front autonome ne connaît que
+  son satellite ; les apps de Lun'Anima intègrent les vues sans les réécrire.
 
 ## Quand une question d'architecture se pose
 
