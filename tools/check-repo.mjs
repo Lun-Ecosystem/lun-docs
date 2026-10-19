@@ -11,6 +11,10 @@ export const REQUIRED_FILES = [
   'standards/workflow.md',
   'standards/git.md',
   'standards/environnements.md',
+  'standards/structure-projet.md',
+  'standards/qualite.md',
+  'standards/securite.md',
+  'standards/stack.md',
   'LICENSE',
   'docs/specs/2026-10-19-referentiel-design.md',
 ];
