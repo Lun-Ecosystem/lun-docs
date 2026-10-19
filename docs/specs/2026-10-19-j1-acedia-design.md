@@ -155,9 +155,10 @@ Prototype de comportement validé (maquette du brainstorming, à affiner ; les �
   chiffrement des secrets, appels Gmail, notions de journal et de garde), pas de base : il ne
   synchronise pas par historique, stocke en fichiers et a grossi autour de connecteurs hors MVP.
   **[choix Claude, conformément à la spec §5 : « reprendre ou réécrire se décide au début de J1 »]**
-- **Dépôt** : `CrOliX-AltF4/LunAcedia` transféré dans `Lun-Ecosystem` (historique conservé, renommé
-  `lun-acedia` **[choix Claude]**), contenu remplacé par la réécriture via PR. Le transfert est fait
-  par CrOliX. `registry.yaml` mis à jour.
+- **Dépôt** : **nouveau dépôt public `Lun-Ecosystem/lun-acedia`**, créé depuis le gabarit, comme
+  `lun-anima`. L'ancien `CrOliX-AltF4/LunAcedia` reste intact, en lecture seule, comme référence
+  (archivé plus tard par CrOliX). `registry.yaml` pointe vers le nouveau dépôt. (Décidé avec
+  CrOliX ; remplace le « transfert » de la spec de l'écosystème.)
 - **Synchro** : rien n'est exposé sur internet, donc pas de push Google (Pub/Sub). Interrogation
   périodique incrémentale : historique Gmail, jetons de synchro de l'Agenda, date de mise à jour pour
   Tasks. Fréquence laissée au constructeur ; une action faite dans Acedia est visible tout de suite.
@@ -200,7 +201,7 @@ Prouvés en local avec le compte de test, captures ou enregistrements dans la PR
     reprise, invoque une action.
 14. Le front autonome s'installe sur un téléphone Android (PWA) et fonctionne sur le réseau local.
 15. Le paquet de vues est publié et importable par un projet tiers.
-16. Le dépôt est dans l'organisation, CI verte, registre à jour.
+16. Le dépôt `Lun-Ecosystem/lun-acedia` existe, CI verte, ruleset actif, registre à jour.
 
 ## 10. Laissé au constructeur
 
@@ -213,4 +214,5 @@ clavier, détail visuel dans le cadre de `standards/design.md`.
 - Tableau des briques (§5) : Acedia couvre Gmail, Agenda, Tasks, Drive ; GitHub, RSS et Home
   Assistant sortent de son périmètre MVP (GitHub ira à un futur satellite).
 - Tableau des frontières : la boîte ne contient plus les notifications GitHub.
-- Ancien code d'Acedia : décision prise, réécriture (§8 ci-dessus).
+- Ancien code d'Acedia : décision prise, réécriture dans un nouveau dépôt (§8 ci-dessus) ; le jalon
+  J1 dit « dans l'organisation », pas « transférée ».
