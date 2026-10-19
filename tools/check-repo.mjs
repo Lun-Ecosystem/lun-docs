@@ -18,6 +18,7 @@ export const REQUIRED_FILES = [
   'standards/qualite.md',
   'standards/securite.md',
   'standards/stack.md',
+  'standards/contrat-satellite.md',
   'standards/design.md',
   'adr/README.md',
   'adr/0001-referentiel-et-methode.md',
