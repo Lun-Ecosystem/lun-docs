@@ -1,24 +1,52 @@
 # Stack
 
-> **Squelette : rempli à l'étape 2** (planification), une fois l'architecture core/satellites posée.
-> Le choix de stack dépend de l'architecture, pas l'inverse. Chaque choix renverra à un ADR.
+> Choix communs de l'écosystème, décidés à l'étape 2 : [ADR 0002](../adr/0002-stack.md). Un projet
+> qui s'en écarte le justifie par un ADR dans `docs/decisions/`.
 
 ## Langages
 
-_À définir._
+- **TypeScript** partout côté serveur et front, en mode strict.
+- **Node.js** : `^22.13.0 || >=24` ; la CI et les images de prod utilisent la LTS 24.
+- **Python** seulement pour les services externes qui l'imposent (RVC). Lun'Gula, existant, reste en
+  Python.
 
 ## Frameworks
 
-_À définir : core, panel desktop, application mobile, satellites._
+| Usage | Choix |
+|---|---|
+| Serveurs (core, satellites) | Node + TypeScript ; le framework HTTP est choisi par le premier projet qui en a besoin, par un ADR |
+| Front (apps de Lun'Anima, fronts autonomes des satellites) | Svelte 5 + Vite, tokens de [`design.md`](design.md) |
+| App desktop | Tauri 2 (zone de notification, démarrage, mises à jour, services lancés sans console) |
+| App mobile | Capacitor, Android |
+| Website | Astro |
+| Vues partagées | un satellite publie ses vues métier en paquet de composants Svelte (standard du contrat satellite) |
 
 ## Données
 
-_À définir : stockage, mémoire vectorielle, fiches façon Obsidian._
+- **SQLite** pour l'état de chaque service : un utilisateur, une instance. Pas de fichiers JSON comme
+  stockage.
+- **Cerveau** : fichiers Markdown (convention Obsidian) indexés dans SQLite ; la recherche sémantique
+  passe par une API ou un modèle très léger (le NAS n'héberge rien de lourd).
 
 ## Outillage qualité
 
-_À définir : format, lint, typage, tests, hooks (voir [`qualite.md`](qualite.md))._
+Tout projet TypeScript part de [`templates/ts/`](../templates/ts/), par-dessus `templates/project/` :
+
+| Barrière | Outil | Script |
+|---|---|---|
+| Format | Prettier (`printWidth` 110, guillemets simples ; Markdown exclu) | `format:check` |
+| Lint | ESLint, config plate, `typescript-eslint` recommandé | `lint` |
+| Typage | `tsc --noEmit`, `strict`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` | `typecheck` |
+| Tests | Vitest | `test` |
+| Commits | hook `commit-msg` (Conventional Commits) ; titre de PR vérifié en CI | — |
+| Adresses internes | `tools/check-repo.mjs --addresses .` de lun-docs, en CI | — |
+
+Les hooks s'activent avec `git config core.hooksPath hooks` : `pre-commit` (format et lint),
+`commit-msg`, `pre-push` (refuse `main`). TypeScript reste en 6.0 tant que `typescript-eslint` ne
+prend pas en charge la 7. L'outillage de lun-docs lui-même reste sans dépendance (`node:test`).
 
 ## Déploiement
 
-_À définir dans le cadre de [`environnements.md`](environnements.md) : image Docker sur GHCR, NAS._
+Dans le cadre de [`environnements.md`](environnements.md) : image Docker **amd64** publiée sur GHCR
+au tag de version, récupérée par le NAS (UGREEN DXP2800, Intel N100). Les apps desktop et mobile se
+distribuent par les releases GitHub de leur dépôt.

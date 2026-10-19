@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { checkRequiredFiles, checkMaxLines, checkNoInternalAddresses } from './check-repo.mjs';
 
 function fixture(files) {
@@ -88,4 +90,34 @@ test('checkNoInternalAddresses scans any text file, whatever its extension', () 
 test('checkNoInternalAddresses skips binary files', () => {
   const root = fixture({ 'logo.png': 'PNG\u0000\u0001 192.168.1.1' });
   assert.deepEqual(checkNoInternalAddresses(root), []);
+});
+
+const CLI = fileURLToPath(new URL('./check-repo.mjs', import.meta.url));
+
+function gitRepo(files) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'lun-addr-'));
+  for (const [name, text] of Object.entries(files)) fs.writeFileSync(path.join(root, name), text);
+  execFileSync('git', ['init', '-q'], { cwd: root });
+  execFileSync('git', ['add', '.'], { cwd: root });
+  return root;
+}
+
+function runCli(args) {
+  try {
+    return { code: 0, out: execFileSync(process.execPath, [CLI, ...args], { encoding: 'utf8', stdio: 'pipe' }) };
+  } catch (e) {
+    return { code: e.status, out: `${e.stdout}${e.stderr}` };
+  }
+}
+
+test('--addresses scans another repo and fails on a private IP', () => {
+  const root = gitRepo({ 'config.md': 'host: 192.168.1.20\n' });
+  const { code, out } = runCli(['--addresses', root]);
+  assert.equal(code, 1);
+  assert.match(out, /config\.md:1/);
+});
+
+test('--addresses passes on a repo without internal address', () => {
+  const root = gitRepo({ 'README.md': '# Clean\n' });
+  assert.equal(runCli(['--addresses', root]).code, 0);
 });
