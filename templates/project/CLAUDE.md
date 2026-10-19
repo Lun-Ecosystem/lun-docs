@@ -1,7 +1,7 @@
 # <Nom du projet>
 
 > Projet de l'écosystème Lun'. Les règles communes (méthode, git, qualité, design) viennent du plugin
-> `lun` et de [lun-docs](https://github.com/CrOliX-AltF4/lun-docs), qui font foi. Ce fichier ne garde
+> `lun` et de [lun-docs](https://github.com/Lun-Ecosystem/lun-docs), qui font foi. Ce fichier ne garde
 > que ce qui est propre à ce projet. 100 lignes maximum.
 
 ## Ce projet

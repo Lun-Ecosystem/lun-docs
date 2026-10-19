@@ -8,7 +8,7 @@ import { checkRegistry, checkAdrs } from './check-registry.mjs';
 const project = (fields) =>
   '  - ' + Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join('\n    ') + '\n';
 
-const valid = { id: 'core', nom: "Lun'Core", role: 'core', depot: 'CrOliX-AltF4/core', visibilite: 'prive', etat: 'actif' };
+const valid = { id: 'core', nom: "Lun'Core", role: 'core', depot: 'Lun-Ecosystem/core', visibilite: 'prive', etat: 'actif' };
 
 test('checkRegistry accepts an empty registry', () => {
   assert.deepEqual(checkRegistry('version: 1\nprojets: []\n'), []);

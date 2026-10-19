@@ -17,7 +17,7 @@ Aucune dépendance au NAS : tout tourne sur le poste.
 
 - [`docs/`](docs/) : ce que fait le projet aujourd'hui (utilisateur, technique, exploitation).
 - [`docs/decisions/`](docs/decisions/) : les décisions propres au projet.
-- Règles communes : [lun-docs](https://github.com/CrOliX-AltF4/lun-docs).
+- Règles communes : [lun-docs](https://github.com/Lun-Ecosystem/lun-docs).
 
 ## Contribuer
 

@@ -1,7 +1,7 @@
 {
   "extraKnownMarketplaces": {
     "lun-docs": {
-      "source": { "source": "github", "repo": "CrOliX-AltF4/lun-docs" }
+      "source": { "source": "github", "repo": "Lun-Ecosystem/lun-docs" }
     }
   },
   "enabledPlugins": {

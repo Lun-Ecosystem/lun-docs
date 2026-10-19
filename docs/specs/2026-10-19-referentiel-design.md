@@ -73,7 +73,7 @@ source d'inspiration consultée au cas par cas.
   Opus 5.5 (défaut), Sonnet 5.5, Haiku 5.5, **Fable 5**.
 - Échéance VIP : **31/12/2026** (~10 semaines au 2026-10-19). Le référentiel doit être léger à
   produire : il est le socle, pas le livrable.
-- GitHub : compte `CrOliX-AltF4`.
+- GitHub : organisation `Lun-Ecosystem` pour tous les dépôts de l'écosystème **[CrOliX, 2026-10-19]** ; le compte perso `CrOliX-AltF4` garde le website et les anciens projets, archivés en lecture seule.
 - DA imposée : celle du website (`D:\projets\projets perso\website`), aussi présente sur le mobile et
   le desktop.
 

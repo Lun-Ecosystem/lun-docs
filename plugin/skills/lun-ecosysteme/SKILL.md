@@ -29,4 +29,4 @@ et peuvent être câblés au core.**
 3. Un nouveau projet s'inscrit dans `registry.yaml` et part de `templates/project/` de lun-docs.
 
 Lire le registre sans clone local :
-`gh api repos/CrOliX-AltF4/lun-docs/contents/registry.yaml -H "Accept: application/vnd.github.raw"`
+`gh api repos/Lun-Ecosystem/lun-docs/contents/registry.yaml -H "Accept: application/vnd.github.raw"`

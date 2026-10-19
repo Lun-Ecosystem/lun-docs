@@ -28,7 +28,7 @@ En cas de conflit entre lun-docs et un projet, lun-docs fait foi, ou on le chang
 Les gabarits de projet déclarent déjà la marketplace dans `.claude/settings.json`. À la main :
 
 ```
-/plugin marketplace add CrOliX-AltF4/lun-docs
+/plugin marketplace add Lun-Ecosystem/lun-docs
 /plugin install lun@lun-docs
 ```
 
