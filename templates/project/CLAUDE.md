@@ -6,7 +6,7 @@
 
 ## Ce projet
 
-- **Rôle** : <core | satellite>, inscrit dans `registry.yaml` de lun-docs.
+- **Rôle** : <core | satellite | vitrine>, inscrit dans `registry.yaml` de lun-docs.
 - **Possède** : <les fonctions dont ce projet est le seul propriétaire>.
 - **Ne possède pas** : <ce qu'il consomme d'un autre projet, et par quel contrat>.
 
