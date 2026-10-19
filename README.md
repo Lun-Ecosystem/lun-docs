@@ -48,6 +48,7 @@ gh repo create Lun-Ecosystem/<nom> --private|--public --add-readme
 git clone https://github.com/Lun-Ecosystem/<nom> && cd <nom> && git switch -c chore/socle
 cp -r <lun-docs>/templates/project/. .
 cp -r <lun-docs>/templates/ts/. .      # projet TypeScript (voir standards/stack.md)
+git add hooks && git update-index --chmod=+x hooks/*   # Windows perd le bit exécutable à la copie
 git config core.hooksPath hooks
 sh <lun-docs>/tools/setup-github.sh Lun-Ecosystem/<nom>
 ```
