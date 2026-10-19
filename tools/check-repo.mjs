@@ -15,6 +15,7 @@ export const REQUIRED_FILES = [
   'standards/qualite.md',
   'standards/securite.md',
   'standards/stack.md',
+  'standards/design.md',
   'LICENSE',
   'docs/specs/2026-10-19-referentiel-design.md',
 ];
