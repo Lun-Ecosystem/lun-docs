@@ -5,9 +5,13 @@
   "description": "Référentiel central de l'écosystème Lun' : standards, méthode et plugin Claude Code.",
   "type": "module",
   "license": "MIT",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "test": "node --test \"tools/**/*.test.mjs\" \"plugin/hooks/*.test.mjs\"",
-    "check": "node tools/check-repo.mjs"
+    "check": "node tools/check-repo.mjs",
+    "sync": "node tools/sync-standards.mjs",
+    "sync:check": "node tools/sync-standards.mjs --check"
   }
 }
