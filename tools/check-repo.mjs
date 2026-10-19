@@ -8,6 +8,9 @@ export const REQUIRED_FILES = [
   'README.md',
   'vision.md',
   'standards/essentiel.md',
+  'standards/workflow.md',
+  'standards/git.md',
+  'standards/environnements.md',
   'LICENSE',
   'docs/specs/2026-10-19-referentiel-design.md',
 ];
