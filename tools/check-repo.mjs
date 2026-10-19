@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkRegistry, checkAdrs } from './check-registry.mjs';
 
 export const REQUIRED_FILES = [
   'README.md',
@@ -16,6 +17,10 @@ export const REQUIRED_FILES = [
   'standards/securite.md',
   'standards/stack.md',
   'standards/design.md',
+  'adr/README.md',
+  'adr/0001-referentiel-et-methode.md',
+  'registry.yaml',
+  'community-skills.md',
   'LICENSE',
   'docs/specs/2026-10-19-referentiel-design.md',
 ];
@@ -90,6 +95,10 @@ export function runAll(root) {
     ...checkRequiredFiles(root, REQUIRED_FILES),
     ...checkMaxLines(root, 'standards', 150),
     ...checkNoInternalAddresses(root),
+    ...checkAdrs(root),
+    ...(fs.existsSync(path.join(root, 'registry.yaml'))
+      ? checkRegistry(fs.readFileSync(path.join(root, 'registry.yaml'), 'utf8'))
+      : []),
   ];
 }
 
