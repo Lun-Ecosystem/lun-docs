@@ -8,15 +8,54 @@
 # Champs obligatoires par projet :
 #   id          identifiant court, en minuscules
 #   nom         nom affiché (« Lun'Xxx »)
-#   role        core | satellite (un seul core)
+#   role        core | satellite | vitrine | referentiel (un seul core)
 #   depot       owner/nom sur GitHub
 #   visibilite  public | prive
-#   etat        actif | en-pause | archive
+#   etat        actif | en-dev | en-pause | archive
 # Champs optionnels : description, stack, contrats (ce que le projet expose au core).
 #
 # Vérifié par : npm run check
-# Les projets de l'étape 2 s'ajoutent ici à leur création.
+# Un projet s'ajoute ici à sa création ; les id reprennent ceux du website, qui lit ce fichier au build.
 # =============================================================================
 version: 1
 
-projets: []
+projets:
+  - id: lun-docs
+    nom: "Lun'Docs"
+    role: referentiel
+    depot: Lun-Ecosystem/lun-docs
+    visibilite: public
+    etat: actif
+    description: "Référentiel commun : normes, méthode, registre et plugin Claude Code lun."
+
+  - id: website
+    nom: "Lun'Ecosystem (site)"
+    role: vitrine
+    depot: Lun-Ecosystem/website
+    visibilite: prive
+    etat: actif
+    description: "Vitrine FR/EN de l'écosystème et de Natsume."
+
+  - id: lunacedia
+    nom: "Lun'Acedia"
+    role: satellite
+    depot: CrOliX-AltF4/LunAcedia
+    visibilite: public
+    etat: en-dev
+    description: "Serveur de la journée : mails, agenda, tâches, GitHub, RSS, Home Assistant, triés à la source."
+
+  - id: lunira
+    nom: "Lun'Ira"
+    role: satellite
+    depot: CrOliX-AltF4/LunIra
+    visibilite: public
+    etat: actif
+    description: "CLI multi-agents qui transforme une intention en code livrable."
+
+  - id: lungula
+    nom: "Lun'Gula"
+    role: satellite
+    depot: CrOliX-AltF4/LunGula
+    visibilite: public
+    etat: en-pause
+    description: "Apprentissage par imitation : des replays humains entrent, un modèle ONNX sort."

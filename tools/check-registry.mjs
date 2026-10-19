@@ -4,7 +4,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const REQUIRED = ['id', 'nom', 'role', 'depot', 'visibilite', 'etat'];
-const ENUMS = { role: ['core', 'satellite'], visibilite: ['public', 'prive'] };
+const ENUMS = {
+  role: ['core', 'satellite', 'vitrine', 'referentiel'],
+  visibilite: ['public', 'prive'],
+  etat: ['actif', 'en-dev', 'en-pause', 'archive'],
+};
 
 function parseProjects(yamlText) {
   const projects = [];

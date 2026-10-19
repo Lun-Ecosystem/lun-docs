@@ -34,6 +34,24 @@ test('checkRegistry reports two cores', () => {
   assert.ok(checkRegistry(text).some((e) => e.includes('more than one core')));
 });
 
+test('checkRegistry accepts the new roles', () => {
+  const text =
+    'projets:\n' +
+    project({ ...valid, id: 'website', role: 'vitrine' }) +
+    project({ ...valid, id: 'lun-docs', role: 'referentiel', visibilite: 'public' });
+  assert.deepEqual(checkRegistry(text), []);
+});
+
+test('checkRegistry rejects an unknown etat', () => {
+  const errors = checkRegistry('projets:\n' + project({ ...valid, etat: 'brouillon' }));
+  assert.ok(errors.some((e) => e.includes('etat')), errors.join('\n'));
+});
+
+test('checkRegistry rejects an unknown role', () => {
+  const errors = checkRegistry('projets:\n' + project({ ...valid, role: 'app' }));
+  assert.ok(errors.some((e) => e.includes('role')), errors.join('\n'));
+});
+
 test('checkRegistry ignores comments', () => {
   assert.deepEqual(checkRegistry('# header\nprojets:\n  # a comment\n' + project(valid)), []);
 });

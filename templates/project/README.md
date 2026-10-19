@@ -2,7 +2,7 @@
 
 <Une phrase : ce que fait le projet, pour qui.>
 
-**Rôle dans l'écosystème** : <core | satellite>. <Ce qu'il possède, ce qu'il consomme.>
+**Rôle dans l'écosystème** : <core | satellite | vitrine>. <Ce qu'il possède, ce qu'il consomme.>
 
 ## Démarrer en local
 
