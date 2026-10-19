@@ -45,7 +45,18 @@ garde qui interdit à l'agent de merger, de pousser sur `main` ou de forcer un p
 
 ```bash
 npm test           # tests de l'outillage
-npm run check      # fichiers requis, longueur des standards, aucune adresse interne
+npm run check      # fichiers requis, longueurs, adresses internes, registre, ADR, versions
+npm run sync       # recopie les standards modifiés dans le plugin (obligatoire avant commit)
 ```
 
 lun-docs suit ses propres règles : une branche, une PR, CrOliX merge.
+
+## Publier une version du plugin
+
+Un chantier ne vaut pas une release. Quand plusieurs chantiers mergés forment un ensemble validé :
+
+1. PR `chore(release): lun x.y.z` : même version dans `plugin/.claude-plugin/plugin.json` et
+   `.claude-plugin/marketplace.json`, liste des chantiers regroupés. CrOliX merge.
+2. Sur `main` à jour, CrOliX pose le tag : `claude plugin tag plugin --push`.
+3. La CI vérifie et publie la release GitHub avec ses notes. Les projets récupèrent la nouvelle version
+   avec `/plugin update lun@lun-docs`.

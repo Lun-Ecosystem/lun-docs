@@ -5,6 +5,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { checkRegistry, checkAdrs } from './check-registry.mjs';
+import { checkVersions } from './check-version.mjs';
 
 export const REQUIRED_FILES = [
   'README.md',
@@ -116,6 +117,7 @@ export function runAll(root) {
     ...checkMaxLines(root, 'templates/project/CLAUDE.md', 100),
     ...checkNoInternalAddresses(root),
     ...checkAdrs(root),
+    ...(fs.existsSync(path.join(root, 'plugin/.claude-plugin/plugin.json')) ? checkVersions(root) : []),
     ...(fs.existsSync(path.join(root, 'registry.yaml'))
       ? checkRegistry(fs.readFileSync(path.join(root, 'registry.yaml'), 'utf8'))
       : []),

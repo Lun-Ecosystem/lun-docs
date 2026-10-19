@@ -28,5 +28,10 @@ plugin les bloque ; ne cherche pas à le contourner.
 
 ## Release
 
-Version et changelog sont produits par l'outillage du dépôt à partir des commits, jamais rédigés à la
-main par un agent.
+**Un chantier ne vaut pas une release.** Les chantiers mergés se regroupent logiquement ; la release
+n'a lieu qu'après validation post-tests de l'ensemble, sur décision de CrOliX.
+
+- Sur demande seulement : préparer la PR `chore(release): <projet> x.y.z` (bump de version, liste
+  des chantiers regroupés).
+- Jamais : poser un tag, pousser des tags, créer une release. C'est CrOliX qui tague ; la CI fait le
+  reste (notes générées depuis les commits, image si le projet est déployé).

@@ -37,6 +37,18 @@ GitHub de CrOliX : GitHub seul ne peut pas faire la différence, d'où cette dou
 
 ## Release
 
-- Versions sémantiques, déduites des commits.
-- Changelog et numéro de version générés par l'outillage, jamais écrits à la main par un LLM.
-- L'outil et le déclenchement sont fixés projet par projet, à la mise en place de sa CI.
+**Un chantier ne vaut pas une release.**
+
+- On **regroupe logiquement** plusieurs chantiers mergés (un thème, un jalon) avant de publier.
+- On ne release **qu'après validation post-tests** de l'ensemble regroupé, en local, de bout en bout.
+- La release se déclenche par un **bump de version** : une PR `chore(release): <projet> x.y.z` qui
+  liste les chantiers regroupés, mergée par CrOliX, puis le tag de version posé **par CrOliX seul**.
+- Le tag déclenche la CI de release : vérifications, release GitHub avec notes générées depuis les
+  commits, et pour les projets déployés, l'image GHCR. Aucune PR de release automatique.
+- Versions sémantiques. Notes et changelog sont générés par l'outillage, jamais rédigés par un LLM.
+- L'agent peut préparer la PR de bump sur demande ; il ne pose jamais de tag et ne crée jamais de
+  release (le hook de garde bloque `git push --tags`, `refs/tags/…`, `claude plugin tag`,
+  `gh release create`).
+
+Pour lun-docs : versions de `plugin.json` et de `marketplace.json` identiques (vérifié par
+`npm run check`), tag posé avec `claude plugin tag plugin --push` (format `lun--v<version>`).

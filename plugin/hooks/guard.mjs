@@ -52,6 +52,7 @@ function evaluatePush(args, branchHere) {
       return 'force push is reserved to CrOliX';
     }
     if (arg === '--mirror' || arg === '--all') return `git push ${arg} can rewrite main: reserved to CrOliX`;
+    if (arg === '--tags' || arg === '--follow-tags') return 'pushing tags (releases) is reserved to CrOliX';
     if (/^-[a-zA-Z]+$/.test(arg) && arg.includes('f')) return 'force push is reserved to CrOliX';
     if (PUSH_OPTIONS_WITH_VALUE.has(arg)) { i++; continue; }
     if (arg.startsWith('-')) continue;
@@ -60,6 +61,7 @@ function evaluatePush(args, branchHere) {
   const refspecs = positional.slice(1);
   for (const refspec of refspecs) {
     if (refspec.startsWith('+')) return 'force push (+refspec) is reserved to CrOliX';
+    if (refspec.includes('refs/tags/')) return 'pushing tags (releases) is reserved to CrOliX';
     const destination = refspec.includes(':') ? refspec.split(':').pop() : refspec;
     if (destination === 'main' || destination === 'refs/heads/main') {
       return 'pushing to main is reserved to CrOliX: push a branch and open a PR';
@@ -89,6 +91,8 @@ function evaluateSegment(tokens, state, context) {
     return null;
   }
   if (cmd === 'gh' && rest[0] === 'pr' && rest[1] === 'merge') return 'merging a PR is reserved to CrOliX';
+  if (cmd === 'gh' && rest[0] === 'release' && rest[1] === 'create') return 'releases are created by CrOliX';
+  if (cmd === 'claude' && rest[0] === 'plugin' && rest[1] === 'tag') return 'release tags are created by CrOliX';
   if (cmd !== 'git') return null;
 
   let dir = state.cwd;

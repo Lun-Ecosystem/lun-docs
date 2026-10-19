@@ -61,6 +61,12 @@ const blockedMore = [
   'git push --mirror',
   'git push --all origin',
   '{ git push origin main; }',
+  // Releases are tagged by CrOliX only.
+  'git push origin --tags',
+  'git push --follow-tags',
+  'git push origin refs/tags/lun--v0.2.0',
+  'claude plugin tag plugin --push',
+  'gh release create lun--v0.2.0',
 ];
 for (const command of blockedMore) {
   test(`blocks (review): ${command}`, () => {
