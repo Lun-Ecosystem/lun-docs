@@ -1,0 +1,16 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # À compléter selon la stack (standards/stack.md de lun-docs) :
+      # format, lint, typage, tests, vérification des adresses internes (dépôts publics).
+      - name: Placeholder
+        run: echo "Configure the stack-specific checks"

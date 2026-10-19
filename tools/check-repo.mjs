@@ -21,6 +21,11 @@ export const REQUIRED_FILES = [
   'adr/0001-referentiel-et-methode.md',
   'registry.yaml',
   'community-skills.md',
+  'templates/project/README.md',
+  'templates/project/CLAUDE.md',
+  'templates/project/.claude/settings.json',
+  'templates/project/.github/pull_request_template.md',
+  'templates/project/hooks/pre-push',
   'LICENSE',
   'docs/specs/2026-10-19-referentiel-design.md',
 ];
@@ -94,6 +99,7 @@ export function runAll(root) {
   return [
     ...checkRequiredFiles(root, REQUIRED_FILES),
     ...checkMaxLines(root, 'standards', 150),
+    ...checkMaxLines(root, 'templates/project/CLAUDE.md', 100),
     ...checkNoInternalAddresses(root),
     ...checkAdrs(root),
     ...(fs.existsSync(path.join(root, 'registry.yaml'))

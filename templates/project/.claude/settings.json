@@ -1,0 +1,18 @@
+{
+  "extraKnownMarketplaces": {
+    "lun-docs": {
+      "source": { "source": "github", "repo": "CrOliX-AltF4/lun-docs" }
+    }
+  },
+  "enabledPlugins": {
+    "lun@lun-docs": true
+  },
+  "permissions": {
+    "deny": [
+      "Bash(gh pr merge:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push origin main:*)"
+    ]
+  }
+}
