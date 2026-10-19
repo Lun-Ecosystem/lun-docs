@@ -5,6 +5,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const REQUIRED_FILES = [
+  'README.md',
+  'vision.md',
+  'standards/essentiel.md',
   'LICENSE',
   'docs/specs/2026-10-19-referentiel-design.md',
 ];
