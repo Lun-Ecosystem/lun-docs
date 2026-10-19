@@ -31,7 +31,7 @@ projets:
   - id: website
     nom: "Lun'Ecosystem (site)"
     role: vitrine
-    depot: Lun-Ecosystem/website
+    depot: CrOliX-AltF4/website
     visibilite: prive
     etat: actif
     description: "Vitrine FR/EN de l'écosystème et de Natsume."
