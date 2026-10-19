@@ -73,7 +73,7 @@ source d'inspiration consultée au cas par cas.
   Opus 5.5 (défaut), Sonnet 5.5, Haiku 5.5, **Fable 5**.
 - Échéance VIP : **31/12/2026** (~10 semaines au 2026-10-19). Le référentiel doit être léger à
   produire : il est le socle, pas le livrable.
-- GitHub : compte `CrOliX-AltF4`.
+- GitHub : organisation `Lun-Ecosystem` pour tous les dépôts de l'écosystème **[CrOliX, 2026-10-19]** ; le compte perso `CrOliX-AltF4` garde le website et les anciens projets, archivés en lecture seule.
 - DA imposée : celle du website (`D:\projets\projets perso\website`), aussi présente sur le mobile et
   le desktop.
 
@@ -201,7 +201,12 @@ Deux environnements, pas trois.
 - Commits en Conventional Commits (`feat:`, `fix:`, …), vérifiés par un hook.
 - PR petites ; gabarit reprenant les critères de fin et les preuves (sortie des tests, capture,
   commande de démo) ; fusion en squash.
-- La CI doit passer pour merger. Release et changelog automatiques depuis les commits.
+- La CI doit passer pour merger.
+- **Release [CrOliX, 2026-10-19]** : un chantier ne vaut pas une release. On regroupe logiquement
+  plusieurs chantiers et on ne release qu'après validation post-tests de l'ensemble. La release est
+  déclenchée par un bump de version (PR mergée par CrOliX, puis tag posé par CrOliX seul) ; pas de
+  bot de PR de release (retour d'expérience LunAnima : 60 PR de release). Notes générées depuis les
+  commits par la CI.
 - Revue automatique optionnelle d'une PR par l'API Claude dans la CI (avec les tokens API de CrOliX) :
   à évaluer lors de la mise en place de la CI **[choix Claude]**.
 

@@ -1,0 +1,36 @@
+---
+name: lun-chantier
+description: Use when starting, executing or closing any piece of work (chantier) in a Lun' project - from a GitHub issue to a merged PR. Freezes scope, sets the level label, routes to the right dev agent and requires local proof.
+---
+
+# Chantier Lun'
+
+La méthode complète est dans `references/workflow.md`, les règles dans `references/essentiel.md`.
+Ce skill s'appuie sur superpowers ; il ne le remplace pas.
+
+## Ouvrir
+
+1. Lis l'issue (`gh issue view <n>`). Reformule le besoin à CrOliX.
+2. Écris les **critères de fin**, vérifiables en local. Fixe le **niveau** avec CrOliX et pose
+   l'étiquette : `gh issue edit <n> --add-label niveau:<trivial|standard|critique|exceptionnel>`.
+3. Le périmètre est **figé** à partir d'ici.
+4. Cadrage et plan : `superpowers:brainstorming` si le besoin n'est pas clair, puis
+   `superpowers:writing-plans`. Fais attaquer le plan par l'agent `plan-challenger`, intègre ou
+   réfute ses objections, puis CrOliX valide. **Pas de code avant.**
+
+## Exécuter
+
+- Une branche dédiée (`feat/<sujet>`), jamais `main`.
+- Agent de dev selon l'étiquette : `niveau:trivial` → `dev-haiku`, `niveau:standard` → `dev-sonnet`,
+  `niveau:critique` → `dev-opus`. **`dev-fable` uniquement si CrOliX le demande explicitement dans
+  la conversation**, même avec `niveau:exceptionnel` (sinon : `dev-opus`, et le signaler).
+- Après chaque tâche : agent `reviewer` sur le diff. Corrige les points bloquants.
+- Une observation hors périmètre devient une issue `inbox`
+  (`gh issue create --label inbox --title "…" --body "…"`), **sauf** si elle empêche d'atteindre les
+  critères de fin.
+
+## Clore
+
+- Chaque critère de fin est **prouvé en local**, de bout en bout, par une commande ou une capture.
+- `superpowers:verification-before-completion` avant d'annoncer que c'est fini.
+- Livraison avec `lun-livrer`. CrOliX merge.

@@ -1,0 +1,22 @@
+# =============================================================================
+# Registre des projets de l'écosystème Lun'
+#
+# Source de vérité sur : quels projets existent, leur rôle, leur dépôt, leur état.
+# Ce dépôt est PUBLIC : aucune adresse interne (IP du NAS, Tailscale, domaines privés),
+# aucun secret. Ces valeurs vivent dans les .env non versionnés des projets.
+#
+# Champs obligatoires par projet :
+#   id          identifiant court, en minuscules
+#   nom         nom affiché (« Lun'Xxx »)
+#   role        core | satellite (un seul core)
+#   depot       owner/nom sur GitHub
+#   visibilite  public | prive
+#   etat        actif | en-pause | archive
+# Champs optionnels : description, stack, contrats (ce que le projet expose au core).
+#
+# Vérifié par : npm run check
+# Les projets de l'étape 2 s'ajoutent ici à leur création.
+# =============================================================================
+version: 1
+
+projets: []

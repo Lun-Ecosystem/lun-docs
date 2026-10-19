@@ -1,0 +1,9 @@
+{
+  "name": "lun",
+  "version": "0.1.0",
+  "description": "Méthode de travail, agents par niveau de tâche, skills lun-* et garde-fous de l'écosystème Lun'.",
+  "author": { "name": "CrOliX-AltF4" },
+  "homepage": "https://github.com/Lun-Ecosystem/lun-docs",
+  "repository": "https://github.com/Lun-Ecosystem/lun-docs",
+  "license": "MIT"
+}

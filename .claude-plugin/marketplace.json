@@ -1,0 +1,15 @@
+{
+  "name": "lun-docs",
+  "owner": { "name": "Lun-Ecosystem" },
+  "metadata": {
+    "description": "Marketplace de l'écosystème Lun' : le plugin lun applique le référentiel lun-docs dans chaque projet."
+  },
+  "plugins": [
+    {
+      "name": "lun",
+      "source": "./plugin",
+      "description": "Méthode de travail, agents par niveau de tâche, skills lun-* et garde-fous de l'écosystème Lun'.",
+      "version": "0.1.0"
+    }
+  ]
+}

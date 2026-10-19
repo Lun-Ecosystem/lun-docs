@@ -1,0 +1,32 @@
+name: Release
+
+# Triggered by the tag CrOliX creates with `claude plugin tag plugin --push` (lun--v<version>),
+# after a version-bump PR grouping several validated chantiers has been merged.
+on:
+  push:
+    tags:
+      - 'lun--v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Version matches the tag
+        run: node tools/check-version.mjs "${GITHUB_REF_NAME}"
+      - name: Tests and checks
+        run: |
+          npm test
+          npm run check
+          npm run sync:check
+          npx -y @anthropic-ai/claude-code@2.1.303 plugin validate --strict plugin
+      - name: GitHub release with generated notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" --title "lun ${GITHUB_REF_NAME#lun--v}" --generate-notes --verify-tag

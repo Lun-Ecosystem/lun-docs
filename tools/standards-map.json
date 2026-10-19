@@ -1,0 +1,7 @@
+{
+  "lun-ecosysteme": ["vision.md", "standards/essentiel.md"],
+  "lun-design": ["standards/design.md"],
+  "lun-chantier": ["standards/workflow.md", "standards/essentiel.md"],
+  "lun-inbox": ["standards/workflow.md"],
+  "lun-livrer": ["standards/git.md", "standards/qualite.md"]
+}
