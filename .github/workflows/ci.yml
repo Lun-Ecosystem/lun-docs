@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Tests
+        run: npm test
+      - name: Repository checks
+        run: npm run check
+      - name: Standards copies in sync
+        run: npm run sync:check
+      - name: Plugin and marketplace validation
+        run: |
+          npx -y @anthropic-ai/claude-code@2.1.303 plugin validate --strict .
+          npx -y @anthropic-ai/claude-code@2.1.303 plugin validate --strict plugin
+          npx -y @anthropic-ai/claude-code@2.1.303 plugin validate --strict plugin/agents
+          npx -y @anthropic-ai/claude-code@2.1.303 plugin validate --strict plugin/skills
