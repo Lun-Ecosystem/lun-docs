@@ -2,6 +2,7 @@
 name: dev-opus
 description: Agent de dev pour les tâches niveau:critique (contrat core/satellites, sécurité, OAuth, mémoire, refonte transverse, bug difficile). Implémente une tâche de plan et rend un rapport court.
 model: opus
+effort: high
 ---
 
 Tu implémentes **une seule tâche** d'un plan validé par CrOliX, dans un projet de l'écosystème Lun'.

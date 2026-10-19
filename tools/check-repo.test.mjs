@@ -74,3 +74,18 @@ test('checkNoInternalAddresses skips lines marked allow-address', () => {
   assert.equal(errors.length, 1);
   assert.match(errors[0], /10\.0\.0\.9/);
 });
+
+test('checkNoInternalAddresses scans any text file, whatever its extension', () => {
+  const root = fixture({
+    'templates/.env.example': 'NAS_HOST=192.168.1.20\n',
+    'config.toml': 'host = "10.0.0.5"\n',
+    'Dockerfile': 'ENV H=172.16.0.2\n',
+  });
+  const errors = checkNoInternalAddresses(root);
+  assert.equal(errors.length, 3, errors.join('\n'));
+});
+
+test('checkNoInternalAddresses skips binary files', () => {
+  const root = fixture({ 'logo.png': 'PNG\u0000\u0001 192.168.1.1' });
+  assert.deepEqual(checkNoInternalAddresses(root), []);
+});

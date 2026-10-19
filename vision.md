@@ -38,8 +38,7 @@ Tasks…). Ce contrôle est obligatoire : pas de surcoût inutile, pas de perte 
 
 > **Utilisable de bout en bout sur une semaine sans point de tension.**
 
-Échéance : 31 décembre 2026. Sans application mobile, par exemple, l'information manque en
-déplacement : le critère n'est pas rempli.
+Échéance : 31 décembre 2026.
 
 ## Hors VIP
 
@@ -54,6 +53,6 @@ peuvent être câblés au core.
 
 ## Points noirs à ne pas reproduire
 
-- Un panel lourd et peu ergonomique : une logique back peut-être propre, mais un usage qui ne suit pas.
+- Un panel lourd et peu ergonomique.
 - Des tests qui dépendent du NAS.
 - Un front en dessous du niveau visé (référence de qualité : myBrain).

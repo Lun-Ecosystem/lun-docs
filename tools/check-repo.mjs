@@ -2,6 +2,7 @@
 // Run directly (`npm run check`) to run every check and exit 1 on any error.
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { checkRegistry, checkAdrs } from './check-registry.mjs';
 
@@ -31,7 +32,6 @@ export const REQUIRED_FILES = [
 ];
 
 const SKIPPED_DIRS = new Set(['node_modules', '.git', '.superpowers']);
-const TEXT_EXTENSIONS = new Set(['.md', '.mjs', '.js', '.json', '.yaml', '.yml', '.sh', '.txt', '']);
 
 function walk(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -41,6 +41,19 @@ function walk(dir, files = []) {
     else files.push(full);
   }
   return files;
+}
+
+/** Files git would track (tracked + untracked not ignored); a plain walk outside a git repo. */
+function listFiles(root) {
+  try {
+    const out = execFileSync('git', ['-C', root, 'ls-files', '-z', '--cached', '--others', '--exclude-standard'], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    });
+    return out.split('\0').filter(Boolean).map((f) => path.join(root, f)).filter((f) => fs.existsSync(f));
+  } catch {
+    return walk(root);
+  }
 }
 
 const rel = (root, file) => path.relative(root, file).split(path.sep).join('/');
@@ -76,10 +89,11 @@ function isInternal(a, b) {
 
 export function checkNoInternalAddresses(root) {
   const errors = [];
-  for (const file of walk(root)) {
-    if (!TEXT_EXTENSIONS.has(path.extname(file))) continue;
+  for (const file of listFiles(root)) {
     if (file.endsWith('.test.mjs')) continue; // fixtures contain addresses on purpose
-    const lines = fs.readFileSync(file, 'utf8').split(/\r?\n/);
+    const text = fs.readFileSync(file, 'utf8');
+    if (text.includes('\0')) continue; // binary file
+    const lines = text.split(/\r?\n/);
     lines.forEach((line, i) => {
       if (line.includes('allow-address')) return; // documented example, reviewed by hand
       for (const m of line.matchAll(IPV4)) {
