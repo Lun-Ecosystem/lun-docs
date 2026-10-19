@@ -36,6 +36,14 @@ projets:
     etat: actif
     description: "Vitrine FR/EN de l'écosystème et de Natsume."
 
+  - id: lunanima
+    nom: "Lun'Anima"
+    role: core
+    depot: Lun-Ecosystem/lun-anima
+    visibilite: prive
+    etat: en-dev
+    description: "Le core : Natsume, sa mémoire, sa conversation et ses apps desktop et mobile."
+
   - id: lunacedia
     nom: "Lun'Acedia"
     role: satellite
