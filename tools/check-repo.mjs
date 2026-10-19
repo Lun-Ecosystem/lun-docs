@@ -124,9 +124,14 @@ export function runAll(root) {
   ];
 }
 
+// `--addresses <dir>`: only the internal-address scan, on any repository (used by project CIs).
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-  const errors = runAll(root);
+  const flag = process.argv.indexOf('--addresses');
+  const root =
+    flag === -1
+      ? path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+      : path.resolve(process.argv[flag + 1] ?? '.');
+  const errors = flag === -1 ? runAll(root) : checkNoInternalAddresses(root);
   for (const e of errors) console.error(e);
   console.log(errors.length ? `${errors.length} error(s)` : 'check: OK');
   process.exit(errors.length ? 1 : 0);

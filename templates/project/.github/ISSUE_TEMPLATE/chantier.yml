@@ -1,6 +1,6 @@
 name: Chantier
 description: Un travail à mener, avec un périmètre figé et des critères de fin.
-title: "[chantier] "
+title: '[chantier] '
 body:
   - type: textarea
     id: besoin

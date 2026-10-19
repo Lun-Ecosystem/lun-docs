@@ -41,6 +41,21 @@ garde qui interdit à l'agent de merger, de pousser sur `main` ou de forcer un p
 2. Le standard qui correspond à la tâche du jour.
 3. Pour un nouveau projet : [`templates/project/`](templates/project/) et l'ajout au registre.
 
+## Créer un projet
+
+```bash
+gh repo create Lun-Ecosystem/<nom> --private|--public --add-readme
+git clone https://github.com/Lun-Ecosystem/<nom> && cd <nom> && git switch -c chore/socle
+cp -r <lun-docs>/templates/project/. .
+cp -r <lun-docs>/templates/ts/. .      # projet TypeScript (voir standards/stack.md)
+git config core.hooksPath hooks
+sh <lun-docs>/tools/setup-github.sh Lun-Ecosystem/<nom>
+```
+
+Remplacer ensuite tous les `<…>` (README, CLAUDE.md, `package.json`, `src/`), vérifier
+`npm run format:check && npm run lint && npm run typecheck && npm test`, ouvrir la PR, puis inscrire
+le projet dans [`registry.yaml`](registry.yaml).
+
 ## Travailler sur lun-docs
 
 ```bash
