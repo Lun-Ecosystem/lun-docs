@@ -54,6 +54,22 @@ ChatGPT ou Gemini, la boîte, les validations, la gestion des connecteurs Google
    quel satellite sans connaître son métier.
 6. **Le modèle juge, le code garantit.** Partout où un LLM produit du contenu (tri, mémoire,
    briefing), la tenue de livre est du code déterministe et testé.
+7. **Une vue n'existe qu'en un exemplaire.** Un satellite qui a un front publie ses vues métier
+   (pour Acedia : la boîte, la lecture, les gestes) en paquet de composants Svelte. Les apps de
+   Lun'Anima les intègrent sans jamais les réécrire. Une vue peut s'afficher à deux endroits, jamais
+   en deux versions.
+
+Frontière entre les deux sortes de fronts :
+
+| | Front autonome d'un satellite | Apps de Lun'Anima |
+|---|---|---|
+| Contenu | **Son domaine seulement** : ses données, ses actions, ses réglages, ses autorisations | **Le transversal** : Natsume (fil, voix, avatar), cerveau, briefing, modes, coûts et pause agrégés |
+| Vues métier | Il en est la **source** et les publie | Il les **intègre** |
+| Connaît | son propre serveur, rien d'autre | le core seul, qui relaie les satellites |
+| Interdit | les données d'un autre satellite, une fonction de Natsume, un réglage « hub » | recoder une vue ou une règle métier d'un satellite |
+
+Le front autonome est aussi le **mode de secours** : core en panne ou en pause, Acedia reste
+utilisable. Il reste fonctionnel et sobre ; le soin du produit va aux apps de Lun'Anima.
 
 Test de rangement d'une fonctionnalité :
 
@@ -70,22 +86,23 @@ Test de rangement d'une fonctionnalité :
 
 | Brique | Rôle | Visibilité | Stack | Origine |
 |---|---|---|---|---|
-| **Core** | Natsume : personnalité, cerveau, conversation, nuit et matin, modes, agrégation du contrôle, API unique des apps | privé | TypeScript / Node, SQLite | remplace la partie cerveau de LunAnima |
-| **Lun'Acedia** | Satellite « ta journée » : GitHub, Gmail, Agenda, Tâches, RSS, Home Assistant ; actions à la source ; agent de tri ; tableau de bord web autonome installable sur mobile (PWA) ; majordome conversationnel en autonome (hors MVP) | public | TypeScript / Node, SQLite, front Svelte | LunAcedia, à challenger au début de son chantier |
-| **Apps Lun'** | Le front unique Svelte, empaqueté deux fois : **desktop** (Tauri 2, avec les capacités PC) et **mobile** (Capacitor, Android) | public **[choix Claude, déduit de la règle « tout public sauf le core »]** | Svelte 5 + Vite, Tauri 2, Capacitor | remplace le panel de LunAnima et LunAvaritia |
-| **Website** | Vitrine FR/EN de l'écosystème | public | Astro | website, intégré à l'écosystème |
+| **Lun'Anima** (`lun-anima`) | Monorepo du core et de ses apps. `core/` : Natsume (personnalité, cerveau, conversation, nuit et matin, modes, agrégation du contrôle, API des apps). `ui/` : le front Svelte commun. `desktop/` : Tauri 2 avec les capacités PC. `mobile/` : Capacitor, Android | privé | TypeScript / Node, SQLite ; Svelte 5 + Vite, Tauri 2, Capacitor | remplace LunAnima, son panel et LunAvaritia |
+| **Lun'Acedia** | Satellite « ta journée » : GitHub, Gmail, Agenda, Tâches, RSS, Home Assistant ; actions à la source ; agent de tri ; front autonome web, installable sur mobile (PWA) ; paquet de vues pour Lun'Anima ; majordome conversationnel en autonome (hors MVP) | public | TypeScript / Node, SQLite, front Svelte | LunAcedia, à challenger au début de son chantier |
+| **Website** | Vitrine FR/EN de l'écosystème | privé (le code n'a pas vocation à être exposé) | Astro | website, déplacé dans `LunEcosystem/` et transféré dans l'organisation |
 | **lun-docs** | Référentiel, normes, plugin `lun` | public | — | existe |
 
-Les noms des nouveaux dépôts (core, apps) sont provisoires ; CrOliX les fixe à leur création.
-Tous vivent dans l'organisation `Lun-Ecosystem`.
+Les noms suivent le lore du site : Anima, l'âme, au centre du sceau ; un péché par pointe. **Lun'Avaritia
+est mise en réserve** : si Acedia reçoit un jour une app Android autonome (son front empaqueté par
+Capacitor, dans le dépôt d'Acedia), elle reprendra ce nom. Tous les dépôts vivent dans
+l'organisation `Lun-Ecosystem`.
 
 ### 4.2 Verdict sur l'ancien écosystème
 
 | Ancien projet | Verdict |
 |---|---|
-| LunAnima | **Scindé** : le cerveau va au core, le panel et l'agent desktop vont aux apps (capacités PC). Les liens jeux attendent le mode jeu. |
+| LunAnima | **Refait** dans le monorepo `lun-anima` : le cerveau va dans `core/`, le panel et l'agent desktop dans `desktop/` (capacités PC). Les liens jeux attendent le mode jeu. |
 | LunAcedia | **Gardé** comme satellite. D'après son README, il est déjà en TypeScript / Node, avec une API REST + WebSocket, un tableau de bord, un appairage par jeton et une image GHCR. Reprendre ou réécrire se décide au début du chantier J1. **Aucune migration de données** : les autorisations Google sont redonnées, l'historique de tri n'est pas repris **[choix Claude]**. |
-| LunAvaritia | **Remplacé** par l'app mobile Lun' (Capacitor). Acedia n'a plus d'app native : en autonome, son tableau de bord web suffit. Le code Flutter n'est pas repris. |
+| LunAvaritia | **Remplacé** par l'app mobile de Lun'Anima. Acedia n'a plus d'app native : en autonome, son front web installable suffit. Plus de double champ d'URL (Acedia ou « hub ») : chaque front ne connaît que son serveur. Le code Flutter n'est pas repris ; le nom est mis en réserve. |
 | website | **Gardé**, branché sur le registre (§10, chantier W). |
 | LunArchive | **Archivé** : ancien site, remplacé par le website **[choix Claude, à confirmer]**. |
 | LunIra, LunGula | Satellites sains, **hors MVP**, inchangés. |
@@ -97,7 +114,7 @@ remplaçant en service.
 
 | Fonctionnalité | Source de vérité | Affichée sur |
 |---|---|---|
-| Boîte (mails, notifications GitHub, tâches, agenda) et gestes à la source | Acedia | mobile, desktop, tableau de bord d'Acedia ; voix (résumé) |
+| Boîte (mails, notifications GitHub, tâches, agenda) et gestes à la source | Acedia (données et vues) | front autonome d'Acedia ; mobile et desktop de Lun'Anima via le paquet de vues ; voix (résumé) |
 | Tri, étiquetage, filtrage des mails | Acedia (son agent, sa clé LLM) | idem |
 | Autorisations Google (jetons, scopes) | Acedia | panel et mobile (réglages), via le contrat |
 | Conversation avec Natsume | Core | mobile (fil), desktop (voix + fil) |
@@ -128,10 +145,12 @@ d'appairage, jamais par un secret serveur saisi à la main. Le format exact (RES
 schéma des types) est laissé au constructeur ; un satellite publie les types de son contrat pour
 que le core et les apps les consomment.
 
-**Le contrat des écrans** (l'API du core vue par les apps) est décrit dans un paquet de types
-**public**, publié depuis le dépôt des apps ; le core privé l'implémente. Ce contrat ne contient ni
-secret ni adresse, et la CI des apps publiques n'a jamais besoin d'accéder au dépôt privé
-**[choix Claude]**.
+**Le contrat des écrans** (l'API du core vue par les apps) est interne au monorepo `lun-anima` :
+un paquet de types partagé par `core/`, `ui/`, `desktop/` et `mobile/`, modifié dans la même PR que
+l'écran qui le consomme.
+
+**Le paquet de vues** d'un satellite (principe 7) est versionné et publié avec le satellite ; les
+apps de Lun'Anima le consomment avec le client de son contrat.
 
 **Réseau** : en prod, le mobile et le desktop joignent le NAS par un réseau privé maillé
 (Tailscale, comme aujourd'hui). Le core et les satellites **ne sont jamais exposés sur internet**.
@@ -272,10 +291,10 @@ locales). Les jalons deviennent les valeurs du champ « Jalon » du Projects.
 
 | Jalon | Chantiers | Fin visée |
 |---|---|---|
-| **J0 Socle** | `standards/stack.md` + ADR ; `standards/contrat-satellite.md` ; registre étendu (rôles `app` et `vitrine`) ; création des dépôts core et apps depuis le gabarit ; chantier **W** : le website lit `registry.yaml` au build | 01/11 |
-| **J1 Acedia** | Acedia conforme au contrat, dans l'organisation, tableau de bord installable sur mobile, prouvé en local avec le compte Google de test | 15/11 |
+| **J0 Socle** | `standards/stack.md` + ADR ; `standards/contrat-satellite.md` ; registre étendu (rôles `vitrine` et `referentiel`, `etat` vérifié) ; création du monorepo `lun-anima` depuis le gabarit ; chantier **W** : le website lit `registry.yaml` au build | 01/11 |
+| **J1 Acedia** | Acedia conforme au contrat, dans l'organisation, front autonome installable sur mobile, paquet de vues publié, prouvé en local avec le compte Google de test | 15/11 |
 | **J2 Core v1** | Conversation ; personnalité (chantier dédié, cadré avec CrOliX) ; cerveau v1 (wiki, contexte chaud, point d'entrée du contexte) ; branchement à Acedia ; API des apps | 29/11 |
-| **J3 Apps v1** | Front Svelte commun ; mobile (fil, boîte, validations, réglages) ; desktop (panel, zone de notification, services surveillés) | 13/12 |
+| **J3 Apps v1** | `ui/`, `desktop/` et `mobile/` dans `lun-anima` ; mobile (fil, boîte via le paquet de vues d'Acedia, validations, réglages) ; desktop (panel, zone de notification, services surveillés) | 13/12 |
 | **J4 Nuit, voix, contrôle** | Cycle de nuit et briefing ; voix et RVC ; VTube Studio ; modes ; coûts et pause agrégés | 22/12 |
 | **J5 Rodage** | Une semaine d'usage réel en prod, corrections ; releases groupées ; anciens dépôts archivés | 31/12 |
 
