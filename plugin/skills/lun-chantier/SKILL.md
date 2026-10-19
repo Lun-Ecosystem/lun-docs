@@ -20,7 +20,10 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
 
 ## Exécuter
 
-- Une branche dédiée (`feat/<sujet>`), jamais `main`.
+- Partir de `main` à jour, puis créer la branche du chantier, jamais `main` :
+  `git switch main && git pull --ff-only && git switch -c <type>/<sujet>`. Ne pas rester sur la
+  branche d'un chantier précédent. (`git pull --ff-only` plutôt que `git checkout main && git pull` :
+  le mode auto de Claude Code prend parfois ce dernier pour un merge.)
 - Agent de dev selon l'étiquette : `niveau:trivial` → `dev-haiku`, `niveau:standard` → `dev-sonnet`,
   `niveau:critique` → `dev-opus`. **`dev-fable` uniquement si CrOliX le demande explicitement dans
   la conversation**, même avec `niveau:exceptionnel` (sinon : `dev-opus`, et le signaler).

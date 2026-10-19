@@ -7,6 +7,8 @@
 
 - `main` est protégée. Jamais de push direct, jamais de push forcé.
 - Une branche par chantier ou par tâche : `feat/<sujet>`, `fix/<sujet>`, `docs/<sujet>`, `chore/<sujet>`.
+- Chaque chantier part de `main` à jour : `git switch main && git pull --ff-only`, puis
+  `git switch -c <type>/<sujet>`.
 
 ## Commits
 
