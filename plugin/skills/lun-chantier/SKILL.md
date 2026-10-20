@@ -24,6 +24,10 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
   `git switch main && git pull --ff-only && git switch -c <type>/<sujet>`. Ne pas rester sur la
   branche d'un chantier précédent. (`git pull --ff-only` plutôt que `git checkout main && git pull` :
   le mode auto de Claude Code prend parfois ce dernier pour un merge.)
+- **Une seule branche et une seule PR pour tout le chantier** (`references/git.md`) : chaque tâche du
+  plan est un ou plusieurs commits sur cette branche, jamais une branche poussée ni une PR à part.
+  Des worktrees locaux pour des tâches parallèles, fusionnés dans la branche du chantier, au besoin.
+  La PR s'ouvre en brouillon au premier push (`lun-livrer`).
 - Agent de dev selon l'étiquette : `niveau:trivial` → `dev-haiku`, `niveau:standard` → `dev-sonnet`,
   `niveau:critique` → `dev-opus`. **`dev-fable` uniquement si CrOliX le demande explicitement dans
   la conversation**, même avec `niveau:exceptionnel` (sinon : `dev-opus`, et le signaler).

@@ -6,9 +6,22 @@
 ## Branches
 
 - `main` est protégée. Jamais de push direct, jamais de push forcé.
-- Une branche par chantier ou par tâche : `feat/<sujet>`, `fix/<sujet>`, `docs/<sujet>`, `chore/<sujet>`.
+- **Un chantier = une branche = une PR** : `feat/<sujet>`, `fix/<sujet>`, `docs/<sujet>`, `chore/<sujet>`.
+  Jamais une PR par tâche ou par étape du plan.
 - Chaque chantier part de `main` à jour : `git switch main && git pull --ff-only`, puis
   `git switch -c <type>/<sujet>`.
+- Les **étapes** du chantier se font sur sa branche : un ou plusieurs commits par étape, chacune
+  contrôlée (barrières vertes) avant la suivante.
+- **Worktrees** permis pour des étapes indépendantes menées en parallèle : leurs branches restent
+  locales, sont fusionnées dans la branche du chantier puis supprimées. Jamais poussées, jamais de PR.
+- **Pas de branches empilées poussées** (une par étape, chacune partant de la précédente) : avec la
+  fusion en squash, la suivante entre en conflit dès que la première est mergée.
+- Un chantier trop gros pour une PR se **découpe en plusieurs chantiers au moment du plan** (une
+  issue, une branche, une PR chacun, le suivant partant de `main` une fois le précédent mergé),
+  jamais tâche par tâche en cours d'exécution.
+- Une fois la PR mergée (la branche distante est supprimée automatiquement) : `git fetch --prune`,
+  vérifier que tout est dans `main`, puis supprimer la branche locale (`git branch -D`, car le squash
+  la fait paraître « en avance »).
 
 ## Commits
 
@@ -19,7 +32,9 @@
 
 ## Pull requests
 
-- Petites : un chantier, ou une tâche d'un gros chantier.
+- Une seule par chantier, **ouverte en brouillon dès le premier push** : la CI tourne à chaque étape
+  poussée. Elle passe « prête » quand les critères de fin sont prouvés.
+- Les corrections de revue arrivent dans la même PR, jamais dans une nouvelle.
 - Le gabarit est obligatoire : issue liée, critères de fin cochés, **preuves** (sortie des tests,
   capture, commande de démo), niveau de la tâche.
 - La CI doit être verte.
