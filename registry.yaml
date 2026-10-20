@@ -47,7 +47,7 @@ projets:
   - id: lunacedia
     nom: "Lun'Acedia"
     role: satellite
-    depot: CrOliX-AltF4/LunAcedia
+    depot: Lun-Ecosystem/lun-acedia
     visibilite: public
     etat: en-dev
     description: "Serveur de la journée : mails, agenda, tâches, GitHub, RSS, Home Assistant, triés à la source."
