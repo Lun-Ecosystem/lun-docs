@@ -87,7 +87,7 @@ Test de rangement d'une fonctionnalité :
 | Brique | Rôle | Visibilité | Stack | Origine |
 |---|---|---|---|---|
 | **Lun'Anima** (`lun-anima`) | Monorepo du core et de ses apps. `core/` : Natsume (personnalité, cerveau, conversation, nuit et matin, modes, agrégation du contrôle, API des apps). `ui/` : le front Svelte commun. `desktop/` : Tauri 2 avec les capacités PC. `mobile/` : Capacitor, Android | privé | TypeScript / Node, SQLite ; Svelte 5 + Vite, Tauri 2, Capacitor | remplace LunAnima, son panel et LunAvaritia |
-| **Lun'Acedia** | Satellite « ta journée » : GitHub, Gmail, Agenda, Tâches, RSS, Home Assistant ; actions à la source ; agent de tri ; front autonome web, installable sur mobile (PWA) ; paquet de vues pour Lun'Anima ; majordome conversationnel en autonome (hors MVP) | public | TypeScript / Node, SQLite, front Svelte | LunAcedia, à challenger au début de son chantier |
+| **Lun'Acedia** | Satellite « ta journée » : Gmail, Agenda, Tâches, Drive (GitHub, RSS et Home Assistant sortent de son MVP ; GitHub ira à un futur satellite) ; actions à la source ; agent de tri ; front autonome web, installable sur mobile (PWA) ; paquet de vues pour Lun'Anima ; majordome conversationnel en autonome (hors MVP) | public | TypeScript / Node, SQLite, front Svelte | réécrit dans le nouveau dépôt `lun-acedia` (LunAcedia en lecture seule) |
 | **Website** | Vitrine FR/EN de l'écosystème | privé (le code n'a pas vocation à être exposé) | Astro | website, déplacé dans `LunEcosystem/` et transféré dans l'organisation |
 | **lun-docs** | Référentiel, normes, plugin `lun` | public | — | existe |
 
@@ -101,7 +101,7 @@ l'organisation `Lun-Ecosystem`.
 | Ancien projet | Verdict |
 |---|---|
 | LunAnima | **Refait** dans le monorepo `lun-anima` : le cerveau va dans `core/`, le panel et l'agent desktop dans `desktop/` (capacités PC). Les liens jeux attendent le mode jeu. |
-| LunAcedia | **Gardé** comme satellite. D'après son README, il est déjà en TypeScript / Node, avec une API REST + WebSocket, un tableau de bord, un appairage par jeton et une image GHCR. Reprendre ou réécrire se décide au début du chantier J1. **Aucune migration de données** : les autorisations Google sont redonnées, l'historique de tri n'est pas repris **[choix Claude]**. |
+| LunAcedia | **Gardé** comme satellite. D'après son README, il est déjà en TypeScript / Node, avec une API REST + WebSocket, un tableau de bord, un appairage par jeton et une image GHCR. Décision prise au début du chantier J1 : **réécriture** dans un nouveau dépôt de l'organisation, `lun-acedia` (cahier des attendus de J1, §8) ; l'ancien code reste en lecture seule. **Aucune migration de données** : les autorisations Google sont redonnées, l'historique de tri n'est pas repris **[choix Claude]**. |
 | LunAvaritia | **Remplacé** par l'app mobile de Lun'Anima. Acedia n'a plus d'app native : en autonome, son front web installable suffit. Plus de double champ d'URL (Acedia ou « hub ») : chaque front ne connaît que son serveur. Le code Flutter n'est pas repris ; le nom est mis en réserve. |
 | website | **Gardé**, branché sur le registre (§10, chantier W). |
 | LunArchive | **Archivé** : ancien site, remplacé par le website **[choix Claude, à confirmer]**. |
@@ -114,7 +114,7 @@ remplaçant en service.
 
 | Fonctionnalité | Source de vérité | Affichée sur |
 |---|---|---|
-| Boîte (mails, notifications GitHub, tâches, agenda) et gestes à la source | Acedia (données et vues) | front autonome d'Acedia ; mobile et desktop de Lun'Anima via le paquet de vues ; voix (résumé) |
+| Boîte (mails, tâches, agenda) et gestes à la source | Acedia (données et vues) | front autonome d'Acedia ; mobile et desktop de Lun'Anima via le paquet de vues ; voix (résumé) |
 | Tri, étiquetage, filtrage des mails | Acedia (son agent, sa clé LLM) | idem |
 | Autorisations Google (jetons, scopes) | Acedia | panel et mobile (réglages), via le contrat |
 | Conversation avec Natsume | Core | mobile (fil), desktop (voix + fil) |
