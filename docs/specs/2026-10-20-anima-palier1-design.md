@@ -94,10 +94,11 @@ Le core est un client d'Acedia selon `contrat-satellite.md` v1 :
 - **Événements** : le core écoute `GET /lun/v1/events` (SSE), reprend après une coupure avec
   `Last-Event-ID`, et **enregistre** chaque événement reçu, avec son importance. C'est l'amorce de
   la file unique du core (spec §7.3) ; le filtrage par mode viendra avec les modes.
-  **[choix Claude]** Un événement est identifié par satellite et par son `id` (pas de doublon). Si
-  Acedia renvoie un `id` plus petit que le dernier reçu, sa base a été remise à zéro : le core
-  repart de zéro pour ce satellite. Une coupure plus longue que la rétention d'Acedia (7 jours)
-  perd les événements les plus anciens : c'est accepté.
+  **[choix Claude]** Un événement est identifié par satellite, par son `id` et par sa date (pas de
+  doublon). Une base d'Acedia remise à zéro perd aussi ses clients appairés : le jeton du core est
+  refusé (401), le satellite apparaît « à réappairer », et le nouvel appairage repart de zéro pour
+  les événements. Une coupure plus longue que la rétention d'Acedia (7 jours) perd les événements
+  les plus anciens : c'est accepté.
 - **Actions et relais** : le core liste les actions d'Acedia et peut en invoquer une. L'API des apps
   relaie santé, actions et coûts d'Acedia **sans remodeler** ses réponses (spec §5).
 - **Coupure** : Acedia absente ou injoignable ne fait jamais tomber le core ; le core le dit et
