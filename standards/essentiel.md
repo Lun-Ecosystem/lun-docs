@@ -34,8 +34,8 @@ essais. Aucune doc du type « à tester sur le NAS ».
 
 ## 5. Seul CrOliX merge
 
-Jamais de push sur `main`, jamais de push forcé, jamais de merge par l'agent. Une PR par chantier,
-CI verte, CrOliX merge.
+Jamais de push sur `main`, jamais de push forcé, jamais de merge par l'agent. Une branche et une PR
+par chantier (jamais une par tâche), CI verte, CrOliX merge.
 
 ## 6. Rien de privé dans un dépôt public
 

@@ -10,11 +10,12 @@
    **critères de fin**, fixer le **niveau** (étiquette `niveau:*`). Le périmètre est **figé**.
 2. **Planifier et challenger.** Proposer 2 ou 3 approches, les critiquer, en recommander une.
    L'agent `plan-challenger` attaque le plan. CrOliX valide. **Aucun code avant ce feu vert.**
-3. **Exécuter.** Une branche dédiée. Les sous-agents `dev-*` prennent les tâches du plan une par une,
-   tests d'abord quand c'est pertinent. L'agent principal contrôle chaque tâche avant la suivante.
+3. **Exécuter.** Une seule branche pour le chantier, une PR en brouillon dès le premier push. Les
+   sous-agents `dev-*` prennent les tâches du plan une par une, tests d'abord quand c'est pertinent,
+   chacune en commits sur cette branche. L'agent principal contrôle chaque tâche avant la suivante.
 4. **Valider.** Barrières automatiques (format, lint, typage, tests) en local puis en CI ; revue par
    l'agent `reviewer` ; **preuve d'usage bout en bout en local** par CrOliX.
-5. **Livrer.** PR selon [`git.md`](git.md). CrOliX merge.
+5. **Livrer.** La PR du chantier passe « prête », selon [`git.md`](git.md). CrOliX merge.
 
 ## La règle anti-ajout infini
 

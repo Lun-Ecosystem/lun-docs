@@ -14,12 +14,21 @@ Les règles sont dans `references/git.md` et `references/qualite.md`.
 
 ## Pull request
 
+**Une seule PR par chantier**, jamais une par tâche. Si le chantier a déjà sa PR, pousse sur sa
+branche : la PR se met à jour.
+
 1. Barrières locales vertes (format, lint, typage, tests) : lance-les et lis la sortie.
 2. `git push -u origin <branche>` (jamais `main`).
-3. `gh pr create` avec le gabarit du dépôt rempli : issue liée (`Closes #n`), critères de fin cochés,
-   **preuves** (sortie des tests, capture, commande de démo), niveau.
+3. Premier push du chantier : `gh pr create --draft` avec le gabarit du dépôt (issue liée,
+   `Closes #n`, niveau).
 4. `gh pr checks --watch` : la CI doit être verte.
-5. Dis à CrOliX que la PR est prête, avec son lien.
+5. Critères de fin prouvés : gabarit complété (critères cochés, **preuves** : sortie des tests,
+   capture, commande de démo), `gh pr ready`, puis dis à CrOliX que la PR est prête, avec son lien.
+
+## Après le merge
+
+La branche distante est supprimée automatiquement. `git fetch --prune`, vérifie que tout est dans
+`main` (`git diff origin/main <branche>` vide), puis `git branch -D <branche>` et repars de `main`.
 
 ## Interdit
 
