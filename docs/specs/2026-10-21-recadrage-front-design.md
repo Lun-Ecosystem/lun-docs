@@ -180,7 +180,7 @@ Le palier refait surtout la forme. Voici ce qui touche aux données ou au serveu
 
    « Annuler » remet le mail dans son état d'avant. Pour une proposition, elle revient en attente
    dans la file À valider, et l'exemple appris par l'IA est oublié. Le journal montre ces actions
-   avec une troisième origine, « toi ». Le changement de l'API est reporté dans le contrat satellite
+   avec une troisième origine, « à la main » (voix neutre, §6). Le changement de l'API est reporté dans le contrat satellite
    s'il touche une route du contrat.
 
 Hors palier (§8) : le lien d'une tâche vers son mail d'origine, le glisser-déposer des événements,
