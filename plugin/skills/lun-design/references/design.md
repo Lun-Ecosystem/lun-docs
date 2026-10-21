@@ -34,10 +34,11 @@ Lun’). Le monde d’un projet ne change que l’**accent** : `--accent`, `--ac
 
 ## Jetons de référence
 
-La seule source est [`design/tokens.css`](../design/tokens.css) : le socle et le bloc d’accent de
+La seule source est `design/tokens.css` (dans lun-docs) : le socle et le bloc d’accent de
 chaque monde. Chaque dépôt garde une copie générée, avec l’en-tête « ne pas modifier ici »
-(`node tools/sync-tokens.mjs <fichier>` pour l’écrire). La CI du dépôt la compare à la référence avec
-`node tools/sync-tokens.mjs --check <fichier>` et échoue au moindre écart.
+(`node tools/sync-tokens.mjs <fichier>` pour l’écrire). L’option `--monde <nom>` ne garde que le socle
+et le bloc de ce monde : un dépôt n’embarque pas l’accent des autres. La CI du dépôt compare la copie à la
+référence avec `node tools/sync-tokens.mjs --check [--monde <nom>] <fichier>` et échoue au moindre écart.
 
 ## Couleurs « monde » par projet
 
