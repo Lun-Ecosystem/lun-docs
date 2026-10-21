@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lun'Acedia · Réglages</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --encre:#0D0B09;--encre-2:#1A1612;--ivoire:#F0EBE1;--papier:#E8E2D6;--lune:#C8C0B0;--lavis:#8A9BAE;--rouge:#7A1818;
+  --monde-fond:#070C14;--monde-accent:#3A6080;
+  --fond:var(--encre);--surface-1:var(--encre-2);--surface-2:#221D18;--surface-3:#2B251F;
+  --survol:rgba(240,235,225,.045);--bordure:rgba(200,192,176,.12);--bordure-forte:rgba(200,192,176,.24);
+  --texte:var(--ivoire);--texte-2:var(--lune);--texte-3:#958C7E;
+  --accent:var(--monde-accent);--accent-survol:#45719A;--accent-texte:#9DBEDA;--accent-doux:rgba(58,96,128,.24);--accent-bord:rgba(110,155,195,.45);
+  --ok:#7CC29B;--ok-doux:rgba(124,194,155,.12);--ok-bord:rgba(124,194,155,.38);
+  --attention:#E0B36A;--attention-doux:rgba(224,179,106,.12);--attention-bord:rgba(224,179,106,.38);
+  --danger:#E3A0A0;--danger-doux:rgba(227,160,160,.10);--danger-bord:rgba(227,160,160,.38);
+  --ia:#B9A7E0;--ia-doux:rgba(185,167,224,.11);--ia-bord:rgba(185,167,224,.36);
+  --r-1:6px;--r-2:10px;--r-3:14px;--ombre-2:0 12px 32px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.4);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#060504;color:var(--texte);font:300 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+.page{max-width:1480px;margin:0 auto;padding:36px 24px 100px}
+.intro h1{font:500 38px/1.1 var(--serif);margin:0 0 8px}
+.intro p{color:var(--texte-2);max-width:980px;margin:0 0 6px}
+.etat{margin-top:44px}
+.etat>h2{font:500 26px var(--serif);margin:0 0 4px}
+.etat>p{color:var(--texte-2);margin:0 0 14px;max-width:1000px}
+.etat>p b{color:var(--texte);font-weight:500}
+.cadre{border:1px solid var(--bordure-forte);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.cadre .chrome-nav{height:30px;background:#151210;display:flex;align-items:center;gap:6px;padding:0 12px;border-bottom:1px solid var(--bordure)}
+.cadre .chrome-nav i{width:10px;height:10px;border-radius:50%;background:#3a332c}
+.cadre .chrome-nav span{margin-left:14px;font-size:11.5px;color:var(--texte-3)}
+.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.i-s{width:14px;height:14px}
+.kbd{font:500 10.5px var(--sans);color:var(--texte-3);border:1px solid var(--bordure-forte);border-bottom-width:2px;border-radius:5px;padding:0 5px;line-height:16px}
+
+/* ---------- Application ---------- */
+.app{display:grid;grid-template-columns:232px 1fr;height:720px;background:var(--fond)}
+.rail{background:var(--fond);border-right:1px solid var(--bordure);display:flex;flex-direction:column;padding:14px 10px;gap:2px;min-height:0}
+.marque{display:flex;align-items:center;gap:9px;padding:2px 8px 14px;font:500 21px var(--serif)}
+.marque i{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-doux)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:var(--r-2);font:400 13.5px var(--sans);border:1px solid transparent;color:var(--texte);background:none;white-space:nowrap;cursor:pointer}
+.btn.principal{background:var(--accent);border-color:var(--accent)}
+.btn.doux{background:var(--accent-doux);border-color:var(--accent-bord);color:var(--accent-texte)}
+.btn.secondaire{background:var(--surface-2);border-color:var(--bordure-forte)}
+.btn.fantome{color:var(--texte-2)}.btn.fantome:hover{background:var(--survol)}
+.btn.icone{width:34px;padding:0;justify-content:center}
+.btn.petit{height:28px;padding:0 10px;font-size:12.5px;border-radius:var(--r-1)}
+.btn.icone.petit{width:28px;padding:0}
+.btn.plein{width:100%;justify-content:center;height:38px;margin-bottom:12px}
+.lien{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:var(--r-2);color:var(--texte-2);font-size:13.5px;position:relative}
+.lien:hover{background:var(--survol)}
+.lien.on{background:var(--accent-doux);color:var(--texte)}
+.lien.on::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--accent-texte)}
+.lien .n{margin-left:auto;font:400 12px var(--sans);color:var(--texte-3)}
+.lien.on .n{color:var(--texte)}
+.lien .n.ia{color:var(--ia);background:var(--ia-doux);border:1px solid var(--ia-bord);border-radius:9px;padding:0 6px;line-height:16px;font-size:11px}
+.groupe{display:flex;align-items:center;justify-content:space-between;font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:14px 10px 4px}
+.pastille-c{width:8px;height:8px;border-radius:2px;flex:none}
+.rail .bas{margin-top:auto;border-top:1px solid var(--bordure);padding-top:10px;display:flex;flex-direction:column;gap:2px}
+.service{display:flex;align-items:center;gap:9px;margin-top:8px;padding:9px 10px;border-radius:var(--r-2);background:var(--surface-1);border:1px solid var(--bordure);font-size:12px;color:var(--texte-2)}
+.service .p{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-doux)}
+.service b{color:var(--texte);font-weight:400;display:block;font-size:12.5px}
+
+.zone{display:flex;flex-direction:column;min-width:0;min-height:0}
+.haut{display:flex;align-items:center;gap:12px;height:58px;padding:0 18px;border-bottom:1px solid var(--bordure)}
+.rech{flex:1;max-width:620px;display:flex;align-items:center;gap:10px;height:38px;padding:0 12px;background:var(--surface-1);border:1px solid var(--bordure-forte);border-radius:var(--r-2);color:var(--texte-3);font-size:13.5px}
+.rech .kbd{margin-left:auto}
+.haut .droite{margin-left:auto;display:flex;align-items:center;gap:8px}
+.avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:500 11.5px var(--sans);flex:none;background:var(--surface-3);color:var(--texte-2)}
+.onglets{display:flex;align-items:center;gap:2px;padding:0 18px;border-bottom:1px solid var(--bordure);height:44px}
+.onglets span{height:44px;display:flex;align-items:center;gap:6px;padding:0 12px;color:var(--texte-2);font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.onglets span.on{color:var(--texte);border-color:var(--accent-texte)}
+.onglets span small{color:var(--texte-3);font-size:11.5px}
+.onglets .outils{margin-left:auto;display:flex;align-items:center;gap:6px;border:0;color:var(--texte-3);font-size:12.5px}
+
+.contenu{display:flex;min-height:0;flex:1}
+.liste{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column}
+.liste.etroite{flex:0 0 430px;border-right:1px solid var(--bordure)}
+.jour{font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:12px 18px 6px}
+.rangee{display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 18px;border-bottom:1px solid var(--bordure);position:relative}
+.rangee:hover{background:var(--survol)}
+.rangee.sel{background:var(--accent-doux)}
+.rangee.sel::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--accent-texte)}
+.rangee.lu .de,.rangee.lu .l2 b{font-weight:300;color:var(--texte-2)}
+.rangee .nonlu{width:7px;height:7px;border-radius:50%;background:var(--accent-texte);flex:none}
+.rangee .esp{width:7px;flex:none}
+.case{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--bordure-forte);flex:none;display:grid;place-items:center}
+.case.on{background:var(--accent);border-color:var(--accent)}
+.corps{flex:1;min-width:0}
+.l1{display:flex;align-items:center;gap:8px}
+.de{font-weight:500;font-size:13.5px;white-space:nowrap}
+.heure{margin-left:auto;color:var(--texte-3);font-size:12px;white-space:nowrap}
+.l2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:var(--texte-2);margin-top:1px}
+.l2 b{color:var(--texte);font-weight:400}
+.pj{display:inline-flex;align-items:center;gap:4px;color:var(--texte-3);font-size:11.5px;margin-left:6px}
+.propo-mini{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 3px 0 8px;border-radius:11px;background:var(--ia-doux);border:1px solid var(--ia-bord);color:var(--ia);font-size:11.5px;white-space:nowrap}
+.propo-mini button{width:18px;height:18px;border-radius:50%;border:0;background:rgba(185,167,224,.2);color:var(--texte);display:grid;place-items:center;padding:0}
+.propo-mini button .i{width:11px;height:11px}
+.fait{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:11px;color:var(--ia);font-size:11.5px;border:1px dashed var(--ia-bord);white-space:nowrap}
+.etiq{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:var(--r-1);background:var(--surface-2);color:var(--texte-2);font-size:11px}
+.urg{color:var(--attention);background:var(--attention-doux)}
+.survol{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-2);padding:2px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.barre-sel{display:flex;align-items:center;gap:6px;height:48px;padding:0 14px;margin:10px 14px 4px;border-radius:var(--r-2);background:var(--surface-2);border:1px solid var(--bordure-forte)}
+.barre-sel b{font-weight:400;margin:0 10px 0 6px}
+
+/* ---------- Lecture ---------- */
+.lecture{flex:1;min-width:0;display:flex;flex-direction:column;position:relative;background:var(--fond)}
+.outils-l{display:flex;align-items:center;gap:2px;height:52px;padding:0 14px;border-bottom:1px solid var(--bordure)}
+.sepv{width:1px;height:20px;background:var(--bordure);margin:0 6px}
+.outils-l .fin{margin-left:auto;display:flex;gap:6px;align-items:center}
+.lecture .defile{padding:22px 34px 30px;overflow:hidden}
+.objet{font:500 28px/1.2 var(--serif);margin:0 0 14px}
+.exp{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.exp .qui b{font-weight:500}
+.exp .qui span{color:var(--texte-3);font-size:12.5px}
+.exp .quand{margin-left:auto;color:var(--texte-3);font-size:12.5px;text-align:right}
+.propo{border:1px solid var(--ia-bord);background:linear-gradient(180deg,var(--ia-doux),rgba(185,167,224,.02));border-radius:var(--r-2);padding:12px 14px;margin-bottom:20px}
+.propo .tete{display:flex;align-items:center;gap:8px;color:var(--ia);font-size:12.5px}
+.jauge{margin-left:auto;display:inline-flex;align-items:center;gap:6px;color:var(--texte-3);font-size:12px}
+.jauge .barre{width:52px;height:4px;border-radius:4px;background:var(--surface-3);overflow:hidden}
+.jauge .barre span{display:block;height:100%;background:var(--ia)}
+.propo .quoi{margin:6px 0 2px;font-size:14.5px;font-weight:400}
+.propo .quoi b{font-weight:500}
+.propo .pq{color:var(--texte-2);font-size:13px;margin:0 0 10px}
+.propo .act{display:flex;gap:6px;align-items:center}
+.propo .act .kbd:first-of-type{margin-left:auto}
+.message{color:var(--papier);font-size:14.5px;line-height:1.7;max-width:720px}
+.message p{margin:0 0 12px}
+.message a{color:var(--accent-texte)}
+.message .sig{color:var(--texte-3);font-size:13px}
+.pieces{display:flex;gap:10px;margin:18px 0}
+.piece{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--r-2);background:var(--surface-1);border:1px solid var(--bordure);font-size:13px}
+.piece small{display:block;color:var(--texte-3);font-size:11.5px}
+.repondre{display:flex;align-items:center;gap:10px;margin-top:18px;max-width:720px;height:44px;padding:0 14px;border-radius:var(--r-2);border:1px solid var(--bordure-forte);color:var(--texte-3);background:var(--surface-1)}
+.menu{position:absolute;min-width:240px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-2);box-shadow:var(--ombre-2);padding:6px;z-index:10}
+.menu .titre{font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:6px 10px 4px}
+.menu .filtre{display:flex;align-items:center;gap:8px;height:32px;margin:0 2px 4px;padding:0 8px;border-radius:var(--r-1);background:var(--surface-1);border:1px solid var(--bordure);color:var(--texte-3);font-size:12.5px}
+.menu .item{display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:var(--r-1);font-size:13.5px}
+.menu .item.actif{background:var(--survol)}
+.menu .item .kbd{margin-left:auto}
+.menu .item.ia{color:var(--ia)}
+.menu .sep{height:1px;background:var(--bordure);margin:6px 4px}
+.menu .item.dan{color:var(--danger)}
+.annot{position:absolute;font:400 12px var(--sans);color:#F2D38A;background:rgba(40,30,10,.92);border:1px solid rgba(242,211,138,.5);border-radius:8px;padding:5px 9px;max-width:230px;z-index:20;line-height:1.4}
+
+/* ---------- Mobile ---------- */
+.telephones{display:flex;gap:28px;flex-wrap:wrap}
+.tel{width:390px;height:780px;border-radius:38px;border:10px solid #1d1915;background:var(--fond);overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.tel .statut{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;color:var(--texte-2)}
+.tel .tete{display:flex;align-items:center;gap:10px;padding:6px 14px 10px}
+.tel .tete .rech{height:42px;max-width:none;border-radius:21px}
+.tel .chips{display:flex;gap:6px;padding:0 14px 8px;overflow:hidden}
+.chip{height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--bordure-forte);display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--texte-2);white-space:nowrap}
+.chip.on{background:var(--accent-doux);border-color:var(--accent-bord);color:var(--texte)}
+.tel .rangee{padding:10px 14px;min-height:72px;align-items:flex-start}
+.tel .rangee .avatar{margin-top:2px}
+.tel .fab{position:absolute;right:16px;bottom:84px;height:52px;padding:0 20px;border-radius:16px;background:var(--accent);display:flex;align-items:center;gap:8px;font-size:14px;box-shadow:0 10px 24px rgba(0,0,0,.45)}
+.tel nav{margin-top:auto;height:68px;border-top:1px solid var(--bordure);display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface-1)}
+.tel nav span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--texte-3)}
+.tel nav span.on{color:var(--texte)}
+.tel nav span.on .ic{background:var(--accent-doux);color:var(--accent-texte)}
+.tel nav .ic{width:56px;height:28px;border-radius:14px;display:grid;place-items:center;position:relative}
+.tel nav .ic em{position:absolute;top:-3px;right:8px;font:500 10px/15px var(--sans);font-style:normal;min-width:15px;height:15px;border-radius:8px;background:var(--ia);color:#1A1612;text-align:center;padding:0 4px}
+.tel .lect{padding:4px 18px;overflow:hidden;flex:1}
+.tel .barre-bas{display:flex;justify-content:space-around;align-items:center;height:60px;border-top:1px solid var(--bordure);background:var(--surface-1)}
+.notes{margin-top:24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media(max-width:1100px){.notes{grid-template-columns:1fr}}
+.note{background:var(--surface-1);border:1px solid var(--bordure);border-radius:var(--r-3);padding:16px 18px;font-size:13.5px;color:var(--texte-2)}
+.note h3{font:500 19px var(--serif);color:var(--texte);margin:0 0 6px}
+.note ul{margin:0;padding-left:18px}.note li{margin:4px 0}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></symbol>
+  <symbol id="trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+  <symbol id="more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+  <symbol id="spark" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+  <symbol id="folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></symbol>
+  <symbol id="list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  <symbol id="inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="reply" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v3"/></symbol>
+  <symbol id="send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></symbol>
+  <symbol id="clip" viewBox="0 0 24 24"><path d="m21 11-9 9a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8"/></symbol>
+  <symbol id="file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="spam" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></symbol>
+  <symbol id="eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></symbol>
+  <symbol id="pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+</svg>
+<style>
+.app.reg{height:900px}
+.regl{display:grid;grid-template-columns:220px 1fr;flex:1;min-height:0}
+.snav{border-right:1px solid var(--bordure);padding:18px 10px;display:flex;flex-direction:column;gap:2px}
+.snav h2{font:500 24px var(--serif);margin:0 10px 10px}
+.snav .groupe{padding-top:10px}
+.scontenu{overflow:hidden;padding:24px 32px 40px}
+.scol{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.pagehead small{font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3)}
+.pagehead h1{font:500 32px/1.1 var(--serif);margin:4px 0 6px}
+.pagehead p{margin:0;color:var(--texte-2)}
+.carteR{background:var(--surface-1);border:1px solid var(--bordure);border-radius:var(--r-3)}
+.carteR>header{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--bordure)}
+.carteR>header h3{font:500 15px var(--sans);margin:0}
+.carteR>header p{margin:2px 0 0;color:var(--texte-3);font-size:12.5px}
+.carteR>header .droite{margin-left:auto;display:flex;gap:6px;align-items:center}
+.ligneR{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--bordure)}
+.ligneR:last-child{border-bottom:0}
+.ligneR .rl{font-size:14px}
+.ligneR .rh{font-size:12.5px;color:var(--texte-3);margin-top:2px;max-width:470px}
+.ligneR .rc{display:flex;align-items:center;gap:8px}
+.badge{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:12px;font-size:12px}
+.badge.ok{background:var(--ok-doux);color:var(--ok);border:1px solid var(--ok-bord)}
+.badge.att{background:var(--attention-doux);color:var(--attention);border:1px solid var(--attention-bord)}
+.badge.dan{background:var(--danger-doux);color:var(--danger);border:1px solid var(--danger-bord)}
+.badge .p{width:6px;height:6px;border-radius:50%;background:currentColor}
+.mono{font:400 13px ui-monospace,Consolas,monospace;color:var(--texte-2)}
+.curseur{width:220px;height:6px;border-radius:3px;background:var(--surface-3);position:relative}
+.curseur span{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.curseur i{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--ivoire);transform:translate(-50%,-50%);box-shadow:0 1px 4px rgba(0,0,0,.5)}
+.valeur{min-width:52px;text-align:right;font:500 14px var(--sans)}
+.echelle{display:flex;margin:4px 18px 16px;height:30px;border-radius:var(--r-2);overflow:hidden;font-size:11.5px}
+.echelle div{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--texte);padding:0 8px}
+.boite{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;padding:10px 18px;border-bottom:1px solid var(--bordure)}
+.boite:last-child{border-bottom:0}
+.boite small{color:var(--texte-3);font-size:12px}
+.seg{display:flex;padding:2px;border-radius:var(--r-2);background:var(--surface-2);border:1px solid var(--bordure-forte)}
+.seg span{height:28px;display:flex;align-items:center;padding:0 12px;border-radius:7px;font-size:12.5px;color:var(--texte-2)}
+.seg span.on{background:var(--surface-3);color:var(--texte)}
+.seg.petit span{height:24px;padding:0 10px;font-size:12px}
+.banniere{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--r-2);background:var(--danger-doux);border:1px solid var(--danger-bord);color:var(--texte)}
+.banniere .i{color:var(--danger)}
+.banniere p{margin:0;font-size:13.5px}
+.banniere p small{display:block;color:var(--texte-2);font-size:12.5px}
+.banniere .btn{margin-left:auto}
+.regle{display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid var(--bordure);font-size:13.5px;color:var(--texte-2)}
+.regle .poignee{color:var(--texte-3);letter-spacing:-2px;cursor:grab}
+.regle .num{width:20px;height:20px;border-radius:50%;background:var(--surface-3);display:grid;place-items:center;font-size:11px;color:var(--texte-2)}
+.regle b{font-weight:400;color:var(--texte)}
+.regle .droite{margin-left:auto;display:flex;gap:2px}
+.phrase{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:14px 18px;font-size:13.5px;color:var(--texte-2);background:rgba(255,255,255,.015);border-radius:0 0 var(--r-3) var(--r-3)}
+.app-r{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bordure)}
+.app-r:last-child{border-bottom:0}
+.app-r .ico{width:36px;height:36px;border-radius:var(--r-2);background:var(--surface-3);display:grid;place-items:center;color:var(--texte-2)}
+.app-r b{font-weight:500;font-size:14px}
+.app-r small{display:block;color:var(--texte-3);font-size:12.5px}
+.voile{position:absolute;inset:0;background:rgba(6,5,4,.62);display:grid;place-items:center;z-index:20}
+.dlg{width:440px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-3);box-shadow:var(--ombre-2);padding:20px 22px 16px}
+.dlg h3{font:500 22px var(--serif);margin:0 0 6px}
+.dlg p{margin:0 0 16px;color:var(--texte-2);font-size:13.5px}
+.dlg .pied{display:flex;justify-content:flex-end;gap:8px}
+.btn.danger{background:var(--danger-doux);border-color:var(--danger-bord);color:var(--danger)}
+.tel .slist{padding:0 14px;display:flex;flex-direction:column;gap:14px;overflow:hidden;flex:1}
+.tel .sgr small{display:block;font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:0 4px 6px}
+.tel .sgr .bloc{background:var(--surface-1);border:1px solid var(--bordure);border-radius:var(--r-3)}
+.tel .sgr .it{display:flex;align-items:center;gap:12px;height:50px;padding:0 14px;border-bottom:1px solid var(--bordure);font-size:14px}
+.tel .sgr .it:last-child{border-bottom:0}
+.tel .sgr .it .v{margin-left:auto;color:var(--texte-3);font-size:12.5px;display:flex;align-items:center;gap:6px}
+</style>
+
+<div class="page">
+  <div class="intro">
+    <h1>Lun'Acedia · Réglages</h1>
+    <p>Planche 6. Même contenu qu’aujourd’hui (compte Google, clé Anthropic, seuil, boîtes et étiquettes, règles, appareils), plus le second seuil réglable décidé sur la planche 4. Seule la forme change.</p>
+    <p>Références : réglages myBrain (rail par catégorie, cartes, lignes libellé + aide + contrôle), compte Google (une page par thème, état lisible d’un coup d’œil), Linear (règles en phrases). Fini la colonne étroite avec une moitié d’écran vide : la colonne est centrée et chaque réglage tient sur une ligne.</p>
+  </div>
+
+  <!-- ================= ÉTAT 1 ================= -->
+  <section class="etat">
+    <h2>1 · Tri par l’IA</h2>
+    <p>Une page par thème, choisie dans la colonne de gauche. Chaque carte dit son état d’abord (<b>En service</b>, échéance), l’action ensuite. Les deux seuils sont expliqués par une échelle : ce qui est rangé seul, ce que « Tout valider » prend, ce qui reste à valider un par un.</p>
+    <div class="cadre">
+      <div class="chrome-nav"><i></i><i></i><i></i><span>localhost:8787 · Lun'Acedia</span></div>
+      <div class="app reg">
+        <aside class="rail">
+          <div class="marque"><i></i>Lun'Acedia</div>
+          <button class="btn principal plein"><svg class="i"><use href="#plus"/></svg>Nouveau message</button>
+          <div class="lien"><svg class="i"><use href="#inbox"/></svg>Réception<span class="n">12</span></div>
+          <div class="lien"><svg class="i"><use href="#spark"/></svg>À valider<span class="n ia">3</span></div>
+          <div class="lien"><svg class="i"><use href="#cal"/></svg>Agenda</div>
+          <div class="lien"><svg class="i"><use href="#list"/></svg>Tâches<span class="n">4</span></div>
+          <div class="bas">
+            <div class="lien"><svg class="i"><use href="#clock"/></svg>Journal</div>
+            <div class="lien on"><svg class="i"><use href="#cog"/></svg>Réglages</div>
+            <div class="service"><span class="p"></span><div><b>Tri par l’IA actif</b>Synchronisé il y a 1 min</div></div>
+          </div>
+        </aside>
+        <div class="zone">
+          <div class="regl">
+            <nav class="snav">
+              <h2>Réglages</h2>
+              <div class="groupe">Compte</div>
+              <div class="lien"><svg class="i"><use href="#mail"/></svg>Compte Google</div>
+              <div class="lien"><svg class="i"><use href="#eye"/></svg>Appareils et applications</div>
+              <div class="groupe">Tri</div>
+              <div class="lien on"><svg class="i"><use href="#spark"/></svg>Tri par l’IA</div>
+              <div class="lien"><svg class="i"><use href="#folder"/></svg>Boîtes et règles</div>
+            </nav>
+            <div class="scontenu"><div class="scol">
+              <div class="pagehead"><small>Tri</small><h1>Tri par l’IA</h1><p>La clé qui fait tourner le tri, et le niveau de confiance à partir duquel l’IA agit seule.</p></div>
+
+              <div class="carteR">
+                <header><div><h3>Clé Anthropic</h3><p>Utilisée seulement pour classer tes mails. Jamais affichée en entier.</p></div><div class="droite"><span class="badge ok"><span class="p"></span>En service</span></div></header>
+                <div class="ligneR"><div><div class="rl">Clé enregistrée</div><div class="rh">Se termine par <span class="mono">ZQAA</span> · vérifiée le 20 oct. 2026</div></div><div class="rc"><button class="btn secondaire petit">Remplacer…</button><button class="btn fantome petit" style="color:var(--danger)">Retirer</button></div></div>
+                <div class="ligneR"><div><div class="rl">Échéance déclarée</div><div class="rh">Avertissement 14 jours puis 3 jours avant.</div></div><div class="rc"><span class="puce" style="height:32px;display:inline-flex;align-items:center;gap:6px;padding:0 10px;border-radius:var(--r-1);background:var(--surface-2);border:1px solid var(--bordure-forte);font-size:13px"><svg class="i i-s"><use href="#cal"/></svg>12 mars 2027</span></div></div>
+              </div>
+
+              <div class="carteR">
+                <header><div><h3>Seuils de confiance</h3><p>Ce que l’IA fait seule, et ce qu’elle te laisse.</p></div></header>
+                <div class="ligneR"><div><div class="rl">Ranger seul à partir de</div><div class="rh">Au-dessus, le mail est rangé sans te demander ; tu peux toujours annuler depuis le journal.</div></div><div class="rc"><div class="curseur"><span style="width:90%;background:var(--ok)"></span><i style="left:90%"></i></div><span class="valeur">95 %</span></div></div>
+                <div class="ligneR"><div><div class="rl">« Tout valider » à partir de</div><div class="rh">Dans la file À valider, le bouton groupé prend les propositions au-dessus de ce seuil.</div></div><div class="rc"><div class="curseur"><span style="width:70%;background:var(--ia)"></span><i style="left:70%"></i></div><span class="valeur">85 %</span></div></div>
+                <div class="echelle"><div style="flex:35;background:var(--surface-3)">50 %<span style="flex:1;text-align:center">en dessous de 85 % : un par un</span></div><div style="flex:10;background:rgba(185,167,224,.28)">« Tout valider »</div><div style="flex:5;background:rgba(124,194,155,.3);min-width:64px">seul · 100 %</div></div>
+              </div>
+
+              <div class="carteR">
+                <header><div><h3>Tri en cours</h3><p>Mettre en pause arrête le tri des nouveaux mails, rien d’autre.</p></div><div class="droite"><button class="btn secondaire petit"><svg class="i i-s"><use href="#pause"/></svg>Mettre en pause</button></div></header>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ÉTAT 2 ================= -->
+  <section class="etat">
+    <h2>2 · Boîtes, règles, et un problème de clé</h2>
+    <p>Quand quelque chose ne va pas, une <b>bannière</b> le dit en haut de la page concernée, avec l’action pour réparer. Les boîtes choisissent leur rôle d’un clic. Les règles se lisent comme des phrases, s’ordonnent par glisser, et se créent en complétant une phrase.</p>
+    <div class="cadre">
+      <div class="chrome-nav"><i></i><i></i><i></i><span>localhost:8787 · Lun'Acedia</span></div>
+      <div class="app reg">
+        <aside class="rail">
+          <div class="marque"><i></i>Lun'Acedia</div>
+          <button class="btn principal plein"><svg class="i"><use href="#plus"/></svg>Nouveau message</button>
+          <div class="lien"><svg class="i"><use href="#inbox"/></svg>Réception<span class="n">12</span></div>
+          <div class="lien"><svg class="i"><use href="#spark"/></svg>À valider<span class="n ia">3</span></div>
+          <div class="lien"><svg class="i"><use href="#cal"/></svg>Agenda</div>
+          <div class="lien"><svg class="i"><use href="#list"/></svg>Tâches<span class="n">4</span></div>
+          <div class="bas">
+            <div class="lien"><svg class="i"><use href="#clock"/></svg>Journal</div>
+            <div class="lien on"><svg class="i"><use href="#cog"/></svg>Réglages</div>
+            <div class="service" style="border-color:var(--danger-bord)"><span class="p" style="background:var(--danger);box-shadow:0 0 0 3px var(--danger-doux)"></span><div><b>Tri en pause</b>Clé refusée</div></div>
+          </div>
+        </aside>
+        <div class="zone">
+          <div class="regl">
+            <nav class="snav">
+              <h2>Réglages</h2>
+              <div class="groupe">Compte</div>
+              <div class="lien"><svg class="i"><use href="#mail"/></svg>Compte Google</div>
+              <div class="lien"><svg class="i"><use href="#eye"/></svg>Appareils et applications</div>
+              <div class="groupe">Tri</div>
+              <div class="lien"><svg class="i"><use href="#spark"/></svg>Tri par l’IA<span class="n" style="color:var(--danger)">●</span></div>
+              <div class="lien on"><svg class="i"><use href="#folder"/></svg>Boîtes et règles</div>
+            </nav>
+            <div class="scontenu"><div class="scol">
+              <div class="banniere"><svg class="i"><use href="#spam"/></svg><p>Clé Anthropic refusée : le tri par l’IA est en pause.<small>Tes règles continuent de s’appliquer. Les nouveaux mails restent en réception.</small></p><button class="btn principal petit">Remplacer la clé</button></div>
+              <div class="pagehead"><small>Tri</small><h1>Boîtes et règles</h1><p>Où l’IA peut ranger, et ce qui est rangé avant même de lui demander.</p></div>
+
+              <div class="carteR">
+                <header><div><h3>Boîtes et étiquettes</h3><p>Une boîte reçoit les mails rangés ; une étiquette s’ajoute sans déplacer.</p></div><div class="droite"><button class="btn secondaire petit"><svg class="i i-s"><use href="#plus"/></svg>Nouvelle</button></div></header>
+                <div class="boite"><span class="pastille-c" style="background:#6B8FB0"></span><div>Factures <small>· 42 mails</small></div><div class="seg petit"><span class="on">Boîte</span><span>Étiquette</span><span>Ignorée</span></div><button class="btn fantome icone petit"><svg class="i"><use href="#more"/></svg></button></div>
+                <div class="boite"><span class="pastille-c" style="background:#A88B5C"></span><div>Administratif <small>· 17 mails</small></div><div class="seg petit"><span class="on">Boîte</span><span>Étiquette</span><span>Ignorée</span></div><button class="btn fantome icone petit"><svg class="i"><use href="#more"/></svg></button></div>
+                <div class="boite"><span class="pastille-c" style="background:#8A9BAE"></span><div>Opérateur <small>· 9 mails</small></div><div class="seg petit"><span>Boîte</span><span class="on">Étiquette</span><span>Ignorée</span></div><button class="btn fantome icone petit"><svg class="i"><use href="#more"/></svg></button></div>
+              </div>
+
+              <div class="carteR">
+                <header><div><h3>Règles</h3><p>Appliquées avant l’IA, dans l’ordre ; la première qui correspond range le mail.</p></div></header>
+                <div class="regle"><span class="poignee">⋮⋮</span><span class="num">1</span><span>Si l’<b>expéditeur</b> est « <b>noreply@free-mobile.fr</b> », ranger dans</span><span class="etiq" style="background:var(--surface-3)"><span class="pastille-c" style="background:#6B8FB0"></span>Factures</span><div class="droite"><button class="btn fantome icone petit"><svg class="i"><use href="#trash"/></svg></button></div></div>
+                <div class="regle"><span class="poignee">⋮⋮</span><span class="num">2</span><span>Si l’<b>objet</b> contient « <b>avis d’imposition</b> », ranger dans</span><span class="etiq" style="background:var(--surface-3)"><span class="pastille-c" style="background:#A88B5C"></span>Administratif</span><div class="droite"><button class="btn fantome icone petit"><svg class="i"><use href="#trash"/></svg></button></div></div>
+                <div class="phrase"><svg class="i i-s"><use href="#plus"/></svg>Si l’<span class="btn secondaire petit">expéditeur<svg class="i i-s"><use href="#chev"/></svg></span><span class="btn secondaire petit">contient<svg class="i i-s"><use href="#chev"/></svg></span><span class="puce" style="height:28px;display:inline-flex;align-items:center;padding:0 10px;border-radius:var(--r-1);background:var(--surface-2);border:1px solid var(--accent-bord);color:var(--texte);min-width:150px;font-size:13px">@sncf-connect.com</span>ranger dans<span class="btn secondaire petit">Choisir une boîte<svg class="i i-s"><use href="#chev"/></svg></span><button class="btn principal petit" style="margin-left:auto">Ajouter</button></div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ÉTAT 3 ================= -->
+  <section class="etat">
+    <h2>3 · Appareils et applications, confirmation de retrait</h2>
+    <p>Chaque accès dit ce qu’il est, depuis quand et sa dernière activité ; « ce navigateur » est repéré. Une action qui coupe un accès passe par une <b>fenêtre de confirmation</b> qui dit la conséquence, bouton rouge doux, jamais par une alerte du navigateur.</p>
+    <div class="cadre">
+      <div class="chrome-nav"><i></i><i></i><i></i><span>localhost:8787 · Lun'Acedia</span></div>
+      <div class="app" style="position:relative">
+        <aside class="rail">
+          <div class="marque"><i></i>Lun'Acedia</div>
+          <button class="btn principal plein"><svg class="i"><use href="#plus"/></svg>Nouveau message</button>
+          <div class="lien"><svg class="i"><use href="#inbox"/></svg>Réception<span class="n">12</span></div>
+          <div class="lien"><svg class="i"><use href="#spark"/></svg>À valider<span class="n ia">3</span></div>
+          <div class="lien"><svg class="i"><use href="#cal"/></svg>Agenda</div>
+          <div class="bas"><div class="lien on"><svg class="i"><use href="#cog"/></svg>Réglages</div></div>
+        </aside>
+        <div class="zone">
+          <div class="regl">
+            <nav class="snav">
+              <h2>Réglages</h2>
+              <div class="groupe">Compte</div>
+              <div class="lien"><svg class="i"><use href="#mail"/></svg>Compte Google</div>
+              <div class="lien on"><svg class="i"><use href="#eye"/></svg>Appareils et applications</div>
+              <div class="groupe">Tri</div>
+              <div class="lien"><svg class="i"><use href="#spark"/></svg>Tri par l’IA</div>
+              <div class="lien"><svg class="i"><use href="#folder"/></svg>Boîtes et règles</div>
+            </nav>
+            <div class="scontenu"><div class="scol">
+              <div class="pagehead"><small>Compte</small><h1>Appareils et applications</h1><p>Ce qui a accès à Lun'Acedia.</p></div>
+              <div class="carteR">
+                <header><div><h3>3 accès</h3></div><div class="droite"><button class="btn secondaire petit"><svg class="i i-s"><use href="#plus"/></svg>Relier un appareil</button></div></header>
+                <div class="app-r"><span class="ico"><svg class="i"><use href="#eye"/></svg></span><div><b>Chrome sur Windows</b> <span class="badge ok" style="height:20px;margin-left:6px">Ce navigateur</span><small>Relié le 18 oct. · actif maintenant</small></div><button class="btn fantome petit">Retirer</button></div>
+                <div class="app-r"><span class="ico"><svg class="i"><use href="#mail"/></svg></span><div><b>Safari sur iPhone</b><small>Relié le 19 oct. · actif il y a 3 h</small></div><button class="btn fantome petit">Retirer</button></div>
+                <div class="app-r"><span class="ico" style="color:var(--rouge);background:rgba(122,24,24,.2)"><svg class="i"><use href="#spark"/></svg></span><div><b>Lun'Anima</b><small>Application · reçoit les alertes · reliée le 20 oct.</small></div><button class="btn fantome petit">Retirer</button></div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+        <div class="voile"><div class="dlg"><h3>Retirer Safari sur iPhone ?</h3><p>Cet appareil perdra l’accès à Lun'Acedia. Un nouveau code sera nécessaire pour le relier.</p><div class="pied"><button class="btn secondaire">Annuler</button><button class="btn danger">Retirer l’appareil</button></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MOBILE ================= -->
+  <section class="etat">
+    <h2>4 · Mobile</h2>
+    <p>La colonne de thèmes devient une liste d’entrée ; chaque thème s’ouvre en plein écran avec les mêmes cartes empilées. L’état est visible dès la liste.</p>
+    <div class="telephones">
+      <div class="tel">
+        <div class="statut"><span>09:41</span><span>5G · 82 %</span></div>
+        <div class="tete"><div style="font:500 26px var(--serif)">Réglages</div></div>
+        <div class="slist">
+          <div class="sgr"><small>Compte</small><div class="bloc">
+            <div class="it"><svg class="i"><use href="#mail"/></svg>Compte Google<span class="v">Connecté<svg class="i i-s" style="transform:rotate(180deg)"><use href="#left"/></svg></span></div>
+            <div class="it"><svg class="i"><use href="#eye"/></svg>Appareils<span class="v">3<svg class="i i-s" style="transform:rotate(180deg)"><use href="#left"/></svg></span></div>
+          </div></div>
+          <div class="sgr"><small>Tri</small><div class="bloc">
+            <div class="it"><svg class="i"><use href="#spark"/></svg>Tri par l’IA<span class="v"><span class="badge ok" style="height:20px">En service</span><svg class="i i-s" style="transform:rotate(180deg)"><use href="#left"/></svg></span></div>
+            <div class="it"><svg class="i"><use href="#folder"/></svg>Boîtes et règles<span class="v">3 boîtes · 2 règles<svg class="i i-s" style="transform:rotate(180deg)"><use href="#left"/></svg></span></div>
+          </div></div>
+        </div>
+        <nav><span><span class="ic"><svg class="i"><use href="#mail"/></svg></span>Mail</span><span><span class="ic"><svg class="i"><use href="#spark"/></svg><em>3</em></span>À valider</span><span><span class="ic"><svg class="i"><use href="#cal"/></svg></span>Agenda</span><span class="on"><span class="ic"><svg class="i"><use href="#cog"/></svg></span>Réglages</span></nav>
+      </div>
+    </div>
+  </section>
+
+  <div class="notes">
+    <div class="note"><h3>Ce qui change de fond</h3><ul><li>Second seuil « Tout valider » réglable (décidé sur la planche 4).</li><li>Rôle « Ignorée » pour une étiquette Gmail que l’IA ne doit pas utiliser (aujourd’hui : « Aucun »), même donnée, autre mot.</li><li>Ordre des règles modifiable : à vérifier côté serveur ; sinon, numéros affichés et ordre fixe.</li><li>Dernière activité d’un appareil : seulement si l’info existe déjà.</li></ul></div>
+    <div class="note"><h3>Regroupements</h3><ul><li>Boîtes et règles sur une même page : on règle les deux ensemble.</li><li>Le Compte Google garde sa page : état, adresse, Déconnecter (confirmation).</li><li>Les jours fériés et autres options d’agenda restent dans l’agenda lui-même.</li></ul></div>
+    <div class="note"><h3>À trancher</h3><ul><li>Le mot « Ignorée » à la place de « Aucun » te va-t-il ?</li><li>Retrait de clé : je propose une confirmation, comme pour les appareils.</li></ul></div>
+  </div>
+</div>
+</body>
+</html>

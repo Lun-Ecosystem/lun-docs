@@ -20,9 +20,30 @@
 
 Les noms des tokens sont repris tels quels dans chaque surface, quel que soit le framework.
 
+## Règle B : socle commun, couleur du monde en accent
+
+Toutes les interfaces partagent les mêmes surfaces, textes, bordures, tons, rayons et ombres (le socle
+Lun’). Le monde d’un projet ne change que l’**accent** : `--accent`, `--accent-survol`,
+`--accent-texte`, `--accent-doux`, `--accent-bord`.
+
+- L’attribut `data-monde="acedia"` ou `data-monde="anima"` se pose sur la **racine de chaque vue**, pas
+  sur la page. Une vue d’Acedia reprise dans le panel d’Anima garde ainsi son accent bleu.
+- Le **rouge d’Anima n’est jamais utilisé en texte** : `--accent-texte` y reprend `--texte`. Le rouge
+  sert de fond (bouton, pastille) ou de bordure.
+- Un composant n’écrit **aucune couleur en dur** : il lit les jetons.
+
+## Jetons de référence
+
+La seule source est `design/tokens.css` (dans lun-docs) : le socle et le bloc d’accent de
+chaque monde. Chaque dépôt garde une copie générée, avec l’en-tête « ne pas modifier ici »
+(`node tools/sync-tokens.mjs <fichier>` pour l’écrire). L’option `--monde <nom>` ne garde que le socle
+et le bloc de ce monde : un dépôt n’embarque pas l’accent des autres. La CI du dépôt compare la copie à la
+référence avec `node tools/sync-tokens.mjs --check [--monde <nom>] <fichier>` et échoue au moindre écart.
+
 ## Couleurs « monde » par projet
 
-Chaque projet a son monde (fond et accent), utilisé pour l'identifier dans le panel et le mobile.
+Chaque projet a son monde. Le tableau sert à **identifier un projet** (une tuile du panel, par
+exemple), plus comme fond d’application : le fond des interfaces est celui du socle.
 
 | Projet | Fond | Accent |
 |---|---|---|
@@ -35,7 +56,7 @@ Chaque projet a son monde (fond et accent), utilisé pour l'identifier dans le p
 | Lun'Superbia | `#06080F` | `#5A6A90` |
 | Lun'Luxuria | `#100409` | `#8A1E5A` |
 
-Un nouveau projet de l'étape 2 reprend le monde du nom qu'il porte, ou en reçoit un par ADR.
+Un nouveau projet de l’étape 2 reprend le monde du nom qu’il porte, ou en reçoit un par ADR.
 
 ## Typographie
 
@@ -66,3 +87,39 @@ Le défaut à corriger est l'usage, pas l'identité.
 - Lisible en déplacement : contrastes du texte conformes WCAG AA sur les fonds `--encre`.
 - Les effets du website (curseur personnalisé, transitions lourdes) restent au site vitrine ; les
   outils du quotidien privilégient la vitesse.
+
+## Composants communs
+
+Chaque écran ne s’assemble qu’avec ces briques, jamais avec une version refaite localement.
+
+- **Jetons** : couleurs, échelle typographique, rayons, ombres, espacements, hauteurs, mouvement.
+- **Boutons** : cinq niveaux (principal, doux, secondaire, fantôme, danger), trois tailles, variante
+  icône seule ; une seule action principale par zone.
+- **Champs** : texte (libellé au-dessus, aide en dessous, erreur à la place de l’aide), liste
+  déroulante, curseur avec sa valeur, date, bascule, case, commande segmentée, saisie de code.
+- **L’IA** : pastille de proposition, carte de proposition complète, marque « rangé seul », ton IA
+  dédié (violet).
+- **Calques** : menus avec filtre et raccourcis, bulle de détail, info-bulle, fenêtre de dialogue et de
+  confirmation, toast avec annulation, bannière d’état.
+- **Structures** : rangée de liste, carte de réglages faite de lignes, état vide qui explique,
+  squelette de chargement, pastilles de filtre, badge d’état.
+- **Navigation** : rail avec groupes, compteurs et carte d’état du service, colonne de thèmes, onglets,
+  palette de commandes (Ctrl K), barre de navigation mobile et bouton flottant.
+- **Pages seules** : carte centrée sur fond encre avec halo du monde, indicateur d’étapes.
+
+## Bibliothèques retenues
+
+| Besoin | Choix |
+|---|---|
+| Comportements (menu, liste déroulante, bulle, dialogue, info-bulle, onglets, palette, date, curseur, bascule, case) | **Bits UI** (sans style, Svelte 5) : les menus passent par un calque au-dessus de la page, aucun n’est coupé par un conteneur |
+| Icônes | **`@lucide/svelte`** |
+| Grille d’agenda | **FullCalendar 7**, habillé par les jetons |
+| Style | **Jetons CSS** ; ni Tailwind ni bibliothèque de composants stylés |
+
+Aucune police ni ressource ne vient d’un CDN. Pas d’alerte native (`alert`, `confirm`, `prompt`).
+
+## Vérification avant toute PR de front
+
+Un écran ou un composant de front est **vérifié dans Chrome**, en largeur bureau (1440 px) et mobile
+(390 px), contre sa planche ou le catalogue des composants, avant l’ouverture de la PR. Les captures
+ne contiennent aucune donnée réelle.
