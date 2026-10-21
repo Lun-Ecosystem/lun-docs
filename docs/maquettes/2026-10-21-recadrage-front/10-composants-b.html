@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lun' · Briques communes B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ Jetons proposés (monde Lun'Acedia) ============ */
+:root{
+  /* socle Lun' : identique pour toutes les interfaces (règle B) */
+  --encre:#0D0B09; --encre-2:#1A1612; --ivoire:#F0EBE1; --papier:#E8E2D6; --lune:#C8C0B0; --lavis:#8A9BAE; --rouge:#7A1818;
+  --fond:var(--encre); --surface-1:var(--encre-2); --surface-2:#221D18; --surface-3:#2B251F;
+  --survol:rgba(240,235,225,.045); --appui:rgba(240,235,225,.08);
+  --bordure:rgba(200,192,176,.12); --bordure-forte:rgba(200,192,176,.24);
+  --texte:var(--ivoire); --texte-2:var(--lune); --texte-3:#958C7E;
+  /* monde : seule couche qui change d'une interface à l'autre (ici Acedia) */
+  --accent:#3A6080; --accent-survol:#45719A; --accent-texte:#9DBEDA;
+  --accent-doux:rgba(58,96,128,.24); --accent-bord:rgba(110,155,195,.45);
+  /* tons : couleur, fond doux, bordure (communs) */
+  --ok:#7CC29B; --ok-doux:rgba(124,194,155,.12); --ok-bord:rgba(124,194,155,.38);
+  --attention:#E0B36A; --attention-doux:rgba(224,179,106,.12); --attention-bord:rgba(224,179,106,.38);
+  --danger:#E3A0A0; --danger-plein:#7A1818; --danger-doux:rgba(227,160,160,.10); --danger-bord:rgba(227,160,160,.38);
+  --info:#8A9BAE; --info-doux:rgba(138,155,174,.12); --info-bord:rgba(138,155,174,.38);
+  --ia:#B9A7E0; --ia-doux:rgba(185,167,224,.11); --ia-bord:rgba(185,167,224,.36);
+  /* forme */
+  --r-1:6px; --r-2:10px; --r-3:14px; --r-rond:999px;
+  --ombre-1:0 1px 2px rgba(0,0,0,.35);
+  --ombre-2:0 12px 32px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.4);
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fond);color:var(--texte);font:300 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+.page{max-width:1240px;margin:0 auto;padding:40px 32px 120px}
+.intro h1{font:500 40px/1.1 var(--serif);margin:0 0 8px}
+.intro p{color:var(--texte-2);max-width:820px;margin:0 0 6px}
+.note-maquette{display:inline-flex;gap:8px;align-items:center;margin-top:10px;font-size:12px;color:var(--texte-3);border:1px dashed var(--bordure-forte);border-radius:var(--r-rond);padding:3px 10px}
+section.bloc{margin-top:56px}
+.bloc>header{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.bloc>header .num{font:500 13px var(--sans);color:var(--accent-texte);letter-spacing:.08em}
+.bloc>header h2{font:500 28px/1.2 var(--serif);margin:0}
+.bloc>.pourquoi{color:var(--texte-2);margin:0 0 18px;max-width:880px}
+.grille{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.planche{background:var(--surface-1);border:1px solid var(--bordure);border-radius:var(--r-3);padding:20px}
+.planche h3{font:500 13px var(--sans);text-transform:uppercase;letter-spacing:.08em;color:var(--texte-3);margin:0 0 14px}
+.regle{font-size:12.5px;color:var(--texte-3);margin:14px 0 0;border-top:1px solid var(--bordure);padding-top:10px}
+.regle b{color:var(--texte-2);font-weight:500}
+.ligne{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.col{display:flex;flex-direction:column;gap:10px}
+.av{font-size:11px;color:var(--danger);text-transform:uppercase;letter-spacing:.08em;margin:0 0 6px}
+.ap{font-size:11px;color:var(--ok);text-transform:uppercase;letter-spacing:.08em;margin:0 0 6px}
+
+/* ============ Icônes (style Lucide, trait 1.75) ============ */
+.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.i-s{width:14px;height:14px}.i-l{width:20px;height:20px}
+
+/* ============ Boutons ============ */
+.btn{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:var(--r-2);font:400 13.5px var(--sans);border:1px solid transparent;cursor:pointer;color:var(--texte);background:none;white-space:nowrap}
+.btn.principal{background:var(--accent);border-color:var(--accent)}
+.btn.principal:hover{background:var(--accent-survol)}
+.btn.doux{background:var(--accent-doux);border-color:var(--accent-bord);color:var(--accent-texte)}
+.btn.secondaire{background:var(--surface-2);border-color:var(--bordure-forte)}
+.btn.secondaire:hover{background:var(--surface-3)}
+.btn.fantome{color:var(--texte-2)}.btn.fantome:hover{background:var(--survol);color:var(--texte)}
+.btn.danger{border-color:var(--danger-bord);color:var(--danger)}.btn.danger:hover{background:var(--danger-doux)}
+.btn.danger-plein{background:var(--danger-plein);border-color:var(--danger-plein)}
+.btn.petit{height:28px;padding:0 10px;font-size:12.5px;border-radius:var(--r-1)}
+.btn.grand{height:42px;padding:0 20px;font-size:14.5px}
+.btn.icone{width:34px;padding:0;justify-content:center}
+.btn.icone.petit{width:28px}
+.btn[disabled]{opacity:.42;cursor:not-allowed}
+.btn.charge .spin{width:14px;height:14px;border:2px solid rgba(240,235,225,.35);border-top-color:var(--texte);border-radius:50%}
+.btn:focus-visible,.champ input:focus-visible{outline:2px solid var(--accent-texte);outline-offset:2px}
+.focus-demo{outline:2px solid var(--accent-texte);outline-offset:2px}
+.kbd{font:500 11px var(--sans);color:var(--texte-3);border:1px solid var(--bordure-forte);border-bottom-width:2px;border-radius:5px;padding:0 5px;line-height:17px}
+.groupe-btn{display:inline-flex;border:1px solid var(--bordure-forte);border-radius:var(--r-2);overflow:hidden}
+.groupe-btn button{height:32px;padding:0 12px;background:var(--surface-2);border:0;color:var(--texte-2);font:400 13px var(--sans);border-left:1px solid var(--bordure)}
+.groupe-btn button:first-child{border-left:0}
+.groupe-btn button.on{background:var(--accent-doux);color:var(--texte)}
+
+/* ============ Champs ============ */
+.champ{display:flex;flex-direction:column;gap:6px;min-width:0}
+.champ label{font:400 13px var(--sans);color:var(--texte)}
+.champ .aide{font-size:12.5px;color:var(--texte-3)}
+.champ .err{font-size:12.5px;color:var(--danger);display:flex;gap:6px;align-items:center}
+.entree{display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-2);color:var(--texte)}
+.entree input{flex:1;min-width:0;background:none;border:0;color:inherit;font:300 14px var(--sans);outline:none}
+.entree input::placeholder{color:var(--texte-3)}
+.entree.focus{border-color:var(--accent-texte);box-shadow:0 0 0 3px var(--accent-doux)}
+.entree.erreur{border-color:var(--danger-bord);box-shadow:0 0 0 3px var(--danger-doux)}
+.entree .suffixe{color:var(--texte-3);font-size:12.5px}
+.select{justify-content:space-between;cursor:pointer}
+.inter{width:36px;height:20px;border-radius:var(--r-rond);background:var(--surface-3);border:1px solid var(--bordure-forte);position:relative;flex:none}
+.inter::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--texte-2);transition:.15s}
+.inter.on{background:var(--accent);border-color:var(--accent)}.inter.on::after{left:18px;background:#fff}
+.case{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--bordure-forte);display:grid;place-items:center;flex:none}
+.case.on{background:var(--accent);border-color:var(--accent)}
+.curseur{position:relative;height:4px;background:var(--surface-3);border-radius:4px;flex:1}
+.curseur span{position:absolute;left:0;top:0;bottom:0;width:80%;background:var(--accent);border-radius:4px}
+.curseur i{position:absolute;left:80%;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;background:var(--ivoire);border-radius:50%;box-shadow:var(--ombre-1)}
+
+/* ============ Pastilles et étiquettes ============ */
+.pastille{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:var(--r-rond);font:400 12px var(--sans);border:1px solid}
+.pastille .point{width:6px;height:6px;border-radius:50%;background:currentColor}
+.t-ok{color:var(--ok);background:var(--ok-doux);border-color:var(--ok-bord)}
+.t-att{color:var(--attention);background:var(--attention-doux);border-color:var(--attention-bord)}
+.t-dan{color:var(--danger);background:var(--danger-doux);border-color:var(--danger-bord)}
+.t-info{color:var(--info);background:var(--info-doux);border-color:var(--info-bord)}
+.t-ia{color:var(--ia);background:var(--ia-doux);border-color:var(--ia-bord)}
+.t-neutre{color:var(--texte-2);background:var(--surface-2);border-color:var(--bordure-forte)}
+.etiquette{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:var(--r-1);font:400 12px var(--sans);background:var(--surface-3);color:var(--texte-2)}
+.etiquette .c{width:8px;height:8px;border-radius:2px}
+.compteur{min-width:20px;height:18px;padding:0 6px;border-radius:var(--r-rond);background:var(--accent);color:#fff;font:500 11px/18px var(--sans);text-align:center}
+
+/* ============ Proposition IA ============ */
+.propo{border:1px solid var(--ia-bord);background:linear-gradient(180deg,var(--ia-doux),transparent 120%);border-radius:var(--r-2);padding:12px 14px}
+.propo .tete{display:flex;align-items:center;gap:8px;color:var(--ia);font:400 12.5px var(--sans)}
+.propo .quoi{margin:6px 0 2px;font:400 14px var(--sans)}
+.propo .quoi b{font-weight:500}
+.propo .pourquoi{color:var(--texte-2);font-size:13px;margin:0 0 10px}
+.jauge{display:inline-flex;align-items:center;gap:6px;color:var(--texte-3);font-size:12px}
+.jauge .barre{width:46px;height:4px;border-radius:4px;background:var(--surface-3);overflow:hidden}
+.jauge .barre span{display:block;height:100%;background:var(--ia)}
+.propo-mini{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 4px 0 9px;border-radius:var(--r-rond);background:var(--ia-doux);border:1px solid var(--ia-bord);color:var(--ia);font-size:12px}
+.propo-mini button{width:20px;height:20px;border-radius:50%;border:0;background:rgba(185,167,224,.2);color:var(--texte);display:grid;place-items:center;cursor:pointer}
+
+/* ============ Surfaces flottantes ============ */
+.scene{position:relative;background:var(--surface-1);border:1px solid var(--bordure);border-radius:var(--r-3);height:260px;overflow:hidden}
+.scene .gauche{position:absolute;inset:0 55% 0 0;border-right:1px solid var(--bordure);padding:14px}
+.scene .droite{position:absolute;inset:0 0 0 45%;padding:14px;color:var(--texte-3);display:grid;place-items:center;font-size:13px}
+.menu{position:absolute;min-width:230px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-2);box-shadow:var(--ombre-2);padding:6px;z-index:5}
+.menu .item{display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:var(--r-1);color:var(--texte);font-size:13.5px}
+.menu .item:hover,.menu .item.actif{background:var(--survol)}
+.menu .item .raccourci{margin-left:auto}
+.menu .sep{height:1px;background:var(--bordure);margin:6px 4px}
+.menu .titre{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--texte-3);padding:6px 10px 4px}
+.menu .item.dan{color:var(--danger)}
+.bulle{position:absolute;background:var(--surface-3);color:var(--texte);font-size:12px;padding:5px 9px;border-radius:var(--r-1);box-shadow:var(--ombre-2);white-space:nowrap}
+.dialogue{background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-3);box-shadow:var(--ombre-2);padding:22px;max-width:420px}
+.dialogue h4{font:500 22px var(--serif);margin:0 0 6px}
+.dialogue p{color:var(--texte-2);margin:0 0 18px}
+.dialogue .actions{display:flex;justify-content:flex-end;gap:8px}
+.toast{display:flex;align-items:center;gap:12px;background:var(--surface-3);border:1px solid var(--bordure-forte);border-radius:var(--r-2);box-shadow:var(--ombre-2);padding:10px 12px 10px 14px;font-size:13.5px}
+.toast .lien{color:var(--accent-texte);font-weight:400;margin-left:auto}
+.bandeau{display:flex;gap:10px;align-items:flex-start;border:1px solid;border-radius:var(--r-2);padding:10px 14px;font-size:13.5px}
+.bandeau p{margin:0;color:var(--texte-2)}.bandeau b{font-weight:500;color:inherit}
+
+/* ============ Structures ============ */
+.carte{background:var(--surface-1);border:1px solid var(--bordure);border-radius:var(--r-3)}
+.carte>.ct{padding:16px 18px 6px}
+.carte>.ct h4{font:500 20px var(--serif);margin:0}
+.carte>.ct p{margin:2px 0 0;color:var(--texte-3);font-size:13px}
+.reglage{display:flex;align-items:center;gap:18px;padding:14px 18px;border-top:1px solid var(--bordure)}
+.reglage:first-of-type{border-top:0}
+.reglage .txt{flex:1;min-width:0}
+.reglage .txt b{display:block;font-weight:400;font-size:14px}
+.reglage .txt span{color:var(--texte-3);font-size:12.5px}
+.rangee{display:flex;align-items:center;gap:12px;height:56px;padding:0 14px;border-bottom:1px solid var(--bordure);position:relative}
+.rangee:hover{background:var(--survol)}
+.rangee.sel{background:var(--accent-doux)}
+.rangee.sel::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--accent-texte)}
+.rangee .av{margin:0}
+.avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:500 12px var(--sans);flex:none;background:var(--surface-3);color:var(--texte-2)}
+.rangee .corps{flex:1;min-width:0;display:flex;flex-direction:column}
+.rangee .l1{display:flex;gap:8px;align-items:baseline}
+.rangee .de{font-weight:500;font-size:13.5px;white-space:nowrap}
+.rangee .heure{margin-left:auto;color:var(--texte-3);font-size:12px;white-space:nowrap}
+.rangee .l2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:var(--texte-2)}
+.rangee .l2 b{color:var(--texte);font-weight:400}
+.rangee .survol{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-2);padding:2px;box-shadow:var(--ombre-1)}
+.vide{display:flex;flex-direction:column;align-items:center;text-align:center;padding:30px 20px}
+.vide .ico{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--ok-doux);color:var(--ok);margin-bottom:12px}
+.vide h5{font:500 22px var(--serif);margin:0 0 4px}
+.vide p{color:var(--texte-2);margin:0 0 14px;max-width:340px;font-size:13.5px}
+.squelette{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--surface-2),var(--surface-3),var(--surface-2));background-size:200% 100%}
+.onglets{display:flex;gap:2px;border-bottom:1px solid var(--bordure)}
+.onglets span{padding:8px 12px;color:var(--texte-2);font-size:13.5px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.onglets span.on{color:var(--texte);border-color:var(--accent-texte)}
+.rail{display:flex;flex-direction:column;gap:2px;width:100%}
+.rail .lien{display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:var(--r-2);color:var(--texte-2);font-size:13.5px}
+.rail .lien.on{background:var(--accent-doux);color:var(--texte)}
+.rail .lien .compteur{margin-left:auto}
+.rail .groupe{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--texte-3);padding:12px 10px 4px}
+.fil{display:flex;gap:6px;align-items:center;color:var(--texte-3);font-size:12.5px}
+.palette{background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-3);box-shadow:var(--ombre-2);overflow:hidden}
+.palette .rech{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--bordure);color:var(--texte-3)}
+.palette .item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:13.5px}
+.palette .item.actif{background:var(--survol)}
+.palette .item small{color:var(--texte-3);margin-left:auto}
+.palette .pied{display:flex;gap:14px;padding:8px 14px;border-top:1px solid var(--bordure);color:var(--texte-3);font-size:12px}
+.typo-ex{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid var(--bordure);padding:8px 0}
+.typo-ex small{color:var(--texte-3);font:300 12px var(--sans);white-space:nowrap}
+.nuancier{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.nuance{border:1px solid var(--bordure);border-radius:var(--r-2);overflow:hidden;font-size:12px}
+.nuance .pl{height:46px}
+.nuance div:last-child{padding:6px 8px;color:var(--texte-2)}
+.nuance code{color:var(--texte-3);font-size:11px}
+.lib{display:grid;grid-template-columns:150px 1fr;gap:6px 16px;font-size:13.5px}
+.lib dt{color:var(--texte-3)}.lib dd{margin:0}
+.lib dd small{color:var(--texte-3)}
+</style>
+</head>
+<body>
+<!-- Sprites d’icônes, style Lucide -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></symbol>
+  <symbol id="trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+  <symbol id="more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+  <symbol id="spark" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+  <symbol id="folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  <symbol id="inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></symbol>
+  <symbol id="key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.3-9.3M17 6l3 3M14 9l2 2"/></symbol>
+  <symbol id="pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+  <symbol id="reply" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v3"/></symbol>
+  <symbol id="tag" viewBox="0 0 24 24"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></symbol>
+  <symbol id="bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+  <symbol id="link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></symbol>
+</svg>
+
+<div class="page">
+  <div class="intro">
+    <h1>Les briques communes · couleurs B</h1>
+    <p>Planche 10 : la planche 1 repassée en règle B (socle Lun' commun, couleur du monde en accent seulement), avec les jetons utilisés dans toutes les planches d’écran. C’est la base du fichier de jetons unique prévu dans lun-docs. Avant tout écran, ce qui doit être normalisé et partagé : jetons, composants, comportements. Chaque écran sera ensuite assemblé uniquement avec ces briques.</p>
+    <p>Références : jetons et réglages de myBrain, barre latérale et palette de commandes de MIA, liste et lecture de Gmail, réglages Google, Linear pour la densité et le clavier.</p>
+    <span class="note-maquette">Maquette statique : les couleurs et tailles sont des propositions, rien n’est codé.</span>
+  </div>
+
+  <!-- ===================== 1. Jetons ===================== -->
+  <section class="bloc">
+    <header><span class="num">01</span><h2>Jetons : couleurs</h2></header>
+    <p class="pourquoi">Aujourd’hui on a une palette, pas un vocabulaire. Proposition : trois niveaux de surface, trois niveaux de texte, deux bordures, et pour chaque ton un trio couleur, fond doux, bordure. Un ton « IA » dédié pour tout ce que l’IA propose ou a fait seule. Règle B : les surfaces et le texte sont le socle Lun' (encre chaude, ivoire, lune), communs à toutes les interfaces ; seul l’accent change selon le monde.</p>
+    <div class="grille g2">
+      <div class="planche">
+        <h3>Surfaces et texte</h3>
+        <div class="nuancier">
+          <div class="nuance"><div class="pl" style="background:#0D0B09;border:1px solid rgba(200,192,176,.24)"></div><div>Fond<br><code>--fond</code> encre</div></div>
+          <div class="nuance"><div class="pl" style="background:#1A1612"></div><div>Surface 1<br><code>--surface-1</code> encre 2, cartes</div></div>
+          <div class="nuance"><div class="pl" style="background:#221D18"></div><div>Surface 2<br><code>--surface-2</code> champs, menus</div></div>
+          <div class="nuance"><div class="pl" style="background:#2B251F"></div><div>Surface 3<br><code>--surface-3</code> survol fort</div></div>
+          <div class="nuance"><div class="pl" style="background:#F0EBE1"></div><div>Texte<br><code>--texte</code> ivoire</div></div>
+          <div class="nuance"><div class="pl" style="background:#C8C0B0"></div><div>Texte 2<br><code>--texte-2</code> lune</div></div>
+          <div class="nuance"><div class="pl" style="background:#958C7E"></div><div>Texte 3<br><code>--texte-3</code> légendes</div></div>
+          <div class="nuance"><div class="pl" style="background:#3A6080"></div><div>Accent<br><code>--accent</code> seule couche du monde</div></div>
+        </div>
+        <p class="regle"><b>Règle :</b> aucun composant n’écrit une couleur en dur. Contraste vérifié WCAG AA : texte 3 sur fond, 5,9:1 (5,0:1 sur surface 2) ; ivoire sur accent, 5,6:1 ; IA sur surface 1, 8,3:1.</p>
+      </div>
+      <div class="planche">
+        <h3>Tons (couleur, fond doux, bordure)</h3>
+        <div class="col">
+          <div class="ligne"><span class="pastille t-ok"><span class="point"></span>Ok · en service</span><span class="pastille t-att"><span class="point"></span>Attention · expire dans 10 j</span></div>
+          <div class="ligne"><span class="pastille t-dan"><span class="point"></span>Danger · clé refusée</span><span class="pastille t-info"><span class="point"></span>Info · synchronisé</span></div>
+          <div class="ligne"><span class="pastille t-ia"><svg class="i i-s"><use href="#spark"/></svg>IA · proposition</span><span class="pastille t-neutre">Neutre · brouillon</span></div>
+        </div>
+        <p class="regle"><b>Règle :</b> le rouge Lun' (<code>--rouge</code>) reste l’accent d’Anima et le fond des actions destructrices pleines. Un état d’erreur en texte utilise <code>--danger</code>, lisible sur fond sombre.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================== 1 bis. Socle et mondes ===================== -->
+  <section class="bloc">
+    <header><span class="num">01b</span><h2>Socle commun, accent par monde</h2></header>
+    <p class="pourquoi">La règle B validée : une interface se reconnaît d’abord comme Lun', ensuite par sa couleur de monde. Le fichier de jetons unique déclare le socle une fois ; chaque projet ne surcharge que les cinq variables d’accent.</p>
+    <div class="grille g2">
+      <div class="planche">
+        <h3>Acedia : bleu</h3>
+        <div class="ligne"><span class="btn principal" style="background:#3A6080;border-color:#3A6080">Action principale</span><span class="pastille" style="background:rgba(58,96,128,.24);border:1px solid rgba(110,155,195,.45);color:#9DBEDA">Sélection</span><span style="display:inline-flex;align-items:center;gap:8px;font:500 18px var(--serif)"><i style="width:9px;height:9px;border-radius:50%;background:#3A6080;box-shadow:0 0 0 4px rgba(58,96,128,.24)"></i>Lun'Acedia</span></div>
+        <p class="regle"><code>--accent:#3A6080</code> · <code>--accent-texte:#9DBEDA</code> : le bleu peut servir de texte (liens, sélection).</p>
+      </div>
+      <div class="planche">
+        <h3>Anima : rouge</h3>
+        <div class="ligne"><span class="btn principal" style="background:#7A1818;border-color:#7A1818">Action principale</span><span class="pastille" style="background:rgba(122,24,24,.26);border:1px solid rgba(224,180,172,.32);color:var(--texte)">Sélection</span><span style="display:inline-flex;align-items:center;gap:8px;font:500 18px var(--serif)"><i style="width:9px;height:9px;border-radius:50%;background:#7A1818;box-shadow:0 0 0 4px rgba(122,24,24,.26)"></i>Lun'Anima</span></div>
+        <p class="regle"><code>--accent:#7A1818</code> : <b>jamais en texte</b> (décision planche 9), seulement en fond et en point, pour qu’une erreur (<code>--danger</code>) reste reconnaissable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2. Typo ===================== -->
+  <section class="bloc">
+    <header><span class="num">02</span><h2>Jetons : typographie, rayons, ombres</h2></header>
+    <p class="pourquoi">Cormorant pour les titres et les noms, Inter pour tout le reste. Une échelle fixe au lieu de tailles au cas par cas. Les petites tailles ne sont jamais en Cormorant (illisible sous 18 px, c’est le défaut actuel de l’agenda).</p>
+    <div class="grille g2">
+      <div class="planche">
+        <h3>Échelle</h3>
+        <div class="typo-ex"><span style="font:500 34px var(--serif)">Titre de page</span><small>Cormorant 500 · 34</small></div>
+        <div class="typo-ex"><span style="font:500 24px var(--serif)">Titre de section</span><small>Cormorant 500 · 24</small></div>
+        <div class="typo-ex"><span style="font:500 19px var(--serif)">Titre de carte</span><small>Cormorant 500 · 19</small></div>
+        <div class="typo-ex"><span style="font:400 14px var(--sans)">Libellé, bouton, ligne de liste</span><small>Inter 400 · 14</small></div>
+        <div class="typo-ex"><span style="font:300 14px var(--sans)">Texte courant, lecture d’un mail</span><small>Inter 300 · 14</small></div>
+        <div class="typo-ex"><span style="font:300 12.5px var(--sans);color:var(--texte-3)">Aide, légende, horodatage</span><small>Inter 300 · 12,5</small></div>
+        <div class="typo-ex" style="border:0"><span style="font:500 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--texte-3)">Sur-titre de groupe</span><small>Inter 500 · 11 · capitales</small></div>
+      </div>
+      <div class="planche">
+        <h3>Rayons, ombres, espacements</h3>
+        <div class="ligne" style="gap:16px">
+          <div style="width:70px;height:46px;border-radius:6px;background:var(--surface-3)"></div>
+          <div style="width:70px;height:46px;border-radius:10px;background:var(--surface-3)"></div>
+          <div style="width:70px;height:46px;border-radius:14px;background:var(--surface-3)"></div>
+          <div style="width:70px;height:46px;border-radius:14px;background:var(--surface-2);box-shadow:var(--ombre-2);border:1px solid var(--bordure-forte)"></div>
+        </div>
+        <p style="color:var(--texte-3);font-size:12.5px;margin:8px 0 0">6 px petits contrôles · 10 px boutons et champs · 14 px cartes et dialogues · ombre réservée à ce qui flotte (menus, dialogues, toasts).</p>
+        <p class="regle"><b>Espacement :</b> pas de 4 px (4, 8, 12, 16, 24, 32, 48). <b>Hauteurs :</b> 28 petit, 34 normal, 38 champ, 42 grand. <b>Mouvement :</b> 120 à 180 ms, jamais de transition lourde (règle design.md).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3. Boutons ===================== -->
+  <section class="bloc">
+    <header><span class="num">03</span><h2>Boutons</h2></header>
+    <p class="pourquoi">Le défaut le plus visible aujourd’hui : tous les boutons ont le même poids. Proposition : cinq niveaux, et une seule action principale par zone.</p>
+    <div class="grille g2">
+      <div class="planche">
+        <h3>Niveaux</h3>
+        <div class="col">
+          <div class="ligne"><button class="btn principal"><svg class="i"><use href="#plus"/></svg>Nouveau message</button><span style="color:var(--texte-3);font-size:12.5px">principal : l’action attendue, une seule par zone</span></div>
+          <div class="ligne"><button class="btn doux"><svg class="i"><use href="#check"/></svg>Valider la proposition</button><span style="color:var(--texte-3);font-size:12.5px">doux : action recommandée secondaire</span></div>
+          <div class="ligne"><button class="btn secondaire">Annuler</button><span style="color:var(--texte-3);font-size:12.5px">secondaire : alternative neutre</span></div>
+          <div class="ligne"><button class="btn fantome"><svg class="i"><use href="#reply"/></svg>Répondre</button><span style="color:var(--texte-3);font-size:12.5px">fantôme : barres d’outils, actions répétées</span></div>
+          <div class="ligne"><button class="btn danger">Retirer l’accès</button><button class="btn danger-plein">Supprimer définitivement</button><span style="color:var(--texte-3);font-size:12.5px">danger, danger plein (confirmation)</span></div>
+        </div>
+      </div>
+      <div class="planche">
+        <h3>Tailles, icônes, états</h3>
+        <div class="col">
+          <div class="ligne"><button class="btn principal petit">Petit</button><button class="btn principal">Normal</button><button class="btn principal grand">Grand</button></div>
+          <div class="ligne">
+            <button class="btn fantome icone" title="Archiver"><svg class="i"><use href="#archive"/></svg></button>
+            <button class="btn fantome icone"><svg class="i"><use href="#trash"/></svg></button>
+            <button class="btn fantome icone"><svg class="i"><use href="#more"/></svg></button>
+            <span style="color:var(--texte-3);font-size:12.5px">bouton icône : toujours une info-bulle avec le nom et le raccourci</span>
+          </div>
+          <div class="ligne">
+            <button class="btn principal focus-demo">Focus clavier</button>
+            <button class="btn principal charge"><span class="spin"></span>Vérification…</button>
+            <button class="btn principal" disabled>Désactivé</button>
+          </div>
+          <div class="ligne"><div class="groupe-btn"><button>Jour</button><button class="on">Semaine</button><button>Mois</button></div><span style="color:var(--texte-3);font-size:12.5px">groupe segmenté pour un choix exclusif</span></div>
+        </div>
+        <p class="regle"><b>Règle :</b> un bouton en cours d’action garde sa largeur, affiche un indicateur et un verbe à l’infinitif en cours (« Vérification… »). Un bouton désactivé dit pourquoi en info-bulle.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4. Champs ===================== -->
+  <section class="bloc">
+    <header><span class="num">04</span><h2>Champs et contrôles</h2></header>
+    <p class="pourquoi">Aujourd’hui les libellés sont en ligne à gauche, les champs de tailles disparates. Proposition à la MIA et Google : libellé au-dessus, aide en dessous, erreur à la place de l’aide, largeur selon le contenu attendu.</p>
+    <div class="grille g3">
+      <div class="planche col">
+        <h3>Texte</h3>
+        <div class="champ"><label>Nom de la boîte</label><div class="entree"><input placeholder="Factures"></div><span class="aide">Devient un libellé Gmail.</span></div>
+        <div class="champ"><label>Nouvelle clé</label><div class="entree focus"><svg class="i" style="color:var(--texte-3)"><use href="#key"/></svg><input value="sk-ant-••••••••••••" ></div><span class="aide">Vérifiée auprès d’Anthropic avant d’être enregistrée.</span></div>
+        <div class="champ"><label>Code d’appairage</label><div class="entree erreur"><input value="48 21"></div><span class="err"><svg class="i i-s"><use href="#alert"/></svg>6 chiffres attendus.</span></div>
+      </div>
+      <div class="planche col">
+        <h3>Choix</h3>
+        <div class="champ"><label>Ranger dans</label><div class="entree select"><span><svg class="i" style="vertical-align:-3px;color:var(--texte-3)"><use href="#folder"/></svg>&nbsp; Factures</span><svg class="i" style="color:var(--texte-3)"><use href="#chev"/></svg></div></div>
+        <div class="champ"><label>Seuil de confiance</label><div class="ligne" style="gap:14px"><div class="curseur"><span></span><i></i></div><div class="entree" style="width:84px;height:34px"><input value="80"><span class="suffixe">%</span></div></div><span class="aide">Sous ce seuil, l’IA propose et attend une validation.</span></div>
+        <div class="champ"><label>Échéance de la clé</label><div class="entree" style="max-width:200px"><svg class="i" style="color:var(--texte-3)"><use href="#cal"/></svg><input value="31 oct. 2026"></div></div>
+      </div>
+      <div class="planche col">
+        <h3>Bascules et cases</h3>
+        <div class="reglage" style="padding:8px 0;border:0"><div class="txt"><b>Tri automatique</b><span>Range seul au-dessus du seuil</span></div><span class="inter on"></span></div>
+        <div class="reglage" style="padding:8px 0"><div class="txt"><b>Notifications d’agenda</b><span>15 min avant chaque événement</span></div><span class="inter"></span></div>
+        <div class="ligne" style="margin-top:6px"><span class="case on"><svg class="i i-s" style="width:11px;height:11px;stroke:#fff;stroke-width:3"><use href="#check"/></svg></span>Sélectionné<span class="case" style="margin-left:14px"></span>Non sélectionné</div>
+        <p class="regle"><b>Règle :</b> une bascule agit tout de suite (pas de bouton Enregistrer). Un formulaire à plusieurs champs a un seul bouton principal en bas à droite.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 5. IA ===================== -->
+  <section class="bloc">
+    <header><span class="num">05</span><h2>L’IA visible et contrôlable</h2></header>
+    <p class="pourquoi">Le cœur d’Acedia. Aujourd’hui : « Aucune boîte ? 70 % » avec ✓ et ✎, incompréhensible. Proposition : la proposition dit ce que l’IA veut faire, avec quelle confiance, et se valide ou se corrige en un geste. Version compacte dans la liste, version complète dans la lecture.</p>
+    <div class="grille g2">
+      <div class="planche col">
+        <h3>Dans la liste (compacte)</h3>
+        <div class="ligne"><span class="propo-mini"><svg class="i i-s"><use href="#spark"/></svg>Spam · 70 %<button title="Valider (V)"><svg class="i i-s" style="width:12px;height:12px"><use href="#check"/></svg></button><button title="Corriger (C)"><svg class="i i-s" style="width:12px;height:12px"><use href="#chev"/></svg></button></span></div>
+        <div class="ligne"><span class="propo-mini"><svg class="i i-s"><use href="#spark"/></svg>Factures + Urgent · 92 %<button><svg class="i i-s" style="width:12px;height:12px"><use href="#check"/></svg></button><button><svg class="i i-s" style="width:12px;height:12px"><use href="#chev"/></svg></button></span></div>
+        <div class="ligne"><span class="pastille t-ia" style="background:none"><svg class="i i-s"><use href="#check"/></svg>Rangé par l’IA dans Newsletters</span><span style="color:var(--texte-3);font-size:12.5px">déjà fait seul, annulable</span></div>
+        <div class="ligne"><span class="pastille t-neutre">Aucune boîte trouvée</span><span style="color:var(--texte-3);font-size:12.5px">au lieu de « Aucune boîte ? »</span></div>
+      </div>
+      <div class="planche">
+        <h3>Dans la lecture (complète)</h3>
+        <div class="propo">
+          <div class="tete"><svg class="i i-s"><use href="#spark"/></svg>Proposition de l’IA <span class="jauge" style="margin-left:auto">confiance<span class="barre"><span style="width:70%"></span></span>70 %</span></div>
+          <p class="quoi">Ranger dans <b>Spam</b></p>
+          <p class="pourquoi">Expéditeur inconnu, aucun échange précédent, objet générique. Sous le seuil de 95 % exigé pour le spam : en attente de validation.</p>
+          <div class="ligne"><button class="btn doux petit"><svg class="i i-s"><use href="#check"/></svg>Valider</button><button class="btn secondaire petit">Ranger ailleurs…</button><button class="btn fantome petit">Garder en réception</button><span class="kbd" style="margin-left:auto">V</span><span class="kbd">C</span></div>
+        </div>
+        <p class="regle"><b>À trancher :</b> la ligne « pourquoi » demande que le classifieur renvoie une courte justification (aujourd’hui il ne renvoie que boîte, étiquettes, importance, confiance). C’est le seul ajout de fond proposé.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 6. Flottants ===================== -->
+  <section class="bloc">
+    <header><span class="num">06</span><h2>Ce qui flotte : menus, info-bulles, dialogues, toasts</h2></header>
+    <p class="pourquoi">Le bug du menu à moitié caché derrière la lecture vient de menus posés dans le flux de la page. Règle : tout ce qui flotte passe par un calque au-dessus de l’application (portail), se positionne seul, se retourne s’il manque de place, se ferme avec Échap et au clic dehors, et garde le focus clavier.</p>
+    <div class="grille g2">
+      <div class="planche">
+        <h3>Menu ancré qui déborde proprement sur le panneau voisin</h3>
+        <div class="scene">
+          <div class="gauche">
+            <div class="rangee sel" style="height:48px;border-radius:8px"><div class="corps"><div class="l1"><span class="de">Free Mobile</span><span class="heure">09:12</span></div><div class="l2"><b>Votre facture</b> · disponible</div></div></div>
+            <div class="menu" style="left:150px;top:64px">
+              <div class="titre">Ranger dans</div>
+              <div class="item actif"><svg class="i"><use href="#folder"/></svg>Factures<span class="kbd raccourci">1</span></div>
+              <div class="item"><svg class="i"><use href="#folder"/></svg>Administratif<span class="kbd raccourci">2</span></div>
+              <div class="item"><svg class="i"><use href="#folder"/></svg>Newsletters<span class="kbd raccourci">3</span></div>
+              <div class="sep"></div>
+              <div class="item"><svg class="i"><use href="#plus"/></svg>Nouvelle boîte…</div>
+              <div class="item dan"><svg class="i"><use href="#trash"/></svg>Corbeille</div>
+            </div>
+          </div>
+          <div class="droite">Lecture</div>
+        </div>
+      </div>
+      <div class="planche col">
+        <h3>Info-bulle, dialogue, toast, bandeau</h3>
+        <div style="position:relative;height:44px"><button class="btn fantome icone" style="position:absolute;left:0;top:6px"><svg class="i"><use href="#archive"/></svg></button><span class="bulle" style="left:44px;top:10px">Archiver <span class="kbd" style="margin-left:6px">E</span></span></div>
+        <div class="dialogue"><h4>Retirer Lun'Anima ?</h4><p>Cette application perdra l’accès à Lun'Acedia. Elle devra être reliée à nouveau.</p><div class="actions"><button class="btn secondaire">Annuler</button><button class="btn danger-plein">Retirer</button></div></div>
+        <div class="toast"><svg class="i" style="color:var(--ok)"><use href="#check"/></svg>3 mails rangés dans Factures<span class="lien">Annuler</span></div>
+        <div class="bandeau t-dan"><svg class="i" style="margin-top:2px"><use href="#alert"/></svg><p><b>Clé Anthropic refusée.</b> Le tri par l’IA est en pause, les règles continuent. <span style="color:var(--accent-texte)">Remplacer la clé</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 7. Structures ===================== -->
+  <section class="bloc">
+    <header><span class="num">07</span><h2>Structures : listes, cartes de réglages, états vides, chargement</h2></header>
+    <p class="pourquoi">Les écrans se composent de ces structures, jamais de HTML posé à la main. Une ligne de liste montre l’essentiel sans couper l’objet ; les actions apparaissent au survol (comme Gmail). Un état vide explique et propose quoi faire (comme la Revue de myBrain).</p>
+    <div class="grille g2">
+      <div class="planche" style="padding:0;overflow:hidden">
+        <div style="padding:14px 18px 6px"><h3 style="margin:0">Ligne de liste</h3></div>
+        <div class="rangee"><span class="case"></span><span class="avatar">FM</span><div class="corps"><div class="l1"><span class="de">Free Mobile</span><span class="propo-mini" style="height:20px"><svg class="i i-s"><use href="#spark"/></svg>Factures · 92 %</span><span class="heure">09:12</span></div><div class="l2"><b>Votre facture d’octobre est disponible</b> · Montant 19,99 €, prélevé le 5 novembre</div></div></div>
+        <div class="rangee sel"><span class="case on"><svg class="i i-s" style="width:11px;height:11px;stroke:#fff;stroke-width:3"><use href="#check"/></svg></span><span class="avatar" style="background:var(--surface-3)">CR</span><div class="corps"><div class="l1"><span class="de">CrOliX</span><span class="heure">00:28</span></div><div class="l2"><b>Test fausse clef</b> · Yo. Envoyé à partir de Outlook pour Android</div></div></div>
+        <div class="rangee"><span class="case"></span><span class="avatar">G</span><div class="corps"><div class="l1"><span class="de">Google</span><span class="heure">hier</span></div><div class="l2"><b>Alerte de sécurité</b> · Nouvelle connexion sur Windows</div></div><div class="survol"><button class="btn fantome icone petit"><svg class="i"><use href="#archive"/></svg></button><button class="btn fantome icone petit"><svg class="i"><use href="#folder"/></svg></button><button class="btn fantome icone petit"><svg class="i"><use href="#trash"/></svg></button><button class="btn fantome icone petit"><svg class="i"><use href="#clock"/></svg></button></div></div>
+        <div style="padding:10px 18px 14px"><p class="regle" style="border:0;margin:0;padding:0"><b>Règle :</b> objet et début du message sur une ligne qui prend toute la largeur ; proposition IA courte ; actions au survol et au clavier.</p></div>
+      </div>
+      <div class="carte">
+        <div class="ct"><h4>Compte Google</h4><p>Mail, agenda et tâches passent par ce compte.</p></div>
+        <div class="reglage"><span class="avatar" style="width:36px;height:36px">NT</span><div class="txt"><b>natsume.tsurugi@gmail.com</b><span>Relié le 14 sept. 2026</span></div><span class="pastille t-ok"><span class="point"></span>Connecté</span></div>
+        <div class="reglage"><div class="txt"><b>Autorisations</b><span>Gmail (lecture, modification) · Agenda · Tâches</span></div><button class="btn fantome petit">Détails</button></div>
+        <div class="reglage"><div class="txt"><b>Déconnecter le compte</b><span>Le tri et la synchronisation s’arrêtent.</span></div><button class="btn danger petit">Déconnecter</button></div>
+      </div>
+      <div class="planche">
+        <h3>État vide</h3>
+        <div class="vide"><div class="ico"><svg class="i i-l"><use href="#check"/></svg></div><h5>Rien n’attend de validation</h5><p>Les prochaines propositions de l’IA apparaîtront ici. Les mails rangés seuls restent visibles dans le journal.</p><button class="btn secondaire petit">Voir le journal</button></div>
+      </div>
+      <div class="planche col">
+        <h3>Chargement (squelette, pas de texte « Chargement… »)</h3>
+        <div class="ligne"><span class="avatar"></span><div class="col" style="flex:1;gap:8px"><div class="squelette" style="width:40%"></div><div class="squelette" style="width:85%"></div></div></div>
+        <div class="ligne"><span class="avatar"></span><div class="col" style="flex:1;gap:8px"><div class="squelette" style="width:30%"></div><div class="squelette" style="width:70%"></div></div></div>
+        <div class="ligne"><span class="avatar"></span><div class="col" style="flex:1;gap:8px"><div class="squelette" style="width:45%"></div><div class="squelette" style="width:78%"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 8. Navigation ===================== -->
+  <section class="bloc">
+    <header><span class="num">08</span><h2>Navigation : rail, onglets, palette de commandes</h2></header>
+    <p class="pourquoi">Aujourd’hui quatre boutons en haut à droite. Proposition : un rail à gauche avec icônes, libellés et compteurs (comme MIA), des onglets soulignés pour les sous-vues, un fil d’Ariane dans les réglages, et une palette Ctrl K pour tout faire au clavier.</p>
+    <div class="grille g3">
+      <div class="planche">
+        <h3>Rail</h3>
+        <div class="rail">
+          <div class="lien on"><svg class="i"><use href="#inbox"/></svg>Réception<span class="compteur">12</span></div>
+          <div class="lien"><svg class="i"><use href="#spark"/></svg>À valider<span class="compteur" style="background:var(--ia-doux);color:var(--ia);border:1px solid var(--ia-bord)">2</span></div>
+          <div class="lien"><svg class="i"><use href="#cal"/></svg>Agenda</div>
+          <div class="lien"><svg class="i"><use href="#list"/></svg>Tâches</div>
+          <div class="groupe">Boîtes</div>
+          <div class="lien"><svg class="i"><use href="#folder"/></svg>Factures</div>
+          <div class="lien"><svg class="i"><use href="#folder"/></svg>Newsletters</div>
+          <div class="groupe">Système</div>
+          <div class="lien"><svg class="i"><use href="#clock"/></svg>Journal</div>
+          <div class="lien"><svg class="i"><use href="#cog"/></svg>Réglages</div>
+        </div>
+      </div>
+      <div class="planche col">
+        <h3>Onglets et fil d’Ariane</h3>
+        <div class="onglets"><span class="on">Tout</span><span>Non lus</span><span>Proposés par l’IA</span><span>Rangés seuls</span></div>
+        <div class="fil" style="margin-top:12px">Réglages <svg class="i i-s"><use href="#right"/></svg> Tri <svg class="i i-s"><use href="#right"/></svg> <span style="color:var(--texte)">Règles</span></div>
+        <p class="regle"><b>Règle :</b> l’onglet actif est souligné en accent, jamais seulement « un peu plus clair ».</p>
+      </div>
+      <div class="planche">
+        <h3>Palette Ctrl K</h3>
+        <div class="palette">
+          <div class="rech"><svg class="i"><use href="#search"/></svg>ranger fac</div>
+          <div class="item actif"><svg class="i"><use href="#folder"/></svg>Ranger la sélection dans Factures<small>Action</small></div>
+          <div class="item"><svg class="i"><use href="#search"/></svg>Chercher « fac » dans les mails<small>Recherche</small></div>
+          <div class="item"><svg class="i"><use href="#cog"/></svg>Réglages, Boîtes et étiquettes<small>Aller à</small></div>
+          <div class="pied"><span><span class="kbd">↑</span> <span class="kbd">↓</span> naviguer</span><span><span class="kbd">↵</span> ouvrir</span><span><span class="kbd">Échap</span> fermer</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 9. Socle technique ===================== -->
+  <section class="bloc">
+    <header><span class="num">09</span><h2>Socle technique proposé (à valider)</h2></header>
+    <p class="pourquoi">Ce qui donne le rendu MIA et myBrain, ce n’est pas une bibliothèque toute faite : c’est un système de jetons strict et des comportements fiables. Pour ne pas réinventer les comportements (le menu caché en est la preuve), je propose une bibliothèque sans style, habillée par nos jetons.</p>
+    <div class="planche">
+      <dl class="lib">
+        <dt>Comportements</dt><dd><b>Bits UI</b> (Svelte 5, sans style) : menus, popovers, listes déroulantes, dialogues, info-bulles, onglets, palette de commandes, sélecteur de date. Accessibilité et clavier gérés. <small>Alternative : Melt UI (même famille, plus bas niveau).</small></dd>
+        <dt>Apparence</dt><dd>Nos jetons et nos composants maison par-dessus (CSS, pas de Tailwind), dans le paquet de vues partagé avec le panel d’Anima. <small>Alternative écartée : shadcn-svelte, qui impose Tailwind et un look générique.</small></dd>
+        <dt>Icônes</dt><dd><b>Lucide</b> (trait fin, sobre, cohérent avec Inter). <small>myBrain utilise Font Awesome ; Lucide colle mieux à la DA.</small></dd>
+        <dt>Agenda</dt><dd><b>Schedule-X</b> ou <b>FullCalendar</b> pour la grille jour, semaine, mois, habillés par nos jetons, au lieu d’une grille maison. <small>Choix après essai.</small></dd>
+        <dt>Lecture d’un mail</dt><dd>Corps HTML dans un cadre isolé, adapté au thème sombre (fond sombre, liens et texte recolorés, images gardées), comme Gmail en mode sombre.</dd>
+        <dt>Vérification</dt><dd>Chaque composant a une page de démonstration (catalogue) dans le dépôt, contrôlée dans Chrome, avec capture dans la PR.</dd>
+      </dl>
+    </div>
+  </section>
+</div>
+</body>
+</html>

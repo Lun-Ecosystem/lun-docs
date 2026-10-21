@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lun' · DA commune ou par projet</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--encre:#0D0B09;--encre-2:#1A1612;--ivoire:#F0EBE1;--papier:#E8E2D6;--lune:#C8C0B0;--lavis:#8A9BAE;--rouge:#7A1818;
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#0A0908;color:var(--ivoire);font:300 14px/1.5 var(--sans)}
+.page{max-width:1500px;margin:0 auto;padding:36px 28px 80px}
+h1{font:500 38px/1.1 var(--serif);margin:0 0 8px}
+.lead{color:var(--lune);max-width:900px;margin:0 0 6px}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:28px}
+@media(max-width:1100px){.cols{grid-template-columns:1fr}}
+.opt{border:1px solid rgba(200,192,176,.14);border-radius:14px;overflow:hidden;cursor:pointer;background:#0F0D0B}
+.opt.selected{outline:2px solid #C8C0B0;outline-offset:3px}
+.opt>header{padding:16px 18px 12px}
+.opt>header .l{font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--lune)}
+.opt>header h2{font:500 24px/1.2 var(--serif);margin:4px 0 4px}
+.opt>header p{margin:0;color:var(--lune);font-size:13px}
+.verdict{padding:12px 18px 16px;font-size:13px;color:var(--lune);border-top:1px solid rgba(200,192,176,.12)}
+.verdict b{color:var(--ivoire);font-weight:500}
+.verdict ul{margin:6px 0 0;padding-left:18px}.verdict li{margin:2px 0}
+
+/* ------- mini application, habillée par les variables de chaque variante ------- */
+.app{display:grid;grid-template-columns:150px 1fr;height:330px;background:var(--fond);color:var(--t1);border-top:1px solid var(--bord);border-bottom:1px solid var(--bord)}
+.app .rail{background:var(--s1);border-right:1px solid var(--bord);padding:12px 8px;display:flex;flex-direction:column;gap:2px}
+.app .marque{display:flex;align-items:center;gap:8px;padding:2px 8px 12px;font:500 17px var(--serif)}
+.app .marque i{width:8px;height:8px;border-radius:50%;background:var(--monde)}
+.app .lien{display:flex;align-items:center;justify-content:space-between;height:30px;padding:0 8px;border-radius:8px;font-size:12.5px;color:var(--t2)}
+.app .lien.on{background:var(--sel);color:var(--t1);box-shadow:inset 2px 0 0 var(--marque-sel)}
+.app .cpt{min-width:18px;height:16px;border-radius:9px;background:var(--accent);color:#fff;font:500 10px/16px var(--sans);text-align:center;padding:0 5px}
+.app .grp{font:500 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--t3);padding:10px 8px 2px}
+.app main{display:flex;flex-direction:column;min-width:0}
+.app .barre{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--bord)}
+.app .rech{flex:1;height:30px;border-radius:8px;background:var(--s2);border:1px solid var(--bord-f);color:var(--t3);font-size:12px;display:flex;align-items:center;padding:0 10px}
+.app .bp{height:30px;padding:0 12px;border-radius:8px;background:var(--accent);color:#fff;font:400 12.5px var(--sans);display:flex;align-items:center}
+.app .row{display:flex;gap:10px;align-items:center;height:50px;padding:0 12px;border-bottom:1px solid var(--bord);position:relative}
+.app .row.sel{background:var(--sel)}
+.app .row.sel::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--marque-sel)}
+.app .av{width:26px;height:26px;border-radius:50%;background:var(--s3);color:var(--t2);display:grid;place-items:center;font:500 10px var(--sans);flex:none}
+.app .c{flex:1;min-width:0}
+.app .l1{display:flex;gap:6px;align-items:center;font-size:12.5px}
+.app .l1 b{font-weight:500}.app .l1 .h{margin-left:auto;color:var(--t3);font-size:11px}
+.app .l2{font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app .ia{display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 7px;border-radius:9px;font-size:10.5px;color:var(--ia);background:var(--ia-d);border:1px solid var(--ia-b)}
+.app .carte{margin:12px;border:1px solid var(--bord);background:var(--s1);border-radius:12px;padding:10px 12px}
+.app .carte h4{font:500 16px var(--serif);margin:0 0 4px}
+.app .carte .ln{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--t2)}
+.app .ok{height:18px;padding:0 8px;border-radius:9px;font-size:10.5px;color:#7CC29B;background:rgba(124,194,155,.12);border:1px solid rgba(124,194,155,.38);display:inline-flex;align-items:center}
+.app .alerte{margin:0 12px 12px;border:1px solid var(--dan-b);background:var(--dan-d);color:var(--dan);border-radius:10px;padding:8px 10px;font-size:12px}
+
+/* Variante A : stricte, identique partout (aucun monde) */
+.vA{--fond:#0D0B09;--s1:#1A1612;--s2:#221D18;--s3:#2B251F;--bord:rgba(200,192,176,.12);--bord-f:rgba(200,192,176,.24);
+  --t1:#F0EBE1;--t2:#C8C0B0;--t3:#958C7E;--accent:#7A1818;--sel:rgba(122,24,24,.22);--marque-sel:#C77;--monde:#7A1818;
+  --ia:#B9A7E0;--ia-d:rgba(185,167,224,.11);--ia-b:rgba(185,167,224,.36);--dan:#E3A0A0;--dan-d:rgba(227,160,160,.1);--dan-b:rgba(227,160,160,.38)}
+/* Variante B : socle Lun' (encre, ivoire, lune) + accent du monde */
+.vB{--fond:#0D0B09;--s1:#1A1612;--s2:#221D18;--s3:#2B251F;--bord:rgba(200,192,176,.12);--bord-f:rgba(200,192,176,.24);
+  --t1:#F0EBE1;--t2:#C8C0B0;--t3:#958C7E;--accent:#3A6080;--sel:rgba(58,96,128,.24);--marque-sel:#9DBEDA;--monde:#3A6080;
+  --ia:#B9A7E0;--ia-d:rgba(185,167,224,.11);--ia-b:rgba(185,167,224,.36);--dan:#E3A0A0;--dan-d:rgba(227,160,160,.1);--dan-b:rgba(227,160,160,.38)}
+/* Variante C : monde complet (fond et surfaces teintés), proposition de la planche 1 */
+.vC{--fond:#070C14;--s1:#0C1320;--s2:#111A2A;--s3:#18233A;--bord:rgba(200,192,176,.12);--bord-f:rgba(200,192,176,.26);
+  --t1:#F0EBE1;--t2:#C8C0B0;--t3:#8C95A6;--accent:#3A6080;--sel:rgba(58,96,128,.24);--marque-sel:#9DBEDA;--monde:#3A6080;
+  --ia:#B9A7E0;--ia-d:rgba(185,167,224,.11);--ia-b:rgba(185,167,224,.36);--dan:#E3A0A0;--dan-d:rgba(227,160,160,.1);--dan-b:rgba(227,160,160,.38)}
+
+.panel{margin-top:40px;border:1px solid rgba(200,192,176,.14);border-radius:14px;padding:18px 20px;background:#0F0D0B}
+.panel h2{font:500 26px var(--serif);margin:0 0 6px}
+.panel p{color:var(--lune);margin:0 0 14px;max-width:960px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:1000px){.duo{grid-template-columns:1fr}}
+.duo .cap{font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--lune);margin:0 0 8px}
+.mini-panel{display:grid;grid-template-columns:130px 1fr 1fr;height:150px;border:1px solid rgba(200,192,176,.14);border-radius:10px;overflow:hidden}
+.mini-panel>div{padding:10px;font-size:11.5px}
+.mini-panel .t{font:500 14px var(--serif);margin-bottom:6px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.tg{height:18px;padding:0 7px;border-radius:9px;font-size:10.5px;display:inline-flex;align-items:center;border:1px solid}
+.reco{margin-top:28px;border:1px solid rgba(200,192,176,.24);border-radius:14px;padding:18px 20px;background:#13110E}
+.reco h2{font:500 26px var(--serif);margin:0 0 8px}
+.reco ol{margin:0;padding-left:20px;color:var(--papier)}.reco li{margin:6px 0}
+.reco code{color:var(--lune);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Une DA stricte, ou un socle commun et un monde par projet ?</h1>
+  <p class="lead">Le même fragment d’écran (rail, liste de mails, carte d’état, alerte) habillé de trois façons. Les briques de la planche 1 ne changent pas : seuls les jetons de couleur bougent. Clique sur la variante qui te semble juste.</p>
+  <p class="lead">Ta remarque est fondée : la planche 1 avait teinté tout le fond et toutes les surfaces en bleu nuit, et laissé de côté encre, encre 2 et papier. Le bleu venait du monde Lun'Acedia du site, mais appliqué partout il efface le socle Lun'.</p>
+
+  <div class="cols">
+    <!-- A -->
+    <div class="opt" data-choice="a" onclick="toggleSelect(this)">
+      <header><div class="l">A · stricte</div><h2>Une seule DA, identique partout</h2><p>Encre et ivoire partout, rouge Lun' comme seul accent. Aucun monde.</p></header>
+      <div class="app vA">
+        <div class="rail"><div class="marque"><i></i>Lun'Acedia</div><div class="lien on">Réception<span class="cpt">12</span></div><div class="lien">À valider</div><div class="lien">Agenda</div><div class="grp">Boîtes</div><div class="lien">Factures</div><div class="lien">Réglages</div></div>
+        <main><div class="barre"><div class="rech">Rechercher</div><div class="bp">Nouveau message</div></div>
+          <div class="row sel"><div class="av">FM</div><div class="c"><div class="l1"><b>Free Mobile</b><span class="ia">Factures · 92 %</span><span class="h">09:12</span></div><div class="l2">Votre facture d’octobre est disponible · 19,99 €</div></div></div>
+          <div class="row"><div class="av">G</div><div class="c"><div class="l1"><b>Google</b><span class="h">hier</span></div><div class="l2">Alerte de sécurité · Nouvelle connexion</div></div></div>
+          <div class="carte"><h4>Clé Anthropic</h4><div class="ln">Se termine par ZQAA <span class="ok">En service</span></div></div>
+          <div class="alerte">Clé refusée : le tri par l’IA est en pause.</div>
+        </main>
+      </div>
+      <div class="verdict"><b>Pour :</b> unité maximale, rien à arbitrer.<ul><li><b>Contre :</b> le rouge sert à la fois d’accent et d’alerte, une sélection ressemble à une erreur.</li><li>On perd ce que le site a posé : un monde par projet.</li><li>Dans le panel, impossible de savoir d’un coup d’œil de quel satellite vient une vue.</li></ul></div>
+    </div>
+    <!-- B -->
+    <div class="opt" data-choice="b" onclick="toggleSelect(this)">
+      <header><div class="l">B · socle + accent du monde</div><h2>Base Lun' commune, le monde en accent</h2><p>Encre, encre 2, ivoire, lune pour toutes les surfaces et le texte ; le bleu Acedia seulement pour l’accent, la sélection et la marque.</p></header>
+      <div class="app vB">
+        <div class="rail"><div class="marque"><i></i>Lun'Acedia</div><div class="lien on">Réception<span class="cpt">12</span></div><div class="lien">À valider</div><div class="lien">Agenda</div><div class="grp">Boîtes</div><div class="lien">Factures</div><div class="lien">Réglages</div></div>
+        <main><div class="barre"><div class="rech">Rechercher</div><div class="bp">Nouveau message</div></div>
+          <div class="row sel"><div class="av">FM</div><div class="c"><div class="l1"><b>Free Mobile</b><span class="ia">Factures · 92 %</span><span class="h">09:12</span></div><div class="l2">Votre facture d’octobre est disponible · 19,99 €</div></div></div>
+          <div class="row"><div class="av">G</div><div class="c"><div class="l1"><b>Google</b><span class="h">hier</span></div><div class="l2">Alerte de sécurité · Nouvelle connexion</div></div></div>
+          <div class="carte"><h4>Clé Anthropic</h4><div class="ln">Se termine par ZQAA <span class="ok">En service</span></div></div>
+          <div class="alerte">Clé refusée : le tri par l’IA est en pause.</div>
+        </main>
+      </div>
+      <div class="verdict"><b>Pour :</b> chaque écran est d’abord Lun' (encre chaude, ivoire), puis reconnaissable par sa couleur de monde.<ul><li>Dans le panel d’Anima, les vues de tous les satellites partagent les mêmes surfaces : pas d’effet patchwork.</li><li>Rouge réservé à Anima et aux alertes pleines, bleu à Acedia : les rôles ne se mélangent pas.</li><li><b>Contre :</b> le monde se lit moins fort qu’en C hors de l’app autonome.</li></ul></div>
+    </div>
+    <!-- C -->
+    <div class="opt" data-choice="c" onclick="toggleSelect(this)">
+      <header><div class="l">C · monde complet</div><h2>Le monde teinte tout</h2><p>Fond et surfaces en bleu nuit Acedia, comme la planche 1. Le socle Lun' ne garde que le texte.</p></header>
+      <div class="app vC">
+        <div class="rail"><div class="marque"><i></i>Lun'Acedia</div><div class="lien on">Réception<span class="cpt">12</span></div><div class="lien">À valider</div><div class="lien">Agenda</div><div class="grp">Boîtes</div><div class="lien">Factures</div><div class="lien">Réglages</div></div>
+        <main><div class="barre"><div class="rech">Rechercher</div><div class="bp">Nouveau message</div></div>
+          <div class="row sel"><div class="av">FM</div><div class="c"><div class="l1"><b>Free Mobile</b><span class="ia">Factures · 92 %</span><span class="h">09:12</span></div><div class="l2">Votre facture d’octobre est disponible · 19,99 €</div></div></div>
+          <div class="row"><div class="av">G</div><div class="c"><div class="l1"><b>Google</b><span class="h">hier</span></div><div class="l2">Alerte de sécurité · Nouvelle connexion</div></div></div>
+          <div class="carte"><h4>Clé Anthropic</h4><div class="ln">Se termine par ZQAA <span class="ok">En service</span></div></div>
+          <div class="alerte">Clé refusée : le tri par l’IA est en pause.</div>
+        </main>
+      </div>
+      <div class="verdict"><b>Pour :</b> immersion forte, fidèle à l’ambiance du monde sur le site.<ul><li><b>Contre :</b> encre, encre 2 et papier disparaissent ; chaque projet devient une app d’une autre couleur.</li><li>Dans le panel, une vue bleue posée sur un fond Anima rouge sombre : patchwork.</li><li>Huit mondes à maintenir en surfaces complètes, contrastes à revérifier pour chacun.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Le test qui tranche : une vue Acedia dans le panel d’Anima</h2>
+    <p>Le panel embarque les vues des satellites (paquet de vues partagé). Voici le même panel, avec une vue Acedia et une vue Anima côte à côte.</p>
+    <div class="duo">
+      <div><p class="cap">Avec B</p>
+        <div class="mini-panel" style="background:#0D0B09">
+          <div style="background:#1A1612;border-right:1px solid rgba(200,192,176,.12)"><div class="t">Lun'Anima</div><div style="color:#C8C0B0">Natsume<br>Mails<br>Agenda<br>Réglages</div></div>
+          <div style="border-right:1px solid rgba(200,192,176,.12)"><div class="t" style="display:flex;gap:6px;align-items:center"><span style="width:7px;height:7px;border-radius:50%;background:#3A6080"></span>Mails · Acedia</div><div style="color:#C8C0B0">Free Mobile · facture</div><div class="tags"><span class="tg" style="color:#9DBEDA;border-color:rgba(110,155,195,.45);background:rgba(58,96,128,.22)">12 non lus</span></div></div>
+          <div><div class="t" style="display:flex;gap:6px;align-items:center"><span style="width:7px;height:7px;border-radius:50%;background:#7A1818"></span>Natsume</div><div style="color:#C8C0B0">Bonjour, trois mails attendent.</div><div class="tags"><span class="tg" style="color:#E3A0A0;border-color:rgba(227,160,160,.38);background:rgba(122,24,24,.22)">en ligne</span></div></div>
+        </div>
+      </div>
+      <div><p class="cap">Avec C</p>
+        <div class="mini-panel" style="background:#120A0A">
+          <div style="background:#1E1212;border-right:1px solid rgba(200,192,176,.12)"><div class="t">Lun'Anima</div><div style="color:#C8C0B0">Natsume<br>Mails<br>Agenda<br>Réglages</div></div>
+          <div style="background:#070C14;border-right:1px solid rgba(200,192,176,.12)"><div class="t">Mails · Acedia</div><div style="color:#C8C0B0">Free Mobile · facture</div><div class="tags"><span class="tg" style="color:#9DBEDA;border-color:rgba(110,155,195,.45);background:rgba(58,96,128,.22)">12 non lus</span></div></div>
+          <div><div class="t">Natsume</div><div style="color:#C8C0B0">Bonjour, trois mails attendent.</div><div class="tags"><span class="tg" style="color:#E3A0A0;border-color:rgba(227,160,160,.38);background:rgba(122,24,24,.22)">en ligne</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reco">
+    <h2>Ma recommandation : B</h2>
+    <ol>
+      <li><b>Socle commun obligatoire</b> dans tous les projets : <code>--encre</code> fond, <code>--encre-2</code> surfaces, deux surfaces dérivées plus claires, <code>--ivoire</code> texte, <code>--lune</code> texte secondaire, <code>--papier</code> pour les surfaces claires éventuelles (lecture d’un mail clair, impression), <code>--lavis</code> info, <code>--rouge</code> Anima et alertes pleines, plus les tons ok, attention, danger, IA.</li>
+      <li><b>Monde du projet, en accent seulement :</b> <code>--monde-accent</code> pour le bouton principal, la sélection, les compteurs, le point de marque. <code>--monde-fond</code> réservé aux grandes surfaces d’identité : écran d’accueil, page de connexion et d’autorisation, en-tête d’une vue dans le panel.</li>
+      <li><b>Un seul fichier de jetons</b> dans lun-docs (et le skill <code>lun-design</code>), repris tel quel par chaque projet ; un projet ne déclare que ses deux jetons de monde.</li>
+      <li>Ça devient une règle écrite de <code>standards/design.md</code>, pour ne plus avoir à rearbitrer à chaque palier.</li>
+    </ol>
+  </div>
+</div>
+</body>
+</html>
