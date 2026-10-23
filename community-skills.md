@@ -12,6 +12,9 @@
 | **skill-creator** (Anthropic) | Écrire nos skills et **les tester** (évaluations), au lieu de les supposer efficaces. |
 | **graphify** (Graphify-Labs, `uv tool install graphifyy` puis `graphify install --platform claude`) | Graphe de connaissances d'un dépôt (`/graphify`) : repérer les nœuds centraux et les liens entre docs, specs et code avant un cadrage. La sortie `graphify-out/` reste locale (ignorée par git). Mise à jour : `uv tool upgrade graphifyy` puis la même commande `install`. |
 | **find-skills** (vercel-labs/skills, `npx skills add vercel-labs/skills --skill find-skills -g -a claude-code`) | Chercher un skill existant avant d'en écrire un. Toute trouvaille passe par ce fichier (PR avec la raison) avant d'être installée ; on retire ce qui ne sert plus (`npx skills remove`). |
+| **svelte-core-bestpractices**, **svelte-code-writer** (sveltejs/ai-tools, équipe Svelte) | Svelte 5 et ses runes à jour, plutôt que des motifs Svelte 4 de mémoire. Le second appelle la documentation officielle via `npx @sveltejs/mcp`. |
+| **hono** (honojs/skills, équipe Hono ; `hono-jsx` et `hono-void` non installés) | Le serveur d'Acedia et du core. |
+| **vitest** (antfu/skills, Anthony Fu, équipe Vitest) | API Vitest à jour pour nos tests. |
 
 ## À évaluer
 
@@ -19,6 +22,7 @@
 |---|---|---|
 | **Context7** (documentation à jour des bibliothèques) | Éviter que l'agent invente des API obsolètes | Au choix de la stack (étape 2) |
 | **Caveman** | Moins de tokens dans les rapports des sous-agents et les fichiers mémoire. Jamais sur ce qui est destiné à CrOliX | Pendant les deux semaines de mesure |
+| **web-design-guidelines** (vercel-labs/agent-skills) | Relecture accessibilité et ergonomie des écrans, en complément de `frontend-design` et `lun-design` ; à écarter s'il contredit la DA | Pendant le recadrage front, sur un ou deux écrans |
 | **Revue de PR par l'API Claude en CI** | Une relecture automatique de chaque PR | À la CI du premier projet de l'étape 2 |
 
 ## Écartés
