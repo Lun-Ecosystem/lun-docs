@@ -19,7 +19,7 @@ l'API métier du satellite.
 |---|---|---|
 | `GET /lun/v1/authorize?client&redirect_uri&state&code_challenge` | publique, mène à la page d'autorisation du satellite | page HTML, ou redirection vers `redirect_uri` |
 | `POST /lun/v1/pair` `{ code }` ou `{ code, code_verifier, client }` | échange un code d'appairage (6 chiffres) ou un code d'autorisation contre un jeton | `{ token, satellite: { id, nom, version } }` |
-| `GET /lun/v1/health` | santé et état | `{ status, reason?, version }` |
+| `GET /lun/v1/health` | santé et état | `{ status, reason?, version, paused? }` |
 | `GET /lun/v1/costs?since=<ISO>` | dépense depuis une date | `{ currency: 'USD', since, until, total, items }` |
 | `POST /lun/v1/pause` `{ reason? }` | coupe toute action automatique | `{ status }` |
 | `POST /lun/v1/resume` | rétablit les actions automatiques | `{ status }` |
@@ -33,7 +33,7 @@ l'API métier du satellite.
 type Status = 'ok' | 'paused' | 'degraded';
 type Importance = 'info' | 'normal' | 'urgent';
 
-interface Health { status: Status; reason?: string; version: string }
+interface Health { status: Status; reason?: string; version: string; paused?: true } // paused : en pause alors que l'état affiché est degraded
 interface CostItem { provider: string; model?: string; amount: number; calls: number }
 interface Costs { currency: 'USD'; since: string; until: string; total: number; items: CostItem[] }
 interface LunEvent { id: string; type: string; importance: Importance; at: string; title: string; data?: unknown }
@@ -47,7 +47,7 @@ restent écrits ici ; un paquet partagé ne sera créé que si deux projets en o
 ## Appairage
 
 - Le code est **donné par le satellite**, par son front ou par sa commande `pair-code`, à usage unique,
-  valable **10 minutes**.
+  valable **10 minutes**. Il s'affiche groupé par trois (« 482 917 ») ; `pair` ignore les espaces, rien d'autre.
 - Le jeton obtenu est propre à un client (le core, un appareil) et révocable depuis le satellite.
 - **Appareil** : navigateur relié par un code à 6 chiffres. **Application** : client relié par
   autorisation, enregistré au nom de `client` (le core). Les deux sont listés et retirables côté
