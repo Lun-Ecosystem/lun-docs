@@ -31,6 +31,7 @@
 |---|---|
 | **Ruflo** (ex-Claude Flow) | 300+ outils MCP et essaims d'agents qui gonflent le contexte et vident le quota Pro ; une partie des fonctions signalées comme non implémentées par un audit ; orchestration opaque, contraire à l'exigence de contrôle. Déjà essayé (LunArchive). |
 | **watermarks-remover** (guillaumemeyer) | Son but principal est d'effacer les marques de provenance IA (SynthID, C2PA), avec un module qui réécrit le texte jusqu'à tromper les détecteurs : contraire à la transparence attendue. Il ajoute aussi un hook sur chaque écriture de fichier et un service Python local. Aucun besoin dans l'écosystème. |
+| **agent-skills** (addyosmani, 25 skills, 9 commandes, 4 agents) | Doublon de la méthode déjà en place : cadrage, plan, TDD, débogage, revue, simplification et git sont couverts par superpowers ; chantier, livraison, DA et contradicteur de plan par nos `lun-*`. Son propre aiguilleur (`using-agent-skills`) concurrencerait celui de superpowers. Seuls des thèmes absents chez nous (perf web, observabilité, mise en production) pourraient servir plus tard : à rechercher alors un par un avec find-skills. |
 | **Universal CLAUDE.md** | Une seule source, gain annoncé sur la sortie et non sur le contexte, sans méthode vérifiable. Les vrais leviers (CLAUDE.md court, skills à la demande, sous-agents) sont appliqués par construction. |
 
 Ajouter ou retirer un outil passe par une PR sur ce fichier, avec la raison.
