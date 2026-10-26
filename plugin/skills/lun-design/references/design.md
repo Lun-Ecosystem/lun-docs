@@ -93,16 +93,19 @@ Le défaut à corriger est l'usage, pas l'identité.
 Chaque écran ne s’assemble qu’avec ces briques, jamais avec une version refaite localement.
 
 - **Jetons** : couleurs, échelle typographique, rayons, ombres, espacements, hauteurs, mouvement.
-- **Boutons** : cinq niveaux (principal, doux, secondaire, fantôme, danger), trois tailles, variante
-  icône seule ; une seule action principale par zone.
+- **Boutons** : six niveaux (principal, doux, secondaire, fantôme, danger, `danger-plein` pour la
+  confirmation d’un geste destructeur), trois tailles, variante icône seule ; une seule action
+  principale par zone.
 - **Champs** : texte (libellé au-dessus, aide en dessous, erreur à la place de l’aide), liste
-  déroulante, curseur avec sa valeur, date, bascule, case, commande segmentée, saisie de code.
+  déroulante, curseur avec sa valeur, date, bascule, case, commande segmentée, saisie de code (une
+  case par chiffre, collage accepté).
 - **L’IA** : pastille de proposition, carte de proposition complète, marque « rangé seul », ton IA
   dédié (violet).
 - **Calques** : menus avec filtre et raccourcis, bulle de détail, info-bulle, fenêtre de dialogue et de
   confirmation, toast avec annulation, bannière d’état.
-- **Structures** : rangée de liste, carte de réglages faite de lignes, état vide qui explique,
-  squelette de chargement, pastilles de filtre, badge d’état.
+- **Structures** : rangée de liste avec actions au survol, groupe par jour, carte de réglages faite
+  de lignes, état vide qui explique, squelette de chargement, pastilles de filtre, badge d’état,
+  touche de clavier.
 - **Navigation** : rail avec groupes, compteurs et carte d’état du service, colonne de thèmes, onglets,
   palette de commandes (Ctrl K), barre de navigation mobile et bouton flottant.
 - **Pages seules** : carte centrée sur fond encre avec halo du monde, indicateur d’étapes.
