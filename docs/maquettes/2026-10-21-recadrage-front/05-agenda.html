@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lun'Acedia · Agenda et tâches</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --encre:#0D0B09;--encre-2:#1A1612;--ivoire:#F0EBE1;--papier:#E8E2D6;--lune:#C8C0B0;--lavis:#8A9BAE;--rouge:#7A1818;
+  --monde-fond:#070C14;--monde-accent:#3A6080;
+  --fond:var(--encre);--surface-1:var(--encre-2);--surface-2:#221D18;--surface-3:#2B251F;
+  --survol:rgba(240,235,225,.045);--bordure:rgba(200,192,176,.12);--bordure-forte:rgba(200,192,176,.24);
+  --texte:var(--ivoire);--texte-2:var(--lune);--texte-3:#958C7E;
+  --accent:var(--monde-accent);--accent-survol:#45719A;--accent-texte:#9DBEDA;--accent-doux:rgba(58,96,128,.24);--accent-bord:rgba(110,155,195,.45);
+  --ok:#7CC29B;--ok-doux:rgba(124,194,155,.12);--ok-bord:rgba(124,194,155,.38);
+  --attention:#E0B36A;--attention-doux:rgba(224,179,106,.12);--attention-bord:rgba(224,179,106,.38);
+  --danger:#E3A0A0;--danger-doux:rgba(227,160,160,.10);--danger-bord:rgba(227,160,160,.38);
+  --ia:#B9A7E0;--ia-doux:rgba(185,167,224,.11);--ia-bord:rgba(185,167,224,.36);
+  --r-1:6px;--r-2:10px;--r-3:14px;--ombre-2:0 12px 32px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.4);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#060504;color:var(--texte);font:300 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+.page{max-width:1480px;margin:0 auto;padding:36px 24px 100px}
+.intro h1{font:500 38px/1.1 var(--serif);margin:0 0 8px}
+.intro p{color:var(--texte-2);max-width:980px;margin:0 0 6px}
+.etat{margin-top:44px}
+.etat>h2{font:500 26px var(--serif);margin:0 0 4px}
+.etat>p{color:var(--texte-2);margin:0 0 14px;max-width:1000px}
+.etat>p b{color:var(--texte);font-weight:500}
+.cadre{border:1px solid var(--bordure-forte);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.cadre .chrome-nav{height:30px;background:#151210;display:flex;align-items:center;gap:6px;padding:0 12px;border-bottom:1px solid var(--bordure)}
+.cadre .chrome-nav i{width:10px;height:10px;border-radius:50%;background:#3a332c}
+.cadre .chrome-nav span{margin-left:14px;font-size:11.5px;color:var(--texte-3)}
+.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.i-s{width:14px;height:14px}
+.kbd{font:500 10.5px var(--sans);color:var(--texte-3);border:1px solid var(--bordure-forte);border-bottom-width:2px;border-radius:5px;padding:0 5px;line-height:16px}
+
+/* ---------- Application ---------- */
+.app{display:grid;grid-template-columns:232px 1fr;height:720px;background:var(--fond)}
+.rail{background:var(--fond);border-right:1px solid var(--bordure);display:flex;flex-direction:column;padding:14px 10px;gap:2px;min-height:0}
+.marque{display:flex;align-items:center;gap:9px;padding:2px 8px 14px;font:500 21px var(--serif)}
+.marque i{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-doux)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:var(--r-2);font:400 13.5px var(--sans);border:1px solid transparent;color:var(--texte);background:none;white-space:nowrap;cursor:pointer}
+.btn.principal{background:var(--accent);border-color:var(--accent)}
+.btn.doux{background:var(--accent-doux);border-color:var(--accent-bord);color:var(--accent-texte)}
+.btn.secondaire{background:var(--surface-2);border-color:var(--bordure-forte)}
+.btn.fantome{color:var(--texte-2)}.btn.fantome:hover{background:var(--survol)}
+.btn.icone{width:34px;padding:0;justify-content:center}
+.btn.petit{height:28px;padding:0 10px;font-size:12.5px;border-radius:var(--r-1)}
+.btn.icone.petit{width:28px;padding:0}
+.btn.plein{width:100%;justify-content:center;height:38px;margin-bottom:12px}
+.lien{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:var(--r-2);color:var(--texte-2);font-size:13.5px;position:relative}
+.lien:hover{background:var(--survol)}
+.lien.on{background:var(--accent-doux);color:var(--texte)}
+.lien.on::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--accent-texte)}
+.lien .n{margin-left:auto;font:400 12px var(--sans);color:var(--texte-3)}
+.lien.on .n{color:var(--texte)}
+.lien .n.ia{color:var(--ia);background:var(--ia-doux);border:1px solid var(--ia-bord);border-radius:9px;padding:0 6px;line-height:16px;font-size:11px}
+.groupe{display:flex;align-items:center;justify-content:space-between;font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:14px 10px 4px}
+.pastille-c{width:8px;height:8px;border-radius:2px;flex:none}
+.rail .bas{margin-top:auto;border-top:1px solid var(--bordure);padding-top:10px;display:flex;flex-direction:column;gap:2px}
+.service{display:flex;align-items:center;gap:9px;margin-top:8px;padding:9px 10px;border-radius:var(--r-2);background:var(--surface-1);border:1px solid var(--bordure);font-size:12px;color:var(--texte-2)}
+.service .p{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-doux)}
+.service b{color:var(--texte);font-weight:400;display:block;font-size:12.5px}
+
+.zone{display:flex;flex-direction:column;min-width:0;min-height:0}
+.haut{display:flex;align-items:center;gap:12px;height:58px;padding:0 18px;border-bottom:1px solid var(--bordure)}
+.rech{flex:1;max-width:620px;display:flex;align-items:center;gap:10px;height:38px;padding:0 12px;background:var(--surface-1);border:1px solid var(--bordure-forte);border-radius:var(--r-2);color:var(--texte-3);font-size:13.5px}
+.rech .kbd{margin-left:auto}
+.haut .droite{margin-left:auto;display:flex;align-items:center;gap:8px}
+.avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:500 11.5px var(--sans);flex:none;background:var(--surface-3);color:var(--texte-2)}
+.onglets{display:flex;align-items:center;gap:2px;padding:0 18px;border-bottom:1px solid var(--bordure);height:44px}
+.onglets span{height:44px;display:flex;align-items:center;gap:6px;padding:0 12px;color:var(--texte-2);font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.onglets span.on{color:var(--texte);border-color:var(--accent-texte)}
+.onglets span small{color:var(--texte-3);font-size:11.5px}
+.onglets .outils{margin-left:auto;display:flex;align-items:center;gap:6px;border:0;color:var(--texte-3);font-size:12.5px}
+
+.contenu{display:flex;min-height:0;flex:1}
+.liste{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column}
+.liste.etroite{flex:0 0 430px;border-right:1px solid var(--bordure)}
+.jour{font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:12px 18px 6px}
+.rangee{display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 18px;border-bottom:1px solid var(--bordure);position:relative}
+.rangee:hover{background:var(--survol)}
+.rangee.sel{background:var(--accent-doux)}
+.rangee.sel::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--accent-texte)}
+.rangee.lu .de,.rangee.lu .l2 b{font-weight:300;color:var(--texte-2)}
+.rangee .nonlu{width:7px;height:7px;border-radius:50%;background:var(--accent-texte);flex:none}
+.rangee .esp{width:7px;flex:none}
+.case{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--bordure-forte);flex:none;display:grid;place-items:center}
+.case.on{background:var(--accent);border-color:var(--accent)}
+.corps{flex:1;min-width:0}
+.l1{display:flex;align-items:center;gap:8px}
+.de{font-weight:500;font-size:13.5px;white-space:nowrap}
+.heure{margin-left:auto;color:var(--texte-3);font-size:12px;white-space:nowrap}
+.l2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:var(--texte-2);margin-top:1px}
+.l2 b{color:var(--texte);font-weight:400}
+.pj{display:inline-flex;align-items:center;gap:4px;color:var(--texte-3);font-size:11.5px;margin-left:6px}
+.propo-mini{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 3px 0 8px;border-radius:11px;background:var(--ia-doux);border:1px solid var(--ia-bord);color:var(--ia);font-size:11.5px;white-space:nowrap}
+.propo-mini button{width:18px;height:18px;border-radius:50%;border:0;background:rgba(185,167,224,.2);color:var(--texte);display:grid;place-items:center;padding:0}
+.propo-mini button .i{width:11px;height:11px}
+.fait{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:11px;color:var(--ia);font-size:11.5px;border:1px dashed var(--ia-bord);white-space:nowrap}
+.etiq{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:var(--r-1);background:var(--surface-2);color:var(--texte-2);font-size:11px}
+.urg{color:var(--attention);background:var(--attention-doux)}
+.survol{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-2);padding:2px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.barre-sel{display:flex;align-items:center;gap:6px;height:48px;padding:0 14px;margin:10px 14px 4px;border-radius:var(--r-2);background:var(--surface-2);border:1px solid var(--bordure-forte)}
+.barre-sel b{font-weight:400;margin:0 10px 0 6px}
+
+/* ---------- Lecture ---------- */
+.lecture{flex:1;min-width:0;display:flex;flex-direction:column;position:relative;background:var(--fond)}
+.outils-l{display:flex;align-items:center;gap:2px;height:52px;padding:0 14px;border-bottom:1px solid var(--bordure)}
+.sepv{width:1px;height:20px;background:var(--bordure);margin:0 6px}
+.outils-l .fin{margin-left:auto;display:flex;gap:6px;align-items:center}
+.lecture .defile{padding:22px 34px 30px;overflow:hidden}
+.objet{font:500 28px/1.2 var(--serif);margin:0 0 14px}
+.exp{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.exp .qui b{font-weight:500}
+.exp .qui span{color:var(--texte-3);font-size:12.5px}
+.exp .quand{margin-left:auto;color:var(--texte-3);font-size:12.5px;text-align:right}
+.propo{border:1px solid var(--ia-bord);background:linear-gradient(180deg,var(--ia-doux),rgba(185,167,224,.02));border-radius:var(--r-2);padding:12px 14px;margin-bottom:20px}
+.propo .tete{display:flex;align-items:center;gap:8px;color:var(--ia);font-size:12.5px}
+.jauge{margin-left:auto;display:inline-flex;align-items:center;gap:6px;color:var(--texte-3);font-size:12px}
+.jauge .barre{width:52px;height:4px;border-radius:4px;background:var(--surface-3);overflow:hidden}
+.jauge .barre span{display:block;height:100%;background:var(--ia)}
+.propo .quoi{margin:6px 0 2px;font-size:14.5px;font-weight:400}
+.propo .quoi b{font-weight:500}
+.propo .pq{color:var(--texte-2);font-size:13px;margin:0 0 10px}
+.propo .act{display:flex;gap:6px;align-items:center}
+.propo .act .kbd:first-of-type{margin-left:auto}
+.message{color:var(--papier);font-size:14.5px;line-height:1.7;max-width:720px}
+.message p{margin:0 0 12px}
+.message a{color:var(--accent-texte)}
+.message .sig{color:var(--texte-3);font-size:13px}
+.pieces{display:flex;gap:10px;margin:18px 0}
+.piece{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--r-2);background:var(--surface-1);border:1px solid var(--bordure);font-size:13px}
+.piece small{display:block;color:var(--texte-3);font-size:11.5px}
+.repondre{display:flex;align-items:center;gap:10px;margin-top:18px;max-width:720px;height:44px;padding:0 14px;border-radius:var(--r-2);border:1px solid var(--bordure-forte);color:var(--texte-3);background:var(--surface-1)}
+.menu{position:absolute;min-width:240px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-2);box-shadow:var(--ombre-2);padding:6px;z-index:10}
+.menu .titre{font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:6px 10px 4px}
+.menu .filtre{display:flex;align-items:center;gap:8px;height:32px;margin:0 2px 4px;padding:0 8px;border-radius:var(--r-1);background:var(--surface-1);border:1px solid var(--bordure);color:var(--texte-3);font-size:12.5px}
+.menu .item{display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:var(--r-1);font-size:13.5px}
+.menu .item.actif{background:var(--survol)}
+.menu .item .kbd{margin-left:auto}
+.menu .item.ia{color:var(--ia)}
+.menu .sep{height:1px;background:var(--bordure);margin:6px 4px}
+.menu .item.dan{color:var(--danger)}
+.annot{position:absolute;font:400 12px var(--sans);color:#F2D38A;background:rgba(40,30,10,.92);border:1px solid rgba(242,211,138,.5);border-radius:8px;padding:5px 9px;max-width:230px;z-index:20;line-height:1.4}
+
+/* ---------- Mobile ---------- */
+.telephones{display:flex;gap:28px;flex-wrap:wrap}
+.tel{width:390px;height:780px;border-radius:38px;border:10px solid #1d1915;background:var(--fond);overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.tel .statut{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;color:var(--texte-2)}
+.tel .tete{display:flex;align-items:center;gap:10px;padding:6px 14px 10px}
+.tel .tete .rech{height:42px;max-width:none;border-radius:21px}
+.tel .chips{display:flex;gap:6px;padding:0 14px 8px;overflow:hidden}
+.chip{height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--bordure-forte);display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--texte-2);white-space:nowrap}
+.chip.on{background:var(--accent-doux);border-color:var(--accent-bord);color:var(--texte)}
+.tel .rangee{padding:10px 14px;min-height:72px;align-items:flex-start}
+.tel .rangee .avatar{margin-top:2px}
+.tel .fab{position:absolute;right:16px;bottom:84px;height:52px;padding:0 20px;border-radius:16px;background:var(--accent);display:flex;align-items:center;gap:8px;font-size:14px;box-shadow:0 10px 24px rgba(0,0,0,.45)}
+.tel nav{margin-top:auto;height:68px;border-top:1px solid var(--bordure);display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface-1)}
+.tel nav span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--texte-3)}
+.tel nav span.on{color:var(--texte)}
+.tel nav span.on .ic{background:var(--accent-doux);color:var(--accent-texte)}
+.tel nav .ic{width:56px;height:28px;border-radius:14px;display:grid;place-items:center;position:relative}
+.tel nav .ic em{position:absolute;top:-3px;right:8px;font:500 10px/15px var(--sans);font-style:normal;min-width:15px;height:15px;border-radius:8px;background:var(--ia);color:#1A1612;text-align:center;padding:0 4px}
+.tel .lect{padding:4px 18px;overflow:hidden;flex:1}
+.tel .barre-bas{display:flex;justify-content:space-around;align-items:center;height:60px;border-top:1px solid var(--bordure);background:var(--surface-1)}
+.notes{margin-top:24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media(max-width:1100px){.notes{grid-template-columns:1fr}}
+.note{background:var(--surface-1);border:1px solid var(--bordure);border-radius:var(--r-3);padding:16px 18px;font-size:13.5px;color:var(--texte-2)}
+.note h3{font:500 19px var(--serif);color:var(--texte);margin:0 0 6px}
+.note ul{margin:0;padding-left:18px}.note li{margin:4px 0}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></symbol>
+  <symbol id="trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+  <symbol id="more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+  <symbol id="spark" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+  <symbol id="folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></symbol>
+  <symbol id="list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  <symbol id="inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="reply" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v3"/></symbol>
+  <symbol id="send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></symbol>
+  <symbol id="clip" viewBox="0 0 24 24"><path d="m21 11-9 9a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8"/></symbol>
+  <symbol id="file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="spam" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></symbol>
+  <symbol id="eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></symbol>
+  <symbol id="pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+</svg>
+<style>
+.app.agenda{height:820px}
+.mini{padding:4px 6px 10px}
+.mini .t{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:0 4px 6px}
+.mini .t span{display:flex;gap:2px;color:var(--texte-3)}
+.mini .g{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11.5px;row-gap:2px}
+.mini .g b{font-weight:400;color:var(--texte-3);font-size:10.5px;padding-bottom:2px}
+.mini .g i{font-style:normal;height:24px;width:24px;margin:auto;display:grid;place-items:center;border-radius:50%;color:var(--texte-2)}
+.mini .g i.h{color:var(--texte-3);opacity:.5}
+.mini .g i.cs{background:var(--survol)}
+.mini .g i.auj{background:var(--accent);color:#fff}
+.cal{display:flex;align-items:center;gap:10px;height:30px;padding:0 10px;font-size:13px;color:var(--texte-2);border-radius:var(--r-1)}
+.cal .cc{width:14px;height:14px;border-radius:4px;display:grid;place-items:center}
+.cal .cc svg{width:10px;height:10px;stroke:#0D0B09;stroke-width:3.2}
+.cal.off .cc{background:none!important;border:1.5px solid var(--bordure-forte)}
+.cal.off{color:var(--texte-3)}
+.barre-a{display:flex;align-items:center;gap:8px;height:56px;padding:0 18px;border-bottom:1px solid var(--bordure)}
+.barre-a h1{font:500 22px var(--serif);margin:0 0 0 8px}
+.barre-a .droite{margin-left:auto;display:flex;align-items:center;gap:8px}
+.seg{display:flex;padding:2px;border-radius:var(--r-2);background:var(--surface-1);border:1px solid var(--bordure-forte)}
+.seg span{height:28px;display:flex;align-items:center;padding:0 12px;border-radius:7px;font-size:12.5px;color:var(--texte-2)}
+.seg span.on{background:var(--surface-3);color:var(--texte)}
+.sem{display:grid;grid-template-columns:56px repeat(7,1fr)}
+.sem .jt{height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-bottom:1px solid var(--bordure);border-left:1px solid var(--bordure)}
+.sem .jt small{font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3)}
+.sem .jt b{font:400 20px var(--sans);width:34px;height:34px;display:grid;place-items:center;border-radius:50%}
+.sem .jt.auj small{color:var(--accent-texte)}
+.sem .jt.auj b{background:var(--accent);color:#fff}
+.sem .jt.we b{color:var(--texte-2)}
+.sem .lib{font-size:10.5px;color:var(--texte-3);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;border-bottom:1px solid var(--bordure)}
+.sem .case-j{border-left:1px solid var(--bordure);border-bottom:1px solid var(--bordure);padding:3px 3px;min-height:30px;position:relative}
+.jour-entier{height:22px;border-radius:5px;font-size:11.5px;display:flex;align-items:center;padding:0 8px;white-space:nowrap;overflow:hidden}
+.tache-j{display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border-radius:5px;font-size:11.5px;color:var(--texte-2);border:1px dashed var(--bordure-forte);white-space:nowrap;overflow:hidden}
+.tache-j .rnd{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--texte-3);flex:none}
+.tache-j.fait{text-decoration:line-through;color:var(--texte-3)}
+.tache-j.fait .rnd{background:var(--texte-3)}
+.tache-j.retard{border-color:var(--attention-bord);color:var(--attention)}
+.grille{display:grid;grid-template-columns:56px repeat(7,1fr);position:relative}
+.heures div{height:46px;font-size:10.5px;color:var(--texte-3);text-align:right;padding-right:8px;transform:translateY(-7px)}
+.col{position:relative;border-left:1px solid var(--bordure);background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 45px,var(--bordure) 45px,var(--bordure) 46px)}
+.col.we{background-color:rgba(255,255,255,.012)}
+.ev{position:absolute;left:3px;right:5px;border-radius:6px;padding:4px 7px;font-size:11.5px;line-height:1.3;overflow:hidden;color:var(--texte)}
+.ev b{font-weight:500;display:block;font-size:12px}
+.ev span{color:var(--texte-2)}
+.ev.court{display:flex;gap:6px;align-items:center;padding-top:2px}
+.ev.court b{display:inline}
+.ev.sel{outline:2px solid var(--texte);outline-offset:1px}
+.p1{background:rgba(107,143,176,.28);box-shadow:inset 3px 0 0 #6B8FB0}
+.p2{background:rgba(168,139,92,.28);box-shadow:inset 3px 0 0 #A88B5C}
+.p3{background:rgba(124,156,126,.28);box-shadow:inset 3px 0 0 #7C9C7E}
+.maint{position:absolute;left:-5px;right:0;height:2px;background:var(--danger);z-index:3}
+.maint::before{content:"";position:absolute;left:0;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--danger)}
+.pop{position:absolute;width:330px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-3);box-shadow:var(--ombre-2);padding:10px 12px 12px;z-index:15}
+.pop .outils{display:flex;justify-content:flex-end;gap:2px;margin-bottom:4px}
+.pop h3{font:500 21px var(--serif);margin:0 0 2px;display:flex;align-items:center;gap:10px}
+.pop h3 i{width:12px;height:12px;border-radius:3px;flex:none}
+.pop .ligne{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--texte-2);margin-top:9px}
+.pop .ligne .i{margin-top:2px;color:var(--texte-3)}
+.taches{flex:1;overflow:hidden;padding:18px 24px;display:flex;flex-direction:column;gap:6px;max-width:900px}
+.ajout{display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:var(--r-2);background:var(--surface-1);border:1px solid var(--bordure-forte);color:var(--texte-3);font-size:13.5px;margin-bottom:8px}
+.ajout .droite{margin-left:auto;display:flex;gap:6px}
+.tgroupe{display:flex;align-items:center;gap:8px;font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:12px 4px 4px}
+.tgroupe.retard{color:var(--attention)}
+.trow{display:flex;align-items:center;gap:12px;min-height:46px;padding:6px 10px;border-radius:var(--r-2);position:relative}
+.trow:hover,.trow.survole{background:var(--survol)}
+.trow .rnd{width:18px;height:18px;border-radius:50%;border:1.6px solid var(--texte-3);flex:none}
+.trow .rnd.ok{background:var(--ok);border-color:var(--ok);display:grid;place-items:center}
+.trow .titre{font-size:14px}
+.trow .sous{font-size:12px;color:var(--texte-3);display:flex;gap:10px;align-items:center}
+.trow .sous .retard{color:var(--attention)}
+.trow .droite{margin-left:auto;display:flex;gap:6px;align-items:center}
+.trow.fini .titre{color:var(--texte-3);text-decoration:line-through}
+.lienmail{display:inline-flex;align-items:center;gap:4px;color:var(--accent-texte)}
+.dialogue{width:520px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-3);box-shadow:var(--ombre-2);overflow:hidden}
+.dialogue .dt{display:flex;align-items:center;gap:6px;padding:12px 14px 0}
+.dialogue .dt .seg{margin-right:auto}
+.dialogue .dc{padding:10px 18px 4px;display:flex;flex-direction:column;gap:12px}
+.champ-titre{font:500 24px var(--serif);border-bottom:1px solid var(--accent-texte);padding:4px 0 6px;color:var(--texte)}
+.lchamp{display:flex;align-items:center;gap:12px;font-size:13.5px;color:var(--texte-2)}
+.lchamp .i{color:var(--texte-3)}
+.puce{height:32px;display:inline-flex;align-items:center;gap:6px;padding:0 10px;border-radius:var(--r-1);background:var(--surface-1);border:1px solid var(--bordure-forte);color:var(--texte);font-size:13px}
+.toggle{width:30px;height:18px;border-radius:9px;background:var(--surface-3);border:1px solid var(--bordure-forte);position:relative;flex:none}
+.toggle::after{content:"";position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--texte-3)}
+.dialogue .df{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px 16px;border-top:1px solid var(--bordure);margin-top:12px}
+.duo{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+.fond-flou{padding:40px;border-radius:14px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.015) 0 160px,transparent 160px 162px),rgba(0,0,0,.55);border:1px solid var(--bordure)}
+.tel .plan{flex:1;overflow:hidden;padding:0 14px}
+.tel .pj-j{display:grid;grid-template-columns:44px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--bordure)}
+.tel .pj-j .d{text-align:center}
+.tel .pj-j .d small{display:block;font:500 10px var(--sans);letter-spacing:.1em;color:var(--texte-3);text-transform:uppercase}
+.tel .pj-j .d b{font:400 20px var(--sans);display:grid;place-items:center;width:34px;height:34px;margin:2px auto 0;border-radius:50%}
+.tel .pj-j.auj .d small{color:var(--accent-texte)}
+.tel .pj-j.auj .d b{background:var(--accent);color:#fff}
+.tel .pj-j .evs{display:flex;flex-direction:column;gap:6px}
+.tel .ev{position:static;padding:7px 10px;font-size:12.5px}
+</style>
+
+<div class="page">
+  <div class="intro">
+    <h1>Lun'Acedia · Agenda et tâches</h1>
+    <p>Planche 5. Le modèle actuel ne change pas : événements Google (plusieurs agendas, rappels, journée entière, lieu) et tâches Google (liste, échéance, note, faite ou non). Seule la forme est refaite.</p>
+    <p>Références : Google Agenda (grille horaire, ligne de l’heure courante, bulle de détail au clic, mini-calendrier), Google Tasks et Things (tâches groupées par échéance, ajout rapide en une ligne), Fantastical (vue planning sur mobile). Rendu prévu avec Schedule-X ou FullCalendar habillé de nos jetons, à confirmer dans la spec.</p>
+  </div>
+
+  <!-- ================= ÉTAT 1 ================= -->
+  <section class="etat">
+    <h2>1 · Semaine, détail d’un événement ouvert</h2>
+    <p>Une vraie <b>grille horaire</b>, la ligne de l’heure courante, les journées entières et les tâches en bandeau au-dessus. Couleur = agenda (case à cocher dans le rail pour masquer). Le titre de période est en minuscules à la française. Un clic sur un événement ouvre une bulle de détail ; un clic dans un créneau vide ouvre la création.</p>
+    <div class="cadre">
+      <div class="chrome-nav"><i></i><i></i><i></i><span>localhost:8787 · Lun'Acedia</span></div>
+      <div class="app agenda">
+        <aside class="rail">
+          <div class="marque"><i></i>Lun'Acedia</div>
+          <button class="btn principal plein"><svg class="i"><use href="#plus"/></svg>Créer</button>
+          <div class="mini">
+            <div class="t">octobre 2026<span><svg class="i i-s"><use href="#left"/></svg><svg class="i i-s" style="transform:rotate(180deg)"><use href="#left"/></svg></span></div>
+            <div class="g"><b>L</b><b>M</b><b>M</b><b>J</b><b>V</b><b>S</b><b>D</b>
+              <i class="h">28</i><i class="h">29</i><i class="h">30</i><i>1</i><i>2</i><i>3</i><i>4</i>
+              <i>5</i><i>6</i><i>7</i><i>8</i><i>9</i><i>10</i><i>11</i>
+              <i>12</i><i>13</i><i>14</i><i>15</i><i>16</i><i>17</i><i>18</i>
+              <i class="cs">19</i><i class="cs">20</i><i class="auj">21</i><i class="cs">22</i><i class="cs">23</i><i class="cs">24</i><i class="cs">25</i>
+              <i>26</i><i>27</i><i>28</i><i>29</i><i>30</i><i>31</i><i class="h">1</i></div>
+          </div>
+          <div class="lien"><svg class="i"><use href="#inbox"/></svg>Réception<span class="n">12</span></div>
+          <div class="lien on"><svg class="i"><use href="#cal"/></svg>Agenda</div>
+          <div class="lien"><svg class="i"><use href="#list"/></svg>Tâches<span class="n">4</span></div>
+          <div class="groupe">Agendas</div>
+          <div class="cal"><span class="cc" style="background:#6B8FB0"><svg class="i"><use href="#check"/></svg></span>Personnel</div>
+          <div class="cal"><span class="cc" style="background:#A88B5C"><svg class="i"><use href="#check"/></svg></span>Travail</div>
+          <div class="cal"><span class="cc" style="background:#7C9C7E"><svg class="i"><use href="#check"/></svg></span>Famille</div>
+          <div class="cal off"><span class="cc"></span>Jours fériés</div>
+          <div class="bas">
+            <div class="lien"><svg class="i"><use href="#cog"/></svg>Réglages</div>
+          </div>
+        </aside>
+        <div class="zone">
+          <div class="barre-a">
+            <button class="btn secondaire petit" style="height:32px">Aujourd’hui</button>
+            <button class="btn fantome icone petit"><svg class="i"><use href="#left"/></svg></button><button class="btn fantome icone petit"><svg class="i" style="transform:rotate(180deg)"><use href="#left"/></svg></button>
+            <h1>19 – 25 octobre 2026</h1>
+            <div class="droite"><button class="btn fantome icone"><svg class="i"><use href="#search"/></svg></button><div class="seg"><span>Jour</span><span class="on">Semaine</span><span>Mois</span><span>Planning</span></div><span class="avatar">NT</span></div>
+          </div>
+          <div class="sem">
+            <div style="border-bottom:1px solid var(--bordure)"></div>
+            <div class="jt"><small>lun.</small><b>19</b></div><div class="jt"><small>mar.</small><b>20</b></div><div class="jt auj"><small>mer.</small><b>21</b></div><div class="jt"><small>jeu.</small><b>22</b></div><div class="jt"><small>ven.</small><b>23</b></div><div class="jt we"><small>sam.</small><b>24</b></div><div class="jt we"><small>dim.</small><b>25</b></div>
+            <div class="lib">jour</div>
+            <div class="case-j"></div><div class="case-j"></div><div class="case-j"></div><div class="case-j"><div class="jour-entier p3">Anniversaire Léa</div></div><div class="case-j"></div>
+            <div class="case-j" style="grid-column:span 2"><div class="jour-entier p1">Week-end à Nantes</div></div>
+            <div class="lib">tâches</div>
+            <div class="case-j"><div class="tache-j fait"><span class="rnd"></span>Envoyer le devis</div></div><div class="case-j"><div class="tache-j retard"><span class="rnd"></span>Payer la taxe foncière</div></div><div class="case-j"></div><div class="case-j"></div><div class="case-j"><div class="tache-j"><span class="rnd"></span>Préparer la valise</div></div><div class="case-j"></div><div class="case-j"></div>
+          </div>
+          <div class="grille">
+            <div class="heures"><div></div><div>09:00</div><div>10:00</div><div>11:00</div><div>12:00</div><div>13:00</div><div>14:00</div><div>15:00</div><div>16:00</div><div>17:00</div><div>18:00</div><div>19:00</div><div>20:00</div></div>
+            <div class="col">
+              <div class="ev p2" style="top:46px;height:44px"><b>Point hebdo</b><span>09:00 – 10:00</span></div>
+              <div class="ev p1" style="top:276px;height:67px"><b>Dentiste</b><span>14:00 – 15:30 · Cabinet Pasteur</span></div>
+            </div>
+            <div class="col">
+              <div class="ev p2" style="top:92px;height:90px"><b>Atelier design Lun'</b><span>10:00 – 12:00</span></div>
+            </div>
+            <div class="col">
+              <div class="maint" style="top:149px"></div>
+              <div class="ev p1 court" style="top:69px;height:21px"><b>Appel banque</b><span>09:30</span></div>
+              <div class="ev p3 sel" style="top:207px;height:44px"><b>Déjeuner avec Camille</b><span>12:30 – 13:30</span></div>
+              <div class="ev p2" style="top:322px;height:44px;right:50%"><b>Revue PR</b><span>15:00</span></div>
+              <div class="ev p1" style="top:345px;height:44px;left:50%"><b>Sport</b><span>15:30</span></div>
+              <div class="pop" style="left:calc(100% + 10px);top:150px">
+                <div class="outils"><button class="btn fantome icone petit" title="Modifier"><svg class="i"><use href="#file"/></svg></button><button class="btn fantome icone petit" title="Supprimer"><svg class="i"><use href="#trash"/></svg></button><button class="btn fantome icone petit"><svg class="i"><use href="#more"/></svg></button><button class="btn fantome icone petit" title="Fermer (Échap)"><svg class="i"><use href="#x"/></svg></button></div>
+                <h3><i style="background:#7C9C7E"></i>Déjeuner avec Camille</h3>
+                <div style="color:var(--texte-2);font-size:13px;padding-left:22px">mercredi 21 octobre · 12:30 – 13:30</div>
+                <div class="ligne"><svg class="i"><use href="#folder"/></svg>Le Café des Arts, 12 rue de la Paix</div>
+                <div class="ligne"><svg class="i"><use href="#clock"/></svg>Rappel 30 min avant</div>
+                <div class="ligne"><svg class="i"><use href="#cal"/></svg>Famille</div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="ev p1" style="top:460px;height:67px"><b>Cinéma</b><span>18:00 – 19:30</span></div>
+            </div>
+            <div class="col">
+              <div class="ev p1" style="top:469px;height:81px"><b>Train Paris → Nantes</b><span>18:12 – 20:00 · voiture 14</span></div>
+            </div>
+            <div class="col we"></div>
+            <div class="col we"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ÉTAT 2 ================= -->
+  <section class="etat">
+    <h2>2 · Tâches</h2>
+    <p>Une page à part, pas un recoin de l’agenda. Ajout en une ligne (« demain » et la liste se règlent sur des pastilles). Groupes par échéance, retard en orange. Au survol : changer la date, la liste, supprimer. Les tâches terminées sont repliées.</p>
+    <div class="cadre">
+      <div class="chrome-nav"><i></i><i></i><i></i><span>localhost:8787 · Lun'Acedia</span></div>
+      <div class="app">
+        <aside class="rail">
+          <div class="marque"><i></i>Lun'Acedia</div>
+          <button class="btn principal plein"><svg class="i"><use href="#plus"/></svg>Nouvelle tâche</button>
+          <div class="lien"><svg class="i"><use href="#inbox"/></svg>Réception<span class="n">12</span></div>
+          <div class="lien"><svg class="i"><use href="#cal"/></svg>Agenda</div>
+          <div class="lien on"><svg class="i"><use href="#list"/></svg>Tâches<span class="n">4</span></div>
+          <div class="groupe">Listes <svg class="i i-s"><use href="#plus"/></svg></div>
+          <div class="lien"><svg class="i i-s"><use href="#check"/></svg>Toutes<span class="n">4</span></div>
+          <div class="lien"><span class="pastille-c" style="background:#6B8FB0"></span>Mes tâches<span class="n">3</span></div>
+          <div class="lien"><span class="pastille-c" style="background:#A88B5C"></span>Lun'<span class="n">1</span></div>
+          <div class="bas">
+            <div class="lien"><svg class="i"><use href="#cog"/></svg>Réglages</div>
+          </div>
+        </aside>
+        <div class="zone">
+          <div class="haut">
+            <div class="rech"><svg class="i"><use href="#search"/></svg>Rechercher, ou une commande<span class="kbd">Ctrl K</span></div>
+            <div class="droite"><span class="avatar">NT</span></div>
+          </div>
+          <div class="taches">
+            <div class="entete" style="display:flex;align-items:flex-end;margin-bottom:12px"><div><h1 style="font:500 30px/1.1 var(--serif);margin:0">Toutes les tâches</h1><p style="margin:4px 0 0;color:var(--texte-2);font-size:13.5px">4 à faire, dont 1 en retard.</p></div></div>
+            <div class="ajout"><svg class="i"><use href="#plus"/></svg><span style="color:var(--texte)">Rappeler le garage</span><div class="droite"><span class="puce"><svg class="i i-s"><use href="#cal"/></svg>demain</span><span class="puce"><span class="pastille-c" style="background:#6B8FB0"></span>Mes tâches</span><span class="kbd" style="align-self:center">↵</span></div></div>
+            <div class="tgroupe retard">En retard · 1</div>
+            <div class="trow"><span class="rnd"></span><div><div class="titre">Payer la taxe foncière</div><div class="sous"><span class="retard">mar. 20 oct.</span><span class="lienmail"><svg class="i i-s"><use href="#mail"/></svg>Impots.gouv</span><span>Mes tâches</span></div></div></div>
+            <div class="tgroupe">Cette semaine · 2</div>
+            <div class="trow survole"><span class="rnd"></span><div><div class="titre">Préparer la valise</div><div class="sous"><span>ven. 23 oct.</span><span>Mes tâches</span></div></div><div class="droite"><button class="btn fantome petit"><svg class="i i-s"><use href="#cal"/></svg>Date</button><button class="btn fantome petit"><svg class="i i-s"><use href="#list"/></svg>Liste</button><button class="btn fantome icone petit"><svg class="i"><use href="#trash"/></svg></button></div></div>
+            <div class="trow"><span class="rnd"></span><div><div class="titre">Relire la spec du recadrage</div><div class="sous"><span>sam. 24 oct.</span><span>Lun'</span></div></div></div>
+            <div class="tgroupe">Sans date · 1</div>
+            <div class="trow"><span class="rnd"></span><div><div class="titre">Trier les vieilles newsletters</div><div class="sous"><span>Mes tâches</span></div></div></div>
+            <div class="tgroupe" style="margin-top:8px"><svg class="i i-s"><use href="#chev"/></svg>Terminées · 12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ÉTAT 3 ================= -->
+  <section class="etat">
+    <h2>3 · Créer ou modifier</h2>
+    <p>Une seule fenêtre pour un événement ou une tâche (bascule en tête), avec les briques de champ de la planche 1. Le titre d’abord, le reste en lignes avec icône, comme Google Agenda. Les options rares (rappels, note) restent repliées tant qu’on ne les ouvre pas.</p>
+    <div class="duo">
+      <div class="fond-flou">
+        <div class="dialogue">
+          <div class="dt"><div class="seg"><span class="on">Événement</span><span>Tâche</span></div><button class="btn fantome icone petit"><svg class="i"><use href="#x"/></svg></button></div>
+          <div class="dc">
+            <div class="champ-titre">Déjeuner avec Camille</div>
+            <div class="lchamp"><svg class="i"><use href="#clock"/></svg><span class="puce">mer. 21 oct. 2026</span><span class="puce">12:30</span>–<span class="puce">13:30</span><span style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12.5px">Journée entière<span class="toggle"></span></span></div>
+            <div class="lchamp"><svg class="i"><use href="#folder"/></svg><span class="puce" style="flex:1;color:var(--texte-2)">Le Café des Arts, 12 rue de la Paix</span></div>
+            <div class="lchamp"><svg class="i"><use href="#cal"/></svg><span class="puce"><span class="pastille-c" style="background:#7C9C7E"></span>Famille<svg class="i i-s"><use href="#chev"/></svg></span></div>
+            <div class="lchamp"><svg class="i"><use href="#clock"/></svg><span class="puce">30 min avant<svg class="i i-s"><use href="#x"/></svg></span><button class="btn fantome petit"><svg class="i i-s"><use href="#plus"/></svg>Rappel</button></div>
+          </div>
+          <div class="df"><button class="btn fantome" style="color:var(--danger);margin-right:auto"><svg class="i i-s"><use href="#trash"/></svg>Supprimer</button><button class="btn secondaire">Annuler</button><button class="btn principal">Enregistrer</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MOBILE ================= -->
+  <section class="etat">
+    <h2>4 · Mobile</h2>
+    <p>Sur téléphone, la vue par défaut est le planning (liste des jours), plus lisible qu’une grille de 7 colonnes. Les tâches du jour sont mêlées aux événements. Un appui long sur un jour crée un événement.</p>
+    <div class="telephones">
+      <div class="tel">
+        <div class="statut"><span>09:41</span><span>5G · 82 %</span></div>
+        <div class="tete" style="justify-content:space-between"><div style="font:500 24px var(--serif)">octobre 2026</div><div style="display:flex;gap:2px"><button class="btn fantome icone"><svg class="i"><use href="#search"/></svg></button><button class="btn secondaire petit">Aujourd’hui</button></div></div>
+        <div class="chips"><span class="chip on">Planning</span><span class="chip">Jour</span><span class="chip">Mois</span><span class="chip">Tâches</span></div>
+        <div class="plan">
+          <div class="pj-j auj"><div class="d"><small>mer.</small><b>21</b></div><div class="evs">
+            <div class="tache-j retard" style="height:28px;font-size:12.5px"><span class="rnd"></span>Payer la taxe foncière</div>
+            <div class="ev p1"><b>Appel banque</b><span>09:30 – 10:00</span></div>
+            <div class="ev p3"><b>Déjeuner avec Camille</b><span>12:30 – 13:30 · Le Café des Arts</span></div>
+            <div class="ev p2"><b>Revue PR</b><span>15:00 – 16:00</span></div>
+          </div></div>
+          <div class="pj-j"><div class="d"><small>jeu.</small><b>22</b></div><div class="evs">
+            <div class="ev p3"><b>Anniversaire Léa</b><span>Journée entière</span></div>
+            <div class="ev p1"><b>Cinéma</b><span>18:00 – 19:30</span></div>
+          </div></div>
+          <div class="pj-j"><div class="d"><small>ven.</small><b>23</b></div><div class="evs">
+            <div class="tache-j" style="height:28px;font-size:12.5px"><span class="rnd"></span>Préparer la valise</div>
+          </div></div>
+        </div>
+        <div class="fab"><svg class="i"><use href="#plus"/></svg>Créer</div>
+        <nav><span><span class="ic"><svg class="i"><use href="#mail"/></svg></span>Mail</span><span><span class="ic"><svg class="i"><use href="#spark"/></svg><em>3</em></span>À valider</span><span class="on"><span class="ic"><svg class="i"><use href="#cal"/></svg></span>Agenda</span><span><span class="ic"><svg class="i"><use href="#cog"/></svg></span>Réglages</span></nav>
+      </div>
+    </div>
+  </section>
+
+  <div class="notes">
+    <div class="note"><h3>Ce qui change de fond</h3><ul><li>Grille horaire réelle, chevauchements côte à côte, ligne de l’heure.</li><li>Tâches visibles dans l’agenda (bandeau) et dans leur propre page.</li><li>Une tâche née d’un mail garde le lien vers ce mail (si l’info existe déjà ; sinon hors palier).</li><li>Corrige le doublon d’événements au changement d’heure (bug à traiter avec le palier).</li></ul></div>
+    <div class="note"><h3>Clavier</h3><ul><li><span class="kbd">T</span> aujourd’hui · <span class="kbd">J</span> <span class="kbd">K</span> période suivante, précédente</li><li><span class="kbd">D</span> jour · <span class="kbd">W</span> semaine · <span class="kbd">M</span> mois · <span class="kbd">A</span> planning</li><li><span class="kbd">C</span> créer · <span class="kbd">Échap</span> fermer la bulle</li></ul></div>
+    <div class="note"><h3>À trancher</h3><ul><li>Vue Mois : même habillage que la semaine, pastilles d’événements ; je ne la dessine pas à part sauf si tu veux la voir.</li><li>Glisser-déposer pour déplacer un événement : la bibliothèque le permet, mais c’est du fond en plus. Je propose de le garder pour plus tard.</li></ul></div>
+  </div>
+</div>
+</body>
+</html>

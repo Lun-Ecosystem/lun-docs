@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lun'Acedia · Journal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --encre:#0D0B09;--encre-2:#1A1612;--ivoire:#F0EBE1;--papier:#E8E2D6;--lune:#C8C0B0;--lavis:#8A9BAE;--rouge:#7A1818;
+  --monde-fond:#070C14;--monde-accent:#3A6080;
+  --fond:var(--encre);--surface-1:var(--encre-2);--surface-2:#221D18;--surface-3:#2B251F;
+  --survol:rgba(240,235,225,.045);--bordure:rgba(200,192,176,.12);--bordure-forte:rgba(200,192,176,.24);
+  --texte:var(--ivoire);--texte-2:var(--lune);--texte-3:#958C7E;
+  --accent:var(--monde-accent);--accent-survol:#45719A;--accent-texte:#9DBEDA;--accent-doux:rgba(58,96,128,.24);--accent-bord:rgba(110,155,195,.45);
+  --ok:#7CC29B;--ok-doux:rgba(124,194,155,.12);--ok-bord:rgba(124,194,155,.38);
+  --attention:#E0B36A;--attention-doux:rgba(224,179,106,.12);--attention-bord:rgba(224,179,106,.38);
+  --danger:#E3A0A0;--danger-doux:rgba(227,160,160,.10);--danger-bord:rgba(227,160,160,.38);
+  --ia:#B9A7E0;--ia-doux:rgba(185,167,224,.11);--ia-bord:rgba(185,167,224,.36);
+  --r-1:6px;--r-2:10px;--r-3:14px;--ombre-2:0 12px 32px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.4);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#060504;color:var(--texte);font:300 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+.page{max-width:1480px;margin:0 auto;padding:36px 24px 100px}
+.intro h1{font:500 38px/1.1 var(--serif);margin:0 0 8px}
+.intro p{color:var(--texte-2);max-width:980px;margin:0 0 6px}
+.etat{margin-top:44px}
+.etat>h2{font:500 26px var(--serif);margin:0 0 4px}
+.etat>p{color:var(--texte-2);margin:0 0 14px;max-width:1000px}
+.etat>p b{color:var(--texte);font-weight:500}
+.cadre{border:1px solid var(--bordure-forte);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.cadre .chrome-nav{height:30px;background:#151210;display:flex;align-items:center;gap:6px;padding:0 12px;border-bottom:1px solid var(--bordure)}
+.cadre .chrome-nav i{width:10px;height:10px;border-radius:50%;background:#3a332c}
+.cadre .chrome-nav span{margin-left:14px;font-size:11.5px;color:var(--texte-3)}
+.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.i-s{width:14px;height:14px}
+.kbd{font:500 10.5px var(--sans);color:var(--texte-3);border:1px solid var(--bordure-forte);border-bottom-width:2px;border-radius:5px;padding:0 5px;line-height:16px}
+
+/* ---------- Application ---------- */
+.app{display:grid;grid-template-columns:232px 1fr;height:720px;background:var(--fond)}
+.rail{background:var(--fond);border-right:1px solid var(--bordure);display:flex;flex-direction:column;padding:14px 10px;gap:2px;min-height:0}
+.marque{display:flex;align-items:center;gap:9px;padding:2px 8px 14px;font:500 21px var(--serif)}
+.marque i{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-doux)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:var(--r-2);font:400 13.5px var(--sans);border:1px solid transparent;color:var(--texte);background:none;white-space:nowrap;cursor:pointer}
+.btn.principal{background:var(--accent);border-color:var(--accent)}
+.btn.doux{background:var(--accent-doux);border-color:var(--accent-bord);color:var(--accent-texte)}
+.btn.secondaire{background:var(--surface-2);border-color:var(--bordure-forte)}
+.btn.fantome{color:var(--texte-2)}.btn.fantome:hover{background:var(--survol)}
+.btn.icone{width:34px;padding:0;justify-content:center}
+.btn.petit{height:28px;padding:0 10px;font-size:12.5px;border-radius:var(--r-1)}
+.btn.icone.petit{width:28px;padding:0}
+.btn.plein{width:100%;justify-content:center;height:38px;margin-bottom:12px}
+.lien{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:var(--r-2);color:var(--texte-2);font-size:13.5px;position:relative}
+.lien:hover{background:var(--survol)}
+.lien.on{background:var(--accent-doux);color:var(--texte)}
+.lien.on::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--accent-texte)}
+.lien .n{margin-left:auto;font:400 12px var(--sans);color:var(--texte-3)}
+.lien.on .n{color:var(--texte)}
+.lien .n.ia{color:var(--ia);background:var(--ia-doux);border:1px solid var(--ia-bord);border-radius:9px;padding:0 6px;line-height:16px;font-size:11px}
+.groupe{display:flex;align-items:center;justify-content:space-between;font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:14px 10px 4px}
+.pastille-c{width:8px;height:8px;border-radius:2px;flex:none}
+.rail .bas{margin-top:auto;border-top:1px solid var(--bordure);padding-top:10px;display:flex;flex-direction:column;gap:2px}
+.service{display:flex;align-items:center;gap:9px;margin-top:8px;padding:9px 10px;border-radius:var(--r-2);background:var(--surface-1);border:1px solid var(--bordure);font-size:12px;color:var(--texte-2)}
+.service .p{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-doux)}
+.service b{color:var(--texte);font-weight:400;display:block;font-size:12.5px}
+
+.zone{display:flex;flex-direction:column;min-width:0;min-height:0}
+.haut{display:flex;align-items:center;gap:12px;height:58px;padding:0 18px;border-bottom:1px solid var(--bordure)}
+.rech{flex:1;max-width:620px;display:flex;align-items:center;gap:10px;height:38px;padding:0 12px;background:var(--surface-1);border:1px solid var(--bordure-forte);border-radius:var(--r-2);color:var(--texte-3);font-size:13.5px}
+.rech .kbd{margin-left:auto}
+.haut .droite{margin-left:auto;display:flex;align-items:center;gap:8px}
+.avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:500 11.5px var(--sans);flex:none;background:var(--surface-3);color:var(--texte-2)}
+.onglets{display:flex;align-items:center;gap:2px;padding:0 18px;border-bottom:1px solid var(--bordure);height:44px}
+.onglets span{height:44px;display:flex;align-items:center;gap:6px;padding:0 12px;color:var(--texte-2);font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.onglets span.on{color:var(--texte);border-color:var(--accent-texte)}
+.onglets span small{color:var(--texte-3);font-size:11.5px}
+.onglets .outils{margin-left:auto;display:flex;align-items:center;gap:6px;border:0;color:var(--texte-3);font-size:12.5px}
+
+.contenu{display:flex;min-height:0;flex:1}
+.liste{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column}
+.liste.etroite{flex:0 0 430px;border-right:1px solid var(--bordure)}
+.jour{font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:12px 18px 6px}
+.rangee{display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 18px;border-bottom:1px solid var(--bordure);position:relative}
+.rangee:hover{background:var(--survol)}
+.rangee.sel{background:var(--accent-doux)}
+.rangee.sel::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--accent-texte)}
+.rangee.lu .de,.rangee.lu .l2 b{font-weight:300;color:var(--texte-2)}
+.rangee .nonlu{width:7px;height:7px;border-radius:50%;background:var(--accent-texte);flex:none}
+.rangee .esp{width:7px;flex:none}
+.case{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--bordure-forte);flex:none;display:grid;place-items:center}
+.case.on{background:var(--accent);border-color:var(--accent)}
+.corps{flex:1;min-width:0}
+.l1{display:flex;align-items:center;gap:8px}
+.de{font-weight:500;font-size:13.5px;white-space:nowrap}
+.heure{margin-left:auto;color:var(--texte-3);font-size:12px;white-space:nowrap}
+.l2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:var(--texte-2);margin-top:1px}
+.l2 b{color:var(--texte);font-weight:400}
+.pj{display:inline-flex;align-items:center;gap:4px;color:var(--texte-3);font-size:11.5px;margin-left:6px}
+.propo-mini{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 3px 0 8px;border-radius:11px;background:var(--ia-doux);border:1px solid var(--ia-bord);color:var(--ia);font-size:11.5px;white-space:nowrap}
+.propo-mini button{width:18px;height:18px;border-radius:50%;border:0;background:rgba(185,167,224,.2);color:var(--texte);display:grid;place-items:center;padding:0}
+.propo-mini button .i{width:11px;height:11px}
+.fait{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:11px;color:var(--ia);font-size:11.5px;border:1px dashed var(--ia-bord);white-space:nowrap}
+.etiq{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:var(--r-1);background:var(--surface-2);color:var(--texte-2);font-size:11px}
+.urg{color:var(--attention);background:var(--attention-doux)}
+.survol{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-2);padding:2px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.barre-sel{display:flex;align-items:center;gap:6px;height:48px;padding:0 14px;margin:10px 14px 4px;border-radius:var(--r-2);background:var(--surface-2);border:1px solid var(--bordure-forte)}
+.barre-sel b{font-weight:400;margin:0 10px 0 6px}
+
+/* ---------- Lecture ---------- */
+.lecture{flex:1;min-width:0;display:flex;flex-direction:column;position:relative;background:var(--fond)}
+.outils-l{display:flex;align-items:center;gap:2px;height:52px;padding:0 14px;border-bottom:1px solid var(--bordure)}
+.sepv{width:1px;height:20px;background:var(--bordure);margin:0 6px}
+.outils-l .fin{margin-left:auto;display:flex;gap:6px;align-items:center}
+.lecture .defile{padding:22px 34px 30px;overflow:hidden}
+.objet{font:500 28px/1.2 var(--serif);margin:0 0 14px}
+.exp{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.exp .qui b{font-weight:500}
+.exp .qui span{color:var(--texte-3);font-size:12.5px}
+.exp .quand{margin-left:auto;color:var(--texte-3);font-size:12.5px;text-align:right}
+.propo{border:1px solid var(--ia-bord);background:linear-gradient(180deg,var(--ia-doux),rgba(185,167,224,.02));border-radius:var(--r-2);padding:12px 14px;margin-bottom:20px}
+.propo .tete{display:flex;align-items:center;gap:8px;color:var(--ia);font-size:12.5px}
+.jauge{margin-left:auto;display:inline-flex;align-items:center;gap:6px;color:var(--texte-3);font-size:12px}
+.jauge .barre{width:52px;height:4px;border-radius:4px;background:var(--surface-3);overflow:hidden}
+.jauge .barre span{display:block;height:100%;background:var(--ia)}
+.propo .quoi{margin:6px 0 2px;font-size:14.5px;font-weight:400}
+.propo .quoi b{font-weight:500}
+.propo .pq{color:var(--texte-2);font-size:13px;margin:0 0 10px}
+.propo .act{display:flex;gap:6px;align-items:center}
+.propo .act .kbd:first-of-type{margin-left:auto}
+.message{color:var(--papier);font-size:14.5px;line-height:1.7;max-width:720px}
+.message p{margin:0 0 12px}
+.message a{color:var(--accent-texte)}
+.message .sig{color:var(--texte-3);font-size:13px}
+.pieces{display:flex;gap:10px;margin:18px 0}
+.piece{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--r-2);background:var(--surface-1);border:1px solid var(--bordure);font-size:13px}
+.piece small{display:block;color:var(--texte-3);font-size:11.5px}
+.repondre{display:flex;align-items:center;gap:10px;margin-top:18px;max-width:720px;height:44px;padding:0 14px;border-radius:var(--r-2);border:1px solid var(--bordure-forte);color:var(--texte-3);background:var(--surface-1)}
+.menu{position:absolute;min-width:240px;background:var(--surface-2);border:1px solid var(--bordure-forte);border-radius:var(--r-2);box-shadow:var(--ombre-2);padding:6px;z-index:10}
+.menu .titre{font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:6px 10px 4px}
+.menu .filtre{display:flex;align-items:center;gap:8px;height:32px;margin:0 2px 4px;padding:0 8px;border-radius:var(--r-1);background:var(--surface-1);border:1px solid var(--bordure);color:var(--texte-3);font-size:12.5px}
+.menu .item{display:flex;align-items:center;gap:10px;height:32px;padding:0 10px;border-radius:var(--r-1);font-size:13.5px}
+.menu .item.actif{background:var(--survol)}
+.menu .item .kbd{margin-left:auto}
+.menu .item.ia{color:var(--ia)}
+.menu .sep{height:1px;background:var(--bordure);margin:6px 4px}
+.menu .item.dan{color:var(--danger)}
+.annot{position:absolute;font:400 12px var(--sans);color:#F2D38A;background:rgba(40,30,10,.92);border:1px solid rgba(242,211,138,.5);border-radius:8px;padding:5px 9px;max-width:230px;z-index:20;line-height:1.4}
+
+/* ---------- Mobile ---------- */
+.telephones{display:flex;gap:28px;flex-wrap:wrap}
+.tel{width:390px;height:780px;border-radius:38px;border:10px solid #1d1915;background:var(--fond);overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.tel .statut{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;color:var(--texte-2)}
+.tel .tete{display:flex;align-items:center;gap:10px;padding:6px 14px 10px}
+.tel .tete .rech{height:42px;max-width:none;border-radius:21px}
+.tel .chips{display:flex;gap:6px;padding:0 14px 8px;overflow:hidden}
+.chip{height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--bordure-forte);display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--texte-2);white-space:nowrap}
+.chip.on{background:var(--accent-doux);border-color:var(--accent-bord);color:var(--texte)}
+.tel .rangee{padding:10px 14px;min-height:72px;align-items:flex-start}
+.tel .rangee .avatar{margin-top:2px}
+.tel .fab{position:absolute;right:16px;bottom:84px;height:52px;padding:0 20px;border-radius:16px;background:var(--accent);display:flex;align-items:center;gap:8px;font-size:14px;box-shadow:0 10px 24px rgba(0,0,0,.45)}
+.tel nav{margin-top:auto;height:68px;border-top:1px solid var(--bordure);display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface-1)}
+.tel nav span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--texte-3)}
+.tel nav span.on{color:var(--texte)}
+.tel nav span.on .ic{background:var(--accent-doux);color:var(--accent-texte)}
+.tel nav .ic{width:56px;height:28px;border-radius:14px;display:grid;place-items:center;position:relative}
+.tel nav .ic em{position:absolute;top:-3px;right:8px;font:500 10px/15px var(--sans);font-style:normal;min-width:15px;height:15px;border-radius:8px;background:var(--ia);color:#1A1612;text-align:center;padding:0 4px}
+.tel .lect{padding:4px 18px;overflow:hidden;flex:1}
+.tel .barre-bas{display:flex;justify-content:space-around;align-items:center;height:60px;border-top:1px solid var(--bordure);background:var(--surface-1)}
+.notes{margin-top:24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media(max-width:1100px){.notes{grid-template-columns:1fr}}
+.note{background:var(--surface-1);border:1px solid var(--bordure);border-radius:var(--r-3);padding:16px 18px;font-size:13.5px;color:var(--texte-2)}
+.note h3{font:500 19px var(--serif);color:var(--texte);margin:0 0 6px}
+.note ul{margin:0;padding-left:18px}.note li{margin:4px 0}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></symbol>
+  <symbol id="trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+  <symbol id="more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+  <symbol id="spark" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+  <symbol id="folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></symbol>
+  <symbol id="list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  <symbol id="inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="reply" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v3"/></symbol>
+  <symbol id="send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></symbol>
+  <symbol id="clip" viewBox="0 0 24 24"><path d="m21 11-9 9a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8"/></symbol>
+  <symbol id="file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="spam" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></symbol>
+  <symbol id="eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></symbol>
+  <symbol id="pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+</svg>
+<style>
+.jr{flex:1;overflow:hidden;padding:22px 28px}
+.jcol{max-width:900px;margin:0 auto;display:flex;flex-direction:column}
+.jcol .pagehead{display:flex;align-items:flex-end;gap:16px;margin-bottom:14px}
+.jcol .pagehead h1{font:500 32px/1.1 var(--serif);margin:0 0 4px}
+.jcol .pagehead p{margin:0;color:var(--texte-2)}
+.filtres{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.filtres .droite{margin-left:auto}
+.chip .nb{color:var(--texte-3);font-size:11.5px}
+.jjour{font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--texte-3);padding:16px 6px 6px}
+.jl{display:grid;grid-template-columns:52px 28px 1fr auto;gap:12px;align-items:center;min-height:52px;padding:6px 10px;border-radius:var(--r-2);position:relative}
+.jl:hover,.jl.survole{background:var(--survol)}
+.jl .h{color:var(--texte-3);font-size:12.5px;font-variant-numeric:tabular-nums}
+.jl .o{width:28px;height:28px;border-radius:8px;display:grid;place-items:center}
+.jl .o.ia{background:var(--ia-doux);color:var(--ia);border:1px solid var(--ia-bord)}
+.jl .o.regle{background:var(--surface-2);color:var(--texte-2);border:1px solid var(--bordure-forte)}
+.jl .s{min-width:0}
+.jl .s .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+.jl .s .q{font-size:12.5px;color:var(--texte-3);display:flex;align-items:center;gap:6px;margin-top:2px}
+.jl .s .q b{font-weight:400;color:var(--texte-2)}
+.jl .act{display:flex;gap:6px;align-items:center}
+.jl.annule .t{color:var(--texte-3);text-decoration:line-through}
+.jl.annule .o{opacity:.5}
+.jl .err{grid-column:3/5;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--danger);background:var(--danger-doux);border:1px solid var(--danger-bord);border-radius:var(--r-1);padding:6px 10px}
+.vers{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:var(--r-1);background:var(--surface-2);color:var(--texte-2);font-size:11.5px}
+.vers.spam{color:var(--danger);background:var(--danger-doux)}
+.plus{align-self:center;margin-top:14px}
+</style>
+
+<div class="page">
+  <div class="intro">
+    <h1>Lun'Acedia · Journal</h1>
+    <p>Planche 7. Ce que le tri a fait sans toi, et la possibilité de le défaire. Mêmes données qu’aujourd’hui : date, objet, origine (IA ou règle), action, boîte avant et après, annulé ou non.</p>
+    <p>Références : historique d’activité Google (groupé par jour, une ligne par action), filtres en pastilles de l’Activité myBrain, Gmail (annulation sur place). La page actuelle est vide et sans titre visible : celle-ci dit toujours où on en est.</p>
+  </div>
+
+  <!-- ================= ÉTAT 1 ================= -->
+  <section class="etat">
+    <h2>1 · Journal du tri</h2>
+    <p>Groupé par jour, <b>l’origine se voit d’un coup d’œil</b> (étincelle = IA, entonnoir = règle). Chaque ligne dit où le mail est allé ; un clic ouvre le mail. « Annuler » au survol. Une annulation refusée (le mail a changé depuis) s’explique sous la ligne, pas dans un message global.</p>
+    <div class="cadre">
+      <div class="chrome-nav"><i></i><i></i><i></i><span>localhost:8787 · Lun'Acedia</span></div>
+      <div class="app">
+        <aside class="rail">
+          <div class="marque"><i></i>Lun'Acedia</div>
+          <button class="btn principal plein"><svg class="i"><use href="#plus"/></svg>Nouveau message</button>
+          <div class="lien"><svg class="i"><use href="#inbox"/></svg>Réception<span class="n">12</span></div>
+          <div class="lien"><svg class="i"><use href="#spark"/></svg>À valider<span class="n ia">3</span></div>
+          <div class="lien"><svg class="i"><use href="#cal"/></svg>Agenda</div>
+          <div class="lien"><svg class="i"><use href="#list"/></svg>Tâches<span class="n">4</span></div>
+          <div class="bas">
+            <div class="lien on"><svg class="i"><use href="#clock"/></svg>Journal</div>
+            <div class="lien"><svg class="i"><use href="#cog"/></svg>Réglages</div>
+            <div class="service"><span class="p"></span><div><b>Tri par l’IA actif</b>Synchronisé il y a 1 min</div></div>
+          </div>
+        </aside>
+        <div class="zone">
+          <div class="haut">
+            <div class="rech"><svg class="i"><use href="#search"/></svg>Rechercher, ou une commande<span class="kbd">Ctrl K</span></div>
+            <div class="droite"><span class="avatar">NT</span></div>
+          </div>
+          <div class="jr"><div class="jcol">
+            <div class="pagehead"><div><h1>Journal du tri</h1><p>Tout ce qui a été rangé sans toi. Rien n’est définitif : chaque action s’annule.</p></div></div>
+            <div class="filtres"><span class="chip on">Tout</span><span class="chip"><svg class="i i-s" style="color:var(--ia)"><use href="#spark"/></svg>IA</span><span class="chip"><svg class="i i-s"><use href="#filter"/></svg>Règles</span><span class="chip">Annulés</span></div>
+
+            <div class="jjour">Aujourd’hui</div>
+            <div class="jl survole"><span class="h">10:02</span><span class="o ia"><svg class="i i-s"><use href="#spark"/></svg></span><div class="s"><div class="t">Votre avis de taxe foncière est disponible</div><div class="q">Rangé dans <span class="vers"><span class="pastille-c" style="background:#A88B5C"></span>Administratif</span>par l’IA</div></div><div class="act"><button class="btn fantome petit"><svg class="i i-s"><use href="#eye"/></svg>Ouvrir</button><button class="btn secondaire petit"><svg class="i i-s"><use href="#reply"/></svg>Annuler</button></div></div>
+            <div class="jl"><span class="h">09:12</span><span class="o regle"><svg class="i i-s"><use href="#filter"/></svg></span><div class="s"><div class="t">Votre facture d’octobre est disponible</div><div class="q">Rangé dans <span class="vers"><span class="pastille-c" style="background:#6B8FB0"></span>Factures</span>par la règle n° 1</div></div><div class="act"></div></div>
+            <div class="jl"><span class="h">07:02</span><span class="o ia"><svg class="i i-s"><use href="#spark"/></svg></span><div class="s"><div class="t">La matinale du 21 octobre</div><div class="q">Rangé dans <span class="vers"><span class="pastille-c" style="background:#7C9C7E"></span>Newsletters</span>par l’IA</div></div><div class="act"></div></div>
+            <div class="jl"><span class="h">06:40</span><span class="o ia"><svg class="i i-s"><use href="#spark"/></svg></span><div class="s"><div class="t">Vous avez gagné un iPhone 17 !!!</div><div class="q">Envoyé en <span class="vers spam"><svg class="i i-s"><use href="#spam"/></svg>Spam</span>par l’IA</div></div><div class="act"><button class="btn fantome petit" style="opacity:.6">Annuler</button></div>
+              <div class="err"><svg class="i i-s"><use href="#spam"/></svg>Le mail a changé depuis (déplacé dans Gmail), annulation refusée.</div></div>
+            <div class="jjour">Hier</div>
+            <div class="jl annule"><span class="h">18:30</span><span class="o ia"><svg class="i i-s"><use href="#spark"/></svg></span><div class="s"><div class="t">Votre colis arrive demain</div><div class="q">Rangé dans <span class="vers"><span class="pastille-c" style="background:#7C9C7E"></span>Newsletters</span>par l’IA · <span style="color:var(--texte-2)">annulé à 18:41</span></div></div><div class="act"><span class="badge" style="background:var(--surface-2);color:var(--texte-3);height:22px;display:inline-flex;align-items:center;padding:0 8px;border-radius:11px;font-size:12px">Annulé</span></div></div>
+            <div class="jl"><span class="h">07:02</span><span class="o ia"><svg class="i i-s"><use href="#spark"/></svg></span><div class="s"><div class="t">La matinale du 20 octobre</div><div class="q">Rangé dans <span class="vers"><span class="pastille-c" style="background:#7C9C7E"></span>Newsletters</span>par l’IA</div></div><div class="act"></div></div>
+            <button class="btn secondaire petit plus">Plus ancien</button>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ÉTAT 2 ================= -->
+  <section class="etat">
+    <h2>2 · Mobile, et journal vide</h2>
+    <p>Sur téléphone, même liste, l’annulation par glissement. Journal vide : on explique ce qui y apparaîtra, au lieu d’une phrase seule.</p>
+    <div class="telephones">
+      <div class="tel">
+        <div class="statut"><span>09:41</span><span>5G · 82 %</span></div>
+        <div class="tete" style="justify-content:space-between"><button class="btn fantome icone"><svg class="i"><use href="#left"/></svg></button><div style="font:500 22px var(--serif);margin-right:auto">Journal du tri</div></div>
+        <div class="chips"><span class="chip on">Tout</span><span class="chip">IA</span><span class="chip">Règles</span><span class="chip">Annulés</span></div>
+        <div class="jjour" style="padding-left:16px">Aujourd’hui</div>
+        <div style="padding:0 8px">
+          <div class="jl" style="grid-template-columns:40px 28px 1fr"><span class="h">10:02</span><span class="o ia"><svg class="i i-s"><use href="#spark"/></svg></span><div class="s"><div class="t">Votre avis de taxe foncière</div><div class="q"><span class="vers">Administratif</span></div></div></div>
+          <div class="jl" style="grid-template-columns:40px 28px 1fr"><span class="h">09:12</span><span class="o regle"><svg class="i i-s"><use href="#filter"/></svg></span><div class="s"><div class="t">Votre facture d’octobre</div><div class="q"><span class="vers">Factures</span>règle n° 1</div></div></div>
+          <div class="jl" style="grid-template-columns:40px 28px 1fr"><span class="h">07:02</span><span class="o ia"><svg class="i i-s"><use href="#spark"/></svg></span><div class="s"><div class="t">La matinale du 21 octobre</div><div class="q"><span class="vers">Newsletters</span></div></div></div>
+        </div>
+        <nav><span><span class="ic"><svg class="i"><use href="#mail"/></svg></span>Mail</span><span><span class="ic"><svg class="i"><use href="#spark"/></svg><em>3</em></span>À valider</span><span><span class="ic"><svg class="i"><use href="#cal"/></svg></span>Agenda</span><span class="on"><span class="ic"><svg class="i"><use href="#cog"/></svg></span>Réglages</span></nav>
+      </div>
+      <div class="tel">
+        <div class="statut"><span>09:41</span><span>5G · 82 %</span></div>
+        <div class="tete" style="justify-content:space-between"><button class="btn fantome icone"><svg class="i"><use href="#left"/></svg></button><div style="font:500 22px var(--serif);margin-right:auto">Journal du tri</div></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:0 34px;color:var(--texte-2)">
+          <div style="width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--bordure-forte);color:var(--texte-3)"><svg class="i" style="width:26px;height:26px"><use href="#clock"/></svg></div>
+          <div style="font:500 24px var(--serif);color:var(--texte)">Rien pour l’instant</div>
+          <p style="margin:0;font-size:13.5px">Quand une règle ou l’IA range un mail sans te demander, l’action apparaît ici et peut être annulée.</p>
+          <button class="btn secondaire petit" style="margin-top:6px"><svg class="i i-s"><use href="#cog"/></svg>Régler le seuil</button>
+        </div>
+        <nav><span><span class="ic"><svg class="i"><use href="#mail"/></svg></span>Mail</span><span><span class="ic"><svg class="i"><use href="#spark"/></svg></span>À valider</span><span><span class="ic"><svg class="i"><use href="#cal"/></svg></span>Agenda</span><span class="on"><span class="ic"><svg class="i"><use href="#cog"/></svg></span>Réglages</span></nav>
+      </div>
+    </div>
+  </section>
+
+  <div class="notes">
+    <div class="note"><h3>Ce qui change de fond</h3><ul><li>Filtres par origine et « Annulés » : sur les entrées déjà chargées, ou côté serveur si simple.</li><li>« par la règle n° 1 » : seulement si l’entrée garde la règle ; sinon « par une règle ».</li><li>Erreur d’annulation rattachée à sa ligne.</li></ul></div>
+    <div class="note"><h3>Place dans l’app</h3><ul><li>Bureau : en bas du rail, avec Réglages.</li><li>Mobile : dans Réglages (pas d’onglet à lui), et depuis la file À valider vide.</li></ul></div>
+    <div class="note"><h3>À trancher</h3><ul><li>Le bilan de la file vide (planche 4 : « 14 rangés seuls aujourd’hui ») demande un comptage par jour côté serveur. Petit fond en plus ; je le propose dans le palier.</li></ul></div>
+  </div>
+</div>
+</body>
+</html>
