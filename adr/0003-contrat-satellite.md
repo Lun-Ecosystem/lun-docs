@@ -1,6 +1,6 @@
 # ADR 0003 : contrat satellite REST + SSE, appairage par jeton
 
-Statut : acceptée
+Statut : remplacée par 0004
 Date : 2026-10-19
 
 ## Contexte
