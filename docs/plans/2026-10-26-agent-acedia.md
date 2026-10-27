@@ -414,14 +414,14 @@ Svelte 5, Bits UI. Nouvelle dépendance serveur : `openai` ^7.39.0 (même versio
 - La rédaction s'ouvre sur un brouillon par son id (`getDraft`), affiche le bandeau « Brouillon
   préparé par Pina. Relire avant d'envoyer : rien ne part sans un clic sur Envoyer. », enregistre par
   `PUT /api/drafts/:id`, envoie par `POST /api/drafts/:id/send`, jette par `DELETE`. Fenêtre de Pina
-  ouverte au-dessus : la rédaction réserve sa largeur, aucun bouton caché.
+  ouverte : elle survole la rédaction, qui ne change pas de mise en page (décision de CrOliX).
 - Page Réglages « Pina » : mode (Valider avant chaque action / Faire tout de suite, avec la mention
   « Les suppressions demandent toujours une validation »), consignes (texte, 2000 caractères au
   plus), conservation du fil (jours), plafond quotidien ($) avec la dépense du jour, modèle
   (`ModelPicker use="pina"`).
 
 - [ ] **Step 1: Tests** `composer opened from a draft shows the banner and sends through drafts/send`,
-  `composer actions stay visible with the panel open (layout class)`, `Pina settings save and bound values`.
+  `Pina settings save and bound values`.
 - [ ] **Step 2–4:** FAIL, implémenter, PASS.
 - [ ] **Step 5: Commit** `feat(views): draft review in the composer and Pina settings`.
 - [ ] **Step 6: Arrêt** (rédaction avec bandeau et fenêtre ouverte ; Réglages › Pina).

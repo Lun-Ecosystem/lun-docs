@@ -167,8 +167,8 @@ Selon la maquette `01-assistant.html`, avec « Assistant » remplacé par « Pin
 - **Lanceur** en bas à droite, seul élément fixe dans ce coin ; `Ctrl J` ouvre et ferme ; une pastille
   compte ce qui attend CrOliX (les cartes en attente).
 - **Fenêtre** flottante, **taille dynamique** : on tire son bord ou son coin, ou on l'agrandit d'un
-  bouton ; la taille est retenue. Elle ne cache jamais les boutons d'action de l'écran dessous (défaut
-  de la maquette, état 3 : à corriger).
+  bouton ; la taille est retenue. **Elle survole l’interface sans jamais la redimensionner** :
+  ce qu’elle couvre se dégage en la réduisant, en la déplaçant de taille ou en la fermant (CrOliX).
 - En-tête : nom, rappel du mode (« Validation avant chaque action », lien vers les Réglages),
   historique des jours, agrandir, réduire.
 - Cartes : en attente, faite (avec Annuler), refusée, en échec (avec la raison).
