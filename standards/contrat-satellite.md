@@ -36,12 +36,16 @@ interface Health { status: Status; reason?: string; version: string; paused?: tr
 interface CostItem { provider: string; model?: string; amount: number; calls: number }
 interface Costs { currency: 'USD'; since: string; until: string; total: number; items: CostItem[] }
 interface LunEvent { id: string; type: string; importance: Importance; at: string; title: string; data?: unknown }
-interface Action { name: string; description: string; input: object /* JSON Schema */ }
+interface Action { name: string; description: string; input: object /* JSON Schema */; effect: 'read' | 'write' | 'delete' }
 interface ActionResult { ok: boolean; result?: unknown; error?: string }
 ```
 
 Les dates sont en ISO 8601 UTC, les montants en dollars avec deux décimales au moins. Ces types
 restent écrits ici ; un paquet partagé ne sera créé que si deux projets en ont réellement besoin.
+
+`effect` dit ce que fait une action : `read` ne change rien, `write` modifie, `delete` supprime. Ajout
+compatible au contrat v1 : un client qui l’ignore continue de fonctionner. Un agent qui agit par ces
+actions garde toujours la main de l’utilisateur sur les `delete`.
 
 ## Appairage
 
