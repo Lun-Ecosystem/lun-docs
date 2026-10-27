@@ -36,7 +36,7 @@ interface autonome, et il passe le test « utile à quelqu'un sans Lun' ».
 
 - **Lun'Acedia** : bornée aux outils Google. Mail, agenda et tâches au MVP ; Drive plus tard si c'est
   cohérent. Son agent est Pina.
-- **Le cerveau** (nouveau satellite, nom à choisir par CrOliX) : la base de connaissance. Il reçoit
+- **Lun'Avaritia, le cerveau** (nouveau satellite) : la base de connaissance. Il reçoit
   des sources, rédige les fiches, les met en forme et les relie, dans l'esprit de myBrain et
   d'Obsidian. Son agent rédige ; rien n'entre sans la validation de CrOliX. Au MVP, son front
   autonome reste sobre (consulter, éditer, valider) [choix Claude] : la validation quotidienne passe
@@ -163,15 +163,15 @@ moyen terme.
 | Propositions d'action issues de la nuit | Core → postes | MVP |
 | Portail, contrôle agrégé, modes | Core | MVP |
 | Voix + RVC, avatar | Core + desktop | MVP, première ligne de coupe |
-| Fiches, liens, incohérences, dépôts, « note ça » | Cerveau | MVP |
-| Veille tech sur URL choisies | Cerveau | MVP léger |
+| Fiches, liens, incohérences, dépôts, « note ça » | Lun'Avaritia | MVP |
+| Veille tech sur URL choisies | Lun'Avaritia | MVP léger |
 | Mail, agenda, tâches, tri, Pina | Acedia | fait |
 | Délégation et bilan du jour côté Acedia | Acedia | MVP, nouveau |
 | Alertes déterministes (#37) | Acedia | MVP |
 | Journal borné (#33), poids du build (#38) | Acedia | MVP léger |
 | Confort façon Google (#34), Drive | Acedia | moyen terme |
 | Notifications GitHub à la source, pilotage de l'environnement de dev | Ira (refondu) | moyen terme |
-| Veille libre sur internet | Cerveau | moyen terme |
+| Veille libre sur internet | Lun'Avaritia | moyen terme |
 | Home Assistant | futur satellite | long terme |
 | Gula, mode jeu, vision d'écran, streaming | — | long terme (2027) |
 
@@ -188,12 +188,27 @@ dans le core ; un satellite par source de lecture.
 - une fiche écrite sans validation, ou une mémoire de la relation compactée avec la journée ;
 - une réponse vocale qui attend le cerveau.
 
-## 11. Ce qui reste à trancher
+## 11. Décisions de suite
 
-- **Le nom du cerveau**, et s'il vit dans un dépôt public comme Acedia.
-- **L'ordre des chantiers** jusqu'au 31/12 : la suite se tranche à partir de cette carte.
-- **La liaison** entre l'app mobile et le core sur le NAS, et entre le core et ses satellites, reste
-  liée à l'appairage, en attente.
+- **Le nom** : le cerveau s'appelle **Lun'Avaritia**. L'avarice garde tout et n'efface rien, comme une
+  mémoire où un fait démenti est barré, jamais effacé. Le nom, mis en réserve pour une app Android
+  d'Acedia qui n'a plus lieu d'être, est repris. Reste à trancher à sa création : dépôt public ou
+  privé.
+- **L'ordre des chantiers** jusqu'au 31/12, chacun avec son issue, sa branche et sa PR :
+  1. **Contrat satellite v2** (lun-docs) : délégation, cartes relayées, bilan du jour, retrait des
+     vues ; ADR.
+  2. **Acedia** : route de délégation, cartes exposées, bilan du jour, alertes déterministes (#37).
+  3. **Core** : délégation et cartes relayées. Première boucle complète : « marque le resto » dit à
+     Natsume, une carte de Pina, validée depuis le core.
+  4. **Lun'Avaritia v1** : fiches, « note ça », dépôts, validation.
+  5. **Core** : mémoire vive, routines (veille nocturne, point du matin), contexte chaud.
+  6. **Apps du core** : mobile d'abord, puis desktop.
+  7. **Personnalité, voix, avatar, modes.**
+  8. **Rodage** : une semaine d'usage en local.
+- **La liaison** (mobile → core sur le NAS, core → satellites) attend la fin du dev local du MVP. On
+  ne reprend pas le parcours de l'ancien écosystème, trop lourd en étapes : relier un satellite doit
+  rester simple pour quelqu'un qui le récupère seul. D'ici là, le core et Acedia se relient en local
+  avec l'existant (`pair-code`, `connect`).
 
 ## 12. Laissé au constructeur
 
