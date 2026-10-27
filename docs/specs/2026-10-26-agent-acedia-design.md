@@ -69,7 +69,7 @@ Inventaire fait contre les routes de l'API (liste exacte à confirmer action par
 |---|---|
 | Mails | sortir de la corbeille, signaler spam, marquer lu ou non lu, lister une boîte (réception, une boîte, non lus) |
 | À valider | lister les propositions en attente |
-| Boîtes | créer, renommer |
+| Boîtes | lister, créer, changer le rôle (boîte ou étiquette) ; l’écran ne renomme pas |
 | Brouillons | créer un brouillon (nouveau ou réponse dans un fil), le modifier, le jeter |
 | Journal | lister les dernières actions, annuler une action |
 | Règles de tri | lister, créer, modifier, supprimer |
@@ -111,8 +111,8 @@ sans nouveau consentement.
   validable ligne par ligne ou d'un « Tout valider » **[choix Claude]**.
 - **Carte en attente** : valable le jour même. À la fin du jour, elle passe « expirée » dans
   l'historique, sans effet. Au Valider, l'action revérifie l'état (mail déjà déplacé, événement
-  supprimé) et échoue proprement avec la raison si besoin. La pastille compte les cartes en attente
-  et les brouillons prêts du jour **[choix Claude]**.
+  supprimé) et échoue proprement avec la raison si besoin. La pastille compte les cartes en attente du jour
+  (un brouillon à créer en est une) **[choix Claude]**.
 - **Bornes** : au plus 8 allers-retours d'outils par demande ; un plafond de dépense quotidien pour
   Pina, réglable (1 $ par défaut) ; au-delà, elle le dit et s'arrête **[choix Claude]**.
 - **Brouillons** : une demande de réponse donne une carte « Brouillon prêt, non envoyé ». Ouvrir le
@@ -165,7 +165,7 @@ Ce bloc passe en premier dans le plan : Pina en dépend.
 Selon la maquette `01-assistant.html`, avec « Assistant » remplacé par « Pina » :
 
 - **Lanceur** en bas à droite, seul élément fixe dans ce coin ; `Ctrl J` ouvre et ferme ; une pastille
-  compte ce qui attend CrOliX (carte à valider, brouillon prêt).
+  compte ce qui attend CrOliX (les cartes en attente).
 - **Fenêtre** flottante, **taille dynamique** : on tire son bord ou son coin, ou on l'agrandit d'un
   bouton ; la taille est retenue. Elle ne cache jamais les boutons d'action de l'écran dessous (défaut
   de la maquette, état 3 : à corriger).
