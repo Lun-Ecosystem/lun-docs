@@ -111,7 +111,7 @@ avant toute action. Plusieurs autorisations peuvent être en attente, chacune av
   de message. Une lecture simple peut passer par une action du catalogue, sans agent.
 - **Cartes** : elles vivent chez le satellite, qui garde la décision et le journal. Le core les
   affiche et transmet le geste ; une carte qui n'est plus en attente ne se valide ni ne se refuse.
-- **Bilan du jour** : action de lecture `day.digest` `{ since, until }` (ISO UTC) qui rend un `Digest`.
+- **Bilan du jour** : tout satellite à données sert l'action de lecture `day.digest` `{ since, until }` (ISO UTC) qui rend un `Digest`.
   Le core choisit la période ; le satellite ne connaît pas la journée de Natsume.
 - **Alertes** : `urgent` est réservé aux alertes issues de règles déterministes, pour joindre CrOliX
   en direct. Le core ne retient du flux que `urgent` et les événements de contrôle (clé, état).
