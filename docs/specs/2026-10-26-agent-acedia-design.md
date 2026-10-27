@@ -83,7 +83,7 @@ sans nouveau consentement.
 | Fonction de l'écran | Raison |
 |---|---|
 | Envoyer un mail | L'envoi est un clic de CrOliX dans l'écran de rédaction (§2.2). |
-| Réglages, clé Anthropic, connexion Google | Configuration et secrets : à la main seulement. |
+| Réglages, clés des fournisseurs d’IA, connexion Google | Configuration et secrets : à la main seulement. |
 | Appareils et applications liées, codes d'appairage | Sécurité. |
 | Pause et reprise du tri | Garde-fou : reste un geste de CrOliX. |
 
@@ -91,9 +91,9 @@ sans nouveau consentement.
 
 - **Boucle d'agent côté serveur d'Acedia**, sur l'API Claude avec l'usage d'outils. Les outils sont
   exactement les actions du catalogue, décrites par leur schéma. Pas d'outil propre à Pina.
-- **Modèle** : Claude Sonnet 5.5 par défaut, réglable ; la clé est celle qu'Acedia a déjà
-  **[choix Claude]**. Chaque appel est compté dans les coûts d'Acedia ; sans clé ou crédit épuisé,
-  la fenêtre le dit et propose les Réglages.
+- **Modèle** : choisi dans les Réglages parmi les fournisseurs configurés (§5 bis). Chaque appel est
+  compté dans les coûts d'Acedia ; sans clé ou crédit épuisé, la fenêtre le dit et propose les
+  Réglages.
 - **Lectures** : faites tout de suite, sans validation.
 - **Écritures**, selon le réglage « Mode de Pina » :
   - **Valider avant (par défaut).** L'écriture devient une **carte** dans le fil : champs lisibles,
@@ -125,6 +125,31 @@ sans nouveau consentement.
 - **Consignes pour Pina** : un texte libre dans les Réglages, écrit par CrOliX (« signe Natsume »,
   « je tutoie tout le monde »), ajouté à ses instructions. Rien d'appris automatiquement.
 
+## 5 bis. Fournisseurs de LLM et choix du modèle
+
+Demandé par CrOliX à la validation : la clé Anthropic imposée aujourd'hui par Acedia est un choix
+arbitraire. On généralise, **pour le tri comme pour Pina**.
+
+- **Fournisseurs** : Anthropic, OpenAI, Google (Gemini), Mistral, et un point d'accès compatible
+  OpenAI à adresse libre (Ollama en local, OpenRouter…) **[choix Claude sur la liste]**.
+- **Clés** : une par fournisseur, saisie dans les Réglages, chiffrée comme l'actuelle, affichée par
+  ses 4 derniers caractères, avec les mêmes alertes (refusée, rétablie, échéance). Le `.env` reste
+  possible ; la clé des Réglages l'emporte, comme aujourd'hui. Les clés et échéances déjà
+  enregistrées pour Anthropic sont reprises sans rien ressaisir.
+- **Choix du modèle par usage** : un modèle pour le tri, un pour Pina, chacun choisi dans une liste
+  des modèles des fournisseurs configurés. Pour Pina, seuls les modèles qui savent utiliser des
+  outils sont proposés.
+- **Indication de coût** dans le choix : prix d'entrée et de sortie par million de jetons, et un
+  repère rapide (€, €€, €€€) **[choix Claude sur la forme]**. Les prix viennent d'une table intégrée,
+  datée, complétable par le `.env` comme dans le core ; un modèle sans prix connu l'indique au lieu
+  d'afficher zéro.
+- **Coûts** : chaque appel est compté par fournisseur et par modèle, dans la route `costs` existante.
+- **Un seul point d'appel par usage** : une couche « fournisseur » commune donne au tri la
+  classification et à Pina la conversation avec outils ; ni le tri ni Pina ne connaissent le format
+  d'un fournisseur. Le comportement du tri ne change pas pour un modèle Anthropic.
+
+Ce bloc passe en premier dans le plan : Pina en dépend.
+
 ## 6. Le fil et sa mémoire
 
 - **Un fil par jour.** Chaque jour s'ouvre sur un fil neuf. Pina ne relit que le fil du jour.
@@ -151,7 +176,8 @@ Selon la maquette `01-assistant.html`, avec « Assistant » remplacé par « Pin
   `↑` rappelle la dernière demande.
 - **Mobile** : bouton violet dans la barre du haut ; la fenêtre devient une feuille qui monte du bas.
 - **Réglages**, nouvelle section « Pina » : mode (valider avant, faire tout de suite), consignes,
-  conservation du fil, modèle.
+  conservation du fil, modèle, plafond quotidien. La section « Clé Anthropic » devient
+  « Fournisseurs d'IA » (§5 bis), et le tri gagne son choix de modèle.
 - Socle Lun' commun, violet réservé à l'IA, bleu Acedia en accent seulement.
 
 ## 8. Preuves
