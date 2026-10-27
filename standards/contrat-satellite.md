@@ -36,7 +36,7 @@ l'API métier du satellite.
 
 ```ts
 type Status = 'ok' | 'paused' | 'degraded';
-type Importance = 'info' | 'normal' | 'urgent';
+type Importance = 'urgent' | 'normal' | 'low' | 'info' | 'log'; // paliers P0 à P4 : standards/notifications.md
 
 interface Health { status: Status; reason?: string; version: string; paused?: true; agent?: true } // paused : en pause alors que l'état affiché est degraded ; agent : sert agent et cards
 interface CostItem { provider: string; model?: string; amount: number; calls: number }
@@ -102,9 +102,9 @@ avant toute action. Plusieurs autorisations peuvent être en attente, chacune av
 - **Pause** : le satellite continue de servir ses lectures et ses événements ; seules les actions
   automatiques (tri, écritures, appels LLM non demandés) s'arrêtent. Une action invoquée à la main
   reste possible.
-- **Importance** : fixée par le satellite. `urgent` traverse le mode focus, `normal` attend la fin du
-  focus, `info` n'interrompt jamais. Le core filtre selon le mode ; le satellite ne connaît pas les
-  modes.
+- **Importance** : fixée par le satellite selon [`notifications.md`](notifications.md) (paliers P0 à P4).
+  Le core rend selon le mode ; le satellite ne connaît pas les modes. `low` et `log` inconnus d'un
+  client valent `info`.
 - **Délégation** (`agent`, `cards` : seulement si `health` porte `agent: true`) : l'agent applique ses
   règles. Écriture = carte ; suppression = toujours une carte, quel que soit le mode ; jamais d'envoi
   de message. Une lecture simple peut passer par une action du catalogue, sans agent.
@@ -122,8 +122,8 @@ avant toute action. Plusieurs autorisations peuvent être en attente, chacune av
   | Type | Importance | Cas |
   |---|---|---|
   | `key.invalid` | `normal` | la clé est refusée par le fournisseur |
-  | `key.restored` | `info` | la clé refusée refonctionne |
-  | `key.expiring` | `normal` | échéance proche, `data: { daysLeft: 14 \| 3, expires: 'AAAA-MM-JJ' }` |
+  | `key.restored` | `log` | la clé refusée refonctionne |
+  | `key.expiring` | `normal` à J-3, `low` à J-14 | échéance proche, `data: { daysLeft: 14 \| 3, expires: 'AAAA-MM-JJ' }` |
 
 ## Erreurs
 
@@ -147,4 +147,4 @@ le core et n'intègrent jamais ceux d'un satellite : se ressembler n'est pas un 
 
 Une rupture (route retirée, champ renommé ou rendu obligatoire) crée `/lun/v2`. La v1 reste servie
 jusqu'à ce que le core soit migré. Ajouter un champ optionnel ou une route (comme `authorize`) n'est pas une rupture.
-La v1.1 ajoute `agent`, `cards`, `day.digest` et `Health.agent` sans rupture.
+La v1.1 ajoute `agent`, `cards`, `day.digest`, `Health.agent` et les importances `low`, `log` sans rupture.
