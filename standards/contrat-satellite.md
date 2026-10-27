@@ -1,13 +1,15 @@
 # Contrat satellite
 
 > Ce que tout satellite expose pour être piloté par Lun'Anima sans que le core connaisse son métier.
-> Décision : [ADR 0003](../adr/0003-contrat-satellite.md). Version du contrat : **v1**.
+> Décision : [ADR 0004](../adr/0004-delegation-aux-agents.md), qui remplace l'[ADR 0003](../adr/0003-contrat-satellite.md).
+> Version du contrat : **v1.1**.
 
 ## Principe
 
-Un satellite est **garant de sa logique métier** : il opère seul, en autonome. Natsume s'y branche,
-l'interroge, lui demande d'agir, écoute ses événements et relaie le résultat. Le core ne réimplémente
-jamais ce que fait un satellite et ne recopie pas ses modèles de données.
+Un satellite est **garant de sa logique métier** et opère seul. Le core est un manager, le satellite un
+poste : Natsume lui délègue, lit son bilan du jour, écoute ses alertes et restitue. Le core ne refait
+jamais le travail d'un satellite, ne décide jamais à sa place et ne recopie pas ses données. Deux
+satellites ne se parlent jamais : tout croisement passe par le core.
 
 ## Routes
 
@@ -18,13 +20,17 @@ l'API métier du satellite.
 |---|---|---|
 | `GET /lun/v1/authorize?client&redirect_uri&state&code_challenge` | publique, mène à la page d'autorisation du satellite | page HTML, ou redirection vers `redirect_uri` |
 | `POST /lun/v1/pair` `{ code }` ou `{ code, code_verifier, client }` | échange un code d'appairage (6 chiffres) ou un code d'autorisation contre un jeton | `{ token, satellite: { id, nom, version } }` |
-| `GET /lun/v1/health` | santé et état | `{ status, reason?, version, paused? }` |
+| `GET /lun/v1/health` | santé et état | `{ status, reason?, version, paused?, agent? }` |
 | `GET /lun/v1/costs?since=<ISO>` | dépense depuis une date | `{ currency: 'USD', since, until, total, items }` |
 | `POST /lun/v1/pause` `{ reason? }` | coupe toute action automatique | `{ status }` |
 | `POST /lun/v1/resume` | rétablit les actions automatiques | `{ status }` |
 | `GET /lun/v1/events` | flux SSE des événements, reprise par `Last-Event-ID` | flux |
 | `GET /lun/v1/actions` | actions disponibles | `{ actions }` |
 | `POST /lun/v1/actions/:name` | invoque une action, corps validé par son schéma | `{ ok, result?, error? }` |
+| `POST /lun/v1/agent` `{ request, context? }` | confie une demande à l'agent du satellite | `AgentReply` |
+| `GET /lun/v1/cards?status=pending` | cartes du satellite (par défaut, en attente) | `{ cards: Card[] }` |
+| `POST /lun/v1/cards/:id/accept` `{ input? }` | valide une carte, `input` remplace l'entrée (« Modifier ») | `{ card: Card }` |
+| `POST /lun/v1/cards/:id/refuse` | refuse une carte | `{ card: Card }` |
 
 ## Types
 
@@ -32,12 +38,20 @@ l'API métier du satellite.
 type Status = 'ok' | 'paused' | 'degraded';
 type Importance = 'info' | 'normal' | 'urgent';
 
-interface Health { status: Status; reason?: string; version: string; paused?: true } // paused : en pause alors que l'état affiché est degraded
+interface Health { status: Status; reason?: string; version: string; paused?: true; agent?: true } // paused : en pause alors que l'état affiché est degraded ; agent : sert agent et cards
 interface CostItem { provider: string; model?: string; amount: number; calls: number }
 interface Costs { currency: 'USD'; since: string; until: string; total: number; items: CostItem[] }
 interface LunEvent { id: string; type: string; importance: Importance; at: string; title: string; data?: unknown }
 interface Action { name: string; description: string; input: object /* JSON Schema */; effect: 'read' | 'write' | 'delete' }
 interface ActionResult { ok: boolean; result?: unknown; error?: string }
+
+interface AgentRequest { request: string; context?: Record<string, string> } // texte de CrOliX, contexte libre borné
+interface AgentReply { summary: string; cards: Card[]; refs: Ref[]; cost: { currency: 'USD'; amount: number } }
+interface Ref { type: string; id: string; title: string } // ce que la réponse cite : un mail, un événement…
+type CardStatus = 'pending' | 'done' | 'refused' | 'failed' | 'expired';
+interface Card { id: string; action: string; effect: 'write' | 'delete'; title: string; lines: string[]; status: CardStatus; at: string; error?: string } // lines : cible et nouvelles valeurs, rédigées pour un humain
+interface DigestItem { type: string; title: string; at: string; ref?: Ref }
+interface Digest { since: string; until: string; received: DigestItem[]; done: DigestItem[]; pending: number }
 ```
 
 Les dates sont en ISO 8601 UTC, les montants en dollars avec deux décimales au moins. Ces types
@@ -91,6 +105,15 @@ avant toute action. Plusieurs autorisations peuvent être en attente, chacune av
 - **Importance** : fixée par le satellite. `urgent` traverse le mode focus, `normal` attend la fin du
   focus, `info` n'interrompt jamais. Le core filtre selon le mode ; le satellite ne connaît pas les
   modes.
+- **Délégation** (`agent`, `cards` : seulement si `health` porte `agent: true`) : l'agent applique ses
+  règles. Écriture = carte ; suppression = toujours une carte, quel que soit le mode ; jamais d'envoi
+  de message. Une lecture simple peut passer par une action du catalogue, sans agent.
+- **Cartes** : elles vivent chez le satellite, qui garde la décision et le journal. Le core les
+  affiche et transmet le geste ; une carte qui n'est plus en attente ne se valide ni ne se refuse.
+- **Bilan du jour** : action de lecture `day.digest` `{ since, until }` (ISO UTC) qui rend un `Digest`.
+  Le core choisit la période ; le satellite ne connaît pas la journée de Natsume.
+- **Alertes** : `urgent` est réservé aux alertes issues de règles déterministes, pour joindre CrOliX
+  en direct. Le core ne retient du flux que `urgent` et les événements de contrôle (clé, état).
 - **Coûts** : chaque appel payant (LLM, API) est compté par le satellite lui-même.
 - **Crédit épuisé** : `health` passe en `degraded` avec la raison ; les lectures continuent.
 - **Clé de service** : types d'événement recommandés pour un satellite qui dépend d'une clé d'API.
@@ -108,28 +131,20 @@ avant toute action. Plusieurs autorisations peuvent être en attente, chacune av
 |---|---|
 | 400 | corps invalide (schéma de l'action, `since` illisible) |
 | 401 | jeton absent, invalide ou révoqué ; code d'appairage expiré |
-| 404 | action inconnue |
-| 409 | `pause` alors que déjà en pause, `resume` alors que déjà actif |
+| 404 | action inconnue ; carte inconnue ; `/agent` ou `/cards` sur un satellite sans agent |
+| 409 | `pause` alors que déjà en pause, `resume` alors que déjà actif ; carte qui n'est plus en attente |
 | 503 | service `degraded` pour l'opération demandée |
 
 Corps d'erreur : `{ error: string }`, message lisible par un humain.
 
-## Fronts et vues
+## Fronts
 
-Une vue n'existe qu'en **un exemplaire** : un satellite qui a un front publie ses vues métier en paquet
-de composants Svelte, versionné avec lui, nommé `@lun-ecosystem/<id>-views`. Les apps de Lun'Anima les
-intègrent sans les réécrire.
-
-| | Front autonome d'un satellite | Apps de Lun'Anima |
-|---|---|---|
-| Contenu | son domaine seulement : données, actions, réglages, autorisations | le transversal : Natsume, cerveau, briefing, modes, coûts agrégés |
-| Vues métier | en est la source et les publie | les intègre |
-| Connaît | son propre serveur, rien d'autre (aucun réglage « hub ») | le core seul, qui relaie les satellites |
-| Interdit | les données d'un autre satellite, une fonction de Natsume | recoder une vue ou une règle métier d'un satellite |
-
-Le front autonome sert aussi de **mode de secours** quand le core est en panne ou en pause.
+Un satellite a un **front autonome complet**, aussi mode de secours, qui ne connaît que son serveur
+(ni Natsume, ni un autre satellite). Les apps de Lun'Anima ont **leurs propres écrans**, passent par
+le core et n'intègrent jamais ceux d'un satellite : se ressembler n'est pas un doublon.
 
 ## Versionnement
 
 Une rupture (route retirée, champ renommé ou rendu obligatoire) crée `/lun/v2`. La v1 reste servie
 jusqu'à ce que le core soit migré. Ajouter un champ optionnel ou une route (comme `authorize`) n'est pas une rupture.
+La v1.1 ajoute `agent`, `cards`, `day.digest` et `Health.agent` sans rupture.
