@@ -168,7 +168,7 @@ Selon la maquette `01-assistant.html`, avec « Assistant » remplacé par « Pin
   compte ce qui attend CrOliX (les cartes en attente).
 - **Fenêtre** flottante, **taille dynamique** : on tire son bord ou son coin, ou on l'agrandit d'un
   bouton ; la taille est retenue. **Elle survole l’interface sans jamais la redimensionner** :
-  ce qu’elle couvre se dégage en la réduisant, en la déplaçant de taille ou en la fermant (CrOliX).
+  ce qu’elle couvre se dégage en la réduisant, en changeant sa taille ou en la fermant (CrOliX).
 - En-tête : nom, rappel du mode (« Validation avant chaque action », lien vers les Réglages),
   historique des jours, agrandir, réduire.
 - Cartes : en attente, faite (avec Annuler), refusée, en échec (avec la raison).
