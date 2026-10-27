@@ -1,5 +1,8 @@
 # Écosystème Lun' : architecture et MVP au 31/12/2026
 
+> **Révisée le 2026-10-27** par [`2026-10-27-liaison-core-satellites-design.md`](2026-10-27-liaison-core-satellites-design.md)
+> (§8) : le paquet de vues, le cerveau dans le core et le majordome hors MVP ne tiennent plus.
+
 > Spec de l'étape 2 (planification de zéro), rédigée le 2026-10-19 à l'issue du cadrage avec CrOliX.
 > Elle fait autorité pour le découpage en chantiers. Ce qui est marqué **[choix Claude]** est une
 > décision prise par l'agent pendant la rédaction, à contester librement ; tout le reste a été dit

@@ -21,3 +21,6 @@ Gabarit : [`_template.md`](_template.md).
 | N° | Décision | Statut |
 |---|---|---|
 | [0001](0001-referentiel-et-methode.md) | Référentiel central, méthode de travail et agent IA | acceptée |
+| [0002](0002-stack.md) | Stack de l'écosystème | acceptée |
+| [0003](0003-contrat-satellite.md) | Contrat satellite REST + SSE, appairage par jeton | remplacée par 0004 |
+| [0004](0004-delegation-aux-agents.md) | Délégation aux agents des satellites, sans paquet de vues | acceptée |

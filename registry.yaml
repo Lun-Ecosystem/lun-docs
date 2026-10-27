@@ -50,7 +50,7 @@ projets:
     depot: Lun-Ecosystem/lun-acedia
     visibilite: public
     etat: en-dev
-    description: "Serveur de la journée : mails, agenda, tâches, GitHub, RSS, Home Assistant, triés à la source."
+    description: "Serveur de la journée : mail, agenda et tâches Google, triés à la source, avec son assistante Pina."
 
   - id: lunira
     nom: "Lun'Ira"

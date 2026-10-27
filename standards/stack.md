@@ -19,13 +19,13 @@
 | App desktop | Tauri 2 (zone de notification, démarrage, mises à jour, services lancés sans console) |
 | App mobile | Capacitor, Android |
 | Website | Astro |
-| Vues partagées | un satellite publie ses vues métier en paquet de composants Svelte (standard du contrat satellite) |
+| Écrans | chaque produit a les siens ; les apps du core n'intègrent pas les écrans d'un satellite (contrat satellite, « Fronts ») |
 
 ## Données
 
 - **SQLite** pour l'état de chaque service : un utilisateur, une instance. Pas de fichiers JSON comme
   stockage.
-- **Cerveau** : fichiers Markdown (convention Obsidian) indexés dans SQLite ; la recherche sémantique
+- **Cerveau** (le satellite Lun'Avaritia) : fichiers Markdown (convention Obsidian) indexés dans SQLite ; la recherche sémantique
   passe par une API ou un modèle très léger (le NAS n'héberge rien de lourd).
 
 ## Outillage qualité
