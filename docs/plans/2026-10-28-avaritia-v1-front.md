@@ -184,11 +184,11 @@ racine de l'espace Lun') ; `standards/design.md` ; ADR 0006 (tâche 1).
 
 **Interfaces:**
 - Consumes: `GET /api/graph` (tâche 3), `FichePanel` (tâche 6), ADR 0006.
-- Produces: `buildGraph(data: GraphData, palette: Palette): Graph` (graphology) dans `graph.ts`, `Palette = { node: string; edge: string; flagged: string; accent: string; label: string }` lue sur `:root` (`--lavis`, `--bord`, `--danger`, `--accent`, `--lune`) ; `nodeSize(degree: number): number` (entre 3 et 14, croissance en racine) ; `focus(graph, id): Set<number>` (la fiche et ses voisins directs).
+- Produces: `buildGraph(data: GraphData, palette: Palette): Graph` (graphology) dans `graph.ts`, `Palette = { node: string; edge: string; flagged: string; accent: string; label: string }` lue sur `:root` (`--lavis`, `--bord`, `--danger`, `--accent`, `--lune`) ; `nodeSize(degree: number): number` (entre 2 et 10, croissance en racine ; ramené de 3–14 après la passe Chrome, graphe plus calme) ; `focus(graph, id): Set<number>` (la fiche et ses voisins directs).
 
 - [ ] **Step 1: Tests d'abord** (`graph.test.ts`, sans WebGL) :
   - `buildGraph` crée un nœud par fiche et une arête par lien ; une arête vers un nœud absent est ignorée sans erreur ; un nœud `flagged` prend `palette.flagged` en bordure ; la taille suit `nodeSize(degree)` ;
-  - `nodeSize(0) === 3`, `nodeSize(10000) === 14` ;
+  - `nodeSize(0) === 2`, `nodeSize(10000) === 10` ;
   - `focus` rend la fiche et ses voisins ;
   - 5 000 nœuds et 15 000 arêtes se construisent en moins de 500 ms (borne lâche, mesurée dans le test).
   - `Memoire.test.ts` : en `mode=graphe`, le module du graphe n'est importé qu'à ce moment (mock de `./memoire/Graphe.svelte` compté) ; sans WebGL (`getContext('webgl2')` nul en jsdom), l'état vide « Le graphe demande WebGL. » s'affiche.
