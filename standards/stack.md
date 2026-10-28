@@ -25,8 +25,9 @@
 
 - **SQLite** pour l'état de chaque service : un utilisateur, une instance. Pas de fichiers JSON comme
   stockage.
-- **Cerveau** (le satellite Lun'Avaritia) : fichiers Markdown (convention Obsidian) indexés dans SQLite ; la recherche sémantique
-  passe par une API ou un modèle très léger (le NAS n'héberge rien de lourd).
+- **Cerveau** (le satellite Lun'Avaritia) : SQLite comme source de vérité, corps des fiches en Markdown, recherche plein texte
+  par FTS5 ; import et export Obsidian en porte d'entrée et de sortie ([ADR 0005](../adr/0005-cerveau-sqlite.md)). Pas de
+  recherche sémantique en v1.
 
 ## Outillage qualité
 
