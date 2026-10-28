@@ -87,7 +87,7 @@ racine de l'espace Lun') ; `standards/design.md` ; ADR 0006 (tâche 1).
 ### Task 3: Le serveur, les lectures du front
 
 **Files:**
-- Modify: `server/src/brain/routes.ts`, `server/src/brain/drafts.ts` (export d'une vue), `server/src/brain/agent.ts` ou `store.ts` (voisins)
+- Modify: `server/src/brain/routes.ts`, `server/src/brain/drafts.ts` (export d'une vue), `server/src/brain/agent.ts` ou `store.ts` (voisins), `server/src/brain/settings.ts` et `server/src/brain/prompt.ts` (agent personnalisable, décision de CrOliX du 2026-10-28 : un agent neutre par défaut, personnalisable par chaque utilisateur)
 - Test: `server/src/brain/routes.test.ts` (ou le fichier de tests des routes existant)
 
 **Interfaces:**
@@ -95,8 +95,11 @@ racine de l'espace Lun') ; `standards/design.md` ; ADR 0006 (tâche 1).
   - `GET /api/drafts` → `{ drafts: DraftView[]; held: number }`, dans l'ordre de la file (`queue(db, drafts.cap)`), `held` = brouillons en attente au-delà du plafond. `DraftView = { id: number; kind: 'fiche' | 'contradiction' | 'doublon' | 'import'; card: Card; payload: DraftPayload; names: Record<string, string>; facts: Record<string, { text: string; struck: boolean }>; createdAt: string; origin: Draft['origin'] }` : `names` donne le titre de chaque fiche citée par id, `facts` le texte de chaque fait cité (`keep`, `strike`, `replaces`).
   - `GET /api/graph` → `{ nodes: { id: number; title: string; typeId: number; degree: number; flagged: boolean }[]; edges: { from: number; to: number; relation: string }[] }`, fiches fusionnées exclues, `flagged` = fiche citée par une contradiction, un doublon ou un fait `replaces` en attente.
   - `GET /api/fiches/:id` ajoute `neighbors: { id: number; title: string; relation: string; direction: 'out' | 'in' }[]` (fiches gardées seulement) et `depots: { id: number; name: string }[]` (dépôts d'où viennent ses faits).
+  - Réglages de l'agent dans `SCHEMAS` de `settings.ts` : `'agent.name'` (texte de 1 à 40 caractères, défaut `'Agent'`), `'agent.icon'` (un de `'sparkles' | 'brain' | 'book-open' | 'library' | 'feather' | 'moon' | 'gem' | 'scroll'`, noms d'icônes Lucide, défaut `'sparkles'`), `'agent.tone'` (`'neutre' | 'chaleureux' | 'concis'`, défaut `'neutre'`), `'agent.persona'` (texte de 0 à 500 caractères, défaut `''`). `GET /api/settings` les rend, `PUT` les valide comme les autres.
+  - `askSystem(s: Pick<Settings, 'agent.name' | 'agent.tone' | 'agent.persona'>): string` dans `prompt.ts` remplace la constante `ASK_SYSTEM` pour le chat et la délégation (les appels de tri et de rédaction des lots ne changent pas : les fiches restent neutres). Forme : une ligne de voix (nom, ton), puis le contexte du personnage dans un bloc délimité `<personnage>…</personnage>` annoncé comme réglant **la voix seulement**, puis les règles du wiki **après** le bloc, inchangées.
 
 - [ ] **Step 1: Tests d'abord** :
+  - Agent personnalisable : `saveSettings` refuse `agent.name` vide ou de 41 caractères, `agent.icon` hors liste, `agent.persona` de 501 caractères ; `askSystem` avec les défauts contient « Agent » et aucun bloc `<personnage>` ; avec un contexte, le bloc est présent et les règles du wiki viennent après lui ; un contexte contenant `</personnage>` est neutralisé (la balise fermante est retirée ou échappée, le bloc ne se ferme qu'une fois) ; l'agent du chat (`ask`) envoie `askSystem(...)` au fournisseur (faux fournisseur, `system` capturé).
   - `GET /api/drafts` : avec une contradiction, un doublon et une fiche en attente, l'ordre est contradiction, doublon, fiche ; `names[keep]` est le titre de la fiche ; avec `drafts.cap` à 1 et trois brouillons, `drafts.length === 1` et `held === 2`.
   - `GET /api/graph` : deux fiches liées donnent un nœud chacune avec `degree 1` et une arête `{ from, to, relation }` ; une fiche fusionnée n'apparaît pas et ses liens pointent vers la fiche gardée ou disparaissent ; une fiche citée par une contradiction en attente a `flagged: true`.
   - `GET /api/fiches/:id` : `neighbors` contient le lien sortant (`direction 'out'`) et entrant (`'in'`) avec le titre ; sans jeton d'appareil → 401.
@@ -215,14 +218,14 @@ racine de l'espace Lun') ; `standards/design.md` ; ADR 0006 (tâche 1).
 ### Task 9: Réglages
 
 **Files:**
-- Create: `app/src/screens/Reglages.svelte`, `app/src/reglages/{Modele.svelte,Lots.svelte,Types.svelte,Donnees.svelte,Appareils.svelte}`
+- Create: `app/src/screens/Reglages.svelte`, `app/src/reglages/{Modele.svelte,Lots.svelte,Types.svelte,Donnees.svelte,Agent.svelte,Appareils.svelte}`
 - Test: `app/src/screens/Reglages.test.ts`, `app/src/reglages/Types.test.ts`
 
 **Interfaces:**
 - Consumes: `GET|PUT /api/settings` (`drafts.cap`, `cost.monthlyCap`, `core.lots`), `/api/llm/providers`, `/api/llm/models`, `/api/llm/choice`, `GET|POST|PATCH|DELETE /api/types`, `POST /api/export`, `GET /api/clients`, `DELETE /api/clients/:id`, `POST /api/pairing-codes`, `POST /lun/v1/pause|resume`, `GET /lun/v1/health`. Les composants `Providers` et `ModelPicker` d'Acedia (`views/src/lib/settings`) sont copiés et adaptés, pas réécrits.
 
 - [ ] **Step 1: Tests d'abord** :
-  - `Reglages.test.ts` : quatre cartes dans l'ordre de la maquette (Modèle de langage, Lots du core, Structure des fiches, Données) plus Appareils et Service ; le plafond mensuel se modifie (`PUT /api/settings` avec `cost.monthlyCap`) et la dépense du mois s'affiche à côté (« 1,20 $ sur 5,00 $ ») ; la bascule « Accepter les lots du core » poste `core.lots` ; le plafond de brouillons refuse 0 et accepte 1 à 100 (valeurs du serveur) ; aucune heure de passage n'est réglable ici, la ligne dit « Heure fixée par le core » ; « Exporter en Markdown » affiche le dossier rendu ; « Pause » poste `/lun/v1/pause` et la carte d'état du rail passe à « En pause » ; une clé enregistrée n'affiche que ses 4 derniers caractères.
+  - `Reglages.test.ts` : quatre cartes dans l'ordre de la maquette (Modèle de langage, Lots du core, Structure des fiches, Données) plus Agent, Appareils et Service ; la carte **Agent** règle le nom (1 à 40 caractères), l'icône (choix parmi les huit du serveur, aperçu dans la bulle), le ton (commande segmentée Neutre / Chaleureux / Concis) et le contexte du personnage (zone de texte, compteur « N / 500 », aide « Règle la voix de l'agent, jamais ce qu'il a le droit de faire »), le tout par `PUT /api/settings` ; le plafond mensuel se modifie (`PUT /api/settings` avec `cost.monthlyCap`) et la dépense du mois s'affiche à côté (« 1,20 $ sur 5,00 $ ») ; la bascule « Accepter les lots du core » poste `core.lots` ; le plafond de brouillons refuse 0 et accepte 1 à 100 (valeurs du serveur) ; aucune heure de passage n'est réglable ici, la ligne dit « Heure fixée par le core » ; « Exporter en Markdown » affiche le dossier rendu ; « Pause » poste `/lun/v1/pause` et la carte d'état du rail passe à « En pause » ; une clé enregistrée n'affiche que ses 4 derniers caractères.
   - `Types.test.ts` : ajouter, renommer ; retirer un type non vide affiche l'erreur du serveur ; retirer un type vide passe par `ConfirmDialog`.
 - [ ] **Step 2: Lancer** → échec.
 - [ ] **Step 3: Écrire** l'écran avec `SettingsCard` et `SettingsRow` ; la carte Modèle de langage (fournisseurs, modèles) est chargée par `import()`.
@@ -242,7 +245,7 @@ racine de l'espace Lun') ; `standards/design.md` ; ADR 0006 (tâche 1).
 
 - [ ] **Step 1: Tests d'abord** :
   - `conversation.test.ts` : `send` poste `request` et l'historique des tours précédents ; la réponse s'ajoute avec son coût ; une erreur 402 ou de crédit affiche « Crédit épuisé chez le fournisseur » ; en pause, la réponse de pause s'affiche telle quelle.
-  - `AgentPanel.test.ts` : la bulle est en bas à droite sur chaque écran, `Échap` ferme le panneau et rend le focus à la bulle ; « note que Client X préfère le mardi » produit la réponse de l'agent et, si un brouillon est créé, un lien « Voir dans À valider » ; la réponse passe par `Prose` (aucun HTML).
+  - `AgentPanel.test.ts` : la bulle est en bas à droite sur chaque écran, avec l'icône et le nom réglés (`agent.icon`, `agent.name`, lus dans `GET /api/settings` ; défaut « Agent » et `sparkles`), le titre du panneau porte ce nom, `Échap` ferme le panneau et rend le focus à la bulle ; « note que Client X préfère le mardi » produit la réponse de l'agent et, si un brouillon est créé, un lien « Voir dans À valider » ; la réponse passe par `Prose` (aucun HTML).
 - [ ] **Step 2: Lancer** → échec.
 - [ ] **Step 3: Écrire** la bulle et le panneau (400 px en bureau, plein écran sous 760 px), le contexte envoyé est la fiche ouverte (`?fiche=<id>`) s'il y en a une.
 - [ ] **Step 4: Retirer** de `app/src/lib/ui` les composants copiés qu'aucun écran n'utilise (`grep` de chaque nom dans `app/src`).
