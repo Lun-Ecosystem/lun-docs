@@ -116,6 +116,7 @@ Chaque écran ne s’assemble qu’avec ces briques, jamais avec une version ref
 | Comportements (menu, liste déroulante, bulle, dialogue, info-bulle, onglets, palette, date, curseur, bascule, case) | **Bits UI** (sans style, Svelte 5) : les menus passent par un calque au-dessus de la page, aucun n’est coupé par un conteneur |
 | Icônes | **`@lucide/svelte`** |
 | Grille d’agenda | **FullCalendar 7**, habillé par les jetons |
+| Graphe de fiches | **Sigma.js 3 + graphology** (WebGL), ADR 0006 |
 | Style | **Jetons CSS** ; ni Tailwind ni bibliothèque de composants stylés |
 
 Aucune police ni ressource ne vient d’un CDN. Pas d’alerte native (`alert`, `confirm`, `prompt`).
