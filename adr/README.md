@@ -24,3 +24,4 @@ Gabarit : [`_template.md`](_template.md).
 | [0002](0002-stack.md) | Stack de l'écosystème | acceptée |
 | [0003](0003-contrat-satellite.md) | Contrat satellite REST + SSE, appairage par jeton | remplacée par 0004 |
 | [0004](0004-delegation-aux-agents.md) | Délégation aux agents des satellites, sans paquet de vues | acceptée |
+| [0005](0005-cerveau-sqlite.md) | Le cerveau d'Avaritia vit dans SQLite | acceptée |

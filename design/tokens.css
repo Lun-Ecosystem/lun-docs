@@ -38,3 +38,11 @@
   --accent-doux:rgba(122,24,24,.26); --accent-bord:rgba(224,180,172,.32);
 }
 /* @fin-monde */
+
+/* @monde avaritia */
+/* bleu nuit Avaritia jamais en texte : --accent-texte reprend le texte du socle */
+[data-monde='avaritia'] {
+  --accent:#1A3070; --accent-survol:#234090; --accent-texte:var(--texte);
+  --accent-doux:rgba(26,48,112,.30); --accent-bord:rgba(140,165,225,.36);
+}
+/* @fin-monde */

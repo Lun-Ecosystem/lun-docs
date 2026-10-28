@@ -52,6 +52,14 @@ projets:
     etat: en-dev
     description: "Serveur de la journée : mail, agenda et tâches Google, triés à la source, avec son assistante Pina."
 
+  - id: lunavaritia
+    nom: "Lun'Avaritia"
+    role: satellite
+    depot: Lun-Ecosystem/lun-avaritia
+    visibilite: public
+    etat: en-dev
+    description: "Base de savoir de l'écosystème : fiches normalisées et reliées, faits sourcés, import et export Obsidian."
+
   - id: lunira
     nom: "Lun'Ira"
     role: satellite
