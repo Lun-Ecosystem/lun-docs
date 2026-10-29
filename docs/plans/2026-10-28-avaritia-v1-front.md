@@ -253,3 +253,18 @@ racine de l'espace Lun') ; `standards/design.md` ; ADR 0006 (tâche 1).
 - [ ] **Step 6: Mettre à jour** `README.md` (lancer le front), `docs/prouver-avaritia.md` (parcours dans le navigateur), `CLAUDE.md` (le front).
 - [ ] **Step 7: Lancer** toutes les barrières → vertes ; `npm run build` sans avertissement de taille.
 - [ ] **Step 8: Commit** `feat(app): floating agent, proof walkthrough and cleanup`.
+
+## Amendements du 2026-10-29 (revue croisée avec Acedia, décisions de CrOliX)
+
+- Rien de visible ne pointe vers le core : plus de bascule « Accepter les lots du core » ni de ligne
+  « Heure fixée par le core » (le réglage `core.lots` disparaît aussi du serveur), plus de « Core
+  relié / non relié » dans le rail (la carte d'état montre la dépense du mois), une source `core`
+  s'affiche « observation », le tableau de bord parle de « Dernier traitement ».
+- Une note ou un dépôt traité alimente aussi « Dernier traitement » (table `runs`).
+- Seuil mobile à 768 px partout (et non 760), comme le kit et Acedia.
+- Mémoire : groupes fermés par défaut, sauf celui de la fiche ouverte.
+- Réglages en thèmes (colonne groupée, une page par thème, liste puis thème en plein écran sur
+  téléphone), comme Acedia.
+- Panneau de l'agent redimensionnable, pleine hauteur possible, taille gardée, ouvert par Ctrl J,
+  comme celui d'Acedia.
+- Kit commun synchronisé depuis lun-docs : chantier à part (lun-docs#43).

@@ -184,15 +184,15 @@ produit complet sur son métier. Navigation par rail, agent en bulle flottante e
 5. **Réglages**, page importante :
    - modèle de langage : fournisseur et clé (chiffrée, échéance suivie), modèle, **plafond de coût
      mensuel** ;
-   - lots du core : accepter ou non, plafond de brouillons par passage. L'heure de passage appartient à
-     la routine du core (5 h, heure de Paris), pas à Avaritia ;
+   - lots : plafond de brouillons par passage. Accepter les lots tient à l'autorisation du client dans
+     « Appareils et applications », et l'heure de passage à la routine du core ; rien de cela n'est
+     affiché (amendé le 2026-10-29 : le front public ne montre rien qui pointe vers le core) ;
    - structure des fiches : types ;
-   - données : import Obsidian, export Markdown, liaison au core.
+   - données : import Obsidian, export Markdown.
+   Réglages rangés en thèmes, une page par thème, comme Acedia (amendé le 2026-10-29).
 
-Design : socle Lun' commun, couleur du monde en **accent seulement** (`#1A3070`, bleu nuit, au
-registre du site). Le bloc d'accent d'Avaritia est à ajouter à `design/tokens.css`. Point de
-vigilance : il est proche du bleu acier d'Acedia (`#3A6080`) ; vérifier qu'on les distingue côte à
-côte dans le portail du core.
+Design : socle Lun' commun, couleur du monde en **accent seulement** : l'or `#745716` (amendé le
+2026-10-29 : le bleu nuit `#1A3070` d'origine se confondait avec le bleu acier d'Acedia, `#3A6080`).
 
 ## 6. Le modèle de langage et le coût
 
