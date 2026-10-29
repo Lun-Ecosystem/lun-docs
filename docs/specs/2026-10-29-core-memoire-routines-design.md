@@ -63,6 +63,10 @@ Un palier = une branche = une PR, dans cet ordre.
   pas au chat.
 - Les cartes d'Avaritia (brouillons, contradictions, doublons) passent par le relais de cartes
   existant, comme celles de Pina.
+- **Les dates ne se périment pas** (remarque de CrOliX, 29/10) : Avaritia écrit une date relative
+  (« jeudi », « demain ») en date complète, comptée depuis la date de la note, et Natsume comme l'agent
+  d'Avaritia connaissent la date du jour. Un fait « à rappeler le jeudi 29 octobre 2026 » relu une
+  semaine plus tard se lit comme passé.
 
 ### Palier 2 : la veille nocturne et la mémoire de la relation
 
@@ -116,11 +120,25 @@ Un palier = une branche = une PR, dans cet ordre.
 - **Le point du matin** est une routine séparée, à **heure fixe** (7 h 30 au MVP **[choix Claude]**).
   Elle ne dépend pas de la fin du traitement d'Avaritia, qui traite ses lots en différé : elle lit les
   cartes en attente à ce moment-là. Elle présente **cinq éléments au plus, tous postes confondus**,
-  dans cet ordre : les alertes `urgent` de la journée écoulée, puis les contradictions et doublons
-  d'Avaritia, puis les autres cartes, de la plus ancienne à la plus récente **[choix Claude]**. Le
-  contrat ne portant ni échéance ni urgence sur une carte, le classement s'appuie seulement sur ces
-  signaux, sans appel au modèle. Le surplus reste consultable dans le relais de cartes, sans être
-  poussé.
+  dans cet ordre : les alertes `urgent` de la journée écoulée, puis les échéances ouvertes (ci-dessous),
+  puis les contradictions et doublons d'Avaritia, puis les autres cartes, de la plus ancienne à la plus
+  récente **[choix Claude]**. Le contrat ne portant ni échéance ni urgence sur une carte, le classement
+  s'appuie seulement sur ces signaux, sans appel au modèle. Le surplus reste consultable dans le
+  relais de cartes, sans être poussé.
+- **Les échéances et leurs relances** (demande de CrOliX, 29/10) : une chose datée à faire (« rappeler
+  Paul jeudi ») ne doit ni dormir dans une fiche une fois la date passée, ni partir en tâche Google.
+  - **Avaritia porte l'échéance.** Quand une note décrit une chose à faire à une date, le fait reçoit
+    une **date d'échéance** structurée en plus de son texte. Elle se voit dans la carte et CrOliX la
+    valide avec le reste. Sans date dite, pas d'échéance : rien n'est deviné.
+  - **Le core la lit par le contrat** : une lecture `brain.due` rend les faits actifs dont l'échéance
+    tombe au plus tard le jour donné (texte, fiche, date). Le core ne garde aucune copie.
+  - **Le point du matin relance** une échéance du jour ou passée : « Tu as rappelé Paul ? ». Elle est
+    poussée chaque matin tant qu'elle est ouverte, et **sept jours au plus après sa date**
+    **[choix Claude]**. Ensuite elle n'est plus poussée, mais reste dans la fiche et dans `brain.due`.
+  - **La clôture passe par une note.** « Oui, c'est fait » part chez Avaritia comme tout « note ça » :
+    le brouillon dit « Paul rappelé le 30 octobre 2026 » et remplace le fait daté (mécanisme
+    `replaces` existant), qui sort de `brain.due` une fois la carte validée. « Pas encore » ne change
+    rien, la relance revient le lendemain. Aucune échéance ne se clôt sans carte validée.
 - **Les propositions d'action** du matin sont, au MVP, les cartes déjà en attente chez les postes.
   La veille nocturne ne délègue rien : faire préparer un brouillon à Acedia pendant la nuit (exemple
   du mail urgent de la spec de liaison §5) vient plus tard (décision de CrOliX, 29/10).
@@ -218,6 +236,9 @@ nocturne qui réapprend le métier d'Acedia.
 - Le matin, le contexte du modèle contient le contexte chaud et la journée en cours, pas la veille
   (sauf les six derniers messages).
 - Le point du matin présente cinq éléments au plus, dans l'ordre prévu.
+- « Note que je dois rappeler Paul jeudi » donne un fait daté avec son échéance ; le jeudi matin et
+  les matins suivants, le point du matin relance ; « c'est fait » donne une carte qui, validée, sort
+  l'échéance de `brain.due`. Huit jours après la date, elle n'est plus poussée.
 
 ## 9. Le modèle et le coût
 
@@ -235,6 +256,9 @@ la mesure de la recette.
 - §5 : cinq éléments au plus au point du matin, tous postes confondus ; au MVP, la nuit ne fait rien
   préparer aux postes.
 - §11 : le chantier 5 commence par le branchement d'Avaritia au core, absent du chantier 4.
+
+Côté contrat satellite, le palier 3 ajoute une lecture `brain.due` (v1.2) et une date d'échéance
+facultative sur un fait d'Avaritia.
 
 ## 11. Laissé au constructeur
 
