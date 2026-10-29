@@ -91,7 +91,7 @@ it('relays the drafts of a note to Lun’Avaritia', async () => {
   openai.replyWithTools([call({ poste: 'lunavaritia', demande: 'Note que le studio a déménagé à Nantes.' })]);
   fake.queueAgent({ summary: 'Brouillon prêt.', cards: [NOTE_CARD], refs: [] });
   const stored = await ask(h, 'note que le studio a déménagé à Nantes');
-  expect(fake.agentRequests[0]).toMatchObject({ request: 'Note que le studio a déménagé à Nantes.' });
+  expect(fake.agentBodies[0]).toMatchObject({ request: 'Note que le studio a déménagé à Nantes.' });
   expect(stored.text).toBe('Brouillon prêt.');
   expect(stored.cards).toEqual([{ satellite: 'lunavaritia', card: NOTE_CARD }]);
 });
@@ -110,9 +110,9 @@ Dans `service.test.ts`, sans poste : `SYSTEM` devient `${SYSTEM_PROMPT} ${postRu
 vérifie que cette règle dit le mail, l'agenda, les tâches **et** la mémoire non joignables, sans
 `DELEGATE_TOOL`.
 
-`NOTE_CARD` est une carte du contrat d'Avaritia (`action: 'brain.draft'`, titre et lignes fictifs) ;
+`NOTE_CARD` est une carte du contrat d'Avaritia (`action: 'brain.<sorte>'`, comme `drafts.ts`, titre et lignes fictifs) ;
 `systemOf(openai)` lit le premier tour du premier appel (factoriser les deux lectures existantes). Le
-nom exact du corps reçu par `POST /agent` suit celui des tests existants (`fake.agentRequests`).
+champ exact du corps reçu par `POST /agent` suit celui des tests existants (`fake.agentBodies`).
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
@@ -161,13 +161,13 @@ Expected: `npm run clients` (ou la santé du core) montre `lunavaritia` relié.
 
 - [ ] **Step 2: « Note ça »**
 
-Run: `npm run chat -- "note que le studio Exemple a déménagé à Nantes"`
+Run: `npm run chat`, puis taper « note que le studio Exemple a déménagé à Nantes »
 Expected: la réponse est le résumé d'Avaritia ; une carte de brouillon apparaît dans `GET /api/cards`
 du core et dans « À valider » d'Avaritia ; l'accepter depuis le core écrit la fiche.
 
 - [ ] **Step 3: Une question sur le savoir**
 
-Run: `npm run chat -- "qu'est-ce qu'on sait du studio Exemple ?"`
+Run: dans le même `npm run chat`, taper « qu'est-ce qu'on sait du studio Exemple ? »
 Expected: une réponse tirée des fiches de la démo, sans carte, en un seul appel du modèle côté core
 (une ligne de coût pour ce tour dans `costs`).
 
