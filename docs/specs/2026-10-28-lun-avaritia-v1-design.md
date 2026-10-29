@@ -153,6 +153,11 @@ d'un satellite. **Un lot mal formé est refusé en entier, avec la raison, avant
 - Lectures directes, sans agent, pour ne pas payer deux fois les jetons : `brain.search` (plein
   texte), `brain.read` (une fiche), `brain.neighbors` (les fiches liées). Elles rendent des **extraits
   courts et sourcés**, bornés en taille, jamais la base entière.
+- `brain.due` `{ day }` (jour ISO, contrat v1.2) rend les faits actifs dont l'**échéance** tombe au
+  plus tard ce jour : `{ factId, ficheId, fiche, text, due }`, triés par échéance. Un fait reçoit une
+  échéance (`due`, jour ISO) quand une note décrit une chose à faire à une date dite ; elle se voit
+  sur la carte et se valide avec le reste. Le core lit, il ne garde aucune copie (spec du chantier 5
+  du core, palier 3).
 - Les questions qui demandent un raisonnement passent par la délégation `POST /lun/v1/agent`.
 - Le core s'en sert aussi, au chantier 5, pour recomposer le contexte chaud. La réponse vocale
   n'attend jamais le cerveau (anti-but de la spec de liaison).
