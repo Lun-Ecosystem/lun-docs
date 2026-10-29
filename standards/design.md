@@ -50,10 +50,13 @@ exemple), plus comme fond d’application : le fond des interfaces est celui du 
 | Lun'Acedia | `#070C14` | `#3A6080` |
 | Lun'Ira | `#080F08` | `#2A5C2A` |
 | Lun'Gula | `#110D05` | `#8A6020` |
-| Lun'Avaritia | `#050810` | `#1A3070` |
+| Lun'Avaritia | `#100C03` | `#745716` |
 | Lun'Invidia | `#080410` | `#5A1880` |
 | Lun'Superbia | `#06080F` | `#5A6A90` |
 | Lun'Luxuria | `#100409` | `#8A1E5A` |
+
+Avaritia est passée du bleu nuit à l’or le 2026-10-29 : le bleu était trop proche d’Acedia. L’ocre de
+Gula est voisin ; il sera à écarter quand Gula prendra forme.
 
 Un nouveau projet de l’étape 2 reprend le monde du nom qu’il porte, ou en reçoit un par ADR.
 
