@@ -63,7 +63,7 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
 - **Le point du matin est un texte composé par le code**, sans modèle, posté par Natsume dans le fil
   principal avec une nouvelle surface `routine`. La personnalité viendra au chantier 7.
   - Il n'est posté que s'il a au moins un élément.
-  - Il n'est posté qu'avant midi : un core lancé le soir compose le contexte chaud, mais ne dit pas
+  - Il n'est posté qu'avant midi : un core redémarré le soir (maintenance, mise à jour, coupure du NAS) compose le contexte chaud, mais ne dit pas
     « bonjour ».
 - **Le contexte chaud se compose en deux appels.**
   1. Le premier donne trois recherches au plus : des noms de personnes, de projets ou d'organisations.
@@ -74,7 +74,7 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
   Si la composition échoue, le contexte précédent reste et le point part quand même.
 - **« Repartir propre » vaut pour le fil principal seulement.** Un sujet repris après des jours garde
   ses 40 derniers messages : le couper à 5 h lui ferait perdre son objet.
-- **Une routine attend celle qui la précède dans la liste du moteur.** Avec un core lancé à 9 h, le
+- **Une routine attend celle qui la précède dans la liste du moteur.** Le core tourne en continu (NAS) ; après un redémarrage exceptionnel vers 9 h, le
   matin passe après la veille.
 - **Un Avaritia qui ne connaît pas `brain.due` (404)** : pas d'échéance ce matin, l'incident est noté
   dans les logs, le point part.
@@ -89,7 +89,7 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
   redemandée comme toute sortie invalide (test en tâche 2).
 - **Le contexte du chat juste après 5 h** : les six derniers messages de la veille et le contexte chaud
   d'hier, aucun appel réseau (test en tâche 6).
-- **Un core lancé à 9 h** avec la veille et le matin dus : le matin attend la fin de la veille (test en
+- **Un core redémarré à 9 h** (maintenance, coupure du NAS) avec la veille et le matin dus : le matin attend la fin de la veille (test en
   tâche 5).
 
 ---
