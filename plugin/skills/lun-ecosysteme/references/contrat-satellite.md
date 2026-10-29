@@ -3,7 +3,7 @@
 
 > Ce que tout satellite expose pour être piloté par Lun'Anima sans que le core connaisse son métier.
 > Décision : [ADR 0004](../adr/0004-delegation-aux-agents.md), qui remplace l'[ADR 0003](../adr/0003-contrat-satellite.md).
-> Version du contrat : **v1.1**.
+> Version du contrat : **v1.2**.
 
 ## Principe
 
@@ -148,4 +148,4 @@ le core et n'intègrent jamais ceux d'un satellite : se ressembler n'est pas un 
 
 Une rupture (route retirée, champ renommé ou rendu obligatoire) crée `/lun/v2`. La v1 reste servie
 jusqu'à ce que le core soit migré. Ajouter un champ optionnel ou une route (comme `authorize`) n'est pas une rupture.
-La v1.1 ajoute `agent`, `cards`, `day.digest`, `Health.agent` et les importances `low`, `log` sans rupture.
+Sans rupture, la v1.1 ajoute `agent`, `cards`, `day.digest`, `Health.agent`, les importances `low`, `log`, et la v1.2 `brain.due` (Avaritia §4.2).
