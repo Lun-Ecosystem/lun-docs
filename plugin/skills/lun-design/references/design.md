@@ -51,10 +51,13 @@ exemple), plus comme fond d’application : le fond des interfaces est celui du 
 | Lun'Acedia | `#070C14` | `#3A6080` |
 | Lun'Ira | `#080F08` | `#2A5C2A` |
 | Lun'Gula | `#110D05` | `#8A6020` |
-| Lun'Avaritia | `#050810` | `#1A3070` |
+| Lun'Avaritia | `#100C03` | `#745716` |
 | Lun'Invidia | `#080410` | `#5A1880` |
 | Lun'Superbia | `#06080F` | `#5A6A90` |
 | Lun'Luxuria | `#100409` | `#8A1E5A` |
+
+Avaritia est passée du bleu nuit à l’or le 2026-10-29 : le bleu était trop proche d’Acedia. L’ocre de
+Gula est voisin ; il sera à écarter quand Gula prendra forme.
 
 Un nouveau projet de l’étape 2 reprend le monde du nom qu’il porte, ou en reçoit un par ADR.
 
@@ -84,6 +87,12 @@ Le défaut à corriger est l'usage, pas l'identité.
 - Le contrôle (couper un service, voir un coût, changer une autorisation) est visible et immédiat,
   avec un retour d'état explicite.
 - Desktop et mobile partagent les tokens, les noms et les icônes ; la mise en page s'adapte.
+- Un seul seuil mobile, **768 px** : la mise en page téléphone s'applique sous 768 px
+  (`max-width: 767.98px`), dans le kit comme dans les écrans.
+- Le front public d'un satellite ne montre **rien qui pointe vers le core**, qui est privé : ni
+  réglage, ni état de liaison, ni source « le core ». Le satellite se présente comme un produit
+  autonome ; ce qui vient du core passe par le contrat sous un nom neutre (client autorisé,
+  observation).
 - Lisible en déplacement : contrastes du texte conformes WCAG AA sur les fonds `--encre`.
 - Les effets du website (curseur personnalisé, transitions lourdes) restent au site vitrine ; les
   outils du quotidien privilégient la vitesse.
@@ -117,6 +126,7 @@ Chaque écran ne s’assemble qu’avec ces briques, jamais avec une version ref
 | Comportements (menu, liste déroulante, bulle, dialogue, info-bulle, onglets, palette, date, curseur, bascule, case) | **Bits UI** (sans style, Svelte 5) : les menus passent par un calque au-dessus de la page, aucun n’est coupé par un conteneur |
 | Icônes | **`@lucide/svelte`** |
 | Grille d’agenda | **FullCalendar 7**, habillé par les jetons |
+| Graphe de fiches | **Sigma.js 3 + graphology** (WebGL), ADR 0006 |
 | Style | **Jetons CSS** ; ni Tailwind ni bibliothèque de composants stylés |
 
 Aucune police ni ressource ne vient d’un CDN. Pas d’alerte native (`alert`, `confirm`, `prompt`).
