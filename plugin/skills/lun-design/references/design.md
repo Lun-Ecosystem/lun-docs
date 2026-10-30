@@ -39,6 +39,7 @@ chaque monde. Chaque dépôt garde une copie générée, avec l’en-tête « ne
 (`node tools/sync-tokens.mjs <fichier>` pour l’écrire). L’option `--monde <nom>` ne garde que le socle
 et le bloc de ce monde : un dépôt n’embarque pas l’accent des autres. La CI du dépôt compare la copie à la
 référence avec `node tools/sync-tokens.mjs --check [--monde <nom>] <fichier>` et échoue au moindre écart.
+Le kit de composants suit la même règle : source `design/kit/`, copie par `node tools/sync-kit.mjs [--check] <dossier>`.
 
 ## Couleurs « monde » par projet
 
