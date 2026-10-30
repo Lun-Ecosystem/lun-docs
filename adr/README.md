@@ -21,8 +21,9 @@ Gabarit : [`_template.md`](_template.md).
 | N° | Décision | Statut |
 |---|---|---|
 | [0001](0001-referentiel-et-methode.md) | Référentiel central, méthode de travail et agent IA | acceptée |
-| [0002](0002-stack.md) | Stack de l'écosystème | acceptée |
+| [0002](0002-stack.md) | Stack de l'écosystème | remplacée par 0007 |
 | [0003](0003-contrat-satellite.md) | Contrat satellite REST + SSE, appairage par jeton | remplacée par 0004 |
 | [0004](0004-delegation-aux-agents.md) | Délégation aux agents des satellites, sans paquet de vues | acceptée |
 | [0005](0005-cerveau-sqlite.md) | Le cerveau d'Avaritia vit dans SQLite | acceptée |
 | [0006](0006-graphe-sigma.md) | Le graphe d'Avaritia : Sigma.js et graphology | acceptée |
+| [0007](0007-stack-mobile-pwa.md) | Stack de l'écosystème, le mobile en PWA | acceptée |

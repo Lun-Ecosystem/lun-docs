@@ -1,6 +1,6 @@
 # ADR 0002 : stack de l'écosystème
 
-Statut : acceptée
+Statut : remplacée par 0007
 Date : 2026-10-19
 
 ## Contexte

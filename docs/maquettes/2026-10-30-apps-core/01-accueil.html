@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Lun'Anima, accueil v4</title>
+<style>
+@font-face { font-family: 'Inter'; font-weight: 300; src: url('../../../design/fonts/inter-latin-300-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 400; src: url('../../../design/fonts/inter-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 500; src: url('../../../design/fonts/inter-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Cormorant Garamond'; font-weight: 400; src: url('../../../design/fonts/cormorant-garamond-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Cormorant Garamond'; font-weight: 500; src: url('../../../design/fonts/cormorant-garamond-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Cormorant Garamond'; font-weight: 400; font-style: italic; src: url('../../../design/fonts/cormorant-garamond-latin-400-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Cormorant Garamond'; font-weight: 500; font-style: italic; src: url('../../../design/fonts/cormorant-garamond-latin-500-italic.woff2') format('woff2'); }
+
+/* jetons de référence (lun-docs design/tokens.css), recopiés tels quels */
+:root {
+  --encre:#0D0B09; --encre-2:#1A1612; --ivoire:#F0EBE1; --papier:#E8E2D6; --lune:#C8C0B0; --lavis:#8A9BAE; --rouge:#7A1818;
+  --fond:var(--encre); --surface-1:var(--encre-2); --surface-2:#221D18; --surface-3:#2B251F;
+  --survol:rgba(240,235,225,.045); --appui:rgba(240,235,225,.08);
+  --bordure:rgba(200,192,176,.12); --bordure-forte:rgba(200,192,176,.24);
+  --texte:var(--ivoire); --texte-2:var(--lune); --texte-3:#958C7E;
+  --ok:#7CC29B; --ok-doux:rgba(124,194,155,.12); --ok-bord:rgba(124,194,155,.38);
+  --attention:#E0B36A; --attention-doux:rgba(224,179,106,.12); --attention-bord:rgba(224,179,106,.38);
+  --danger:#E3A0A0; --danger-plein:#7A1818; --danger-doux:rgba(227,160,160,.10); --danger-bord:rgba(227,160,160,.38);
+  --info:#8A9BAE; --info-doux:rgba(138,155,174,.12); --info-bord:rgba(138,155,174,.38);
+  --ia:#B9A7E0; --ia-doux:rgba(185,167,224,.11); --ia-bord:rgba(185,167,224,.36);
+  --r-1:6px; --r-2:10px; --r-3:14px; --r-rond:999px;
+  --ombre-1:0 1px 2px rgba(0,0,0,.35);
+  --ombre-2:0 12px 32px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.4);
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+}
+[data-monde='acedia'] { --accent:#3A6080; --accent-survol:#45719A; --accent-texte:#9DBEDA; --accent-doux:rgba(58,96,128,.24); --accent-bord:rgba(110,155,195,.45); }
+[data-monde='anima'] { --accent:#7A1818; --accent-survol:#8E2020; --accent-texte:var(--texte); --accent-doux:rgba(122,24,24,.26); --accent-bord:rgba(224,180,172,.32); }
+[data-monde='avaritia'] { --accent:#745716; --accent-survol:#7F611A; --accent-texte:#D9BE7A; --accent-doux:rgba(116,87,22,.28); --accent-bord:rgba(217,190,122,.40); }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: #050403; color: var(--texte); font: 300 14px/1.5 var(--sans); padding: 28px 24px 60px; }
+.planche { max-width: 1480px; margin: 0 auto; }
+.planche > h1 { font: 500 30px/1.2 var(--serif); margin: 0 0 6px; }
+.planche > p { color: var(--texte-2); max-width: 78ch; margin: 0 0 8px; }
+.legende { color: var(--texte-3); font-size: 12.5px; margin: 10px 0 0; text-align: center; }
+.rang { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; margin-top: 26px; }
+
+svg.i { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* ---------- cadre bureau ---------- */
+.bureau { width: 1440px; height: 760px; border: 1px solid var(--bordure-forte); border-radius: 12px; background: var(--fond); display: flex; overflow: hidden; position: relative; }
+.rail { width: 216px; flex: none; border-right: 1px solid var(--bordure); padding: 18px 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+.marque { font: 500 22px/1 var(--serif); margin: 2px 8px 22px; }
+.marque em { font-style: italic; font-weight: 400; color: var(--texte-2); }
+.lien { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-1); color: var(--texte-2); font-size: 13.5px; }
+.lien .n { margin-left: auto; font-size: 12px; color: var(--texte-3); }
+.lien.actif { background: var(--surface-2); color: var(--texte); }
+.lien.actif svg { color: var(--texte); }
+.lien .pastille { margin-left: auto; min-width: 20px; height: 18px; padding: 0 6px; border-radius: var(--r-rond); background: var(--accent); color: var(--ivoire); font-size: 11px; display: grid; place-items: center; font-weight: 400; }
+.rail .bas { margin-top: auto; }
+.service { border: 1px solid var(--bordure); border-radius: var(--r-2); padding: 10px 12px; background: var(--surface-1); font-size: 12.5px; }
+.service .t { display: flex; align-items: center; gap: 8px; color: var(--texte); }
+.service .s { color: var(--texte-3); font-size: 12px; margin-top: 2px; }
+.point { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+.point.att { background: var(--attention); }
+
+.centre { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.barre { height: 58px; flex: none; display: flex; align-items: center; padding: 0 26px; border-bottom: 1px solid var(--bordure); gap: 12px; }
+.recherche { flex: 1; max-width: 520px; height: 34px; border-radius: var(--r-rond); background: var(--surface-1); border: 1px solid var(--bordure); display: flex; align-items: center; gap: 9px; padding: 0 14px; color: var(--texte-3); font-size: 13px; }
+.kbd { margin-left: auto; font-size: 11px; color: var(--texte-3); border: 1px solid var(--bordure-forte); border-radius: 5px; padding: 0 5px; line-height: 17px; }
+.page { flex: 1; overflow: hidden; padding: 26px 30px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 34px; align-content: start; }
+
+.jour h2 { font: 500 32px/1.1 var(--serif); margin: 0; }
+.jour .voix { font: italic 400 19px/1.35 var(--serif); color: var(--texte-2); margin: 8px 0 0; max-width: 60ch; }
+.jour .voix b { font-weight: 500; color: var(--texte); }
+
+h3.bloc { font: 500 19px/1.2 var(--serif); margin: 26px 0 10px; display: flex; align-items: baseline; gap: 10px; }
+h3.bloc span { font: 300 12.5px var(--sans); color: var(--texte-3); }
+
+.liste { border: 1px solid var(--bordure); border-radius: var(--r-3); background: var(--surface-1); overflow: hidden; }
+.ligne { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-top: 1px solid var(--bordure); }
+.ligne:first-child { border-top: 0; }
+.ligne .monde { width: 3px; align-self: stretch; border-radius: 2px; background: var(--accent); flex: none; }
+.ligne .corps { flex: 1; min-width: 0; }
+.ligne .titre { color: var(--texte); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ligne .meta { white-space: nowrap; font-size: 12px; color: var(--texte-3); display: flex; gap: 10px; align-items: center; margin-top: 1px; }
+.ligne .projet { color: var(--accent-texte); }
+.badge { font-size: 11px; padding: 0 8px; line-height: 19px; border-radius: var(--r-rond); border: 1px solid; }
+.badge.danger { color: var(--danger); background: var(--danger-doux); border-color: var(--danger-bord); }
+.badge.att { color: var(--attention); background: var(--attention-doux); border-color: var(--attention-bord); }
+.badge.ia { color: var(--ia); background: var(--ia-doux); border-color: var(--ia-bord); }
+.actions { display: flex; gap: 6px; flex: none; }
+.btn { height: 30px; padding: 0 12px; border-radius: var(--r-1); font: 400 12.5px var(--sans); display: inline-flex; align-items: center; gap: 6px; border: 1px solid transparent; color: var(--ivoire); background: var(--accent); white-space: nowrap; }
+.btn.second { background: transparent; border-color: var(--bordure-forte); color: var(--texte); }
+.btn.fantome { background: transparent; color: var(--texte-2); }
+.urgente { background: linear-gradient(90deg, var(--danger-doux), transparent 60%); }
+
+.cote h3.bloc:first-child { margin-top: 4px; }
+.fil-temps { position: relative; padding-left: 18px; }
+.fil-temps::before { content: ''; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 1px; background: var(--bordure-forte); }
+.etape { position: relative; margin-bottom: 14px; }
+.etape::before { content: ''; position: absolute; left: -18px; top: 6px; width: 9px; height: 9px; border-radius: 50%; background: var(--fond); border: 1px solid var(--ok); }
+.etape .h { font-size: 12px; color: var(--texte-3); }
+.etape .q { color: var(--texte); }
+.etape .d { font-size: 12.5px; color: var(--texte-2); }
+.postes { display: grid; gap: 6px; }
+.poste { display: flex; align-items: center; gap: 10px; font-size: 13px; padding: 8px 12px; border: 1px solid var(--bordure); border-radius: var(--r-2); background: var(--surface-1); }
+.poste .nom { color: var(--accent-texte); }
+.poste .etat { margin-left: auto; font-size: 12px; color: var(--texte-3); }
+.jauge { margin-top: 8px; }
+.jauge .ch { display: flex; justify-content: space-between; font-size: 13px; }
+.jauge .ch b { font-weight: 400; }
+.jauge .rail-j { height: 5px; border-radius: 3px; background: var(--surface-3); margin-top: 7px; overflow: hidden; }
+.jauge .rail-j i { display: block; height: 100%; width: 12%; background: var(--ok); }
+.jauge .note { font-size: 12px; color: var(--texte-3); margin-top: 6px; }
+
+/* panneau de Natsume, suit la navigation */
+.natsume { position: absolute; top: 12px; right: 12px; bottom: 12px; width: 380px; z-index: 5; border: 1px solid var(--bordure-forte); border-radius: var(--r-3); background: var(--surface-2); box-shadow: var(--ombre-2); display: flex; flex-direction: column; overflow: hidden; }
+.natsume .tete { height: 58px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid var(--bordure); }
+.natsume .tete .nom { font: 500 20px var(--serif); }
+.presence { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-doux); }
+.natsume .tete .x { margin-left: auto; color: var(--texte-3); display: flex; gap: 10px; align-items: center; }
+.messages { flex: 1; overflow: hidden; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.m { max-width: 92%; font-size: 13.5px; }
+.m.elle { color: var(--texte); }
+.m.elle .qui { font: italic 400 15px var(--serif); color: var(--texte-2); }
+.m.moi { align-self: flex-end; background: var(--surface-3); border-radius: 14px 14px 4px 14px; padding: 8px 12px; }
+.carte { border: 1px solid var(--accent-bord); border-radius: var(--r-2); background: var(--accent-doux); padding: 10px 12px; }
+.carte .q { font-size: 11.5px; color: var(--accent-texte); }
+.carte .t { margin: 3px 0 9px; }
+.saisie { margin: 0 14px 14px; min-height: 46px; border-radius: var(--r-3); border: 1px solid var(--bordure-forte); background: var(--surface-2); display: flex; align-items: center; padding: 0 8px 0 14px; gap: 8px; color: var(--texte-3); font-size: 13.5px; }
+.saisie .rond { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--ivoire); }
+.saisie .rond.vide { background: transparent; color: var(--texte-2); margin-left: 0; }
+
+/* ---------- cadre téléphone ---------- */
+.tel { width: 390px; height: 800px; border: 1px solid var(--bordure-forte); border-radius: 34px; background: var(--fond); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.tel .haut { height: 52px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; }
+.tel .haut .marque { margin: 0; font-size: 20px; }
+.tel .haut .ic { color: var(--texte-2); display: flex; gap: 16px; }
+.tel .defile { flex: 1; overflow: hidden; padding: 4px 16px 0; }
+.tel .jour h2 { font-size: 28px; }
+.tel .jour .voix { font-size: 17px; }
+.tel .ligne { padding: 11px 12px; gap: 10px; align-items: flex-start; }
+.tel .ligne .corps { white-space: normal; }
+.tel .ligne .titre { white-space: normal; }
+.tel .ligne .actions { margin-top: 8px; }
+.tel .ligne .bas-l { display: block; }
+.resume { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tuile { border: 1px solid var(--bordure); border-radius: var(--r-2); background: var(--surface-1); padding: 10px 12px; font-size: 12.5px; color: var(--texte-2); }
+.tuile b { display: block; font: 500 18px var(--serif); color: var(--texte); }
+.nav-mob { height: 70px; flex: none; border-top: 1px solid var(--bordure); display: flex; padding: 8px 6px 12px; background: var(--fond); }
+.nav-mob div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--texte-3); position: relative; }
+.nav-mob .on { color: var(--texte); }
+.nav-mob .on .fond-ic { background: var(--accent-doux); }
+.fond-ic { width: 46px; height: 26px; border-radius: var(--r-rond); display: grid; place-items: center; }
+.nav-mob .cpt { position: absolute; top: -4px; left: 56%; min-width: 17px; height: 15px; border-radius: var(--r-rond); background: var(--accent); color: var(--ivoire); font-size: 10px; display: grid; place-items: center; padding: 0 4px; }
+.bulle { position: absolute; right: 16px; bottom: 86px; height: 46px; border-radius: 23px; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 9px; background: var(--surface-2); border: 1px solid var(--accent-bord); box-shadow: var(--ombre-2); font-size: 13.5px; }
+.bulle .presence { width: 9px; height: 9px; }
+.bulle svg { color: var(--texte-2); }
+
+/* feuille ouverte sur mobile */
+.voile { position: absolute; inset: 0; background: rgba(5,4,3,.6); }
+.feuille { position: absolute; left: 0; right: 0; bottom: 0; top: 64px; background: var(--surface-1); border-radius: 20px 20px 0 0; border-top: 1px solid var(--bordure-forte); display: flex; flex-direction: column; box-shadow: var(--ombre-2); }
+.feuille .poignee { width: 38px; height: 4px; border-radius: 2px; background: var(--bordure-forte); margin: 8px auto 0; }
+.feuille .tete { height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid var(--bordure); }
+.feuille .tete .nom { font: 500 20px var(--serif); }
+.feuille .tete .ctx { margin-left: auto; font-size: 12px; color: var(--texte-3); }
+.saisie.mob { min-height: 52px; margin-bottom: 20px; }
+.micro { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--ivoire); display: grid; place-items: center; margin-left: auto; }
+
+.notes { max-width: 1440px; margin: 34px auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.notes div { border-top: 1px solid var(--bordure-forte); padding-top: 10px; color: var(--texte-2); font-size: 13.5px; }
+.notes b { display: block; font: 500 17px var(--serif); color: var(--texte); margin-bottom: 4px; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="planche" data-monde="anima">
+  <h1>Lun'Anima, l'accueil</h1>
+  <p>L'accueil répond à une question : qu'est-ce qui m'attend, et est-ce que tout tourne ? Il s'ouvre sans appel au modèle. Natsume n'est plus une page : sa bulle suit partout, comme l'agent des satellites.</p>
+
+  <!-- ==================== BUREAU ==================== -->
+  <div class="rang">
+  <div>
+  <div class="bureau">
+    <nav class="rail">
+      <div class="marque">Lun' <em>Anima</em></div>
+      <div class="lien actif"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/></svg>Accueil</div>
+      <div class="lien"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m8 12 3 3 5-6"/></svg>À valider<span class="pastille">4</span></div>
+      <div class="lien"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Journal</div>
+      <div class="lien"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>Écosystème</div>
+      <div class="bas">
+        <div class="service"><div class="t"><span class="point"></span>Tout tourne</div><div class="s">3 postes en ligne, dépense 0,12 $ sur 1 $</div></div>
+      </div>
+    </nav>
+
+    <div class="centre">
+      <div class="barre">
+        <div class="recherche"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Rechercher ou lancer une commande<span class="kbd">Ctrl K</span></div>
+      </div>
+      <div class="page">
+        <section>
+          <div class="jour">
+            <h2>Vendredi 30 octobre</h2>
+            <p class="voix">Une urgence ce matin, la banque, avant midi. Paul attend ton rappel ; le reste peut attendre ta pause.</p>
+          </div>
+
+          <h3 class="bloc">À traiter <span>5, de la plus pressante à la plus ancienne</span></h3>
+          <div class="liste">
+            <div class="ligne urgente" data-monde="acedia"><span class="monde"></span>
+              <div class="corps"><div class="titre">Banque : virement à confirmer avant 12 h</div><div class="meta"><span class="projet">Lun'Acedia</span><span>reçu à 9 h 42</span><span class="badge danger">urgent</span></div></div>
+              <div class="actions"><span class="btn second">Ouvrir le mail</span></div></div>
+            <div class="ligne" data-monde="avaritia"><span class="monde"></span>
+              <div class="corps"><div class="titre">Rappeler Paul</div><div class="meta"><span class="projet">Lun'Avaritia</span><span>prévu aujourd'hui</span><span class="badge att">échéance</span></div></div>
+              <div class="actions"><span class="btn fantome">Plus tard</span><span class="btn">C'est fait</span></div></div>
+            <div class="ligne" data-monde="acedia"><span class="monde"></span>
+              <div class="corps"><div class="titre">Réponse à Paul : « Je te rappelle à 14 h. »</div><div class="meta"><span class="projet">Lun'Acedia</span><span>brouillon de mail</span></div></div>
+              <div class="actions"><span class="btn second">Modifier</span><span class="btn">Envoyer</span></div></div>
+            <div class="ligne" data-monde="avaritia"><span class="monde"></span>
+              <div class="corps"><div class="titre">Adresse de Paul : deux versions</div><div class="meta"><span class="projet">Lun'Avaritia</span><span>contradiction</span></div></div>
+              <div class="actions"><span class="btn">Trancher</span></div></div>
+            <div class="ligne" data-monde="avaritia"><span class="monde"></span>
+              <div class="corps"><div class="titre">Fiche Studio Exemple : 2 faits nouveaux</div><div class="meta"><span class="projet">Lun'Avaritia</span><span>depuis hier</span></div></div>
+              <div class="actions"><span class="btn second">Voir</span><span class="btn">Valider</span></div></div>
+          </div>
+        </section>
+
+        <aside class="cote">
+          <h3 class="bloc">Cette nuit, ce matin</h3>
+          <div class="fil-temps">
+            <div class="etape"><div class="h">5 h 00</div><div class="q">Veille de la journée d'hier</div><div class="d">3 observations envoyées à Lun'Avaritia, 1 souvenir</div></div>
+            <div class="etape"><div class="h">7 h 30</div><div class="q">Point du matin</div><div class="d">5 éléments, contexte du jour composé</div></div>
+          </div>
+          <h3 class="bloc">Postes</h3>
+          <div class="postes">
+            <div class="poste" data-monde="acedia"><span class="point"></span><span class="nom">Lun'Acedia</span><span class="etat">mail, agenda, tâches</span></div>
+            <div class="poste" data-monde="avaritia"><span class="point"></span><span class="nom">Lun'Avaritia</span><span class="etat">mémoire, fiches</span></div>
+          </div>
+          <h3 class="bloc">Dépense du jour</h3>
+          <div class="jauge"><div class="ch"><b>0,12 $</b><span style="color:var(--texte-3)">plafond 1 $</span></div><div class="rail-j"><i></i></div><div class="note">Clé OpenAI valable encore 23 jours</div></div>
+        </aside>
+      </div>
+    </div>
+
+    <aside class="natsume" data-monde="anima">
+      <div class="tete"><span class="presence"></span><span class="nom">Natsume</span><span class="x"><span class="kbd" style="margin:0">Ctrl J</span><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></span></div>
+      <div class="messages">
+        <div class="m moi">Réponds à Paul que je le rappelle à 14 h.</div>
+        <div class="m elle"><div class="qui">Natsume</div>C'est prêt, il ne reste qu'à l'envoyer.</div>
+        <div class="carte" data-monde="acedia"><div class="q">Lun'Acedia, brouillon de mail</div><div class="t">À Paul : « Je te rappelle à 14 h. »</div><div class="actions"><span class="btn second">Modifier</span><span class="btn">Envoyer</span></div></div>
+      </div>
+      <div class="saisie">Demander à Natsume<span class="rond vide" style="margin-left:auto"><svg class="i" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span class="rond" style="margin-left:0"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+    </aside>
+  </div>
+  <p class="legende">Bureau, Natsume ouverte (Ctrl J). Le panneau flotte par-dessus la page sans la pousser, et reste ouvert quand on change de section ; fermé, il redevient la bulle en bas à droite. La voix (chantier 7) passera par la même présence.</p>
+  </div>
+  </div>
+
+  <!-- ==================== TÉLÉPHONE ==================== -->
+  <div class="rang" style="justify-content:center">
+    <div>
+      <div class="tel">
+        <div class="haut"><div class="marque">Lun' <em>Anima</em></div><div class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div></div>
+        <div class="defile">
+          <div class="jour"><h2>Vendredi 30 octobre</h2><p class="voix">Une urgence ce matin, la banque, avant midi.</p></div>
+          <h3 class="bloc">À traiter <span>5</span></h3>
+          <div class="liste">
+            <div class="ligne urgente" data-monde="acedia"><span class="monde"></span><div class="corps"><div class="titre">Banque : virement à confirmer avant 12 h</div><div class="meta"><span class="projet">Lun'Acedia</span><span class="badge danger">urgent</span></div><div class="actions"><span class="btn second">Ouvrir le mail</span></div></div></div>
+            <div class="ligne" data-monde="avaritia"><span class="monde"></span><div class="corps"><div class="titre">Rappeler Paul</div><div class="meta"><span class="projet">Lun'Avaritia</span><span>prévu aujourd'hui</span></div><div class="actions"><span class="btn fantome">Plus tard</span><span class="btn">C'est fait</span></div></div></div>
+            <div class="ligne" data-monde="acedia"><span class="monde"></span><div class="corps"><div class="titre">Réponse à Paul</div><div class="meta"><span class="projet">Lun'Acedia</span><span>brouillon de mail</span></div><div class="actions"><span class="btn second">Modifier</span><span class="btn">Envoyer</span></div></div></div>
+          </div>
+          <h3 class="bloc">Cette nuit, ce matin</h3>
+          <div class="resume"><div class="tuile"><b>Veille ✓</b>5 h, 3 observations</div><div class="tuile"><b>Point ✓</b>7 h 30, 5 éléments</div></div>
+        </div>
+        <div class="bulle"><span class="presence"></span>Natsume<svg class="i" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
+        <div class="nav-mob">
+          <div class="on"><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/></svg></span>Accueil</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m8 12 3 3 5-6"/></svg></span><span class="cpt">4</span>À valider</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Journal</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>Écosystème</div>
+        </div>
+      </div>
+      <p class="legende">Téléphone, accueil. La bulle de Natsume flotte au-dessus de la barre, sur tous les écrans.</p>
+    </div>
+
+    <div>
+      <div class="tel">
+        <div class="haut"><div class="marque">Lun' <em>Anima</em></div></div>
+        <div class="defile"><div class="jour"><h2>Vendredi 30 octobre</h2></div></div>
+        <div class="voile"></div>
+        <div class="feuille" data-monde="anima">
+          <div class="poignee"></div>
+          <div class="tete"><span class="presence"></span><span class="nom">Natsume</span><span class="ctx">depuis l'accueil</span></div>
+          <div class="messages">
+            <div class="m moi">Retrouve le mail de Marie sur le devis, il y a un mois environ.</div>
+            <div class="m elle"><div class="qui">Natsume</div>Le 29 septembre : devis de refonte à 4 200 €, valable jusqu'au 31 octobre. Je te l'ouvre ?</div>
+            <div class="m moi">Oui, et prépare une relance.</div>
+            <div class="carte" data-monde="acedia"><div class="q">Lun'Acedia, brouillon de mail</div><div class="t">À Marie : relance sur le devis de refonte</div><div class="actions"><span class="btn second">Modifier</span><span class="btn">Envoyer</span></div></div>
+          </div>
+          <div class="saisie mob">Demander à Natsume<span class="micro"><svg class="i" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span></div>
+        </div>
+      </div>
+      <p class="legende">Téléphone, bulle ouverte. Une feuille qui monte par-dessus l'écran en cours ; on la rabat pour revenir où l'on était. Micro du téléphone à droite.</p>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div><b>Quatre sections, pas une de plus</b>Accueil, À valider, Journal, Écosystème. Natsume n'en prend aucune : elle est partout.</div>
+    <div><b>La couleur dit d'où vient la chose</b>Filet, nom du poste et bouton principal prennent l'accent du monde : bleu Lun'Acedia, or Lun'Avaritia, rouge Lun'Anima (jamais en texte).</div>
+    <div><b>L'accueil ne coûte rien</b>Tout ce qu'il montre est déjà dans le core : point du matin, cartes, alertes, postes, dépense.</div>
+  </div>
+</div>
+</body>
+</html>

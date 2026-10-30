@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Lun'Anima, écosystème et alertes</title>
+<link rel="stylesheet" href="lun.css">
+<style>
+.page.reglages { grid-template-columns: 190px minmax(0, 1fr); gap: 30px; }
+.themes { display: flex; flex-direction: column; gap: 2px; padding-top: 6px; }
+.themes .lien { font-size: 13px; }
+.themes .lien .etat-mini { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+.themes .lien .etat-mini.att { background: var(--attention); }
+.cartes-r { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-content: start; }
+.reg { border: 1px solid var(--bordure); border-radius: var(--r-3); background: var(--surface-1); }
+.reg > h4 { font: 500 18px var(--serif); margin: 0; padding: 14px 16px 4px; display: flex; align-items: baseline; gap: 10px; }
+.reg > h4 span { font: 300 12px var(--sans); color: var(--texte-3); }
+.rl { display: flex; align-items: center; gap: 12px; padding: 11px 16px; border-top: 1px solid var(--bordure); font-size: 13.5px; }
+.reg > h4 + .rl { border-top: 0; }
+.rl .lib { flex: 1; min-width: 0; }
+.rl .lib small { display: block; color: var(--texte-3); font-size: 12px; }
+.rl .val { color: var(--texte-2); font-size: 13px; }
+.champ { height: 30px; min-width: 76px; border: 1px solid var(--bordure-forte); border-radius: var(--r-1); background: var(--surface-2); display: inline-flex; align-items: center; padding: 0 10px; color: var(--texte); font-size: 13px; gap: 6px; }
+.bascule { width: 34px; height: 20px; border-radius: 10px; background: var(--accent); position: relative; flex: none; }
+.bascule::after { content: ''; position: absolute; right: 3px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--ivoire); }
+.bascule.off { background: var(--surface-3); } .bascule.off::after { right: auto; left: 3px; background: var(--lune); }
+.mini-barres { display: flex; align-items: flex-end; gap: 5px; height: 38px; padding: 0 16px 12px; }
+.mini-barres i { flex: 1; background: var(--surface-3); border-radius: 2px; }
+.mini-barres i.auj { background: var(--ok); }
+.bulle-bureau { position: absolute; right: 18px; bottom: 18px; height: 42px; border-radius: 21px; padding: 0 14px 0 12px; display: flex; align-items: center; gap: 9px; background: var(--surface-2); border: 1px solid var(--accent-bord); box-shadow: var(--ombre-2); font-size: 13.5px; z-index: 4; }
+
+/* mobile */
+.groupe { border: 1px solid var(--bordure); border-radius: var(--r-3); background: var(--surface-1); overflow: hidden; margin-bottom: 12px; }
+.gl { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-top: 1px solid var(--bordure); font-size: 14px; }
+.gl:first-child { border-top: 0; }
+.gl .lib { flex: 1; } .gl .lib small { display: block; font-size: 12px; color: var(--texte-3); }
+.gl .chev { color: var(--texte-3); }
+.retour { display: flex; align-items: center; gap: 8px; color: var(--texte-2); font-size: 13.5px; }
+
+/* alertes */
+h2.part { font: 500 26px var(--serif); margin: 64px 0 6px; }
+.part-intro { color: var(--texte-2); max-width: 80ch; margin: 0 0 18px; }
+table.carte-alertes { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--surface-1); border: 1px solid var(--bordure); border-radius: var(--r-3); overflow: hidden; }
+.carte-alertes th { text-align: left; font: 500 15px var(--serif); padding: 12px 14px; border-bottom: 1px solid var(--bordure-forte); color: var(--texte); }
+.carte-alertes td { padding: 10px 14px; border-top: 1px solid var(--bordure); vertical-align: top; color: var(--texte-2); }
+.carte-alertes td:first-child { color: var(--texte); }
+.carte-alertes .src { color: var(--accent-texte); font-size: 12.5px; white-space: nowrap; }
+.carte-alertes .src[data-monde="anima"] { color: var(--texte-2); }
+.palier { display: inline-block; font-size: 11.5px; line-height: 19px; padding: 0 8px; border-radius: var(--r-rond); border: 1px solid; white-space: nowrap; }
+.p0 { color: var(--danger); background: var(--danger-doux); border-color: var(--danger-bord); }
+.p1 { color: var(--attention); background: var(--attention-doux); border-color: var(--attention-bord); }
+.p2 { color: var(--info); background: var(--info-doux); border-color: var(--info-bord); }
+.p3 { color: var(--texte-2); border-color: var(--bordure-forte); }
+.p4 { color: var(--texte-3); border-color: var(--bordure); }
+.manque { color: var(--attention); font-size: 12px; }
+.rendus { display: grid; grid-template-columns: 220px repeat(3, 1fr); gap: 0; border: 1px solid var(--bordure); border-radius: var(--r-3); overflow: hidden; margin-top: 22px; font-size: 13.5px; }
+.rendus > div { padding: 12px 14px; border-top: 1px solid var(--bordure); border-left: 1px solid var(--bordure); color: var(--texte-2); background: var(--surface-1); }
+.rendus > .h { font: 500 15px var(--serif); color: var(--texte); border-top: 0; background: var(--surface-2); }
+.rendus > div:nth-child(4n+1) { border-left: 0; }
+.ecrans { display: flex; gap: 32px; flex-wrap: wrap; margin-top: 26px; align-items: flex-start; }
+.verrou { width: 390px; height: 560px; border-radius: 34px; border: 1px solid var(--bordure-forte); background: radial-gradient(120% 80% at 50% 0%, #1d1712, #070605); padding: 22px 14px; display: flex; flex-direction: column; gap: 10px; }
+.heure { text-align: center; font: 300 56px/1 var(--sans); color: var(--ivoire); margin: 8px 0 14px; }
+.notif { background: rgba(34,29,24,.92); border: 1px solid var(--bordure); border-radius: 18px; padding: 11px 13px; font-size: 13px; }
+.notif .ap { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--texte-3); }
+.notif .ap .lg { width: 16px; height: 16px; border-radius: 5px; background: var(--rouge); }
+.notif .tt { color: var(--texte); margin-top: 3px; } .notif .tt b { font-weight: 500; }
+.notif .act { display: flex; gap: 14px; margin-top: 8px; font-size: 12.5px; color: var(--accent-texte); }
+.notif.haute { border-color: var(--danger-bord); }
+.bureau.petit { width: 760px; height: 420px; }
+.toast { position: absolute; top: 70px; right: 18px; width: 330px; background: var(--surface-2); border: 1px solid var(--bordure-forte); border-left: 3px solid var(--accent); border-radius: var(--r-2); box-shadow: var(--ombre-2); padding: 11px 13px; font-size: 13px; z-index: 6; }
+.toast .q { font-size: 11.5px; color: var(--accent-texte); }
+.toast .act { display: flex; gap: 6px; margin-top: 9px; }
+.win { position: absolute; right: 18px; bottom: 18px; width: 330px; background: #1f1f1f; border: 1px solid #3a3a3a; border-radius: 8px; padding: 12px 14px; font: 400 12.5px 'Segoe UI', system-ui, sans-serif; color: #eee; box-shadow: 0 8px 24px rgba(0,0,0,.6); z-index: 6; }
+.win small { color: #aaa; display: block; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="planche" data-monde="anima">
+  <h1>Lun'Anima, l'écosystème</h1>
+  <p>La section Écosystème répond à : est-ce que tout tourne, combien ça coûte, et comment je le règle ? Elle reprend tout ce qui se règle aujourd'hui dans le terminal ou le <code>.env</code> du core. Les réglages propres à un satellite restent dans son front.</p>
+
+  <!-- ===== BUREAU : réglages ===== -->
+  <div class="rang"><div>
+  <div class="bureau" style="height:780px">
+    <nav class="rail">
+      <div class="marque">Lun' <em>Anima</em></div>
+      <div class="lien"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/></svg>Accueil</div>
+      <div class="lien"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m8 12 3 3 5-6"/></svg>À valider<span class="pastille">4</span></div>
+      <div class="lien"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Journal</div>
+      <div class="lien actif"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>Écosystème</div>
+      <div class="bas"><div class="service"><div class="t"><span class="point"></span>Tout tourne</div><div class="s">3 postes en ligne, dépense 0,12 $ sur 1 $</div></div></div>
+    </nav>
+    <div class="centre">
+      <div class="barre"><div class="recherche"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Rechercher ou lancer une commande<span class="kbd">Ctrl K</span></div></div>
+      <div class="page reglages">
+        <div class="themes">
+          <div class="lien actif">Postes<span class="etat-mini"></span></div>
+          <div class="lien">Dépenses et plafonds<span class="etat-mini"></span></div>
+          <div class="lien">Modèle et clé<span class="etat-mini att"></span></div>
+          <div class="lien">Routines<span class="etat-mini"></span></div>
+          <div class="lien">Appareils</div>
+          <div class="lien">Notifications</div>
+        </div>
+        <div>
+          <div class="jour" style="margin-bottom:18px"><h2 style="font-size:28px">Écosystème</h2></div>
+          <div class="cartes-r">
+            <div class="reg">
+              <h4>Postes <span>2 reliés</span></h4>
+              <div class="rl" data-monde="acedia"><span class="point"></span><div class="lib"><span style="color:var(--accent-texte)">Lun'Acedia</span><small>mail, agenda, tâches · vu il y a 1 min</small></div><span class="btn second">Ouvrir</span></div>
+              <div class="rl" data-monde="avaritia"><span class="point"></span><div class="lib"><span style="color:var(--accent-texte)">Lun'Avaritia</span><small>mémoire, fiches · vu il y a 1 min</small></div><span class="btn second">Ouvrir</span></div>
+              <div class="rl"><div class="lib">Relier un poste<small>son adresse, puis le code à 6 chiffres qu'il affiche</small></div><span class="btn">Relier</span></div>
+            </div>
+            <div class="reg">
+              <h4>Dépenses et plafonds <span>aujourd'hui, 5 h à 5 h</span></h4>
+              <div class="mini-barres"><i style="height:40%"></i><i style="height:65%"></i><i style="height:30%"></i><i style="height:80%"></i><i style="height:55%"></i><i style="height:45%"></i><i class="auj" style="height:20%"></i></div>
+              <div class="rl"><div class="lib">Conversation<small>0,12 $ dépensés</small></div><span class="champ">1,00 $</span></div>
+              <div class="rl"><div class="lib">Routines (veille, matin)<small>0,002 $ dépensés</small></div><span class="champ">0,50 $</span></div>
+            </div>
+            <div class="reg">
+              <h4>Modèle et clé</h4>
+              <div class="rl"><span class="point att"></span><div class="lib">Clé OpenAI<small>en service, expire le 22 novembre (23 jours)</small></div><span class="btn second">Remplacer</span></div>
+              <div class="rl"><div class="lib">Modèle de conversation</div><span class="champ">gpt-6-luna ▾</span></div>
+              <div class="rl"><div class="lib">Longueur maximale d'une réponse<small>en jetons</small></div><span class="champ">800</span></div>
+            </div>
+            <div class="reg">
+              <h4>Routines</h4>
+              <div class="rl"><span class="point"></span><div class="lib">Veille de la nuit, 5 h<small>ce matin, 0,0009 $</small></div><span class="btn second">Lancer</span></div>
+              <div class="rl"><span class="point"></span><div class="lib">Point du matin, 7 h 30<small>ce matin, 5 éléments</small></div><span class="btn second">Lancer</span></div>
+            </div>
+            <div class="reg">
+              <h4>Appareils <span>3 appairés</span></h4>
+              <div class="rl"><div class="lib">PC fixe<small>cet appareil · depuis le 20 octobre</small></div></div>
+              <div class="rl"><div class="lib">Téléphone<small>depuis le 31 octobre</small></div><span class="btn fantome">Révoquer</span></div>
+              <div class="rl"><div class="lib">Appairer un appareil<small>affiche un code valable 10 minutes</small></div><span class="btn">Appairer</span></div>
+            </div>
+            <div class="reg">
+              <h4>Notifications</h4>
+              <div class="rl"><div class="lib">Sur cet appareil<small>urgences avec son, le reste en silence</small></div><span class="bascule"></span></div>
+              <div class="rl"><div class="lib">Sur le téléphone</div><span class="bascule"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bulle-bureau"><span class="presence"></span>Natsume<span class="kbd" style="margin-left:4px">Ctrl J</span></div>
+  </div>
+  <p class="legende">Bureau. Une colonne de thèmes, chaque thème est une carte de lignes. La pastille de couleur dit l'état ; l'orange signale ce qui demandera un geste bientôt (la clé).</p>
+  </div></div>
+
+  <!-- ===== MOBILE : réglages ===== -->
+  <div class="rang" style="justify-content:center">
+    <div>
+      <div class="tel">
+        <div class="haut"><div class="marque">Lun' <em>Anima</em></div></div>
+        <div class="defile">
+          <div class="jour"><h2>Écosystème</h2></div>
+          <div class="service" style="margin:14px 0"><div class="t"><span class="point"></span>Tout tourne</div><div class="s">2 postes en ligne, dépense 0,12 $ sur 1 $</div></div>
+          <div class="groupe">
+            <div class="gl"><span class="point"></span><div class="lib">Postes<small>Lun'Acedia, Lun'Avaritia</small></div><span class="chev">›</span></div>
+            <div class="gl"><span class="point"></span><div class="lib">Dépenses et plafonds<small>0,12 $ sur 1 $</small></div><span class="chev">›</span></div>
+            <div class="gl"><span class="point att"></span><div class="lib">Modèle et clé<small>clé : 23 jours</small></div><span class="chev">›</span></div>
+            <div class="gl"><span class="point"></span><div class="lib">Routines<small>veille et point faits ce matin</small></div><span class="chev">›</span></div>
+          </div>
+          <div class="groupe">
+            <div class="gl"><div class="lib">Appareils<small>3 appairés</small></div><span class="chev">›</span></div>
+            <div class="gl"><div class="lib">Notifications<small>activées sur ce téléphone</small></div><span class="chev">›</span></div>
+          </div>
+        </div>
+        <div class="bulle"><span class="presence"></span>Natsume<svg class="i" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
+        <div class="nav-mob">
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/></svg></span>Accueil</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m8 12 3 3 5-6"/></svg></span><span class="cpt">4</span>À valider</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Journal</div>
+          <div class="on"><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>Écosystème</div>
+        </div>
+      </div>
+      <p class="legende">Téléphone, la liste des thèmes avec leur état en une ligne.</p>
+    </div>
+    <div>
+      <div class="tel">
+        <div class="haut"><div class="retour">‹ Écosystème</div></div>
+        <div class="defile">
+          <div class="jour"><h2>Dépenses et plafonds</h2></div>
+          <div class="reg" style="margin-top:16px">
+            <div class="mini-barres" style="padding-top:14px"><i style="height:40%"></i><i style="height:65%"></i><i style="height:30%"></i><i style="height:80%"></i><i style="height:55%"></i><i style="height:45%"></i><i class="auj" style="height:20%"></i></div>
+            <div class="rl"><div class="lib">Conversation<small>0,12 $ aujourd'hui</small></div><span class="champ">1,00 $</span></div>
+            <div class="rl"><div class="lib">Routines<small>0,002 $ aujourd'hui</small></div><span class="champ">0,50 $</span></div>
+          </div>
+          <p style="color:var(--texte-3);font-size:12.5px;margin-top:12px">Le plafond atteint, Natsume ne répond plus jusqu'à 5 h ; les routines s'arrêtent jusqu'au lendemain.</p>
+        </div>
+        <div class="bulle"><span class="presence"></span>Natsume<svg class="i" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
+        <div class="nav-mob">
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg></span>Accueil</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span><span class="cpt">4</span>À valider</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Journal</div>
+          <div class="on"><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg></span>Écosystème</div>
+        </div>
+      </div>
+      <p class="legende">Téléphone, un thème ouvert : les mêmes lignes qu'au bureau.</p>
+    </div>
+  </div>
+
+  <!-- ===== ALERTES ===== -->
+  <h2 class="part">Les alertes : d'où elles viennent</h2>
+  <p class="part-intro">Le satellite fixe le palier, le core fixe le rendu (standard <code>notifications.md</code>). Voici toutes les sources qui existent aujourd'hui, plus celles qui manquent pour piloter l'écosystème depuis le téléphone.</p>
+  <table class="carte-alertes">
+    <tr><th>Événement</th><th>Source</th><th>Palier</th><th>Exemple</th></tr>
+    <tr><td>Rappel d'agenda</td><td><span class="src" data-monde="acedia">Lun'Acedia</span></td><td><span class="palier p0">P0 interrompre</span></td><td>Appel Paul dans 15 minutes</td></tr>
+    <tr><td>Mail urgent selon une règle</td><td><span class="src" data-monde="acedia">Lun'Acedia</span></td><td><span class="palier p0">P0 interrompre</span></td><td>Expéditeur « banque » désigné urgent</td></tr>
+    <tr><td>Mail jugé urgent par le tri</td><td><span class="src" data-monde="acedia">Lun'Acedia</span></td><td><span class="palier p1">P1 prévenir</span></td><td>avis de l'IA, jamais P0</td></tr>
+    <tr><td>Carte à valider issue d'une demande</td><td><span class="src" data-monde="acedia">Lun'Acedia</span> <span class="src" data-monde="avaritia">Lun'Avaritia</span></td><td><span class="palier p1">P1 prévenir</span></td><td>Brouillon de réponse à Paul prêt</td></tr>
+    <tr><td>Accès qui s'arrête</td><td><span class="src" data-monde="acedia">Lun'Acedia</span> <span class="src" data-monde="avaritia">Lun'Avaritia</span> <span class="src" data-monde="anima">Lun'Anima</span></td><td><span class="palier p1">P1 prévenir</span></td><td>autorisation Google à renouveler, clé refusée</td></tr>
+    <tr><td>Clé qui expire</td><td><span class="src" data-monde="acedia">tous</span></td><td><span class="palier p1">P1 à J-3</span> <span class="palier p2">P2 à J-14</span></td><td>Clé OpenAI : 3 jours</td></tr>
+    <tr><td>Point du matin posté</td><td><span class="src" data-monde="anima">Lun'Anima</span></td><td><span class="palier p1">P1 prévenir</span></td><td>« Ce matin : 5 éléments » <span class="manque">· à créer</span></td></tr>
+    <tr><td>Routine en échec</td><td><span class="src" data-monde="anima">Lun'Anima</span></td><td><span class="palier p1">P1 prévenir</span></td><td>veille arrêtée au plafond <span class="manque">· à créer</span></td></tr>
+    <tr><td>Poste injoignable</td><td><span class="src" data-monde="anima">Lun'Anima</span></td><td><span class="palier p1">P1 prévenir</span></td><td>Lun'Acedia ne répond plus depuis 10 min <span class="manque">· à créer</span></td></tr>
+    <tr><td>Plafond du jour atteint</td><td><span class="src" data-monde="anima">Lun'Anima</span></td><td><span class="palier p1">P1 prévenir</span></td><td>Natsume en pause jusqu'à 5 h <span class="manque">· à créer</span></td></tr>
+    <tr><td>Tri ou fiches à valider, questions du cerveau</td><td><span class="src" data-monde="acedia">Lun'Acedia</span> <span class="src" data-monde="avaritia">Lun'Avaritia</span></td><td><span class="palier p2">P2 signaler</span></td><td>4 mails triés à valider, une contradiction</td></tr>
+    <tr><td>Échéance du jour</td><td><span class="src" data-monde="avaritia">Lun'Avaritia</span></td><td><span class="palier p2">P2 signaler</span></td><td>Rappeler Paul, en tête du point</td></tr>
+    <tr><td>Ce qui s'est fait seul</td><td><span class="src" data-monde="acedia">Lun'Acedia</span> <span class="src" data-monde="avaritia">Lun'Avaritia</span></td><td><span class="palier p3">P3 résumer</span></td><td>mail rangé par une règle, fiche créée</td></tr>
+    <tr><td>État technique</td><td><span class="src" data-monde="acedia">tous</span></td><td><span class="palier p4">P4 journal</span></td><td>boîte mise à jour, clé rétablie, prix inconnu</td></tr>
+  </table>
+
+  <h2 class="part">Et comment elles sont rendues</h2>
+  <p class="part-intro">Une seule file dans le core. Une même alerte part vers les appareils qui ont les notifications ; traitée sur l'un, elle disparaît des autres. App ouverte au premier plan : un bandeau dans l'app plutôt qu'une notification système.</p>
+  <div class="rendus">
+    <div class="h">Palier</div><div class="h">Téléphone</div><div class="h">Bureau</div><div class="h">Dans l'app (partout)</div>
+    <div><span class="palier p0">P0 interrompre</span></div><div>Notification en haut de l'écran, son et vibration, actions directes</div><div>Notification Windows avec son ; app ouverte : bandeau qui reste jusqu'au geste. Chantier 7 : Natsume le dit</div><div>Bloc Urgent en tête de l'accueil, pastille</div>
+    <div><span class="palier p1">P1 prévenir</span></div><div>Notification silencieuse dans le tiroir, regroupée (« 3 cartes à valider »)</div><div>Bandeau discret qui s'efface ; app fermée : notification silencieuse</div><div>Liste À traiter, compteur de À valider</div>
+    <div><span class="palier p2">P2 signaler</span></div><div colspan="2" style="grid-column: span 2">Pas de notification système</div><div>Compteur et ligne dans l'accueil</div>
+    <div><span class="palier p3">P3 résumer</span></div><div style="grid-column: span 2">Rien sur le moment</div><div>Repris dans le point du matin, visible dans le Journal</div>
+    <div><span class="palier p4">P4 journal</span></div><div style="grid-column: span 2">Rien</div><div>Journal seulement</div>
+  </div>
+
+  <div class="ecrans">
+    <div>
+      <div class="verrou">
+        <div class="heure">10:42</div>
+        <div class="notif haute"><div class="ap"><span class="lg"></span>Lun'Anima · Lun'Acedia · maintenant</div><div class="tt"><b>Mail urgent : la banque</b><br>Virement à confirmer avant 12 h.</div><div class="act"><span>Ouvrir</span><span>Plus tard</span></div></div>
+        <div class="notif"><div class="ap"><span class="lg"></span>Lun'Anima · il y a 12 min</div><div class="tt"><b>3 cartes à valider</b><br>Réponse à Paul, fiche Studio Exemple, RDV jeudi</div></div>
+        <div class="notif"><div class="ap"><span class="lg"></span>Lun'Anima · 7 h 30</div><div class="tt"><b>Point du matin</b><br>5 éléments, dont une relance.</div></div>
+      </div>
+      <p class="legende">Téléphone : un P0 en haut, deux P1 silencieux dans le tiroir.</p>
+    </div>
+    <div>
+      <div class="bureau petit" style="position:relative">
+        <nav class="rail" style="width:170px"><div class="marque">Lun' <em>Anima</em></div><div class="lien actif">Accueil</div><div class="lien">À valider<span class="pastille">5</span></div><div class="lien">Journal</div><div class="lien">Écosystème</div></nav>
+        <div class="centre"><div class="barre"></div><div class="page" style="display:block"><div class="jour"><h2 style="font-size:26px">Vendredi 30 octobre</h2></div></div></div>
+        <div class="toast" data-monde="acedia"><div class="q">Lun'Acedia · urgent</div><div style="margin-top:2px">Mail de la banque : virement à confirmer avant 12 h</div><div class="act"><span class="btn">Ouvrir</span><span class="btn fantome">Plus tard</span></div></div>
+        <div class="bulle-bureau" style="bottom:18px"><span class="presence"></span>Natsume</div>
+      </div>
+      <p class="legende">Bureau, app ouverte : un bandeau à la couleur du poste, sous la barre ; il reste jusqu'au geste pour un P0.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
