@@ -2,7 +2,7 @@
 
 > Ce que tout satellite expose pour être piloté par Lun'Anima sans que le core connaisse son métier.
 > Décision : [ADR 0004](../adr/0004-delegation-aux-agents.md), qui remplace l'[ADR 0003](../adr/0003-contrat-satellite.md).
-> Version du contrat : **v1.2**.
+> Version du contrat : **v1.3**.
 
 ## Principe
 
@@ -41,7 +41,7 @@ type Importance = 'urgent' | 'normal' | 'low' | 'info' | 'log'; // paliers P0 à
 interface Health { status: Status; reason?: string; version: string; paused?: true; agent?: true } // paused : en pause alors que l'état affiché est degraded ; agent : sert agent et cards
 interface CostItem { provider: string; model?: string; amount: number; calls: number }
 interface Costs { currency: 'USD'; since: string; until: string; total: number; items: CostItem[] }
-interface LunEvent { id: string; type: string; importance: Importance; at: string; title: string; data?: unknown }
+interface LunEvent { id: string; type: string; importance: Importance; at: string; title: string; data?: unknown; link?: string } // link : chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse
 interface Action { name: string; description: string; input: object /* JSON Schema */; effect: 'read' | 'write' | 'delete' }
 interface ActionResult { ok: boolean; result?: unknown; error?: string }
 
@@ -49,7 +49,7 @@ interface AgentRequest { request: string; context?: Record<string, string> } // 
 interface AgentReply { summary: string; cards: Card[]; refs: Ref[]; cost: { currency: 'USD'; amount: number } }
 interface Ref { type: string; id: string; title: string } // ce que la réponse cite : un mail, un événement…
 type CardStatus = 'pending' | 'done' | 'refused' | 'failed' | 'expired';
-interface Card { id: string; action: string; effect: 'write' | 'delete'; title: string; lines: string[]; status: CardStatus; at: string; error?: string } // lines : cible et nouvelles valeurs, rédigées pour un humain
+interface Card { id: string; action: string; effect: 'write' | 'delete'; title: string; lines: string[]; status: CardStatus; at: string; error?: string; link?: string } // lines : cible et nouvelles valeurs, rédigées pour un humain ; link : chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse
 interface DigestItem { type: string; title: string; at: string; ref?: Ref }
 interface Digest { since: string; until: string; received: DigestItem[]; done: DigestItem[]; pending: number }
 ```
@@ -141,10 +141,10 @@ Corps d'erreur : `{ error: string }`, message lisible par un humain.
 
 Un satellite a un **front autonome complet**, aussi mode de secours, qui ne connaît que son serveur
 (ni Natsume, ni un autre satellite). Les apps de Lun'Anima ont **leurs propres écrans**, passent par
-le core et n'intègrent jamais ceux d'un satellite : se ressembler n'est pas un doublon.
+le core et n'intègrent jamais ceux d'un satellite : se ressembler n'est pas un doublon. Quand un `link` est présent, le core ouvre le front à ce chemin, à une adresse qu'il règle lui-même, et le front n'en sait rien.
 
 ## Versionnement
 
 Une rupture (route retirée, champ renommé ou rendu obligatoire) crée `/lun/v2`. La v1 reste servie
 jusqu'à ce que le core soit migré. Ajouter un champ optionnel ou une route (comme `authorize`) n'est pas une rupture.
-Sans rupture, la v1.1 ajoute `agent`, `cards`, `day.digest`, `Health.agent`, les importances `low`, `log`, et la v1.2 `brain.due` (Avaritia §4.2).
+Sans rupture, la v1.1 ajoute `agent`, `cards`, `day.digest`, `Health.agent`, les importances `low`, `log`, et la v1.2 `brain.due` (Avaritia §4.2), et la v1.3 `link` sur `Card` et `LunEvent`.
