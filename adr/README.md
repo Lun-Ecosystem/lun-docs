@@ -26,3 +26,4 @@ Gabarit : [`_template.md`](_template.md).
 | [0004](0004-delegation-aux-agents.md) | Délégation aux agents des satellites, sans paquet de vues | acceptée |
 | [0005](0005-cerveau-sqlite.md) | Le cerveau d'Avaritia vit dans SQLite | acceptée |
 | [0006](0006-graphe-sigma.md) | Le graphe d'Avaritia : Sigma.js et graphology | acceptée |
+| [0008](0008-acces-exterieur.md) | L'accès depuis l'extérieur, déchiffré sur le NAS seulement | acceptée |
