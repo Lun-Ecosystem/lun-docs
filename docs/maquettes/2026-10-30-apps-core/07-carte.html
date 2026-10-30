@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carte de l'écosystème</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --encre:#0D0B09; --encre-2:#1A1612; --ivoire:#F0EBE1; --papier:#E8E2D6; --lune:#C8C0B0; --lavis:#8A9BAE; --rouge:#7A1818;
+  --fond:var(--encre); --surface-1:var(--encre-2); --surface-2:#221D18; --surface-3:#2B251F;
+  --survol:rgba(240,235,225,.045); --appui:rgba(240,235,225,.08);
+  --bordure:rgba(200,192,176,.12); --bordure-forte:rgba(200,192,176,.24);
+  --texte:var(--ivoire); --texte-2:var(--lune); --texte-3:#958C7E;
+  --ok:#7CC29B; --attention:#E0B36A; --danger:#E3A0A0; --danger-doux:rgba(227,160,160,.10); --danger-bord:rgba(227,160,160,.38);
+  --ia:#B9A7E0;
+  --r-1:6px; --r-2:10px; --r-3:14px; --r-rond:999px;
+  --ombre-2:0 12px 32px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.4);
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+}
+[data-monde='acedia'] { --accent:#3A6080; --accent-survol:#45719A; --accent-texte:#9DBEDA; --accent-doux:rgba(58,96,128,.24); --accent-bord:rgba(110,155,195,.45); }
+[data-monde='anima'] { --accent:#7A1818; --accent-survol:#8E2020; --accent-texte:var(--texte); --accent-doux:rgba(122,24,24,.26); --accent-bord:rgba(224,180,172,.32); }
+[data-monde='avaritia'] { --accent:#745716; --accent-survol:#7F611A; --accent-texte:#D9BE7A; --accent-doux:rgba(116,87,22,.28); --accent-bord:rgba(217,190,122,.40); }
+
+* { box-sizing:border-box; }
+body { margin:0; background:#050403; color:var(--texte); font:300 14px/1.5 var(--sans); padding:24px 24px 64px; }
+.planche { max-width:1392px; margin:0 auto; }
+.planche > h1 { font:500 30px/1.2 var(--serif); margin:0 0 6px; }
+.planche > p { color:var(--texte-2); max-width:78ch; margin:0 0 6px; }
+svg.i { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+button { font:inherit; color:inherit; }
+:focus-visible { outline:2px solid var(--lavis); outline-offset:2px; }
+
+/* ---------- cadre bureau ---------- */
+.app { margin-top:20px; height:800px; border:1px solid var(--bordure-forte); border-radius:12px; background:var(--fond); overflow:hidden; display:flex; flex-direction:column; position:relative; }
+.barre { height:56px; flex:none; display:flex; align-items:center; gap:28px; padding:0 22px; border-bottom:1px solid var(--bordure); }
+.marque { font:500 22px/1 var(--serif); }
+.marque em { font-style:italic; font-weight:400; color:var(--texte-2); }
+.onglets { display:flex; gap:4px; }
+.onglets a { padding:6px 12px; border-radius:var(--r-1); color:var(--texte-3); text-decoration:none; font-size:13.5px; }
+.onglets a.on { background:var(--surface-2); color:var(--texte); }
+.etat { margin-left:auto; display:flex; align-items:center; gap:18px; font-size:12.5px; color:var(--texte-3); }
+.etat .ok { display:flex; align-items:center; gap:8px; color:var(--texte-2); }
+.presence { width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--accent-doux); }
+
+.carte { position:relative; flex:1; overflow:hidden;
+  background: radial-gradient(circle at 50% 44%, rgba(122,24,24,.10) 0, transparent 34%), var(--fond); }
+.carte > svg { position:absolute; inset:0; width:100%; height:100%; }
+.carte text { font-family:var(--sans); font-weight:300; }
+.carte .serif { font-family:var(--serif); font-weight:500; }
+.lisible { paint-order:stroke; stroke:var(--fond); stroke-width:5px; stroke-linejoin:round; }
+.noeud { cursor:pointer; }
+.noeud:focus { outline:none; }
+.noeud:focus-visible .halo, .noeud.sel .halo { opacity:1; }
+.halo { opacity:0; transition:opacity .15s; }
+.voie-hit { stroke:transparent; stroke-width:22; fill:none; cursor:help; }
+.voie.forte { transition:opacity .15s; }
+.liaison.dim { opacity:.25; }
+
+/* jour */
+.jour-ctl { position:absolute; left:22px; top:18px; display:flex; align-items:center; gap:6px; color:var(--texte-2); font-size:13px; }
+.jour-ctl b { font:500 20px var(--serif); color:var(--texte); margin-right:6px; }
+.jour-ctl button { width:28px; height:28px; border-radius:var(--r-1); border:1px solid var(--bordure); background:none; color:var(--texte-2); cursor:pointer; display:grid; place-items:center; }
+.jour-ctl button:hover { background:var(--survol); }
+.jour-ctl button:disabled { opacity:.35; cursor:default; }
+
+/* lecture de la carte */
+.lecture { position:absolute; left:22px; bottom:18px; width:262px; font-size:12px; color:var(--texte-3); }
+.lecture summary { cursor:pointer; color:var(--texte-2); font-size:12.5px; list-style:none; display:flex; align-items:center; gap:6px; }
+.lecture summary::-webkit-details-marker { display:none; }
+.lecture[open] { background:var(--surface-1); border:1px solid var(--bordure); border-radius:var(--r-2); padding:10px 12px 12px; left:14px; bottom:10px; }
+.lecture ul { list-style:none; margin:10px 0 0; padding:0; display:grid; gap:7px; }
+.lecture li { display:flex; align-items:center; gap:10px; }
+.lecture li svg { width:30px; height:20px; flex:none; overflow:visible; }
+
+/* fiche ancrée */
+.fiche { position:absolute; width:348px; max-height:560px; overflow:auto; background:var(--surface-1); border:1px solid var(--bordure-forte); border-radius:var(--r-3); box-shadow:var(--ombre-2); padding:16px 16px 14px; z-index:5; }
+.fiche[hidden] { display:none; }
+.fiche .tete { display:flex; align-items:flex-start; gap:10px; }
+.fiche h2 { margin:0; font:500 26px/1.1 var(--serif); }
+.fiche .sous { margin:4px 0 0; color:var(--texte-3); font-size:12.5px; }
+.fiche .fermer { margin-left:auto; width:28px; height:28px; border:0; background:none; border-radius:var(--r-1); color:var(--texte-3); cursor:pointer; display:grid; place-items:center; flex:none; }
+.fiche .fermer:hover { background:var(--survol); color:var(--texte); }
+.fiche h3 { font:400 12.5px var(--sans); color:var(--texte-2); margin:16px 0 8px; }
+.fiche .voix { font:italic 400 18px/1.35 var(--serif); color:var(--texte-2); margin:12px 0 0; }
+.fiche .filet-monde { height:2px; border-radius:2px; background:var(--accent); margin:12px 0 0; width:40px; }
+.ligne { border:1px solid var(--bordure); border-radius:var(--r-2); padding:9px 11px; margin-bottom:6px; background:var(--surface-2); }
+.ligne b { display:block; font-weight:400; color:var(--texte); font-size:13.5px; }
+.ligne small { color:var(--texte-3); font-size:12px; }
+.ligne.urg { border-color:var(--danger-bord); background:linear-gradient(var(--danger-doux),var(--danger-doux)), var(--surface-2); }
+.ligne .gestes { margin-top:8px; }
+.gestes { display:flex; flex-wrap:wrap; gap:6px; }
+.btn { border:1px solid var(--bordure-forte); border-radius:var(--r-1); padding:5px 11px; font-size:12.5px; color:var(--texte-2); background:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+.btn:hover { background:var(--survol); color:var(--texte); }
+.btn.p { background:var(--accent); border-color:var(--accent); color:var(--ivoire); }
+.btn.p:hover { background:var(--accent-survol); }
+.btn svg.i { width:14px; height:14px; }
+.pied { display:flex; gap:6px; margin-top:14px; padding-top:12px; border-top:1px solid var(--bordure); }
+.seg { display:flex; border:1px solid var(--bordure); border-radius:var(--r-1); padding:2px; gap:2px; }
+.seg span { flex:1; text-align:center; padding:4px 0; border-radius:4px; font-size:12.5px; color:var(--texte-3); cursor:pointer; }
+.seg span.on { background:var(--surface-3); color:var(--texte); }
+.jauge { display:flex; justify-content:space-between; font-size:12.5px; color:var(--texte-2); margin-top:6px; }
+.jauge + .barrette { height:3px; border-radius:2px; background:var(--surface-3); margin-top:5px; overflow:hidden; }
+.barrette i { display:block; height:100%; background:var(--lune); }
+
+/* infobulle des liens */
+.bulle { position:absolute; z-index:6; pointer-events:none; width:270px; background:var(--surface-2); border:1px solid var(--bordure-forte); border-radius:var(--r-2); padding:10px 12px; font-size:12.5px; color:var(--texte-2); box-shadow:var(--ombre-2); }
+.bulle[hidden] { display:none; }
+.bulle b { display:block; font:500 16px var(--serif); color:var(--texte); margin-bottom:4px; }
+.bulle .l { display:flex; gap:8px; margin-top:3px; }
+.bulle .l span:first-child { color:var(--texte-3); width:52px; flex:none; }
+
+/* parler à Natsume */
+.parole { position:absolute; left:50%; bottom:20px; transform:translateX(-50%); width:600px; z-index:4; }
+.parole .fil { display:none; background:var(--surface-1); border:1px solid var(--bordure-forte); border-bottom:0; border-radius:var(--r-3) var(--r-3) 0 0; padding:14px 16px 6px; max-height:240px; overflow:auto; box-shadow:var(--ombre-2); }
+.parole.ouverte .fil { display:block; }
+.parole.ouverte .saisie { border-radius:0 0 var(--r-3) var(--r-3); }
+.msg { margin:0 0 12px; max-width:88%; font-size:13.5px; line-height:1.5; }
+.msg.n { color:var(--texte); }
+.msg.n .qui { font:italic 500 15px var(--serif); color:var(--texte-2); display:block; margin-bottom:2px; }
+.msg.moi { margin-left:auto; background:var(--surface-3); border-radius:var(--r-2); padding:7px 11px; color:var(--texte); width:fit-content; }
+.confie { display:inline-flex; align-items:center; gap:7px; margin-top:6px; border:1px solid var(--accent-bord); background:var(--accent-doux); color:var(--accent-texte); border-radius:var(--r-rond); padding:2px 10px 2px 8px; font-size:12px; }
+.confie .d { width:7px; height:7px; border-radius:50%; background:var(--accent-texte); }
+.parole .entete-fil { display:flex; align-items:center; justify-content:space-between; color:var(--texte-3); font-size:12px; margin-bottom:10px; }
+.parole .entete-fil button { border:0; background:none; color:var(--texte-3); cursor:pointer; font-size:12px; }
+.saisie { display:flex; align-items:center; gap:10px; height:50px; padding:0 6px 0 16px; border:1px solid var(--accent-bord); border-radius:var(--r-3); background:var(--surface-2); box-shadow:var(--ombre-2); }
+.saisie input { flex:1; background:none; border:0; outline:none; color:var(--texte); font:300 14px var(--sans); }
+.saisie input::placeholder { color:var(--texte-3); }
+.saisie .envoyer { width:38px; height:38px; border-radius:var(--r-2); border:0; background:var(--accent); color:var(--ivoire); display:grid; place-items:center; cursor:pointer; }
+.saisie .kbd { font-size:11.5px; color:var(--texte-3); border:1px solid var(--bordure); border-radius:4px; padding:1px 6px; }
+
+/* ---------- téléphone ---------- */
+.tel-zone { margin-top:44px; display:grid; grid-template-columns:390px 390px 1fr; gap:36px; align-items:start; }
+.tel-zone .note h2 { font:500 26px/1.2 var(--serif); margin:0 0 8px; }
+.tel-zone .note p { color:var(--texte-2); max-width:52ch; margin:0 0 10px; }
+.etiquette-tel { font-size:12.5px; color:var(--texte-3); margin:0 0 10px; display:flex; align-items:center; gap:8px; }
+.etiquette-tel.idee { color:var(--ia); }
+.etiquette-tel.idee::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--ia); }
+.tel { width:390px; height:800px; border:1px solid var(--bordure-forte); border-radius:34px; background:var(--fond); overflow:hidden; display:flex; flex-direction:column; position:relative; }
+.tel.idee { border-color:rgba(185,167,224,.45); }
+.tel .haut { height:52px; flex:none; display:flex; align-items:center; justify-content:space-between; padding:0 18px; }
+.tel .haut .marque { font-size:20px; }
+.tel .haut .ic { color:var(--texte-2); display:flex; gap:16px; }
+.tel .defile { flex:1; overflow:hidden; padding:4px 16px 0; }
+.tel .jour h2 { font:500 28px/1.1 var(--serif); margin:0; }
+.tel .jour .voix { font:italic 400 17px/1.35 var(--serif); color:var(--texte-2); margin:8px 0 0; }
+.groupe { border:1px solid var(--bordure); border-radius:var(--r-3); background:var(--surface-1); overflow:hidden; margin-top:12px; }
+.gl { display:flex; align-items:center; gap:12px; padding:13px 14px; border-top:1px solid var(--bordure); font-size:14px; }
+.gl:first-child { border-top:0; }
+.gl .lib { flex:1; } .gl .lib small { display:block; font-size:12px; color:var(--texte-3); }
+.gl .chev { color:var(--texte-3); }
+.point { width:7px; height:7px; border-radius:50%; background:var(--ok); flex:none; }
+.point.att { background:var(--attention); }
+.ecrire { position:absolute; left:12px; right:12px; bottom:84px; height:48px; border-radius:var(--r-3); border:1px solid var(--accent-bord); background:var(--surface-2); box-shadow:var(--ombre-2); display:flex; align-items:center; gap:10px; padding:0 6px 0 14px; color:var(--texte-3); font-size:14px; }
+.nav-mob { height:70px; flex:none; border-top:1px solid var(--bordure); display:flex; padding:8px 6px 12px; background:var(--fond); }
+.nav-mob div { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; font-size:11px; color:var(--texte-3); position:relative; }
+.nav-mob .on { color:var(--texte); }
+.nav-mob .on .fond-ic { background:var(--accent-doux); }
+.fond-ic { width:46px; height:26px; border-radius:var(--r-rond); display:grid; place-items:center; }
+.nav-mob .cpt { position:absolute; top:-4px; left:56%; min-width:17px; height:15px; border-radius:var(--r-rond); background:var(--accent); color:var(--ivoire); font-size:10px; display:grid; place-items:center; padding:0 4px; }
+/* l'idée : une rangée de présences */
+.rangee { margin-top:14px; display:flex; gap:6px; overflow:hidden; }
+.pres { flex:none; width:80px; border:1px solid var(--bordure); border-radius:var(--r-3); background:var(--surface-1); padding:10px 6px 8px; text-align:center; position:relative; }
+.pres .disc { width:38px; height:38px; margin:0 auto; border-radius:50%; border:1.5px solid var(--accent-bord); background:var(--accent-doux); display:grid; place-items:center; font:italic 500 18px var(--serif); color:var(--accent-texte); }
+.pres .nm { font-size:11.5px; color:var(--texte); margin-top:6px; white-space:nowrap; }
+.pres .st { font-size:11px; color:var(--texte-3); white-space:nowrap; }
+.pres .cpt { position:absolute; top:6px; right:10px; min-width:18px; height:16px; border-radius:var(--r-rond); background:var(--accent); color:var(--ivoire); font-size:10.5px; display:grid; place-items:center; padding:0 4px; }
+.pres.urg .cpt { background:var(--danger-plein, #7A1818); }
+.pres.off .disc { border-style:dashed; border-color:var(--bordure-forte); background:none; color:var(--texte-3); }
+
+@media (prefers-reduced-motion: reduce) { .halo { transition:none; } }
+/* ---------- v5 ---------- */
+.onglets a { cursor:pointer; }
+.vue[hidden] { display:none !important; }
+.echelle-ctl { position:absolute; right:22px; top:18px; display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--texte-3); }
+.echelle-ctl .seg { width:auto; }
+.echelle-ctl .seg span { padding:4px 10px; white-space:nowrap; }
+.heure-liste .ligne { border-left:2px solid var(--accent, var(--bordure-forte)); }
+.heure-liste .ligne b { font-size:13px; }
+/* Écosystème : un thème à la fois */
+.eco { flex:1; display:grid; grid-template-columns:260px 1fr; min-height:0; }
+.eco nav { border-right:1px solid var(--bordure); padding:18px 12px; display:flex; flex-direction:column; gap:2px; }
+.eco nav button { all:unset; display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:var(--r-1); cursor:pointer; color:var(--texte-2); font-size:13.5px; }
+.eco nav button:hover { background:var(--survol); }
+.eco nav button.on { background:var(--surface-2); color:var(--texte); }
+.eco nav button:focus-visible { outline:2px solid var(--lavis); }
+.eco nav .lib { flex:1; } .eco nav .lib small { display:block; color:var(--texte-3); font-size:12px; }
+.eco .theme { padding:28px 48px; overflow:auto; width:100%; max-width:1040px; justify-self:center; }
+.eco .theme h2 { font:500 32px/1.1 var(--serif); margin:0; }
+.eco .theme .voix { font:italic 400 19px/1.35 var(--serif); color:var(--texte-2); margin:8px 0 22px; }
+.reglages { border:1px solid var(--bordure); border-radius:var(--r-3); background:var(--surface-1); overflow:hidden; margin-bottom:16px; }
+.rg { display:flex; align-items:center; gap:14px; padding:14px 16px; border-top:1px solid var(--bordure); }
+.rg:first-child { border-top:0; }
+.rg .lib { flex:1; min-width:0; } .rg .lib b { display:block; font-weight:400; color:var(--texte); }
+.rg .lib small { color:var(--texte-3); font-size:12.5px; }
+.rg .val { color:var(--texte-2); font-size:13px; }
+.poste-tete { display:flex; align-items:center; gap:14px; padding:16px; }
+.poste-tete .disc { width:40px; height:40px; border-radius:50%; border:1.5px solid var(--accent-bord); background:var(--accent-doux); display:grid; place-items:center; font:italic 500 18px var(--serif); color:var(--accent-texte); flex:none; }
+.poste-tete .disc.off { border:1.5px dashed var(--bordure-forte); background:none; color:var(--texte-3); }
+.poste-tete .nom { font:500 21px/1.1 var(--serif); }
+.poste-tete .etat-p { font-size:12.5px; color:var(--texte-3); display:flex; align-items:center; gap:7px; margin-top:2px; }
+.poste-tete .gestes { margin-left:auto; }
+.adresse { font-size:13px; color:var(--texte-2); background:var(--surface-2); border:1px solid var(--bordure); border-radius:var(--r-1); padding:5px 10px; }
+.tel-zone.v5 { grid-template-columns:390px 1fr; }
+</style>
+</head>
+<body>
+<div class="planche" data-monde="anima">
+  <h1>La carte, cinquième passage</h1>
+  <p>Les décisions de CrOliX appliquées. Le cadran garde les routines à leur heure ; les événements d'une même heure tiennent en une seule marque, clique-la pour les lire. Le nombre en attente est posé sur le disque du poste. Les postes se placent seuls sur l'orbite : bascule sur « 7 postes » pour voir la carte pleine. L'onglet Écosystème montre un thème à la fois.</p>
+
+  <div class="app" data-monde="anima">
+    <div class="barre">
+      <span class="marque">Lun' <em>Anima</em></span>
+      <nav class="onglets"><a class="on" data-vue="carte" tabindex="0">Carte</a><a tabindex="0" data-vue="journal">Journal</a><a tabindex="0" data-vue="eco">Écosystème</a></nav>
+      <div class="etat">
+        <span class="ok"><span class="presence"></span>Natsume à l'écoute, mode assistante</span>
+        <span>0,02 $ aujourd'hui</span>
+      </div>
+    </div>
+
+    <!-- vue carte -->
+    <div class="carte vue" id="carte">
+      <svg id="svg" viewBox="0 0 1390 742" preserveAspectRatio="xMidYMid meet" aria-label="Carte de l'écosystème"></svg>
+
+      <div class="jour-ctl">
+        <b id="jour-titre">Aujourd'hui</b>
+        <span id="jour-date">vendredi 30 octobre</span>
+        <button id="j-prec" aria-label="Jour précédent"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button id="j-suiv" aria-label="Jour suivant" disabled><svg class="i" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+      </div>
+
+      <div class="echelle-ctl"><span>Maquette</span><div class="seg" role="group" aria-label="Nombre de postes"><span class="on" data-n="3" tabindex="0">3 postes</span><span data-n="7" tabindex="0">7 postes</span></div></div>
+
+      <details class="lecture">
+        <summary><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>Lire la carte</summary>
+        <ul>
+          <li><svg viewBox="0 0 30 20"><circle cx="15" cy="10" r="8" fill="rgba(58,96,128,.24)" stroke="rgba(110,155,195,.6)" stroke-width="1.5"/></svg>Poste relié, son agent répond</li>
+          <li><svg viewBox="0 0 30 20"><circle cx="13" cy="11" r="7" fill="rgba(116,87,22,.28)" stroke="rgba(217,190,122,.6)" stroke-width="1.5"/><circle cx="22" cy="5" r="5" fill="#745716"/><text x="22" y="7.5" font-size="7" fill="#F0EBE1" text-anchor="middle">4</text></svg>Cartes qui attendent ton geste</li>
+          <li><svg viewBox="0 0 30 20"><circle cx="15" cy="10" r="8" fill="none" stroke="rgba(110,155,195,.6)" stroke-width="1.5" stroke-dasharray="10 4"/><circle cx="23" cy="4" r="2.5" fill="#E0B36A"/></svg>Ne répond pas depuis plus de 8 s</li>
+          <li><svg viewBox="0 0 30 20"><circle cx="15" cy="10" r="8" fill="none" stroke="#958C7E" stroke-width="1.5" stroke-dasharray="2 4"/><path d="M11 6l8 8" stroke="#958C7E" stroke-width="1.5"/></svg>Injoignable</li>
+          <li><svg viewBox="0 0 30 20"><circle cx="15" cy="10" r="8" fill="none" stroke="rgba(200,192,176,.35)" stroke-width="1.5" stroke-dasharray="3 5"/></svg>Poste à relier, sans couleur</li>
+          <li><svg viewBox="0 0 30 20"><path d="M15 3l5 7-5 7-5-7z" fill="#C8C0B0"/></svg>Routine faite ; creuse si à venir, barrée si en pause de coût</li>
+          <li><svg viewBox="0 0 30 20"><circle cx="15" cy="10" r="7" fill="#1A1612" stroke="rgba(200,192,176,.6)"/><text x="15" y="13" font-size="8" fill="#F0EBE1" text-anchor="middle">4</text></svg>Ce qui s'est passé dans l'heure</li>
+          <li><svg viewBox="0 0 30 20"><path d="M3 7h24" stroke="#C8C0B0" stroke-opacity=".5"/><path d="M3 13h24" stroke="#D9BE7A" stroke-width="2.2"/></svg>Aller : délégation. Retour : cartes, épais selon le volume</li>
+        </ul>
+      </details>
+
+      <div class="fiche" id="fiche" hidden role="dialog" aria-labelledby="fiche-titre"></div>
+      <div class="bulle" id="bulle" hidden></div>
+
+      <div class="parole" id="parole" data-monde="anima">
+        <div class="fil" id="fil">
+          <div class="entete-fil"><span>Conversation avec Natsume, aujourd'hui</span><button id="replier">Replier</button></div>
+          <p class="msg n"><span class="qui">Natsume</span>Bonjour. Lun'Acedia m'a remonté un virement à confirmer avant midi, et Lun'Avaritia attend ton avis sur dix fiches.</p>
+          <p class="msg moi">Rappelle-moi la banque à 11 h.</p>
+          <p class="msg n"><span class="qui">Natsume</span>C'est noté, je le confie à Lun'Acedia.<br><span class="confie" data-monde="acedia"><span class="d"></span>Confié à Lun'Acedia, 9 h 38</span></p>
+        </div>
+        <form class="saisie" id="saisie" autocomplete="off">
+          <span class="presence"></span>
+          <input id="champ" placeholder="Écrire à Natsume" aria-label="Écrire à Natsume">
+          <span class="kbd">/</span>
+          <button class="envoyer" aria-label="Envoyer"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+      </div>
+    </div>
+
+    <!-- vue écosystème -->
+    <div class="eco vue" id="eco" hidden>
+      <nav id="eco-nav" aria-label="Thèmes"></nav>
+      <section class="theme" id="eco-theme"></section>
+    </div>
+  </div>
+
+  <!-- téléphone -->
+  <div class="tel-zone v5">
+    <div>
+      <p class="etiquette-tel">Téléphone, 390 px : le format actuel avec la rangée de présences</p>
+      <div class="tel" data-monde="anima">
+        <div class="haut"><span class="marque">Lun' <em>Anima</em></span><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span></div>
+        <div class="defile">
+          <div class="jour"><h2>Écosystème</h2></div>
+          <div class="rangee">
+            <div class="pres" data-monde="anima"><div class="disc" style="color:var(--texte)">N</div><div class="nm">Natsume</div><div class="st">à l'écoute</div></div>
+            <div class="pres urg" data-monde="acedia"><span class="cpt">1</span><div class="disc">Ac</div><div class="nm">Lun'Acedia</div><div class="st">1 urgence</div></div>
+            <div class="pres" data-monde="avaritia"><span class="cpt">11</span><div class="disc">Av</div><div class="nm">Lun'Avaritia</div><div class="st">11 à valider</div></div>
+            <div class="pres off"><div class="disc">Ir</div><div class="nm">Lun'Ira</div><div class="st">à relier</div></div>
+          </div>
+          <div class="groupe">
+            <div class="gl"><span class="point"></span><div class="lib">Dépenses et plafonds<small>0,02 $ sur 1,50 $ aujourd'hui</small></div><span class="chev">›</span></div>
+            <div class="gl"><span class="point"></span><div class="lib">Modèle et clé<small>clé en place</small></div><span class="chev">›</span></div>
+            <div class="gl"><span class="point"></span><div class="lib">Routines<small>veille et point faits ce matin</small></div><span class="chev">›</span></div>
+          </div>
+          <div class="groupe">
+            <div class="gl"><div class="lib">Appareils<small>2 appairés</small></div><span class="chev">›</span></div>
+            <div class="gl"><div class="lib">Notifications<small>activées sur ce téléphone</small></div><span class="chev">›</span></div>
+          </div>
+        </div>
+        <div class="ecrire"><span class="presence"></span>Écrire à Natsume</div>
+        <div class="nav-mob">
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg></span>Accueil</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span><span class="cpt">12</span>À valider</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Journal</div>
+          <div class="on"><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg></span>Écosystème</div>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <h2>Au téléphone, pas de carte</h2>
+      <p>La carte est un motif de bureau. Le téléphone garde son format : liste de thèmes, barre de Natsume au-dessus de la navigation, feuilles.</p>
+      <p>La rangée de présences est retenue : elle reprend la grammaire de la carte en petit, couleur du monde pour un poste relié, pointillé sans couleur pour un poste à relier, nombre en attente sur le disque. Toucher une présence monte la feuille du poste.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('svg');
+const carte = document.getElementById('carte');
+const fiche = document.getElementById('fiche');
+const bulle = document.getElementById('bulle');
+const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const C = { x:695, y:318 }, RD = 92;   // Natsume et son cadran
+const ORB = { rx:470, ry:250, de:-155, a:155, haut:22 };   // orbite des postes : arc libre en bas (barre de Natsume) et en haut (lien trop court)
+const COUL = {
+  acedia:   { trait:'rgba(110,155,195,.75)', texte:'#9DBEDA', doux:'rgba(58,96,128,.24)', plein:'#3A6080' },
+  avaritia: { trait:'rgba(217,190,122,.70)', texte:'#D9BE7A', doux:'rgba(116,87,22,.28)', plein:'#745716' },
+};
+const RELIES = [
+  { id:'acedia',   nom:"Lun'Acedia",   ini:'Ac', role:'mail, agenda, tâches', act:'synchro il y a 4 min', attente:1, urg:true, glyph:'mail' },
+  { id:'avaritia', nom:"Lun'Avaritia", ini:'Av', role:'mémoire en fiches',   act:'a répondu à 9 h 31 en 4 s', attente:11, glyph:'fiche' },
+];
+const A_RELIER = [ { id:'ira', nom:"Lun'Ira", ini:'Ir' } ];
+const HYPO = [ { id:'gula', nom:"Lun'Gula", ini:'Gu' }, { id:'invidia', nom:"Lun'Invidia", ini:'In' }, { id:'superbia', nom:"Lun'Superbia", ini:'Su' }, { id:'luxuria', nom:"Lun'Luxuria", ini:'Lu' } ];
+const MAX_POSTES = 7;
+let nPostes = 3;
+const LIENS = {
+  acedia:   { aller:'trier la boîte, préparer une réponse', retour:'1 urgence, 1 mail trié', dernier:'9 h 38', vol:2, urg:true, lib1:'trie, rappelle, prépare', lib2:'1 urgence en retour' },
+  avaritia: { aller:'ranger le point du matin en fiches', retour:'10 brouillons de fiches, 1 échéance', dernier:'9 h 31', vol:11, lib1:'range en fiches', lib2:'11 cartes en retour' },
+};
+const JOURS = [
+  { titre:"Aujourd'hui", date:'vendredi 30 octobre', maintenant:9+40/60, ev:[
+    { h:8+42/60, m:'acedia',   t:'8 h 42', d:"Lun'Acedia vers Natsume", q:'Urgence : Banque, virement à confirmer', urg:true },
+    { h:9.5,     m:'anima',    t:'9 h 30', d:'Veille de la nuit', q:'Faite en rattrapage, 0,0004 $' },
+    { h:9+31/60, m:'avaritia', t:'9 h 31', d:"Natsume vers Lun'Avaritia", q:'Délégation : ranger le point du matin en fiches' },
+    { h:9+31/60, m:'avaritia', t:'9 h 31', d:"Lun'Avaritia vers Natsume", q:'2 brouillons : Studio Exemple, Boulangerie Berthier' },
+    { h:9+38/60, m:'acedia',   t:'9 h 38', d:"Natsume vers Lun'Acedia", q:'Délégation : rappel banque à 11 h' },
+  ], routines:{ veille:'faite', point:'faite' } },
+  { titre:'Hier', date:'jeudi 29 octobre', maintenant:24, ev:[
+    { h:5,       m:'anima',    t:'5 h',     d:'Veille de la nuit', q:'Faite, 0,0009 $' },
+    { h:7.5,     m:'anima',    t:'7 h 30',  d:'Point du matin', q:'Fait, 0,0004 $' },
+    { h:16+2/60, m:'acedia',   t:'16 h 02', d:"Lun'Acedia vers Natsume", q:'Mail trié : 4 mails rangés dans « Factures »' },
+    { h:18+10/60,m:'avaritia', t:'18 h 10', d:"Lun'Avaritia vers Natsume", q:'Nouvelle fiche refusée : Studio Exemple' },
+    { h:23+17/60,m:'anima',    t:'23 h 17', d:'Toi', q:'Validé : nouvelle fiche, Paul Martin' },
+  ], routines:{ veille:'faite', point:'faite' } },
+];
+const ROUTINES = [ { id:'veille', nom:'Veille de la nuit', h:5, lib:'5 h', f:'faite' }, { id:'point', nom:'Point du matin', h:7.5, lib:'7 h 30', f:'fait' } ];
+let jour = 0;
+
+const el = (n, a = {}, p = svg) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p && p.append(e); return e; };
+const pol = (r, deg, c = C) => { const a = (deg - 90) * Math.PI / 180; return [c.x + r * Math.cos(a), c.y + r * Math.sin(a)]; };
+const hAng = h => h / 24 * 360;
+const arc = (r, d0, d1, c = C) => { const [x0,y0] = pol(r,d0,c), [x1,y1] = pol(r,d1,c); return `M${x0} ${y0} A${r} ${r} 0 ${d1-d0>180?1:0} 1 ${x1} ${y1}`; };
+const txt = (x, y, s, a = {}, p) => { const t = el('text', { x, y, ...a }, p); t.textContent = s; return t; };
+const actionnable = (g, f) => { g.addEventListener('click', f); g.addEventListener('keydown', k => (k.key === 'Enter' || k.key === ' ') && (k.preventDefault(), f())); };
+const ecart = (a, b) => Math.abs(((a - b + 540) % 360) - 180);
+
+// Place les postes tout seuls : angles régulièrement répartis sur l'arc, les reliés sur les places du haut.
+function placerPostes() {
+  const liste = [...RELIES.map(p => ({ ...p, etat:'relie' })), ...A_RELIER.map(p => ({ ...p, etat:'off' })),
+    ...HYPO.slice(0, Math.max(0, nPostes - RELIES.length - A_RELIER.length)).map(p => ({ ...p, etat:'off', hypo:true }))];
+  if (liste.length < MAX_POSTES) liste.push({ id:'libre', nom:'Relier un poste', etat:'libre' });
+  const demi = ORB.a - ORB.haut, n = liste.length, pas = 2 * demi / n;
+  const angle = i => { const d = (i + .5) * pas; return d < demi ? ORB.de + d : ORB.haut + d - demi; };
+  const places = liste.map((_, i) => angle(i)).map(a => ({ a, x:C.x + ORB.rx * Math.sin(a * Math.PI / 180), y:C.y - ORB.ry * Math.cos(a * Math.PI / 180) }));
+  places.sort((p, q) => p.y - q.y || p.a - q.a);
+  const ordre = [...liste.filter(p => p.etat === 'relie'), ...liste.filter(p => p.etat === 'off'), ...liste.filter(p => p.etat === 'libre')];
+  return ordre.map((p, i) => ({ ...p, ...places[i] }));
+}
+
+function dessiner() {
+  svg.innerHTML = '';
+  bulle.hidden = true;
+  const J = JOURS[jour], postes = placerPostes(), petit = postes.length > 5;
+  const RP = petit ? 32 : 40;
+  el('defs').innerHTML = `<radialGradient id="gN"><stop offset="0" stop-color="#7A1818" stop-opacity=".55"/><stop offset="1" stop-color="#7A1818" stop-opacity=".18"/></radialGradient>`;
+  el('ellipse', { cx:C.x, cy:C.y, rx:ORB.rx, ry:ORB.ry, fill:'none', stroke:'rgba(200,192,176,.06)', 'stroke-dasharray':'2 8' });
+
+  // liens
+  for (const p of postes) {
+    if (p.etat === 'libre') continue;
+    const g = el('g', { class:'liaison', 'data-id':p.id });
+    const dx = p.x - C.x, dy = p.y - C.y, L = Math.hypot(dx, dy), ux = dx/L, uy = dy/L, nx = -uy, ny = ux;
+    // côté du libellé : vers le haut, ou vers l'extérieur si le lien est vertical
+    const s = Math.abs(ny) < .3 ? (nx > 0 ? 1 : -1) : (ny < 0 ? 1 : -1);
+    const a = [C.x + ux*(RD+30), C.y + uy*(RD+30)], b = [p.x - ux*(RP+14), p.y - uy*(RP+14)];
+    const ctrl = o => [(a[0]+b[0])/2 - nx*s*26 + nx*o, (a[1]+b[1])/2 - ny*s*26 + ny*o];
+    const voie = o => { const c = ctrl(o); return `M${a[0]+nx*o} ${a[1]+ny*o} Q${c[0]} ${c[1]} ${b[0]+nx*o} ${b[1]+ny*o}`; };
+    if (p.etat === 'off') { el('path', { d:voie(0), fill:'none', stroke:'rgba(200,192,176,.24)', 'stroke-width':1, 'stroke-dasharray':'2 7' }, g); continue; }
+    const L2 = LIENS[p.id], col = COUL[p.id];
+    const dA = voie(-5), dR = voie(5);
+    el('path', { d:dA, fill:'none', stroke:'rgba(200,192,176,.42)', 'stroke-width':1 }, g);
+    el('path', { d:dR, fill:'none', stroke:col.trait, 'stroke-width':Math.min(1.2 + Math.log2(L2.vol+1)*.7, 4), 'stroke-linecap':'round' }, g);
+    if (!reduit) {
+      const paquet = (d, sens, fill, dur, begin) => el('animateMotion', { dur, repeatCount:'indefinite', path:d, begin, keyPoints:sens, keyTimes:'0;1', calcMode:'linear' }, el('circle', { r:2.6, fill }, g));
+      paquet(dA, '0;1', '#E8E2D6', '4.5s', '0s');
+      paquet(dR, '1;0', col.texte, '3.2s', '.8s');
+      if (L2.urg) paquet(dR, '1;0', '#E3A0A0', '3.2s', '2.4s');
+    }
+    const hit = el('path', { d:voie(0), class:'voie-hit' }, g);
+    hit.addEventListener('mouseenter', e => montrerLien(p, e));
+    hit.addEventListener('mousemove', e => placerBulle(e));
+    hit.addEventListener('mouseleave', () => { bulle.hidden = true; document.querySelectorAll('.liaison').forEach(x => x.classList.remove('dim')); });
+    const m = ctrl(0), t = .4, q = (u, v, w) => (1-t)*(1-t)*u + 2*(1-t)*t*v + t*t*w, mx = q(a[0], m[0], b[0]), my = q(a[1], m[1], b[1]);   // libellé plus près de Natsume, loin du texte du poste
+    const lx = mx + nx*s*16, ly = my + ny*s*16 - (s*ny < 0 ? 12 : 0);
+    const anc = nx*s > .3 ? 'start' : nx*s < -.3 ? 'end' : 'middle';
+    txt(lx, ly, L2.lib1, { 'text-anchor':anc, 'font-size':12.5, fill:'#958C7E', class:'lisible' }, g);
+    txt(lx, ly+17, L2.lib2, { 'text-anchor':anc, 'font-size':12.5, fill:col.texte, class:'lisible' }, g);
+  }
+
+  // cadran
+  const cad = el('g');
+  el('circle', { cx:C.x, cy:C.y, r:RD, fill:'none', stroke:'rgba(200,192,176,.16)' }, cad);
+  for (let h = 0; h < 24; h++) {
+    const long = h % 6 === 0, [x0,y0] = pol(RD - (long ? 7 : 4), hAng(h)), [x1,y1] = pol(RD, hAng(h));
+    el('line', { x1:x0, y1:y0, x2:x1, y2:y1, stroke:'rgba(200,192,176,.32)' }, cad);
+    if (long) { const [tx,ty] = pol(RD - 18, hAng(h)); txt(tx, ty+4, h + ' h', { 'text-anchor':'middle', 'font-size':10, fill:'#958C7E' }, cad); }
+  }
+  if (J.maintenant < 24) {
+    el('path', { d:arc(RD, 0, hAng(J.maintenant)), fill:'none', stroke:'rgba(224,180,172,.55)', 'stroke-width':2 }, cad);
+    const [ax,ay] = pol(RD, hAng(J.maintenant)); el('circle', { cx:ax, cy:ay, r:4, fill:'#F0EBE1' }, cad);
+  } else el('circle', { cx:C.x, cy:C.y, r:RD, fill:'none', stroke:'rgba(224,180,172,.35)', 'stroke-width':2 }, cad);
+
+  // événements : une marque par heure, avec le nombre
+  const heures = {};
+  for (const e of J.ev) (heures[Math.floor(e.h)] ||= []).push(e);
+  for (const h in heures) {
+    const evs = heures[h], deg = hAng(+h + .5), [x,y] = pol(RD + 17, deg), urg = evs.some(e => e.urg);
+    const g = el('g', { class:'noeud', tabindex:0, role:'button', 'data-id':'h' + h, 'aria-label':`${evs.length} à ${h} h` });
+    el('circle', { cx:x, cy:y, r:15, fill:'rgba(200,192,176,.12)', class:'halo' }, g);
+    el('circle', { cx:x, cy:y, r:9.5, fill:'#1A1612', stroke: urg ? '#E3A0A0' : 'rgba(200,192,176,.6)', 'stroke-width':1.3 }, g);
+    txt(x, y + 4, String(evs.length), { 'text-anchor':'middle', 'font-size':11, fill:'#F0EBE1' }, g);
+    actionnable(g, () => ouvrir('h' + h, x, y, ficheHeure(+h, evs)));
+  }
+  // routines : losanges à leur heure ; le nom s'affiche s'il ne croise aucun lien
+  for (const r of ROUTINES) {
+    const deg = hAng(r.h), [x,y] = pol(RD, deg), faite = J.routines[r.id] === 'faite';
+    const g = el('g', { class:'noeud', tabindex:0, role:'button', 'data-id':r.id, 'aria-label':r.nom });
+    el('circle', { cx:x, cy:y, r:14, fill:'rgba(200,192,176,.10)', class:'halo' }, g);
+    el('path', { d:`M${x} ${y-8} L${x+6} ${y} L${x} ${y+8} L${x-6} ${y}Z`, fill:faite ? '#C8C0B0' : '#0D0B09', stroke:'#C8C0B0', 'stroke-width':1.3 }, g);
+    const libre = postes.filter(p => p.etat !== 'libre').every(p => ecart(p.a, deg) > 20);
+    const [lx,ly] = pol(RD + 50, deg);
+    const t1 = txt(lx, ly - 2, r.nom, { 'font-size':13, fill:'#E8E2D6', class:'lisible' }, g);
+    const t2 = txt(lx, ly + 14, `${r.lib}, ${faite ? r.f : 'à venir'}`, { 'font-size':11.5, fill:'#958C7E', class:'lisible' }, g);
+    if (!libre) { t1.style.display = t2.style.display = 'none'; g.addEventListener('mouseenter', () => t1.style.display = t2.style.display = ''); g.addEventListener('mouseleave', () => t1.style.display = t2.style.display = 'none'); }
+    actionnable(g, () => ouvrir(r.id, x, y));
+  }
+  // Natsume
+  const gN = el('g', { class:'noeud', tabindex:0, role:'button', 'data-id':'natsume', 'aria-label':'Natsume' });
+  el('circle', { cx:C.x, cy:C.y, r:62, fill:'rgba(224,180,172,.08)', class:'halo' }, gN);
+  el('circle', { cx:C.x, cy:C.y, r:52, fill:'url(#gN)', stroke:'rgba(224,180,172,.45)', 'stroke-width':1.5 }, gN);
+  txt(C.x, C.y + 12, 'N', { 'text-anchor':'middle', 'font-size':40, fill:'#F0EBE1', class:'serif', 'font-style':'italic' }, gN);
+  const [px,py] = pol(52, 40);
+  el('circle', { cx:px+4, cy:py-2, r:11, fill:'#7A1818', stroke:'#0D0B09', 'stroke-width':2 }, gN);
+  txt(px+4, py+2, '3', { 'text-anchor':'middle', 'font-size':11.5, fill:'#F0EBE1' }, gN);
+  txt(C.x, C.y + RD + 42, 'Natsume', { 'text-anchor':'middle', 'font-size':26, fill:'#F0EBE1', class:'serif lisible' }, gN);
+  txt(C.x, C.y + RD + 62, 'répartit, relit, te résume', { 'text-anchor':'middle', 'font-size':12.5, fill:'#958C7E', class:'lisible' }, gN);
+  actionnable(gN, () => ouvrir('natsume', C.x, C.y));
+
+  // postes
+  for (const p of postes) {
+    const g = el('g', { class:'noeud', tabindex:0, role:'button', 'data-id':p.id, 'aria-label':p.nom });
+    if (p.etat === 'libre') {
+      el('circle', { cx:p.x, cy:p.y, r:40, fill:'rgba(200,192,176,.05)', class:'halo' }, g);
+      el('circle', { cx:p.x, cy:p.y, r:26, fill:'none', stroke:'rgba(200,192,176,.25)', 'stroke-width':1.2, 'stroke-dasharray':'3 5' }, g);
+      el('path', { d:`M${p.x-7} ${p.y}h14M${p.x} ${p.y-7}v14`, stroke:'#958C7E', 'stroke-width':1.5 }, g);
+      txt(p.x, p.y + 48, 'Relier un poste', { 'text-anchor':'middle', 'font-size':13, fill:'#958C7E' }, g);
+    } else if (p.etat === 'off') {
+      const r = RP - 8;
+      el('circle', { cx:p.x, cy:p.y, r:r + 12, fill:'rgba(200,192,176,.05)', class:'halo' }, g);
+      el('circle', { cx:p.x, cy:p.y, r, fill:'none', stroke:'rgba(200,192,176,.35)', 'stroke-width':1.3, 'stroke-dasharray':'3 5' }, g);
+      txt(p.x, p.y + 7, p.ini, { 'text-anchor':'middle', 'font-size':19, fill:'#958C7E', class:'serif', 'font-style':'italic' }, g);
+      txt(p.x, p.y + r + 24, p.nom, { 'text-anchor':'middle', 'font-size':18, fill:'#C8C0B0', class:'serif lisible' }, g);
+      txt(p.x, p.y + r + 41, 'à relier', { 'text-anchor':'middle', 'font-size':12, fill:'#958C7E', class:'lisible' }, g);
+    } else {
+      const col = COUL[p.id];
+      el('circle', { cx:p.x, cy:p.y, r:RP + 20, fill:col.doux, opacity:.5, class:'halo' }, g);
+      el('circle', { cx:p.x, cy:p.y, r:RP, fill:'#1A1612' }, g);
+      el('circle', { cx:p.x, cy:p.y, r:RP, fill:col.doux, stroke:col.trait, 'stroke-width':1.5 }, g);
+      const k = RP / 40, ic = el('g', { transform:`translate(${p.x-13*k},${p.y-13*k}) scale(${1.08*k})`, fill:'none', stroke:col.texte, 'stroke-width':1.5, 'stroke-linecap':'round', 'stroke-linejoin':'round' }, g);
+      ic.innerHTML = p.glyph === 'mail' ? '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>' : '<path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5M8 13h8M8 17h5"/>';
+      // le nombre en attente, posé sur le disque
+      const [bx,by] = pol(RP, 45, p);
+      el('circle', { cx:bx, cy:by, r:12, fill: p.urg ? '#7A1818' : col.plein, stroke:'#0D0B09', 'stroke-width':2 }, g);
+      txt(bx, by + 4, String(p.attente), { 'text-anchor':'middle', 'font-size':12, fill:'#F0EBE1', 'font-weight':400 }, g);
+      // un poste haut placé reçoit son lien par dessous : son texte passe sur le côté extérieur
+      const cote = p.y < C.y - 150 && Math.abs(p.x - C.x) < 260 ? (p.x >= C.x ? 1 : -1) : 0;
+      const tx = p.x + cote * (RP + 26), ty = cote ? p.y - RP + 20 : p.y + RP + 26, anc = cote > 0 ? 'start' : cote < 0 ? 'end' : 'middle';
+      txt(tx, ty, p.nom, { 'text-anchor':anc, 'font-size':21, fill:'#F0EBE1', class:'serif lisible' }, g);
+      txt(tx, ty + 19, p.role, { 'text-anchor':anc, 'font-size':12.5, fill:'#958C7E', class:'lisible' }, g);
+      txt(tx, ty + 36, p.act, { 'text-anchor':anc, 'font-size':12, fill:'#C8C0B0', class:'lisible' }, g);
+    }
+    actionnable(g, () => ouvrir(p.etat === 'off' && p.id !== 'ira' ? 'hypo' : p.id, p.x, p.y, p.etat === 'off' ? ficheARelier(p) : undefined));
+  }
+  marquerSel();
+}
+
+const ext = '<svg class="i" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+const reg = '<svg class="i" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>';
+const nomMonde = { acedia:"Lun'Acedia", avaritia:"Lun'Avaritia", anima:'Natsume' };
+function ficheHeure(h, evs) {
+  return { monde:'anima', h:`<div class="tete"><div><h2 id="fiche-titre">De ${h} h à ${h + 1} h</h2><p class="sous">${evs.length} ${evs.length > 1 ? 'passages' : 'passage'}, ${JOURS[jour].titre.toLowerCase()}</p></div>FERMER</div>
+    <div class="heure-liste" style="margin-top:12px">${evs.map(e => `<div class="ligne${e.urg ? ' urg' : ''}" data-monde="${e.m}"><small>${e.t}, ${e.d}</small><b>${e.q}</b></div>`).join('')}</div>
+    <div class="pied"><button class="btn">Voir la journée dans le Journal</button></div>` };
+}
+function ficheARelier(p) {
+  return { monde:'anima', h:`<div class="tete"><div><h2 id="fiche-titre">${p.nom}</h2><p class="sous">${p.hypo ? 'Poste imaginé pour la maquette, pas encore relié.' : 'Poste connu, pas encore relié.'}</p></div>FERMER</div>
+    <p style="color:var(--texte-2);margin:12px 0 0">Une fois relié, il prend la couleur de son monde sur la carte et Natsume peut lui confier du travail.</p>
+    <div class="pied"><button class="btn p">Relier ${p.nom}</button></div>` };
+}
+const FICHES = {
+  natsume: { monde:'anima', h:`<div class="tete"><div><h2 id="fiche-titre">Natsume</h2><p class="sous">Manager de l'écosystème, à l'écoute</p></div>FERMER</div>
+    <p class="voix">« Une matinée calme ; deux postes ont du travail pour toi. »</p>
+    <h3>Mode</h3><div class="seg"><span class="on">Assistante</span><span>Focus</span><span>Silence</span></div>
+    <h3>Ce qu'elle te demande</h3>
+    <div class="ligne urg" data-monde="acedia"><b>Banque : virement à confirmer</b><small>de Lun'Acedia, avant 12 h</small><div class="gestes"><button class="btn p">Ouvrir le mail</button><button class="btn">Vu</button></div></div>
+    <div class="ligne" data-monde="avaritia"><b>10 brouillons de fiches</b><small>de Lun'Avaritia</small><div class="gestes"><button class="btn p">Les passer en revue</button></div></div>
+    <div class="ligne" data-monde="avaritia"><b>Rappeler Paul</b><small>échéance aujourd'hui, de Lun'Avaritia</small><div class="gestes"><button class="btn">C'est fait</button><button class="btn">Plus tard</button></div></div>
+    <h3>Dépenses du jour</h3>
+    <div class="jauge"><span>Conversation</span><span>0,02 $ sur 1 $</span></div><div class="barrette"><i style="width:2%"></i></div>
+    <div class="jauge"><span>Routines</span><span>0,0004 $ sur 0,50 $</span></div><div class="barrette"><i style="width:.5%"></i></div>
+    <div class="pied"><button class="btn" data-aller="eco">${reg}Régler Natsume</button></div>` },
+  acedia: { monde:'acedia', h:`<div class="tete"><div><h2 id="fiche-titre">Lun'Acedia</h2><p class="sous">Mail, agenda, tâches. Relié, synchro il y a 4 min.</p></div>FERMER</div><div class="filet-monde"></div>
+    <h3>Remonté à Natsume</h3>
+    <div class="ligne urg"><b>Banque : virement à confirmer</b><small>urgent, 8 h 42</small><div class="gestes"><button class="btn p">Ouvrir le mail</button><button class="btn">Vu</button></div></div>
+    <h3>Confié par Natsume</h3>
+    <div class="ligne"><b>Rappel banque à 11 h</b><small>9 h 38, accepté</small></div>
+    <div class="ligne"><b>Trier la boîte</b><small>il y a 4 min, 12 mails rangés</small></div>
+    <div class="pied"><button class="btn p">${ext}Ouvrir Lun'Acedia</button><button class="btn" data-aller="eco">${reg}Régler ce poste</button></div>` },
+  avaritia: { monde:'avaritia', h:`<div class="tete"><div><h2 id="fiche-titre">Lun'Avaritia</h2><p class="sous">La mémoire en fiches. Relié, a répondu à 9 h 31 en 4 s.</p></div>FERMER</div><div class="filet-monde"></div>
+    <h3>En attente de ton geste</h3>
+    <div class="ligne"><b>Enrichir la fiche : Studio Exemple</b><small>Le studio a déménagé à Nantes.</small><div class="gestes"><button class="btn p">Valider</button><button class="btn">Refuser</button><button class="btn">Voir la fiche</button></div></div>
+    <div class="ligne"><b>Nouvelle fiche : Boulangerie Berthier</b><small>client potentiel</small><div class="gestes"><button class="btn p">Valider</button><button class="btn">Refuser</button></div></div>
+    <div class="ligne"><b>Échéance : Rappeler Paul</b><small>aujourd'hui</small><div class="gestes"><button class="btn">C'est fait</button><button class="btn">Plus tard</button></div></div>
+    <div class="ligne"><b>et 8 autres brouillons</b><small>à passer en revue d'un coup</small><div class="gestes"><button class="btn">Tout passer en revue</button></div></div>
+    <div class="pied"><button class="btn p">${ext}Ouvrir Lun'Avaritia</button><button class="btn" data-aller="eco">${reg}Régler ce poste</button></div>` },
+  ira: ficheARelier({ nom:"Lun'Ira" }),
+  libre: { monde:'anima', h:`<div class="tete"><div><h2 id="fiche-titre">Relier un poste</h2><p class="sous">Une place libre sur la carte.</p></div>FERMER</div>
+    <p style="color:var(--texte-2);margin:12px 0 0">Indique l'adresse du front du poste. Natsume vérifie qu'il répond, puis il prend sa place ici.</p>
+    <div class="pied"><button class="btn p">Ajouter un poste</button></div>` },
+  veille: { monde:'anima', h:`<div class="tete"><div><h2 id="fiche-titre">Veille de la nuit</h2><p class="sous">Routine de Natsume, chaque nuit à 5 h</p></div>FERMER</div>
+    <h3>Dernier passage</h3><div class="ligne"><b>Faite à 9 h 30, en rattrapage</b><small>0,0004 $</small></div>
+    <div class="pied"><button class="btn p">Lancer maintenant</button><button class="btn">Mettre en pause</button></div>` },
+  point: { monde:'anima', h:`<div class="tete"><div><h2 id="fiche-titre">Point du matin</h2><p class="sous">Routine de Natsume, chaque matin à 7 h 30</p></div>FERMER</div>
+    <h3>Dernier passage</h3><div class="ligne"><b>Fait à 9 h 31</b><small>confié à Lun'Avaritia pour les fiches</small></div>
+    <div class="pied"><button class="btn p">Lancer maintenant</button><button class="btn">Mettre en pause</button></div>` },
+};
+let sel = null;
+const echelle = () => carte.clientWidth / 1390;
+function marquerSel() { svg.querySelectorAll('.noeud').forEach(n => n.classList.toggle('sel', n.dataset.id === sel)); }
+function ouvrir(id, x, y, F = FICHES[id]) {
+  sel = id; marquerSel();
+  fiche.dataset.monde = F.monde;
+  fiche.innerHTML = F.h.replace('FERMER', '<button class="fermer" aria-label="Fermer"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>');
+  fiche.hidden = false;
+  fiche.querySelector('.fermer').onclick = fermer;
+  fiche.querySelectorAll('[data-aller]').forEach(b => b.onclick = () => montrerVue(b.dataset.aller));
+  fiche.style.maxHeight = '';
+  const k = echelle(), W = carte.clientWidth, H = carte.clientHeight, pres = Math.hypot(x - C.x, y - C.y) < RD + 40;
+  let left, top = y*k - 120;
+  if (id === 'natsume') left = x*k + 150;
+  else if (pres) { left = x > C.x ? x*k + 40 : x*k - 40 - 348; top = y*k - 60; }   // routine ou heure du cadran
+  else { left = x*k - 174; top = y < C.y ? y*k + 110 : y*k - fiche.offsetHeight - 40; }   // poste : sous lui ou au-dessus
+  left = Math.max(14, Math.min(left, W - 362));
+  if (!pres && id !== 'natsume' && y < C.y) fiche.style.maxHeight = (H - top - 14) + 'px';
+  else top = Math.max(14, Math.min(top, H - fiche.offsetHeight - 14));
+  fiche.style.left = left + 'px'; fiche.style.top = top + 'px';
+  fiche.querySelector('.fermer').focus({ preventScroll:true });
+}
+function fermer() { fiche.hidden = true; const s = sel; sel = null; marquerSel(); const n = svg.querySelector(`.noeud[data-id="${s}"]`); n && n.focus({ preventScroll:true }); }
+addEventListener('keydown', e => { if (e.key === 'Escape') { if (!fiche.hidden) fermer(); else parole.classList.remove('ouverte'); } if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && !carte.hidden) { e.preventDefault(); champ.focus(); } });
+carte.addEventListener('click', e => { if (!fiche.hidden && !fiche.contains(e.target) && !e.target.closest('.noeud')) fermer(); });
+
+function montrerLien(p, e) {
+  const L2 = LIENS[p.id];
+  document.querySelectorAll('.liaison').forEach(x => x.classList.toggle('dim', x.dataset.id !== p.id));
+  bulle.innerHTML = `<b>Natsume et ${p.nom}</b><div class="l"><span>Aller</span><span>${L2.aller}</span></div><div class="l"><span>Retour</span><span>${L2.retour}</span></div><div class="l"><span>Dernier</span><span>échange à ${L2.dernier}</span></div>`;
+  bulle.hidden = false; placerBulle(e);
+}
+function placerBulle(e) {
+  const r = carte.getBoundingClientRect();
+  bulle.style.left = Math.min(e.clientX - r.left + 16, r.width - 286) + 'px';
+  bulle.style.top = Math.min(e.clientY - r.top + 16, r.height - bulle.offsetHeight - 10) + 'px';
+}
+
+// jours et nombre de postes
+const jt = document.getElementById('jour-titre'), jd = document.getElementById('jour-date');
+function changerJour(i) { jour = i; jt.textContent = JOURS[i].titre; jd.textContent = JOURS[i].date; document.getElementById('j-prec').disabled = i === 1; document.getElementById('j-suiv').disabled = i === 0; fiche.hidden = true; dessiner(); }
+document.getElementById('j-prec').onclick = () => changerJour(1);
+document.getElementById('j-suiv').onclick = () => changerJour(0);
+document.querySelectorAll('.echelle-ctl [data-n]').forEach(b => actionnable(b, () => {
+  nPostes = +b.dataset.n; document.querySelectorAll('.echelle-ctl [data-n]').forEach(x => x.classList.toggle('on', x === b)); fiche.hidden = true; dessiner();
+}));
+
+// conversation
+const parole = document.getElementById('parole'), champ = document.getElementById('champ'), fil = document.getElementById('fil');
+champ.addEventListener('focus', () => parole.classList.add('ouverte'));
+document.getElementById('replier').onclick = () => parole.classList.remove('ouverte');
+document.getElementById('saisie').addEventListener('submit', e => {
+  e.preventDefault(); const v = champ.value.trim(); if (!v) return;
+  const m = document.createElement('p'); m.className = 'msg moi'; m.textContent = v; fil.append(m);
+  const r = document.createElement('p'); r.className = 'msg n';
+  r.innerHTML = `<span class="qui">Natsume</span>Entendu, je le confie à Lun'Avaritia.<br><span class="confie" data-monde="avaritia"><span class="d"></span>Confié à Lun'Avaritia, maintenant</span>`;
+  setTimeout(() => { fil.append(r); fil.scrollTop = fil.scrollHeight; }, 500);
+  champ.value = ''; fil.scrollTop = fil.scrollHeight;
+});
+
+// ---------- Écosystème : un thème à la fois ----------
+const pt = '<span class="point"></span>';
+const THEMES = [
+  { id:'postes', nom:'Postes', etat:"Lun'Acedia, Lun'Avaritia", h:`<h2>Postes</h2><p class="voix">Deux postes reliés, un à relier.</p>
+    <div class="reglages" data-monde="acedia">
+      <div class="poste-tete"><div class="disc">Ac</div><div><div class="nom">Lun'Acedia</div><div class="etat-p">${pt}relié, synchro il y a 4 min</div></div>
+        <div class="gestes"><button class="btn">${ext}Ouvrir</button></div></div>
+      <div class="rg"><div class="lib"><b>Adresse du front</b><small>là où s'ouvre Lun'Acedia, dans un nouvel onglet</small></div><span class="adresse">localhost:8787</span><button class="btn">Régler l'adresse</button></div>
+      <div class="rg"><div class="lib"><b>Son agent</b><small>agent par défaut ; nom, icône et ton se règlent dans le poste</small></div></div>
+    </div>
+    <div class="reglages" data-monde="avaritia">
+      <div class="poste-tete"><div class="disc">Av</div><div><div class="nom">Lun'Avaritia</div><div class="etat-p">${pt}relié, a répondu à 9 h 31 en 4 s</div></div>
+        <div class="gestes"><button class="btn">${ext}Ouvrir</button></div></div>
+      <div class="rg"><div class="lib"><b>Adresse du front</b><small>là où s'ouvre Lun'Avaritia, dans un nouvel onglet</small></div><span class="adresse">adresse du NAS</span><button class="btn">Régler l'adresse</button></div>
+      <div class="rg"><div class="lib"><b>Son agent</b><small>agent par défaut ; nom, icône et ton se règlent dans le poste</small></div></div>
+    </div>
+    <div class="reglages">
+      <div class="poste-tete"><div class="disc off">Ir</div><div><div class="nom">Lun'Ira</div><div class="etat-p">pas encore relié</div></div>
+        <div class="gestes"><button class="btn">Relier</button></div></div>
+    </div>
+    <button class="btn p">Relier un poste</button>` },
+  { id:'depenses', nom:'Dépenses et plafonds', etat:"0,02 $ sur 1,50 $ aujourd'hui", h:`<h2>Dépenses et plafonds</h2><p class="voix">0,02 $ sur 7 jours.</p>
+    <div class="reglages"><div class="rg"><div class="lib"><b>Conversation</b><small>0,02 $ aujourd'hui</small></div><span class="val">plafond 1 $ par jour</span><button class="btn">Changer</button></div>
+    <div class="rg"><div class="lib"><b>Routines</b><small>0,0004 $ aujourd'hui</small></div><span class="val">plafond 0,50 $ par jour</span><button class="btn">Changer</button></div></div>` },
+  { id:'modele', nom:'Modèle et clé', etat:'clé en place', h:`<h2>Modèle et clé</h2><p class="voix">La clé est en place.</p>
+    <div class="reglages"><div class="rg"><div class="lib"><b>Modèle</b><small>utilisé pour la conversation et les routines</small></div><button class="btn">Choisir</button></div>
+    <div class="rg"><div class="lib"><b>Clé du fournisseur</b><small>en place</small></div><button class="btn">Remplacer la clé</button></div></div>` },
+  { id:'routines', nom:'Routines', etat:'veille et point faits ce matin', h:`<h2>Routines</h2><p class="voix">Les deux routines sont passées ce matin.</p>
+    <div class="reglages"><div class="rg"><div class="lib"><b>Veille de la nuit</b><small>chaque nuit à 5 h ; faite à 9 h 30, 0,0004 $</small></div><button class="btn">Lancer maintenant</button><button class="btn">Mettre en pause</button></div>
+    <div class="rg"><div class="lib"><b>Point du matin</b><small>chaque matin à 7 h 30 ; fait à 9 h 31</small></div><button class="btn">Lancer maintenant</button><button class="btn">Mettre en pause</button></div></div>` },
+  { id:'appareils', nom:'Appareils', etat:'2 appairés', h:`<h2>Appareils</h2><p class="voix">Là où Natsume te parle.</p>
+    <div class="reglages"><div class="rg"><div class="lib"><b>Téléphone</b><small>notifications activées</small></div><button class="btn">Retirer</button></div>
+    <div class="rg"><div class="lib"><b>Navigateur du bureau</b><small>cette session</small></div></div></div>
+    <button class="btn p">Appairer un appareil</button>` },
+  { id:'notifs', nom:'Notifications', etat:'activées sur ce téléphone', h:`<h2>Notifications</h2><p class="voix">Activées sur le téléphone.</p>
+    <div class="reglages"><div class="rg"><div class="lib"><b>Téléphone</b><small>urgences et cartes à valider</small></div><button class="btn">Couper</button></div></div>` },
+];
+const ecoNav = document.getElementById('eco-nav'), ecoTheme = document.getElementById('eco-theme');
+let themeSel = 'postes';
+function rendreEco() {
+  ecoNav.innerHTML = THEMES.map(t => `<button data-t="${t.id}" class="${t.id === themeSel ? 'on' : ''}" aria-current="${t.id === themeSel}"><div class="lib">${t.nom}<small>${t.etat}</small></div></button>`).join('');
+  ecoTheme.innerHTML = THEMES.find(t => t.id === themeSel).h;
+  ecoNav.querySelectorAll('button').forEach(b => b.onclick = () => { themeSel = b.dataset.t; rendreEco(); });
+}
+function montrerVue(v) {
+  if (v === 'journal') return;   // hors de cette maquette
+  fiche.hidden = true;
+  document.getElementById('carte').hidden = v !== 'carte';
+  document.getElementById('eco').hidden = v !== 'eco';
+  document.querySelectorAll('.onglets a').forEach(a => a.classList.toggle('on', a.dataset.vue === v));
+  if (v === 'eco') rendreEco(); else dessiner();
+}
+document.querySelectorAll('.onglets a').forEach(a => actionnable(a, () => montrerVue(a.dataset.vue)));
+
+dessiner();
+</script>
+</body>
+</html>
