@@ -1,6 +1,6 @@
 # Stack
 
-> Choix communs de l'écosystème, décidés à l'étape 2 : [ADR 0002](../adr/0002-stack.md). Un projet
+> Choix communs de l'écosystème, décidés à l'étape 2 : [ADR 0002](../adr/0002-stack.md), remplacé par l'[ADR 0007](../adr/0007-stack-mobile-pwa.md). Un projet
 > qui s'en écarte le justifie par un ADR dans `docs/decisions/`.
 
 ## Langages
@@ -17,7 +17,7 @@
 | Serveurs (core, satellites) | Node + TypeScript ; le framework HTTP est choisi par le premier projet qui en a besoin, par un ADR |
 | Front (apps de Lun'Anima, fronts autonomes des satellites) | Svelte 5 + Vite, tokens de [`design.md`](design.md) |
 | App desktop | Tauri 2 (zone de notification, démarrage, mises à jour, services lancés sans console) |
-| App mobile | Capacitor, Android |
+| App mobile | PWA servie par le core, Web Push ; Capacitor en porte de sortie (ADR 0007) |
 | Website | Astro |
 | Écrans | chaque produit a les siens ; les apps du core n'intègrent pas les écrans d'un satellite (contrat satellite, « Fronts ») |
 

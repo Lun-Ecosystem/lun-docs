@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Lun'Anima, le catalogue des postes</title>
+<link rel="stylesheet" href="lun.css">
+<style>
+.groupe-rail { margin-top: 18px; }
+.groupe-rail .t { font-size: 12px; color: var(--texte-3); margin: 0 10px 6px; }
+.lien.poste-l .carre { width: 18px; height: 18px; border-radius: 5px; background: var(--accent); flex: none; }
+.lien.poste-l .ext { margin-left: auto; color: var(--texte-3); font-size: 12px; }
+.lien.poste-l .nb { margin-left: auto; font-size: 11px; color: var(--accent-texte); }
+.feuille.cat { top: auto; height: 470px; }
+.tuiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 16px; }
+.tuile-p { border: 1px solid var(--accent-bord); background: var(--accent-doux); border-radius: var(--r-3); padding: 12px; display: flex; flex-direction: column; gap: 6px; min-height: 118px; }
+.tuile-p .nm { font: 500 18px var(--serif); color: var(--texte); }
+.tuile-p .rl2 { font-size: 12px; color: var(--texte-2); }
+.tuile-p .bas2 { margin-top: auto; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--accent-texte); }
+.tuile-p.off { border-color: var(--bordure); background: var(--surface-2); }
+.tuile-p.off .bas2 { color: var(--texte-3); }
+.ouvre { font-size: 12.5px; color: var(--accent-texte); display: inline-flex; gap: 4px; align-items: center; }
+.etapes { max-width: 1440px; margin: 30px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.etapes div { border-top: 1px solid var(--bordure-forte); padding-top: 10px; color: var(--texte-2); font-size: 13.5px; }
+.etapes b { display: block; font: 500 17px var(--serif); color: var(--texte); margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="planche" data-monde="anima">
+  <h1>Lun'Anima, le catalogue des postes</h1>
+  <p>L'app du core n'embarque aucun écran d'un satellite. Pour lire un mail ou ouvrir une fiche, elle ouvre le front du poste, au bon endroit. Le catalogue n'est pas une cinquième section : c'est un lanceur, toujours à portée.</p>
+
+  <div class="rang"><div>
+  <div class="bureau" style="height:600px">
+    <nav class="rail">
+      <div class="marque">Lun' <em>Anima</em></div>
+      <div class="lien actif"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/></svg>Accueil</div>
+      <div class="lien"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m8 12 3 3 5-6"/></svg>À valider<span class="pastille">4</span></div>
+      <div class="lien"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Journal</div>
+      <div class="lien"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>Écosystème</div>
+      <div class="groupe-rail">
+        <div class="t">Postes</div>
+        <div class="lien poste-l" data-monde="acedia"><span class="carre"></span>Lun'Acedia<span class="nb">2</span></div>
+        <div class="lien poste-l" data-monde="avaritia"><span class="carre"></span>Lun'Avaritia<span class="nb">2</span></div>
+      </div>
+      <div class="bas"><div class="service"><div class="t"><span class="point"></span>Tout tourne</div><div class="s">2 postes en ligne</div></div></div>
+    </nav>
+    <div class="centre">
+      <div class="barre"><div class="recherche"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Rechercher ou lancer une commande<span class="kbd">Ctrl K</span></div></div>
+      <div class="page" style="grid-template-columns: minmax(0,1fr) 300px">
+        <section>
+          <div class="jour"><h2>Vendredi 30 octobre</h2></div>
+          <h3 class="bloc">À traiter</h3>
+          <div class="liste">
+            <div class="ligne urgente" data-monde="acedia"><span class="monde"></span>
+              <div class="corps"><div class="titre">Banque : virement à confirmer avant 12 h</div><div class="meta"><span class="projet">Lun'Acedia</span><span class="badge danger">urgent</span><span class="ouvre">Lire dans Lun'Acedia ↗</span></div></div>
+              <div class="actions"><span class="btn fantome">Vu</span><span class="btn">Ouvrir le mail</span></div></div>
+            <div class="ligne" data-monde="avaritia"><span class="monde"></span>
+              <div class="corps"><div class="titre">Adresse de Paul : deux versions</div><div class="meta"><span class="projet">Lun'Avaritia</span><span>contradiction</span></div></div>
+              <div class="actions"><span class="btn second">Voir la fiche</span><span class="btn">Trancher</span></div></div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="bulle-bureau" style="position:absolute;right:18px;bottom:18px;height:42px;border-radius:21px;padding:0 14px 0 12px;display:flex;align-items:center;gap:9px;background:var(--surface-2);border:1px solid var(--accent-bord);box-shadow:var(--ombre-2);font-size:13.5px"><span class="presence"></span>Natsume<span class="kbd" style="margin-left:4px">Ctrl J</span></div>
+  </div>
+  <p class="legende">Bureau : un groupe Postes en bas du rail, avec ce qui attend chez chacun. Un clic ouvre son front dans un nouvel onglet. « Ouvrir le mail » ouvre Lun'Acedia directement sur ce mail.</p>
+  </div></div>
+
+  <div class="rang" style="justify-content:center">
+    <div>
+      <div class="tel">
+        <div class="haut"><div class="marque">Lun' <em>Anima</em></div><div class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div></div>
+        <div class="defile">
+          <div class="jour"><h2>Vendredi 30 octobre</h2></div>
+          <h3 class="bloc">À traiter</h3>
+          <div class="liste">
+            <div class="ligne urgente" data-monde="acedia"><span class="monde"></span><div class="corps"><div class="titre">Banque : virement à confirmer avant 12 h</div><div class="meta"><span class="projet">Lun'Acedia</span><span class="badge danger">urgent</span></div><div class="actions"><span class="btn fantome">Vu</span><span class="btn">Ouvrir le mail ↗</span></div></div></div>
+          </div>
+        </div>
+        <div class="voile"></div>
+        <div class="feuille cat">
+          <div class="poignee"></div>
+          <div class="tete"><span class="nom">Postes</span><span class="ctx">ouvrir le front d'un poste</span></div>
+          <div class="tuiles">
+            <div class="tuile-p" data-monde="acedia"><span class="nm">Lun'Acedia</span><span class="rl2">mail, agenda, tâches</span><span class="bas2"><span class="point"></span>2 à valider</span></div>
+            <div class="tuile-p" data-monde="avaritia"><span class="nm">Lun'Avaritia</span><span class="rl2">mémoire, fiches</span><span class="bas2"><span class="point"></span>2 à valider</span></div>
+            <div class="tuile-p off"><span class="nm">Relier un poste</span><span class="rl2">depuis Écosystème</span><span class="bas2">+</span></div>
+          </div>
+        </div>
+        <div class="nav-mob">
+          <div class="on"><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg></span>Accueil</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span><span class="cpt">4</span>À valider</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Journal</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg></span>Écosystème</div>
+        </div>
+      </div>
+      <p class="legende">Téléphone : l'icône en haut à droite ouvre les postes, en tuiles à la couleur de chacun.</p>
+    </div>
+    <div>
+      <div class="tel" data-monde="acedia">
+        <div class="haut" style="border-bottom:1px solid var(--bordure)"><div class="marque" style="font-size:19px">Lun' <em>Acedia</em></div><span style="font-size:12px;color:var(--texte-3)">Réception</span></div>
+        <div class="defile" style="padding-top:14px">
+          <div style="font:500 22px var(--serif)">Virement à confirmer</div>
+          <div style="font-size:12.5px;color:var(--texte-3);margin:4px 0 14px">Banque · 9 h 42</div>
+          <div style="color:var(--texte-2);font-size:14px">Bonjour, un virement de 1 250 € attend votre confirmation dans votre espace avant 12 h…</div>
+        </div>
+      </div>
+      <p class="legende">Le mail s'ouvre dans le front de Lun'Acedia (son app installée ou un onglet), avec son propre accent. Le bouton retour du téléphone ramène à Lun'Anima ; le front n'affiche rien du core.</p>
+    </div>
+  </div>
+
+  <div class="etapes">
+    <div><b>Une adresse par poste</b>Chaque poste relié garde l'adresse de son front, joignable depuis l'appareil (réseau local au MVP, Tailscale ensuite).</div>
+    <div><b>Un lien profond</b>Une carte ou une alerte peut dire où elle vit dans le front de son poste (le mail, la fiche) : un champ facultatif du contrat, sans rupture.</div>
+    <div><b>Un appairage par appareil</b>La première fois, le front du poste demande son propre code sur ce téléphone, comme aujourd'hui. Puis il garde son jeton.</div>
+    <div><b>Rien du core dans le front</b>Le satellite ne sait pas qu'on vient de Lun'Anima : le lien entre, rien ne pointe en retour.</div>
+  </div>
+</div>
+</body>
+</html>
