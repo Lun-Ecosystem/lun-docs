@@ -76,26 +76,32 @@ mobile est construit en premier, sur des composants déjà pensés pour le deskt
 | **Journal** | Qu'est-ce qui a été fait, par qui, quand ? **[choix Claude]** |
 | **Écosystème** | Combien ça coûte, et comment je le règle ? |
 
-Desktop : un rail à gauche (kit : rail avec compteurs et carte d'état du service), la recherche et la
-palette de commandes (Ctrl K) en haut. Mobile : la barre de navigation du kit en bas, avec compteur
-sur À valider.
+Desktop : la colonne de Natsume à gauche (§3.3) ; à droite, une barre haute porte les quatre
+sections, la recherche et la palette de commandes (Ctrl K), et le lanceur des postes. Pas de rail de
+satellite : la gauche est à Natsume **[choix Claude]**. Mobile : la barre de navigation du kit en bas,
+avec compteur sur À valider.
 
-### 3.3 Natsume, une présence et non une page
+### 3.3 Natsume, au centre du core
 
-La conversation ne prend aucune section : **elle suit partout**, sur la même logique que l'agent des
-satellites (bulle de Lun'Avaritia, panneau de Pina).
+Le core n'est pas un satellite de plus. Dans un satellite, le travail (les mails, les fiches) tient le
+centre et l'agent aide depuis un coin ; dans le core, **Natsume tient le centre et l'écosystème est
+autour d'elle** (cadrage revu avec CrOliX le 2026-10-30). Les deux appareils n'ont pas le même rôle :
 
-- **Desktop** : une bulle en bas à droite ; Ctrl J ou un clic ouvre un **panneau flottant qui se
-  superpose** à la page, sans la pousser ni la redimensionner. Il reste ouvert quand on change de
-  section.
-- **Mobile** : la bulle flotte au-dessus de la barre de navigation, sur tous les écrans. Elle ouvre
-  une **feuille** qui monte par-dessus l'écran en cours ; on la rabat pour revenir où l'on était. Le
-  **micro du téléphone** est à portée dans la saisie : c'est la dictée d'Android (clavier ou
-  reconnaissance du navigateur), qui donne du texte ; rien n'est transcrit par le core avant le
-  chantier 7 **[choix Claude]**.
-- **Contenu** : le fil principal par défaut, et les sujets accessibles depuis le panneau. Les cartes
-  d'une délégation s'affichent dans le fil, avec leurs actions, à la couleur de leur poste.
-- La voix du chantier 7 passera par cette même présence.
+- **Desktop : l'environnement complet de Natsume, et celui par défaut** (le PC est au réseau du NAS).
+  Une colonne de Natsume, à gauche, **sur toutes les sections** : sa présence en tête (nom, état,
+  phrase du jour), puis la conversation, attachée et non dans une bulle. La place de la présence est
+  celle que prendront l'avatar, la voix et plus tard le stream (chantier 7), sans refaire l'écran. Le
+  reste de la largeur montre la section. La colonne se replie (Ctrl J) pour qui veut toute la place.
+- **Mobile : la version compagnon, le strict nécessaire.** Ni avatar ni voix : Natsume est présente
+  par ses mots, avec son contexte et sa mémoire. Une barre « Écrire à Natsume » se tient au-dessus de
+  la barre de navigation, sur tous les écrans ; elle ouvre une **feuille** qui monte par-dessus
+  l'écran en cours. Le **micro du téléphone** y est à portée : c'est la dictée d'Android, qui donne du
+  texte ; rien n'est transcrit par le core avant le chantier 7 **[choix Claude]**.
+- **Son état** se lit en un mot à côté de son nom : à l'écoute, réfléchit, en pause (plafond atteint,
+  clé absente). Le seul mouvement voulu de l'app est celui de ce point d'état. Son **humeur**
+  viendra avec sa personnalité, au chantier 7 : le core ne la tient pas encore **[choix Claude]**.
+- **Contenu** : le fil principal par défaut, et les sujets accessibles depuis la conversation. Les
+  cartes d'une délégation s'affichent dans le fil, avec leurs actions, à la couleur de leur poste.
 
 ### 3.4 L'accueil
 
@@ -107,6 +113,8 @@ urgent attend.
   base (événements, routines, dépense, état) s'affiche tout de suite ; la part de chaque poste
   (cartes, échéances) se charge à côté, bloc par bloc, avec un squelette puis « Lun'Xxx ne répond
   pas » s'il tarde **[choix Claude]**.
+- **Ce qu'elle t'apporte** : l'accueil est le briefing de Natsume, pas un tableau de bord. Au
+  desktop, il occupe la largeur à côté de sa colonne ; au mobile, il est l'écran.
 - **La journée** : la date en titre, et une ligne dans la voix de Natsume. La routine de 7 h 30 l'écrit
   dans **le même appel** que le contexte chaud (un champ court de plus dans sa réponse) et la garde à
   côté ; sans elle, l'accueil n'affiche que la date **[choix Claude]**.
@@ -119,12 +127,15 @@ urgent attend.
     à Natsume, et la carte de remplacement suit le chemin habituel ; « Plus tard » la masque de
     l'accueil jusqu'au lendemain, côté core, sans toucher Avaritia ;
   - une urgence : « Vu » la retire de l'accueil (voir le cycle d'une alerte, §3.8).
+- **Ce qui circule** : les dernières délégations de Natsume, en une ligne chacune (« J'ai demandé à
+  Pina … », et ce qui en est revenu). C'est le trafic réel du pont entre les postes **[choix Claude]**.
 - **À côté** : la nuit et le matin (veille, point du matin, leur résultat en une ligne), l'état des
   postes, la dépense du jour face au plafond, l'échéance de la clé.
 - **La couleur dit d'où vient la chose** : chaque ligne, carte ou bandeau porte `data-monde` de son
   poste. Le filet, le nom du poste et le bouton principal prennent l'accent du monde : bleu
   Lun'Acedia, or Lun'Avaritia, rouge Lun'Anima (jamais en texte, règle B).
-- **Point ouvert** : la disposition des blocs et l'occupation de l'espace ne sont pas validées (§10).
+- **Point ouvert** : la disposition des blocs est à valider sur la planche
+  [`05-accueil-centre.html`](../maquettes/2026-10-30-apps-core/05-accueil-centre.html) (§10).
 
 ### 3.5 À valider
 
@@ -212,7 +223,7 @@ L'app du core **n'embarque aucun écran d'un satellite**, pas même un morceau (
 pour lire un mail ou ouvrir une fiche, elle **ouvre le front du poste, au bon endroit**. C'est le rôle
 de portail que le desktop devait déjà jouer, tenu aussi par le mobile.
 
-- **Un lanceur, pas une section** : au desktop, un groupe « Postes » en bas du rail ; au mobile, une
+- **Un lanceur, pas une section** : au desktop, un bouton « Postes » dans la barre haute ; au mobile, une
   icône en haut à droite qui ouvre les postes en tuiles. Chaque poste porte son monde, son rôle, son
   état et ce qui attend chez lui.
 - **Un lien profond** : une carte ou une alerte peut dire où elle vit dans le front de son poste.
@@ -237,8 +248,8 @@ de portail que le desktop devait déjà jouer, tenu aussi par le mobile.
 
 Un chantier, une PR par palier, dans l'ordre **[choix Claude]** :
 
-1. **Le socle** : workspace `ui/`, kit repris (§9), service sous `/app`, appairage, coque (rail, barre
-   mobile, bulle et panneau de Natsume avec le fil en SSE), **Accueil** et **À valider**.
+1. **Le socle** : workspace `ui/`, kit repris (§9), service sous `/app`, appairage, coque (barre haute, barre
+   mobile, colonne de Natsume au desktop et feuille au mobile, avec le fil en SSE), **Accueil** et **À valider**.
 2. **Journal, Écosystème et catalogue** : les routes de réglage manquantes côté core, les deux
    sections, le catalogue des postes et le contrat v1.3 (liens profonds, chez les satellites aussi).
 3. **Les notifications** : les quatre événements du core à créer, la file de rendu, Web Push vers
@@ -287,9 +298,8 @@ Chaque choix structurant donne un ADR.
 
 ## 10. Points ouverts
 
-- **La disposition de l'accueil** : la base des maquettes sert de première version ; l'agencement des
-  blocs et l'occupation de l'espace seront repris, au desktop comme au mobile. Le palier 1 commence
-  par cette reprise : une planche que CrOliX valide avant le code de l'accueil. La coque, l'appairage
+- **La disposition de l'accueil** : reprise avec Natsume au centre (§3.3) sur la planche
+  `05-accueil-centre.html`, que CrOliX valide avant le code de l'accueil et de la coque revue. La coque, l'appairage
   et À valider n'attendent pas **[choix Claude]**.
 
 ## 11. Recette
@@ -300,8 +310,8 @@ Vérifiée dans Chrome en 1440 px et 390 px, puis sur le téléphone de CrOliX e
 - Ouvrir l'app : l'accueil s'affiche sans appel au modèle (aucun coût ajouté) ; urgence, échéance et
   cartes en tête, chaque ligne à la couleur de son poste.
 - Valider une carte de Lun'Acedia et une de Lun'Avaritia depuis l'accueil, puis depuis À valider.
-- Ouvrir Natsume depuis trois sections différentes, dicter une demande au micro, recevoir une carte
-  dans le fil, la valider ; le panneau ne pousse pas la page au desktop.
+- Écrire à Natsume depuis trois sections différentes, dicter une demande au micro, recevoir une
+  carte dans le fil, la valider ; au desktop, sa colonne reste à sa place d'une section à l'autre.
 - Changer le plafond de la conversation dans Écosystème : pris en compte sans redémarrer le core.
 - Révoquer un appareil : il est refusé à l'appel suivant.
 - Un rappel d'agenda (P0) fait sonner le téléphone, app fermée ; trois cartes (P1) donnent une seule
