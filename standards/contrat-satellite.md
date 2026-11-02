@@ -101,7 +101,7 @@ avant toute action. Plusieurs autorisations peuvent être en attente, chacune av
 
 - **Deux pauses** : `pause` accepte `{ reason?, by?: 'core' }` et `resume` `{ by?: 'core' }` ; `Health.pausedBy` dit qui l'a posée. `resume` avec `by: 'core'` ne lève qu'une pause du core ; une pause locale ne se lève que dans le front du poste. Un `409` répond à une pause déjà posée (ou à une reprise d'une pause non posée) de la même origine ; le core le prend pour un accusé.
 - **Pause du core** (décision de CrOliX) : le poste garde son tri par règles seules (sans modèle, gratuit), donc ses urgences issues de règles remontent ; il répond à `/agent` pour les demandes de CrOliX et les gestes, « C'est fait » compris, et sert ses lectures, ses événements et les gestes sur ses cartes ; tout ce qui est automatique et passe par le modèle s'arrête.
-- **Pause locale** : arrêt complet de ce poste, comme avant la v1.4 ; `/agent` répond qu'il est en pause.
+- **Pause locale** : arrêt complet de ce poste, qui devient muet pour le core ; `/agent` répond qu'il est en pause.
 - **Nom d'agent** : `Health.agentName`, tiré d'un réglage du poste, **vide par défaut** ; vide ou absent, il n'est pas envoyé et aucune ligne Agent n'apparaît.
 - **Importance** : fixée par le satellite selon [`notifications.md`](notifications.md) (paliers P0 à P4).
   Le core rend selon le mode ; le satellite ne connaît pas les modes. `low` et `log` inconnus d'un client valent `info`.
