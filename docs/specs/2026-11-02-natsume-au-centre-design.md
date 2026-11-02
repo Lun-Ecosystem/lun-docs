@@ -210,7 +210,7 @@ le toast ; le geste précédent part à son heure et ne s'annule plus **[choix d
 n'agit pas depuis un champ. Toast sans annulation (information) : 3 s.
 
 Textes **[choix de rédaction pour la forme générique]** : « Validée : Paul Mercier. », « Refusée :
-Adresse de Marion. », « Urgence vue : la banque demande un justificatif. », « Réponse envoyée dans
+Adresse de Marion. », « Urgence vue : la banque demande un justificatif. », « Brouillon créé dans
 5 s : Réponse à Paul. », « Réponse donnée : Chez Lulu. », « 5 fiches validées. » (le type au pluriel
 quand le lot n'a qu'un type, sinon « cartes »), « Les deux fiches validées. », « Une fiche validée,
 l'autre refusée. », « Natsume en pause. », « Natsume reprend. », « Lun'Acedia répond. ».
@@ -319,7 +319,7 @@ téléphone) :
 - **Gestes** : Valider et Refuser ; Urgence : Vu et « Ouvrir le mail » (nouvel onglet, vers le
   poste) ; Question : un bouton par réponse proposée et un champ « Autre réponse, Entrée envoie »,
   les deux relayés comme une acceptation avec `input` `{ answer }` (§9.8) ;
-  carte qui envoie : « Envoyer la réponse », Refuser, « Modifier dans Lun'Acedia », jamais en lot, V
+  carte qui écrit dehors (`sends`, un brouillon Gmail, jamais un envoi) : « Créer le brouillon », Refuser, « Modifier dans Lun'Acedia », jamais en lot, V
   sans effet ; échéance : C'est fait, Plus tard.
 - **Pile** : deux cartes d'un même poste, du même type et du même titre forment une pile qui compte
   pour une rangée **[choix de rédaction : critère de la pile]**. Type « Deux fiches, même nom »,
@@ -756,7 +756,7 @@ une version plus ancienne, il est **muet** pour le core (§9.7).
 - ne plus déclarer « Pina » en dur : le nom d'agent devient un réglage du poste, vide par défaut, et
   ne part dans `health` que rempli ;
 - remplir `kind`, `reason`, `sends` (brouillon de réponse), `lines` et `data.due` quand il les a ;
-  servir la v1.4 dans `health`.
+  déclarer `contract: '1.4'` dans `health` (champ dédié ; `version` reste la version du paquet).
 
 **Ce que Lun'Avaritia doit changer** :
 - `/agent` (`server/src/contract/routes.ts`, ligne 192) refuse tout en pause : même règle, il ne
@@ -764,7 +764,7 @@ une version plus ancienne, il est **muet** pour le core (§9.7).
 - sous une pause du core, ses traitements automatiques par le modèle s'arrêtent, ses lectures
   continuent ;
 - remplir `kind`, `reason` et `options` pour ses questions, lire `input.answer` à l'acceptation ;
-  servir la v1.4 dans `health`.
+  déclarer `contract: '1.4'` dans `health` (champ dédié ; `version` reste la version du paquet).
 
 Les deux gardent la règle « rien du core dans le front ».
 
