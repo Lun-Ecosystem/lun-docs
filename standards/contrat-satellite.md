@@ -2,7 +2,7 @@
 
 > Ce que tout satellite expose pour être piloté par Lun'Anima sans que le core connaisse son métier.
 > Décision : [ADR 0004](../adr/0004-delegation-aux-agents.md), qui remplace l'[ADR 0003](../adr/0003-contrat-satellite.md).
-> Version du contrat : **v1.3**.
+> Version du contrat : **v1.4**.
 
 ## Principe
 
@@ -20,16 +20,16 @@ l'API métier du satellite.
 |---|---|---|
 | `GET /lun/v1/authorize?client&redirect_uri&state&code_challenge` | publique, mène à la page d'autorisation du satellite | page HTML, ou redirection vers `redirect_uri` |
 | `POST /lun/v1/pair` `{ code }` ou `{ code, code_verifier, client }` | échange un code d'appairage (6 chiffres) ou un code d'autorisation contre un jeton | `{ token, satellite: { id, nom, version } }` |
-| `GET /lun/v1/health` | santé et état | `{ status, reason?, version, paused?, agent? }` |
+| `GET /lun/v1/health` | santé et état | `{ status, reason?, version, contract?, paused?, pausedBy?, agent?, agentName? }` |
 | `GET /lun/v1/costs?since=<ISO>` | dépense depuis une date | `{ currency: 'USD', since, until, total, items }` |
-| `POST /lun/v1/pause` `{ reason? }` | coupe toute action automatique | `{ status }` |
-| `POST /lun/v1/resume` | rétablit les actions automatiques | `{ status }` |
+| `POST /lun/v1/pause` `{ reason?, by? }` | coupe toute action automatique | `{ status }` |
+| `POST /lun/v1/resume` `{ by? }` | rétablit les actions automatiques | `{ status }` |
 | `GET /lun/v1/events` | flux SSE des événements, reprise par `Last-Event-ID` | flux |
 | `GET /lun/v1/actions` | actions disponibles | `{ actions }` |
 | `POST /lun/v1/actions/:name` | invoque une action, corps validé par son schéma | `{ ok, result?, error? }` |
 | `POST /lun/v1/agent` `{ request, context? }` | confie une demande à l'agent du satellite | `AgentReply` |
 | `GET /lun/v1/cards?status=pending` | cartes du satellite (par défaut, en attente) | `{ cards: Card[] }` |
-| `POST /lun/v1/cards/:id/accept` `{ input? }` | valide une carte, `input` remplace l'entrée (« Modifier ») | `{ card: Card }` |
+| `POST /lun/v1/cards/:id/accept` `{ input? }` | valide une carte, `input` remplace l'entrée (« Modifier »), ou porte `{ answer }` pour une carte qui a des `options` | `{ card: Card }` |
 | `POST /lun/v1/cards/:id/refuse` | refuse une carte | `{ card: Card }` |
 
 ## Types
@@ -38,10 +38,10 @@ l'API métier du satellite.
 type Status = 'ok' | 'paused' | 'degraded';
 type Importance = 'urgent' | 'normal' | 'low' | 'info' | 'log'; // paliers P0 à P4 : standards/notifications.md
 
-interface Health { status: Status; reason?: string; version: string; paused?: true; agent?: true } // paused : en pause alors que l'état affiché est degraded ; agent : sert agent et cards
+interface Health { status: Status; reason?: string; version: string; contract?: string; paused?: true; pausedBy?: 'core' | 'local'; agent?: true; agentName?: string } // contract : version du contrat servie, `'1.4'` ; paused : en pause alors que l'état affiché est degraded ; pausedBy : qui a posé la pause ; agent : sert agent et cards ; agentName : nom de l'agent, absent tant que le réglage est vide
 interface CostItem { provider: string; model?: string; amount: number; calls: number }
 interface Costs { currency: 'USD'; since: string; until: string; total: number; items: CostItem[] }
-interface LunEvent { id: string; type: string; importance: Importance; at: string; title: string; data?: unknown; link?: string } // link : chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse
+interface LunEvent { id: string; type: string; importance: Importance; at: string; title: string; data?: unknown; link?: string; lines?: string[] } // link : chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse ; lines : contenu montré à l'urgence dépliée ; data.due : heure limite ISO, quand le poste la connaît
 interface Action { name: string; description: string; input: object /* JSON Schema */; effect: 'read' | 'write' | 'delete' }
 interface ActionResult { ok: boolean; result?: unknown; error?: string }
 
@@ -49,7 +49,7 @@ interface AgentRequest { request: string; context?: Record<string, string> } // 
 interface AgentReply { summary: string; cards: Card[]; refs: Ref[]; cost: { currency: 'USD'; amount: number } }
 interface Ref { type: string; id: string; title: string } // ce que la réponse cite : un mail, un événement…
 type CardStatus = 'pending' | 'done' | 'refused' | 'failed' | 'expired';
-interface Card { id: string; action: string; effect: 'write' | 'delete'; title: string; lines: string[]; status: CardStatus; at: string; error?: string; link?: string } // lines : cible et nouvelles valeurs, rédigées pour un humain ; link : chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse
+interface Card { id: string; action: string; effect: 'write' | 'delete'; title: string; lines: string[]; status: CardStatus; at: string; error?: string; link?: string; kind?: string; reason?: string; sends?: true; options?: string[] } // lines : cible et nouvelles valeurs, rédigées pour un humain ; link : chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse ; kind : libellé court du type (« Nouvelle fiche ») ; reason : la raison, à la troisième personne ; sends : valider envoie quelque chose hors de chez CrOliX ; options : réponses proposées d'une question
 interface DigestItem { type: string; title: string; at: string; ref?: Ref }
 interface Digest { since: string; until: string; received: DigestItem[]; done: DigestItem[]; pending: number }
 ```
@@ -99,17 +99,17 @@ avant toute action. Plusieurs autorisations peuvent être en attente, chacune av
 
 ## Comportements
 
-- **Pause** : le satellite continue de servir ses lectures et ses événements ; seules les actions
-  automatiques (tri, écritures, appels LLM non demandés) s'arrêtent. Une action invoquée à la main
-  reste possible.
+- **Deux pauses** : `pause` accepte `{ reason?, by?: 'core' }` et `resume` `{ by?: 'core' }` ; `Health.pausedBy` dit qui l'a posée. `resume` avec `by: 'core'` ne lève qu'une pause du core ; une pause locale ne se lève que dans le front du poste. Un `409` répond à une pause déjà posée (ou à une reprise d'une pause non posée) de la même origine ; le core le prend pour un accusé.
+- **Pause du core** (décision de CrOliX) : le poste garde son tri par règles seules (sans modèle, gratuit), donc ses urgences issues de règles remontent ; il répond à `/agent` pour les demandes de CrOliX et les gestes, « C'est fait » compris, et sert ses lectures, ses événements et les gestes sur ses cartes ; tout ce qui est automatique et passe par le modèle s'arrête.
+- **Pause locale** : arrêt complet de ce poste, comme avant la v1.4 ; `/agent` répond qu'il est en pause.
+- **Nom d'agent** : `Health.agentName`, tiré d'un réglage du poste, **vide par défaut** ; vide ou absent, il n'est pas envoyé et aucune ligne Agent n'apparaît.
 - **Importance** : fixée par le satellite selon [`notifications.md`](notifications.md) (paliers P0 à P4).
-  Le core rend selon le mode ; le satellite ne connaît pas les modes. `low` et `log` inconnus d'un
-  client valent `info`.
+  Le core rend selon le mode ; le satellite ne connaît pas les modes. `low` et `log` inconnus d'un client valent `info`.
 - **Délégation** (`agent`, `cards` : seulement si `health` porte `agent: true`) : l'agent applique ses
   règles. Écriture = carte ; suppression = toujours une carte, quel que soit le mode ; jamais d'envoi
   de message. Une lecture simple peut passer par une action du catalogue, sans agent.
 - **Cartes** : elles vivent chez le satellite, qui garde la décision et le journal. Le core les
-  affiche et transmet le geste ; une carte qui n'est plus en attente ne se valide ni ne se refuse.
+  affiche et transmet le geste ; une carte qui n'est plus en attente ne se valide ni ne se refuse. Sans `kind`, le core écrit « Carte ». Une carte qui a `sends` ou `options` ne se valide jamais en lot. Une réponse libre (hors `options`) qu'une carte ne sait pas prendre vaut `400`.
 - **Bilan du jour** : tout satellite à données sert l'action de lecture `day.digest` `{ since, until }` (ISO UTC) qui rend un `Digest`.
   Le core choisit la période ; le satellite ne connaît pas la journée de Natsume.
 - **Alertes** : `urgent` est réservé aux alertes issues de règles déterministes, pour joindre CrOliX
@@ -147,4 +147,4 @@ le core et n'intègrent jamais ceux d'un satellite : se ressembler n'est pas un 
 
 Une rupture (route retirée, champ renommé ou rendu obligatoire) crée `/lun/v2`. La v1 reste servie
 jusqu'à ce que le core soit migré. Ajouter un champ optionnel ou une route (comme `authorize`) n'est pas une rupture.
-Sans rupture, la v1.1 ajoute `agent`, `cards`, `day.digest`, `Health.agent`, les importances `low`, `log`, la v1.2 `brain.due` (Avaritia §4.2), et la v1.3 `link` sur `Card` et `LunEvent`.
+Sans rupture de route ni de champ, la v1.1 ajoute `agent`, `cards`, `day.digest`, `Health.agent`, les importances `low`, `log`, la v1.2 `brain.due` (Avaritia §4.2), la v1.3 `link` sur `Card` et `LunEvent`. La v1.4 ajoute `by`, `pausedBy`, `agentName`, `contract`, `kind`, `reason`, `sends`, `options`, `answer`, `lines` et `data.due`, et **change le comportement en pause** : un poste qui ne déclare pas `contract` `1.4` ou plus est muet pour le core.
