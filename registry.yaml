@@ -50,7 +50,7 @@ projets:
     depot: Lun-Ecosystem/lun-acedia
     visibilite: public
     etat: en-dev
-    description: "Serveur de la journée : mail, agenda et tâches Google, triés à la source, avec son assistante Pina."
+    description: "Serveur de la journée : mail, agenda et tâches Google, triés à la source, avec son agent."
 
   - id: lunavaritia
     nom: "Lun'Avaritia"
