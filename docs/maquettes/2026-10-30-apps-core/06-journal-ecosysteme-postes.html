@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Lun'Anima, journal, écosystème et postes</title>
+<link rel="stylesheet" href="lun.css">
+<style>
+/* ===== colonne de Natsume (desktop) ===== */
+.colonne { width: 440px; flex: none; display: flex; flex-direction: column; border-right: 1px solid var(--bordure); background: var(--surface-1); position: relative; }
+.colonne .marque { margin: 18px 22px 0; }
+.scene { position: relative; padding: 34px 28px 22px; border-bottom: 1px solid var(--bordure); overflow: hidden; }
+.scene .croissant { position: absolute; right: -18px; top: 6px; width: 190px; height: 190px; color: var(--lune); opacity: .16; }
+.scene .nom-n { font: 500 46px/1 var(--serif); margin: 0; position: relative; }
+.etat { display: flex; align-items: center; gap: 9px; margin-top: 10px; font-size: 13px; color: var(--texte-2); position: relative; }
+.etat .presence { animation: souffle 4.8s ease-in-out infinite; }
+@keyframes souffle { 0%, 100% { box-shadow: 0 0 0 3px var(--accent-doux); } 50% { box-shadow: 0 0 0 7px transparent; } }
+@media (prefers-reduced-motion: reduce) { .etat .presence { animation: none; } }
+.scene .phrase { font: italic 400 21px/1.38 var(--serif); color: var(--texte); margin: 22px 0 0; max-width: 34ch; position: relative; }
+.colonne .messages { padding: 18px 22px; gap: 14px; }
+.colonne .saisie { margin: 0 18px 18px; }
+.replier { position: absolute; top: 16px; right: 16px; color: var(--texte-3); display: flex; align-items: center; gap: 8px; font-size: 12px; z-index: 2; }
+
+/* ===== largeur de la section ===== */
+.section { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.haute { height: 58px; flex: none; display: flex; align-items: center; gap: 4px; padding: 0 22px 0 26px; border-bottom: 1px solid var(--bordure); }
+.onglet { height: 34px; padding: 0 13px; border-radius: var(--r-2); display: flex; align-items: center; gap: 8px; color: var(--texte-2); font-size: 13.5px; }
+.onglet.actif { background: var(--appui); color: var(--texte); }
+.onglet .pastille { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--accent); color: var(--ivoire); font-size: 11px; display: grid; place-items: center; }
+.haute .recherche { margin-left: auto; width: 300px; }
+.postes-b { height: 34px; padding: 0 12px; border-radius: var(--r-2); border: 1px solid var(--bordure); display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--texte-2); margin-left: 10px; }
+.postes-b .d { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.briefing { flex: 1; overflow: hidden; padding: 28px 34px 0; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-content: start; }
+.briefing .jour h2 { font-size: 30px; }
+.briefing .jour p { margin: 6px 0 0; color: var(--texte-3); font-size: 13px; }
+.briefing aside h3.bloc:first-child { margin-top: 4px; }
+.circule { display: grid; gap: 12px; }
+.deleg { border-left: 2px solid var(--accent); padding: 2px 0 2px 12px; }
+.deleg .q { font: italic 400 17px/1.32 var(--serif); color: var(--texte); }
+.deleg .r { font-size: 12.5px; color: var(--texte-2); margin-top: 3px; }
+.deleg .h { font-size: 11.5px; color: var(--texte-3); margin-top: 2px; }
+.instruments { display: grid; gap: 8px; }
+.instr { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--texte-2); padding-bottom: 8px; border-bottom: 1px solid var(--bordure); }
+.instr b { font-weight: 400; font-size: 13.5px; color: var(--texte); font-variant-numeric: tabular-nums; }
+.instr:last-child { border-bottom: 0; }
+
+/* ===== téléphone, compagnon ===== */
+.tel .presence-l { display: flex; align-items: baseline; gap: 9px; margin: 2px 0 14px; }
+.tel .presence-l .presence { align-self: center; }
+.tel .presence-l .n { font: 500 17px var(--serif); }
+.tel .presence-l .e { font-size: 12.5px; color: var(--texte-3); }
+.tel .jour .voix { margin-top: 6px; }
+.tel .deleg { margin-top: 4px; }
+.ecrire { position: absolute; left: 12px; right: 12px; bottom: 84px; height: 48px; border-radius: var(--r-3); border: 1px solid var(--accent-bord); background: var(--surface-2); box-shadow: var(--ombre-2); display: flex; align-items: center; gap: 10px; padding: 0 6px 0 14px; color: var(--texte-3); font-size: 14px; }
+.ecrire .presence { width: 8px; height: 8px; }
+.ecrire .micro { width: 36px; height: 36px; }
+.tel .defile { padding-bottom: 150px; }
+.feuille .tete .e { font-size: 12.5px; color: var(--texte-3); }
+.feuille .messages { padding: 16px; }
+/* ===== commun aux trois écrans ===== */
+.corps-s { flex: 1; min-width: 0; overflow: hidden; padding: 28px 34px 0; }
+.corps-s h2 { font: 500 30px/1.1 var(--serif); margin: 0; }
+.corps-s .sous { margin: 6px 0 0; color: var(--texte-3); font-size: 13px; }
+.colonne.courte .scene { padding-bottom: 18px; }
+.colonne.courte .scene .phrase { font-size: 18px; margin-top: 16px; }
+
+/* ===== journal ===== */
+.filtres { display: flex; gap: 6px; margin: 18px 0 4px; }
+.puce { height: 30px; padding: 0 12px; border-radius: var(--r-rond); border: 1px solid var(--bordure); display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--texte-2); }
+.puce.on { background: var(--appui); border-color: var(--bordure-forte); color: var(--texte); }
+.puce .d { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.jour-j { font: 500 17px var(--serif); margin: 22px 0 8px; display: flex; align-items: baseline; gap: 10px; }
+.jour-j span { font: 300 12px var(--sans); color: var(--texte-3); }
+.trace { display: grid; grid-template-columns: 52px 3px minmax(0, 1fr) auto; gap: 0 14px; align-items: start; padding: 10px 0; border-top: 1px solid var(--bordure); font-size: 13.5px; }
+.trace:first-of-type { border-top: 0; }
+.trace .h { color: var(--texte-3); font-size: 12.5px; font-variant-numeric: tabular-nums; padding-top: 1px; }
+.trace .filet { align-self: stretch; border-radius: 2px; background: var(--accent); }
+.trace .quoi { color: var(--texte); }
+.trace .quoi small { display: block; color: var(--texte-3); font-size: 12px; margin-top: 1px; }
+.trace .quoi .p { color: var(--accent-texte); }
+.issue { font-size: 11.5px; line-height: 19px; padding: 0 8px; border-radius: var(--r-rond); border: 1px solid var(--bordure-forte); color: var(--texte-2); white-space: nowrap; }
+.issue.ok { color: var(--ok); background: var(--ok-doux); border-color: var(--ok-bord); }
+.issue.non { color: var(--texte-3); }
+.issue.ko { color: var(--danger); background: var(--danger-doux); border-color: var(--danger-bord); }
+
+/* ===== écosystème ===== */
+.reglages { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 28px; margin-top: 18px; }
+.themes { display: flex; flex-direction: column; gap: 2px; }
+.theme { height: 34px; padding: 0 10px; border-radius: var(--r-2); display: flex; align-items: center; gap: 8px; color: var(--texte-2); font-size: 13px; }
+.theme.on { background: var(--appui); color: var(--texte); }
+.theme .e { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+.theme .e.att { background: var(--attention); }
+.cartes-r { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-content: start; }
+.reg { border: 1px solid var(--bordure); border-radius: var(--r-3); background: var(--surface-1); }
+.reg > h4 { font: 500 17px var(--serif); margin: 0; padding: 13px 16px 4px; display: flex; align-items: baseline; gap: 10px; }
+.reg > h4 span { font: 300 12px var(--sans); color: var(--texte-3); }
+.rl { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid var(--bordure); font-size: 13.5px; }
+.reg > h4 + .rl { border-top: 0; }
+.rl .lib { flex: 1; min-width: 0; }
+.rl .lib small { display: block; color: var(--texte-3); font-size: 12px; }
+.rl .nom-p { color: var(--accent-texte); }
+.champ { height: 30px; min-width: 70px; border: 1px solid var(--bordure-forte); border-radius: var(--r-1); background: var(--surface-2); display: inline-flex; align-items: center; padding: 0 10px; color: var(--texte); font-size: 13px; font-variant-numeric: tabular-nums; }
+.bascule { width: 34px; height: 20px; border-radius: 10px; background: var(--accent); position: relative; flex: none; }
+.bascule::after { content: ''; position: absolute; right: 3px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--ivoire); }
+.mini-barres { display: flex; align-items: flex-end; gap: 5px; height: 36px; padding: 0 16px 10px; }
+.mini-barres i { flex: 1; background: var(--surface-3); border-radius: 2px; }
+.mini-barres i.auj { background: var(--accent); }
+.point { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
+.point.att { background: var(--attention); }
+.point.monde { background: var(--accent); }
+
+/* ===== lanceur des postes ===== */
+.postes-b.ouvert { background: var(--appui); border-color: var(--bordure-forte); color: var(--texte); }
+.lanceur { position: absolute; top: 62px; right: 22px; width: 400px; background: var(--surface-2); border: 1px solid var(--bordure-forte); border-radius: var(--r-3); box-shadow: var(--ombre-2); padding: 12px; z-index: 5; display: grid; gap: 8px; }
+.tuile { border: 1px solid var(--accent-bord); border-radius: var(--r-2); background: var(--accent-doux); padding: 12px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; }
+.tuile .n { font: 500 18px var(--serif); color: var(--texte); }
+.tuile .r { font-size: 12.5px; color: var(--texte-2); grid-column: 1; }
+.tuile .a { font-size: 12px; color: var(--accent-texte); grid-column: 1; margin-top: 4px; display: flex; align-items: center; gap: 7px; }
+.tuile .btn { grid-column: 2; grid-row: 1 / span 3; }
+.tuile.sans { border-color: var(--bordure); background: var(--surface-1); }
+.tuile.sans .a { color: var(--texte-3); }
+.voile-l { position: absolute; inset: 0; background: color-mix(in srgb, var(--fond) 55%, transparent); z-index: 4; }
+
+/* ===== téléphone ===== */
+.tel .jour-j { margin-top: 16px; }
+.tel .trace { grid-template-columns: 50px 3px minmax(0, 1fr); gap: 0 12px; }
+.trace .h { white-space: nowrap; }
+.tel .trace .issue { grid-column: 3; justify-self: start; margin-top: 6px; }
+.tel .filtres { overflow: hidden; }
+.groupe { border: 1px solid var(--bordure); border-radius: var(--r-3); background: var(--surface-1); overflow: hidden; margin-top: 12px; }
+.gl { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-top: 1px solid var(--bordure); font-size: 14px; }
+.gl:first-child { border-top: 0; }
+.gl .lib { flex: 1; } .gl .lib small { display: block; font-size: 12px; color: var(--texte-3); }
+.gl .chev { color: var(--texte-3); }
+.feuille-p { position: absolute; left: 0; right: 0; bottom: 0; top: 140px; background: var(--surface-1); border-top: 1px solid var(--bordure-forte); border-radius: 20px 20px 0 0; padding: 10px 16px; display: grid; gap: 10px; align-content: start; z-index: 5; }
+.feuille-p .poignee { width: 38px; height: 4px; border-radius: 2px; background: var(--bordure-forte); margin: 0 auto 4px; }
+.feuille-p h3 { font: 500 22px var(--serif); margin: 0 0 2px; }
+</style>
+</head>
+
+<body>
+<div class="planche" data-monde="anima">
+  <h1>Lun'Anima, journal, écosystème et postes</h1>
+  <p>Le palier 2 dans la coque validée en planche 05 : la colonne de Natsume reste à gauche, seule la droite change. Le Journal raconte ce qui a été fait ; l'Écosystème remplace le terminal et le <code>.env</code> ; le lanceur Postes ouvre le front de chaque poste, sans rien en embarquer.</p>
+
+  <!-- ==================== JOURNAL, BUREAU ==================== -->
+  <div class="rang"><div>
+  <div class="bureau">
+    <div class="colonne courte" data-monde="anima">
+      <div class="marque">Lun' <em>Anima</em></div>
+      <div class="replier"><span class="kbd">Ctrl J</span></div>
+      <div class="scene">
+        <svg class="croissant" viewBox="0 0 120 120" aria-hidden="true">
+          <defs><mask id="c1"><rect width="120" height="120" fill="#fff"/><circle cx="78" cy="48" r="46" fill="#000"/></mask></defs>
+          <circle cx="60" cy="60" r="52" fill="currentColor" mask="url(#c1)"/>
+        </svg>
+        <p class="nom-n">Natsume</p>
+        <div class="etat"><span class="presence"></span>à l'écoute</div>
+        <p class="phrase">Une urgence ce matin, la banque, avant midi. Paul attend ton rappel ; le reste peut attendre ta pause.</p>
+      </div>
+      <div class="messages">
+        <div class="m moi">Qu’est-ce que j’ai validé ce matin ?</div>
+        <div class="m elle"><div class="qui">Natsume</div>La réponse à Paul, à 10 h 12. Tu as vu l’alerte de la banque à 9 h 50 et tranché l’adresse de Paul chez Lun'Avaritia.</div>
+      </div>
+      <div class="saisie">Écrire à Natsume<span class="rond"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+    </div>
+
+    <div class="section">
+      <div class="haute">
+        <div class="onglet">Accueil</div>
+        <div class="onglet">À valider<span class="pastille">2</span></div>
+        <div class="onglet actif">Journal</div>
+        <div class="onglet">Écosystème</div>
+        <div class="recherche"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Rechercher ou lancer une commande<span class="kbd">Ctrl K</span></div>
+        <div class="postes-b"><span class="d" data-monde="acedia"></span><span class="d" data-monde="avaritia"></span>Postes</div>
+      </div>
+      <div class="corps-s">
+        <h2>Journal</h2>
+        <p class="sous">Ce qui a été fait, du plus récent au plus ancien. Rien ne s’y modifie.</p>
+        <div class="filtres"><span class="puce on">Tout</span><span class="puce" data-monde="acedia"><span class="d"></span>Lun'Acedia</span><span class="puce" data-monde="avaritia"><span class="d"></span>Lun'Avaritia</span><span class="puce" data-monde="anima"><span class="d"></span>Lun'Anima</span></div>
+          <div class="jour-j">Aujourd'hui <span>vendredi 30 octobre</span></div>
+          <div class="trace" data-monde="acedia"><span class="h">10 h 12</span><span class="filet"></span><div class="quoi">Réponse à Paul envoyée<small><span class="p">Lun'Acedia</span>, brouillon validé depuis le fil de Natsume</small></div><span class="issue ok">validée</span></div>
+          <div class="trace" data-monde="acedia"><span class="h">9 h 50</span><span class="filet"></span><div class="quoi">Banque : virement à confirmer avant 12 h<small><span class="p">Lun'Acedia</span>, urgence vue sur le téléphone</small></div><span class="issue">vue</span></div>
+          <div class="trace" data-monde="avaritia"><span class="h">9 h 31</span><span class="filet"></span><div class="quoi">Adresse de Paul : deux versions<small><span class="p">Lun'Avaritia</span>, contradiction tranchée dans son front</small></div><span class="issue">depuis le poste</span></div>
+          <div class="trace" data-monde="anima"><span class="h">7 h 30</span><span class="filet"></span><div class="quoi">Point du matin<small>cinq éléments, une relance ; 0,0004 $</small></div><span class="issue ok">fait</span></div>
+          <div class="trace" data-monde="anima"><span class="h">5 h 00</span><span class="filet"></span><div class="quoi">Veille de la nuit<small>trois observations rangées ; 0,0009 $</small></div><span class="issue ok">faite</span></div>
+          <div class="jour-j">Hier <span>jeudi 29 octobre</span></div>
+          <div class="trace" data-monde="avaritia"><span class="h">18 h 10</span><span class="filet"></span><div class="quoi">Studio Exemple : nouveau contact<small><span class="p">Lun'Avaritia</span>, refusé depuis l'accueil</small></div><span class="issue non">refusée</span></div>
+          <div class="trace" data-monde="acedia"><span class="h">16 h 02</span><span class="filet"></span><div class="quoi">Tri : 4 mails rangés dans « Factures »<small><span class="p">Lun'Acedia</span>, événement du poste</small></div><span class="issue">info</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="legende">Bureau, 1440 px. Une ligne par chose faite : l'heure, le filet du poste, ce qui s'est passé et d'où, puis l'issue. Une carte décidée dans le front d'un poste n'y paraît que par ses événements. Les routines du core portent le rouge de Lun'Anima.</p>
+  </div></div>
+
+  <!-- ==================== ÉCOSYSTÈME, BUREAU ==================== -->
+  <div class="rang"><div>
+  <div class="bureau">
+    <div class="colonne courte" data-monde="anima">
+      <div class="marque">Lun' <em>Anima</em></div>
+      <div class="replier"><span class="kbd">Ctrl J</span></div>
+      <div class="scene">
+        <svg class="croissant" viewBox="0 0 120 120" aria-hidden="true">
+          <defs><mask id="c2"><rect width="120" height="120" fill="#fff"/><circle cx="78" cy="48" r="46" fill="#000"/></mask></defs>
+          <circle cx="60" cy="60" r="52" fill="currentColor" mask="url(#c2)"/>
+        </svg>
+        <p class="nom-n">Natsume</p>
+        <div class="etat"><span class="presence"></span>à l'écoute</div>
+        <p class="phrase">Une urgence ce matin, la banque, avant midi. Paul attend ton rappel ; le reste peut attendre ta pause.</p>
+      </div>
+      <div class="messages">
+        <div class="m moi">Monte le plafond de la conversation à 2 $ pour aujourd’hui.</div>
+        <div class="m elle"><div class="qui">Natsume</div>Ça se règle dans Écosystème, Dépenses et plafonds. Je ne touche pas à tes plafonds moi-même.</div>
+      </div>
+      <div class="saisie">Écrire à Natsume<span class="rond"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+    </div>
+
+    <div class="section">
+      <div class="haute">
+        <div class="onglet">Accueil</div>
+        <div class="onglet">À valider<span class="pastille">2</span></div>
+        <div class="onglet">Journal</div>
+        <div class="onglet actif">Écosystème</div>
+        <div class="recherche"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Rechercher ou lancer une commande<span class="kbd">Ctrl K</span></div>
+        <div class="postes-b"><span class="d" data-monde="acedia"></span><span class="d" data-monde="avaritia"></span>Postes</div>
+      </div>
+      <div class="corps-s">
+        <h2>Écosystème</h2>
+        <p class="sous">Tout tourne. Deux postes en ligne, 0,12 $ dépensés sur 1 $ aujourd'hui.</p>
+        <div class="reglages">
+          <div class="themes">
+            <div class="theme on">Postes<span class="e"></span></div>
+            <div class="theme">Dépenses et plafonds<span class="e"></span></div>
+            <div class="theme">Modèle et clé<span class="e att"></span></div>
+            <div class="theme">Routines<span class="e"></span></div>
+            <div class="theme">Appareils</div>
+            <div class="theme">Notifications</div>
+          </div>
+          <div class="cartes-r">
+            <div class="reg">
+              <h4>Postes <span>2 reliés</span></h4>
+              <div class="rl" data-monde="acedia"><span class="point monde"></span><div class="lib"><span class="nom-p">Lun'Acedia</span><small>mail, agenda, tâches ; vu il y a 1 min</small></div><span class="btn second">Ouvrir</span></div>
+              <div class="rl" data-monde="avaritia"><span class="point monde"></span><div class="lib"><span class="nom-p">Lun'Avaritia</span><small>notes et fiches ; vu il y a 1 min</small></div><span class="btn second">Ouvrir</span></div>
+              <div class="rl"><div class="lib">Relier un poste<small>son adresse, puis le code à 6 chiffres qu'il affiche</small></div><span class="btn">Relier</span></div>
+            </div>
+            <div class="reg">
+              <h4>Dépenses et plafonds <span>de 5 h à 5 h</span></h4>
+              <div class="mini-barres"><i style="height:40%"></i><i style="height:65%"></i><i style="height:30%"></i><i style="height:80%"></i><i style="height:55%"></i><i style="height:45%"></i><i class="auj" style="height:20%"></i></div>
+              <div class="rl"><div class="lib">Conversation<small>0,12 $ aujourd'hui</small></div><span class="champ">1,00 $</span></div>
+              <div class="rl"><div class="lib">Routines<small>0,001 $ aujourd'hui</small></div><span class="champ">0,50 $</span></div>
+            </div>
+            <div class="reg">
+              <h4>Modèle et clé</h4>
+              <div class="rl"><span class="point att"></span><div class="lib">Clé du fournisseur<small>en service, expire le 22 novembre</small></div><span class="btn second">Remplacer</span></div>
+              <div class="rl"><div class="lib">Modèle de la conversation</div><span class="champ">gpt-5-mini</span></div>
+              <div class="rl"><div class="lib">Longueur d'une réponse<small>en jetons, au plus</small></div><span class="champ">800</span></div>
+            </div>
+            <div class="reg">
+              <h4>Routines</h4>
+              <div class="rl"><span class="point"></span><div class="lib">Veille de la nuit, 5 h<small>faite à 5 h 02</small></div><span class="btn second">Lancer</span></div>
+              <div class="rl"><span class="point"></span><div class="lib">Point du matin, 7 h 30<small>fait à 7 h 30, cinq éléments</small></div><span class="btn second">Lancer</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="legende">Bureau. Une colonne de thèmes, chaque thème est une carte de lignes du kit. La pastille dit l'état ; l'orange annonce un geste à venir (la clé). Appareils et Notifications suivent dans la même grille. Un réglage posé ici s'applique sans redémarrer le core et l'emporte sur le <code>.env</code>.</p>
+  </div></div>
+
+  <!-- ==================== POSTES, BUREAU ==================== -->
+  <div class="rang"><div>
+  <div class="bureau" style="height:520px">
+    <div class="colonne courte" data-monde="anima">
+      <div class="marque">Lun' <em>Anima</em></div>
+      <div class="replier"><span class="kbd">Ctrl J</span></div>
+      <div class="scene">
+        <svg class="croissant" viewBox="0 0 120 120" aria-hidden="true">
+          <defs><mask id="c3"><rect width="120" height="120" fill="#fff"/><circle cx="78" cy="48" r="46" fill="#000"/></mask></defs>
+          <circle cx="60" cy="60" r="52" fill="currentColor" mask="url(#c3)"/>
+        </svg>
+        <p class="nom-n">Natsume</p>
+        <div class="etat"><span class="presence"></span>à l'écoute</div>
+        <p class="phrase">Une urgence ce matin, la banque, avant midi. Paul attend ton rappel ; le reste peut attendre ta pause.</p>
+      </div>
+      <div class="messages">
+        <div class="m elle"><div class="qui">Natsume</div>Pina a deux brouillons qui t’attendent chez Lun'Acedia.</div>
+      </div>
+      <div class="saisie">Écrire à Natsume<span class="rond"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+    </div>
+
+    <div class="section">
+      <div class="haute">
+        <div class="onglet">Accueil</div>
+        <div class="onglet">À valider<span class="pastille">2</span></div>
+        <div class="onglet">Journal</div>
+        <div class="onglet">Écosystème</div>
+        <div class="recherche"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Rechercher ou lancer une commande<span class="kbd">Ctrl K</span></div>
+        <div class="postes-b ouvert"><span class="d" data-monde="acedia"></span><span class="d" data-monde="avaritia"></span>Postes</div>
+      </div>
+      <div class="corps-s"><h2>Vendredi 30 octobre</h2><p class="sous">Quatre choses pour toi, la plus pressante d'abord.</p></div>
+    </div>
+    <div class="voile-l"></div>
+    <div class="lanceur">
+          <div class="tuile" data-monde="acedia"><span class="n">Lun'Acedia</span><span class="r">Mail, agenda, tâches</span><span class="a"><span class="point monde"></span>2 brouillons, 1 urgence</span><span class="btn">Ouvrir</span></div>
+          <div class="tuile" data-monde="avaritia"><span class="n">Lun'Avaritia</span><span class="r">Notes et fiches</span><span class="a"><span class="point monde"></span>1 contradiction</span><span class="btn">Ouvrir</span></div>
+          <div class="tuile sans" data-monde="ira"><span class="n">Lun'Ira</span><span class="r">Pas encore relié</span><span class="a">Adresse de son front à régler dans Écosystème</span></div>
+    </div>
+  </div>
+  <p class="legende">Bureau. « Postes » ouvre le lanceur sur la page en cours : une tuile par poste, à sa couleur, avec ce qui attend chez lui. « Ouvrir » ouvre son front dans un nouvel onglet ; une carte ou une alerte qui sait où elle vit ouvre le front au bon endroit (« Ouvrir le mail »). Sans adresse de front, pas de bouton.</p>
+  </div></div>
+
+  <!-- ==================== TÉLÉPHONE ==================== -->
+  <div class="rang" style="justify-content:center">
+    <div>
+      <div class="tel">
+        <div class="haut"><div class="marque">Lun' <em>Anima</em></div><div class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div></div>
+        <div class="defile">
+          <div class="jour"><h2>Journal</h2></div>
+        <div class="filtres"><span class="puce on">Tout</span><span class="puce" data-monde="acedia"><span class="d"></span>Acedia</span><span class="puce" data-monde="avaritia"><span class="d"></span>Avaritia</span><span class="puce" data-monde="anima"><span class="d"></span>Anima</span></div>
+          <div class="jour-j">Aujourd'hui <span>vendredi 30 octobre</span></div>
+          <div class="trace" data-monde="acedia"><span class="h">10 h 12</span><span class="filet"></span><div class="quoi">Réponse à Paul envoyée<small><span class="p">Lun'Acedia</span>, brouillon validé depuis le fil de Natsume</small></div><span class="issue ok">validée</span></div>
+          <div class="trace" data-monde="acedia"><span class="h">9 h 50</span><span class="filet"></span><div class="quoi">Banque : virement à confirmer avant 12 h<small><span class="p">Lun'Acedia</span>, urgence vue sur le téléphone</small></div><span class="issue">vue</span></div>
+          <div class="trace" data-monde="avaritia"><span class="h">9 h 31</span><span class="filet"></span><div class="quoi">Adresse de Paul : deux versions<small><span class="p">Lun'Avaritia</span>, contradiction tranchée dans son front</small></div><span class="issue">depuis le poste</span></div>
+          <div class="trace" data-monde="anima"><span class="h">7 h 30</span><span class="filet"></span><div class="quoi">Point du matin<small>cinq éléments, une relance ; 0,0004 $</small></div><span class="issue ok">fait</span></div>
+          <div class="trace" data-monde="anima"><span class="h">5 h 00</span><span class="filet"></span><div class="quoi">Veille de la nuit<small>trois observations rangées ; 0,0009 $</small></div><span class="issue ok">faite</span></div>
+          <div class="jour-j">Hier <span>jeudi 29 octobre</span></div>
+          <div class="trace" data-monde="avaritia"><span class="h">18 h 10</span><span class="filet"></span><div class="quoi">Studio Exemple : nouveau contact<small><span class="p">Lun'Avaritia</span>, refusé depuis l'accueil</small></div><span class="issue non">refusée</span></div>
+          <div class="trace" data-monde="acedia"><span class="h">16 h 02</span><span class="filet"></span><div class="quoi">Tri : 4 mails rangés dans « Factures »<small><span class="p">Lun'Acedia</span>, événement du poste</small></div><span class="issue">info</span></div>
+        </div>
+        <div class="ecrire" data-monde="anima"><span class="presence"></span>Écrire à Natsume</div>
+        <div class="nav-mob">
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg></span>Accueil</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span><span class="cpt">2</span>À valider</div>
+          <div class="on"><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Journal</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg></span>Écosystème</div>
+        </div>
+      </div>
+      <p class="legende">Téléphone, 390 px. Les mêmes lignes ; l'issue passe sous le texte.</p>
+    </div>
+    <div>
+      <div class="tel">
+        <div class="haut"><div class="marque">Lun' <em>Anima</em></div><div class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div></div>
+        <div class="defile">
+          <div class="jour"><h2>Écosystème</h2><p class="voix" style="font-size:16px">Tout tourne. Deux postes en ligne.</p></div>
+          <div class="groupe">
+            <div class="gl"><span class="point"></span><div class="lib">Postes<small>Lun'Acedia, Lun'Avaritia</small></div><span class="chev">›</span></div>
+            <div class="gl"><span class="point"></span><div class="lib">Dépenses et plafonds<small>0,12 $ sur 1 $</small></div><span class="chev">›</span></div>
+            <div class="gl"><span class="point att"></span><div class="lib">Modèle et clé<small>la clé expire dans 23 jours</small></div><span class="chev">›</span></div>
+            <div class="gl"><span class="point"></span><div class="lib">Routines<small>veille et point faits ce matin</small></div><span class="chev">›</span></div>
+          </div>
+          <div class="groupe">
+            <div class="gl"><div class="lib">Appareils<small>3 appairés</small></div><span class="chev">›</span></div>
+            <div class="gl"><div class="lib">Notifications<small>activées sur ce téléphone</small></div><span class="chev">›</span></div>
+          </div>
+        </div>
+        <div class="ecrire" data-monde="anima"><span class="presence"></span>Écrire à Natsume</div>
+        <div class="nav-mob">
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg></span>Accueil</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span><span class="cpt">2</span>À valider</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Journal</div>
+          <div class="on"><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg></span>Écosystème</div>
+        </div>
+      </div>
+      <p class="legende">Téléphone. La liste des thèmes et leur état en une ligne ; un thème ouvert montre les mêmes lignes qu'au bureau.</p>
+    </div>
+    <div>
+      <div class="tel">
+        <div class="haut"><div class="marque">Lun' <em>Anima</em></div><div class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div></div>
+        <div class="defile"><div class="jour"><h2>Vendredi 30 octobre</h2></div></div>
+        <div class="voile-l"></div>
+        <div class="feuille-p">
+          <div class="poignee"></div>
+          <h3>Postes</h3>
+          <div class="tuile" data-monde="acedia"><span class="n">Lun'Acedia</span><span class="r">Mail, agenda, tâches</span><span class="a"><span class="point monde"></span>2 brouillons, 1 urgence</span><span class="btn">Ouvrir</span></div>
+          <div class="tuile" data-monde="avaritia"><span class="n">Lun'Avaritia</span><span class="r">Notes et fiches</span><span class="a"><span class="point monde"></span>1 contradiction</span><span class="btn">Ouvrir</span></div>
+        </div>
+        <div class="ecrire" data-monde="anima"><span class="presence"></span>Écrire à Natsume</div>
+        <div class="nav-mob">
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/></svg></span>Accueil</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span><span class="cpt">2</span>À valider</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Journal</div>
+          <div><span class="fond-ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg></span>Écosystème</div>
+        </div>
+      </div>
+      <p class="legende">Téléphone. L'icône en haut à droite monte les postes en feuille. Le front s'ouvre dans son app installée ou un onglet ; le retour du téléphone ramène à Lun'Anima, et le front n'affiche rien du core.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
