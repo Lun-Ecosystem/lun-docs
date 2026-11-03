@@ -120,6 +120,54 @@ describe('toast', () => {
     expect(message.closest('[data-ton]')).toHaveAttribute('data-ton', 'danger');
     expect(screen.queryByRole('button', { name: 'Annuler' })).toBeNull();
   });
+
+  it('a danger toast stays 5 s', async () => {
+    render(Toaster);
+    toast('Échec.', { tone: 'danger' });
+    await tick();
+    await vi.advanceTimersByTimeAsync(4999);
+    expect(screen.getByText('Échec.')).toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(1);
+    expect(screen.queryByText('Échec.')).toBeNull();
+  });
+
+  it('of several information toasts waiting, only the latest shows after the undoable one, for 3 s', async () => {
+    render(Toaster);
+    toast('Validée : A.', { undo: vi.fn(() => Promise.resolve()) });
+    toast('Info 1.');
+    toast('Info 2.');
+    await vi.advanceTimersByTimeAsync(5000);
+    expect(screen.queryByText('Info 1.')).toBeNull();
+    expect(screen.getByText('Info 2.')).toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(2999);
+    expect(screen.getByText('Info 2.')).toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(1);
+    expect(screen.queryByText('Info 2.')).toBeNull();
+  });
+
+  it('a waiting information toast survives a new undoable toast', async () => {
+    render(Toaster);
+    toast('Validée : A.', { undo: vi.fn(() => Promise.resolve()) });
+    toast('Déjà tranchée ailleurs.');
+    toast('Validée : B.', { undo: vi.fn(() => Promise.resolve()) });
+    await tick();
+    expect(screen.getByText('Validée : B.')).toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(5000);
+    expect(screen.getByText('Déjà tranchée ailleurs.')).toBeInTheDocument();
+  });
+
+  it('the seconds and the key hint are hidden from the live region', async () => {
+    render(Toaster);
+    toast('Validée : A.', { undo: vi.fn(() => Promise.resolve()) });
+    await tick();
+    expect(screen.getByText('5 s')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByText('Ctrl Z').closest('[aria-hidden="true"]')).not.toBeNull();
+  });
+
+  it('contained changes the placement', async () => {
+    const { container } = render(Toaster, { contained: true });
+    expect(container.querySelector('.toaster')).toHaveClass('contained');
+  });
 });
 
 describe('CodeInput', () => {
@@ -135,9 +183,7 @@ describe('CodeInput', () => {
   });
 
   it('outside a Field, is described by the id it is given', () => {
-    render(CodeInput, {
-      props: { error: true, 'aria-describedby': 'pourquoi' },
-    });
+    render(CodeInput, { props: { error: true, 'aria-describedby': 'pourquoi' } });
     const input = screen.getByRole('textbox', { name: 'Code à 6 chiffres' });
     expect(input).toHaveAttribute('aria-describedby', 'pourquoi');
     expect(input).toHaveAttribute('aria-invalid', 'true');
@@ -202,9 +248,7 @@ describe('ConfirmDialog', () => {
   it('calls onconfirm only on a click of its button', async () => {
     const user = userEvent.setup();
     const onconfirm = vi.fn(() => Promise.resolve());
-    const { rerender } = render(ConfirmDialog, {
-      props: { ...props, open: true, onconfirm },
-    });
+    const { rerender } = render(ConfirmDialog, { props: { ...props, open: true, onconfirm } });
     expect(screen.getByRole('alertdialog', { name: props.title })).toBeInTheDocument();
     expect(onconfirm).not.toHaveBeenCalled();
 
@@ -230,12 +274,7 @@ describe('ConfirmDialog', () => {
 
   it('can confirm with the full danger button', () => {
     render(ConfirmDialog, {
-      props: {
-        ...props,
-        open: true,
-        onconfirm: vi.fn(),
-        confirmVariant: 'danger-plein',
-      },
+      props: { ...props, open: true, onconfirm: vi.fn(), confirmVariant: 'danger-plein' },
     });
     expect(screen.getByRole('button', { name: props.confirmLabel })).toHaveClass('danger-plein');
   });
@@ -254,9 +293,7 @@ describe('IconButton', () => {
   it('a handler given by the caller keeps the tooltip working', async () => {
     const user = userEvent.setup();
     const onfocus = vi.fn();
-    render(IconButton, {
-      props: { icon: Archive, label: 'Archiver', shortcut: 'E', onfocus },
-    });
+    render(IconButton, { props: { icon: Archive, label: 'Archiver', shortcut: 'E', onfocus } });
     await user.tab();
     const button = screen.getByRole('button', { name: 'Archiver' });
     expect(button).toHaveFocus();

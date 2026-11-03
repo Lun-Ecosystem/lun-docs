@@ -2,7 +2,8 @@
  * Toasts of the views: one store for the page, shown by the Toaster, one at a time. An action that
  * can be undone gives its `undo` and stays 5 s, run by « Annuler » or Ctrl Z; a new toast replaces
  * the one on screen (the replaced undo is dropped: that gesture becomes final). Information stays 3 s
- * and, while an undoable toast counts down, waits for it to leave (the latest one wins). An undo that
+ * and, while an undoable toast counts down, waits for it to leave (the latest one wins; a new
+ * undoable toast does not drop it). An undo that
  * fails replaces its toast by the error, in the danger tone.
  */
 
@@ -69,7 +70,8 @@ export function toast(message: string, options: ToastOptions = {}): void {
     waiting = { message, options };
     return;
   }
-  waiting = undefined;
+  // A notice kept for later survives a new undoable toast; a plain toast replacing the screen is newer.
+  if (!options.undo) waiting = undefined;
   show(message, options);
 }
 

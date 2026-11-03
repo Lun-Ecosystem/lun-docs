@@ -23,10 +23,14 @@
     return bindShortcuts({ 'Ctrl+z': undoLast });
   });
 
+  // Before the first paint of an undoable toast, so it never shows a stale count.
+  $effect.pre(() => {
+    if (undoable) now = Date.now();
+  });
+
   // The seconds left are refreshed only while an undoable toast counts down.
   $effect(() => {
     if (!undoable) return;
-    now = Date.now();
     const interval = setInterval(() => (now = Date.now()), 1000);
     return () => clearInterval(interval);
   });
@@ -47,8 +51,8 @@
             >Annuler</Button
           >
           {#if item.id === undoable?.id}
-            <Kbd>Ctrl Z</Kbd>
-            <span class="reste">{Math.max(0, Math.ceil((item.endsAt - now) / 1000))} s</span>
+            <span aria-hidden="true"><Kbd>Ctrl Z</Kbd></span>
+            <span class="reste" aria-hidden="true">{Math.max(0, Math.ceil((item.endsAt - now) / 1000))} s</span>
           {/if}
         </span>
       {:else}
@@ -160,7 +164,7 @@
   }
   /* Above the bottom bar of the mobile layout (68 px). */
   @media (max-width: 767.98px) {
-    .toaster {
+    .toaster:not(.contained) {
       bottom: calc(84px + env(safe-area-inset-bottom, 0px));
     }
     .toast {
