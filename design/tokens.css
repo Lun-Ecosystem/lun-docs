@@ -17,8 +17,6 @@
   --r-1:6px; --r-2:10px; --r-3:14px; --r-rond:999px;
   --ombre-1:0 1px 2px rgba(0,0,0,.35);
   --ombre-2:0 12px 32px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.4);
-  /* accent d'Anima, distinct du rouge destructif (danger-plein) : grenat prune */
-  --anima:#6B2D4F; --anima-survol:#7C3A5E; --anima-doux:rgba(107,45,79,.26); --anima-bord:rgba(214,170,196,.34); --anima-texte:#E2C3D3;
   --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
   /* marques du monde (sceau, fil, étoile) : ivoire atténué */
   --marque:rgba(240,235,225,.78); --marque-doux:rgba(240,235,225,.22);
@@ -38,7 +36,11 @@
 /* @fin-monde */
 
 /* @monde anima */
-/* grenat prune Anima : --anima* est défini sur :root, le monde ne fait que les mapper */
+/* accent d'Anima, distinct du rouge destructif (danger-plein) : grenat prune.
+   --anima* reste sur :root pour Lun'Anima seulement : la copie d'un satellite n'en garde rien. */
+:root {
+  --anima:#6B2D4F; --anima-survol:#7C3A5E; --anima-doux:rgba(107,45,79,.26); --anima-bord:rgba(214,170,196,.34); --anima-texte:#E2C3D3;
+}
 [data-monde='anima'] {
   --accent:var(--anima); --accent-survol:var(--anima-survol); --accent-texte:var(--anima-texte);
   --accent-doux:var(--anima-doux); --accent-bord:var(--anima-bord);
