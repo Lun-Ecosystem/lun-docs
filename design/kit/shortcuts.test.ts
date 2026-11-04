@@ -23,6 +23,21 @@ describe('bindShortcuts', () => {
     expect(event.defaultPrevented).toBe(true);
   });
 
+  it('an action that returns false keeps the default', () => {
+    const scroll = vi.fn(() => false);
+    unbind = bindShortcuts({ ArrowDown: scroll });
+    const event = press(document.body, 'ArrowDown');
+    expect(scroll).toHaveBeenCalledOnce();
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it('a letter typed with Caps Lock on still triggers its bare key', () => {
+    const validate = vi.fn();
+    unbind = bindShortcuts({ v: validate, 'Shift+v': vi.fn() });
+    press(document.body, 'V');
+    expect(validate).toHaveBeenCalledOnce();
+  });
+
   it('a held key triggers once, not on every repeat', () => {
     const validate = vi.fn();
     unbind = bindShortcuts({ v: validate });
