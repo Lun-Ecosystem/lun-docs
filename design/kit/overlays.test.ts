@@ -272,6 +272,12 @@ describe('ConfirmDialog', () => {
     expect(screen.queryByRole('alertdialog')).toBeNull();
   });
 
+  it('opens with the focus on the harmless choice', async () => {
+    render(ConfirmDialog, { props: { ...props, open: true, onconfirm: vi.fn(), cancelLabel: 'Fermer' } });
+    await settle();
+    expect(screen.getByRole('button', { name: 'Fermer' })).toHaveFocus();
+  });
+
   it('can confirm with the full danger button', () => {
     render(ConfirmDialog, {
       props: { ...props, open: true, onconfirm: vi.fn(), confirmVariant: 'danger-plein' },
