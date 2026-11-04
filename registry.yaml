@@ -64,7 +64,7 @@ projets:
     nom: "Lun'Ira"
     role: satellite
     depot: CrOliX-AltF4/LunIra
-    visibilite: public
+    visibilite: prive
     etat: actif
     description: "CLI multi-agents qui transforme une intention en code livrable."
 
@@ -72,6 +72,6 @@ projets:
     nom: "Lun'Gula"
     role: satellite
     depot: CrOliX-AltF4/LunGula
-    visibilite: public
+    visibilite: prive
     etat: en-pause
     description: "Apprentissage par imitation : des replays humains entrent, un modèle ONNX sort."
