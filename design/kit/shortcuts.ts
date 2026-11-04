@@ -4,6 +4,7 @@
  * - For a symbol (`#`, `?`), Shift and AltGr only serve to type it and are not part of the combo.
  * - Nothing triggers from a field (input, textarea, select, editable zone), except a Ctrl combo
  *   typed in the command palette search, marked `data-palette`, and the combos given in `fromFields`.
+ * - An action that returns `false` declines the key: its default (scrolling, focus...) goes on.
  */
 
 const MODIFIERS = ['Ctrl', 'Alt', 'Shift'] as const;
@@ -51,7 +52,7 @@ function fromField(event: Event): Element | null {
 }
 
 export function bindShortcuts(
-  map: Record<string, () => void>,
+  map: Record<string, () => void | boolean>,
   target: EventTarget = window,
   opts: { fromFields?: string[] } = {},
 ): () => void {
@@ -66,8 +67,7 @@ export function bindShortcuts(
     const field = fromField(event);
     if (field && !anywhere.has(combo) && !(combo.startsWith('Ctrl+') && field.closest('[data-palette]')))
       return;
-    event.preventDefault();
-    run();
+    if (run() !== false) event.preventDefault();
   };
 
   target.addEventListener('keydown', onKeydown);

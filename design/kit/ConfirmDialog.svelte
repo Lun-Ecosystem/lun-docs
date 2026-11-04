@@ -43,6 +43,7 @@
 
   let probe = $state<HTMLElement | null>(null);
   const monde = $derived(mondeOf(probe) ?? fallback);
+  let fenetre = $state<HTMLElement | null>(null);
   let busy = $state(false);
   let failure = $state<string | null>(null);
 
@@ -85,6 +86,11 @@
       {#snippet child({ props })}<div {...props} class="voile"></div>{/snippet}
     </AlertDialog.Overlay>
     <AlertDialog.Content
+      onOpenAutoFocus={(event) => {
+        // The harmless choice takes the focus: Enter never confirms by accident.
+        event.preventDefault();
+        fenetre?.querySelector<HTMLElement>('[data-annuler]')?.focus();
+      }}
       onCloseAutoFocus={(event) => {
         const target = returnFocus?.();
         if (!target) return;
@@ -93,7 +99,7 @@
       }}
     >
       {#snippet child({ props })}
-        <div {...props} class="fenetre" data-monde={monde}>
+        <div {...props} bind:this={fenetre} class="fenetre" data-monde={monde}>
           <AlertDialog.Title>
             {#snippet child({ props: titleProps })}<h2 {...titleProps} class="titre">{title}</h2>{/snippet}
           </AlertDialog.Title>
@@ -108,7 +114,7 @@
           <div class="actions">
             <AlertDialog.Cancel>
               {#snippet child({ props: cancelProps })}
-                <Button {...cancelProps} variant="secondaire" disabled={busy}>{cancelLabel}</Button>
+                <Button {...cancelProps} data-annuler variant="secondaire" disabled={busy}>{cancelLabel}</Button>
               {/snippet}
             </AlertDialog.Cancel>
             <Button variant={confirmVariant} loading={busy} onclick={confirm}>{confirmLabel}</Button>
