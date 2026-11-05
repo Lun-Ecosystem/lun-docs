@@ -42,7 +42,7 @@ projets:
     depot: Lun-Ecosystem/lun-anima
     visibilite: prive
     etat: en-dev
-    description: "Le core : Natsume, sa mémoire, sa conversation et ses apps desktop et mobile."
+    description: "Le core : Natsume, la mémoire de sa relation, sa conversation et son app (PWA, au bureau et au téléphone)."
 
   - id: lunacedia
     nom: "Lun'Acedia"
@@ -65,8 +65,8 @@ projets:
     role: satellite
     depot: CrOliX-AltF4/LunIra
     visibilite: prive
-    etat: actif
-    description: "CLI multi-agents qui transforme une intention en code livrable."
+    etat: en-pause
+    description: "CLI multi-agents qui transforme une intention en code livrable. Mis de côté, dépôt archivé, à repenser et renommer."
 
   - id: lungula
     nom: "Lun'Gula"
@@ -74,4 +74,4 @@ projets:
     depot: CrOliX-AltF4/LunGula
     visibilite: prive
     etat: en-pause
-    description: "Apprentissage par imitation : des replays humains entrent, un modèle ONNX sort."
+    description: "Apprentissage par imitation : des replays humains entrent, un modèle ONNX sort. Mis de côté, dépôt archivé, à repenser et renommer."
