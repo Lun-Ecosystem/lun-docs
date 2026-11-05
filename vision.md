@@ -9,6 +9,11 @@ Natsume est une entité unique : une personnalité et une mémoire, présentes s
 Elle se situe à la frontière entre Jarvis (Iron Man) et Neuro-sama (Vedal) : une assistante qui suit
 CrOliX au quotidien, dans le travail comme dans le jeu, et qui garde le fil d'une surface à l'autre.
 
+**L'horizon** : Natsume fait 90 % du travail sans action manuelle, avec des garde-fous de validation
+réglables. Les 10 % restants sont les cas limites, retrouver une information quand le fil est perdu,
+régler, observer et mesurer. Elle reste une assistante, quel que soit son ton, et ne redevient jamais
+l'agent par défaut d'un fournisseur de modèle.
+
 ## Les cinq surfaces
 
 Les cinq sont indispensables au VIP.
@@ -49,7 +54,9 @@ Tasks…). Ce contrôle est obligatoire : pas de surcoût inutile, pas de perte 
 ## Principe d'architecture
 
 Le core est privé. Les satellites sont des outils autonomes qui portent leur propre logique métier et
-peuvent être câblés au core.
+peuvent être câblés au core. La présence physique de Natsume (voix, avatar, sens, accès au PC) vit dans
+un satellite dédié, Lun'Luxuria : le core est son esprit, Luxuria son corps
+([ADR 0009](adr/0009-lun-luxuria-corps.md)).
 
 ## Points noirs à ne pas reproduire
 

@@ -16,7 +16,8 @@
 |---|---|
 | Serveurs (core, satellites) | Node + TypeScript ; le framework HTTP est choisi par le premier projet qui en a besoin, par un ADR |
 | Front (apps de Lun'Anima, fronts autonomes des satellites) | Svelte 5 + Vite, tokens de [`design.md`](design.md) |
-| App desktop | Tauri 2 (zone de notification, démarrage, mises à jour, services lancés sans console) |
+| App desktop de la présence | Lun'Luxuria, Tauri 2 (zone de notification, démarrage, mises à jour, services lancés sans console), [ADR 0009](../adr/0009-lun-luxuria-corps.md) |
+| App du core sur desktop | la même PWA que sur mobile, servie par le core |
 | App mobile | PWA servie par le core, Web Push ; Capacitor en porte de sortie (ADR 0007) |
 | Website | Astro |
 | Écrans | chaque produit a les siens ; les apps du core n'intègrent pas les écrans d'un satellite (contrat satellite, « Fronts ») |
