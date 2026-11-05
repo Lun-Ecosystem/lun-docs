@@ -28,3 +28,4 @@ Gabarit : [`_template.md`](_template.md).
 | [0006](0006-graphe-sigma.md) | Le graphe d'Avaritia : Sigma.js et graphology | acceptée |
 | [0007](0007-stack-mobile-pwa.md) | Stack de l'écosystème, le mobile en PWA | acceptée |
 | [0008](0008-acces-exterieur.md) | L'accès depuis l'extérieur, déchiffré sur le NAS seulement | acceptée |
+| [0009](0009-lun-luxuria-corps.md) | Lun'Luxuria, le corps de Natsume | acceptée |
