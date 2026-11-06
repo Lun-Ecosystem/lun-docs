@@ -55,6 +55,15 @@
 }
 /* @fin-monde */
 
+/* @monde luxuria */
+/* magenta Luxuria : sur son fond de scène (contraste du libellé ivoire : 7,3) */
+[data-monde='luxuria'] {
+  --accent:#8A1E5A; --accent-survol:#9A2767; --accent-texte:#E7A9CB;
+  --accent-doux:rgba(138,30,90,.26); --accent-bord:rgba(231,169,203,.40);
+  --scene:#100409;
+}
+/* @fin-monde */
+
 /* @monde neutre */
 /* monde neutre : pour les postes sans monde propre */
 [data-monde='neutre'] {
