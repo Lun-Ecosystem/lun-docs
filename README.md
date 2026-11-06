@@ -1,8 +1,18 @@
+<div align="center">
+
 # lun-docs
 
-Le référentiel central de l'écosystème Lun' : la vision, les standards, les décisions d'écosystème,
-le registre des projets, les gabarits, et le plugin Claude Code `lun` qui applique tout cela dans
-chaque projet. Ce dépôt ne contient aucun code applicatif.
+**Le référentiel central de l'écosystème Lun' : la vision, les standards, le registre et le plugin qui les applique.**
+
+Les décisions d'écosystème, les gabarits et le plugin Claude Code `lun`, utilisés par chaque projet. Ce dépôt ne contient
+aucun code applicatif.
+
+[![CI](https://img.shields.io/github/actions/workflow/status/Lun-Ecosystem/lun-docs/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/Lun-Ecosystem/lun-docs/actions/workflows/ci.yml)
+[![Licence](https://img.shields.io/github/license/Lun-Ecosystem/lun-docs?style=flat-square&label=licence)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D22-5FA04E?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
+[![Écosystème Lun'](https://img.shields.io/badge/%C3%A9cosyst%C3%A8me-Lun'-555555?style=flat-square)](https://crolix-website.vercel.app)
+
+</div>
 
 ## Quoi fait foi
 
