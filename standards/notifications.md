@@ -11,6 +11,8 @@
 - **Le core fixe le rendu**, selon le palier et le mode actif. Le satellite ne connaît pas les modes.
 - **Le core est le seul à notifier** CrOliX sur ses appareils. Un front autonome peut notifier pour
   qui l'utilise sans Lun' ; ce n'est pas le parcours de CrOliX.
+- **Annoncer est le rôle de Natsume** : par la voix au bureau, par une notification sur le téléphone.
+  Le desktop n'a pas de notification système. Les compteurs sont communs à tous les supports.
 
 ## Les paliers
 
@@ -32,6 +34,8 @@ Un client qui ne connaît pas `low` ou `log` les traite comme `info` : rien n'in
 | Ce qu'une **règle** de CrOliX dit urgent | mail d'un expéditeur ou avec un mot-clé désignés | P0 |
 | Un service qui s'arrête faute d'accès | autorisation Google à renouveler, crédit épuisé, clé refusée | P1 |
 | Une échéance d'accès proche | clé qui expire : J-3 en P1, J-14 en P2 | P1 / P2 |
+| Une routine qui échoue, un poste injoignable, un plafond atteint | `routine.failed`, `post.unreachable`, `cap.reached` | P1 |
+| Le point du matin, posté | `morning.posted` | P1 |
 | Une décision attendue sur une demande de CrOliX | carte à valider issue d'une délégation | P1 |
 | Un avis de l'IA, sans règle | mail jugé urgent par le tri | P1, jamais P0 |
 | Ce qui est dû dans la journée | tâche à échéance aujourd'hui | P2, en tête du point du matin |
