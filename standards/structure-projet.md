@@ -7,7 +7,7 @@
 
 | Fichier | Contenu |
 |---|---|
-| `README.md` | Ce que fait le projet, son rôle (core ou satellite), **le démarrage local en une commande** |
+| `README.md` | Ce que fait le projet, son rôle (core ou satellite), **le démarrage local en une commande**. Même forme partout, celle de `templates/project/README.md` ; badges d'un dépôt public : version si publiée, CI, licence si posée, Node, stack, écosystème, à la couleur du monde |
 | `CLAUDE.md` | 100 lignes max : renvoie à lun-docs et au plugin, ne garde que le spécifique au projet |
 | `docs/` | Ce qui **existe** : utilisateur, technique, exploitation. Jamais l'historique |
 | `docs/decisions/` | Les ADR propres au projet (une page, remplacés et jamais modifiés) |
