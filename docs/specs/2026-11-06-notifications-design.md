@@ -129,7 +129,7 @@ part sans son.
 ## 6. Web Push
 
 - **La bibliothèque [choix Claude]** : le paquet `web-push`, seule dépendance ajoutée. Le chiffrement du contenu et la
-  signature VAPID ne s'écrivent pas à la main. Licence à confirmer au plan (MPL-2.0 attendue).
+  signature VAPID ne s'écrivent pas à la main. Licence MPL-2.0.
 - **Les clés VAPID** : créées à la première activation, gardées chiffrées comme les autres secrets du core. Leur sujet est
   une adresse du projet, jamais l'adresse mail de CrOliX.
 - **Les abonnements** : une table liée à l'appareil appairé (`clients`). Révoquer un appareil supprime son abonnement. Un
@@ -142,7 +142,7 @@ part sans son.
   `push` et `notificationclick`.
 - **App au premier plan sur le téléphone** : un P0 s'affiche quand même, un P1 non, le compteur bouge déjà
   **[choix Claude]**. Aucun bandeau à construire.
-- **Le toucher** ouvre ou focalise l'app sur le lien : l'adresse de la carte ou de l'urgence dans l'app du core
+- **Le toucher** ouvre ou focalise l'app sur le lien : l'adresse de la carte dans l'app du core
   (`/app/?carte=…`), `/app/` à défaut. Le geste et l'état « vu » passent ainsi par le core.
 - **À l'ouverture de l'app**, elle ferme les notifications de son appareil : l'écran dit déjà l'état réel.
 
@@ -183,7 +183,7 @@ Le texte « Notifications non activées. » dans Dépenses suit l'état réel.
 **Vérifiable sur un poste, sur `localhost`, sans NAS**, Chrome en fenêtre étroite (un contexte sûr, sous le seuil) :
 
 1. Activer l'appareil, envoyer un essai : la notification arrive, app fermée.
-2. Sans présence, un P0 : notification immédiate. Le toucher ouvre l'urgence, et le geste « vu » fonctionne.
+2. Sans présence, un P0 : notification immédiate. Le toucher ouvre l’app, l’urgence en tête, et le geste « vu » fonctionne.
 3. Sans présence, 3 P1 de même type en moins de 2 minutes : une seule notification, qui les compte.
 4. Présence active, un P0 : dit à voix haute, aucune notification. Présence occupée : une notification.
 5. Présence active, un P1 : aucune notification, le compteur monte. La présence finie, rien ne repart.
