@@ -7,8 +7,7 @@
 
 - **TypeScript** partout côté serveur et front, en mode strict.
 - **Node.js** : `^22.13.0 || >=24` ; la CI et les images de prod utilisent la LTS 24.
-- **Python** seulement pour les services externes qui l'imposent (RVC). Lun'Gula, existant, reste en
-  Python.
+- **Python** seulement pour les services externes qui l'imposent (RVC).
 
 ## Frameworks
 
