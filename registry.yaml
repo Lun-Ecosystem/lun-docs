@@ -67,19 +67,3 @@ projets:
     visibilite: public
     etat: en-dev
     description: "Un compagnon vocal de bureau : sa scène, sa voix, ce qu'il écoute. Seul sur un modèle, ou corps de Natsume relié au core (ADR 0009, 0010)."
-
-  - id: lunira
-    nom: "Lun'Ira"
-    role: satellite
-    depot: CrOliX-AltF4/LunIra
-    visibilite: prive
-    etat: en-pause
-    description: "CLI multi-agents qui transforme une intention en code livrable. Mis de côté, dépôt archivé, à repenser et renommer."
-
-  - id: lungula
-    nom: "Lun'Gula"
-    role: satellite
-    depot: CrOliX-AltF4/LunGula
-    visibilite: prive
-    etat: en-pause
-    description: "Apprentissage par imitation : des replays humains entrent, un modèle ONNX sort. Mis de côté, dépôt archivé, à repenser et renommer."

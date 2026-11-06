@@ -48,8 +48,8 @@ Tasks…). Ce contrôle est obligatoire : pas de surcoût inutile, pas de perte 
 ## Hors VIP
 
 - Le streaming.
-- L'apprentissage par imitation (ex-Lun'Gula, testé sur osu!).
-- Le pipeline de développement multi-agents (ex-Lun'Ira).
+- L'apprentissage par imitation.
+- Le pipeline de développement multi-agents.
 
 ## Principe d'architecture
 
