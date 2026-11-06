@@ -60,6 +60,14 @@ projets:
     etat: en-dev
     description: "Base de savoir de l'écosystème : fiches normalisées et reliées, faits sourcés, import et export Obsidian."
 
+  - id: lunluxuria
+    nom: "Lun'Luxuria"
+    role: satellite
+    depot: Lun-Ecosystem/lun-luxuria
+    visibilite: public
+    etat: en-dev
+    description: "Un compagnon vocal de bureau : sa scène, sa voix, ce qu'il écoute. Seul sur un modèle, ou corps de Natsume relié au core (ADR 0009, 0010)."
+
   - id: lunira
     nom: "Lun'Ira"
     role: satellite
