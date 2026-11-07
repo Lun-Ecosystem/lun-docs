@@ -1,5 +1,7 @@
 # Ce qu'elle dit à voix haute : sans markdown ni repère de carte. Plan
 
+> **Livré** par [lun-anima#62](https://github.com/Lun-Ecosystem/lun-anima/pull/62). Cases cochées le 07/11/2026.
+
 > **Pour les agents d'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 
 **But :** que la voix et les sous-titres ne lisent plus le markdown ni les repères de carte qu'une réponse écrite peut
@@ -54,24 +56,24 @@ Le mode seul de Luxuria (`lun-luxuria/src/local.ts:199`) publie sa parole sans `
 
 ### 1. La coupe (`core/src/natsume/speech.ts`)
 
-- [ ] Tests d'abord : parenthèse et crochet ouverts en flux, garde des 80 caractères, garde du retour à la ligne,
+- [x] Tests d'abord : parenthèse et crochet ouverts en flux, garde des 80 caractères, garde du retour à la ligne,
       `**Oui.** Va.`, `Fini. **Maintenant** oui.`
-- [ ] `cut()` ne coupe pas dans une `(` ou un `[` ouvert, sauf garde. `sentenceEnd` garde `*_\`` avec la fin de phrase,
+- [x] `cut()` ne coupe pas dans une `(` ou un `[` ouvert, sauf garde. `sentenceEnd` garde `*_\`` avec la fin de phrase,
       et `OPENS` accepte `*`, `_`, `` ` ``, `#`, `[`.
 
 ### 2. Le nettoyage (`core/src/natsume/speech.ts`)
 
-- [ ] Tests d'abord : chaque forme du critère 2, et ce qui reste (`mot_de_passe`, `jean_dupont@x.fr`, `5 * 2`, `#1`,
+- [x] Tests d'abord : chaque forme du critère 2, et ce qui reste (`mot_de_passe`, `jean_dupont@x.fr`, `5 * 2`, `#1`,
       `-3 °C`, `> 5`, `c0ffee`), un morceau fait de markdown seul (rien de publié), un secret entre `**` qui reste
       masqué, les lignes de carte du critère 3.
-- [ ] `spoken(text)`, appliquée dans `out` avant `maskSecrets`. Commentaire d'une ligne : ce que le fil montre reste
+- [x] `spoken(text)`, appliquée dans `out` avant `maskSecrets`. Commentaire d'une ligne : ce que le fil montre reste
       écrit, ce qui se dit se nettoie.
 
 ### 3. Le fil intact (`core/src/chat/service.test.ts`)
 
-- [ ] Le test du critère 4, sur le harnais de `speak` existant (l. 108 à 140).
+- [x] Le test du critère 4, sur le harnais de `speak` existant (l. 108 à 140).
 
 ### 4. Livrer
 
-- [ ] Issue `inbox` dans lun-luxuria pour le mode seul.
-- [ ] Relecture (agent reviewer), PR avec `lun-livrer`, critères cochés et preuves.
+- [x] Issue `inbox` dans lun-luxuria pour le mode seul.
+- [x] Relecture (agent reviewer), PR avec `lun-livrer`, critères cochés et preuves.
