@@ -53,3 +53,23 @@ test('check reports a missing copy', () => {
   const root = repo();
   assert.equal(syncStandards(root, map, { check: true }).changed.length, 3);
 });
+
+test('check reports a copy whose source left the map, and sync removes it', () => {
+  const root = repo();
+  syncStandards(root, map, { check: false });
+  const smaller = { 'lun-ecosysteme': map['lun-ecosysteme'] };
+  assert.deepEqual(syncStandards(root, smaller, { check: true }).changed, ['plugin/skills/lun-design/references/design.md']);
+  assert.ok(fs.existsSync(copy(root, 'lun-design', 'design.md')), 'check writes nothing');
+  syncStandards(root, smaller, { check: false });
+  assert.equal(fs.existsSync(copy(root, 'lun-design', 'design.md')), false);
+  assert.deepEqual(syncStandards(root, smaller, { check: true }).changed, []);
+});
+
+test('a reference written by hand, without the generated header, is never touched', () => {
+  const root = repo();
+  syncStandards(root, map, { check: false });
+  fs.writeFileSync(copy(root, 'lun-design', 'notes.md'), '# Notes à la main\n');
+  assert.deepEqual(syncStandards(root, map, { check: true }).changed, []);
+  syncStandards(root, map, { check: false });
+  assert.ok(fs.existsSync(copy(root, 'lun-design', 'notes.md')));
+});
