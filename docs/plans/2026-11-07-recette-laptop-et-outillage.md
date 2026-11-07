@@ -2,6 +2,11 @@
 
 > **Pour les agents d'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 
+> **Livré** par [lun-anima#65](https://github.com/Lun-Ecosystem/lun-anima/pull/65) et
+> [lun-luxuria#19](https://github.com/Lun-Ecosystem/lun-luxuria/pull/19) (D), et
+> [lun-docs#88](https://github.com/Lun-Ecosystem/lun-docs/pull/88) (G). Cases cochées le 07/11/2026. Ordre de merge :
+> lun-anima#65, puis lun-luxuria#19 ; lun-docs#88 quand il veut. E reste préparé : il attend l'accord pour Rust.
+
 **But :** faire avancer le MVP sur le laptop autant que possible, par chantiers larges, contrôlés et testés à chaque
 étape. CrOliX, le 07/11, après le merge des trois chantiers précédents : « élargis au max la taille des chantiers sans
 foncer tête baissée », en pleine autonomie.
@@ -77,12 +82,12 @@ Sans voix ni micro réel, « dit » se prouve par l'événement `speech` lu sur 
 
 ### Tâches
 
-- [ ] Branche depuis `main`, PR en brouillon au premier push.
-- [ ] Core jetable et satellite factice, avec les garde-fous ci-dessus ; Luxuria reliée ; Chrome.
-- [ ] Lignes 1 à 6, une à une : verdict et preuve ; correctif et test si l'écart est dans le périmètre.
-- [ ] #18 : tests d'abord ; le 410 dans lun-anima (`presence.ts`, `presence-routes.ts`), puis `src/page.ts`,
+- [x] Branche depuis `main`, PR en brouillon au premier push.
+- [x] Core jetable et satellite factice, avec les garde-fous ci-dessus ; Luxuria reliée ; Chrome.
+- [x] Lignes 1 à 6, une à une : verdict et preuve ; correctif et test si l'écart est dans le périmètre.
+- [x] #18 : tests d'abord ; le 410 dans lun-anima (`presence.ts`, `presence-routes.ts`), puis `src/page.ts`,
       `src/core.ts` et `src/session.svelte.ts` ; ligne 7.
-- [ ] Arrêt du core jetable (seulement ses processus), relecture (agent reviewer), recette notée, PR prête.
+- [x] Arrêt du core jetable (seulement ses processus), relecture (agent reviewer), recette notée, PR prête.
 
 ## G. L'outillage de lun-docs
 
@@ -108,10 +113,10 @@ Sans voix ni micro réel, « dit » se prouve par l'événement `speech` lu sur 
 
 ### Tâches
 
-- [ ] Branche depuis `main`, ce plan, PR en brouillon.
-- [ ] #3, #5 : tests et outils (faits avant la relecture du plan ; les tests sont rejoués en échec sur le code d'avant).
-- [ ] #4 : tests d'abord, scan des six clones frais, puis la règle.
-- [ ] #6, relecture (agent reviewer), coches quand D est prêt, PR prête.
+- [x] Branche depuis `main`, ce plan, PR en brouillon.
+- [x] #3, #5 : tests et outils (faits avant la relecture du plan ; les tests sont rejoués en échec sur le code d'avant).
+- [x] #4 : tests d'abord, scan des six clones frais, puis la règle.
+- [x] #6, relecture (agent reviewer), coches quand D est prêt, PR prête.
 
 ## E. Luxuria dans une fenêtre Tauri (préparé, pas lancé)
 
