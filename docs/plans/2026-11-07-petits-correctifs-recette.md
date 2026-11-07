@@ -1,5 +1,7 @@
 # Petits correctifs de la recette du 07/11. Plan
 
+> **Livré** par [lun-luxuria#11](https://github.com/Lun-Ecosystem/lun-luxuria/pull/11) et [lun-anima#61](https://github.com/Lun-Ecosystem/lun-anima/pull/61). Cases cochées le 07/11/2026.
+
 > **Pour les agents d'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 
 **But :** fermer trois écarts de la recette du desktop, tous prouvables sur le laptop : Luxuria lit son `.env`
@@ -46,35 +48,35 @@ README et une ligne au démarrage quand elle est active.
 
 ### 1. lun-luxuria#4 (`vite.config.ts`)
 
-- [ ] `defineConfig(({ mode }) => …)` avec `const env = { ...loadEnv(mode, process.cwd(), ''), ...process.env }` ;
+- [x] `defineConfig(({ mode }) => …)` avec `const env = { ...loadEnv(mode, process.cwd(), ''), ...process.env }` ;
       `CORE_URL`, `VOIX_URL` et `PORT` viennent de `env`. Le bloc `test` ne change pas.
-- [ ] `process.env.VITEST` reste lu directement pour les plugins.
-- [ ] Preuve par `resolveConfig`, lancée depuis un dossier temporaire qui porte le `.env` d'essai (la config lit
+- [x] `process.env.VITEST` reste lu directement pour les plugins.
+- [x] Preuve par `resolveConfig`, lancée depuis un dossier temporaire qui porte le `.env` d'essai (la config lit
       `process.cwd()`) : aucun `.env` n'est écrit dans le dépôt. Puis avec la variable posée, qui l'emporte.
-- [ ] `.env.example` : la première ligne dit que Vite lit ce fichier.
+- [x] `.env.example` : la première ligne dit que Vite lit ce fichier.
 
 ### 2. lun-anima#57 (`core/src/routines/engine.ts`, `core/src/main.ts`)
 
-- [ ] Tests d'abord, dans `engine.test.ts` : avec `catchUp: false`, un premier tick à 9:00 note la veille et le matin
+- [x] Tests d'abord, dans `engine.test.ts` : avec `catchUp: false`, un premier tick à 9:00 note la veille et le matin
       comme sautés (`sans rattrapage`), sans les jouer, avec leurs entrées au Journal ; le lendemain, les deux
       tournent. Sous la pause avec `catchUp: false`, la raison reste `en pause`. Un passage interrompu au démarrage
       reste noté en échec, puis son créneau est sauté.
-- [ ] `startRoutines` prend `catchUp?: boolean` (vrai par défaut). Le saut passe par `tick`, pas par une seconde
+- [x] `startRoutines` prend `catchUp?: boolean` (vrai par défaut). Le saut passe par `tick`, pas par une seconde
       logique : un ensemble des routines encore à décider, vidé quand chacune est trouvée non due ou sautée. L'ordre
       reste celui de `tick` : `startedSince`, puis la pause (sa raison prime, et une pause illisible laisse le créneau
       dû, sans saut), puis le saut. `skipRun` prend la raison en paramètre.
-- [ ] `word.ts` : `noLetter = 'pause'` seulement si la raison est `en pause`. Test dans le fichier de test du mot.
-- [ ] `main.ts` lit `ROUTINES_CATCHUP` après `loadRootEnv()`, comme les autres. Seul `0` coupe, et une ligne au
+- [x] `word.ts` : `noLetter = 'pause'` seulement si la raison est `en pause`. Test dans le fichier de test du mot.
+- [x] `main.ts` lit `ROUTINES_CATCHUP` après `loadRootEnv()`, comme les autres. Seul `0` coupe, et une ligne au
       démarrage le dit.
-- [ ] `README.md`, tableau des variables ; `.env.example`, la ligne en commentaire.
+- [x] `README.md`, tableau des variables ; `.env.example`, la ligne en commentaire.
 
 ### 3. lun-anima#59 (`core/src/testing/fake-satellite.ts`)
 
-- [ ] Test d'abord : avec une horloge qui avance, deux `emit` rendent chacun `at` égal à `clock()` en ISO. Sans
+- [x] Test d'abord : avec une horloge qui avance, deux `emit` rendent chacun `at` égal à `clock()` en ISO. Sans
       `clock`, la date fixe et son pas d'une seconde restent.
-- [ ] Le constructeur prend `clock?: () => Date`. Sans lui, la date fixe et son pas d'une seconde par événement restent.
+- [x] Le constructeur prend `clock?: () => Date`. Sans lui, la date fixe et son pas d'une seconde par événement restent.
 
 ### 4. Livrer
 
-- [ ] Relecture (agent reviewer) sur chaque diff.
-- [ ] Deux PR avec `lun-livrer`, critères cochés et preuves.
+- [x] Relecture (agent reviewer) sur chaque diff.
+- [x] Deux PR avec `lun-livrer`, critères cochés et preuves.
