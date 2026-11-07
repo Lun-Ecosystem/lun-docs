@@ -28,6 +28,7 @@ export const REQUIRED_FILES = [
   'templates/project/CLAUDE.md',
   'templates/project/.claude/settings.json',
   'templates/project/.github/pull_request_template.md',
+  '.github/pull_request_template.md',
   'templates/project/hooks/pre-push',
   'LICENSE',
   'docs/specs/2026-10-19-referentiel-design.md',
@@ -64,6 +65,13 @@ export function checkRequiredFiles(root, required) {
   return required.filter((f) => !fs.existsSync(path.join(root, f))).map((f) => `missing: ${f}`);
 }
 
+/** Two files that must stay the same, line endings aside: a copy kept by hand, with no generator. */
+export function checkSameFile(root, a, b) {
+  const read = (f) => fs.readFileSync(path.join(root, f), 'utf8').replace(/\r\n/g, '\n');
+  if (!fs.existsSync(path.join(root, a)) || !fs.existsSync(path.join(root, b))) return [];
+  return read(a) === read(b) ? [] : [`${a} differs from ${b}: copy one onto the other`];
+}
+
 /** `target` is a directory (every .md inside, recursively) or a single file. */
 export function checkMaxLines(root, target, max) {
   const full = path.join(root, target);
@@ -80,6 +88,11 @@ export function checkMaxLines(root, target, max) {
 
 const IPV4 = /(?<![\w.#])(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?![\w.])/g;
 const TAILNET = /\b[\w-]+(?:\.[\w-]+)*\.ts\.net\b/g;
+// Home network names; .local and .internal stay out: fixtures and plans use them as example domains.
+const HOME_NAME = /\b[\w-]+(?:\.[\w-]+)*\.(?:lan|home\.arpa)\b/g;
+// IPv6 unique local (fd00::/8): fd, two hex digits, then at least two more groups. allow-address
+const ULA = /(?<![\w:])fd[0-9a-f]{2}(?::[0-9a-f]{0,4}){2,}(?![\w:])/gi;
+const TEST_FILE = /\.(?:test|spec)\.[^./\\]+$/;
 
 function isInternal(a, b) {
   if (a === 10) return true;
@@ -92,7 +105,7 @@ function isInternal(a, b) {
 export function checkNoInternalAddresses(root) {
   const errors = [];
   for (const file of listFiles(root)) {
-    if (file.endsWith('.test.mjs')) continue; // fixtures contain addresses on purpose
+    if (TEST_FILE.test(file)) continue; // fixtures contain addresses on purpose
     const text = fs.readFileSync(file, 'utf8');
     if (text.includes('\0')) continue; // binary file
     const lines = text.split(/\r?\n/);
@@ -106,6 +119,8 @@ export function checkNoInternalAddresses(root) {
       for (const m of line.matchAll(TAILNET)) {
         errors.push(`${rel(root, file)}:${i + 1}: tailnet host ${m[0]}`);
       }
+      for (const m of line.matchAll(HOME_NAME)) errors.push(`${rel(root, file)}:${i + 1}: home network name ${m[0]}`);
+      for (const m of line.matchAll(ULA)) errors.push(`${rel(root, file)}:${i + 1}: IPv6 unique local ${m[0]}`);
     });
   }
   return errors;
@@ -116,6 +131,7 @@ export function runAll(root) {
     ...checkRequiredFiles(root, REQUIRED_FILES),
     ...checkMaxLines(root, 'standards', 150),
     ...checkMaxLines(root, 'templates/project/CLAUDE.md', 100),
+    ...checkSameFile(root, '.github/pull_request_template.md', 'templates/project/.github/pull_request_template.md'),
     ...checkNoInternalAddresses(root),
     ...checkAdrs(root),
     ...(fs.existsSync(path.join(root, 'plugin/.claude-plugin/plugin.json')) ? checkVersions(root) : []),

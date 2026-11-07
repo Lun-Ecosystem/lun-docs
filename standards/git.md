@@ -52,8 +52,10 @@ Dans les deux cas, le hook de garde du plugin bloque côté agent : `gh pr merge
 `--repo` comprises), `git push` vers `main` ou `master`, `--force`, `-f`, `--force-with-lease` et les
 réf. préfixées `+`. Il refuse aussi `gh pr create` sans `--draft`, et un titre de PR (`gh pr create`,
 `gh pr edit`) que la CI refuserait. Ce qu'il ne lit pas passe (`gh api …/merge`, un alias) : le ruleset
-et le hook `pre-push` restent derrière. L'agent agit avec l'identité GitHub de CrOliX : GitHub seul ne
-peut pas faire la différence, d'où cette double barrière.
+et le hook `pre-push` restent derrière. Les règles `deny` du gabarit (`.claude/settings.json`) ne sont
+qu'un filet par préfixe : elles ne voient ni `feat:main` ni une option glissée avant le dépôt, la garde
+reste la barrière. L'agent agit avec l'identité GitHub de CrOliX : GitHub seul ne peut pas faire la
+différence, d'où cette double barrière.
 
 ## Release
 
