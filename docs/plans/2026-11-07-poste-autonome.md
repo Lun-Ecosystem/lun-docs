@@ -201,7 +201,7 @@ du chantier et reste au classement C de la feuille de route.
   la PR, sinon la preuve reste à CrOliX.
   Fait en partie : l'exe construit, lancé, la clé `Run` intacte. La vue de l'icône et la clé restent à CrOliX
   (lun-luxuria#24) : la capture d'écran est refusée à la session de l'exécutant.
-- [ ] Relecture, critères et preuves, passage en « prête ». En cours : lun-luxuria#24, en brouillon.
+- [x] Relecture, critères et preuves, passage en « prête ». Fait : lun-luxuria#24.
 
 ## lun-docs
 
