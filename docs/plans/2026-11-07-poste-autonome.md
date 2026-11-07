@@ -77,8 +77,8 @@ prend : `vitest.config.ts` à étendre à `deploy/`).
   - écrit le pid du serveur dans `<logs>/<name>.pid` et l'efface à la sortie. À son propre arrêt (`SIGINT`, `SIGTERM`,
     `SIGBREAK`), il arrête le serveur avant de sortir.
 
-- [ ] Branche, issue (critères de la spec §3.1, §3.2, §5), PR en brouillon.
-- [ ] Tests d'abord, avec un faux serveur (un script qui écrit deux lignes et sort en 3) :
+- [x] Branche, issue (critères de la spec §3.1, §3.2, §5), PR en brouillon.
+- [x] Tests d'abord, avec un faux serveur (un script qui écrit deux lignes et sort en 3) :
   - les deux lignes arrivent dans le fichier du jour, et le code de sortie vaut 3 ;
   - un journal daté de 15 jours est effacé, un de 13 jours reste, un autre nom n'est pas touché ;
   - une horloge passée à minuit écrit dans le fichier du lendemain (horloge injectée) ;
@@ -88,8 +88,8 @@ prend : `vitest.config.ts` à étendre à `deploy/`).
     seule fois ;
   - le fichier pid existe pendant que le serveur vit, et disparaît après ;
   - un journal de 15 jours apparu pendant que le lanceur tourne est effacé au changement de jour.
-- [ ] Code.
-- [ ] `npm run build` puis `npm start` contre une base jetable (`DB_PATH`, `PORT` jetables) : le core répond sur
+- [x] Code.
+- [x] `npm run build` puis `npm start` contre une base jetable (`DB_PATH`, `PORT` jetables) : le core répond sur
   `/health`, et l'app sous `/app`.
 
 ### Tâche 2 : installer, mettre à jour, retirer
@@ -121,14 +121,14 @@ prend : `vitest.config.ts` à étendre à `deploy/`).
 - `retirer.ps1 [-WhatIf]` : arrête les trois tâches, arrête les serveurs selon la même règle du pid, puis supprime les
   tâches. Il ne supprime ni le dossier ni les bases.
 
-- [ ] Tests : Pester n'est pas installé par défaut ; la preuve est le mode `-WhatIf` et un dossier jetable. Sur le
+- [x] Tests : Pester n'est pas installé par défaut ; la preuve est le mode `-WhatIf` et un dossier jetable. Sur le
   laptop, consigné dans la PR :
   - `installer.ps1 -WhatIf` liste les clones, les builds et le XML des trois tâches ;
   - avec un `.env` manquant : refus, nom du dépôt ;
   - avec `DB_PATH=../ailleurs.db` : refus (point 5) ;
   - avec un port occupé par un serveur jetable : refus, port nommé, rien d'arrêté ;
   - `mettre-a-jour.ps1 -WhatIf` sur une copie modifiée : refus.
-- [ ] La vraie installation n'est pas faite par l'exécutant. Les points 1 et 2 de la recette de la spec demandent de
+- [x] La vraie installation n'est pas faite par l'exécutant. Les points 1 et 2 de la recette de la spec demandent de
   vraies tâches : la PR les liste comme une recette à jouer par CrOliX. Sur le laptop, dans un dossier jetable, s'il le
   veut ; sinon le jour de l'installation sur le desktop, en suivant la page. La PR le dit franchement.
 
@@ -150,7 +150,7 @@ prend : `vitest.config.ts` à étendre à `deploy/`).
   puis `runNight` comme avant. La note du Journal passe par l'événement du core qu'utilise déjà la présence
   (`emitCoreEvent`, importance `log`) : « Base copiée ». Une copie réussie efface le défaut de santé.
 
-- [ ] Tests d'abord :
+- [x] Tests d'abord :
   - la copie s'ouvre avec `node:sqlite` et contient une ligne écrite juste avant ;
   - la huitième copie efface la plus vieille, et un fichier d'un autre nom dans le dossier reste ;
   - deux copies le même jour : la seconde réussit et remplace la première ;
@@ -159,9 +159,9 @@ prend : `vitest.config.ts` à étendre à `deploy/`).
   - un dossier où l'on ne peut pas écrire lève, et les anciennes copies restent (point 4) ;
   - dans `main`, la santé passe en défaut puis revient, par le chemin de `night` (test de la fermeture, ou extraction
     d'une petite fonction `nightWithBackup` testée seule).
-- [ ] `README.md` : où sont les copies, combien, comment en restaurer une (arrêter la tâche, copier, relancer).
+- [x] `README.md` : où sont les copies, combien, comment en restaurer une (arrêter la tâche, copier, relancer).
 
-- [ ] Relecture (agent reviewer), critères cochés et preuves dans la PR, passage en « prête ».
+- [x] Relecture (agent reviewer), critères cochés et preuves dans la PR, passage en « prête ». Fait : lun-anima#69.
 
 ## lun-acedia : rien dans ce chantier
 
@@ -189,17 +189,19 @@ du chantier et reste au classement C de la feuille de route.
 - `display.startWithWindows` suit `autostart.enable()` et `disable()` à l'enregistrement. Au lancement, l'écran lit
   `isEnabled()`, et c'est lui qui fait foi.
 
-- [ ] Branche depuis `main` (après F), issue, PR en brouillon.
-- [ ] Tests d'abord (plugins simulés comme dans `keys.svelte.test.ts`) : l'état ramené à trois valeurs ; un autre
+- [x] Branche depuis `main` (après F), issue, PR en brouillon.
+- [x] Tests d'abord (plugins simulés comme dans `keys.svelte.test.ts`) : l'état ramené à trois valeurs ; un autre
   réglage sauvé ne rappelle pas `tray_state` ; `mute` du menu bascule ; `startWithWindows` activé appelle `enable`, et
   désactivé `disable` ; un échec du plugin se dit à l'écran sans casser l'enregistrement.
-- [ ] Code, `cargo fmt`, `clippy -D warnings`, `cargo test`.
+- [x] Code, `cargo fmt`, `clippy -D warnings`, `cargo test`.
 - [ ] Preuve sur le laptop dans l'exe construit : l'icône suit l'état (core jetable coupé : injoignable), le menu
   « Muette » bascule, « Démarrer avec Windows » est activé puis désactivé.
   La clé `Run` du registre est posée par le plugin à la demande de l'utilisateur dans l'écran : c'est son geste, pas
   celui de l'exécutant. L'exécutant la pose et la retire une fois pour la preuve, avec l'accord de CrOliX demandé dans
   la PR, sinon la preuve reste à CrOliX.
-- [ ] Relecture, critères et preuves, passage en « prête ».
+  Fait en partie : l'exe construit, lancé, la clé `Run` intacte. La vue de l'icône et la clé restent à CrOliX
+  (lun-luxuria#24) : la capture d'écran est refusée à la session de l'exécutant.
+- [x] Relecture, critères et preuves, passage en « prête ». Fait : lun-luxuria#24.
 
 ## lun-docs
 
@@ -207,7 +209,7 @@ du chantier et reste au classement C de la feuille de route.
 
 **Fichiers :** `docs/mise-en-service-desktop.md`, lien depuis `README.md` de lun-docs (section des documents).
 
-- [ ] La page, dans l'ordre que CrOliX suivra :
+- [x] La page, dans l'ordre que CrOliX suivra :
   - **avant** : Node 24, `uv`, Git, Tailscale installé sur le desktop et le téléphone, les cores de dev du desktop
     arrêtés ;
   - **installer** dans un PowerShell administrateur : `installer.ps1 -WhatIf`, puis pour de vrai ;
@@ -222,7 +224,7 @@ du chantier et reste au classement C de la feuille de route.
   - **arrêter, mettre à jour, retirer** ;
   - **ce qui reste à la main** : les notifications Windows (`ToastEnabled`), le pare-feu de vcclient.
   Aucune adresse du tailnet, aucun nom d'hôte réel.
-- [ ] `npm run check` vert ; ce plan et la feuille de route cochés.
+- [x] `npm run check` vert ; ce plan et la feuille de route cochés.
 
 ## Question ouverte, pour CrOliX
 

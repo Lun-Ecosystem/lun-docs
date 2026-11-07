@@ -52,6 +52,7 @@ garde qui interdit à l'agent de merger, de pousser sur `main` ou de forcer un p
 1. [`vision.md`](vision.md), puis [`standards/essentiel.md`](standards/essentiel.md).
 2. Le standard qui correspond à la tâche du jour.
 3. Pour un nouveau projet : [`templates/project/`](templates/project/) et l'ajout au registre.
+4. Pour mettre le desktop en service : [`docs/mise-en-service-desktop.md`](docs/mise-en-service-desktop.md).
 
 ## Créer un projet
 
