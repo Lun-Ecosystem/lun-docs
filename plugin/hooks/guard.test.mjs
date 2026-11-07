@@ -93,6 +93,8 @@ const blockedNorms = [
   'gh pr create -d -t"fix x"',
   'gh pr edit 3 --title "fix:x"',
   'gh -R o/r pr edit 3 -t "Nouveau titre"',
+  'gh pr create --draft=false --title "fix: x" --body-file b.md',
+  'gh pr create --draft -dt "Titre libre"',
 ];
 for (const command of blockedNorms) {
   test(`blocks (norms): ${command}`, () => {
@@ -110,6 +112,10 @@ const allowedNorms = [
   'gh pr edit 3 --body-file b.md',
   'gh pr edit 3 --add-label niveau:standard',
   'gh pr ready 3',
+  'gh pr create --draft --title "fix: x" --body "-tout va bien"',
+  'gh pr edit 3 --title "fix: x" --body "-t ok"',
+  'gh pr create -dt "fix: x"',
+  'gh pr create --draft=true --title "fix: x"',
   'gh pr view 3 -R o/r',
   'git push origin feat/master-plan',
   'git switch main',

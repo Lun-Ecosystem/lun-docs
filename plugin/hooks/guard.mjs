@@ -1,5 +1,6 @@
 // PreToolUse hook (Bash and PowerShell): blocks what only CrOliX may do - merging a PR, pushing to
-// main or master, force-pushing - and a PR opened out of the norm: not a draft, or a title the CI refuses. Exit code 2 blocks the tool call and shows the reason to the agent.
+// main or master, force-pushing - and a PR opened out of the norm: not a draft, or a title the CI
+// refuses. Exit code 2 blocks the tool call and shows the reason to the agent.
 // Fails open on anything it cannot parse: the GitHub ruleset and the pre-push hook stay behind it.
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -46,6 +47,13 @@ const PROTECTED = new Set(['main', 'master', 'refs/heads/main', 'refs/heads/mast
 // The same expression as the "Conventional PR title" step of templates/ts/.github/workflows/ci.yml.
 const PR_TITLE = /^(feat|fix|docs|chore|ci|test|refactor)(\([a-z0-9-]+\))?!?: .+/;
 const GH_OPTIONS_WITH_VALUE = new Set(['-R', '--repo']);
+// The options of gh pr create and edit that take a value: a body starting with -t is not a title.
+const PR_OPTIONS_WITH_VALUE = new Set([
+  ...GH_OPTIONS_WITH_VALUE, '-b', '--body', '-F', '--body-file', '-B', '--base', '-H', '--head',
+  '-l', '--label', '-a', '--assignee', '-r', '--reviewer', '-m', '--milestone', '-p', '--project',
+  '-T', '--template', '--add-label', '--remove-label', '--add-assignee', '--remove-assignee',
+  '--add-reviewer', '--remove-reviewer', '--add-project', '--remove-project',
+]);
 
 const baseName = (cmd) => path.basename(cmd.replace(/\\/g, '/')).toLowerCase().replace(/\.exe$/, '');
 
@@ -82,18 +90,29 @@ function evaluatePush(args, branchHere) {
 
 /** `gh pr create` and `gh pr edit`: the title the CI will check, and a new PR as a draft (git.md). */
 function evaluatePr(action, args, command) {
+  let draft = null;
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     let title = null;
-    if (arg === '--title' || arg === '-t') title = args[i + 1] ?? '';
+    if (PR_OPTIONS_WITH_VALUE.has(arg)) { i++; continue; }
+    if (arg === '--title' || arg === '-t') title = args[++i] ?? '';
     else if (arg.startsWith('--title=')) title = arg.slice('--title='.length);
-    else if (arg.startsWith('-t') && !arg.startsWith('--')) title = arg.slice(2);
+    else if (arg === '--draft' || arg === '--draft=true') draft = true;
+    else if (arg.startsWith('--draft=')) draft = false;
+    else if (/^-[a-zA-Z]+/.test(arg) && !arg.startsWith('--')) {
+      // Short flags run together, as gh reads them: -dt "x" is a draft titled x, -tx is titled x.
+      const at = arg.indexOf('t');
+      if (arg.slice(1, at < 0 ? undefined : at).includes('d')) draft = true;
+      if (at > 0) title = at === arg.length - 1 ? (args[++i] ?? '') : arg.slice(at + 1);
+    }
     if (title !== null && !PR_TITLE.test(title)) {
       return `PR title "${title}" does not pass the CI: it must match ${PR_TITLE.source}`;
     }
   }
-  // On the whole command: a PowerShell here-string body with an apostrophe defeats the quote parsing.
-  if (action === 'create' && !/(^|\s)(--draft(=\S+)?|-d)(?=\s|$)/.test(command)) {
+  // Not found among the tokens: a PowerShell here-string with an apostrophe defeats the quote parsing,
+  // so look in the whole command. shortcut: a -d inside a quoted body then passes; the CI review stays.
+  if (draft === null) draft = /(^|\s)(--draft(=true)?|-d)(?=\s|$)/.test(command);
+  if (action === 'create' && !draft) {
     return 'a PR opens as a draft at the first push (git.md): add --draft, then gh pr ready once the criteria are proven';
   }
   return null;
