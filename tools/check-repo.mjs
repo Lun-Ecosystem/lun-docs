@@ -87,6 +87,11 @@ export function checkMaxLines(root, target, max) {
 
 const IPV4 = /(?<![\w.#])(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?![\w.])/g;
 const TAILNET = /\b[\w-]+(?:\.[\w-]+)*\.ts\.net\b/g;
+// Home network names; .local and .internal stay out: fixtures and plans use them as example domains.
+const HOME_NAME = /\b[\w-]+(?:\.[\w-]+)*\.(?:lan|home\.arpa)\b/g;
+// IPv6 unique local (fd00::/8): fd, two hex digits, then at least two more groups.
+const ULA = /(?<![\w:])fd[0-9a-f]{2}(?::[0-9a-f]{0,4}){2,}(?![\w:])/gi;
+const TEST_FILE = /\.(?:test|spec)\.[^./\\]+$/;
 
 function isInternal(a, b) {
   if (a === 10) return true;
@@ -99,7 +104,7 @@ function isInternal(a, b) {
 export function checkNoInternalAddresses(root) {
   const errors = [];
   for (const file of listFiles(root)) {
-    if (file.endsWith('.test.mjs')) continue; // fixtures contain addresses on purpose
+    if (TEST_FILE.test(file)) continue; // fixtures contain addresses on purpose
     const text = fs.readFileSync(file, 'utf8');
     if (text.includes('\0')) continue; // binary file
     const lines = text.split(/\r?\n/);
@@ -113,6 +118,8 @@ export function checkNoInternalAddresses(root) {
       for (const m of line.matchAll(TAILNET)) {
         errors.push(`${rel(root, file)}:${i + 1}: tailnet host ${m[0]}`);
       }
+      for (const m of line.matchAll(HOME_NAME)) errors.push(`${rel(root, file)}:${i + 1}: home network name ${m[0]}`);
+      for (const m of line.matchAll(ULA)) errors.push(`${rel(root, file)}:${i + 1}: IPv6 unique local ${m[0]}`);
     });
   }
   return errors;

@@ -131,3 +131,23 @@ test('checkSameFile reports two copies that drifted, and ignores line endings', 
   assert.equal(checkSameFile(root, 'a.md', 'b.md').length, 1);
   assert.deepEqual(checkSameFile(root, 'a.md', 'absent.md'), []);
 });
+
+test('checkNoInternalAddresses flags home network names and IPv6 ULA', () => {
+  const root = fixture({ 'e.md': 'nas.lan, box.home.arpa, fd00::1, fd12:3456:789a::1\n' });
+  const errors = checkNoInternalAddresses(root);
+  for (const needle of ['nas.lan', 'box.home.arpa', 'fd00::1', 'fd12:3456:789a::1']) {
+    assert.ok(errors.some((e) => e.includes(needle)), `expected a report for ${needle}`);
+  }
+});
+
+test('checkNoInternalAddresses leaves example names, localhost and look-alikes', () => {
+  const root = fixture({
+    'f.md': 'nas.local, http://tauri.localhost, x.landing, obj.internal, fd: 3, fdfd, ::1, fe80::1\n',
+  });
+  assert.deepEqual(checkNoInternalAddresses(root), []);
+});
+
+test('checkNoInternalAddresses skips test and spec files of any language', () => {
+  const root = fixture({ 'a.test.ts': '192.168.1.20', 'b.spec.js': '10.0.0.5', 'c.test.mjs': 'nas.lan' });
+  assert.deepEqual(checkNoInternalAddresses(root), []);
+});
