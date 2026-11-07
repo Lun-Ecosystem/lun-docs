@@ -1,6 +1,8 @@
 # Natsume au centre, slice 6: the places — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#25](https://github.com/Lun-Ecosystem/lun-anima/pull/25). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Replace the map, the old journal and Écosystème in `lun-anima/ui` with the five places of the spec (Bureau, Constellation, Journal, Atelier, Natsume's fiche), the menu, the state band, Natsume's column with its VS Code–like conversation panel, the phone layouts, the address tree, the keyboard and the `--anima` token.
 
@@ -118,12 +120,12 @@ Deleted in Task 31: `carte/` (all), `screens/` (all), `shell/Postes.svelte`, `sh
 **Interfaces:**
 - Produces CSS custom properties: `--anima #6B2D4F`, `--anima-survol #7C3A5E`, `--anima-doux rgba(107,45,79,.26)`, `--anima-bord rgba(214,170,196,.34)`, `--anima-texte #E2C3D3`, `--marque rgba(240,235,225,.78)`, `--marque-doux rgba(240,235,225,.22)`, `--cadre-focus` (prototype value), all in `:root`; `[data-monde='anima']` maps `--accent*` to them; `[data-monde='neutre']` (prototype values) for posts to link and the neutral world.
 
-- [ ] **Step 0: Branch**
+- [x] **Step 0: Branch**
 
 Run: `git switch feat/core-caps-pause && git switch -c feat/ui-natsume-centre && git -C ../lun-docs switch feat/kit-natsume-centre` (from `lun-anima`, like every command of this plan)
 Expected: `Switched to a new branch 'feat/ui-natsume-centre'`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```ts
 // ui/src/tokens.test.ts — reads lib/tokens.css with node:fs (// @vitest-environment node)
@@ -139,22 +141,22 @@ it('has the ivory marks and a neutral world', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `npx vitest run --project ui ui/src/tokens.test.ts`
 Expected: FAIL (`--anima` absent)
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 In `lun-docs/design/tokens.css`: add the `--anima*`, `--marque*`, `--cadre-focus` lines to `:root` with the prototype's comments (« accent d'Anima, distinct du rouge destructif »; « marques du monde : ivoire atténué »); replace the anima block body with the prototype's line 26 and its comment; add a `/* @monde neutre */ … /* @fin-monde */` block with line 28 of `carnet.css`. Then regenerate:
 `node ../lun-docs/tools/sync-tokens.mjs ui/src/lib/tokens.css` and `node ../lun-docs/tools/sync-tokens.mjs --monde anima core/src/tokens.css` (from `lun-anima`). Set `theme_color: '#6B2D4F'` in `ui/vite.config.ts` (ruling 20).
 
-- [ ] **Step 4: Run to verify it passes, and the token sync check**
+- [x] **Step 4: Run to verify it passes, and the token sync check**
 
 Run: `npx vitest run --project ui ui/src/tokens.test.ts && node ../lun-docs/tools/sync-tokens.mjs --check ui/src/lib/tokens.css && node ../lun-docs/tools/sync-tokens.mjs --check --monde anima core/src/tokens.css`
 Expected: PASS, `tokens: OK` twice
 
-- [ ] **Step 5: Commit both repos** (lun-docs on `feat/kit-natsume-centre`)
+- [x] **Step 5: Commit both repos** (lun-docs on `feat/kit-natsume-centre`)
 
 ```bash
 git -C ../lun-docs add design/tokens.css
@@ -181,7 +183,7 @@ git commit -m "feat(ui): --anima token, apart from the danger fill" -m "Co-Autho
   - `dollars(n: number): string` → `'0,42 $'`, `'0,00 $'` for 0, `'moins de 0,01 $'` for `0 < n < 0.005`
   - `depuis(iso: string, now: Date): string` → `'depuis 14:16'` today, `'depuis hier, 14:16'` otherwise (built on `quand`)
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('hours are 14:20, Paris time', () => expect(heure('2026-11-02T13:20:00.000Z')).toBe('14:20'));
@@ -215,19 +217,19 @@ it('amounts in dollars, two decimals', () => {
 
 (Use the typographic apostrophe `’` in copy only where the existing code already does; `Aujourd’hui` follows `posts.ts`.)
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project ui ui/src/time.test.ts`
 Expected: FAIL (functions not exported)
 
-- [ ] **Step 3: Implement** the functions with `Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris' })` and `Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })`; the narrow no-break space Intl puts before `$` is replaced by a plain space only if the formatter emits one (format the number alone and append `' $'`).
+- [x] **Step 3: Implement** the functions with `Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris' })` and `Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })`; the narrow no-break space Intl puts before `$` is replaced by a plain space only if the formatter emits one (format the number alone and append `' $'`).
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project ui ui/src/time.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/time.ts ui/src/time.test.ts
@@ -258,7 +260,7 @@ export function worldData(monde: Monde, world: string): World | undefined;
 `MONDE.lieux`: Bureau, À trancher, Constellation, Journal, Atelier, Natsume. `MONDE.worlds` in heptagram order, clockwise from the top, with the prototype polygon: ira (50, 12), avaritia (78.1, 26.3), gula (85.1, 58.5), superbia (65.6, 84.2), luxuria (34.4, 84.2), invidia (14.9, 58.5), acedia (21.9, 26.3); names `Lun'Ira` … from `nameOf`; roles: avaritia « Le cerveau », acedia « Mail, agenda, tâches » (the others none). `MONDE.natsume = 'Natsume'`. Natsume's star sits at (50, 50).
 - `testing/monde-neutre.ts`: `MONDE_NEUTRE: Monde` with lieux « Accueil », « À faire », « Carte », « Historique », « Réglages », « Assistante », three worlds `a`, `b`, `c` at other places, `natsume: 'Assistante'`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('lists the seven worlds in heptagram order, as the core does', () => {
@@ -271,19 +273,19 @@ it('every world has a place inside the sky', () => {
 it('roles come from the world data', () => expect(roleOf('lunavaritia')).toBe('Le cerveau'));
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project ui ui/src/monde.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** `monde.ts`, `monde-neutre.ts`, and `roleOf(id)` = `worldData(MONDE, worldOf(id))?.role`. Keep `roleOf`'s signature (callers unchanged).
+- [x] **Step 3: Implement** `monde.ts`, `monde-neutre.ts`, and `roleOf(id)` = `worldData(MONDE, worldOf(id))?.role`. Keep `roleOf`'s signature (callers unchanged).
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project ui ui/src/monde.test.ts ui/src/posts.test.ts`
 Expected: PASS (update the one `posts.test.ts` expectation for `lunavaritia` to « Le cerveau » if it checks it)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/monde.ts ui/src/monde.test.ts ui/src/testing/monde-neutre.ts ui/src/posts.ts ui/src/posts.test.ts
@@ -320,7 +322,7 @@ export function hrefOf(lieu: Lieu): string; // canonical address, default params
 - Rules: unknown paths → Bureau with `redirect: '/app/'`; `/app/valider` → `/app/trancher` (with query); `/app/ecosysteme?theme=x` → `/app/atelier/x` (old slug `cle` → `modele`), else `/app/atelier/postes`; `/app/atelier` → `/app/atelier/postes`; on a desktop `/app/trancher?…` → `/app/?…`; `?carte=avaritia:<id>` splits at the first `:`; `periode` defaults to `7j` and `hrefOf` leaves it out; an unknown `periode`, `type` or `theme` falls back to its default with a `redirect`.
 - Produces (`ui/src/shell/nav.svelte.ts`): `class Nav { lieu: Lieu; phone: boolean; constructor(phone: () => boolean); go(href: string, opts?: { replace?: boolean }): void; back(): void }` — `go` pushes (or replaces) history, re-parses, applies a `redirect` with `replaceState`; listens to `popstate`. Context key `'nav'`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 const p = (path: string, phone = false) => parseAddress(new URL(path, 'http://x'), phone);
@@ -352,19 +354,19 @@ it('hrefOf gives back the address, without defaults', () => {
 it('Nav follows the back button', () => { /* go('/app/journal'), go('/app/atelier/postes'), history.back() → popstate → lieu.place === 'journal' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project ui ui/src/shell/routes.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** `parseAddress`, `hrefOf`, `Nav`.
+- [x] **Step 3: Implement** `parseAddress`, `hrefOf`, `Nav`.
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project ui ui/src/shell/routes.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/shell/routes.ts ui/src/shell/nav.svelte.ts ui/src/shell/routes.test.ts
@@ -402,7 +404,7 @@ export function installEchap(target?: EventTarget): () => void;          // one 
 
 Escape closes the open layer of highest rank (`lot` > `feuille` > `detail` > `champ`), one per press; does nothing while an `[aria-modal="true"]` element is in the document (Bits UI handles its own, ruling 18); never changes place.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('no key needs Shift, Alt or AltGr', () => {
@@ -430,19 +432,19 @@ it('Escape closes one layer per press, the highest first', async () => {
 it('Escape leaves a modal dialog to itself', async () => { /* aria-modal div present → no close */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project ui ui/src/shell/touches.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** both modules. A remover is idempotent; `installEchap` calls `preventDefault` only when it closed something.
+- [x] **Step 3: Implement** both modules. A remover is idempotent; `installEchap` calls `preventDefault` only when it closed something.
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project ui ui/src/shell/touches.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/shell/touches.ts ui/src/shell/couches.ts ui/src/shell/touches.test.ts
@@ -484,7 +486,7 @@ export function queueCount(state: CoreState): { total: number; staleAt?: string 
 - Produces (`ui/src/testing/core.ts`): `coreState(over?: Partial<CoreState>): CoreState`, `queue(over?: Partial<Queue>): Queue`, `upcoming(over?)`, `word(place, over?)`, `postDetail(id, over?)`, `journalPage(over?)`; `fakeCore` defaults gain `'GET /state'`, `'GET /queue'`, `'GET /upcoming'`, `'GET /word'`, `'GET /satellites'`.
 - Produces (`ui/src/testing/Host.svelte`): props `{ component: Component; props?: Record<string, unknown>; phone?: boolean; monde?: Monde; state?: CoreState }`; sets contexts `api` (`createApi('tok')`), `etat`, `file`, `nav`, `monde`, `conversation`, `fil`, `posts` with real stores over `fakeCore`, renders the component and the kit `Toaster`. Later tasks add their stores to it as they are created (`file` in Task 15, `conversation`/`fil` in Task 9/11).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // etat.test.ts
@@ -528,19 +530,19 @@ it('« Prévenir seulement » keeps the first sentence', () => { /* plafond band
 
 Apostrophes (ruling 21): post names keep the straight `'` that `nameOf` gives (`Lun'Acedia`); every other apostrophe in fixed copy is the typographic `’`, as the existing app writes it (`n’est`, `Aujourd’hui`). Tests write strings the same way.
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project ui ui/src/etat.test.ts ui/src/shell/bande.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** types, `Etat`, `natsumeWord`, `queueCount`, `bandeOf`, the fixtures and `Host.svelte`. The band of a post (`poste-injoignable`, `poste-muet`) is never shown while `state.pause` is set (§4.3; the core may already drop it, the UI drops it too).
+- [x] **Step 3: Implement** types, `Etat`, `natsumeWord`, `queueCount`, `bandeOf`, the fixtures and `Host.svelte`. The band of a post (`poste-injoignable`, `poste-muet`) is never shown while `state.pause` is set (§4.3; the core may already drop it, the UI drops it too).
 
-- [ ] **Step 4: Validate the component and run the tests**
+- [x] **Step 4: Validate the component and run the tests**
 
 Run: `npx @sveltejs/mcp svelte-autofixer ui/src/testing/Host.svelte && npx vitest run --project ui ui/src/etat.test.ts ui/src/shell/bande.test.ts`
 Expected: no issue; PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/types.ts ui/src/etat.svelte.ts ui/src/etat.test.ts ui/src/shell/bande.ts ui/src/shell/bande.test.ts ui/src/testing/core.ts ui/src/testing/Host.svelte
@@ -561,7 +563,7 @@ git commit -m "feat(ui): one state store, Natsume's state word and the band text
 
 Menu content (§4.2): the seal and « Lun'Anima » linking to `/app/`; Bureau, Constellation, Journal, Atelier in Cormorant from `monde.lieux`, the active one marked by the ivory thread (`--marque`) with `aria-current="page"`; Bureau carries the counter in neutral (« 13 » or « 13, lu à 14:11 »), nothing at 0; presences of posts not `a-relier` (world dot via `data-monde`, name, line), each a link to `/app/constellation/<world>`; none: « Aucun poste relié » linking to `/app/atelier/postes/relier`; footer button « Chercher » with `<Kbd>Ctrl K</Kbd>` calling `onpalette`. No Natsume entry. Background per prototype `.menu` (`--anima-doux` gradient).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('lists the four places, the fiche of Natsume is not one', async () => {
@@ -586,19 +588,19 @@ it.each([[{ count: 2, urgent: 0 }, '2'], [{ count: 0, urgent: 2 }, '2 urgences']
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project ui ui/src/shell/Menu.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** both components with kit `NavLink` where it fits (it already renders an icon; the menu has none, so use plain `<a>` styled with tokens if `NavLink` forces an icon).
+- [x] **Step 3: Implement** both components with kit `NavLink` where it fits (it already renders an icon; the menu has none, so use plain `<a>` styled with tokens if `NavLink` forces an icon).
 
-- [ ] **Step 4: Validate and run**
+- [x] **Step 4: Validate and run**
 
 Run: `npx @sveltejs/mcp svelte-autofixer ui/src/shell/Menu.svelte && npx @sveltejs/mcp svelte-autofixer ui/src/shell/Presences.svelte && npx vitest run --project ui ui/src/shell/Menu.test.ts`
 Expected: no issue; PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/shell/Menu.svelte ui/src/shell/Presences.svelte ui/src/shell/Menu.test.ts
@@ -617,7 +619,7 @@ git commit -m "feat(ui): menu of places with the queue counter and presences" -m
 - Consumes: `bandeOf`, `BandeView` (Task 6); `Etat.read`; `POST /api/resume` (slice 5); `Nav.go`.
 - Produces: `Bande.svelte` (no props; reads contexts). Full-width row: tone dot, text, one button (`Button variant="doux" size="petit"`); `role="status"`; renders nothing when `bandeOf` is undefined; sets `--bande-h` on `document.documentElement` from its measured height (0 when absent) for the detail panel's top. Reprendre calls `POST /api/resume`, toasts « Natsume reprend. », then `etat.read()`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('shows nothing when all is well', () => { renderHost(Bande, { state: coreState() }); expect(screen.queryByRole('status')).toBeNull(); });
@@ -631,10 +633,10 @@ it('Reprendre lifts the pause and says so', async () => {
 it('Voir le poste leads to its panel', async () => { /* poste-injoignable → click → location.pathname === '/app/constellation/acedia' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/shell/Bande.test.ts` — FAIL
-- [ ] **Step 3: Implement** `Bande.svelte`.
-- [ ] **Step 4: Validate and run** — `npx @sveltejs/mcp svelte-autofixer ui/src/shell/Bande.svelte && npx vitest run --project ui ui/src/shell/Bande.test.ts` — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/shell/Bande.test.ts` — FAIL
+- [x] **Step 3: Implement** `Bande.svelte`.
+- [x] **Step 4: Validate and run** — `npx @sveltejs/mcp svelte-autofixer ui/src/shell/Bande.svelte && npx vitest run --project ui ui/src/shell/Bande.test.ts` — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/shell/Bande.svelte ui/src/shell/Bande.test.ts
@@ -675,7 +677,7 @@ export function borne(h: number, corps: number): number; // clamp to [FIL_MIN, c
 
 Stored as JSON `{ etat, hauteur }` under `lunanima.conversation`, written on every change; every storage access in try/catch; a stored value that is not an object, an unknown `etat`, or a `hauteur` not a finite positive number gives the defaults (`range`, `null`).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('opens at the default height, about 45 % of the body', () => {
@@ -714,10 +716,10 @@ it('arrows move by 24 px, double-click goes back to the default', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/panneau.test.ts` — FAIL
-- [ ] **Step 3: Implement** `PanneauConv` and `borne`.
-- [ ] **Step 4: Run to verify they pass** — same command — PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/panneau.test.ts` — FAIL
+- [x] **Step 3: Implement** `PanneauConv` and `borne`.
+- [x] **Step 4: Run to verify they pass** — same command — PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/natsume/panneau.svelte.ts ui/src/natsume/panneau.test.ts
@@ -744,7 +746,7 @@ Layout rules (§4.4, the word never moves):
 - E (`bindPlaceKeys({ conversation })`): if a detail panel is open, it closes (via the layer stack) and the field takes focus (§4.5 ruling of the spec); from `range`, `ouvrir()`; then focus the field.
 - While the field has focus, `pushCouche('champ', …)` returns focus to what had it before (§4.4: Escape in the field does not change the panel's state).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('the word keeps its width and scroll position when the panel opens, moves and folds', async () => {
@@ -771,10 +773,10 @@ it('the head button is disabled when Natsume is unreachable', () => { /* etat.do
 
 (`ColonneFixture.svelte` in `ui/src/natsume/fixtures/` renders `Colonne` with a tall word, a stub thread and a real `Champ`-like textarea labelled « Écrire à Natsume »; jsdom has no layout, so the test sets `panneau.corps = 800` through the context.)
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/Colonne.test.ts` — FAIL
-- [ ] **Step 3: Implement** `Colonne.svelte` and the fixture.
-- [ ] **Step 4: Validate and run** — `npx @sveltejs/mcp svelte-autofixer ui/src/natsume/Colonne.svelte && npx vitest run --project ui ui/src/natsume/Colonne.test.ts` — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/Colonne.test.ts` — FAIL
+- [x] **Step 3: Implement** `Colonne.svelte` and the fixture.
+- [x] **Step 4: Validate and run** — `npx @sveltejs/mcp svelte-autofixer ui/src/natsume/Colonne.svelte && npx vitest run --project ui ui/src/natsume/Colonne.test.ts` — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/natsume/Colonne.svelte ui/src/natsume/Colonne.test.ts ui/src/natsume/fixtures
@@ -800,7 +802,7 @@ git commit -m "feat(ui): Natsume's column, a panel that never moves her word" -m
   - `CarteReduite.svelte` props `{ satellite: string; card: Card }`: type (`card.kind ?? 'Carte'`), post, hour, title, then « Voir dans À trancher » (`nav.go('/app/?carte=<world>:<id>')`, phone `/app/trancher?carte=…`) while the file still has it, else the badge « Tranchée ». No gesture button, ever.
   - `Conversation.ouvrirSujet(thread: string, messageId?: number): void` (component export) for « Voir la conversation » (Task 22): opens the panel, opens the thread, scrolls that message into view.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a relayed card has no gesture, only « Voir dans À trancher »', async () => {
@@ -821,10 +823,10 @@ it.each([
 it('a manual pause keeps the field active', () => { expect(raisonChamp({ state: coreState({ pause: { since: S, by: 'manuel' } }), downSince: null })).toBeUndefined(); });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/Conversation.test.ts ui/src/natsume/fil.test.ts` — FAIL
-- [ ] **Step 3: Implement** the three components and `Fil.envoyer`. Topics come from `fil.threads` (`kind === 'topic'`), pill text `title` plus `heure(createdAt)`.
-- [ ] **Step 4: Validate and run** — autofixer on the three files, then the same vitest command — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/Conversation.test.ts ui/src/natsume/fil.test.ts` — FAIL
+- [x] **Step 3: Implement** the three components and `Fil.envoyer`. Topics come from `fil.threads` (`kind === 'topic'`), pill text `title` plus `heure(createdAt)`.
+- [x] **Step 4: Validate and run** — autofixer on the three files, then the same vitest command — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/natsume/Conversation.svelte ui/src/natsume/Champ.svelte ui/src/natsume/CarteReduite.svelte ui/src/natsume/fil.svelte.ts ui/src/natsume/Conversation.test.ts ui/src/natsume/fil.test.ts
@@ -862,7 +864,7 @@ Sections (§6.1, top to bottom), each absent when empty; a section whose read fa
 4. Ce que j'ai fait: the three entries (`done`), each a link to `/app/journal/<id>`, then « Journal du jour » (`/app/journal?periode=auj`).
 Reads once on mount and again on the window event `lun:changed` (dispatched by the app after each send, Task 29).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('shows the letter with its date and corrections', async () => {
@@ -879,10 +881,10 @@ it('an empty Ce qui vient disappears', async () => { /* items [], tasks [] → n
 it('the last three journal entries link to their detail', async () => { /* href '/app/journal/1284' and link 'Journal du jour' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/mot/MotBureau.test.ts` — FAIL
-- [ ] **Step 3: Implement** `mot.ts` and `MotBureau.svelte` (headings in Cormorant, lines in Inter, tokens only).
-- [ ] **Step 4: Validate and run** — autofixer on `MotBureau.svelte`, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/mot/MotBureau.test.ts` — FAIL
+- [x] **Step 3: Implement** `mot.ts` and `MotBureau.svelte` (headings in Cormorant, lines in Inter, tokens only).
+- [x] **Step 4: Validate and run** — autofixer on `MotBureau.svelte`, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/natsume/mot
@@ -905,7 +907,7 @@ git commit -m "feat(ui): the Bureau's word, letter first" -m "Co-Authored-By: Cl
   - Atelier: « Derniers réglages », three dated lines (`quand(at)` and the entry's `title`) « hier, 18:42 : délai de réponse de Lun'Acedia, 8 s ».
   - Natsume: Lettre du matin 07:30, Confié aujourd'hui, Dépense du jour.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('Constellation: routines and spend from the state', async () => {
@@ -921,10 +923,10 @@ it('Atelier: the last three settings, dated', async () => { /* 'hier, 18:42 : d�
 it('Natsume: letter time, delegations and spend of the day', async () => { /* '07:30', '2', '0,42 $' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/mot/mots.test.ts` — FAIL
-- [ ] **Step 3: Implement** the four components.
-- [ ] **Step 4: Validate and run** — autofixer on each of the four files, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/natsume/mot/mots.test.ts` — FAIL
+- [x] **Step 3: Implement** the four components.
+- [x] **Step 4: Validate and run** — autofixer on each of the four files, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/natsume/mot
@@ -946,7 +948,7 @@ git commit -m "feat(ui): the word of the Constellation, the Journal, the Atelier
   - Phone: a bottom sheet with Bits `Dialog` (modal), header with « Replier », a veil that closes on click; Android back closes it first (the owner place pushes an address for the sheet, so Back pops it — the component itself only calls `onclose`).
   - Registers `pushCouche(phone ? 'feuille' : 'detail', onclose)` while open.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('Escape closes it and gives the focus back to its opener', async () => {
@@ -959,10 +961,10 @@ it('on a phone it is a sheet with « Replier »', async () => { renderHost(Detai
 it('it does not push the page: no class or style is set on the page', () => { /* document.querySelector('[data-page]') style unchanged */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/shell/Detail.test.ts` — FAIL
-- [ ] **Step 3: Implement** `Detail.svelte` and `ui/src/shell/fixtures/DetailFixture.svelte`.
-- [ ] **Step 4: Validate and run** — autofixer on both, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/shell/Detail.test.ts` — FAIL
+- [x] **Step 3: Implement** `Detail.svelte` and `ui/src/shell/fixtures/DetailFixture.svelte`.
+- [x] **Step 4: Validate and run** — autofixer on both, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/shell/Detail.svelte ui/src/shell/Detail.test.ts ui/src/shell/fixtures
@@ -1009,7 +1011,7 @@ export class FileStore {
 - a `POST` refused (`holdGesture` throws: `4xx`, `5xx`, network) puts the rows back and shows the error on the card.
 - Produces (`ui/src/file/textes.ts`): `factsOf(geste: Geste): ToastFacts` and `texteDe(geste: Geste): string` = `heldToastText(factsOf(geste))` — « Validée : Paul Mercier. », « Refusée : Adresse de Marion. », « Urgence vue : la banque demande un justificatif. » (`factsOf` lowers the title's first letter), « Brouillon créé : Réponse à Paul. » (ruling 1), « Réponse donnée : Chez Lulu. » (question), « 5 fiches validées. », « Les deux fiches validées. », « Les deux fiches refusées. », « Une fiche validée, l’autre refusée. » (ruling 3), « C'est fait : … », « Plus tard : … » (ruling 5); `nomDe(kind?: string): { un: string; plusieurs: string }` (ruling 6).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // textes.test.ts
@@ -1039,10 +1041,10 @@ it('a refused post puts the row back and says why', async () => { /* POST 500 { 
 it('a relay failure puts the card back with its reason', async () => { /* vi.useFakeTimers, GET /gestures/7 → relayed, items[0] { outcome: 'failed', reason } → item.failure === reason */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/file/file.test.ts ui/src/file/textes.test.ts` — FAIL
-- [ ] **Step 3: Implement** both modules; add `file` to `testing/Host.svelte`.
-- [ ] **Step 4: Run to verify they pass** — same command — PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/file/file.test.ts ui/src/file/textes.test.ts` — FAIL
+- [x] **Step 3: Implement** both modules; add `file` to `testing/Host.svelte`.
+- [x] **Step 4: Run to verify they pass** — same command — PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/file ui/src/testing/Host.svelte
@@ -1072,7 +1074,7 @@ git commit -m "feat(ui): one queue store, held gestures and their toasts" -m "Co
     - a relay failure: its line and Réessayer (runs the same `Geste` again).
 - Keys (only inside `data-aide="file"`, never from a field): ArrowDown/ArrowUp choose the next/previous row across groups; V = Valider, or Vu on an urgency; never on `sends`, a question or a pile; R = Refuser (also on `sends`). After a gesture the focus goes to the first gesture of the next row at the same rank (`leaveRow`).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a row not unfolded has no Valider', async () => {
@@ -1102,10 +1104,10 @@ it('Natsume unreachable: every gesture is disabled', async () => { /* etat.downS
 it('a group folds at its title', async () => { /* click group title → aria-expanded false, rows hidden */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/file/File.test.ts` — FAIL
-- [ ] **Step 3: Implement** the three components (kit `Button`, `Badge`, `TextInput`, `Tooltip`).
-- [ ] **Step 4: Validate and run** — autofixer on `File.svelte`, `Rangee.svelte`, `Depliee.svelte`, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/file/File.test.ts` — FAIL
+- [x] **Step 3: Implement** the three components (kit `Button`, `Badge`, `TextInput`, `Tooltip`).
+- [x] **Step 4: Validate and run** — autofixer on `File.svelte`, `Rangee.svelte`, `Depliee.svelte`, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/file ui/src/screens/focus.ts
@@ -1128,7 +1130,7 @@ git commit -m "feat(ui): the queue, rows and the card unfolded in place" -m "Co-
   - `Lot.svelte` props `{ satellite: string; cards: Card[]; onclose: () => void }`: heading « Valider ensemble », « Décoche une fiche pour la laisser à trancher. », one row per card (kit `Checkbox` checked, title, contents, reason), footer Fermer and the submit button whose label follows the checked count: « Valider les 5 fiches », « Valider la fiche », « Aucune fiche cochée » (disabled). Uses `nomDe(kind)` for « fiche(s) »/« carte(s) ».
   - In `File.svelte`: a group whose `batchable` items number at least two shows « Valider les N fiches » (`Button variant="doux"`) at its title; clicking replaces the group by `Lot`; the title button disappears meanwhile; Escape (layer `lot`) or Fermer brings the group back.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a batch of 5 with one unchecked validates 4, one toast, Annuler restores all', async () => {
@@ -1149,10 +1151,10 @@ it('a pile: « Valider celle-ci » keeps one and refuses the other', async () =>
 it('a pile never joins a batch', () => { /* group with pile + 2 batchable → button 'Valider les 2 fiches' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/file/Lot.test.ts` — FAIL
-- [ ] **Step 3: Implement** both components and the two modifications.
-- [ ] **Step 4: Validate and run** — autofixer on `Pile.svelte`, `Lot.svelte`, `File.svelte`, `Depliee.svelte`, then `npx vitest run --project ui ui/src/file` — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/file/Lot.test.ts` — FAIL
+- [x] **Step 3: Implement** both components and the two modifications.
+- [x] **Step 4: Validate and run** — autofixer on `Pile.svelte`, `Lot.svelte`, `File.svelte`, `Depliee.svelte`, then `npx vitest run --project ui ui/src/file` — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/file
@@ -1175,7 +1177,7 @@ git commit -m "feat(ui): piles and batches with exceptions, undone as one" -m "C
   - Choosing a row writes `?carte=` with `replaceState` (the chosen card survives a reload); folding it back removes it.
   - `BureauTel.svelte` (phone `/app/`): presences as wrapping pills, « À trancher » and the three most pressing (urgent first, then the queue order), each a link to `/app/trancher?carte=…`, « Voir les 13 », then `MotBureau`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('the title carries the same number as the state', async () => { renderHost(Bureau); expect(await screen.findByRole('heading', { name: 'À trancher 13' })).toBeInTheDocument(); });
@@ -1194,10 +1196,10 @@ it('phone Bureau: three most pressing and « Voir les 13 »', async () => { rend
 it('phone tab: chips filter by post', async () => { /* click 'Lun'Acedia 2' → location.search '?poste=acedia' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/lieux/Bureau.test.ts` — FAIL
-- [ ] **Step 3: Implement** both components.
-- [ ] **Step 4: Validate and run** — autofixer on both, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/lieux/Bureau.test.ts` — FAIL
+- [x] **Step 3: Implement** both components.
+- [x] **Step 4: Validate and run** — autofixer on both, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/lieux
@@ -1220,7 +1222,7 @@ git commit -m "feat(ui): the Bureau and the phone's À trancher" -m "Co-Authored
   - Natsume's star: monogram, `natsumeWord`, « 13 à trancher »; link to `/app/constellation/natsume`, which focuses the column's word (desktop) — no panel.
   - `Constellation.svelte`: heading « Constellation », the sky, a visually hidden list doubling it (`<ul>` with the same names), the post panel when `lieu.poste` is a world, the phone list (Natsume then the posts in heptagram order, state and number) under 768 px; Tab follows heptagram order (DOM order of the stars = `MONDE.worlds` order after Natsume); Enter on a star opens it (native link). No post: Natsume's star alone and « Relier un poste ». `data-aide="ciel"`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('each world sits at its fixed place, in heptagram order', async () => {
@@ -1239,10 +1241,10 @@ it('nothing here decides a card', () => { expect(screen.queryByRole('button', { 
 it('phone: a list of stars', () => { renderHost(Constellation, { phone: true }); /* list items Natsume, then posts */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/constellation/Constellation.test.ts` — FAIL
-- [ ] **Step 3: Implement** the three components (copy the disc styles of `Noeud.svelte`, then delete nothing yet).
-- [ ] **Step 4: Validate and run** — autofixer on the three files, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/constellation/Constellation.test.ts` — FAIL
+- [x] **Step 3: Implement** the three components (copy the disc styles of `Noeud.svelte`, then delete nothing yet).
+- [x] **Step 4: Validate and run** — autofixer on the three files, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/constellation
@@ -1270,7 +1272,7 @@ git commit -m "feat(ui): the Constellation, worlds at fixed places" -m "Co-Autho
   - Just paired with no capability (`lastSuccess.count === 0` and no delegation setting, from `GET /api/settings` `posts[id].night === false`, slice 5): « Ce que Natsume peut lui confier : Lun'Ira n'a encore rien déclaré. », « Rien ne lui est confié tant que tu ne l'as pas réglé. », « Régler la veille de la nuit ».
   - A click on another star changes the content without closing (keyed on `world`); Escape, the cross, or Back close it and clean the address to `/app/constellation`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('Escape closes the panel, returns the focus to the star and cleans the address', async () => {
@@ -1287,10 +1289,10 @@ it('a world to link offers « Relier Lun'Ira »', async () => { /* GET /posts/lu
 it('the API is called with the satellite id', async () => { /* fetch called with '/api/posts/lunacedia' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/constellation/PanneauPoste.test.ts` — FAIL
-- [ ] **Step 3: Implement** the panel and mount it.
-- [ ] **Step 4: Validate and run** — autofixer on `PanneauPoste.svelte`, `Constellation.svelte`, then `npx vitest run --project ui ui/src/constellation` — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/constellation/PanneauPoste.test.ts` — FAIL
+- [x] **Step 3: Implement** the panel and mount it.
+- [x] **Step 4: Validate and run** — autofixer on `PanneauPoste.svelte`, `Constellation.svelte`, then `npx vitest run --project ui ui/src/constellation` — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/constellation
@@ -1310,7 +1312,7 @@ git commit -m "feat(ui): a post's panel, diagnostic first" -m "Co-Authored-By: C
 - Produces (`ui/src/journal/filtres.ts`): `apiQuery(l: Extract<Lieu, { place: 'journal' }>, avant?: string): string` (app world id → satellite id, `natsume` → `lunanima` (ruling 17), `q` trimmed, `periode` always sent); `OUTCOMES: Record<JournalOutcome, { label: string; tone: Tone }>` = À trancher (ia), Tranchée (ok), Vue (neutre), Fait (ok), Échoué (danger), Sautée (neutre) — « Sautée, en pause » when `meta` says pause is the core's text, not the UI's.
 - `Journal.svelte`: heading « Journal », « 1 286 événements depuis le 12 octobre » (`total` with a thin space thousands separator from `Intl.NumberFormat('fr-FR')`, `since` as `dateLongue` without weekday… use « le 12 octobre »); filter row: search (placeholder « Chercher : Paul, banque, veille », count of results (`matched`) when a filter acts), period (`Segmented`: Aujourd'hui, 7 jours, Tout), post chips (Tous, each linked post, Natsume), « Plus de filtres » toggling the types (Tous, Urgences, Cartes, Confiés, Routines). Every filter change calls `nav.go(hrefOf(...))` (push, so Back gives the previous filter); the search pushes after 300 ms idle and on Enter. List grouped by day: « Aujourd'hui », « Hier », then « lundi 2 novembre, 6 événements »; rows: hour, world mark, title, meta, outcome badge; each row a link to `/app/journal/<n>` (keeps the filters); « Plus ancien » appends `next`. Empty: « Rien ne correspond. », « Aucun événement avec ces filtres. », « Effacer les filtres »; nothing at all: « Rien d'écrit encore. »; error: « Le Journal ne s'est pas chargé. » and Réessayer. Ctrl F (Journal only, `bindPlaceKeys({ chercher })`) focuses the search; ArrowUp/Down move between rows (`data-aide="journal"`). Phone: filters folded under « Filtres ».
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('period, post, type and search combine in the address and the request', async () => {
@@ -1331,10 +1333,10 @@ it('Ctrl F focuses the search', async () => { await userEvent.keyboard('{Control
 it('no cost total anywhere', async () => { expect(screen.queryByText(/\$/)).toBeNull(); });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/journal/Journal.test.ts` — FAIL
-- [ ] **Step 3: Implement** `filtres.ts` and `Journal.svelte` (reuse the load/append/generation logic of `screens/Journal.svelte`).
-- [ ] **Step 4: Validate and run** — autofixer on `Journal.svelte`, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/journal/Journal.test.ts` — FAIL
+- [x] **Step 3: Implement** `filtres.ts` and `Journal.svelte` (reuse the load/append/generation logic of `screens/Journal.svelte`).
+- [x] **Step 4: Validate and run** — autofixer on `Journal.svelte`, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/journal
@@ -1354,7 +1356,7 @@ git commit -m "feat(ui): the Journal, filters in the address" -m "Co-Authored-By
 - Consumes: `GET /api/journal/:id` → `JournalDetail` (slice 3); `Detail`; `Conversation.ouvrirSujet` (Task 11, reached through the `conversation` context: `panneau.ouvrir()` then `fil.open(thread)` and a `scrollIntoView` on `[data-message="<id>"]`); `frontHref`; `quand`, `heure`, `dollars`.
 - Produces: `PanneauEntree.svelte` props `{ n: number }`: breadcrumb « Journal / Aujourd'hui, 11:04 » and « n° 1 284 »; title, meta, outcome badge; **La chaîne** (dated steps, the last one marked; « La carte est à trancher. » for a pending outcome); « Ce qui a été confié » for a delegation (type `confie`: its title and steps); Coût (`cost`), Durée (`durationMs`), Références (`refs`); « Trancher la carte » when `pending` holds a card (→ `/app/?carte=<worldOf(pending.satellite)>:<pending.card.id>`, phone `/app/trancher?carte=…`); footer « Voir la conversation » (when `threadId`, with `messageId`; hidden when `threadId` is absent) and « Ouvrir dans Lun'Acedia » (new tab). ArrowUp/ArrowDown with the panel open move to the previous/next entry of the loaded list (address `/app/journal/<n>` replaced, filters kept). Closing returns to `/app/journal?<filters>` and focuses the row.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a pending entry leads to its card', async () => {
@@ -1368,10 +1370,10 @@ it('« Voir la conversation » opens the panel on that topic', async () => { /* 
 it('Escape closes and keeps the filters', async () => { /* '/app/journal/1284?periode=auj' → Escape → '/app/journal?periode=auj' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/journal/PanneauEntree.test.ts` — FAIL
-- [ ] **Step 3: Implement** the panel and mount it.
-- [ ] **Step 4: Validate and run** — autofixer on both files, then `npx vitest run --project ui ui/src/journal` — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/journal/PanneauEntree.test.ts` — FAIL
+- [x] **Step 3: Implement** the panel and mount it.
+- [x] **Step 4: Validate and run** — autofixer on both files, then `npx vitest run --project ui ui/src/journal` — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/journal
@@ -1394,7 +1396,7 @@ git commit -m "feat(ui): a Journal entry and its chain in a panel" -m "Co-Author
   - `Clavier.svelte`: banner « Bientôt modifiables. », then `TOUCHES` grouped Partout, À trancher, Ailleurs, read-only (`Kbd` and effect).
   - `Notifications.svelte`: « Notifications non activées. » only.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('arrows move between themes', async () => {
@@ -1408,10 +1410,10 @@ it('a failed save says so on its line', async () => { /* save rejects → 'Ce r�
 it('Clavier shows the table read-only', async () => { /* banner text, 'Ctrl K' row, no input */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/atelier/Atelier.test.ts` — FAIL
-- [ ] **Step 3: Implement** the four components.
-- [ ] **Step 4: Validate and run** — autofixer on the four files, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/atelier/Atelier.test.ts` — FAIL
+- [x] **Step 3: Implement** the four components.
+- [x] **Step 4: Validate and run** — autofixer on the four files, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/atelier
@@ -1432,7 +1434,7 @@ git commit -m "feat(ui): the Atelier, its save rule, Clavier and Notifications" 
   - `Postes.svelte`: per linked post (`id="poste-<world>"`), one `SettingsCard`: role and « Relié depuis le 27 octobre » (`pairedAt`); Agent (read-only, no line when empty); Lui confier la veille de la nuit (bascule, `night`); Plafond du poste (champ, `capUsd`, empty = `null`, hint « Au-delà, plus rien ne lui est confié jusqu'à 05:00 »); Délai de réponse (champ, seconds, `replyTimeoutS`); Alertes urgentes en direct (bascule, `liveUrgent`); Bilan du jour (bascule, `digest`); « Adresse de sa page » (the old front address row, ruling 14); « État et diagnostic » (link to `/app/constellation/<world>`); Délier (`ConfirmDialog`, focus on Fermer, `confirmVariant="danger-plein"`, the prototype's text). A world to link: one row with Relier (→ `/app/atelier/postes/relier?poste=<world>`). No live state here.
   - `Relier.svelte` (page `/app/atelier/postes/relier`): `Steps` « Le poste », « Le code », « Vérification »; address field, then `CodeInput` (six digits shown by the post), a countdown, hint « Tu peux coller le code. »; errors « Il faut six chiffres. », the core's refusal text, « Code expiré. Demande un nouveau code au poste. »; on success: `nav.go('/app/constellation/<world>')` and toast « Lun'Ira est relié. ».
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('one template per linked post, the agent only when declared', async () => { /* two posts, one agentName 'Iris' → one 'Agent' row */ });
@@ -1443,10 +1445,10 @@ it('Relier: success opens the post in the Constellation and says so', async () =
 it('no live state in the Atelier', async () => { expect(screen.queryByText(/ne répond pas|Réessayer/)).toBeNull(); });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/atelier/Postes.test.ts` — FAIL
-- [ ] **Step 3: Implement** both components; hook `Relier` into `Atelier.svelte` when `lieu.relier`.
-- [ ] **Step 4: Validate and run** — autofixer on `Postes.svelte`, `Relier.svelte`, `Atelier.svelte`, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/atelier/Postes.test.ts` — FAIL
+- [x] **Step 3: Implement** both components; hook `Relier` into `Atelier.svelte` when `lieu.relier`.
+- [x] **Step 4: Validate and run** — autofixer on `Postes.svelte`, `Relier.svelte`, `Atelier.svelte`, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/atelier
@@ -1467,7 +1469,7 @@ git commit -m "feat(ui): Atelier Postes and the Relier page" -m "Co-Authored-By:
   - `Depenses.svelte`: Aujourd'hui (« remis à zéro à 05:00 ») by source (each post « 0,05 $ sur 1,00 $ », its cap from settings, « 0,05 $ » alone when `null`; « Natsume seule » is the `natsume` source with Conversation `chat` and lettre du matin `routines`); the last seven days in bars (CSS bars sized by `spend.week`, labelled for screen readers); Plafonds: Par jour (`id="plafond-jour"`, hint « Pour Natsume et tous ses postes »), Par mois (`id="plafond-mois"`), « Quand un plafond est atteint » (choix: Prévenir seulement, Mettre en pause), « Prévenir à 80 % du plafond » (bascule) with « Notifications non activées. » and a link to `/app/atelier/notifications`. Consequence lines while typing a cap below the spend: « Sous la dépense du jour (0,42 $) : pause jusqu'à 05:00. », « Sous la dépense du mois : pause jusqu'au 1er décembre. ». After a cap save: `etat.read()` (the band and the head follow).
   - `ModeleCle.svelte`: the model, the key (« Enregistrée le 27 octobre, se termine par 4f2a », or « Refusée à 14:10. Colle une nouvelle clé. »), its expiry, the reply length; the key is never shown again.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a cap below the spend shows its consequence', async () => {
@@ -1480,10 +1482,10 @@ it('amounts are dollars with two decimals', async () => { /* '0,05 $ sur 1,00 $'
 it('the key is never shown', async () => { /* only 'se termine par 4f2a' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/atelier/Depenses.test.ts` — FAIL
-- [ ] **Step 3: Implement** both components.
-- [ ] **Step 4: Validate and run** — autofixer on both, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/atelier/Depenses.test.ts` — FAIL
+- [x] **Step 3: Implement** both components.
+- [x] **Step 4: Validate and run** — autofixer on both, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/atelier
@@ -1504,7 +1506,7 @@ git commit -m "feat(ui): Atelier spend, caps, model and key" -m "Co-Authored-By:
   - `Routines.svelte`: Veille de la nuit (05:00) and Lettre du matin (07:30): last run (`quand`), result, « Lancer maintenant » (also during a pause); a relaunched letter is a correction (the core decides; the UI says the result line it gets).
   - `Appareils.svelte`: « Un appareil reconnu voit tout Lun'Anima. », the list (badge « Cet appareil »), Révoquer (`ConfirmDialog`, focus on Fermer), « Ajouter un appareil » → `nav.go('/app/atelier/appareils?ajout=1')` which shows the code « 731 506 », « Valable encore 4:59. Un seul usage. » (live countdown m:ss) and « Annuler ce code ».
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('adding a device puts ?ajout=1 in the address and shows the code', async () => { /* code '731506' → '731 506', 'Valable encore 4:59. Un seul usage.' */ });
@@ -1512,10 +1514,10 @@ it('Révoquer asks first, focus on Fermer', async () => { /* … */ });
 it('Lancer maintenant works during a pause', async () => { /* state.pause set → button enabled, POST /routines/morning */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/atelier/Appareils.test.ts` — FAIL
-- [ ] **Step 3: Implement** both components.
-- [ ] **Step 4: Validate and run** — autofixer on both, then `npx vitest run --project ui ui/src/atelier` — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/atelier/Appareils.test.ts` — FAIL
+- [x] **Step 3: Implement** both components.
+- [x] **Step 4: Validate and run** — autofixer on both, then `npx vitest run --project ui ui/src/atelier` — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/atelier
@@ -1537,7 +1539,7 @@ git commit -m "feat(ui): Atelier routines and devices" -m "Co-Authored-By: Claud
   - `MiseEnRoute.svelte` (`/app/mise-en-route`): header « 4 réglages avant de commencer. » counting the first four not done (ruling 2); rows checked by the state only: Cet appareil est reconnu, La clé du modèle (link Modèle et clé), Les plafonds with « Garder ces valeurs » (`PATCH /api/settings { capsKept: true }`, then `etat.read()`), Un premier poste relié (link Relier), Les notifications (badge « bientôt »), Un second appareil (facultatif, link Ajouter un appareil). Done: `nav.go('/app/', { replace: true })`.
   - `Appareil.svelte` (`/app/appareil`, no token): « Ce navigateur n'est pas encore reconnu », the device code field, « Rien de Lun'Anima n'est affiché avant la reconnaissance. », Entrer; `revoque`: heading « Cet appareil a été révoqué ». Props `{ revoque: boolean; onPaired: (token: string) => void }`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('the fiche says what is true today and what will come', () => { /* texts; no tablist */ });
@@ -1550,10 +1552,10 @@ it('the unknown browser shows nothing of Lun'Anima', () => { /* only the code fo
 it('a revoked device says so', () => { /* revoque → 'Cet appareil a été révoqué' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/lieux/Lieux.test.ts` — FAIL
-- [ ] **Step 3: Implement** the three components.
-- [ ] **Step 4: Validate and run** — autofixer on the three, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/lieux/Lieux.test.ts` — FAIL
+- [x] **Step 3: Implement** the three components.
+- [x] **Step 4: Validate and run** — autofixer on the three, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/lieux
@@ -1574,7 +1576,7 @@ git commit -m "feat(ui): Natsume's fiche, first launch and the device page" -m "
   - `commandsOf(ctx: { state: CoreState | null; queue: Queue | null; monde: Monde; go: (href: string) => void; pause: () => void; resume: () => void; retry: (satellite: string) => void }): PaletteCommand[]` with groups (French group labels): « Lieux » (« Bureau, 13 à trancher », Constellation, Journal, Atelier, « Fiche de Natsume »), « Postes » (each linked post with its presence line or state), « Gestes » (Mettre en pause or Reprendre, or Relever le plafond; « Réessayer Lun'Acedia » only for a `muet` post; Relier un poste; Ajouter un appareil), « Réglages » (Plafond par jour, Plafond par mois, Modèle et clé, Raccourcis clavier → their Atelier address and fragment), « À trancher » (the five most pressing: urgent first then queue order; each opens `/app/?carte=…`). No command decides a card.
   - `Aide.svelte`: a one-line bar at the bottom of the page; on `focusin` it reads `document.activeElement.closest('[data-aide]')?.dataset.aide` and shows the keys of `TOUCHES` for that context (`file`: Flèches, V, R, Ctrl Z, E; `journal`: Flèches, Entrée, Ctrl F; `ciel`: Tab, Entrée; `atelier`: Flèches gauche et droite, Entrée, Échap; elsewhere: Ctrl K, E); inside a field (`saisie` or any input) it shows only Entrée, Maj Entrée, Échap. No message, no card reason.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('groups places, posts, gestures, settings and the five most pressing', () => {
@@ -1587,10 +1589,10 @@ it('Réessayer only for a mute post', () => { /* one muet → 'Réessayer Lun'Ac
 it('the help bar hides V and R while typing', async () => { /* focus textarea in data-aide=file → shows 'Entrée', not 'V' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/shell/palette.test.ts` — FAIL
-- [ ] **Step 3: Implement** both.
-- [ ] **Step 4: Validate and run** — autofixer on `Aide.svelte`, then vitest — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/shell/palette.test.ts` — FAIL
+- [x] **Step 3: Implement** both.
+- [x] **Step 4: Validate and run** — autofixer on `Aide.svelte`, then vitest — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/shell/palette.ts ui/src/shell/Aide.svelte ui/src/shell/palette.test.ts
@@ -1612,7 +1614,7 @@ git commit -m "feat(ui): palette groups and the help bar" -m "Co-Authored-By: Cl
   - `App.svelte`: without a token → `Appareil` at `/app/appareil` (`?revoque` after a 401: ruling 11); with one → creates `Etat`, `FileStore`, `Nav`, `PanneauConv`, `Fil`, `posts` and sets their contexts (`monde` = `MONDE` unless a `monde` prop is given — the hook for the neutral test); the `api` context's `send` and `stream` re-read `etat` and `file` after each call and dispatch `lun:changed`; `etat.start()`; `installEchap()`; redirects: `parseAddress().redirect` with `replaceState`, `/app/` → `/app/mise-en-route` while `state.route.done === false`; Natsume unreachable with no snapshot: an error screen « Natsume ne répond pas. » with Réessayer, no data.
   - `Shell.svelte`: desktop grid (§4.1) `grid-template-rows: auto 1fr; grid-template-columns: clamp(180px, 16vw, 240px) 1fr clamp(280px, 25vw, 360px)`, the band on the first row across; `Menu`, the page cell (`data-page`, `position: relative`, kit `Toaster contained` inside it — ruling 12 — and `Aide` at its bottom), `Colonne` with the place's word (`MotBureau` for bureau/trancher, `MotConstellation`, `MotJournal`, `MotAtelier`, `MotNatsume` for natsume and mise-en-route), `Conversation` and `Champ`. The place renders in a `{#key lieu.place}` block with a 180 ms opacity fade, none under `prefers-reduced-motion: reduce`. The palette (kit `CommandPalette`, lazy as today) with `commandsOf`. `/app/constellation/natsume` on a desktop calls `Colonne.focusMot()`. Phone chrome comes in Task 30.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('/app/ shows the Bureau with the menu, the band and Natsume\'s column', async () => {
@@ -1644,10 +1646,10 @@ it('with a neutral world the tool stays complete', async () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/App.test.ts ui/src/monde-neutre.test.ts` — FAIL
-- [ ] **Step 3: Implement** `Shell.svelte` and `App.svelte`; remove the old exports `Route`, `ROUTES`, `pathOf`, `routeFromPath` from `shell/routes.ts` and their old tests.
-- [ ] **Step 4: Validate and run** — `npx @sveltejs/mcp svelte-autofixer ui/src/shell/Shell.svelte && npx @sveltejs/mcp svelte-autofixer ui/src/App.svelte && npx vitest run --project ui ui/src/App.test.ts ui/src/monde-neutre.test.ts ui/src/shell` — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/App.test.ts ui/src/monde-neutre.test.ts` — FAIL
+- [x] **Step 3: Implement** `Shell.svelte` and `App.svelte`; remove the old exports `Route`, `ROUTES`, `pathOf`, `routeFromPath` from `shell/routes.ts` and their old tests.
+- [x] **Step 4: Validate and run** — `npx @sveltejs/mcp svelte-autofixer ui/src/shell/Shell.svelte && npx @sveltejs/mcp svelte-autofixer ui/src/App.svelte && npx vitest run --project ui ui/src/App.test.ts ui/src/monde-neutre.test.ts ui/src/shell` — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/App.svelte ui/src/App.test.ts ui/src/monde-neutre.test.ts ui/src/shell ui/src/testing/core.ts
@@ -1671,7 +1673,7 @@ git commit -m "feat(ui): the places in one shell, the app switched over" -m "Co-
   - `BarreTel.svelte`: « Écrire à Natsume » bar above the navigation on every page (or `raisonChamp` when disabled); it opens a sheet (header « Natsume » and state, Replier, thread, topics, field). Opening any sheet (conversation, a post, Natsume, a Journal entry) pushes a history entry (`history.pushState({ feuille: true }, '')` for the conversation; the address of the detail for the others), so Android's Back closes the sheet before leaving the place.
   - Constellation on a phone: the star list; a post or Natsume opens the sheet (ruling 13 for Natsume). Journal on a phone: filters folded under « Filtres »; an entry opens as a sheet.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // matchMedia stubbed to phone
@@ -1687,10 +1689,10 @@ it('a Journal entry and a post open as sheets; a card unfolds in place', async (
 it('the header links the monogram to the fiche', async () => { /* href '/app/natsume' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/shell/Telephone.test.ts` — FAIL
-- [ ] **Step 3: Implement** the two components and the phone layout (`@media (max-width: 767.98px)`: single column, header, band, page, conversation bar, bottom navigation; `env(safe-area-inset-*)` kept as today).
-- [ ] **Step 4: Validate and run** — autofixer on `TeteTel.svelte`, `BarreTel.svelte`, `Shell.svelte`, `Constellation.svelte`, `Journal.svelte`, then `npx vitest run --project ui` — no issue; PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 2: Run to verify they fail** — `npx vitest run --project ui ui/src/shell/Telephone.test.ts` — FAIL
+- [x] **Step 3: Implement** the two components and the phone layout (`@media (max-width: 767.98px)`: single column, header, band, page, conversation bar, bottom navigation; `env(safe-area-inset-*)` kept as today).
+- [x] **Step 4: Validate and run** — autofixer on `TeteTel.svelte`, `BarreTel.svelte`, `Shell.svelte`, `Constellation.svelte`, `Journal.svelte`, then `npx vitest run --project ui` — no issue; PASS
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/shell ui/src/constellation ui/src/journal
@@ -1712,7 +1714,7 @@ git commit -m "feat(ui): phone header, bottom navigation and Natsume's bar" -m "
   - no `text-transform: uppercase`;
   - in the markup (outside `<script>` and `<style>`): no `·`, no `—`, no `→`, no `Pina`, no `/\bcore\b/i`, no `front`, no `heptagramme`, no « Envoyer la réponse ».
 
-- [ ] **Step 1: Write the guard test**
+- [x] **Step 1: Write the guard test**
 
 ```ts
 it.each(svelteFiles())('%s keeps the copy and colour rules', (file) => {
@@ -1723,21 +1725,21 @@ it.each(svelteFiles())('%s keeps the copy and colour rules', (file) => {
 });
 ```
 
-- [ ] **Step 2: Run it to see what the old views break**
+- [x] **Step 2: Run it to see what the old views break**
 
 Run: `npx vitest run --project ui ui/src/copy.test.ts`
 Expected: FAIL on files of `carte/`, `screens/` and others being deleted (and on any new file that slipped)
 
-- [ ] **Step 3: Delete the old views, fix any new file the guard names, edit `CLAUDE.md`**
+- [x] **Step 3: Delete the old views, fix any new file the guard names, edit `CLAUDE.md`**
 
 `CLAUDE.md` line « App au bureau : … » becomes: « App : cinq lieux (Bureau `/app/`, Constellation, Journal, Atelier, fiche de Natsume) et la colonne de Natsume ; au téléphone (767,98 px), Bureau, À trancher, Journal, Atelier en bas et une barre « Écrire à Natsume ». » `grep -rn "carte/\|screens/\|cards/\|Panneau.svelte\|Pair.svelte\|/map" ui/src` must return nothing.
 
-- [ ] **Step 4: Run the whole UI suite and the type check**
+- [x] **Step 4: Run the whole UI suite and the type check**
 
 Run: `npx vitest run --project ui && npm run check -w @lun-anima/ui`
 Expected: PASS, `svelte-check found 0 errors and 0 warnings`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add -A ui/src CLAUDE.md
@@ -1750,22 +1752,22 @@ git commit -m "refactor(ui): remove the map, the old journal and Écosystème" -
 
 **Files:** none new (fixes only, in the files they concern)
 
-- [ ] **Step 1: Full gate**
+- [x] **Step 1: Full gate**
 
 Run: `npm test && npm run lint && npm run typecheck && npm run format:check`
 Expected: all green
 
-- [ ] **Step 2: Kit and token sync**
+- [x] **Step 2: Kit and token sync**
 
 Run: `node ../lun-docs/tools/sync-tokens.mjs --check ui/src/lib/tokens.css && node ../lun-docs/tools/sync-kit.mjs --check ui/src/lib/ui`
 Expected: `tokens: OK`, `kit: OK`
 
-- [ ] **Step 3: Browser check (§14), Chrome on the local core**
+- [x] **Step 3: Browser check (§14), Chrome on the local core**
 
 Start the core (`npm run dev`) and the UI (`npm run dev:ui`); CrOliX signs in himself if a device code is asked (memory « Laisser la connexion à CrOliX »). At 1440×900, 1280×720 and 390×844, on each place: no console error, no horizontal scroll (`document.documentElement.scrollWidth === innerWidth`); the same À trancher number in the menu, the title, the phone tab, Natsume's star and the palette, before and after Valider, a batch and Annuler; E focuses the field on every place, the panel opens at a partial height, handle, Agrandir, Restaurer and Ranger work with mouse and keyboard, a reload restores height and state, the word keeps its width and scroll position; Escape closes one layer per press in the §4.9 order; the post panel covers the column with a shadow and the sky recentres; phone: conversation bar on every page, Back closes a sheet first. Compare each place with its prototype page in `maquettes/`.
 Expected: every point holds; any miss is fixed in the file concerned and committed as `fix(ui): …` with the attribution line.
 
-- [ ] **Step 4: Commit any fix** (one commit per fix, message `fix(ui): <what>`, ending with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`)
+- [x] **Step 4: Commit any fix** (one commit per fix, message `fix(ui): <what>`, ending with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`)
 
 ---
 

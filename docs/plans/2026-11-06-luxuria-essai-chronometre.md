@@ -1,5 +1,7 @@
 # Lun'Luxuria, l'essai chronométré. Plan
 
+> Exécuté en partie le 07/11 sur le desktop : voix, transcription, RVC et micro. La fenêtre Tauri, Live2D et la mesure avec un jeu ne sont pas faits. Relevé : [lun-luxuria#9](https://github.com/Lun-Ecosystem/lun-luxuria/pull/9). Cases laissées vides.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans. Un seul exécutant, sur le poste lui-même. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal :** mesurer sur le desktop de CrOliX ce que Luxuria devra tenir, et fixer les briques de la voix, du rendu et de la détection du micro.

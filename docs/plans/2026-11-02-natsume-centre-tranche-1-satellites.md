@@ -1,6 +1,8 @@
 # Satellites on contract v1.4 (Natsume au centre, slice 1) Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-docs#55](https://github.com/Lun-Ecosystem/lun-docs/pull/55), [lun-acedia#46](https://github.com/Lun-Ecosystem/lun-acedia/pull/46), [lun-avaritia#12](https://github.com/Lun-Ecosystem/lun-avaritia/pull/12). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Lun'Acedia and Lun'Avaritia serve satellite contract v1.4 (core pause apart from local pause, `/agent` open under a core pause, rules-only triage, declared agent name, new card and event fields, `{ answer }`), and `standards/contrat-satellite.md` says so.
 
@@ -45,20 +47,20 @@ The contract in `standards/contrat-satellite.md` still reads v1.2: v1.3 (`link`,
 **Interfaces:**
 - Produces: the contract text Tasks 2 to 8 implement. Field names exactly: `by`, `pausedBy`, `agentName`, `contract`, `kind`, `reason`, `sends`, `options`, `answer`, `lines`, `data.due`, `link`.
 
-- [ ] **Step 1: Branch** — `git switch main && git pull --ff-only && git switch -c feat/contract-v1-4` in lun-docs.
+- [x] **Step 1: Branch** — `git switch main && git pull --ff-only && git switch -c feat/contract-v1-4` in lun-docs.
 
-- [ ] **Step 2: Edit the contract.** In French, keeping the document's style:
+- [x] **Step 2: Edit the contract.** In French, keeping the document's style:
   - Header: « Version du contrat : **v1.4**. »
   - Routes table: `GET /lun/v1/health` answers `{ status, reason?, version, contract?, paused?, pausedBy?, agent?, agentName? }`; `POST /lun/v1/pause` `{ reason?, by? }`; `POST /lun/v1/resume` `{ by? }`; `POST /lun/v1/cards/:id/accept` `{ input? }`, « `input` remplace l'entrée (« Modifier »), ou porte `{ answer }` pour une carte qui a des `options` ».
   - Types: `Health` gains `contract?: string` (« version du contrat servie, `'1.4'` »), `pausedBy?: 'core' | 'local'`, `agentName?: string`; `LunEvent` gains `link?: string` (v1.3, chemin dans le front du poste, jamais une adresse) and `lines?: string[]`; `Card` gains `link?: string` (v1.3), `kind?: string`, `reason?: string`, `sends?: true`, `options?: string[]`. One comment line each, from §9.8. Add « `data.due` : heure limite ISO, quand le poste la connaît ».
   - Comportements, replace the **Pause** bullet with three: **Deux pauses** (the `by` rule and the 409 rule from Global Constraints); **Pause du core** (the §9.8 paragraph verbatim); **Pause locale** (« arrêt complet de ce poste, comme avant la v1.4 ; `/agent` répond qu'il est en pause »). Add to **Cartes**: « Sans `kind`, le core écrit « Carte ». Une carte qui a `sends` ou `options` ne se valide jamais en lot. Une réponse libre (hors `options`) qu'une carte ne sait pas prendre vaut `400`. » Add a **Nom d'agent** bullet (the §9.8 text).
   - Versionnement: replace the last sentence with « Sans rupture de route ni de champ, la v1.1 ajoute … la v1.2 `brain.due` (Avaritia §4.2), la v1.3 `link` sur `Card` et `LunEvent`. La v1.4 ajoute `by`, `pausedBy`, `agentName`, `contract`, `kind`, `reason`, `sends`, `options`, `answer`, `lines` et `data.due`, et **change le comportement en pause** : un poste qui ne déclare pas `contract` `1.4` ou plus est muet pour le core. »
 
-- [ ] **Step 3: Regenerate the copy** — Run: `npm run sync` then `npm run sync:check`. Expected: `sync:check` exits 0; `git diff --stat` shows the plugin copy changed with the same lines.
+- [x] **Step 3: Regenerate the copy** — Run: `npm run sync` then `npm run sync:check`. Expected: `sync:check` exits 0; `git diff --stat` shows the plugin copy changed with the same lines.
 
-- [ ] **Step 4: Run the checks** — Run: `npm test && npm run check`. Expected: all pass.
+- [x] **Step 4: Run the checks** — Run: `npm test && npm run check`. Expected: all pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add standards/contrat-satellite.md plugin/skills/lun-ecosysteme/references/contrat-satellite.md registry.yaml
@@ -86,7 +88,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Produces, in `identity.ts`: `export const CONTRACT = '1.4'`.
 - Produces, in `pina/store.ts`: `declaredAgentName(db: DatabaseSync): string | undefined` — the trimmed `pina.name` setting, or `undefined` when it is empty or still the neutral default `'Agent'` (`DEFAULTS.name`).
 
-- [ ] **Step 1: Write the failing tests** in `pause.test.ts` (keep the three existing ones):
+- [x] **Step 1: Write the failing tests** in `pause.test.ts` (keep the three existing ones):
 
 ```ts
 it('keeps the core pause and the local pause apart', async () => {
@@ -116,13 +118,13 @@ it('declares the agent name only once the user set one', async () => {
 });
 ```
 
-- [ ] **Step 2: Run them** — `npx vitest run server/src/contract/pause.test.ts server/src/contract/health.test.ts`. Expected: FAIL (no `by`, no `contract`, no `pausedBy`).
+- [x] **Step 2: Run them** — `npx vitest run server/src/contract/pause.test.ts server/src/contract/health.test.ts`. Expected: FAIL (no `by`, no `contract`, no `pausedBy`).
 
-- [ ] **Step 3: Implement.** State as in Interfaces. Routes: parse the pause body with `z.object({ reason: z.string().max(500).optional(), by: z.literal('core').optional() })` and the resume body with `z.object({ by: z.literal('core').optional() })` via the file's `readJson` (empty body = `{}`; bad JSON or schema → 400). The 409 checks read `state.core` or `state.local` for the given origin. `resume` answers `{ status: statusOf(getState(db)).status }` (so `'paused'` while the other pause holds). Health: `{ ...status, ...paused, ...(state.pausedBy && { pausedBy: state.pausedBy }), version: deps.version, contract: CONTRACT, agent: true, ...(name && { agentName: name }) }`, `paused` unchanged (degraded and any pause).
+- [x] **Step 3: Implement.** State as in Interfaces. Routes: parse the pause body with `z.object({ reason: z.string().max(500).optional(), by: z.literal('core').optional() })` and the resume body with `z.object({ by: z.literal('core').optional() })` via the file's `readJson` (empty body = `{}`; bad JSON or schema → 400). The 409 checks read `state.core` or `state.local` for the given origin. `resume` answers `{ status: statusOf(getState(db)).status }` (so `'paused'` while the other pause holds). Health: `{ ...status, ...paused, ...(state.pausedBy && { pausedBy: state.pausedBy }), version: deps.version, contract: CONTRACT, agent: true, ...(name && { agentName: name }) }`, `paused` unchanged (degraded and any pause).
 
-- [ ] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS (other tests still call `setPaused(db, true)`, now a local pause).
+- [x] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS (other tests still call `setPaused(db, true)`, now a local pause).
 
-- [ ] **Step 5: Commit** — `feat(contract): core pause apart from local pause, health v1.4` (with the Co-Authored-By line).
+- [x] **Step 5: Commit** — `feat(contract): core pause apart from local pause, health v1.4` (with the Co-Authored-By line).
 
 ---
 
@@ -136,7 +138,7 @@ it('declares the agent name only once the user set one', async () => {
 **Interfaces:**
 - Consumes: `getState(db).pausedBy`, `setPaused(db, paused, by)` from Task 2.
 
-- [ ] **Step 1: Write the failing tests** in `pipeline.test.ts` (next to « does nothing while paused… », which stays as the local-pause test):
+- [x] **Step 1: Write the failing tests** in `pipeline.test.ts` (next to « does nothing while paused… », which stays as the local-pause test):
 
 ```ts
 it('under a core pause, rules still file and raise urgent, the AI waits', async () => {
@@ -174,13 +176,13 @@ it('answers a request under a core pause, refuses it under a local pause', async
 });
 ```
 
-- [ ] **Step 2: Run them** — `npx vitest run server/src/triage/pipeline.test.ts server/src/contract/agent.test.ts`. Expected: FAIL.
+- [x] **Step 2: Run them** — `npx vitest run server/src/triage/pipeline.test.ts server/src/contract/agent.test.ts`. Expected: FAIL.
 
-- [ ] **Step 3: Implement.** In `triageNew`, at each iteration read the state once: `pausedBy === 'local'` returns (as today); a core pause sets `useAi = false` (rules only, the rest stays queued through the existing `'wait'` outcome). Update the doc comment to say so. In `/agent`, refuse only when `getState(db).pausedBy === 'local'`; the `PAUSED` text stays.
+- [x] **Step 3: Implement.** In `triageNew`, at each iteration read the state once: `pausedBy === 'local'` returns (as today); a core pause sets `useAi = false` (rules only, the rest stays queued through the existing `'wait'` outcome). Update the doc comment to say so. In `/agent`, refuse only when `getState(db).pausedBy === 'local'`; the `PAUSED` text stays.
 
-- [ ] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS.
+- [x] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS.
 
-- [ ] **Step 5: Commit** — `feat(triage): rules only under a core pause, agent still answers`.
+- [x] **Step 5: Commit** — `feat(triage): rules only under a core pause, agent still answers`.
 
 ---
 
@@ -201,19 +203,19 @@ it('answers a request under a core pause, refuses it under a local pause', async
 - Urgent rule mail `lines`: `` `De : ${from.name ? `${from.name} <${from.addr}>` : from.addr}` `` then, when the snippet is not empty, `` `Extrait : ${snippet}` ``.
 - Event reminder `data.due`: the event's start, ISO (`r.at + r.minutes * 60_000`); task reminders get none (no hour).
 
-- [ ] **Step 1: Write the failing tests.**
+- [x] **Step 1: Write the failing tests.**
   - `cards.test.ts`: `it('gives each card its kind, and sends only on a reply draft')` — an `event.create` card lists with `kind: 'Créer un événement'` and no `sends` key; a `draft.create` card with input `{ to: 'paul@example.org', subject: 'Re: Orion', text: 'Jeudi.', replyTo: 'm1' }` lists with `kind: 'Brouillon de réponse', sends: true`; without `replyTo`, no `sends`. Update the existing exact `toEqual` of « lists pending cards in the contract format » with `kind`.
   - `events.test.ts`: `it('keeps the lines of an event')` — `emitEvent(h.db, { type: 't', importance: 'urgent', title: 'x', lines: ['a', 'b'] }, now)` then `eventsSince(h.db)[0]` toMatchObject `{ lines: ['a', 'b'] }`; an event without lines has no `lines` key.
   - `pipeline.test.ts`, in « a rule that sets the urgent tag emits urgent… »: deliver `m1` with `from: 'Prof <prof@ecole.example.org>'`, `snippet: 'Réunion demain'` (or the fake's default snippet) and expect the urgent event's `lines` toEqual `['De : Prof <prof@ecole.example.org>', 'Extrait : Réunion demain']`; the `info` event has no `lines`.
   - `reminders.test.ts`, in « emits a 10-minute reminder once… »: expect `data` toMatchObject `{ due: <the event start ISO> }`; in the task test, `data` has no `due`.
 
-- [ ] **Step 2: Run** — `npx vitest run server/src/contract server/src/triage/pipeline.test.ts server/src/agenda/reminders.test.ts`. Expected: FAIL.
+- [x] **Step 2: Run** — `npx vitest run server/src/contract server/src/triage/pipeline.test.ts server/src/agenda/reminders.test.ts`. Expected: FAIL.
 
-- [ ] **Step 3: Implement** as in Interfaces.
+- [x] **Step 3: Implement** as in Interfaces.
 
-- [ ] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS.
+- [x] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS.
 
-- [ ] **Step 5: Commit** — `feat(contract): card kind and sends, urgent lines and due (v1.4)`.
+- [x] **Step 5: Commit** — `feat(contract): card kind and sends, urgent lines and due (v1.4)`.
 
 ---
 
@@ -229,15 +231,15 @@ it('answers a request under a core pause, refuses it under a local pause', async
 - Consumes: `Health.pausedBy` from Task 2.
 - Rule: the front's `paused` (what Mettre en pause / Reprendre acts on) is `(status === 'paused' || paused === true) && pausedBy !== 'core'`. Under a core pause only, the service card says `service: 'pause'`, `detail: 'Les règles seules rangent'`, and the bar offers Mettre en pause (a local pause). Nothing names who paused.
 
-- [ ] **Step 1: Write the failing tests.** `status.test.ts`: `it('under a pause it did not set, offers to pause and says the rules go on')` — `client.health.mockResolvedValue({ status: 'paused', pausedBy: 'core' })` → `readStatus(...)` toMatchObject `{ service: 'pause', detail: 'Les règles seules rangent', paused: false }`; with `pausedBy: 'local'` → `{ service: 'pause', detail: 'Rien n’est rangé seul', paused: true }`. `Settings.test.ts`: with health `{ status: 'paused', pausedBy: 'core' }`, the service toggle offers the pause, not Reprendre (follow the file's existing health mock).
+- [x] **Step 1: Write the failing tests.** `status.test.ts`: `it('under a pause it did not set, offers to pause and says the rules go on')` — `client.health.mockResolvedValue({ status: 'paused', pausedBy: 'core' })` → `readStatus(...)` toMatchObject `{ service: 'pause', detail: 'Les règles seules rangent', paused: false }`; with `pausedBy: 'local'` → `{ service: 'pause', detail: 'Rien n’est rangé seul', paused: true }`. `Settings.test.ts`: with health `{ status: 'paused', pausedBy: 'core' }`, the service toggle offers the pause, not Reprendre (follow the file's existing health mock).
 
-- [ ] **Step 2: Run** — `npx vitest run app/src/shell/status.test.ts views/src/lib/settings/Settings.test.ts`. Expected: FAIL.
+- [x] **Step 2: Run** — `npx vitest run app/src/shell/status.test.ts views/src/lib/settings/Settings.test.ts`. Expected: FAIL.
 
-- [ ] **Step 3: Implement** the rule in `readStatus` (a core-only pause takes the `'paused'` branch with the new detail) and in `Settings.svelte`.
+- [x] **Step 3: Implement** the rule in `readStatus` (a core-only pause takes the `'paused'` branch with the new detail) and in `Settings.svelte`.
 
-- [ ] **Step 4: Run** — `npm test && npm run typecheck && npm run lint && npm run check:colors`. Expected: PASS.
+- [x] **Step 4: Run** — `npm test && npm run typecheck && npm run lint && npm run check:colors`. Expected: PASS.
 
-- [ ] **Step 5: Commit** — `feat(app): the pause a front shows is its own`. Then open the PR (load `lun-livrer` first).
+- [x] **Step 5: Commit** — `feat(app): the pause a front shows is its own`. Then open the PR (load `lun-livrer` first).
 
 ---
 
@@ -254,15 +256,15 @@ it('answers a request under a core pause, refuses it under a local pause', async
 - Produces: `PausedBy`, `SatelliteState`, `setPaused(db, paused, by = 'local')` exactly as Task 2 (same setting keys `paused` and `pausedByCore`); `declaredAgentName(db: DatabaseSync): string | undefined` in `brain/settings.ts`, from `setting(db, 'agent.name')`, undefined when empty or `'Agent'`.
 - Behaviour: `runPending` (`brain/ingest.ts:60,68`) already stops on `getState(db).paused`, which now covers both pauses: unchanged, that is the « automatique par le modèle s'arrête ». `resume` (either origin) still calls `runPending`, which returns at once while the other pause holds.
 
-- [ ] **Step 1: Write the failing tests.** Copy Task 2's `pause.test.ts` and `health.test.ts` cases (agent name set with `saveSettings(h.db, { 'agent.name': 'Iris' })`; Avaritia's health has the same exact `toEqual` to update with `contract: '1.4'`). In `agent.test.ts` « agent routes »: `it('answers under a core pause, refuses under a local pause')` — `setPaused(t.h.db, true, 'core')` then `post({ request: 'salut' })` toMatchObject `{ summary: 'Rien.' }`; `setPaused(t.h.db, true)` then the summary matches `/en pause/` and `cost.amount` is 0. In `ingest.test.ts`: `it('under a core pause, a lot waits queued with no model call')` — `setPaused(t.h.db, true, 'core')`, push `t.goodReplies()`, ingest one observation as the first test does, wait a tick: expect `t.status(1).status` toBe `'queued'` and every pushed reply still in `t.replies`; then `POST /lun/v1/resume { by: 'core' }` and `await t.settle()` → `'done'`.
+- [x] **Step 1: Write the failing tests.** Copy Task 2's `pause.test.ts` and `health.test.ts` cases (agent name set with `saveSettings(h.db, { 'agent.name': 'Iris' })`; Avaritia's health has the same exact `toEqual` to update with `contract: '1.4'`). In `agent.test.ts` « agent routes »: `it('answers under a core pause, refuses under a local pause')` — `setPaused(t.h.db, true, 'core')` then `post({ request: 'salut' })` toMatchObject `{ summary: 'Rien.' }`; `setPaused(t.h.db, true)` then the summary matches `/en pause/` and `cost.amount` is 0. In `ingest.test.ts`: `it('under a core pause, a lot waits queued with no model call')` — `setPaused(t.h.db, true, 'core')`, push `t.goodReplies()`, ingest one observation as the first test does, wait a tick: expect `t.status(1).status` toBe `'queued'` and every pushed reply still in `t.replies`; then `POST /lun/v1/resume { by: 'core' }` and `await t.settle()` → `'done'`.
 
-- [ ] **Step 2: Run** — `npx vitest run server/src/contract server/src/brain/agent.test.ts server/src/brain/ingest.test.ts`. Expected: FAIL.
+- [x] **Step 2: Run** — `npx vitest run server/src/contract server/src/brain/agent.test.ts server/src/brain/ingest.test.ts`. Expected: FAIL.
 
-- [ ] **Step 3: Implement** as Task 2 (same body schemas, 409 per origin, same health shape) plus `/agent` refusing only when `pausedBy === 'local'`.
+- [x] **Step 3: Implement** as Task 2 (same body schemas, 409 per origin, same health shape) plus `/agent` refusing only when `pausedBy === 'local'`.
 
-- [ ] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS.
+- [x] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS.
 
-- [ ] **Step 5: Commit** — on `feat/contract-v1-4` from up-to-date `main`: `feat(contract): core pause apart from local pause, health v1.4`.
+- [x] **Step 5: Commit** — on `feat/contract-v1-4` from up-to-date `main`: `feat(contract): core pause apart from local pause, health v1.4`.
 
 ---
 
@@ -286,7 +288,7 @@ Avaritia's questions are its `contradiction` and `doublon` drafts (`brain/proces
   - fiche or import: `InvalidInputError('Cette carte n’attend pas de réponse.')`.
   - Option texts are read when the answer arrives, from the same helpers `cardOf` uses.
 
-- [ ] **Step 1: Write the failing tests** in `drafts.test.ts`:
+- [x] **Step 1: Write the failing tests** in `drafts.test.ts`:
 
 ```ts
 it('gives kind, reason and options to its questions, kind alone to a fiche', () => {
@@ -313,13 +315,13 @@ it('refuses a free answer to a doublon and any answer to a fiche, writing nothin
 
 In `routes.test.ts`: `it('accepts an answer through the contract')` — `POST /lun/v1/cards/:id/accept` `{ input: { answer: 'vieux fait' } }` → 200, `card.status` `'done'`; `{ input: { answer: 'Autre' } }` on a doublon → 400 `{ error: 'Choisis l’une des deux fiches.' }`. Update « writes human lines for a contradiction… » if it relied on the `Raison` line (it does not today).
 
-- [ ] **Step 2: Run** — `npx vitest run server/src/brain/drafts.test.ts server/src/contract/routes.test.ts`. Expected: FAIL.
+- [x] **Step 2: Run** — `npx vitest run server/src/brain/drafts.test.ts server/src/contract/routes.test.ts`. Expected: FAIL.
 
-- [ ] **Step 3: Implement** as in Interfaces; the answer is resolved into a payload before the existing transaction, so the claim and the writes stay one transaction.
+- [x] **Step 3: Implement** as in Interfaces; the answer is resolved into a payload before the existing transaction, so the claim and the writes stay one transaction.
 
-- [ ] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS.
+- [x] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS.
 
-- [ ] **Step 5: Commit** — `feat(brain): questions carry options, an answer decides them (v1.4)`.
+- [x] **Step 5: Commit** — `feat(brain): questions carry options, an answer decides them (v1.4)`.
 
 ---
 
@@ -334,12 +336,12 @@ In `routes.test.ts`: `it('accepts an answer through the contract')` — `POST /l
 - Consumes: `Health.pausedBy` from Task 6.
 - App status gains `held: boolean` (any pause: `status === 'paused' || paused === true`); `paused` (what the toggle and Réglages act on) becomes `held && pausedBy !== 'core'`. The rail's service card shows `'pause'` when `held`, so the card says « Traitement en pause » under a core pause while the toggle offers « Mettre le traitement en pause ». Nothing names who paused.
 
-- [ ] **Step 1: Write the failing test** in `App.test.ts`: `it('under a pause it did not set, shows the pause and offers to pause')` — a `fakeServer` variant answering health `{ status: 'paused', pausedBy: 'core', version: '0.0.0', agent: true }`; the rail shows « Traitement en pause » and the palette or rail action reads « Mettre le traitement en pause »; clicking it calls `POST /lun/v1/pause` (never `resume`).
+- [x] **Step 1: Write the failing test** in `App.test.ts`: `it('under a pause it did not set, shows the pause and offers to pause')` — a `fakeServer` variant answering health `{ status: 'paused', pausedBy: 'core', version: '0.0.0', agent: true }`; the rail shows « Traitement en pause » and the palette or rail action reads « Mettre le traitement en pause »; clicking it calls `POST /lun/v1/pause` (never `resume`).
 
-- [ ] **Step 2: Run** — `npx vitest run app/src/App.test.ts`. Expected: FAIL.
+- [x] **Step 2: Run** — `npx vitest run app/src/App.test.ts`. Expected: FAIL.
 
-- [ ] **Step 3: Implement** the rule above.
+- [x] **Step 3: Implement** the rule above.
 
-- [ ] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS, `noCore.test.ts` and `noAnima.test.ts` included.
+- [x] **Step 4: Run** — `npm test && npm run typecheck && npm run lint`. Expected: PASS, `noCore.test.ts` and `noAnima.test.ts` included.
 
-- [ ] **Step 5: Commit** — `feat(app): the pause a front shows is its own`. Then open the PR (load `lun-livrer` first).
+- [x] **Step 5: Commit** — `feat(app): the pause a front shows is its own`. Then open the PR (load `lun-livrer` first).

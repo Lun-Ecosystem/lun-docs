@@ -20,7 +20,8 @@
 
 - Un fichier d'avancement, une roadmap, des « paliers » : c'est le GitHub Projects.
 - Un journal des observations : ce sont les issues `inbox`.
-- Un plan de chantier terminé : il vit dans l'issue ou la PR fermée.
+- Un plan de chantier : il vit dans `lun-docs/docs/plans/`. À la clôture, ses cases sont cochées et sa tête donne le
+  lien de la PR qui livre. Une tâche non faite reste vide, et la PR dit pourquoi.
 - Une copie d'un standard de lun-docs : on y renvoie.
 - `graphify-out/` : le graphe est local à chaque poste et se reconstruit.
 

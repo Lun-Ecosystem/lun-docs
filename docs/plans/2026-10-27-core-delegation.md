@@ -1,6 +1,8 @@
 # Core : délégation aux postes et cartes relayées
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#11](https://github.com/Lun-Ecosystem/lun-anima/pull/11). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Natsume confie seule une demande au bon poste (Pina pour Acedia) par un outil du modèle, et
 CrOliX valide les cartes du poste depuis le core : « marque le resto » dit à Natsume donne une carte
@@ -66,14 +68,14 @@ Chaque ligne a son test dans la tâche qui possède le code (tâches 1, 3 et 4).
 - `FakeOpenAi` peut scripter une réponse avec des appels d'outil (texte facultatif + appels), streamée
   en morceaux comme le fait OpenAI (`delta.tool_calls[i].function.arguments` découpé).
 
-- [ ] **Step 1:** Tests : avec `tools`, la requête envoyée porte `tools` au format OpenAI
+- [x] **Step 1:** Tests : avec `tools`, la requête envoyée porte `tools` au format OpenAI
   (`type: 'function'`) ; un appel d'outil streamé en trois morceaux donne un seul chunk `tool` avec
   les arguments recollés ; deux appels donnent deux chunks ; le texte éventuel reste en `delta` ;
   sans `tools`, la requête n'a pas de champ `tools`.
-- [ ] **Step 2:** Lancer, voir échouer.
-- [ ] **Step 3:** Implémenter (accumuler par `index`, émettre à la fin).
-- [ ] **Step 4:** `npm test` : vert.
-- [ ] **Step 5:** Commit `feat(chat): tool calls in the provider`.
+- [x] **Step 2:** Lancer, voir échouer.
+- [x] **Step 3:** Implémenter (accumuler par `index`, émettre à la fin).
+- [x] **Step 4:** `npm test` : vert.
+- [x] **Step 5:** Commit `feat(chat): tool calls in the provider`.
 
 ### Task 2: Le client du contrat v1.1
 
@@ -99,13 +101,13 @@ Chaque ligne a son test dans la tâche qui possède le code (tâches 1, 3 et 4).
 - Le faux satellite sert `/agent`, `/cards`, `/cards/:id/accept|refuse` avec des réponses scriptables
   (dont `404`, `409` « Carte expirée », pause).
 
-- [ ] **Step 1:** Tests : `agent` envoie `{ request }` avec le jeton et rend l'`AgentReply` ; un `404`
+- [x] **Step 1:** Tests : `agent` envoie `{ request }` avec le jeton et rend l'`AgentReply` ; un `404`
   ou un `409` lève `SatelliteResponseError` avec le statut et le message ; `decide` relaie le corps
   `{ input }` et rend la réponse brute ; un événement `low` ou `log` du flux est stocké tel quel.
-- [ ] **Step 2:** Lancer, voir échouer.
-- [ ] **Step 3:** Implémenter.
-- [ ] **Step 4:** `npm test` : vert.
-- [ ] **Step 5:** Commit `feat(satellites): contract v1.1 client (agent, cards)`.
+- [x] **Step 2:** Lancer, voir échouer.
+- [x] **Step 3:** Implémenter.
+- [x] **Step 4:** `npm test` : vert.
+- [x] **Step 5:** Commit `feat(satellites): contract v1.1 client (agent, cards)`.
 
 ### Task 3: Natsume délègue en un temps
 
@@ -144,7 +146,7 @@ Comportement :
   `deleguer` avec une demande complète et autonome ; ne jamais demander de confirmation, le poste
   prépare une carte que CrOliX valide ; ne pas inventer ce que le poste n'a pas dit.
 
-- [ ] **Step 1:** Tests (FakeOpenAi + faux satellite) :
+- [x] **Step 1:** Tests (FakeOpenAi + faux satellite) :
   - « marque le resto » : le modèle appelle `deleguer`, le poste rend un résumé et une carte, la réponse
     stockée a le résumé et `cards` ; le fournisseur n'est appelé **qu'une fois** ;
   - deux appels d'outil : une seule délégation ;
@@ -153,10 +155,10 @@ Comportement :
   - plafond atteint : ni modèle ni délégation ;
   - aucun poste relié : la requête au modèle n'a pas de `tools` ;
   - le prompt système contient la règle « ne demande jamais de confirmation ».
-- [ ] **Step 2:** Lancer, voir échouer.
-- [ ] **Step 3:** Implémenter.
-- [ ] **Step 4:** `npm test` : vert.
-- [ ] **Step 5:** Commit `feat(chat): Natsume delegates to a post in one turn`.
+- [x] **Step 2:** Lancer, voir échouer.
+- [x] **Step 3:** Implémenter.
+- [x] **Step 4:** `npm test` : vert.
+- [x] **Step 5:** Commit `feat(chat): Natsume delegates to a post in one turn`.
 
 ### Task 4: Les cartes relayées par le core
 
@@ -176,13 +178,13 @@ Comportement :
 `[v] valider · [r] refuser · [Entrée] plus tard` ; la commande `/cartes` liste les cartes en attente ;
 le message d'erreur du poste s'affiche tel quel.
 
-- [ ] **Step 1:** Tests : la liste rassemble les cartes de deux postes et nomme celui qui est
+- [x] **Step 1:** Tests : la liste rassemble les cartes de deux postes et nomme celui qui est
   injoignable ; un `accept` relaie `{ input }` et le `200` ; une carte d'hier rend `409`
   « Carte expirée » ; dans le CLI, `v` valide la carte affichée et `/cartes` les liste.
-- [ ] **Step 2:** Lancer, voir échouer.
-- [ ] **Step 3:** Implémenter.
-- [ ] **Step 4:** `npm test` : vert.
-- [ ] **Step 5:** Commit `feat(core): relayed cards in the API and the terminal chat`.
+- [x] **Step 2:** Lancer, voir échouer.
+- [x] **Step 3:** Implémenter.
+- [x] **Step 4:** `npm test` : vert.
+- [x] **Step 5:** Commit `feat(core): relayed cards in the API and the terminal chat`.
 
 ### Task 5: Doc et barrières
 
@@ -191,9 +193,9 @@ le message d'erreur du poste s'affiche tel quel.
 - Modify: `README.md` (routes `/api/cards`, outil de délégation), `CLAUDE.md` (« Ne possède pas » : plus
   de vues de satellite intégrées, contrat v1.1)
 
-- [ ] **Step 1:** Écrire la décision et la doc.
-- [ ] **Step 2:** Toutes les barrières : vertes.
-- [ ] **Step 3:** Démo locale (Acedia avec un fournisseur de LLM configuré par CrOliX ; sinon la démo
+- [x] **Step 1:** Écrire la décision et la doc.
+- [x] **Step 2:** Toutes les barrières : vertes.
+- [x] **Step 3:** Démo locale (Acedia avec un fournisseur de LLM configuré par CrOliX ; sinon la démo
   passe en recette avec lui) : core relié à Acedia, « marque le resto » dans `npm run chat`,
   la carte de Pina validée avec `v` ; sortie gardée pour la PR.
-- [ ] **Step 4:** Commit `docs: delegation to posts`.
+- [x] **Step 4:** Commit `docs: delegation to posts`.

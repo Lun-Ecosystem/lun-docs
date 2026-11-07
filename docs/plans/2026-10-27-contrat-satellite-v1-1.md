@@ -1,6 +1,8 @@
 # Contrat satellite v1.1 : délégation, cartes, bilan du jour
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-docs#36](https://github.com/Lun-Ecosystem/lun-docs/pull/36), [lun-acedia#41](https://github.com/Lun-Ecosystem/lun-acedia/pull/41). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Réviser le contrat satellite pour le modèle manager / postes : délégation à l'agent d'un
 satellite, cartes relayées, bilan du jour, alertes bornées, fin du paquet de vues.
@@ -46,7 +48,7 @@ Chacune est fixée par un texte vérifié dans la tâche 1 (étape de relecture 
 **Interfaces:**
 - Produces : les routes et types ci-dessous, consommés par les chantiers 2 (Acedia) et 3 (core).
 
-- [ ] **Step 1: En-tête et routes**
+- [x] **Step 1: En-tête et routes**
 
 En-tête : « Version du contrat : **v1.1** » et un renvoi vers l'ADR 0004. Ajouter au tableau des routes :
 
@@ -59,7 +61,7 @@ En-tête : « Version du contrat : **v1.1** » et un renvoi vers l'ADR 0004. Ajo
 
 Une phrase : ces routes ne sont servies que par un satellite dont `health` porte `agent: true`.
 
-- [ ] **Step 2: Types**
+- [x] **Step 2: Types**
 
 Ajouter au bloc de types, sans toucher aux existants sauf `Health` :
 
@@ -76,7 +78,7 @@ interface Digest { since: string; until: string; received: DigestItem[]; done: D
 
 `lines` : la cible et les nouvelles valeurs, déjà rédigées pour un humain (le core les affiche telles quelles).
 
-- [ ] **Step 3: Comportements**
+- [x] **Step 3: Comportements**
 
 Ajouter quatre puces :
 - **Délégation** : l'agent du satellite traite la demande avec ses propres règles. Une écriture
@@ -91,12 +93,12 @@ Ajouter quatre puces :
   pour joindre CrOliX en direct. Le core ne retient du flux que `urgent` et les événements de
   contrôle (clé, état).
 
-- [ ] **Step 4: Erreurs**
+- [x] **Step 4: Erreurs**
 
 Ligne `404` complétée par « carte inconnue ; `/agent` ou `/cards` sur un satellite sans agent ».
 Ligne `409` complétée par « carte qui n'est plus en attente ».
 
-- [ ] **Step 5: Remplacer « Fronts et vues » par « Fronts »**
+- [x] **Step 5: Remplacer « Fronts et vues » par « Fronts »**
 
 Section `## Fronts`, sans paquet de vues :
 - Un satellite a un front autonome complet sur son métier ; c'est aussi le mode de secours.
@@ -104,11 +106,11 @@ Section `## Fronts`, sans paquet de vues :
   jamais les écrans d'un satellite. Deux écrans qui se ressemblent ne sont pas un doublon.
 - Un front autonome ne connaît que son serveur ; il ne contient aucune fonction de Natsume.
 
-- [ ] **Step 6: Versionnement**
+- [x] **Step 6: Versionnement**
 
 Ajouter : « v1.1 ajoute `agent`, `cards`, `day.digest` et `Health.agent` sans rupture. »
 
-- [ ] **Step 7: Régénérer la copie et vérifier**
+- [x] **Step 7: Régénérer la copie et vérifier**
 
 Run: `npm run sync && npm run sync:check && npm run check && npm test`
 Expected: `sync: OK`, `check: OK`, tous les tests verts.
@@ -119,7 +121,7 @@ Expected: 5 ou plus (les cinq points du Review Focus sont écrits).
 Run: `grep -rn "paquet de vues\|-views" standards plugin/skills`
 Expected: aucune ligne, sauf `standards/stack.md` (traité en tâche 2).
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add standards/contrat-satellite.md plugin/skills/lun-ecosysteme/references/contrat-satellite.md
@@ -137,7 +139,7 @@ git commit -m "docs(contract): delegation, relayed cards and day digest (v1.1)"
 **Interfaces:**
 - Consumes : le contrat v1.1 de la tâche 1.
 
-- [ ] **Step 1: Écrire l'ADR 0004 au gabarit `adr/_template.md`**
+- [x] **Step 1: Écrire l'ADR 0004 au gabarit `adr/_template.md`**
 
 Titre « ADR 0004 : délégation aux agents des satellites, sans paquet de vues », `Statut : acceptée`,
 date 2026-10-27. Contexte : spec du 2026-10-27. Décision : reprend ce que l'ADR 0003 garde (REST sous
@@ -146,24 +148,24 @@ du jour, alertes bornées, fin du paquet de vues. Alternatives écartées : vues
 du core (doublon d'interface, core en capsule) ; WebSocket pour la délégation (une requête suffit) ;
 satellite qui pousse son bilan (connexion permanente inutile).
 
-- [ ] **Step 2: Passer l'ADR 0003 à `Statut : remplacée par 0004`**
+- [x] **Step 2: Passer l'ADR 0003 à `Statut : remplacée par 0004`**
 
-- [ ] **Step 3: Compléter l'index de `adr/README.md`**
+- [x] **Step 3: Compléter l'index de `adr/README.md`**
 
 Lignes 0002 (pile, acceptée), 0003 (contrat REST + SSE, remplacée par 0004), 0004 (acceptée).
 
-- [ ] **Step 4: `standards/stack.md`**
+- [x] **Step 4: `standards/stack.md`**
 
 Ligne « Vues partagées » remplacée par « Écrans | chaque produit a les siens ; les apps du core
 n'intègrent pas les écrans d'un satellite (contrat satellite, « Fronts ») ». Ligne « Cerveau » :
 préciser qu'il vit dans le satellite Lun'Avaritia.
 
-- [ ] **Step 5: Vérifier**
+- [x] **Step 5: Vérifier**
 
 Run: `npm run sync && npm run sync:check && npm run check`
 Expected: `sync: OK`, `check: OK` (l'ADR fait 60 lignes au plus, son statut est valide).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add adr standards/stack.md plugin
@@ -176,21 +178,21 @@ git commit -m "docs(adr): 0004 delegation to satellite agents replaces 0003"
 - Modify: `registry.yaml` (description de `lunacedia`)
 - Modify: `docs/specs/2026-10-19-ecosysteme-design.md` (bandeau en tête seulement)
 
-- [ ] **Step 1: Description d'Acedia**
+- [x] **Step 1: Description d'Acedia**
 
 `description: "Serveur de la journée : mail, agenda et tâches Google, triés à la source, avec son assistante Pina."`
 
-- [ ] **Step 2: Bandeau de la spec d'écosystème**
+- [x] **Step 2: Bandeau de la spec d'écosystème**
 
 Sous le titre : « > Révisée le 2026-10-27 par `2026-10-27-liaison-core-satellites-design.md` (§8) :
 le paquet de vues, le cerveau dans le core et le majordome hors MVP ne tiennent plus. »
 
-- [ ] **Step 3: Vérifier**
+- [x] **Step 3: Vérifier**
 
 Run: `npm run check && npm test`
 Expected: `check: OK`, tous les tests verts.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add registry.yaml docs/specs/2026-10-19-ecosysteme-design.md

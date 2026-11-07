@@ -1,6 +1,8 @@
 # Acedia, poste délégable : contrat v1.1 et paliers de notification
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-acedia#41](https://github.com/Lun-Ecosystem/lun-acedia/pull/41). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Lun'Acedia sert le contrat satellite v1.1 (délégation à Pina, cartes relayées, `day.digest`,
 `Health.agent`) et émet chaque événement à son palier de notification.
@@ -49,14 +51,14 @@ Chaque ligne a son test dans la tâche qui possède le code (tâches 2, 3 et 5).
   `targetsOf(messages: ChatMessage[]): Map<string, Target>`, `cardLines(db: DatabaseSync, card: Card): string[]`
   (une ligne par champ, « Libellé : valeur », noms tirés des boîtes et des messages du jour de la carte).
 
-- [ ] **Step 1:** Écrire `cardLines` test : une carte `mail.file` sur un mail lu dans le fil donne
+- [x] **Step 1:** Écrire `cardLines` test : une carte `mail.file` sur un mail lu dans le fil donne
   `['Mail : <sujet>', 'Boîte : Factures']` ; une carte `event.delete` donne la ligne de l'événement.
-- [ ] **Step 2:** Lancer, voir échouer (`cardLines` absent).
-- [ ] **Step 3:** Déplacer le texte (sans `Icon.ts`) dans `wording.ts`, adapter `targetsOf` aux messages
+- [x] **Step 2:** Lancer, voir échouer (`cardLines` absent).
+- [x] **Step 3:** Déplacer le texte (sans `Icon.ts`) dans `wording.ts`, adapter `targetsOf` aux messages
   du serveur, écrire `cardLines`. `views/.../cards.ts` importe `../../../../server/src/pina/wording.ts`
   (même procédé que `types.test.ts`) et n'ajoute que l'icône.
-- [ ] **Step 4:** `npx vitest run server/src/pina views/src/lib/pina` : vert, front inchangé.
-- [ ] **Step 5:** Commit `refactor(pina): card wording lives on the server`.
+- [x] **Step 4:** `npx vitest run server/src/pina views/src/lib/pina` : vert, front inchangé.
+- [x] **Step 5:** Commit `refactor(pina): card wording lives on the server`.
 
 ### Task 2: Cartes relayées et `Health.agent`
 
@@ -71,7 +73,7 @@ Chaque ligne a son test dans la tâche qui possède le code (tâches 2, 3 et 5).
 - Produces : `decideCard(deps: PinaDeps, id: number, decision: 'accept' | 'refuse', input?: unknown): Promise<{ ok: true; card: Card } | { ok: false; status: 400 | 404 | 409; error: string }>` ;
   `toContractCard(db, card): ContractCard` avec `ContractCard = { id: string; action; effect: 'write' | 'delete'; title; lines: string[]; status; at; error?: string }`.
 
-- [ ] **Step 1:** Tests dans `cards.test.ts` :
+- [x] **Step 1:** Tests dans `cards.test.ts` :
   - `GET /lun/v1/cards` rend les cartes en attente au format du contrat (id en texte, `lines` remplies) ;
   - `GET /lun/v1/cards?status=done` filtre ;
   - `accept` exécute et rend `status: 'done'` ; `refuse` rend `refused` ;
@@ -79,12 +81,12 @@ Chaque ligne a son test dans la tâche qui possède le code (tâches 2, 3 et 5).
   - carte d'hier : `409` « Carte expirée » ; id inconnu : `404` ;
   - `accept { input }` sur une carte `delete` : `400` ;
   - `GET /lun/v1/health` porte `agent: true`.
-- [ ] **Step 2:** Lancer, voir échouer.
-- [ ] **Step 3:** Extraire le corps de `POST /api/pina/cards/:id` dans `decideCard` (expiration, édition,
+- [x] **Step 2:** Lancer, voir échouer.
+- [x] **Step 3:** Extraire le corps de `POST /api/pina/cards/:id` dans `decideCard` (expiration, édition,
   exécution, `resume`), refuser `input` sur `effect === 'delete'`, brancher les deux routes du contrat
   et `GET /lun/v1/cards?status=` (défaut `pending`, tous jours confondus, plus récentes d'abord).
-- [ ] **Step 4:** `npx vitest run server/src/contract server/src/pina` : vert.
-- [ ] **Step 5:** Commit `feat(contract): relayed cards and health.agent`.
+- [x] **Step 4:** `npx vitest run server/src/contract server/src/pina` : vert.
+- [x] **Step 5:** Commit `feat(contract): relayed cards and health.agent`.
 
 ### Task 3: La délégation `POST /lun/v1/agent`
 
@@ -97,19 +99,19 @@ Chaque ligne a son test dans la tâche qui possède le code (tâches 2, 3 et 5).
 - Consumes : `toContractCard` (tâche 2).
 - Produces : `ask(deps, text, context, opts?: { mode?: 'validate' }): Promise<number>` (rend l'id du tour).
 
-- [ ] **Step 1:** Tests dans `agent.test.ts`, avec le faux fournisseur de Pina :
+- [x] **Step 1:** Tests dans `agent.test.ts`, avec le faux fournisseur de Pina :
   - « Range ce mail dans Factures » avec `context: { screen: 'mail', mailId: 'm02' }` : réponse
     `{ summary, cards: [une carte pending mail.file], refs: [], cost: { currency: 'USD', amount } }` ;
   - Pina réglée en « faire tout de suite » : une délégation donne quand même une carte, rien n'est exécuté ;
   - contexte avec une clé inconnue, une valeur de plus de 200 caractères ou un `screen` inconnu : `400` ;
   - sans fournisseur configuré : `200`, `summary` dit qu'aucun LLM n'est réglé, aucune carte.
-- [ ] **Step 2:** Lancer, voir échouer.
-- [ ] **Step 3:** Route : valider `{ request: string (1 à 4 000), context?: { screen?, mailId?, day?, listId?, draftId? } }`
+- [x] **Step 2:** Lancer, voir échouer.
+- [x] **Step 3:** Route : valider `{ request: string (1 à 4 000), context?: { screen?, mailId?, day?, listId?, draftId? } }`
   avec les règles d'id de `pina/routes.ts`, appeler `ask(..., { mode: 'validate' })`, puis bâtir la réponse :
   `summary` = dernier message assistant du tour, `cards` = cartes du tour, `cost` = dépense de Pina avant / après.
   `refs: []` avec `// shortcut: refs empty until the core shows them, fill from the turn's read tools`.
-- [ ] **Step 4:** `npx vitest run server/src/contract server/src/pina` : vert.
-- [ ] **Step 5:** Commit `feat(contract): delegate a request to Pina`.
+- [x] **Step 4:** `npx vitest run server/src/contract server/src/pina` : vert.
+- [x] **Step 5:** Commit `feat(contract): delegate a request to Pina`.
 
 ### Task 4: Le bilan du jour `day.digest`
 
@@ -121,13 +123,13 @@ Chaque ligne a son test dans la tâche qui possède le code (tâches 2, 3 et 5).
 - Produces : `day.digest({ since, until })` → `{ since, until, received: DigestItem[], done: DigestItem[], pending: number }`,
   `DigestItem = { type; title; at; ref?: { type; id; title } }`.
 
-- [ ] **Step 1:** Tests : avec la démo, un intervalle d'un jour rend les mails reçus dedans (`type: 'mail'`),
+- [x] **Step 1:** Tests : avec la démo, un intervalle d'un jour rend les mails reçus dedans (`type: 'mail'`),
   les entrées du journal (`type: 'journal.<action>'`) et les cartes faites (`type: 'card.<action>'`) ;
   `pending` = propositions en attente + cartes en attente ; `since` après `until` ou illisible : erreur `400`.
-- [ ] **Step 2:** Lancer, voir échouer.
-- [ ] **Step 3:** Écrire l'action (lecture seule, bornes `[since, until[` en UTC).
-- [ ] **Step 4:** `npx vitest run server/src/contract` : vert, parité comprise.
-- [ ] **Step 5:** Commit `feat(contract): day.digest`.
+- [x] **Step 2:** Lancer, voir échouer.
+- [x] **Step 3:** Écrire l'action (lecture seule, bornes `[since, until[` en UTC).
+- [x] **Step 4:** `npx vitest run server/src/contract` : vert, parité comprise.
+- [x] **Step 5:** Commit `feat(contract): day.digest`.
 
 ### Task 5: Chaque événement à son palier
 
@@ -149,12 +151,12 @@ Table à appliquer (standard des notifications) :
 | `mail.triaged` par l'IA | avis du LLM | `normal` si le LLM le dit urgent, sinon `info` |
 | `mail.pending` | avis du LLM | `normal` si le LLM le dit urgent, sinon `low` |
 
-- [ ] **Step 1:** Tests : un mail que le LLM dit urgent n'émet jamais `urgent` ; une règle qui pose
+- [x] **Step 1:** Tests : un mail que le LLM dit urgent n'émet jamais `urgent` ; une règle qui pose
   l'étiquette urgente émet `urgent` ; `key.expiring` à J-14 est `low` ; un rappel d'agenda est `urgent`.
-- [ ] **Step 2:** Lancer, voir échouer.
-- [ ] **Step 3:** Appliquer la table.
-- [ ] **Step 4:** `npm test` : vert.
-- [ ] **Step 5:** Commit `fix(events): each event at its notification tier`.
+- [x] **Step 2:** Lancer, voir échouer.
+- [x] **Step 3:** Appliquer la table.
+- [x] **Step 4:** `npm test` : vert.
+- [x] **Step 5:** Commit `fix(events): each event at its notification tier`.
 
 ### Task 6: Le menu des rappels au-dessus de la fenêtre (#39), doc et barrières
 
@@ -163,8 +165,8 @@ Table à appliquer (standard des notifications) :
 - Test: `views/src/lib/agenda/ItemEditor.test.ts` (ou le test d'éditeur existant)
 - Modify: `docs/pina.md` (« Pina, poste du core » : délégation, cartes relayées, mode forcé), `README.md` (contrat v1.1)
 
-- [ ] **Step 1:** Test : ouvrir « + Rappel » dans l'éditeur ouvert, le menu est au-dessus (`z-index` calculé > 51) et un choix ajoute le rappel.
-- [ ] **Step 2:** Lancer, voir échouer.
-- [ ] **Step 3:** Corriger `Menu.svelte`, écrire la doc.
-- [ ] **Step 4:** Toutes les barrières : vertes.
-- [ ] **Step 5:** Commit `fix(views): reminder menu above the editor` puis `docs: Pina as a post of the core`.
+- [x] **Step 1:** Test : ouvrir « + Rappel » dans l'éditeur ouvert, le menu est au-dessus (`z-index` calculé > 51) et un choix ajoute le rappel.
+- [x] **Step 2:** Lancer, voir échouer.
+- [x] **Step 3:** Corriger `Menu.svelte`, écrire la doc.
+- [x] **Step 4:** Toutes les barrières : vertes.
+- [x] **Step 5:** Commit `fix(views): reminder menu above the editor` puis `docs: Pina as a post of the core`.
