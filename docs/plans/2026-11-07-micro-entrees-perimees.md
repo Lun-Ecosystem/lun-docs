@@ -1,5 +1,7 @@
 # Le micro tenu : sans les entrées périmées du registre. Plan
 
+> **Livré** par [lun-luxuria#15](https://github.com/Lun-Ecosystem/lun-luxuria/pull/15). Cases cochées le 07/11/2026. Le critère 6, au desktop après le merge, reste à constater (noté dans la recette).
+
 > **Pour les agents d'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 
 **But :** qu'une entrée ancienne du registre Windows ne rende plus Luxuria « occupée » en permanence
@@ -43,10 +45,10 @@ qui tourne) coûte un `tasklist` toutes les 3 s pour un cas que rien n'a encore 
 
 ## Tâches
 
-- [ ] Test d'abord, `voix/test_service.py` : entrée ouverte récente (tenue), ouverte de 13 h (libre), fermée (libre),
+- [x] Test d'abord, `voix/test_service.py` : entrée ouverte récente (tenue), ouverte de 13 h (libre), fermée (libre),
       une ruche et l'autre fusionnées, casse et `#` du nom, conversion FILETIME sur une valeur réelle, `winreg` absent.
-- [ ] `apps_on_microphone` : la lecture du registre rend `(nom, début)` des entrées ouvertes ; une fonction pure garde
+- [x] `apps_on_microphone` : la lecture du registre rend `(nom, début)` des entrées ouvertes ; une fonction pure garde
       celles de moins de 12 h. Commentaire d'une ligne pour FILETIME, `shortcut:` pour la limite.
-- [ ] `docs/README.md`.
-- [ ] Relecture (agent reviewer), PR avec `lun-livrer`, critères cochés et preuves, critère 6 vide ; ligne dans la
+- [x] `docs/README.md`.
+- [x] Relecture (agent reviewer), PR avec `lun-livrer`, critères cochés et preuves, critère 6 vide ; ligne dans la
       recette.
