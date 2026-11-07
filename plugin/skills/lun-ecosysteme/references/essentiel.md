@@ -52,3 +52,11 @@ Toute modification visible met à jour `docs/` dans le même commit.
 Un satellite porte sa logique métier et fonctionne seul ; le core s'y branche par le
 [contrat satellite](contrat-satellite.md) et ne réimplémente jamais ce qu'il fait. Une vue métier
 n'existe qu'en un exemplaire, publiée par le satellite qui la possède.
+
+## 9. Le graphe d'abord
+
+Quand `graphify-out/graph.json` existe, toute recherche commence par `graphify query "<question>"`,
+`graphify explain "<nom>"` ou `graphify path "<A>" "<B>"`, et cette consigne passe dans le prompt de
+chaque sous-agent. On lit ensuite les seuls passages utiles, plutôt que specs et standards en entier.
+Une règle ou une décision se cite toujours depuis son texte d'origine, jamais depuis le graphe. Voir
+[`structure-projet.md`](structure-projet.md).

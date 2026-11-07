@@ -1,0 +1,10 @@
+.superpowers/
+docs/maquettes/
+design/kit/
+node_modules/
+package-lock.json
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.svg

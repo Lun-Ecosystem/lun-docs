@@ -10,7 +10,8 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
 
 ## Ouvrir
 
-1. Lis l'issue (`gh issue view <n>`). Reformule le besoin à CrOliX.
+1. Lis l'issue (`gh issue view <n>`). Cherche ce qui s'y rattache dans le graphe (`essentiel.md`, §9)
+   avant de relire specs et standards. Reformule le besoin à CrOliX.
 2. Écris les **critères de fin**, vérifiables en local. Fixe le **niveau** avec CrOliX et pose
    l'étiquette : `gh issue edit <n> --add-label niveau:<trivial|standard|critique|exceptionnel>`.
 3. Le périmètre est **figé** à partir d'ici.
