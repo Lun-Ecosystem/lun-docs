@@ -17,6 +17,10 @@ Les décisions sans mention sont de CrOliX. **[choix Claude]** marque un choix �
 spontanée bornée entre au MVP, la langue parlée reste ouverte à l'écoute, le `SOCLE` est recadré (proposition en revue,
 lun-anima#35), et une réponse peut se préparer avant la fin réelle de sa phrase (§6.9).
 
+**Depuis l'[ADR 0011](../../adr/0011-chaine-vocale-mvp.md)**, après l'essai du 07/11 : la cible passe à 2,5 s en médiane
+sur le desktop, les briques de la chaîne sont fixées, et aucune vraie carte ne se valide à la voix sans confiance réelle
+de la transcription. Les chiffres de 1,5 s plus bas sont remplacés par cet ADR.
+
 ## 1. L'intention
 
 Luxuria est la porte de sortie de Natsume hors de l'app : ce qui lui permet de vivre sur le desktop de
@@ -166,8 +170,8 @@ inventée sur place, et le texte fixe reste neutre : « Natsume est injoignable.
 
 ### 6.2 La voix
 
-Comme au §7.2 de la spec : micro ouvert au casque, bouton pour le couper, phrase par phrase, cible de moins
-de 1,5 s en valeur médiane (moins de 1 s visé, la veille ne promet pas moins), identifiant d'énoncé pour jeter l'audio en retard, phrase d'attente avant une
+Comme au §7.2 de la spec : micro ouvert au casque, bouton pour le couper, phrase par phrase, cible de 2,5 s
+en valeur médiane sur le desktop (ADR 0011 ; moins de 1 s reste l'horizon), identifiant d'énoncé pour jeter l'audio en retard, phrase d'attente avant une
 délégation longue, secret masqué avant la synthèse. Le texte masqué sert aussi aux sous-titres : ce qu'on
 voit à l'écran n'en dit pas plus que ce qu'on entend **[choix Claude]**.
 
@@ -303,7 +307,7 @@ carte actuelle. Il fixe les briques, et son rapport entre dans le dépôt.
 
 | Mesure | Seuil |
 |---|---|
-| Fin de phrase → premier mot, chaîne complète | moins de 1,5 s en valeur médiane |
+| Fin de phrase → premier mot, chaîne complète | 2,5 s en valeur médiane (ADR 0011 ; 1,5 s à l'origine) |
 | Idem avec un jeu lancé | à mesurer, et à présenter à CrOliX avec le repli proposé |
 | Modèle Live2D dans une fenêtre Tauri | 30 images/s au moins, chaîne vocale active |
 | Délai du son à la bouche | imperceptible à l'usage, jugé par CrOliX |
@@ -319,6 +323,13 @@ revient à CrOliX avec les options chiffrées (modèle plus rapide, sans RVC, au
 
 Si le rendu Live2D ne tient pas les seuils, le niveau 2 reste la cible et le format revient à CrOliX, avec les
 chiffres, avant toute commande.
+
+**Résultat du 07/11** (rapport : `lun-luxuria/docs/essai-2026-11-07.md`). La chaîne complète, sans jeu, donne 2776 ms en
+médiane, 3754 au 95ᵉ centile : au-dessus des 1,5 s. Le relevé est revenu à CrOliX, qui a assoupli la cible
+([ADR 0011](../../adr/0011-chaine-vocale-mvp.md)). Restent à mesurer : la chaîne avec un jeu lancé, Live2D dans une
+fenêtre Tauri, le délai du son à la bouche, la vignette au-dessus d'un jeu, la fenêtre de « annule » et le rendu de RVC
+en français avec un modèle entraîné en français. La détection du micro tenu a relevé un faux positif durable : des entrées
+périmées du registre (lun-luxuria#5).
 
 ## 8. Ce qui change dans le core
 
