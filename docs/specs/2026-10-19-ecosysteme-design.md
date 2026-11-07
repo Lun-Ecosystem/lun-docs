@@ -198,6 +198,9 @@ ce que le cerveau a retenu, les questions du jour. Il est prêt au réveil, sur 
 
 ### 7.3 Les modes
 
+> **07/11 : après le MVP.** Au MVP, seul le mute du bureau existe ([spec](2026-11-07-mute-du-bureau-design.md)) ; les
+> modes reviendront sous forme de rôles éditables, avec ce qui passe parmi leurs réglages.
+
 Chaque événement transmis (alerte d'un satellite, rappel, question du cerveau) porte une importance.
 Le mode actif décide s'il passe tout de suite, attend ou est coupé :
 
@@ -244,7 +247,9 @@ transmet. Deux événements ne se chevauchent jamais : une file unique dans le c
 - **Autorisations Google** : gérées par Acedia, affichées et réglables depuis les apps.
 - **App desktop = une vraie application** : elle démarre avec Windows (réglable), vit dans la zone de
   notification, lance et surveille elle-même ses services locaux (RVC…) **sans aucune fenêtre
-  cmd**, affiche leur état et se met à jour seule.
+  cmd**, affiche leur état et se met à jour seule. Au MVP, c'est Lun'Luxuria, sans mise à jour automatique : un
+  nouveau build se lance à la main pendant le rodage ([spec du poste autonome](2026-11-07-poste-autonome-design.md),
+  07/11).
 
 ## 9. Stack
 
@@ -272,8 +277,9 @@ dans le respect de `standards/qualite.md`.
 
 1. **L'assistante au quotidien** : tri de nuit, briefing du matin, rappels par urgence, cerveau
    (nuit, questions, dépôts), boîte et gestes à la source, fil de discussion sur mobile.
-2. **Le contrôle** : pause par satellite, interrupteur général, coûts, autorisations Google, modes
-   assistante, focus et silence ; app desktop propre (§8).
+2. **Le contrôle** : pause par satellite, interrupteur général, coûts, autorisations Google, mute du
+   bureau (les modes assistante, focus et silence passent après le MVP, décision du 07/11) ; app desktop
+   propre (§8).
 3. **Les débuts de la présence** : personnalité, voix (parler et entendre, avec RVC), avatar 2D
    dans VTube Studio.
 
@@ -310,7 +316,7 @@ et les mêmes dates :
 | J0, J1 | avant le 27/10 | fait |
 | J2 Core v1 | 1 à 5 : contrat, Acedia, délégation, Avaritia, mémoire et routines | fait |
 | J3 Apps v1 | 6 : mobile, puis desktop | mobile fait. **Lun'Luxuria remplace l'app desktop** du core (décision du 07/11) |
-| J4 Nuit, voix, contrôle | 7 : personnalité, voix, avatar, modes | en cours (lun-docs#61) ; avatar après le MVP (lun-docs#62) ; modes pas commencés |
+| J4 Nuit, voix, contrôle | 7 : personnalité, voix, avatar, mute du bureau | en cours (lun-docs#61) ; avatar après le MVP (lun-docs#62) ; les modes passent après le MVP, remplacés par le mute du bureau (décision du 07/11, [spec](2026-11-07-mute-du-bureau-design.md)) |
 | J5 Rodage | 8 : une semaine d'usage en local | à faire ; le NAS vient une fois le MVP validé |
 
 **Ligne de coupe si le calendrier glisse** : l'avatar part d'abord, puis RVC (voix de synthèse
