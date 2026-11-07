@@ -1,5 +1,5 @@
 // PreToolUse hook (Bash and PowerShell): blocks what only CrOliX may do - merging a PR, pushing to
-// main, force-pushing. Exit code 2 blocks the tool call and shows the reason to the agent.
+// main or master, force-pushing - and a PR opened out of the norm: not a draft, or a title the CI refuses. Exit code 2 blocks the tool call and shows the reason to the agent.
 // Fails open on anything it cannot parse: the GitHub ruleset and the pre-push hook stay behind it.
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -42,6 +42,11 @@ const SHELL_COMMAND_FLAGS = new Set(['-c', '-command', '/c', '/k']);
 const GIT_OPTIONS_WITH_VALUE = new Set(['-C', '-c', '--git-dir', '--work-tree', '--namespace']);
 const PUSH_OPTIONS_WITH_VALUE = new Set(['-o', '--push-option', '--repo', '--receive-pack', '--exec']);
 
+const PROTECTED = new Set(['main', 'master', 'refs/heads/main', 'refs/heads/master']);
+// The same expression as the "Conventional PR title" step of templates/ts/.github/workflows/ci.yml.
+const PR_TITLE = /^(feat|fix|docs|chore|ci|test|refactor)(\([a-z0-9-]+\))?!?: .+/;
+const GH_OPTIONS_WITH_VALUE = new Set(['-R', '--repo']);
+
 const baseName = (cmd) => path.basename(cmd.replace(/\\/g, '/')).toLowerCase().replace(/\.exe$/, '');
 
 function evaluatePush(args, branchHere) {
@@ -63,15 +68,45 @@ function evaluatePush(args, branchHere) {
     if (refspec.startsWith('+')) return 'force push (+refspec) is reserved to CrOliX';
     if (refspec.includes('refs/tags/')) return 'pushing tags (releases) is reserved to CrOliX';
     const destination = refspec.includes(':') ? refspec.split(':').pop() : refspec;
-    if (destination === 'main' || destination === 'refs/heads/main') {
-      return 'pushing to main is reserved to CrOliX: push a branch and open a PR';
+    if (PROTECTED.has(destination)) {
+      return `pushing to ${destination.replace('refs/heads/', '')} is reserved to CrOliX: push a branch and open a PR`;
     }
   }
   const implicit = refspecs.length === 0 || refspecs.every((r) => r === 'HEAD' || r === '@');
-  if (implicit && branchHere() === 'main') {
-    return 'you are on main: pushing it is reserved to CrOliX, push a branch and open a PR';
+  const here = implicit ? branchHere() : null;
+  if (here === 'main' || here === 'master') {
+    return `you are on ${here}: pushing it is reserved to CrOliX, push a branch and open a PR`;
   }
   return null;
+}
+
+/** `gh pr create` and `gh pr edit`: the title the CI will check, and a new PR as a draft (git.md). */
+function evaluatePr(action, args, command) {
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    let title = null;
+    if (arg === '--title' || arg === '-t') title = args[i + 1] ?? '';
+    else if (arg.startsWith('--title=')) title = arg.slice('--title='.length);
+    else if (arg.startsWith('-t') && !arg.startsWith('--')) title = arg.slice(2);
+    if (title !== null && !PR_TITLE.test(title)) {
+      return `PR title "${title}" does not pass the CI: it must match ${PR_TITLE.source}`;
+    }
+  }
+  // On the whole command: a PowerShell here-string body with an apostrophe defeats the quote parsing.
+  if (action === 'create' && !/(^|\s)(--draft(=\S+)?|-d)(?=\s|$)/.test(command)) {
+    return 'a PR opens as a draft at the first push (git.md): add --draft, then gh pr ready once the criteria are proven';
+  }
+  return null;
+}
+
+/** The words of a gh command, without its options and the value of -R or --repo, wherever they stand. */
+function ghWords(args) {
+  const words = [];
+  for (let i = 0; i < args.length; i++) {
+    if (GH_OPTIONS_WITH_VALUE.has(args[i])) i++;
+    else if (!args[i].startsWith('-')) words.push(args[i]);
+  }
+  return words;
 }
 
 function evaluateSegment(tokens, state, context) {
@@ -90,8 +125,13 @@ function evaluateSegment(tokens, state, context) {
     if (flag >= 0 && rest[flag + 1]) return evaluateCommand(rest[flag + 1], { ...context, cwd: state.cwd }).reason ?? null;
     return null;
   }
-  if (cmd === 'gh' && rest[0] === 'pr' && rest[1] === 'merge') return 'merging a PR is reserved to CrOliX';
-  if (cmd === 'gh' && rest[0] === 'release' && rest[1] === 'create') return 'releases are created by CrOliX';
+  if (cmd === 'gh') {
+    const [group, action] = ghWords(rest);
+    if (group === 'pr' && action === 'merge') return 'merging a PR is reserved to CrOliX';
+    if (group === 'pr' && (action === 'create' || action === 'edit')) return evaluatePr(action, rest, state.command);
+    if (group === 'release' && action === 'create') return 'releases are created by CrOliX';
+    return null;
+  }
   if (cmd === 'claude' && rest[0] === 'plugin' && rest[1] === 'tag') return 'release tags are created by CrOliX';
   if (cmd !== 'git') return null;
 
@@ -110,7 +150,7 @@ function evaluateSegment(tokens, state, context) {
  * @param {{ cwd?: string, branchOf?: (dir: string) => string | null }} context
  */
 export function evaluateCommand(command, context = {}) {
-  const state = { cwd: context.cwd ?? process.cwd() };
+  const state = { cwd: context.cwd ?? process.cwd(), command };
   for (const tokens of segments(command)) {
     const reason = evaluateSegment(tokens, state, context);
     if (reason) return { block: true, reason };

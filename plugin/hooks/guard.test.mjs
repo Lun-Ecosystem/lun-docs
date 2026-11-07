@@ -22,7 +22,7 @@ const allowed = [
   'git push -u origin feat/bootstrap',
   'git push origin feat/main-menu',
   'git status',
-  'gh pr create --fill',
+  'gh pr create --fill --draft',
   'gh pr view 12',
   'git log | grep "gh pr merge"',
   'echo "git push origin main"',
@@ -73,6 +73,68 @@ for (const command of blockedMore) {
     assert.equal(evaluateCommand(command).block, true);
   });
 }
+
+// gh options before the subcommand, master as main, PRs to the norm (lun-docs#2, #23, #33).
+const blockedNorms = [
+  'gh -R o/r pr merge 3',
+  'gh pr -R o/r merge 3',
+  'gh --repo o/r pr merge 3',
+  'gh --repo=o/r pr merge 3',
+  'gh pr --repo=o/r merge 3',
+  'git push origin master',
+  'git push origin HEAD:master',
+  'git push origin refs/heads/master',
+  'git push origin HEAD:refs/heads/master',
+  'gh pr create --fill',
+  'gh pr create --title "fix: x" --body-file b.md',
+  'gh pr create --draft --title "Recadrage du front" --body-file b.md',
+  'gh pr create --draft --title="Recadrage du front"',
+  'gh pr create -d -t "fix(Voix): x"',
+  'gh pr create -d -t"fix x"',
+  'gh pr edit 3 --title "fix:x"',
+  'gh -R o/r pr edit 3 -t "Nouveau titre"',
+];
+for (const command of blockedNorms) {
+  test(`blocks (norms): ${command}`, () => {
+    const result = evaluateCommand(command);
+    assert.equal(result.block, true);
+    assert.ok(result.reason && result.reason.length > 0);
+  });
+}
+
+const allowedNorms = [
+  'gh pr create --draft --title "fix: x" --body-file b.md',
+  'gh pr create -d --title="feat(guard)!: y"',
+  'gh -R o/r pr create --draft -t "docs(plans): z"',
+  'gh pr edit 3 --title "chore(release): lun 0.3.0"',
+  'gh pr edit 3 --body-file b.md',
+  'gh pr edit 3 --add-label niveau:standard',
+  'gh pr ready 3',
+  'gh pr view 3 -R o/r',
+  'git push origin feat/master-plan',
+  'git switch main',
+  'git branch -D feat/x',
+  'git commit -m "fix: say why gh pr create needs --draft"',
+];
+for (const command of allowedNorms) {
+  test(`allows (norms): ${command}`, () => {
+    assert.equal(evaluateCommand(command).block, false);
+  });
+}
+
+test('reads the draft flag across a PowerShell here-string with an apostrophe', () => {
+  const ps = "gh pr create --title \"fix: x\" --body @'\nL'onglet (fermé) ne coupe plus rien.\n'@ --draft";
+  assert.equal(evaluateCommand(ps).block, false);
+  assert.equal(evaluateCommand(ps.replace(' --draft', '')).block, true);
+});
+
+test('gives the CI expression when a title is refused', () => {
+  assert.match(evaluateCommand('gh pr edit 3 --title "Titre libre"').reason, /feat\|fix\|docs/);
+});
+
+test('protects master like main', () => {
+  assert.equal(evaluateCommand('git push', { cwd: '/repo', branchOf: () => 'master' }).block, true);
+});
 
 const onMain = { cwd: '/repo', branchOf: () => 'main' };
 const onFeature = { cwd: '/repo', branchOf: () => 'feat/x' };

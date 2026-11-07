@@ -49,9 +49,12 @@
 | Public | Ruleset GitHub : PR obligatoire, check CI requis, pas de push forcé, pas de suppression |
 | Core (privé, pas de GitHub Pro) | Permissions Claude Code + hook git `pre-push` local qui refuse tout push vers `main` |
 
-Dans les deux cas, le hook de garde du plugin bloque côté agent : `gh pr merge`, `git push` vers
-`main`, `--force`, `-f`, `--force-with-lease` et les réf. préfixées `+`. L'agent agit avec l'identité
-GitHub de CrOliX : GitHub seul ne peut pas faire la différence, d'où cette double barrière.
+Dans les deux cas, le hook de garde du plugin bloque côté agent : `gh pr merge` (options `-R` et
+`--repo` comprises), `git push` vers `main` ou `master`, `--force`, `-f`, `--force-with-lease` et les
+réf. préfixées `+`. Il refuse aussi `gh pr create` sans `--draft`, et un titre de PR (`gh pr create`,
+`gh pr edit`) que la CI refuserait. Ce qu'il ne lit pas passe (`gh api …/merge`, un alias) : le ruleset
+et le hook `pre-push` restent derrière. L'agent agit avec l'identité GitHub de CrOliX : GitHub seul ne
+peut pas faire la différence, d'où cette double barrière.
 
 ## Release
 
