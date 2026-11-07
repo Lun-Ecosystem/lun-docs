@@ -1,5 +1,7 @@
 # La fin de présence arrive même quand la page se ferme. Plan
 
+> **Livré** par [lun-luxuria#13](https://github.com/Lun-Ecosystem/lun-luxuria/pull/13). Cases cochées le 07/11/2026.
+
 > **Pour les agents d'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 
 **But :** quand l'onglet de Luxuria se ferme, le core apprend tout de suite que personne n'est plus là
@@ -41,11 +43,11 @@ erreur après la fermeture est absorbée par le `.catch` de `leave`.
 
 ## Tâches
 
-- [ ] Test d'abord, `src/core.test.ts` : `keepalive` pour `stopped` seulement, le reste de l'init inchangé.
-- [ ] `presence` passe `...(state === 'stopped' ? { keepalive: true } : {})` à `#call`, qui garde l'option.
-- [ ] Test d'abord, le retour par l'historique : `pageshow` avec `persisted` rappelle l'annonce, sans `persisted` rien.
-- [ ] `session.svelte.ts` : un écouteur `pageshow` qui rappelle `#announce()` si `persisted`, retiré à `abort` comme les
+- [x] Test d'abord, `src/core.test.ts` : `keepalive` pour `stopped` seulement, le reste de l'init inchangé.
+- [x] `presence` passe `...(state === 'stopped' ? { keepalive: true } : {})` à `#call`, qui garde l'option.
+- [x] Test d'abord, le retour par l'historique : `pageshow` avec `persisted` rappelle l'annonce, sans `persisted` rien.
+- [x] `session.svelte.ts` : un écouteur `pageshow` qui rappelle `#announce()` si `persisted`, retiré à `abort` comme les
       autres.
-- [ ] La preuve Chrome du critère 3, script dans le scratchpad, sortie dans la PR.
-- [ ] Issue `inbox` lun-anima pour les deux onglets ; commentaire dans #8 sur la confirmation au desktop.
-- [ ] Relecture (agent reviewer), PR avec `lun-livrer`, critères cochés et preuves.
+- [x] La preuve Chrome du critère 3, script dans le scratchpad, sortie dans la PR.
+- [x] Issue `inbox` lun-anima pour les deux onglets ; commentaire dans #8 sur la confirmation au desktop.
+- [x] Relecture (agent reviewer), PR avec `lun-livrer`, critères cochés et preuves.
