@@ -30,3 +30,4 @@ Gabarit : [`_template.md`](_template.md).
 | [0008](0008-acces-exterieur.md) | L'accès depuis l'extérieur, déchiffré sur le NAS seulement | acceptée |
 | [0009](0009-lun-luxuria-corps.md) | Lun'Luxuria, le corps de Natsume | acceptée, publique depuis 0010 |
 | [0010](0010-lun-luxuria-publique.md) | Lun'Luxuria, un satellite public qui fonctionne seul | acceptée |
+| [0011](0011-chaine-vocale-mvp.md) | La chaîne vocale du MVP, après l'essai du 07/11 | acceptée |
