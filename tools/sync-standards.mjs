@@ -31,8 +31,9 @@ export function syncStandards(root, map, { check }) {
   for (const skill of fs.existsSync(skills) ? fs.readdirSync(skills) : []) {
     const refs = path.join(skills, skill, 'references');
     if (!fs.existsSync(refs)) continue;
-    for (const name of fs.readdirSync(refs)) {
-      const full = path.join(refs, name);
+    for (const entry of fs.readdirSync(refs, { withFileTypes: true })) {
+      if (!entry.isFile()) continue;
+      const full = path.join(refs, entry.name);
       if (expectedTargets.has(full) || !fs.readFileSync(full, 'utf8').startsWith('<!-- Copie générée depuis ')) continue;
       changed.push(path.relative(root, full).split(path.sep).join('/'));
       if (!check) fs.rmSync(full);

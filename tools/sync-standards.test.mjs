@@ -73,3 +73,10 @@ test('a reference written by hand, without the generated header, is never touche
   syncStandards(root, map, { check: false });
   assert.ok(fs.existsSync(copy(root, 'lun-design', 'notes.md')));
 });
+
+test('a folder inside references is left alone', () => {
+  const root = repo();
+  syncStandards(root, map, { check: false });
+  fs.mkdirSync(copy(root, 'lun-design', 'images'));
+  assert.deepEqual(syncStandards(root, map, { check: true }).changed, []);
+});

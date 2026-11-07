@@ -28,6 +28,7 @@ export const REQUIRED_FILES = [
   'templates/project/CLAUDE.md',
   'templates/project/.claude/settings.json',
   'templates/project/.github/pull_request_template.md',
+  '.github/pull_request_template.md',
   'templates/project/hooks/pre-push',
   'LICENSE',
   'docs/specs/2026-10-19-referentiel-design.md',
