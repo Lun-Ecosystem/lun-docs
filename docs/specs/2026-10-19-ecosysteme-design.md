@@ -37,8 +37,8 @@ ChatGPT ou Gemini, la boîte, les validations, la gestion des connecteurs Google
 **Le soir.** CrOliX lance le panel desktop et parle à Lun' de vive voix. Deux rôles :
 
 1. **la compagnie** : un duo comique, réactif à ce qu'il dit et à ce qu'elle comprend ;
-2. **la veille** : elle reste en alerte et remonte les événements de l'écosystème, filtrés par le
-   **mode** actif (voir §7.3).
+2. **la veille** : elle reste en alerte et remonte les événements de l'écosystème, filtrés par leur
+   palier ; au MVP, la sourdine du bureau la fait taire, sauf l'exception des urgences (voir §7.3).
 
 ## 3. Principes d'architecture
 
@@ -124,7 +124,7 @@ remplaçant en service.
 | Cerveau (fiches, questions, dépôts de brouillons) | Core | mobile, desktop |
 | Briefing du matin et rappels | Core (assemble Acedia + cerveau) | mobile, desktop ; voix |
 | Personnalité, humeur, relation | Core | desktop (voix, avatar), mobile (ton du fil) |
-| Modes (focus, silence, assistante ; streameuse plus tard) | Core | mobile, desktop |
+| Sourdine du bureau au MVP ; modes après le MVP, en rôles éditables (assistante, focus, silence, streameuse) | Luxuria pour la sourdine, core pour les modes | desktop ; mobile pour les modes |
 | Coûts, états, pause / reprise | Chaque satellite et le core ; agrégés par le core | panel, mobile |
 | Voix : captation, synthèse, RVC | Capacités PC (app desktop) | desktop |
 | Avatar 2D (VTube Studio) | Capacités PC (app desktop), piloté par le core | desktop |
@@ -140,7 +140,7 @@ standard de lun-docs (`standards/contrat-satellite.md`) :
 - **santé et état** : en marche, en pause, dégradé, avec la raison ;
 - **coûts** : dépense LLM et API sur une période, dans un format commun ;
 - **pause et reprise** : couper toute action automatique sans arrêter le service ;
-- **flux d'événements** : ce qui se passe, avec une **importance** (que le core filtre selon le mode) ;
+- **flux d'événements** : ce qui se passe, avec une **importance** (que le core filtre selon le palier, et au MVP selon la sourdine du bureau) ;
 - **actions** : la liste de ce qu'on peut lui demander, invocables par POST.
 
 L'authentification entre core et satellite, et entre apps et core, passe par des jetons
@@ -304,7 +304,7 @@ locales). Les jalons deviennent les valeurs du champ « Jalon » du Projects.
 | **J1 Acedia** | Acedia conforme au contrat, dans l'organisation, front autonome installable sur mobile, paquet de vues publié, prouvé en local avec le compte Google de test | 15/11 |
 | **J2 Core v1** | Conversation ; personnalité (chantier dédié, cadré avec CrOliX) ; cerveau v1 (wiki, contexte chaud, point d'entrée du contexte) ; branchement à Acedia ; API des apps | 29/11 |
 | **J3 Apps v1** | `ui/`, `desktop/` et `mobile/` dans `lun-anima` ; mobile (fil, boîte via le paquet de vues d'Acedia, validations, réglages) ; desktop (panel, zone de notification, services surveillés) | 13/12 |
-| **J4 Nuit, voix, contrôle** | Cycle de nuit et briefing ; voix et RVC ; VTube Studio ; modes ; coûts et pause agrégés | 22/12 |
+| **J4 Nuit, voix, contrôle** | Cycle de nuit et briefing ; voix et RVC ; VTube Studio ; sourdine du bureau (les modes passent après le MVP, 07/11) ; coûts et pause agrégés | 22/12 |
 | **J5 Rodage** | Une semaine d'usage réel en prod, corrections ; releases groupées ; anciens dépôts archivés | 31/12 |
 
 **Recalage du 07/11** (décision de CrOliX, lun-docs#73). Depuis le 27/10, l'ordre suit les huit chantiers de la
