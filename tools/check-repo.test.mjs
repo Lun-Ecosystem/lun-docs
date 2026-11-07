@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { checkRequiredFiles, checkMaxLines, checkNoInternalAddresses } from './check-repo.mjs';
+import { checkRequiredFiles, checkMaxLines, checkNoInternalAddresses, checkSameFile } from './check-repo.mjs';
 
 function fixture(files) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'lun-docs-'));
@@ -120,4 +120,14 @@ test('--addresses scans another repo and fails on a private IP', () => {
 test('--addresses passes on a repo without internal address', () => {
   const root = gitRepo({ 'README.md': '# Clean\n' });
   assert.equal(runCli(['--addresses', root]).code, 0);
+});
+
+test('checkSameFile reports two copies that drifted, and ignores line endings', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'lun-same-'));
+  fs.writeFileSync(path.join(root, 'a.md'), '## Issue\n');
+  fs.writeFileSync(path.join(root, 'b.md'), '## Issue\r\n');
+  assert.deepEqual(checkSameFile(root, 'a.md', 'b.md'), []);
+  fs.writeFileSync(path.join(root, 'b.md'), '## Ticket\n');
+  assert.equal(checkSameFile(root, 'a.md', 'b.md').length, 1);
+  assert.deepEqual(checkSameFile(root, 'a.md', 'absent.md'), []);
 });

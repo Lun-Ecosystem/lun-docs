@@ -64,6 +64,13 @@ export function checkRequiredFiles(root, required) {
   return required.filter((f) => !fs.existsSync(path.join(root, f))).map((f) => `missing: ${f}`);
 }
 
+/** Two files that must stay the same, line endings aside: a copy kept by hand, with no generator. */
+export function checkSameFile(root, a, b) {
+  const read = (f) => fs.readFileSync(path.join(root, f), 'utf8').replace(/\r\n/g, '\n');
+  if (!fs.existsSync(path.join(root, a)) || !fs.existsSync(path.join(root, b))) return [];
+  return read(a) === read(b) ? [] : [`${a} differs from ${b}: copy one onto the other`];
+}
+
 /** `target` is a directory (every .md inside, recursively) or a single file. */
 export function checkMaxLines(root, target, max) {
   const full = path.join(root, target);
@@ -116,6 +123,7 @@ export function runAll(root) {
     ...checkRequiredFiles(root, REQUIRED_FILES),
     ...checkMaxLines(root, 'standards', 150),
     ...checkMaxLines(root, 'templates/project/CLAUDE.md', 100),
+    ...checkSameFile(root, '.github/pull_request_template.md', 'templates/project/.github/pull_request_template.md'),
     ...checkNoInternalAddresses(root),
     ...checkAdrs(root),
     ...(fs.existsSync(path.join(root, 'plugin/.claude-plugin/plugin.json')) ? checkVersions(root) : []),
