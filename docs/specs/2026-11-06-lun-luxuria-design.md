@@ -154,7 +154,8 @@ L'essai du §7 confronte ce choix au vrai PC. Il ne le rouvre que s'il échoue.
 
 ### 5.3 Les états
 
-`présente`, `écoute`, `réfléchit`, `parle`, `attend`, `occupée`, `micro coupé`, `injoignable`, `plafond atteint`.
+`présente`, `écoute`, `réfléchit`, `parle`, `attend`, `occupée`, `micro coupé`, `muette` (07/11, §6.6), `injoignable`,
+`plafond atteint`.
 Ils sont calculés dans Luxuria à partir du micro, de la lecture audio et du flux du core. Au MVP, ils
 s'affichent par l'étiquette et par le souffle ; les images ne distinguent que le repos et la parole. Un état
 affiché correspond à la réalité : `micro coupé` veut dire qu'aucune capture ne tourne.
@@ -259,6 +260,9 @@ d'un clic ; seul le départ du compteur change.
 Les modes annoncés du core (assistante, focus, silence) **n'existent pas encore dans le code** (vérifié le 06/11).
 Ce chantier ne les construit pas : au MVP, Luxuria n'a que ses états locaux (§6.3) et le core ne reçoit que les
 signaux de présence **[choix Claude]**. L'échelle complète des modes de présence est au §11.
+
+**07/11** : un seul état s'ajoute au MVP, `muette`, par le mute du bureau
+([spec](2026-11-07-mute-du-bureau-design.md)). Les modes restent après le MVP.
 
 ### 6.7 Le plafond de dépense
 
