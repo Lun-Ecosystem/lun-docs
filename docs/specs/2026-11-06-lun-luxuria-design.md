@@ -66,6 +66,8 @@ modeste. Échéance du MVP : 31/12.
 - Application Tauri 2, dépôt `lun-luxuria`, **public**, entrée au registre à sa création (ADR 0010). D'ici le desktop,
   une page Vite dans le navigateur, qui porte déjà toute la logique : Tauri n'ajoute que la fenêtre, le raccourci global
   et le vrai nom de l'appli sur le micro **[choix Claude]**.
+  *Annoté le 07/11 (plan `2026-11-07-luxuria-tauri`) : sous WebView2, le micro est tenu par `msedgewebview2.exe`, pas
+  par Luxuria. Le vrai nom n'est donc pas tenu, et une autre appli WebView2 (le nouveau Teams) échappe à la détection.*
 - Reliée, Luxuria est un client du core avec un jeton d'appareil. Elle n'expose rien, et ne sert aucune route du
   contrat satellite au MVP.
 - Seule, elle parle à un modèle compatible OpenAI choisi dans ses réglages, sous un nom et un ton neutres par défaut. Son

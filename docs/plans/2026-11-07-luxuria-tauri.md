@@ -132,16 +132,18 @@ que la voix ne passe pas par l'IPC.
 
 ## Tâches
 
-- [ ] Branche `feat/fenetre-tauri` depuis `main`, PR en brouillon au premier push.
-- [ ] Tâche 0 : squelette Tauri minimal et preuves du critère 0 ; si le flux échoue, arrêt et plan amendé (B).
-- [ ] CORS du service voix, tests d'abord ; `src/desktop/fetch.ts` et base de la voix, tests ; « Adresse du serveur ».
-- [ ] Squelette complet : CSP, capacités, icônes (SVG du monde, sans nom d'instance), sans console, une seule instance.
-- [ ] Fenêtre : géométries, mémoire, premier plan, déplacement, fil agrandi ; fermeture avec `stopped`. Tests.
-- [ ] Raccourcis globaux : bascule et touche à maintenir, refus des touches imprimables, repli. Tests.
-- [ ] Corps : commande Rust et ses tests, puis `src/desktop/corps.ts`, Réglages, Scene (vignette recadrée).
-- [ ] Service voix : commande Rust et ses tests, lancement idempotent, journal, arrêt de l'arbre.
-- [ ] CI Windows, `docs/README.md`, `CLAUDE.md`, spec §3 annotée, preuves sur le laptop, relecture (agent reviewer),
-      PR prête.
+- [x] Branche `feat/fenetre-tauri` depuis `main`, PR en brouillon au premier push
+      ([lun-luxuria#20](https://github.com/Lun-Ecosystem/lun-luxuria/pull/20)).
+- [x] Tâche 0 : squelette Tauri minimal et preuves du critère 0 ; si le flux échoue, arrêt et plan amendé (B).
+- [x] CORS du service voix, tests d'abord ; `src/desktop/fetch.ts` et base de la voix, tests ; « Adresse du serveur ».
+- [x] Squelette complet : CSP, capacités, icônes (SVG du monde, sans nom d'instance), sans console, une seule instance.
+- [x] Fenêtre : géométries, mémoire, premier plan, déplacement, fil agrandi ; fermeture avec `stopped`. Tests.
+- [x] Raccourcis globaux : bascule et touche à maintenir, refus des touches imprimables, repli. Tests. Preuve à la main
+      chez CrOliX : les touches envoyées par `keybd_event` depuis la session de Claude n'atteignent pas le bureau.
+- [x] Corps : commande Rust et ses tests, puis `src/desktop/corps.ts`, Réglages, Scene (vignette recadrée).
+- [x] Service voix : commande Rust et ses tests, lancement idempotent, journal, arrêt de l'arbre.
+- [x] CI Windows, `docs/README.md`, `CLAUDE.md`, spec §3 annotée, preuves sur le laptop, relecture (agent reviewer),
+      PR prête. Le lien symbolique est vérifié en CI, où la vérification ne peut plus être sautée.
 
 ## Hors périmètre
 
