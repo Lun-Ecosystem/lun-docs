@@ -78,8 +78,8 @@ sa phrase « en vocal » lit `busy`, qui garde son sens.
 - `announceP0` : la phrase part sans raison `p0` si `busy || silentAnnounce`. `#stale` de la file des notifications
   applique la même règle. `spontaneousDue` : `if (!present || busy || muted) return false`.
 
-- [ ] Branche depuis `main`, issue ouverte (critères de la spec §4 et §5), PR en brouillon au premier push.
-- [ ] Tests d'abord :
+- [x] Branche depuis `main`, issue ouverte (critères de la spec §4 et §5), PR en brouillon au premier push.
+- [x] Tests d'abord :
   - `presence.test.ts` :
     - un `started` avec `busy: true` donne `presenceNow().busy` vrai **avant** tout battement (le trou de 30 s) ;
     - pareil pour `muted` et `silentAnnounce` ;
@@ -93,8 +93,8 @@ sa phrase « en vocal » lit `busy`, qui garde son sens.
   - `situation.test.ts` : `silentAnnounce` ou `muted` seuls ne produisent pas la phrase « en vocal ».
   - Route : `{ state: 'beat', muted: true }` rend 204 ; `muted: 'oui'` rend 400 et le message cite `muted?` et
     `silentAnnounce?` ; `{ state: 'started', silentAnnounce: true }` est rangé.
-- [ ] Code : les signatures ci-dessus.
-- [ ] `README.md` : la route de présence dit les deux champs et ce qu'ils coupent.
+- [x] Code : les signatures ci-dessus.
+- [x] `README.md` : la route de présence dit les deux champs et ce qu'ils coupent.
 
 ### Tâche 2 : le test instable (lun-anima#7), en dernier
 
@@ -103,13 +103,13 @@ sa phrase « en vocal » lit `busy`, qui garde son sens.
 Elle ne sert aucun critère de la spec : elle passe par ce dépôt, rien de plus. Elle ne bloque pas la PR. Si la cause
 résiste plus d'une heure, l'issue reçoit ce qui a été trouvé et la tâche sort du chantier.
 
-- [ ] Reproduire : `npx vitest run core/src/satellites/listener.test.ts --repeat 50` (ou une boucle), noter le taux
+- [x] Reproduire : `npx vitest run core/src/satellites/listener.test.ts --repeat 50` (ou une boucle), noter le taux
   d'échec dans l'issue.
-- [ ] Trouver la cause (horloge réelle, ordre des promesses, minuterie non avancée) et la corriger à la racine, sans
+- [x] Trouver la cause (horloge réelle, ordre des promesses, minuterie non avancée) et la corriger à la racine, sans
   `retry` ni délai allongé.
-- [ ] Preuve : 200 passages verts d'affilée, notés dans la PR. `Closes #7`.
+- [x] Preuve : 200 passages verts d'affilée, notés dans la PR. `Closes #7`.
 
-- [ ] Relecture (agent reviewer), critères cochés et preuves dans la PR, passage en « prête ».
+- [x] Relecture (agent reviewer), critères cochés et preuves dans la PR, passage en « prête ».
 
 ## lun-luxuria
 
@@ -133,8 +133,8 @@ présence), `src/local.ts` si le type l'exige, `src/conversation.ts` ; tests `se
   que le battement ;
 - `Conversation` reçoit `silenced: () => boolean` dans ses dépendances.
 
-- [ ] Branche depuis `main`, issue ouverte (critères de la spec §3, §4, §7), PR en brouillon.
-- [ ] Tests d'abord :
+- [x] Branche depuis `main`, issue ouverte (critères de la spec §3, §4, §7), PR en brouillon.
+- [x] Tests d'abord :
   - muette, `#applyMic` n'ouvre pas le micro même avec `micOn` (espion sur `openMicrophone`, jamais appelé) ; levée,
     le micro revient dans l'état de `micOn` ;
   - muette au lancement (`luxuria.mute = 'on'`) : `presence('started', { ritual: false, muted: true, ... })`, même avec
@@ -149,7 +149,7 @@ présence), `src/local.ts` si le type l'exige, `src/conversation.ts` ; tests `se
   - muette, `write(text)` ne part pas et `holdKey(true)` ne compte pas ;
   - `stateOf` : `silenced` donne `silenced` ; `linked: false` donne `unreachable` même muette ; `speaking` passe devant ;
   - occupée puis mute levé : le micro reste fermé (point 3).
-- [ ] Code : les interfaces ci-dessus. Le calcul de `should` dans `#applyMic` gagne `&& !this.silenced`.
+- [x] Code : les interfaces ci-dessus. Le calcul de `should` dans `#applyMic` gagne `&& !this.silenced`.
 
 ### Tâche 4 : le geste, l'écran et les réglages
 
@@ -160,7 +160,7 @@ raison en clair), `src/settings.ts` (`display.muteShortcut`, défaut `'Control+S
 `src/desktop/keys.svelte.test.ts`, `src/Scene.test.ts`, `src/desktop/reglages.test.ts`, et un `src/settings.test.ts`
 nouveau pour `readSettings`.
 
-- [ ] Tests d'abord :
+- [x] Tests d'abord :
   - `readSettings` d'un ancien réglage sans `muteShortcut` donne le défaut ;
   - `keysFollow` enregistre le raccourci du mute et l'appel bascule `toggleMute` ; un autre réglage sauvé ne le
     réenregistre pas (comme le test du 07/11 pour les deux autres touches) ; un raccourci déjà pris est dit dans
@@ -170,11 +170,11 @@ nouveau pour `readSettings`.
   - le bouton a un nom accessible qui suit l'état (« Rendre la parole » / « La rendre muette ») et `aria-pressed` ;
   - muette, le champ du fil est `disabled` et dit pourquoi ;
   - `noCore.test.ts` reste vert.
-- [ ] Code. **Point de design léger** avant le bouton : socle commun, magenta en accent seulement. Vérification à
+- [x] Code. **Point de design léger** avant le bouton : socle commun, magenta en accent seulement. Vérification à
   l'écran dans la page (Chrome) et dans la fenêtre (CDP), en scène et en petit mode, clair et sombre.
-- [ ] `docs/README.md` : le mute dans le tableau des états et des réglages, le champ `muted` dans le contrat de
+- [x] `docs/README.md` : le mute dans le tableau des états et des réglages, le champ `muted` dans le contrat de
   présence. `CLAUDE.md` si une règle change (a priori non).
-- [ ] Recette de la spec §7, sur le laptop, contre un core jetable avec un satellite factice (`luxuria-essai/banc`) :
+- [x] Recette de la spec §7, sur le laptop, **points 2, 4, 6 et 7 joués** (lun-luxuria#22) ; 1, 3 et 5 au desktop (B9), contre un core jetable avec un satellite factice (`luxuria-essai/banc`) :
   points 1 à 7. Pour le point 4 :
   - le satellite factice émet, par `/ctl/emit`, un P0 d'importance `urgent` et un `agenda.reminder` d'importance
     `urgent`, datés de l'instant. Seuls les urgents de moins de 5 min (`P0_FRESH_MS`) sont annoncés ;
@@ -182,8 +182,8 @@ nouveau pour `readSettings`.
     réglage) ;
   - la file des notifications se lit en base jetable après le tick suivant de l'envoi (`sent` contre `dropped`). Le
     délai d'attente exact est relevé dans `push/queue.ts` au moment de l'écrire.
-- [ ] Relecture (agent reviewer), critères cochés et preuves dans la PR, passage en « prête ».
+- [x] Relecture (agent reviewer), critères cochés et preuves dans la PR, passage en « prête ».
 
 ## lun-docs
 
-- [ ] Ce plan coché, dans la PR de la feuille de route (ou une PR de coches s'il est déjà fusionné).
+- [x] Ce plan coché, dans une PR de coches (la feuille de route était fusionnée).

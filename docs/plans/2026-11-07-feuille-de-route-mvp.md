@@ -23,9 +23,9 @@ partie vide, son relevé est fait (lun-luxuria#9).
 
 | # | Point | Où | Chantier |
 |---|---|---|---|
-| A1 | **Le mute du bureau** : couper ses sens, urgences en exception réglable | lun-luxuria, lun-anima | [F](#f-le-mute-du-bureau) |
+| A1 | **Le mute du bureau** : couper ses sens, urgences en exception réglable | lun-luxuria, lun-anima | [F](#f-le-mute-du-bureau), fait : lun-anima#67, lun-luxuria#22 |
 | A2 | **Le poste qui tourne seul** : serveurs sans console qui redémarrent, journaux, sauvegarde de la base, Luxuria avec Windows et dans la zone de notification, téléphone par Tailscale | les cinq dépôts | [G](#g-le-poste-qui-tourne-seul) |
-| A3 | **La confiance de whisper-server** fixée à 0,9 : un « Oui » a validé une carte (lun-luxuria#6, critique), et RVC par blocs (lun-luxuria#7, première étape). La partie code se prouve sur le laptop contre des faux ; seuls les relevés demandent le desktop | lun-luxuria | [H](#h-la-confiance-de-la-voix), plan déjà écrit |
+| A3 | **La confiance de whisper-server** fixée à 0,9 : un « Oui » a validé une carte (lun-luxuria#6, critique), et RVC par blocs (lun-luxuria#7, première étape). La partie code se prouve sur le laptop contre des faux ; seuls les relevés demandent le desktop | lun-luxuria | [H](#h-la-confiance-de-la-voix), fait côté laptop : lun-luxuria#10 ; les relevés sont B1 |
 | A4 | Les specs qui se contredisent sur les modes (J4, notifications, Luxuria §6.6), et l'app desktop du §8 de la spec écosystème (mises à jour) | lun-docs | dans ce document et la PR qui le porte |
 
 ### B. Bloque le MVP, attend le desktop ou CrOliX
@@ -40,6 +40,7 @@ partie vide, son relevé est fait (lun-luxuria#9).
 | B6 | Une soirée réelle : latence par tour et coût, puis décision sur le plafond de 1 $ par jour (spec Luxuria §6.7) | desktop |
 | B7 | Notifications Windows coupées (`ToastEnabled = 0`) ; vcclient sur `0.0.0.0:18000` et règles du pare-feu | CrOliX : réglages système |
 | B8 | La semaine de rodage elle-même (J5), sur le poste mis en service par G | CrOliX |
+| B9 | Recette du mute, points 1, 3 et 5 : aucune capture en sourdine, la parole spontanée repart à son heure, en appel un P0 n'est pas dit | desktop |
 
 ### C. Petit, à glisser dans un chantier qui passe par le dépôt
 
