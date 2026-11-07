@@ -22,6 +22,21 @@
 - Un journal des observations : ce sont les issues `inbox`.
 - Un plan de chantier terminé : il vit dans l'issue ou la PR fermée.
 - Une copie d'un standard de lun-docs : on y renvoie.
+- `graphify-out/` : le graphe est local à chaque poste et se reconstruit.
+
+## Graphe de connaissance
+
+Installation, une fois par poste : `uv tool install graphifyy`. À la racine d'un dépôt :
+
+- premier graphe : `/graphify .` dans Claude Code ;
+- après un changement de code : `graphify update .`, sans modèle ;
+- après un changement de docs : `/graphify . --update`.
+
+`.graphifyignore` écarte ce qui n'apporte rien au graphe, comme les captures et les maquettes.
+
+Le graphe global se construit dans le dossier parent des dépôts, hors de git :
+`graphify merge-graphs <dépôt>/graphify-out/graph.json … --out graphify-out/graph.json`. Il ne se met
+pas à jour tout seul : on le refait après avoir rafraîchi les graphes des dépôts.
 
 ## CLAUDE.md
 
