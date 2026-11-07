@@ -40,6 +40,7 @@ partie vide, son relevé est fait (lun-luxuria#9).
 | B6 | Une soirée réelle : latence par tour et coût, puis décision sur le plafond de 1 $ par jour (spec Luxuria §6.7) | desktop |
 | B7 | Notifications Windows coupées (`ToastEnabled = 0`) ; vcclient sur `0.0.0.0:18000` et règles du pare-feu | CrOliX : réglages système |
 | B8 | La semaine de rodage elle-même (J5), sur le poste mis en service par G | CrOliX |
+| B9 | Recette du mute, points 1, 3 et 5 : aucune capture en sourdine, la parole spontanée repart à son heure, en appel un P0 n'est pas dit | desktop |
 
 ### C. Petit, à glisser dans un chantier qui passe par le dépôt
 
