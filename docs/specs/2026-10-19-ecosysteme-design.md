@@ -214,8 +214,8 @@ transmet. Deux événements ne se chevauchent jamais : une file unique dans le c
 - **Personnalité** : un ton, des humeurs, une mémoire de la relation, du désaccord maîtrisé.
 - **Voix** : CrOliX parle, Natsume répond à voix haute (synthèse + RVC). Captation, transcription,
   synthèse et RVC se font côté PC (fournisseurs cloud ou GPU local) ; **seul du texte transite
-  vers le core**, qui décide quoi dire. Cible : **moins de 2 secondes** entre la fin de ta phrase
-  et le premier mot entendu **[choix Claude]**.
+  vers le core**, qui décide quoi dire. Cible : **2,5 s en médiane** entre la fin de ta phrase
+  et le premier mot entendu, sur le desktop ([ADR 0011](../../adr/0011-chaine-vocale-mvp.md) ; 2 s à l'origine).
 - **Avatar 2D** : VTube Studio piloté depuis le core via les capacités PC. Les modèles sont
   génériques, sans fichiers d'expressions : au MVP, la vie de l'avatar passe uniquement par ses
   **paramètres** (clignement, respiration, synchro labiale, boucle d'animation au repos).

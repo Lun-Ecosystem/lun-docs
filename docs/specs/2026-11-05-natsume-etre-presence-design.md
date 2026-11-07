@@ -276,8 +276,8 @@ Pas de rituel complet si Luxuria se relance moins de 30 minutes après sa fermet
 CrOliX parle, Natsume répond à voix haute, phrase par phrase, et peut être coupée. **Au MVP : micro ouvert
 et casque** (décision de CrOliX, 05/11), avec un bouton qui coupe le micro ; les enceintes et leur
 annulation d'écho viendront plus tard. Captation,
-transcription, synthèse et RVC se font sur le PC. Cible : **moins de 2 s** entre la fin de la phrase et
-le premier mot entendu (spec d'origine), en visant moins.
+transcription, synthèse et RVC se font sur le PC. Cible : **2,5 s en médiane** entre la fin de la phrase et
+le premier mot entendu, sur le desktop ([ADR 0011](../../adr/0011-chaine-vocale-mvp.md) ; 2 s à l'origine), en visant moins.
 
 Chaîne de départ tirée de la veille **[choix Claude]** : Silero VAD et une détection de fin de tour,
 faster-whisper, découpe du flux du core par phrase, synthèse locale et RVC, un identifiant d'énoncé
@@ -345,7 +345,7 @@ L'étape 1 ne change pas d'écran, sauf pour le ton de ce que Natsume écrit dé
 - Fermer Luxuria laisse tourner le core et les satellites sans erreur affichée.
 - Le rituel démarre au lancement, ne répète pas ce qui a été vu sur mobile, et ne se rejoue pas à une
   relance rapide.
-- Fin de phrase → premier mot : moins de 2 s en valeur médiane, mesuré sur le vrai PC.
+- Fin de phrase → premier mot : 2,5 s au plus en valeur médiane, mesuré sur le vrai PC (ADR 0011).
 - Couper Natsume arrête l'audio et le fil ne garde que ce qui a été dit.
 - Un échange à la voix apparaît en direct sur le mobile.
 
