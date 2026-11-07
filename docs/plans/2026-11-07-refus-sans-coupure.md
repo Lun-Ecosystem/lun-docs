@@ -1,5 +1,8 @@
 # Service voix : un refus arrive comme un refus. Plan
 
+> **Livré** par [lun-luxuria#17](https://github.com/Lun-Ecosystem/lun-luxuria/pull/17), avec le chantier A de
+> `2026-11-07-chantiers-laptop-avant-mvp.md` (le commit de lun-luxuria#16, fermée, y est repris). Cases cochées le 07/11/2026.
+
 > **Pour les agents d'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 
 **But :** qu'un `POST` refusé reçoive son 403 au lieu d'une connexion coupée (Lun-Ecosystem/lun-luxuria#14), et que
@@ -34,6 +37,6 @@ autorisée (`_body`, déjà dans le `try` de `do_POST` : un 500, pas une coupure
 
 ## Tâches
 
-- [ ] Test d'abord : les 30 refus, le corps de 500 Ko, `abc` et `-1`.
-- [ ] `_refused` : la lecture bornée et gardée, `Handler.timeout`, commentaire d'une ligne sur le RST de Windows.
-- [ ] Relecture (agent reviewer), PR avec `lun-livrer`, critères cochés et preuves.
+- [x] Test d'abord : les 30 refus, le corps de 500 Ko, `abc` et `-1`.
+- [x] `_refused` : la lecture bornée et gardée, `Handler.timeout`, commentaire d'une ligne sur le RST de Windows.
+- [x] Relecture (agent reviewer), PR avec `lun-livrer`, critères cochés et preuves.

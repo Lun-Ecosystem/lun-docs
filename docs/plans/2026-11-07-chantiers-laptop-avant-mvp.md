@@ -2,6 +2,11 @@
 
 > **Pour les agents d'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 
+> **Livré** par [lun-luxuria#17](https://github.com/Lun-Ecosystem/lun-luxuria/pull/17) (A),
+> [lun-anima#64](https://github.com/Lun-Ecosystem/lun-anima/pull/64) (B) et
+> [lun-docs#87](https://github.com/Lun-Ecosystem/lun-docs/pull/87) (C). Cases cochées le 07/11/2026. Ordre de merge : B,
+> puis A ; C quand il veut.
+
 **But :** finir sur le laptop ce qui peut l'être avant le MVP, en trois chantiers regroupés au lieu d'une PR par issue.
 CrOliX, le 07/11 : « il faut planifier et regrouper ». Le desktop attend (relevés de confiance, RVC à l'oreille,
 `/micro` avec Discord) : rien ici n'en dépend.
@@ -46,10 +51,10 @@ les trois PR se ferment avec un renvoi.
 
 ### Tâches
 
-- [ ] Branche depuis `main`, reprise du commit de lun-luxuria#16, PR en brouillon ; fermer #16 avec un renvoi.
-- [ ] Test d'abord, puis `spoken` dans `src/local.ts` (ou un petit `src/spoken.ts` s'il dépasse vingt lignes).
-- [ ] Test d'abord, puis `tab` dans `src/core.ts` et `src/session.svelte.ts`.
-- [ ] `docs/README.md`, relecture (agent reviewer), critères cochés et preuves dans la PR, passage en « prête ».
+- [x] Branche depuis `main`, reprise du commit de lun-luxuria#16, PR en brouillon ; fermer #16 avec un renvoi.
+- [x] Test d'abord, puis `spoken` dans `src/local.ts` (ou un petit `src/spoken.ts` s'il dépasse vingt lignes).
+- [x] Test d'abord, puis `tab` dans `src/core.ts` et `src/session.svelte.ts`.
+- [x] `docs/README.md`, relecture (agent reviewer), critères cochés et preuves dans la PR, passage en « prête ».
 
 ## B. Présence et Constellation (lun-anima)
 
@@ -85,10 +90,10 @@ dans l'issue, qui reste ouverte jusqu'au prochain échec observé.
 
 ### Tâches
 
-- [ ] Branche depuis `main`, PR en brouillon au premier push ; la mesure de #7 en commentaire de l'issue.
-- [ ] #63 : tests d'abord, puis `presence.ts` et `presence-routes.ts`.
-- [ ] #60 : tests d'abord, puis `word.ts`, `ui/src/types.ts`, `MotConstellation.svelte`.
-- [ ] Relecture (agent reviewer), critères cochés et preuves, passage en « prête ».
+- [x] Branche depuis `main`, PR en brouillon au premier push ; la mesure de #7 en commentaire de l'issue.
+- [x] #63 : tests d'abord, puis `presence.ts` et `presence-routes.ts`.
+- [x] #60 : tests d'abord, puis `word.ts`, `ui/src/types.ts`, `MotConstellation.svelte`.
+- [x] Relecture (agent reviewer), critères cochés et preuves, passage en « prête ».
 
 ## C. La garde du plugin (lun-docs)
 
@@ -114,11 +119,11 @@ dans l'issue, qui reste ouverte jusqu'au prochain échec observé.
 
 ### Tâches
 
-- [ ] Branche depuis `main`, reprise des commits de lun-docs#85 et #86, ce plan ; PR en brouillon ; fermer #85 et #86
+- [x] Branche depuis `main`, reprise des commits de lun-docs#85 et #86, ce plan ; PR en brouillon ; fermer #85 et #86
       avec un renvoi.
-- [ ] Tests d'abord, puis `guard.mjs` : options globales de `gh`, `master`, titre, brouillon.
-- [ ] `standards/git.md` et les copies.
-- [ ] Relecture (agent reviewer), coches de ce plan quand A et B sont prêts, passage en « prête ».
+- [x] Tests d'abord, puis `guard.mjs` : options globales de `gh`, `master`, titre, brouillon.
+- [x] `standards/git.md` et les copies.
+- [x] Relecture (agent reviewer), coches de ce plan quand A et B sont prêts, passage en « prête ».
 
 ## Hors périmètre
 
