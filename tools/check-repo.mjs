@@ -89,7 +89,7 @@ const IPV4 = /(?<![\w.#])(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?![\w.])/g;
 const TAILNET = /\b[\w-]+(?:\.[\w-]+)*\.ts\.net\b/g;
 // Home network names; .local and .internal stay out: fixtures and plans use them as example domains.
 const HOME_NAME = /\b[\w-]+(?:\.[\w-]+)*\.(?:lan|home\.arpa)\b/g;
-// IPv6 unique local (fd00::/8): fd, two hex digits, then at least two more groups.
+// IPv6 unique local (fd00::/8): fd, two hex digits, then at least two more groups. allow-address
 const ULA = /(?<![\w:])fd[0-9a-f]{2}(?::[0-9a-f]{0,4}){2,}(?![\w:])/gi;
 const TEST_FILE = /\.(?:test|spec)\.[^./\\]+$/;
 
