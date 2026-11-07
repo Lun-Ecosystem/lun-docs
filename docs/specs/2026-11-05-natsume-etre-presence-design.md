@@ -341,7 +341,8 @@ L'étape 1 ne change pas d'écran, sauf pour le ton de ce que Natsume écrit dé
 
 ### 10.3 Le corps
 
-- Luxuria démarre sans fenêtre de console et se connecte au core sur le NAS.
+- Luxuria démarre sans fenêtre de console et se connecte au core du desktop. Le MVP se valide en local ; le
+  déploiement sur le NAS vient une fois le MVP validé (décision de CrOliX, 07/11).
 - Fermer Luxuria laisse tourner le core et les satellites sans erreur affichée.
 - Le rituel démarre au lancement, ne répète pas ce qui a été vu sur mobile, et ne se rejoue pas à une
   relance rapide.
