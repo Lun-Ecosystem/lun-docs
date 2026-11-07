@@ -1,6 +1,8 @@
 # Natsume au centre, slice 4: held gestures and undo — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#23](https://github.com/Lun-Ecosystem/lun-anima/pull/23). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Every gesture of the queue (accept, refuse, an answer, Vu, C'est fait, Plus tard, a pile, a batch) goes through `POST /api/gestures`. The core holds it for 5 s in a persisted `held_gestures` table and takes its cards out of `/api/queue` at once. Then it relays the gesture to the post, or drops it on `DELETE`. The kit's toast shows one undoable line with Ctrl Z and the time left.
 
@@ -123,12 +125,12 @@ export function hiddenTargets(db: DatabaseSync, now: Date): Hidden;
 
 `hiddenTargets` keys cards as `` `${satellite}:${cardId}` ``. A value of `null` means the target is still `held` or `relaying` and has no outcome yet. Otherwise the value is the `done_at` of an `ok` or `conflict` outcome from the last 24 h. `events` holds the event ids that are still held (a relayed Vu is already in `event_seen`). `dues` follows the cards rule for `done`; a relayed `later` is already in `due_later`.
 
-- [ ] **Step 0: Branch**
+- [x] **Step 0: Branch**
 
 Run: `git switch feat/core-journal && git pull && git switch -c feat/core-held-gestures`
 Expected: `Switched to a new branch 'feat/core-held-gestures'`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // store.test.ts — openDb(':memory:'), t(s) = new Date(Date.parse('2026-11-02T08:00:00.000Z') + s * 1000)
@@ -182,12 +184,12 @@ it('one held card of a pile leaves the other as a single card', () => {
 it('a held Vu hides its urgent event, a held due hides its due', () => { /* events, dues */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/gestures/store.test.ts core/src/reads/queue.test.ts`
 Expected: FAIL (module not found)
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Migration:
 
@@ -220,12 +222,12 @@ CREATE INDEX held_items_by_target ON held_gesture_items (kind, satellite_id, tar
 
 `holdGesture` inserts inside one `BEGIN`/`COMMIT`. `cancelGesture` is `UPDATE … SET state = 'cancelled' WHERE id = ? AND state = 'held' AND due_at > ?`, then a lookup tells `late` from `unknown`. `claimGesture` is `UPDATE … SET state = 'relaying' WHERE id = ? AND state = 'held'` and checks `changes === 1`. In `buildQueue`, call `hiddenTargets` once, then drop targets before forming piles. A card is dropped when its value is `null`, or when its `done_at` is at or after `cardRead.readAt`. A due is dropped the same way against `cached('dues').readAt`. An event is dropped when its id is in `events`.
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core core/src/gestures core/src/reads`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/db.ts core/src/gestures/store.ts core/src/gestures/store.test.ts core/src/reads/queue.ts core/src/reads/queue.test.ts
@@ -269,7 +271,7 @@ Relay of one gesture: `claimGesture` (when it returns false, the gesture was can
 
 Each item gets `settleItem` right after its call, so a crash resumes at the next item. On `ok`, journal it with the slice 3 mapping (Interfaces consumed from slice 3) (`noteCardGesture` / `noteSeen` / `appendJournal`; C'est fait is already journaled by `recordDelegation`). The call is try/caught and a failure is only logged. When all items are settled, call `finishGesture`, then `void reads.readNow(sat)` (errors logged) for each satellite with an `ok` or `conflict` item.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // harness with FakeSatellite lunacedia (contract 1.4) and lunavaritia; h.gestures not started
@@ -331,19 +333,19 @@ it('reads the post again after a relay', async () => { /* readNow spy called wit
 
 To pin the hang, give the constructor deps an optional `relayTimeoutMs` (default `RELAY_TIMEOUT_MS`); the test sets it to 20. If `FakeSatellite` does not yet have `failDecide(id, status, body)`, `hangDecide(id)` and `lastBody(route)`, add them, one small method each.
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/gestures/relay.test.ts`
 Expected: FAIL (module not found)
 
-- [ ] **Step 3: Implement** `GestureRelay` as specified, the `decide` timeout, and the two extractions (`/dues/:factId/later` and `/dues/:factId/done` keep their answers byte for byte). Then wire the harness and `main.ts`. Timers use `unref()`.
+- [x] **Step 3: Implement** `GestureRelay` as specified, the `decide` timeout, and the two extractions (`/dues/:factId/later` and `/dues/:factId/done` keep their answers byte for byte). Then wire the harness and `main.ts`. Timers use `unref()`.
 
-- [ ] **Step 4: Run to verify they pass, and that nothing else moved**
+- [x] **Step 4: Run to verify they pass, and that nothing else moved**
 
 Run: `npx vitest run --project core`
 Expected: PASS (`home.test.ts` and `satellites/routes.test.ts` unchanged)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/gestures/relay.ts core/src/gestures/relay.test.ts core/src/satellites/client.ts core/src/accueil/routes.ts core/src/app.ts core/src/main.ts core/src/testing
@@ -381,7 +383,7 @@ Checks, in this order, against `buildQueue(deps, now)`:
 
 `DELETE` calls `cancelGesture`, then `disarm` when the result is `cancelled`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // harness; lunacedia v1.4 with cards w1, w2 (write), send (sends: true), del (effect delete), p1/p2 (pile); lunavaritia with ask (options ['Garder', 'Fusionner']) and a due 7; one urgent event
@@ -440,19 +442,19 @@ it('a world id is not an API id', async () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/gestures/routes.test.ts`
 Expected: FAIL (404 on `/api/gestures`)
 
-- [ ] **Step 3: Implement** `gestureRoutes`, mount it, and add the README lines: `POST /api/gestures` (« tenu 5 s, puis relayé au poste »), `DELETE /api/gestures/:id`, `GET /api/gestures/:id`.
+- [x] **Step 3: Implement** `gestureRoutes`, mount it, and add the README lines: `POST /api/gestures` (« tenu 5 s, puis relayé au poste »), `DELETE /api/gestures/:id`, `GET /api/gestures/:id`.
 
-- [ ] **Step 4: Full core gate**
+- [x] **Step 4: Full core gate**
 
 Run: `npx vitest run --project core && npm run lint && npm run typecheck`
 Expected: all green
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/gestures/routes.ts core/src/gestures/routes.test.ts core/src/app.ts README.md
@@ -486,12 +488,12 @@ export function undo(id: number): Promise<void>; export function undoLast(): voi
 
 `TOAST_DURATION` and `MAX_SHOWN` go away. `toast` with `undo` replaces the toast on screen, and the previous `undo` is dropped (that gesture becomes final). `toast` without `undo`, while an undoable toast is counting and not `undoing`, is kept as the next toast (the latest wins) and shown when the current one leaves. Otherwise it replaces the current one. The Toaster binds `Ctrl+z` (not from a field: `bindShortcuts` already guarantees it) and shows `<Kbd>Ctrl Z</Kbd>`. It shows the seconds left, `Math.ceil((endsAt - now) / 1000)` followed by « s », refreshed every second by an `$effect` interval that runs only while an undoable toast is shown. The Toaster takes `contained?: boolean`: when true, it is `position: absolute` and centred in its parent; otherwise it keeps today's fixed placement. Failure of an undo is unchanged: the error message, the danger tone, no Annuler.
 
-- [ ] **Step 0: Branch**
+- [x] **Step 0: Branch**
 
 Run: `cd ../lun-docs && git switch main && git pull && git switch -c feat/kit-natsume-centre`
 Expected: `Switched to a new branch 'feat/kit-natsume-centre'`
 
-- [ ] **Step 1: Write the failing tests** (in `lun-docs/design/kit/overlays.test.ts`, replacing the four current `toast` tests)
+- [x] **Step 1: Write the failing tests** (in `lun-docs/design/kit/overlays.test.ts`, replacing the four current `toast` tests)
 
 ```ts
 it('Ctrl Z runs the undo of the toast, which then goes away', async () => {
@@ -528,19 +530,19 @@ it('an information toast waits for the undoable one to end', async () => {
 it('an undo that fails replaces the toast by its message, in the danger tone', async () => { /* kept from today, message 'Trop tard pour annuler.' */ });
 ```
 
-- [ ] **Step 2: Copy into lun-anima and run to verify they fail**
+- [x] **Step 2: Copy into lun-anima and run to verify they fail**
 
 Run: `cd ../lun-anima && node ../lun-docs/tools/sync-kit.mjs ui/src/lib/ui && npx vitest run --project ui ui/src/lib/ui/overlays.test.ts`
 Expected: FAIL (`Ctrl Z` not found)
 
-- [ ] **Step 3: Implement** `toasts.svelte.ts` and `Toaster.svelte` in `lun-docs/design/kit` as specified (tokens only, Lucide icons through `Icon.ts`, Svelte 5 runes).
+- [x] **Step 3: Implement** `toasts.svelte.ts` and `Toaster.svelte` in `lun-docs/design/kit` as specified (tokens only, Lucide icons through `Icon.ts`, Svelte 5 runes).
 
-- [ ] **Step 4: Copy again and run to verify they pass**
+- [x] **Step 4: Copy again and run to verify they pass**
 
 Run: `node ../lun-docs/tools/sync-kit.mjs ui/src/lib/ui && npx vitest run --project ui && node ../lun-docs/tools/sync-kit.mjs --check ui/src/lib/ui && npm run typecheck`
 Expected: PASS, `kit: OK`
 
-- [ ] **Step 5: Commit, in both repos**
+- [x] **Step 5: Commit, in both repos**
 
 ```bash
 cd ../lun-docs && git add design/kit/toasts.svelte.ts design/kit/Toaster.svelte design/kit/overlays.test.ts
@@ -588,7 +590,7 @@ A title that already ends with « . », « ? » or « ! » takes no extra full s
 
 `holdGesture` lets a `POST` error throw: the caller shows it on the card (slice 6). `settleGesture` waits until `dueAt` plus 500 ms by the device clock, then reads `GET /gestures/:id`. While the state is `held` or `relaying`, it reads again every second, at most 20 times. It toasts « Déjà tranchée ailleurs. » once when `conflict > 0`, and returns the failures for the caller to show on their cards (« … n'a pas répondu, rien n'a été fait. », or the satellite's `400` reason). A cancelled gesture resolves `{ state: 'cancelled', failed: [], conflict: 0 }`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it.each([
@@ -615,19 +617,19 @@ it('settles: failures come back for their cards, a conflict is toasted once', as
 
 Use the apostrophe character the codebase already uses in its French copy (`’` in `decide.ts`), and keep it the same in `heldToastText` and the test.
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project ui ui/src/gestures/held.test.ts`
 Expected: FAIL (module not found)
 
-- [ ] **Step 3: Implement `ui/src/gestures/held.ts`** as specified.
+- [x] **Step 3: Implement `ui/src/gestures/held.ts`** as specified.
 
-- [ ] **Step 4: Full gate**
+- [x] **Step 4: Full gate**
 
 Run: `npm test && npm run lint && npm run typecheck && npm run format:check`
 Expected: all green
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add ui/src/gestures/held.ts ui/src/gestures/held.test.ts

@@ -1,6 +1,8 @@
 # Natsume au centre, slice 2: the read loop and the state — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#20](https://github.com/Lun-Ecosystem/lun-anima/pull/20). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** The core keeps what every post last served (cards, dues, agenda, costs, health) in its own tables, refreshed by a background loop, and answers `GET /api/state`, `/api/queue`, `/api/upcoming`, `/api/posts/:id` and `POST /api/posts/:id/check` from that cache alone.
 
@@ -66,12 +68,12 @@
   - `LunEvent` gains `lines?: string[]`.
   - `events.lines TEXT` (JSON `string[]` or NULL); `StoredEvent.event.lines` restored when present.
 
-- [ ] **Step 0: Branch**
+- [x] **Step 0: Branch**
 
 Run: `git switch feat/core-app-palier-2 && git pull && git switch -c feat/core-read-loop`
 Expected: `Switched to a new branch 'feat/core-read-loop'`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // core/src/events/store.test.ts — uses openDb(':memory:'), inserts a satellites row (token_enc 't').
@@ -86,21 +88,21 @@ it('drops lines that are not a list of strings', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/events/store.test.ts`
 Expected: FAIL (`lines` undefined)
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Append migration `ALTER TABLE events ADD COLUMN lines TEXT;` (comment: « v1.4: what an urgent event shows unfolded »). In `storeEvent`, write `JSON.stringify(event.lines)` only when `Array.isArray(event.lines) && event.lines.every((l) => typeof l === 'string')`, else NULL. `toStored` sets `event.lines` when the column is not NULL. Add the type fields with one-line doc comments quoting §9.8.
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core core/src/events core/src/satellites`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/satellites/client.ts core/src/db.ts core/src/events/store.ts core/src/events/store.test.ts
@@ -129,7 +131,7 @@ git commit -m "feat(core): contract v1.4 fields and stored event lines" -m "Co-A
   - `recordSuccess(db, id, at: Date, health: Health, count: number): void` — sets contact, success, count, health; clears `readFailed` and `downSince`.
   - `saveCache(db, key: string, at: Date, value: unknown): void`, `cached<T>(db, key): { readAt: string; value: T } | undefined`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a read is stale after 5 minutes or after a failed attempt', () => {
@@ -153,12 +155,12 @@ it('a failure keeps the last cards and the first down time', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/reads/store.test.ts`
 Expected: FAIL (module not found)
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Migration:
 
@@ -173,12 +175,12 @@ CREATE TABLE read_cache (key TEXT PRIMARY KEY, read_at TEXT NOT NULL, value TEXT
 
 Functions are one upsert each (`INSERT … ON CONFLICT(satellite_id) DO UPDATE`); NULL columns map to absent fields.
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core core/src/reads/store.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/db.ts core/src/reads/store.ts core/src/reads/store.test.ts
@@ -200,7 +202,7 @@ git commit -m "feat(core): card_reads, post_status and read_cache tables" -m "Co
   - `ListenerDeps.onSignal?: (signal: Signal) => void`
   - `ManagerDeps.onSignal?: (satelliteId: string, signal: Signal) => void`, passed to each listener bound to its row id.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```ts
 it('signals open, each stored event, and a cut', async () => {
@@ -216,21 +218,21 @@ it('signals open, each stored event, and a cut', async () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `npx vitest run --project core core/src/satellites/listener.test.ts`
 Expected: FAIL (no signal)
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Call `onSignal({ kind: 'open' })` right after `this.#link = 'connected'`; `{ kind: 'event' }` after a successful `storeEvent` in `#receive`; `{ kind: 'cut', reason: message }` in the non-abort `catch` (also for `unpaired`), and once when the stream ends without error (reason `Flux d'événements fermé`). A throwing `onSignal` is caught and logged, never ends the listener. Harness: add `onSignal?` to `HarnessOptions`, passed to the manager (Task 4 keeps it and calls it after `reads.signal`).
 
-- [ ] **Step 4: Run to verify it passes**
+- [x] **Step 4: Run to verify it passes**
 
 Run: `npx vitest run --project core core/src/satellites`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/satellites/listener.ts core/src/satellites/manager.ts core/src/satellites/listener.test.ts core/src/testing/harness.ts
@@ -270,7 +272,7 @@ A pass for post `id`:
 
 Coalescing: one pass in flight per post; a `schedule` during a pass marks one more pass, any number of marks give one.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // setup: FakeSatellite({ id: 'lunacedia', contract: '1.4' }), paired, h.reads.start(); onTestFinished(() => h.reads.stop()).
@@ -320,19 +322,19 @@ it('caches the dues of Lun\'Avaritia and the agenda of Lun\'Acedia', async () =>
 
 (Two fakes need distinct URLs: give `FakeSatellite` an optional `url` in its constructor identity, and a test `fetch` that dispatches on the URL host.)
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/reads/loop.test.ts`
 Expected: FAIL (module not found)
 
-- [ ] **Step 3: Implement `ReadLoop` in `core/src/reads/loop.ts`** as specified in the Interfaces block; wire harness and `main.ts` (`let reads: ReadLoop` declared before the manager, `onSignal: (id, s) => reads.signal(id, s)`), timer `unref()`.
+- [x] **Step 3: Implement `ReadLoop` in `core/src/reads/loop.ts`** as specified in the Interfaces block; wire harness and `main.ts` (`let reads: ReadLoop` declared before the manager, `onSignal: (id, s) => reads.signal(id, s)`), timer `unref()`.
 
-- [ ] **Step 4: Run to verify they pass, and that nothing else moved**
+- [x] **Step 4: Run to verify they pass, and that nothing else moved**
 
 Run: `npx vitest run --project core`
 Expected: PASS (the existing `home.test.ts` call-count test still passes: the harness loop is not started)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/reads/loop.ts core/src/reads/loop.test.ts core/src/app.ts core/src/main.ts core/src/testing core/src/accueil/routes.ts
@@ -367,7 +369,7 @@ git commit -m "feat(core): background read loop for cards, dues, agenda and cost
 
 State rule, in this order: not in `satellites` table and a world → `a-relier`; `!reads.everRead(id)` → `inconnu`; link `unpaired` or no client → `injoignable`/`liaison`; link not `connected` or `postStatus.health` absent → `injoignable` with `since: downSince`; `health.pausedBy === 'local'` → `muet`/`pause-locale`; `!speaksV14(health.contract)` → `muet`/`contrat`; else `relie`. `agentName` = `health.agentName?.trim().slice(0, 40)` when non-empty, on any state that has a health.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a world never paired is « à relier »', async () => {
@@ -419,19 +421,19 @@ it('no agent name is written in the core', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/reads/posts.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** `worlds.ts`, `postStates`, `speaksV14`, the two routes (`stale` from `isStale(cardRead?.readAt, postStatus.readFailed, now)`; `cost` only when the cached `costs:<id>.since` equals today's `dayStart`), mount in `app.ts`, edit `ROLES`.
+- [x] **Step 3: Implement** `worlds.ts`, `postStates`, `speaksV14`, the two routes (`stale` from `isStale(cardRead?.readAt, postStatus.readFailed, now)`; `cost` only when the cached `costs:<id>.since` equals today's `dayStart`), mount in `app.ts`, edit `ROLES`.
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/worlds.ts core/src/reads/posts.ts core/src/reads/routes.ts core/src/reads/posts.test.ts core/src/app.ts core/src/chat/posts.ts
@@ -472,7 +474,7 @@ Rules:
 - `sends`: `card.sends === true`.
 - `total` = `urgent.length + Σ group.count`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('urgent first, oldest first, without reminders or seen ones', () => { /* insert 3 urgent events: one agenda.reminder, one seen */
@@ -513,19 +515,19 @@ it('total counts urgencies plus each group\'s count', () => {
 
 Most tests call `buildQueue` directly on rows written with Task 2's store functions and a stub `reads`/`satellites` (`{ everRead: () => true }`, `{ link: () => 'connected', client: () => ({}) }`), to avoid fakes.
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/reads/queue.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement `buildQueue`** and `GET /queue` (`c.json(buildQueue(deps, deps.clock()))`).
+- [x] **Step 3: Implement `buildQueue`** and `GET /queue` (`c.json(buildQueue(deps, deps.clock()))`).
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core core/src/reads`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/reads/queue.ts core/src/reads/queue.test.ts core/src/reads/routes.ts
@@ -557,7 +559,7 @@ export function buildUpcoming(deps: { db: DatabaseSync; routineSchedule: Routine
 
 Rules: window `(now, upcomingEnd(now)]`; routines: each slot of today and of the next Natsume day inside the window; agenda events with a timed `start` inside the window → `event`; all-day events whose day is today, and tasks with `due === parisIsoDay(now)` and `!done` → `tasks`; `agenda.reminder` events of the last 2 days whose `data.at` is inside the window and whose `data.id` is not an agenda item already listed → `reminder` at `data.at`; urgent events of the last 7 days with a string `data.due` inside the window → `due`. Items sorted by `at`. `readAt`/`stale` describe the `agenda` cache (`stale` with `failed = false`; absent cache → `stale: true`). A post absent puts nothing.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // clock 2026-11-02T08:00Z = 09:00 Paris
@@ -584,19 +586,19 @@ it('without an agenda read, the rest still shows and says it is stale', () => {
 it('GET /api/upcoming calls no post', async () => { /* call counter unchanged */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/reads/upcoming.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** `upcomingEnd`, `buildUpcoming`, `GET /upcoming` (`routineSchedule: deps.routineSchedule ?? []`); switch the loop's `agenda.list` `to` to `upcomingEnd(now)`; move `RoutineSlot` and re-export it from `map/map.ts` so nothing else changes.
+- [x] **Step 3: Implement** `upcomingEnd`, `buildUpcoming`, `GET /upcoming` (`routineSchedule: deps.routineSchedule ?? []`); switch the loop's `agenda.list` `to` to `upcomingEnd(now)`; move `RoutineSlot` and re-export it from `map/map.ts` so nothing else changes.
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/reads core/src/routines/engine.ts core/src/map/map.ts core/src/app.ts
@@ -643,7 +645,7 @@ Rules:
 - `band`: the first of `BAND_ORDER` that holds: key refused; a post `injoignable` (the one down longest, `since`); a post `muet` (with `reason`); `!route.done`. No band otherwise.
 - `route`: `key` = key state `ok`; `firstPost` = a row in `satellites`; `secondDevice` = at least two clients with `revoked_at IS NULL`; `done = key && firstPost`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('one count everywhere: state.queue.total is the queue\'s total, before and after a card leaves', async () => {
@@ -672,19 +674,19 @@ it('setup unfinished without a key or a post', () => {
 it('/home keeps its spend', async () => { /* existing home.test spend assertions still pass */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/reads/state.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** `daySpend` (move, `/home` calls it), `buildState`, `GET /state`; add the README lines for `GET /api/state`, `GET /api/queue`, `GET /api/upcoming`, `GET /api/posts/:id`, `POST /api/posts/:id/check` (« lus dans le cache du core, aucun appel aux postes » for the GETs).
+- [x] **Step 3: Implement** `daySpend` (move, `/home` calls it), `buildState`, `GET /state`; add the README lines for `GET /api/state`, `GET /api/queue`, `GET /api/upcoming`, `GET /api/posts/:id`, `POST /api/posts/:id/check` (« lus dans le cache du core, aucun appel aux postes » for the GETs).
 
-- [ ] **Step 4: Full gate**
+- [x] **Step 4: Full gate**
 
 Run: `npm test && npm run lint && npm run typecheck && npm run format:check`
 Expected: all green
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/reads core/src/accueil/routes.ts README.md
@@ -709,7 +711,7 @@ git commit -m "feat(core): GET /api/state, one state for every place" -m "Co-Aut
   - `cancelPairingCode(db: DatabaseSync, code: string): boolean` — deletes an unused code (`used_at IS NULL`).
   - `DELETE /api/pairing-codes/:code` → `204`; unknown or already used → `404 { error: 'Code inconnu' }`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // unlink.test.ts — harness with FakeSatellite lunacedia (contract 1.4), paired and read once
@@ -734,19 +736,19 @@ it('a cancelled code can no longer pair', async () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/satellites/unlink.test.ts core/src/auth/routes.test.ts`
 Expected: FAIL (404 on the routes)
 
-- [ ] **Step 3: Implement** the two store functions and the two routes; README lines `DELETE /api/satellites/:id` (« délie un poste ; ses événements restent ») and `DELETE /api/pairing-codes/:code` (« annule un code d'appairage pas encore utilisé »).
+- [x] **Step 3: Implement** the two store functions and the two routes; README lines `DELETE /api/satellites/:id` (« délie un poste ; ses événements restent ») and `DELETE /api/pairing-codes/:code` (« annule un code d'appairage pas encore utilisé »).
 
-- [ ] **Step 4: Full gate**
+- [x] **Step 4: Full gate**
 
 Run: `npm test && npm run lint && npm run typecheck && npm run format:check`
 Expected: all green
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/satellites core/src/auth README.md

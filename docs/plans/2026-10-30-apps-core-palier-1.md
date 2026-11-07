@@ -1,6 +1,8 @@
 # Apps du core, chantier 6, palier 1 : le socle, Natsume, À valider et l'accueil
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#18](https://github.com/Lun-Ecosystem/lun-anima/pull/18). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** L'app du core existe. Elle est servie par le core, s'appaire et s'installe en PWA. Elle
 affiche l'accueil de pilotage et À valider, et Natsume la suit partout, en bulle.
@@ -95,15 +97,15 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
 **Interfaces:**
 - Produces : la disposition validée de l'accueil, au desktop et au mobile, que Task 9 suit.
 
-- [ ] **Step 1 : reprendre l'agencement des blocs et l'occupation de l'espace**
+- [x] **Step 1 : reprendre l'agencement des blocs et l'occupation de l'espace**
   - Partir de `01-accueil.html`.
   - Chercher la disposition dans Chrome, en 1440 px et en 390 px.
   - Respecter le standard design et les retours de CrOliX : la couleur par poste, le chat en
     superposition, la DA complète.
   - Proposer deux variantes au plus.
-- [ ] **Step 2 : faire valider par CrOliX** (navigateur). Task 9 attend cette validation ; Tasks 1 à
+- [x] **Step 2 : faire valider par CrOliX** (navigateur). Task 9 attend cette validation ; Tasks 1 à
   8 n'attendent pas.
-- [ ] **Step 3 : commit** `docs(maquettes): home layout v2 for the core app`.
+- [x] **Step 3 : commit** `docs(maquettes): home layout v2 for the core app`.
 
 ### Task 1 : le kit commun dans lun-docs
 
@@ -120,16 +122,16 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
   lun-docs/design/kit : ne pas modifier ici ». Un fichier de `<dir>` absent de la source est signalé
   par `--check`. Les codes de sortie sont ceux de `sync-tokens.mjs`.
 
-- [ ] **Step 1 : écrire les tests qui échouent** (`sync-kit.test.mjs`, `node --test`) :
+- [x] **Step 1 : écrire les tests qui échouent** (`sync-kit.test.mjs`, `node --test`) :
   - `writes every kit file with the header` ;
   - `check passes on an identical copy` ;
   - `check fails on a changed file and names it` ;
   - `check fails on an extra file in the copy`.
-- [ ] **Step 2 : `npm test`.** Attendu : FAIL, module absent.
-- [ ] **Step 3 : implémenter `syncKit(root, target, { check })`** sur le modèle de `syncTokens`, en
+- [x] **Step 2 : `npm test`.** Attendu : FAIL, module absent.
+- [x] **Step 3 : implémenter `syncKit(root, target, { check })`** sur le modèle de `syncTokens`, en
   fins de ligne LF.
-- [ ] **Step 4 : `npm test && npm run check`.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(kit): common front kit in design/kit with sync-kit`.
+- [x] **Step 4 : `npm test && npm run check`.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(kit): common front kit in design/kit with sync-kit`.
 
 ### Task 2 : le workspace `ui/` de lun-anima
 
@@ -150,13 +152,13 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
     `theme_color: '#7A1818'`, `background_color: '#0D0B09'`) ;
   - un service worker qui ne met en cache que la coque, et jamais `/api`.
 
-- [ ] **Step 1 : test qui échoue**, `ui/src/App.test.ts > renders the pairing screen without a token`.
-- [ ] **Step 2 : `npm test`.** Attendu : FAIL.
-- [ ] **Step 3 : poser le workspace**, sur le modèle de `lun-avaritia/app`. Le proxy de dev envoie
+- [x] **Step 1 : test qui échoue**, `ui/src/App.test.ts > renders the pairing screen without a token`.
+- [x] **Step 2 : `npm test`.** Attendu : FAIL.
+- [x] **Step 3 : poser le workspace**, sur le modèle de `lun-avaritia/app`. Le proxy de dev envoie
   `/api` vers `127.0.0.1:8788`.
-- [ ] **Step 4 : contrôles de la racine.** Lancer `npm test && npm run typecheck && npm run lint &&
+- [x] **Step 4 : contrôles de la racine.** Lancer `npm test && npm run typecheck && npm run lint &&
   npm run format:check && npm run build`. Attendu : vert.
-- [ ] **Step 5 : commit** `feat(ui): app workspace with the common kit and tokens`.
+- [x] **Step 5 : commit** `feat(ui): app workspace with the common kit and tokens`.
 
 ### Task 3 : le core sert l'app, et HTTPS hors de la boucle locale
 
@@ -174,7 +176,7 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
   - `tlsOptions(env): { cert: Buffer; key: Buffer } | undefined`, qui lève une erreur claire quand
     `HOST` n'est pas en boucle locale et qu'un fichier manque.
 
-- [ ] **Step 1 : tests qui échouent**
+- [x] **Step 1 : tests qui échouent**
   - `serveApp` :
     - `serves a built file under /app` ;
     - `answers the shell for an app route` ;
@@ -184,12 +186,12 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
     - `loopback host needs no certificate` ;
     - `LAN host without certificate throws, naming TLS_CERT` ;
     - `LAN host with both files gives the options`.
-- [ ] **Step 2 : `npx vitest run core/src/serve-app.test.ts core/src/tls.test.ts`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter, puis brancher dans `main.ts`.** `serve({ fetch, hostname, port,
+- [x] **Step 2 : `npx vitest run core/src/serve-app.test.ts core/src/tls.test.ts`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter, puis brancher dans `main.ts`.** `serve({ fetch, hostname, port,
   createServer: https.createServer, serverOptions })` quand `tlsOptions` rend des options.
   `appDir = ui/dist` quand il existe.
-- [ ] **Step 4 : suite complète.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(core): serve the app under /app, HTTPS off loopback`.
+- [x] **Step 4 : suite complète.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(core): serve the app under /app, HTTPS off loopback`.
 
 ### Task 4 : appairage et client d'API de l'app
 
@@ -204,16 +206,16 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
     onEvent)` lit le SSE de `POST /api/threads/:id/messages`.
   - `ApiError` et `UnauthorizedError`, comme dans Avaritia.
 
-- [ ] **Step 1 : tests qui échouent**
+- [x] **Step 1 : tests qui échouent**
   - `session` :
     - `a refused code says so without telling whether it existed` ;
     - `a 401 clears the token and calls onUnauthorized once` ;
     - `stream yields user, delta and done events in order`.
   - `Pair` : `six digits pair the device and open the app`.
-- [ ] **Step 2 : lancer les tests.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter.** `Pair.svelte` = `StandaloneCard` avec `CodeInput` et le monde anima.
-- [ ] **Step 4 : lancer les tests.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(ui): pairing and API client`.
+- [x] **Step 2 : lancer les tests.** Attendu : FAIL.
+- [x] **Step 3 : implémenter.** `Pair.svelte` = `StandaloneCard` avec `CodeInput` et le monde anima.
+- [x] **Step 4 : lancer les tests.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(ui): pairing and API client`.
 
 ### Task 5 : la coque, quatre sections
 
@@ -229,14 +231,14 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
     vient de `GET /api/cards`. La carte d'état du service vient de `GET /api/health` et
     `GET /api/costs`. La palette Ctrl K porte les commandes de navigation.
 
-- [ ] **Step 1 : tests qui échouent**
+- [x] **Step 1 : tests qui échouent**
   - `routes` : `routes map to /app paths and back, unknown goes home`.
   - `Shell` :
     - `shows four sections and the valider count` ;
     - `below 768px shows the bottom bar instead of the rail` ;
     - `journal and ecosysteme say they come at palier 2`.
-- [ ] **Step 2 à 4 : rouge, implémentation, vert.**
-- [ ] **Step 5 : commit** `feat(ui): shell with four sections`.
+- [x] **Step 2 à 4 : rouge, implémentation, vert.**
+- [x] **Step 5 : commit** `feat(ui): shell with four sections`.
 
 ### Task 6 : Natsume, la bulle et son panneau
 
@@ -254,7 +256,7 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
   - `Fil` : `messages`, `asking` et `thread` (`'main'` par défaut), avec `send(text)` et `open(threadId)` ;
   - `CardItem` (`{ satellite, card, ondecided }`), réutilisé par Tasks 7 et 9.
 
-- [ ] **Step 1 : tests qui échouent**
+- [x] **Step 1 : tests qui échouent**
   - `Bulle` :
     - `Ctrl J opens and closes the panel` ;
     - `the panel stays open across a section change and keeps its thread`.
@@ -266,8 +268,8 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
       panneau ouvert et fermé) ;
     - `below 768px it opens as a sheet over the screen`.
   - `CardItem` : `accepting relays the gesture; a 409 removes the card and says it was decided elsewhere`.
-- [ ] **Step 2 à 4 : rouge, implémentation, vert.** Le panneau suit `lun-avaritia/app/src/agent/AgentPanel.svelte` (calque, focus, Échap) ; la feuille suit le kit mobile.
-- [ ] **Step 5 : commit** `feat(ui): Natsume as a floating presence`.
+- [x] **Step 2 à 4 : rouge, implémentation, vert.** Le panneau suit `lun-avaritia/app/src/agent/AgentPanel.svelte` (calque, focus, Échap) ; la feuille suit le kit mobile.
+- [x] **Step 5 : commit** `feat(ui): Natsume as a floating presence`.
 
 ### Task 7 : À valider
 
@@ -277,13 +279,13 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
 **Interfaces:**
 - Consumes : `CardItem`, `GET /api/cards`.
 
-- [ ] **Step 1 : tests qui échouent**
+- [x] **Step 1 : tests qui échouent**
   - `groups pending cards by post, each in its world` ;
   - `an unreachable post is named, the others still show` ;
   - `deciding a card updates the shell count`.
-- [ ] **Step 2 à 4 : rouge, implémentation, vert.** Raccourcis V (valider) et R (refuser), repris
+- [x] **Step 2 à 4 : rouge, implémentation, vert.** Raccourcis V (valider) et R (refuser), repris
   d'Avaritia, sur la carte qui a le focus.
-- [ ] **Step 5 : commit** `feat(ui): pending cards screen`.
+- [x] **Step 5 : commit** `feat(ui): pending cards screen`.
 
 ### Task 8 : la part du core de l'accueil
 
@@ -320,7 +322,7 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
     contexte. La consigne : une phrase pour CrOliX, dans la voix de Natsume, sur ce qui compte
     aujourd'hui, avec les dates en entier.
 
-- [ ] **Step 1 : tests qui échouent**
+- [x] **Step 1 : tests qui échouent**
   - `home` :
     - `answers without calling any post` (avec un poste qui lève une erreur à tout appel) ;
     - `a seen urgent event leaves urgent` ;
@@ -330,10 +332,10 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
     - `later hides a due until the next day` ;
     - `done delegates "C’est fait : <text>" to lunavaritia and returns its cards`.
   - `compose-warm` : `keeps the phrase with the context`.
-- [ ] **Step 2 : `npm test`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter.**
-- [ ] **Step 4 : suite complète.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(core): home data, seen alerts, due later and done, the day's phrase`.
+- [x] **Step 2 : `npm test`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter.**
+- [x] **Step 4 : suite complète.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(core): home data, seen alerts, due later and done, the day's phrase`.
 
 ### Task 9 : l'accueil (après la validation de Task 0)
 
@@ -344,7 +346,7 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
 - Consumes : `GET /api/home`, `GET /api/dues`, `GET /api/cards`, `CardItem`, les routes `seen`,
   `later` et `done`.
 
-- [ ] **Step 1 : tests qui échouent**
+- [x] **Step 1 : tests qui échouent**
   - `shows the core part at once while a post is still loading` (`/api/cards` retenu) ;
   - `a post that takes more than 8 s says it does not answer, the rest stays usable` ;
   - `urgent first, then dues, then cards, each row in its world` ;
@@ -352,8 +354,8 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
   - `Plus tard hides a due` ;
   - `C'est fait shows the replacement card from Avaritia` ;
   - `no phrase today shows only the date`.
-- [ ] **Step 2 à 4 : rouge, implémentation, vert.**
-- [ ] **Step 5 : commit** `feat(ui): the home, piloting view`.
+- [x] **Step 2 à 4 : rouge, implémentation, vert.**
+- [x] **Step 5 : commit** `feat(ui): the home, piloting view`.
 
 ### Task 10 : la preuve
 
@@ -362,16 +364,16 @@ d'une alerte, §4, §7, §10, §11). Maquettes : `docs/maquettes/2026-10-30-apps
   (« Organisation » : `ui/` en PWA, `mobile/` retiré ; « Lancer l'app »), `lun-anima/CLAUDE.md` (les
   apps).
 
-- [ ] **Step 1 : Chrome, 1440 px et 390 px**, avec les vrais serveurs locaux :
+- [x] **Step 1 : Chrome, 1440 px et 390 px**, avec les vrais serveurs locaux :
   - appairer l'app ;
   - accueil, À valider et Natsume depuis trois sections ;
   - une carte d'Acedia et une d'Avaritia validées ;
   - Lun'Acedia coupé : son bloc dit qu'il ne répond pas.
 
   Faire des captures sans donnée réelle.
-- [ ] **Step 2 : le téléphone de CrOliX en réseau local**, en HTTPS avec un certificat local :
+- [x] **Step 2 : le téléphone de CrOliX en réseau local**, en HTTPS avec un certificat local :
   installer l'app depuis Chrome, faire l'accueil, dicter une demande, valider sa carte.
-- [ ] **Step 3 : commit** `docs: core app proof`.
+- [x] **Step 3 : commit** `docs: core app proof`.
 
 ## Hors du palier 1
 

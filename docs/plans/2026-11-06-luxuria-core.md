@@ -1,6 +1,8 @@
 # Lun'Luxuria, la partie core. Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#46](https://github.com/Lun-Ecosystem/lun-anima/pull/46). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal :** donner au core ce dont un client vocal a besoin : savoir que CrOliX est là, composer l'accueil, publier ce qui se dit, être coupé, annoncer un P0.
 
@@ -43,7 +45,7 @@ Chacun a son test dans la tâche indiquée.
 
 **Interfaces :** rien de nouveau pour les autres tâches.
 
-- [ ] **Test en échec**, dans `mirror.test.ts` :
+- [x] **Test en échec**, dans `mirror.test.ts` :
 
 ```ts
 it.each(['non annule', 'annule tout', 'non, annule !'])('« %s » within 5 s means the post is never called', async (said) => {
@@ -59,9 +61,9 @@ it('« annule tout » cancels every gesture still held', async () => { /* deux c
 it('« n\'annule pas » goes to the model and cancels nothing', async () => { /* le geste part */ });
 ```
 
-- [ ] Vérifier l'échec : `npx vitest run core/src/natsume/mirror.test.ts`.
-- [ ] Ajouter `non annule`, `non annule ca`, `non annule la`, `non annule le`, `annule tout` à `CANCEL_WORDS`. Pour `annule tout` seul, boucler sur `latestHeld` jusqu'à vide. Les autres annulent le dernier geste, comme aujourd'hui.
-- [ ] Tests verts, barrières, commit `fix(natsume): hear « non annule » and « annule tout »`, PR.
+- [x] Vérifier l'échec : `npx vitest run core/src/natsume/mirror.test.ts`.
+- [x] Ajouter `non annule`, `non annule ca`, `non annule la`, `non annule le`, `annule tout` à `CANCEL_WORDS`. Pour `annule tout` seul, boucler sur `latestHeld` jusqu'à vide. Les autres annulent le dernier geste, comme aujourd'hui.
+- [x] Tests verts, barrières, commit `fix(natsume): hear « non annule » and « annule tout »`, PR.
 
 ### Tâche 2 : une carte changée depuis sa lecture
 
@@ -69,7 +71,7 @@ it('« n\'annule pas » goes to the model and cancels nothing', async () => { /*
 
 **Interfaces :** `cardDigest(card: Card): string` (sha256 de `title`, `lines`, `action`, `sends`, et des options de la carte) ; `Ref` gagne `digest?: string` ; `currentCardSince` le rend. Texte fixe `CHANGED = "Cette carte a changé depuis que je te l'ai lue : relis-la avant de trancher."`.
 
-- [ ] **Test en échec :**
+- [x] **Test en échec :**
 
 ```ts
 it('a card reworded after her reading is not held, and says so', async () => {
@@ -86,10 +88,10 @@ it('a change that keeps its words does not refuse the gesture', async () => { /*
 it('the hint keeps the digest of the reading, so « envoie » after a change is refused', async () => { /* lire, changer, « oui », « envoie » */ });
 ```
 
-- [ ] Vérifier l'échec.
-- [ ] `readCardFor` et `#present` posent le `digest` ; l'indice de `decideCardFor` le conserve dans son `presentCard`. Dans `decideCardFor`, si `isCurrent` et que `cur.digest` existe et diffère de `cardDigest(card)`, répondre `CHANGED` via `ignore`, sans tenir. Une carte désignée par son repère sans lecture, ou un `current` antérieur sans `digest`, passe comme aujourd'hui.
-- [ ] Limite à écrire dans un commentaire `shortcut:` : le core ne voit un changement qu'une fois lu chez le poste, sans toucher au contrat.
-- [ ] Tests verts, barrières, commit `fix(natsume): refuse a gesture on a card changed since it was read`, PR.
+- [x] Vérifier l'échec.
+- [x] `readCardFor` et `#present` posent le `digest` ; l'indice de `decideCardFor` le conserve dans son `presentCard`. Dans `decideCardFor`, si `isCurrent` et que `cur.digest` existe et diffère de `cardDigest(card)`, répondre `CHANGED` via `ignore`, sans tenir. Une carte désignée par son repère sans lecture, ou un `current` antérieur sans `digest`, passe comme aujourd'hui.
+- [x] Limite à écrire dans un commentaire `shortcut:` : le core ne voit un changement qu'une fois lu chez le poste, sans toucher au contrat.
+- [x] Tests verts, barrières, commit `fix(natsume): refuse a gesture on a card changed since it was read`, PR.
 
 ### Tâche 3 : ce qui se dit, sur le flux en direct
 
@@ -117,7 +119,7 @@ send(threadId, text, surface, opts: { confidence?: number; speak?: boolean })
 
 **[choix Claude]** Le core découpe en phrases et masque lui-même par `maskSecrets` (`memory/secrets.ts`), plutôt que d'envoyer les fragments bruts. Un seul masquage, et sous-titres comme audio n'en disent pas plus que le fil.
 
-- [ ] **Tests en échec :**
+- [x] **Tests en échec :**
 
 ```ts
 // speech.test.ts
@@ -133,10 +135,10 @@ it('a fixed sentence (Annulé.) with speak is spoken whole, without the model', 
 it('accepts speak and refuses a non-boolean', ...);
 ```
 
-- [ ] Vérifier l'échec, puis écrire `speaker` : tampon, coupure sur `.`, `!`, `?`, `…` suivis d'un espace et d'une majuscule, d'un guillemet ou d'un tiret de dialogue.
-- [ ] Dans `send`, si `speak`, abonner un `speaker(..., 'reply')` au `Reply` : `delta` vers `push`, `done` vers `end`.
-- [ ] Vérifier que l'app ignore un type inconnu sur `/api/live` : `grep` du client dans `ui/src`, test si besoin.
-- [ ] Tests verts, barrières, commit `feat(chat): publish what is said on the live stream`, PR.
+- [x] Vérifier l'échec, puis écrire `speaker` : tampon, coupure sur `.`, `!`, `?`, `…` suivis d'un espace et d'une majuscule, d'un guillemet ou d'un tiret de dialogue.
+- [x] Dans `send`, si `speak`, abonner un `speaker(..., 'reply')` au `Reply` : `delta` vers `push`, `done` vers `end`.
+- [x] Vérifier que l'app ignore un type inconnu sur `/api/live` : `grep` du client dans `ui/src`, test si besoin.
+- [x] Tests verts, barrières, commit `feat(chat): publish what is said on the live stream`, PR.
 
 ### Tâche 4 : la coupure
 
@@ -150,7 +152,7 @@ it('accepts speak and refuses a non-boolean', ...);
 
 **Règle de stockage :** seuls les messages `ok` repartent au modèle (`recentForContext`). `said` non vide donne donc `status: 'ok'`, `text: said`. `said` vide donne `status: 'partial'`, `text: ''`.
 
-- [ ] **Tests en échec**, sur le flux suspendu de `FakeOpenAi` (`hang: 'first'`) :
+- [x] **Tests en échec**, sur le flux suspendu de `FakeOpenAi` (`hang: 'first'`) :
 
 ```ts
 it('cutting a reply under way stops the provider, stores what was said and bills what streamed', ...);
@@ -164,10 +166,10 @@ it('speech stops at the cut', ...);
 it('a cut on a CrOliX message or an unknown id is a 404', ...);
 ```
 
-- [ ] Vérifier l'échec.
-- [ ] `#running: Map<id, { abort: AbortController; speaker?; cutSaid?: string }>`. `cut` en cours : poser `cutSaid`, arrêter le `speaker`, `abort()`. Passer `signal` aux deux `provider.stream`. Dans `#generate`, tester `cutSaid` après la boucle et dans le `catch` : compter le coût par `#charge`, ne lancer aucun outil, stocker selon la règle ci-dessus. `noteTics` ne voit que `said`.
-- [ ] `cut` sur un message déjà final : `#update` selon la même règle. `live.publish({ type: 'message', ... })` pour que le mobile suive.
-- [ ] Tests verts, barrières, commit `feat(chat): let a client cut a reply and keep only what was said`, PR.
+- [x] Vérifier l'échec.
+- [x] `#running: Map<id, { abort: AbortController; speaker?; cutSaid?: string }>`. `cut` en cours : poser `cutSaid`, arrêter le `speaker`, `abort()`. Passer `signal` aux deux `provider.stream`. Dans `#generate`, tester `cutSaid` après la boucle et dans le `catch` : compter le coût par `#charge`, ne lancer aucun outil, stocker selon la règle ci-dessus. `noteTics` ne voit que `said`.
+- [x] `cut` sur un message déjà final : `#update` selon la même règle. `live.publish({ type: 'message', ... })` pour que le mobile suive.
+- [x] Tests verts, barrières, commit `feat(chat): let a client cut a reply and keep only what was said`, PR.
 
 ### Tâche 5 : la présence et « occupé »
 
@@ -190,7 +192,7 @@ export function presenceNow(db, now: Date): { present: boolean; busy: boolean };
 
 `POST /api/presence`, corps `{ state: 'started' | 'beat' | 'stopped', busy?: boolean }`, sur l'API à jeton d'appareil. Le signal « occupé » n'existe que là.
 
-- [ ] **Tests en échec :**
+- [x] **Tests en échec :**
 
 ```ts
 it('present after a start, absent 90 s after the last beat', ...);
@@ -204,9 +206,9 @@ it('refuses an unknown state and an unpaired client', ...);
 it('stays out of the Journal', ...);
 ```
 
-- [ ] Vérifier l'échec, écrire le module et la route. La route de cette tâche renvoie seulement 204 ; le rituel vient en 5b.
-- [ ] Règle `presenceRule` dans `SITUATION_RULES`, une ligne quand il est là : `CrOliX est sur son PC.` Avec `occupé` : `CrOliX est en vocal avec quelqu'un.` Test de `situation.test.ts` à côté des autres.
-- [ ] Tests verts, barrières, commit `feat(natsume): know when CrOliX is at his desk`, PR.
+- [x] Vérifier l'échec, écrire le module et la route. La route de cette tâche renvoie seulement 204 ; le rituel vient en 5b.
+- [x] Règle `presenceRule` dans `SITUATION_RULES`, une ligne quand il est là : `CrOliX est sur son PC.` Avec `occupé` : `CrOliX est en vocal avec quelqu'un.` Test de `situation.test.ts` à côté des autres.
+- [x] Tests verts, barrières, commit `feat(natsume): know when CrOliX is at his desk`, PR.
 
 ### Tâche 5b : le rituel
 
@@ -231,7 +233,7 @@ Consigne, en un seul bloc : une phrase de bienvenue, comment il va, puis ce qui 
 
 **Météo : hors de ce plan tant que CrOliX n'a pas dit quelle ville et quelle source.** La spec prévoit qu'une source absente est omise sans bruit.
 
-- [ ] **Tests en échec :**
+- [x] **Tests en échec :**
 
 ```ts
 it('a start composes one model call, in the main thread, spoken as ritual', ...);
@@ -244,9 +246,9 @@ it('at the cap, no ritual and no invented sentence', ...);
 it('the ritual has no tool', ...);                           // openai.requests[0].body.tools absent
 ```
 
-- [ ] Vérifier l'échec, écrire `ritualTurn`, `compose`, `say`, et les appeler depuis `POST /api/presence` à `started`. La route répond 204 sans attendre le modèle.
-- [ ] **Recette réelle** sur core jetable, 4 passes : relever le texte, le coût, et ce qui a été redit. Résultats dans la PR, sans enjoliver.
-- [ ] Tests verts, barrières, commit `feat(natsume): welcome him when he arrives`, PR.
+- [x] Vérifier l'échec, écrire `ritualTurn`, `compose`, `say`, et les appeler depuis `POST /api/presence` à `started`. La route répond 204 sans attendre le modèle.
+- [x] **Recette réelle** sur core jetable, 4 passes : relever le texte, le coût, et ce qui a été redit. Résultats dans la PR, sans enjoliver.
+- [x] Tests verts, barrières, commit `feat(natsume): welcome him when he arrives`, PR.
 
 ### Tâche 6 : le P0 à voix haute
 
@@ -266,7 +268,7 @@ export function announceP0(deps, e: { type: string; title: string; at: string },
 
 La phrase est stockée en `surface: 'routine'`, déjà rejouée au modèle comme donnée (`block('point', ...)`), car le titre vient d'un satellite. `why: 'p0'` laisse Luxuria appliquer son réglage.
 
-- [ ] **Tests en échec :**
+- [x] **Tests en échec :**
 
 ```ts
 it('a P0 during a presence is said, without any model call, and is in the thread', ...);
@@ -279,8 +281,8 @@ it('its title replays as data, never as her words', ...);    // block('point') d
 it('a failure to announce does not cost the stored event', ...);
 ```
 
-- [ ] Vérifier l'échec, écrire, câbler dans `onSignal`, dans un `try`.
-- [ ] Tests verts, barrières, commit `feat(natsume): say a P0 aloud during a presence`, PR.
+- [x] Vérifier l'échec, écrire, câbler dans `onSignal`, dans un `try`.
+- [x] Tests verts, barrières, commit `feat(natsume): say a P0 aloud during a presence`, PR.
 
 ### Tâche 7 : les 5 s partent à la fin de sa phrase
 
@@ -294,7 +296,7 @@ it('a failure to announce does not cost the stored event', ...);
 - `holdCards(deps, items, origin, holdMs?)` ; `rescheduleHeld(db, id, dueAt): boolean`, seulement si l'état est `held`.
 - `POST /api/threads/:id/messages/:mid/spoken`, 204. Le client parle d'un message qu'il a fini de dire, jamais d'un geste. La tâche 4 appelle le même chemin dans `cut`.
 
-- [ ] **Tests en échec :**
+- [x] **Tests en échec :**
 
 ```ts
 it('with speak, a gesture waits for the sentence, then 5 s', ...);
@@ -307,8 +309,8 @@ it('a core restart keeps the 30 s deadline', ...);
 it('the Journal and the post call are the same as a click', ...);
 ```
 
-- [ ] Vérifier l'échec. `Acted` gagne `heldId`, `#awaitingSpoken: Map<messageId, gestureId>`. `spoken` : `rescheduleHeld`, `gestures.arm`, nouvelle publication `{ type: 'card', state: 'held' }` pour le compteur de l'app.
-- [ ] Tests verts, barrières, commit `feat(gestures): start the hold when she has finished saying it`, PR.
+- [x] Vérifier l'échec. `Acted` gagne `heldId`, `#awaitingSpoken: Map<messageId, gestureId>`. `spoken` : `rescheduleHeld`, `gestures.arm`, nouvelle publication `{ type: 'card', state: 'held' }` pour le compteur de l'app.
+- [x] Tests verts, barrières, commit `feat(gestures): start the hold when she has finished saying it`, PR.
 
 ---
 

@@ -1,6 +1,8 @@
 # Natsume au centre, slice 3: the Journal table — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#22](https://github.com/Lun-Ecosystem/lun-anima/pull/22). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** One `journal` table (with its `journal_steps` chain) holds everything the core noted, existing history included; `GET /api/journal` and `GET /api/journal/:id` read it with period, post, type and accent-insensitive search filters; a card enters the Journal at its first read by the loop; `/api/map` and `core/src/map/` are gone.
 
@@ -93,12 +95,12 @@ export function noteCardGesture(db: DatabaseSync, g: { at: string; post: string;
 export function noteSeen(db: DatabaseSync, eventId: number, at: string): void;
 ```
 
-- [ ] **Step 0: Branch**
+- [x] **Step 0: Branch**
 
 Run: `git switch feat/core-read-loop && git switch -c feat/core-journal`
 Expected: `Switched to a new branch 'feat/core-journal'`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('folds accents, case and curly apostrophes', () => {
@@ -127,12 +129,12 @@ it('a failed gesture is « echoue », a gesture on an unknown card creates its e
 it('seen sets « vue » on the urgency', () => { /* appendJournal urgence eventId 7 → noteSeen(db, 7, T2) → outcome vue, step « Vue. » */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/journal/store.test.ts`
 Expected: FAIL (module not found)
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Migration (comment: « The Journal: one table for everything the core noted, and the chain of each entry »):
 
@@ -156,12 +158,12 @@ CREATE INDEX journal_steps_by_entry ON journal_steps (entry, id);
 
 `day = natsumeDay(new Date(at))`; `refs` JSON or NULL; `title` cut at 200 characters. Origin texts for `noteCardGesture` (`from`): `accueil` « depuis l'accueil », `valider` « depuis À trancher », `fil` « depuis la conversation », `carte` « depuis la carte », `file` « depuis la file » (slice 4's origin).
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core core/src/journal/store.test.ts`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/db.ts core/src/journal/store.ts core/src/journal/store.test.ts
@@ -193,7 +195,7 @@ Sources, all collected first, then sorted by `at` (ties by source order below, t
 
 `satellite_id = 'core'` becomes `lunanima`. A `log` event is never read. A row whose time is not a valid date is skipped.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // fresh openDb(':memory:'): journal empty; insert rows into the old tables, then importHistory(db).
@@ -210,19 +212,19 @@ it('a row with an unreadable time is skipped, the rest comes in', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/journal/import.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** `importHistory` and the runner change (`typeof m === 'string' ? db.exec(m) : m(db)` inside the existing `BEGIN`/`COMMIT`).
+- [x] **Step 3: Implement** `importHistory` and the runner change (`typeof m === 'string' ? db.exec(m) : m(db)` inside the existing `BEGIN`/`COMMIT`).
 
-- [ ] **Step 4: Run to verify they pass, and that every older migration test still passes**
+- [x] **Step 4: Run to verify they pass, and that every older migration test still passes**
 
 Run: `npx vitest run --project core`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/db.ts core/src/journal/import.ts core/src/journal/import.test.ts
@@ -254,7 +256,7 @@ git commit -m "feat(core): replay the existing history into the Journal" -m "Co-
 
 Every new call outside a transaction is best effort like today's `#record`: try/catch, log, the main action never fails for the Journal. Inside `storeEvent`/`emitCoreEvent` it shares their transaction.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('an urgent event enters once, even replayed', async () => {
@@ -279,19 +281,19 @@ it('unlinking a post writes « délié »', async () => { await del('/api/satell
 it('a broken journal never fails the gesture relay', async () => { /* DROP TABLE journal_steps; relay → 200 */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/journal/writes.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** as in the Interfaces block.
+- [x] **Step 3: Implement** as in the Interfaces block.
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core`
 Expected: PASS (the old `journal/journal.test.ts` gesture tests that read `/api/journal` still pass against the old route until Task 6 removes them; any that asserts a `gestures` row is changed to read the `journal` table)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src
@@ -313,7 +315,7 @@ git commit -m "feat(core): events, gestures, delegations, routines and pairing w
 
 Rules: a card with no entry for `(satelliteId, card.id)` → `appendJournal({ type: 'carte', post: satelliteId, title: card.title, meta: card.kind, outcome: 'a-trancher', cardId, at: card.at or read time, step: '<postName> propose.' })`. A card id in the previous `card_reads` row and absent from `cards`, whose latest entry is still `a-trancher` → `addStep(id, at, 'Tranchée dans <postName>.', 'tranchee')`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a card enters once, at its own time, « a-trancher »', () => {
@@ -335,19 +337,19 @@ it('a card already decided through the core keeps its own step', () => { /* note
 it('a card that had a gesture before the migration does not enter again', () => { /* entry from importHistory with card_id 'a' */ });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/journal/cards.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** `journalCards` and the call in `saveCardRead`.
+- [x] **Step 3: Implement** `journalCards` and the call in `saveCardRead`.
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core core/src/journal core/src/reads`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/journal/cards.ts core/src/journal/cards.test.ts core/src/reads/store.ts
@@ -386,7 +388,7 @@ export function journalEntry(db: DatabaseSync, id: number, now: Date): JournalDe
 - `pending`: a `carte` entry whose card is in `cardRead(db, post).cards` → `{ satellite, card }`; an `urgence` whose row outcome is `a-trancher` → `{ event: eventId }`.
 - Routes: `GET /journal?periode&poste&type&q&avant` → `200 JournalPage`; `400 { error }` for a `periode` outside `auj|7j|tout` (« periode attend auj, 7j ou tout »), a `type` outside `JOURNAL_TYPES`, an `avant` that is not `isDay`, a `poste` param not matching `^[a-z]{1,40}$`; `q` trimmed, cut at 100 characters, ignored when empty. `GET /journal/:id` → `200 JournalDetail`, `404 { error: 'Entrée inconnue : <id>' }`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 // clock 2026-11-02T13:00Z (14:00 Paris); entries written with appendJournal.
@@ -427,19 +429,19 @@ it('no cost total anywhere in the page', async () => { expect(Object.keys(p)).to
 it('calls no post', async () => { const before = calls(); await journal(''); expect(calls()).toBe(before); });
 ```
 
-- [ ] **Step 2: Run to verify they fail**
+- [x] **Step 2: Run to verify they fail**
 
 Run: `npx vitest run --project core core/src/journal/routes.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement** `listJournal`, `journalEntry`, the two routes (`journalRoutes(deps: Pick<AppDeps, 'db' | 'clock'>)`, mounted where it is today).
+- [x] **Step 3: Implement** `listJournal`, `journalEntry`, the two routes (`journalRoutes(deps: Pick<AppDeps, 'db' | 'clock'>)`, mounted where it is today).
 
-- [ ] **Step 4: Run to verify they pass**
+- [x] **Step 4: Run to verify they pass**
 
 Run: `npx vitest run --project core core/src/journal`
 Expected: PASS (delete `core/src/journal/journal.test.ts` here: its route assertions are the old shape; its gesture assertions moved to Task 3)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/journal
@@ -459,22 +461,22 @@ git commit -m "feat(core): Journal routes with periods, filters and accent-free 
 - Consumes: slice 2 `RoutineSlot` in `routines/engine.ts`.
 - Produces: no `/api/map`; nothing imports `map/` or `journal/journal.ts`.
 
-- [ ] **Step 1: Write the failing test** (in `core/src/journal/routes.test.ts`)
+- [x] **Step 1: Write the failing test** (in `core/src/journal/routes.test.ts`)
 
 ```ts
 it('the map is gone', async () => { expect((await get('/api/map')).status).toBe(404); });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `npx vitest run --project core core/src/journal/routes.test.ts`
 Expected: FAIL (200)
 
-- [ ] **Step 3: Delete and rewire**; README lines:
+- [x] **Step 3: Delete and rewire**; README lines:
   - `GET /api/journal?periode=auj|7j|tout&poste=&type=&q=&avant=<AAAA-MM-JJ>` : le Journal par journée de Natsume (coupe à 05:00), sept journées non vides par page ; rend `{ total, since, matched, days, next }`. Recherche sans accents ni casse. Aucun appel aux postes.
   - `GET /api/journal/:id` : une entrée, sa chaîne et la carte encore en attente.
 
-- [ ] **Step 4: Full gate**
+- [x] **Step 4: Full gate**
 
 Run: `npm test && npm run lint && npm run typecheck && npm run format:check`
 Expected: all green (UI untouched: its tests mock the core; see the UI ruling)
@@ -482,7 +484,7 @@ Expected: all green (UI untouched: its tests mock the core; see the UI ruling)
 Run: `git grep -n "map/map\|mapRoutes\|journalDays\|journalEntriesOf" -- core`
 Expected: no output
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add -A core/src README.md

@@ -1,6 +1,8 @@
 # Core, chantier 5, palier 3 : le contexte chaud, le point du matin et les relances
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#17](https://github.com/Lun-Ecosystem/lun-anima/pull/17). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Chaque matin, Natsume repart propre, nourrie d'un contexte chaud d'environ 500 mots. À 7 h 30,
 elle pose dans le fil principal un point de cinq éléments au plus, dont les relances des échéances
@@ -111,17 +113,17 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
   - Le fait d'un brouillon `fiche` accepte `due?: string`, un jour ISO valide.
   - Ligne de carte : `Échéance : <jour en toutes lettres>` sous le fait (via `parisDay` d'un jour ISO).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
   - `a fiche draft with a due date writes it on the fact` : appliquer le brouillon ; `getFiche` rend le
     fait avec `due: '2026-11-05'`.
   - `the card shows the due date` : les lignes de `cardOf` contiennent
     `Échéance : jeudi 5 novembre 2026`.
   - `an impossible due date is refused` : `due: '2026-02-30'` → `InvalidInputError` à l'ajout.
-- [ ] **Step 2: Run** `npx vitest run server/src/brain/drafts.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement.** Valider avec `z.iso.date()` plus un contrôle d'aller-retour par `Date`
+- [x] **Step 2: Run** `npx vitest run server/src/brain/drafts.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement.** Valider avec `z.iso.date()` plus un contrôle d'aller-retour par `Date`
   pour refuser le 30 février.
-- [ ] **Step 4: Run** `npm test`. Expected: PASS.
-- [ ] **Step 5: Commit** `feat(brain): a fact may carry a due date`
+- [x] **Step 4: Run** `npm test`. Expected: PASS.
+- [x] **Step 5: Commit** `feat(brain): a fact may carry a due date`
 
 ### Task 2: L'agent pose l'échéance et clôt par un remplacement
 
@@ -138,7 +140,7 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
   - « Une observation qui dit qu'une chose datée est faite remplace (`replaces`) le fait daté, et son
     fait n'a pas d'échéance. »
 
-- [ ] **Step 1: Write the failing tests** (fournisseur factice, comme les tests existants de
+- [x] **Step 1: Write the failing tests** (fournisseur factice, comme les tests existants de
   `process.test.ts`)
   - `a dated thing to do becomes a fact with its due date` : la réponse factice porte
     `due: '2026-11-05'` ; le brouillon a `facts[0].due === '2026-11-05'`.
@@ -146,10 +148,10 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
     deux appels, brouillon valide.
   - `the agent prompt carries the due and closing rules` : `AGENT_SYSTEM` contient « due » et
     « remplace ».
-- [ ] **Step 2: Run** `npx vitest run server/src/brain/process.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run** `npm test`. Expected: PASS.
-- [ ] **Step 5: Commit** `feat(brain): the agent sets due dates and closes them by replacement`
+- [x] **Step 2: Run** `npx vitest run server/src/brain/process.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run** `npm test`. Expected: PASS.
+- [x] **Step 5: Commit** `feat(brain): the agent sets due dates and closes them by replacement`
 
 ### Task 3: La lecture `brain.due`
 
@@ -164,16 +166,16 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
   - `dueAction({ day }, deps): { factId, ficheId, fiche, text, due }[]` : faits avec
     `struck_at IS NULL`, `due <= day`, fiche `merged_into IS NULL`, triés par `due` puis `id`.
 
-- [ ] **Step 1: Write the failing tests** (par HTTP, `run(h, 'brain.due', …)`)
+- [x] **Step 1: Write the failing tests** (par HTTP, `run(h, 'brain.due', …)`)
   - `brain.due gives the open facts due by that day` : trois faits, échus le 01/11, le 05/11 et le
     10/11 ; `day: '2026-11-05'` rend les deux premiers, dans l'ordre.
   - `a replaced fact is no longer due` : le fait du 01/11 remplacé par un brouillon validé n'est plus
     rendu.
   - `a bad day is a 400`.
-- [ ] **Step 2: Run** `npx vitest run server/src/brain/agent.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run** `npm test`. Expected: PASS.
-- [ ] **Step 5: Commit** `feat(contract): brain.due, the open facts due by a day`
+- [x] **Step 2: Run** `npx vitest run server/src/brain/agent.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run** `npm test`. Expected: PASS.
+- [x] **Step 5: Commit** `feat(contract): brain.due, the open facts due by a day`
 
 ### Task 4: L'échéance dans le front
 
@@ -182,13 +184,13 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
   `app/src/memoire/FichePanel.svelte`
 - Test: `app/src/screens/Valider.test.ts`
 
-- [ ] **Step 1: Write the failing test** `shows the due date of a fact to validate` : un brouillon dont
+- [x] **Step 1: Write the failing test** `shows the due date of a fact to validate` : un brouillon dont
   le fait a `due: '2026-11-05'` affiche « Échéance : jeudi 5 novembre 2026 ».
-- [ ] **Step 2: Run** `npx vitest run app/src/screens/Valider.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement.** Une ligne discrète sous le fait, avec les styles existants. `FichePanel`
+- [x] **Step 2: Run** `npx vitest run app/src/screens/Valider.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement.** Une ligne discrète sous le fait, avec les styles existants. `FichePanel`
   montre l'échéance d'un fait actif de la même façon.
-- [ ] **Step 4: Run** `npm test && npm run typecheck && npm run build`. Expected: PASS.
-- [ ] **Step 5: Commit** `feat(app): show a fact's due date`
+- [x] **Step 4: Run** `npm test && npm run typecheck && npm run build`. Expected: PASS.
+- [x] **Step 5: Commit** `feat(app): show a fact's due date`
 
 ## lun-docs (cette PR)
 
@@ -196,11 +198,11 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
 
 **Files:** `standards/contrat-satellite.md`, `docs/specs/2026-10-28-lun-avaritia-v1-design.md` (§4)
 
-- [ ] Version du contrat **v1.2**. Ajouter la ligne : « La v1.2 ajoute la lecture `brain.due` de
+- [x] Version du contrat **v1.2**. Ajouter la ligne : « La v1.2 ajoute la lecture `brain.due` de
   Lun'Avaritia, sans rupture ».
-- [ ] Spec d'Avaritia §4 : `brain.due {day}` → `{ factId, ficheId, fiche, text, due }[]`, et le champ
+- [x] Spec d'Avaritia §4 : `brain.due {day}` → `{ factId, ficheId, fiche, text, due }[]`, et le champ
   `due` d'un fait.
-- [ ] Commit `docs(contract): v1.2, brain.due`
+- [x] Commit `docs(contract): v1.2, brain.due`
 
 ## Lun'Anima (`feat/core-matin`)
 
@@ -214,14 +216,14 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
 - Produces: dans `tick`, une routine n'est pas lancée tant qu'une routine listée avant elle est en
   cours.
 
-- [ ] **Step 1: Write the failing test** `a routine waits for the one listed before it` : deux
+- [x] **Step 1: Write the failing test** `a routine waits for the one listed before it` : deux
   routines dues, la première bloquée sur une promesse.
   - Après un tick, seule la première a démarré.
   - Une fois la première résolue, le tick suivant lance la seconde.
-- [ ] **Step 2: Run** `npx vitest run core/src/routines/engine.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run** `npm test`. Expected: PASS.
-- [ ] **Step 5: Commit** `feat(core): a routine waits for the one before it`
+- [x] **Step 2: Run** `npx vitest run core/src/routines/engine.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run** `npm test`. Expected: PASS.
+- [x] **Step 5: Commit** `feat(core): a routine waits for the one before it`
 
 ### Task 6: Repartir propre avec le contexte chaud
 
@@ -244,16 +246,16 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
   - Le message système se termine par `warmLine(latestWarm(db))` quand un contexte chaud existe :
     « Ce que tu as en tête ce matin : <bloc> ».
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
   - `the main thread starts afresh at 5:00, with the six last messages before` : dix messages hier,
     deux aujourd'hui → huit dans la requête au modèle.
   - `a topic keeps its forty last messages`.
   - `the last warm context is in the system turn, read from the base` : `saveWarm` puis un échange ; le
     système contient le texte ; aucun appel à un satellite.
-- [ ] **Step 2: Run** `npx vitest run core/src/chat`. Expected: FAIL.
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run** `npm test`. Expected: PASS.
-- [ ] **Step 5: Commit** `feat(core): start afresh each morning on the warm context`
+- [x] **Step 2: Run** `npx vitest run core/src/chat`. Expected: FAIL.
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run** `npm test`. Expected: PASS.
+- [x] **Step 5: Commit** `feat(core): start afresh each morning on the warm context`
 
 ### Task 7: Le point du matin, classé sans modèle
 
@@ -280,17 +282,17 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
 
     Un poste injoignable ou un 404 donne une liste vide et une ligne de log.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
   - `ranks alerts, then dues, then contradictions, then the oldest cards, five at most`.
   - `a due date is pushed seven days after it, not eight` (`today` = `due` + 7 → poussée ; + 8 →
     non).
   - `a due date in the future is not pushed`.
   - `the text asks whether a due thing is done`.
   - `gatherPoint survives an Avaritia without brain.due` (404 → `dues: []`, log).
-- [ ] **Step 2: Run** `npx vitest run core/src/routines/morning-point.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run** `npm test`. Expected: PASS.
-- [ ] **Step 5: Commit** `feat(core): the morning point, ranked without the model`
+- [x] **Step 2: Run** `npx vitest run core/src/routines/morning-point.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run** `npm test`. Expected: PASS.
+- [x] **Step 5: Commit** `feat(core): the morning point, ranked without the model`
 
 ### Task 8: La composition du contexte chaud
 
@@ -314,17 +316,17 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
   Coût `night` sur `dayStart(day)`, plafond vérifié avant chaque appel. Sans fournisseur, plafond
   atteint ou sortie invalide après une relance : `'failed'`, rien n'est écrit.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
   - `composes from the portrait, memories, point and fiches` : les deux requêtes au modèle contiennent
     ce qu'il faut ; `brain.search` est appelé avec les recherches rendues ; `latestWarm` rend le
     texte.
   - `without Avaritia, composes from the rest`.
   - `over the cap, keeps the previous context`.
   - `masks a secret in the composed context`.
-- [ ] **Step 2: Run** `npx vitest run core/src/memory/compose-warm.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run** `npm test`. Expected: PASS.
-- [ ] **Step 5: Commit** `feat(core): compose the warm context each morning`
+- [x] **Step 2: Run** `npx vitest run core/src/memory/compose-warm.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run** `npm test`. Expected: PASS.
+- [x] **Step 5: Commit** `feat(core): compose the warm context each morning`
 
 ### Task 9: La routine du matin
 
@@ -350,17 +352,17 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
 
   Un échec de la composition n'empêche pas le point.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
   - `posts the point in the main thread and keeps the warm context`.
   - `nothing to say, nothing posted`.
   - `after noon, composes but does not post`.
   - `Avaritia away: the point leaves without due dates, the run is ok`.
   - `POST /routines/morning runs it, 409 while one runs`.
-- [ ] **Step 2: Run** `npx vitest run core/src/routines`. Expected: FAIL.
-- [ ] **Step 3: Implement.**
-- [ ] **Step 4: Run** `npm test && npm run typecheck && npm run lint && npm run format:check`.
+- [x] **Step 2: Run** `npx vitest run core/src/routines`. Expected: FAIL.
+- [x] **Step 3: Implement.**
+- [x] **Step 4: Run** `npm test && npm run typecheck && npm run lint && npm run format:check`.
   Expected: PASS.
-- [ ] **Step 5: Commit** `feat(core): the morning routine at 7:30`
+- [x] **Step 5: Commit** `feat(core): the morning routine at 7:30`
 
 ### Task 10: La preuve sur les serveurs locaux
 
@@ -369,16 +371,16 @@ contrat `standards/contrat-satellite.md` ; spec d'Avaritia `docs/specs/2026-10-2
 Sur les trois serveurs locaux, branches des tâches 1 à 9, avec les vraies clés. Les scénarios qui
 demandent une autre heure tournent sur une copie de la base, horloge avancée (méthode du palier 2).
 
-- [ ] **Step 1** : « note que je dois rappeler Paul jeudi » dans le chat. La carte d'Avaritia montre
+- [x] **Step 1** : « note que je dois rappeler Paul jeudi » dans le chat. La carte d'Avaritia montre
   l'échéance ; la valider.
-- [ ] **Step 2** : `npm run morning`, horloge le jour de l'échéance à 7 h 30. Le fil principal a le
+- [x] **Step 2** : `npm run morning`, horloge le jour de l'échéance à 7 h 30. Le fil principal a le
   point avec « … c'est fait ? » ; le contexte chaud est en base ; son coût est noté.
-- [ ] **Step 3** : « oui c'est fait » dans le chat. La carte remplace le fait daté ; une fois validée,
+- [x] **Step 3** : « oui c'est fait » dans le chat. La carte remplace le fait daté ; une fois validée,
   `brain.due` ne le rend plus.
-- [ ] **Step 4** : un échange après 5 h. La requête au modèle porte le contexte chaud, la journée en
+- [x] **Step 4** : un échange après 5 h. La requête au modèle porte le contexte chaud, la journée en
   cours et les six messages d'avant.
-- [ ] **Step 5** : horloge à l'échéance + 8 jours. L'échéance n'est plus poussée.
-- [ ] **Step 6** : écrire la démarche et les coûts mesurés dans `docs/README.md`, et les choix du plan dans l'ADR `0003-matin.md` (spec §11). Commit
+- [x] **Step 5** : horloge à l'échéance + 8 jours. L'échéance n'est plus poussée.
+- [x] **Step 6** : écrire la démarche et les coûts mesurés dans `docs/README.md`, et les choix du plan dans l'ADR `0003-matin.md` (spec §11). Commit
   `docs(core): prove the morning on a real day`.
 
 ---

@@ -1,6 +1,8 @@
 # Lun'Anima palier 1 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#4](https://github.com/Lun-Ecosystem/lun-anima/pull/4). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** faire de `lun-anima/core` un serveur vivant en local : clients appairés, branchement à
 Lun'Acedia par le contrat satellite v1, et conversation minimale avec Natsume (fil principal et
@@ -91,11 +93,11 @@ spec de l'écosystème `docs/specs/2026-10-19-ecosysteme-design.md` (§5 à §8)
     `OPENAI_API_KEY=`, `OPENAI_CHAT_MODEL=gpt-4o-mini`, `OPENAI_PRICES=`,
     `CHAT_DAILY_CAP_USD=1`, `CHAT_MAX_OUTPUT_TOKENS=800`, `CORE_URL=http://localhost:8788`.
 
-- [ ] **Step 1: Préparer la branche** : `git switch main && git pull --ff-only && git switch -c
+- [x] **Step 1: Préparer la branche** : `git switch main && git pull --ff-only && git switch -c
   feat/core-palier1`, `git config core.hooksPath hooks`, créer l'issue du chantier (gabarit, critères
   du §6 de la spec), installer les dépendances.
 
-- [ ] **Step 2: Écrire les tests qui échouent**
+- [x] **Step 2: Écrire les tests qui échouent**
 
 ```ts
 // auth/pairing.test.ts
@@ -111,18 +113,18 @@ it('is ok with no reason, degraded while a reason is set', ...)
   // clear('chat') → { status: 'ok', reasons: [] }
 ```
 
-- [ ] **Step 3: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/auth core/src/health.test.ts`
+- [x] **Step 3: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/auth core/src/health.test.ts`
   — Expected: FAIL (modules absents).
 
-- [ ] **Step 4: Implémenter** `db.ts`, `crypto.ts`, `auth/*`, `health.ts`, `app.ts`, `main.ts`
+- [x] **Step 4: Implémenter** `db.ts`, `crypto.ts`, `auth/*`, `health.ts`, `app.ts`, `main.ts`
   (charge `.env` depuis la racine comme Acedia, ouvre la base, sert sur `PORT`, et comme
   `bootstrapPairing` d'Acedia affiche un code si aucun client n'est appairé) et
   `cli/pair-code.ts` (ouvre `DB_PATH`, émet un code, l'affiche avec sa validité).
 
-- [ ] **Step 5: Vérifier** — Run: `npm run format:check && npm run lint && npm run typecheck && npm test`
+- [x] **Step 5: Vérifier** — Run: `npm run format:check && npm run lint && npm run typecheck && npm test`
   — Expected: tout vert. Puis `npm run dev` démarre et `npm run pair-code` affiche un code à 6 chiffres.
 
-- [ ] **Step 6: Commit** `feat(core): serve the core with paired clients`, push, ouvrir la PR en
+- [x] **Step 6: Commit** `feat(core): serve the core with paired clients`, push, ouvrir la PR en
   brouillon (gabarit, issue liée).
 
 ### Task 2: Appairage d'un satellite et relais
@@ -160,7 +162,7 @@ it('is ok with no reason, degraded while a reason is set', ...)
   - `cli/connect.ts` : `npm run connect -- <url> <code>` appelle `pairSatellite` et affiche le nom
     du satellite branché.
 
-- [ ] **Step 1: Écrire les tests qui échouent**
+- [x] **Step 1: Écrire les tests qui échouent**
 
 ```ts
 it('pairs with a satellite code and stores its token encrypted', ...)
@@ -175,11 +177,11 @@ it('shows unreachable when the satellite is down, unpaired when it refuses the t
 it('answers 404 for an unknown satellite', ...)
 ```
 
-- [ ] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/satellites` — Expected: FAIL.
-- [ ] **Step 3: Implémenter** store, client, routes, `FakeSatellite`, `cli/connect.ts`.
-- [ ] **Step 4: Vérifier** — Run: `npx vitest run core/src/satellites` — Expected: PASS ; puis les
+- [x] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/satellites` — Expected: FAIL.
+- [x] **Step 3: Implémenter** store, client, routes, `FakeSatellite`, `cli/connect.ts`.
+- [x] **Step 4: Vérifier** — Run: `npx vitest run core/src/satellites` — Expected: PASS ; puis les
   quatre barrières.
-- [ ] **Step 5: Commit** `feat(core): pair with a satellite and relay its contract`, push.
+- [x] **Step 5: Commit** `feat(core): pair with a satellite and relay its contract`, push.
 
 ### Task 3: Écoute des événements et reconnexion
 
@@ -211,7 +213,7 @@ it('answers 404 for an unknown satellite', ...)
   - `GET /api/events?after=<id local>&limit=<≤ 200, défaut 50>` → `{ items: [{ id, satellite,
     event: LunEvent }], cursor? }`, dans l'ordre d'arrivée.
 
-- [ ] **Step 1: Écrire les tests qui échouent**
+- [x] **Step 1: Écrire les tests qui échouent**
 
 ```ts
 it('parses SSE frames split across chunks, with ids and multi-line data', ...)
@@ -225,12 +227,12 @@ it('picks up a satellite paired while the server runs', ...)   // pairSatellite 
 it('lists the stored events in arrival order with a cursor', ...)
 ```
 
-- [ ] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/satellites core/src/events`
+- [x] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/satellites core/src/events`
   — Expected: FAIL.
-- [ ] **Step 3: Implémenter** `sse.ts`, `listener.ts`, `manager.ts`, `events/*` ; brancher dans
+- [x] **Step 3: Implémenter** `sse.ts`, `listener.ts`, `manager.ts`, `events/*` ; brancher dans
   `main.ts`.
-- [ ] **Step 4: Vérifier** — mêmes tests PASS, puis les quatre barrières.
-- [ ] **Step 5: Commit** `feat(core): listen to satellite events and reconnect`, push.
+- [x] **Step 4: Vérifier** — mêmes tests PASS, puis les quatre barrières.
+- [x] **Step 5: Commit** `feat(core): listen to satellite events and reconnect`, push.
 
 ### Task 4: Fils, messages et journée de Natsume
 
@@ -268,7 +270,7 @@ it('lists the stored events in arrival order with a cursor', ...)
   - Routes : `GET /api/threads`, `POST /api/threads { title }` (1 à 120 caractères) → sujet,
     `GET /api/threads/:id/messages?day=&before=&limit=` ; 404 pour un fil inconnu.
 
-- [ ] **Step 1: Écrire les tests qui échouent**
+- [x] **Step 1: Écrire les tests qui échouent**
 
 ```ts
 // day.test.ts
@@ -289,10 +291,10 @@ it('keeps only ok messages for the context, within the bounds', ...) // erreurs 
 it('lists threads, creates a topic, reads its messages; 404 for an unknown thread', ...)
 ```
 
-- [ ] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/chat` — Expected: FAIL.
-- [ ] **Step 3: Implémenter** `day.ts`, `store.ts`, `routes.ts`.
-- [ ] **Step 4: Vérifier** — mêmes tests PASS, puis les quatre barrières.
-- [ ] **Step 5: Commit** `feat(core): store threads and messages by Natsume day`, push.
+- [x] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/chat` — Expected: FAIL.
+- [x] **Step 3: Implémenter** `day.ts`, `store.ts`, `routes.ts`.
+- [x] **Step 4: Vérifier** — mêmes tests PASS, puis les quatre barrières.
+- [x] **Step 5: Commit** `feat(core): store threads and messages by Natsume day`, push.
 
 ### Task 5: Fournisseur OpenAI, coûts et plafond
 
@@ -328,7 +330,7 @@ it('lists threads, creates a topic, reads its messages; 404 for an unknown threa
     (format du contrat, regroupé par fournisseur et modèle).
   - `costOf(price, inputTokens, outputTokens): number` = `(in × p_in + out × p_out) / 1e6`.
 
-- [ ] **Step 1: Écrire les tests qui échouent**
+- [x] **Step 1: Écrire les tests qui échouent**
 
 ```ts
 it('streams the reply in chunks and reports the usage', ...)
@@ -342,10 +344,10 @@ it('lets OPENAI_PRICES add or override a model, and knows no price for an unknow
 it('sums the spend since an instant, and returns contract Costs', ...)
 ```
 
-- [ ] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/chat/openai.test.ts core/src/chat/costs.test.ts` — Expected: FAIL.
-- [ ] **Step 3: Implémenter** `provider.ts`, `openai.ts`, `costs.ts`, `fake-openai.ts`.
-- [ ] **Step 4: Vérifier** — mêmes tests PASS, puis les quatre barrières.
-- [ ] **Step 5: Commit** `feat(core): stream replies from OpenAI and count their cost`, push.
+- [x] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/chat/openai.test.ts core/src/chat/costs.test.ts` — Expected: FAIL.
+- [x] **Step 3: Implémenter** `provider.ts`, `openai.ts`, `costs.ts`, `fake-openai.ts`.
+- [x] **Step 4: Vérifier** — mêmes tests PASS, puis les quatre barrières.
+- [x] **Step 5: Commit** `feat(core): stream replies from OpenAI and count their cost`, push.
 
 ### Task 6: Envoyer un message et recevoir la réponse
 
@@ -383,7 +385,7 @@ it('sums the spend since an instant, and returns contract Costs', ...)
     `user` (le message enregistré), `delta` `{ text }`…, puis `done` (la réponse enregistrée, quel
     que soit son statut). 400 corps invalide, 404 fil inconnu.
 
-- [ ] **Step 1: Écrire les tests qui échouent**
+- [x] **Step 1: Écrire les tests qui échouent**
 
 ```ts
 // service.test.ts (faux fournisseur en mémoire)
@@ -403,11 +405,11 @@ it('finishes and stores the reply when the client disconnects mid-stream', ...)
 it('answers 400 on an empty text or an unknown surface, 404 on an unknown thread', ...)
 ```
 
-- [ ] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/chat` — Expected: FAIL.
-- [ ] **Step 3: Implémenter** `prompt.ts`, `service.ts`, la route d'envoi ; brancher dans `main.ts`
+- [x] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/chat` — Expected: FAIL.
+- [x] **Step 3: Implémenter** `prompt.ts`, `service.ts`, la route d'envoi ; brancher dans `main.ts`
   (fournisseur absent si `OPENAI_API_KEY` vide, ce qui pose la raison `chat` au démarrage).
-- [ ] **Step 4: Vérifier** — mêmes tests PASS, puis les quatre barrières.
-- [ ] **Step 5: Commit** `feat(core): converse with Natsume in threads`, push.
+- [x] **Step 4: Vérifier** — mêmes tests PASS, puis les quatre barrières.
+- [x] **Step 5: Commit** `feat(core): converse with Natsume in threads`, push.
 
 ### Task 7: Coûts agrégés, discussion en terminal et preuve du palier
 
@@ -434,7 +436,7 @@ it('answers 400 on an empty text or an unknown surface, 404 on an unknown thread
     `ChatProvider`, journée 5 h Paris, plafond borné à une réponse, commandes locales qui écrivent
     dans la base.
 
-- [ ] **Step 1: Écrire les tests qui échouent**
+- [x] **Step 1: Écrire les tests qui échouent**
 
 ```ts
 it('shows the core spend and each satellite spend side by side, with a total', ...)
@@ -444,11 +446,11 @@ it('answers 400 on an unreadable since', ...)
 it('pairs on first run, then streams the reply of each line', ...) // runChat avec le harnais comme fetch
 ```
 
-- [ ] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/costs core/src/cli` — Expected: FAIL.
-- [ ] **Step 3: Implémenter** la route, `runChat` et son point d'entrée, la décision, la doc.
-- [ ] **Step 4: Vérifier** — Run: `npm run format:check && npm run lint && npm run typecheck && npm test`
+- [x] **Step 2: Vérifier qu'ils échouent** — Run: `npx vitest run core/src/costs core/src/cli` — Expected: FAIL.
+- [x] **Step 3: Implémenter** la route, `runChat` et son point d'entrée, la décision, la doc.
+- [x] **Step 4: Vérifier** — Run: `npm run format:check && npm run lint && npm run typecheck && npm test`
   — Expected: tout vert.
-- [ ] **Step 5: Preuve de bout en bout, en local** (vraie clé OpenAI de CrOliX et Acedia locale sur
+- [x] **Step 5: Preuve de bout en bout, en local** (vraie clé OpenAI de CrOliX et Acedia locale sur
   le compte Google de test) ; consigner chaque sortie dans la PR :
   1. `npm run dev` dans `lun-acedia` et dans `lun-anima` ;
   2. code d'appairage lu dans le front d'Acedia → `npm run connect -- http://localhost:8787 <code>` ;
@@ -459,7 +461,7 @@ it('pairs on first run, then streams the reply of each line', ...) // runChat av
   5. arrêter Acedia : le core reste debout et la montre `unreachable` ; la relancer : `connected`
      sans intervention ;
   6. `CHAT_DAILY_CAP_USD=0.0001` : refus propre ; clé volontairement fausse : erreur lisible.
-- [ ] **Step 6: Commit** `feat(core): aggregate costs and chat from the terminal`, push, cocher les
+- [x] **Step 6: Commit** `feat(core): aggregate costs and chat from the terminal`, push, cocher les
   critères dans la PR et la passer « prête ».
 
 ## Hors de ce plan

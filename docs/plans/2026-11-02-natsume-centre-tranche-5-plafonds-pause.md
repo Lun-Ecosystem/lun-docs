@@ -1,6 +1,8 @@
 # Natsume au centre, slice 5: caps and pause — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#24](https://github.com/Lun-Ecosystem/lun-anima/pull/24). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** The core has one daily cap over every source and a monthly cap, per-post settings, a global pause (manual or at a cap) that it holds, journals and relays to every post through contract v1.4, and a morning letter written once a day and only corrected, served with every place's word by `GET /api/word`.
 
@@ -102,9 +104,9 @@ export function seedCaps(db, old: { chatCapUsd: number; routinesCapUsd: number }
 `SETTING_KEYS`: `dayCapUsd: 'day.capUsd'`, `monthCapUsd: 'month.capUsd'`, `atCap: 'caps.atCap'`, `warnAt80: 'caps.warnAt80'`, `capsKept: 'caps.kept'`, `model`, `maxTokens` unchanged. `chatCapUsd`/`routinesCapUsd` leave `LiveSettings`.
 - `PATCH /api/settings` body: `{ dayCapUsd?, monthCapUsd?, atCap?, warnAt80?, capsKept?: true, model?, maxTokens?, posts?: Record<satelliteId, Partial<PostSettings>> }`; a post id not in `satellites` → 400 `Poste inconnu : <id>`; any cap field also sets `caps.kept`. Each changed field → one `appendJournal(db, { at, type: 'reglage', title, post? })` (`at` = the clock's now), titles « Plafond par jour, 3,00 $ », « Plafond par mois, 40,00 $ », « Quand un plafond est atteint : Mettre en pause » / « Prévenir seulement », « Délai de réponse de Lun'Acedia, 8 s », « Plafond de Lun'Acedia, 1,00 $ » / « sans plafond », « Veille de la nuit de Lun'Acedia, activée » / « éteinte », same form for « Bilan du jour » and « Alertes urgentes en direct », « Modèle, gpt-6-luna », « Longueur des réponses, 800 ». Then `deps.pause?.apply()` (Task 3 adds the dep). `GET /api/settings` adds `posts: Record<id, PostSettings & { pairedAt: string }>` for every paired post (`pairedAt` = `satellites.paired_at`, read-only: a PATCH carrying it gets 400, for « Relié depuis le 27 octobre »).
 
-- [ ] **Step 0: Branch** — `git switch feat/core-held-gestures && git pull && git switch -c feat/core-caps-pause`. Expected: `Switched to a new branch 'feat/core-caps-pause'`.
+- [x] **Step 0: Branch** — `git switch feat/core-held-gestures && git pull && git switch -c feat/core-caps-pause`. Expected: `Switched to a new branch 'feat/core-caps-pause'`.
 
-- [ ] **Step 1: Write the failing tests** (in `routes.test.ts`, replace the chat/routines cap cases):
+- [x] **Step 1: Write the failing tests** (in `routes.test.ts`, replace the chat/routines cap cases):
 
 ```ts
 it('seeds the day cap once with the two old caps', () => {
@@ -131,10 +133,10 @@ it('refuses a world id, an unknown post and an out-of-range value', async () => 
 });
 ```
 
-- [ ] **Step 2: Run** — `npx vitest run --project core core/src/settings`. Expected: FAIL.
-- [ ] **Step 3: Implement** as in Interfaces. Validation with the file's zod style (French messages). `main.ts`: `seedCaps(db, { chatCapUsd: numberEnv('CHAT_DAILY_CAP_USD', 1), routinesCapUsd: numberEnv('NIGHT_DAILY_CAP_USD', 0.5) })` before the first `settings()`; `nightDeps.capUsd` = `numberEnv('NIGHT_DAILY_CAP_USD', 0.5)` (a constant, not a setting). Fix every compile error from the removed fields (`ChatService` gets its cap in Task 2; until then pass `dayCapUsd`).
-- [ ] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
-- [ ] **Step 5: Commit** — `git add core/src && git commit -m "feat(core): one daily cap, a monthly cap and per-post settings" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
+- [x] **Step 2: Run** — `npx vitest run --project core core/src/settings`. Expected: FAIL.
+- [x] **Step 3: Implement** as in Interfaces. Validation with the file's zod style (French messages). `main.ts`: `seedCaps(db, { chatCapUsd: numberEnv('CHAT_DAILY_CAP_USD', 1), routinesCapUsd: numberEnv('NIGHT_DAILY_CAP_USD', 0.5) })` before the first `settings()`; `nightDeps.capUsd` = `numberEnv('NIGHT_DAILY_CAP_USD', 0.5)` (a constant, not a setting). Fix every compile error from the removed fields (`ChatService` gets its cap in Task 2; until then pass `dayCapUsd`).
+- [x] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
+- [x] **Step 5: Commit** — `git add core/src && git commit -m "feat(core): one daily cap, a monthly cap and per-post settings" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`
 
 ---
 
@@ -162,7 +164,7 @@ export function spendView(deps: { db: DatabaseSync; settings: () => LiveSettings
 - Read loop extras: `client.costs(monthStart(now).toISOString())` → `saveCache('costs-month:<id>', …)`, failing alone like the other extras; after each `costs:<id>` read, `costs-week:<id>` (`Record<day, number>`) gets today's total and keeps only its 7 most recent days.
 - `ChatService` deps: `settings` becomes `Pick<LiveSettings, 'model' | 'maxTokens'>`; new `capPause: () => Pause | undefined` (Task 3's `PauseKeeper.wanted`, cap pauses only). Refusal: `plafond-jour` → `Plafond du jour atteint : Natsume répond à nouveau à 05:00.`; `plafond-mois` → `Plafond du mois atteint : Natsume répond à nouveau le 1er décembre.` (month name of `until`, « 1er »). Until Task 3 lands, the harness passes `capPause: () => undefined`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('adds the core and each post, a post\'s old read counting zero', () => {
@@ -192,10 +194,10 @@ it('the chat stops at a cap pause, with the time it comes back', async () => {
 it('/home has no phrase and the day spend', async () => { expect(body).not.toHaveProperty('phrase'); expect(body.spend).toMatchObject({ total: expect.any(Number), cap: expect.any(Number) }); });
 ```
 
-- [ ] **Step 2: Run** — `npx vitest run --project core core/src/costs core/src/chat core/src/accueil`. Expected: FAIL.
-- [ ] **Step 3: Implement** as in Interfaces; `CoreState.spend` becomes `SpendView`; delete `daySpend` and update its callers.
-- [ ] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
-- [ ] **Step 5: Commit** — `feat(core): one spend over the core and every post`.
+- [x] **Step 2: Run** — `npx vitest run --project core core/src/costs core/src/chat core/src/accueil`. Expected: FAIL.
+- [x] **Step 3: Implement** as in Interfaces; `CoreState.spend` becomes `SpendView`; delete `daySpend` and update its callers.
+- [x] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
+- [x] **Step 5: Commit** — `feat(core): one spend over the core and every post`.
 
 ---
 
@@ -229,7 +231,7 @@ export class PauseKeeper {
 - Routes: `POST /api/pause` → `200 { pause }`; `POST /api/resume` → `200 {}` or `200 { pause }` if a cap still holds.
 - `ChatService.capPause` = `() => { const p = pause.wanted(); return p?.by === 'manuel' ? undefined : p; }`; a manual pause never stops the chat. Delegations asked by the chat and gestures never read the pause.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('pause and resume are stored, journaled and survive a restart', async () => {
@@ -255,10 +257,10 @@ it('resume under a reached cap leaves the cap pause', async () => { expect((awai
 it('a manual pause keeps the chat open; a cap pause closes it', async () => { /* send a message under each */ });
 ```
 
-- [ ] **Step 2: Run** — `npx vitest run --project core core/src/pause`. Expected: FAIL.
-- [ ] **Step 3: Implement** as in Interfaces; `main.ts` builds the keeper after `settings`, `keeper.start()`, `keeper.stop()` on shutdown. (`/api/state.pause` is wired in Task 8; until then the tests read `currentPause`.)
-- [ ] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
-- [ ] **Step 5: Commit** — `feat(core): a global pause, manual or at a cap`.
+- [x] **Step 2: Run** — `npx vitest run --project core core/src/pause`. Expected: FAIL.
+- [x] **Step 3: Implement** as in Interfaces; `main.ts` builds the keeper after `settings`, `keeper.start()`, `keeper.stop()` on shutdown. (`/api/state.pause` is wired in Task 8; until then the tests read `currentPause`.)
+- [x] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
+- [x] **Step 5: Commit** — `feat(core): a global pause, manual or at a cap`.
 
 ---
 
@@ -276,7 +278,7 @@ it('a manual pause keeps the chat open; a cap pause closes it', async () => { /*
   - `class PauseRelay { constructor(deps: { db; satellites: SatelliteManager; log }); send(paused: boolean): Promise<void>; onOpen(satelliteId: string): Promise<void> }` — `send` calls every `satellites.list()` id in parallel; ack = `res.ok || res.status === 409`; non-acked ids are stored in setting `pause.unacked` (string[]), acked ones removed. `onOpen`: `currentPause(db)` set → send `pause`; else id in `pause.unacked` → send `resume`. Errors are logged once and never thrown.
   - Wiring: `onSignal: (id, s) => { reads.signal(id, s); if (s.kind === 'open') void relay.onOpen(id); }`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('pause and resume reach each paired post with by: core', async () => {
@@ -301,10 +303,10 @@ it('the read loop keeps reading during a pause', async () => {
 });
 ```
 
-- [ ] **Step 2: Run** — `npx vitest run --project core core/src/pause/relay.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement** as in Interfaces; the keeper gets `relay` in `main.ts` and the harness.
-- [ ] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
-- [ ] **Step 5: Commit** — `feat(core): relay the pause to every post, again on each reconnection`.
+- [x] **Step 2: Run** — `npx vitest run --project core core/src/pause/relay.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement** as in Interfaces; the keeper gets `relay` in `main.ts` and the harness.
+- [x] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
+- [x] **Step 5: Commit** — `feat(core): relay the pause to every post, again on each reconnection`.
 
 ---
 
@@ -322,7 +324,7 @@ it('the read loop keeps reading during a pause', async () => {
   - Line 84's wait (« the morning waits for a night still under way ») is removed: every due routine starts in the same tick.
   - `main.ts`: `paused: () => keeper.apply() !== undefined`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('under a pause, a due routine is skipped, noted, and not run', async () => {
@@ -342,10 +344,10 @@ it('a routine failing during a pause is journaled and raises no band', async () 
 });
 ```
 
-- [ ] **Step 2: Run** — `npx vitest run --project core core/src/routines/engine.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement** as in Interfaces; update the `startRoutines` doc comment.
-- [ ] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
-- [ ] **Step 5: Commit** — `feat(core): routines skipped under a pause, the morning no longer waits for the night`.
+- [x] **Step 2: Run** — `npx vitest run --project core core/src/routines/engine.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement** as in Interfaces; update the `startRoutines` doc comment.
+- [x] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
+- [x] **Step 5: Commit** — `feat(core): routines skipped under a pause, the morning no longer waits for the night`.
 
 ---
 
@@ -363,7 +365,7 @@ it('a routine failing during a pause is journaled and raises no band', async () 
   - `buildQueue`: `urgent` drops events of a post whose `liveUrgent` is false.
   - Post names in texts: slice 3's `postName(db, post)` (`core/src/journal/store.ts`); no other name helper is added.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a post over its cap is not delegated to, and the reason says until when', async () => {
@@ -376,10 +378,10 @@ it('the night does not read a digest turned off', async () => { putSetting(db, '
 it('urgent events of a post without live alerts stay out of Urgent', () => { putSetting(db, 'post:lunacedia:liveUrgent', false); expect(q.urgent).toEqual([]); });
 ```
 
-- [ ] **Step 2: Run** — `npx vitest run --project core core/src/chat core/src/routines core/src/reads`. Expected: FAIL.
-- [ ] **Step 3: Implement** as in Interfaces.
-- [ ] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
-- [ ] **Step 5: Commit** — `feat(core): per-post night, digest, cap, reply delay and live alerts`.
+- [x] **Step 2: Run** — `npx vitest run --project core core/src/chat core/src/routines core/src/reads`. Expected: FAIL.
+- [x] **Step 3: Implement** as in Interfaces.
+- [x] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
+- [x] **Step 5: Commit** — `feat(core): per-post night, digest, cap, reply delay and live alerts`.
 
 ---
 
@@ -424,7 +426,7 @@ export interface MorningRecord { id: number; status: 'ok' | 'failed'; cost: numb
 - `gatherPoint(deps, now)` reads `card_reads` (every row), `cached('dues')` and the events table: no post call.
 - `main.ts`: `const night = async () => { const r = await runNight(nightDeps); noteAfterNight(morningDeps, r); return r; }`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('writes the prototype\'s letter', () => {
@@ -449,10 +451,10 @@ it('a relaunch with nothing new writes no note; with a change, one note', async 
 it('the point is gathered from the cache, calling no post', async () => { const before = calls(); await gatherPoint(deps, T); expect(calls()).toBe(before); });
 ```
 
-- [ ] **Step 2: Run** — `npx vitest run --project core core/src/routines`. Expected: FAIL.
-- [ ] **Step 3: Implement** as in Interfaces; update `morning.test.ts` cases that expected `posted`.
-- [ ] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
-- [ ] **Step 5: Commit** — `feat(core): the morning letter, written once a day and corrected`.
+- [x] **Step 2: Run** — `npx vitest run --project core core/src/routines`. Expected: FAIL.
+- [x] **Step 3: Implement** as in Interfaces; update `morning.test.ts` cases that expected `posted`.
+- [x] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
+- [x] **Step 5: Commit** — `feat(core): the morning letter, written once a day and corrected`.
 
 ---
 
@@ -480,7 +482,7 @@ route: { device: true; key: boolean; caps: boolean; firstPost: boolean; secondDe
 
 - Rules: `pause` = `currentPause(db)` (absent when none). `natsume`: order `attente-cle`, `cle-refusee`, `pause` (`since`, `until` of the pause), `reflechit`, `disponible`. Band `plafond` when `spend.reached` (whatever `atCap`): `{ scope, spent, cap, until? }`, `until` only when the pause is a cap pause. Band `pause` when the pause is `manuel`: `{ since }`. Any pause drops the `poste-injoignable` and `poste-muet` bands. `route.caps = capsKept`; `done = key && caps && firstPost`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('a manual pause shows its band and Natsume\'s state', async () => {
@@ -500,10 +502,10 @@ it('an urgent event of a post enters the queue during a pause', () => { expect(s
 it('setup needs the caps kept', () => { expect(s.route).toMatchObject({ caps: false, done: false }); });
 ```
 
-- [ ] **Step 2: Run** — `npx vitest run --project core core/src/reads/state.test.ts`. Expected: FAIL.
-- [ ] **Step 3: Implement** as in Interfaces.
-- [ ] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
-- [ ] **Step 5: Commit** — `feat(core): pause and caps in the single state`.
+- [x] **Step 2: Run** — `npx vitest run --project core core/src/reads/state.test.ts`. Expected: FAIL.
+- [x] **Step 3: Implement** as in Interfaces.
+- [x] **Step 4: Run** — `npx vitest run --project core`. Expected: PASS.
+- [x] **Step 5: Commit** — `feat(core): pause and caps in the single state`.
 
 ---
 
@@ -529,7 +531,7 @@ type NatsumeWord = { letterAt?: string; delegatedToday: number; spendToday: numb
 
 - Rules: `noLetter` only after today's 07:30 slot, without a letter, from today's last `morning` run (`failed` → `echec`, `skipped` → `pause`). `sinceMorning` = `carte` entries since the letter's `written_at` (else today's start): `new` = count, `pending` = those with outcome `a-trancher`; absent when `new` is 0. Routines: today's slot of each routine with its run's state, then tomorrow's slot as `prevue`, or `suspendue` while paused. Journal days: today and yesterday, one line per post with any entry (`confie` = type `confie`, `cartes` = type `carte`, `urgences` = type `urgence`, `faits`/`echoues` = outcome `fait`/`echoue` among `confie`). No cost total anywhere in the Journal word (n° 68).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('the Bureau gives the letter with its notes, what comes and the last three entries', async () => {
@@ -545,10 +547,10 @@ it('the Journal word has a line per post and no cost', () => { expect(JSON.strin
 it('an unknown place is a 400, and no post is called', async () => { expect((await get('/api/word?place=carte')).status).toBe(400); expect(calls()).toBe(before); });
 ```
 
-- [ ] **Step 2: Run** — `npx vitest run --project core core/src/word`. Expected: FAIL.
-- [ ] **Step 3: Implement** as in Interfaces; add the README lines.
-- [ ] **Step 4: Full gate** — `npm test && npm run lint && npm run typecheck && npm run format:check`. Expected: all green.
-- [ ] **Step 5: Commit** — `feat(core): GET /api/word, the word of each place`.
+- [x] **Step 2: Run** — `npx vitest run --project core core/src/word`. Expected: FAIL.
+- [x] **Step 3: Implement** as in Interfaces; add the README lines.
+- [x] **Step 4: Full gate** — `npm test && npm run lint && npm run typecheck && npm run format:check`. Expected: all green.
+- [x] **Step 5: Commit** — `feat(core): GET /api/word, the word of each place`.
 
 ---
 

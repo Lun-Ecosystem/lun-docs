@@ -1,7 +1,9 @@
 # Les notifications : plan d'implémentation
 
+> **Livré** par [lun-anima#54](https://github.com/Lun-Ecosystem/lun-anima/pull/54). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or
-> superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** loin du bureau, un P0 ou un P1 atteint le téléphone ; au bureau, la voix annonce, rappels compris.
 
@@ -41,11 +43,11 @@ Push vers les appareils abonnés. Les rappels entrent dans la file de l'app comm
 
 **Interfaces:** Produces `agenda.reminder` avec `data.subject: string`, le titre du rendez-vous ou de la tâche, sans le délai.
 
-- [ ] **Step 1: Test** `it('carries the bare name of what is coming')` : un rappel émis a `data.subject === 'Dentiste'`, et son
+- [x] **Step 1: Test** `it('carries the bare name of what is coming')` : un rappel émis a `data.subject === 'Dentiste'`, et son
       `title` reste `Dentiste dans 1 h`.
-- [ ] **Step 2: Le voir échouer**, `npm test -w server -- reminders`.
-- [ ] **Step 3: Implémenter** dans `runReminders` : `data.subject = r.title`.
-- [ ] **Step 4: Barrières vertes**, commit `feat(agenda): name what a reminder is about`, PR sur `lun-acedia`.
+- [x] **Step 2: Le voir échouer**, `npm test -w server -- reminders`.
+- [x] **Step 3: Implémenter** dans `runReminders` : `data.subject = r.title`.
+- [x] **Step 4: Barrières vertes**, commit `feat(agenda): name what a reminder is about`, PR sur `lun-acedia`.
 
 ### Task 2: La chaîne Web Push (`lun-anima`, core)
 
@@ -66,7 +68,7 @@ Create `core/src/push/store.ts`, `core/src/push/send.ts`, `core/src/push/routes.
 - Produces les routes, sous le jeton : `GET /push/key` → `{ publicKey }` ; `PUT /push/subscription` `{ endpoint, keys: { p256dh, auth } }` ;
   `DELETE /push/subscription` `{ endpoint }` ; `POST /push/test` ; `GET` et `PATCH /push/settings` `{ night: { on, from, to } }`.
 
-- [ ] **Step 1: Tests** :
+- [x] **Step 1: Tests** :
       `it('refuses an address outside the known push services')`, avec `http://fcm.googleapis.com/x`, `https://evil.test/x`,
       `https://fcm.googleapis.com.evil.test/x` en 400 ;
       `it('revoking a device removes its subscription')` ;
@@ -74,10 +76,10 @@ Create `core/src/push/store.ts`, `core/src/push/send.ts`, `core/src/push/routes.
       `it('without a secret key, says so and the rest of the app still answers')`, 503 sur `/push/key`, 200 sur `/clients` ;
       `it('sends a test to the device that asks')`, avec un `Pusher` factice ;
       `it('forgets a subscription a service says is gone')`.
-- [ ] **Step 2: Les voir échouer**, `npm test -w core -- push`.
-- [ ] **Step 3: Implémenter**, `npm i web-push -w core`. Valider le corps avec zod.
-- [ ] **Step 4: Tests verts.**
-- [ ] **Step 5: Commit** `feat(push): subscribe a device and send it a notification`.
+- [x] **Step 2: Les voir échouer**, `npm test -w core -- push`.
+- [x] **Step 3: Implémenter**, `npm i web-push -w core`. Valider le corps avec zod.
+- [x] **Step 4: Tests verts.**
+- [x] **Step 5: Commit** `feat(push): subscribe a device and send it a notification`.
 
 ### Task 3: La file
 
@@ -101,7 +103,7 @@ Décisions que le constructeur ne peut pas deviner :
 - **Nuit** : `silent: true` pour un P0 dans la plage. Un P1 est toujours `silent: true`.
 - **Lien** : `/app/?carte=<poste>:<id>` pour une carte, `/app/` sinon. L'urgence est en tête de la file.
 
-- [ ] **Step 1: Tests**, avec un `Pusher` factice et une horloge :
+- [x] **Step 1: Tests**, avec un `Pusher` factice et une horloge :
       `it('sends a P0 at once')` ; `it('groups P1 of a type after two minutes, with their count')` ;
       `it('stays silent while the voice can speak')` ; `it('sends a P0 and no P1 while busy')` ;
       `it('sends a P1 once the presence has died without a stop')`, battement à t, envoi à t + 91 s, P1 créé après la mort ;
@@ -109,10 +111,10 @@ Décisions que le constructeur ne peut pas deviner :
       `it('does not flood on the first subscription')`, 50 événements avant, zéro envoi ;
       `it('drops what expired')`, 1 h et 24 h ; `it('drops what was seen or decided before sending')` ;
       `it('keeps a P0 silent at night, and across midnight')` ; `it('retries until expiry, then gives up')`.
-- [ ] **Step 2: Les voir échouer.**
-- [ ] **Step 3: Implémenter**, et brancher dans `main.ts`, avec `stop()` à l'arrêt.
-- [ ] **Step 4: Tests verts.**
-- [ ] **Step 5: Commit** `feat(push): queue what deserves a notification`.
+- [x] **Step 2: Les voir échouer.**
+- [x] **Step 3: Implémenter**, et brancher dans `main.ts`, avec `stop()` à l'arrêt.
+- [x] **Step 4: Tests verts.**
+- [x] **Step 5: Commit** `feat(push): queue what deserves a notification`.
 
 ### Task 4: Les rappels à voix haute
 
@@ -120,11 +122,11 @@ Décisions que le constructeur ne peut pas deviner :
 
 **Interfaces:** Produces `reminderLine(title: string): string`, `Rappel : <title>.`
 
-- [ ] **Step 1: Test** : remplacer `agenda.reminder is not announced` par `it('says a reminder, without calling it urgent')`, et ajouter
+- [x] **Step 1: Test** : remplacer `agenda.reminder is not announced` par `it('says a reminder, without calling it urgent')`, et ajouter
       `it('leaves a reminder in the thread while busy')`.
-- [ ] **Step 2: Le voir échouer.**
-- [ ] **Step 3: Implémenter** : retirer le `return`, choisir la phrase selon le type.
-- [ ] **Step 4: Commit** `feat(natsume): say the reminders aloud`.
+- [x] **Step 2: Le voir échouer.**
+- [x] **Step 3: Implémenter** : retirer le `return`, choisir la phrase selon le type.
+- [x] **Step 4: Commit** `feat(natsume): say the reminders aloud`.
 
 ### Task 5: Les rappels dans la file
 
@@ -140,13 +142,13 @@ Règles : rendez-vous dont `due` est passé, retiré ; plusieurs rappels d'un m�
 la journée de Natsume. Le temps restant se calcule à l'affichage. `PushQueue.tick` publie `{ type: 'queue' }` quand un `due` vient de passer, pour
 qu'un écran ouvert retire le rappel sans geste.
 
-- [ ] **Step 1: Tests** : `it('lists a reminder with its bare name and due time')` ; `it('removes a meeting reminder once it has started')` ;
+- [x] **Step 1: Tests** : `it('lists a reminder with its bare name and due time')` ; `it('removes a meeting reminder once it has started')` ;
       `it('shows only the latest reminder of a meeting')` ; `it('keeps a task reminder until the day ends')` ;
       `it('tells open screens when a reminder falls due')` ; côté écran, `it('shows the time left')`.
-- [ ] **Step 2: Vérifier les doublons** : `ritual.test.ts` et `upcoming.test.ts` reçoivent `it('does not repeat a reminder already in the queue')`.
+- [x] **Step 2: Vérifier les doublons** : `ritual.test.ts` et `upcoming.test.ts` reçoivent `it('does not repeat a reminder already in the queue')`.
       Un rappel déjà émis a un `at` passé et ne devrait plus entrer dans `upcoming` ; si le rituel le répète, le retirer de ses lignes.
-- [ ] **Step 3: Implémenter, tests verts.**
-- [ ] **Step 4: Commit** `feat(queue): keep the reminders in the queue until they fall due`.
+- [x] **Step 3: Implémenter, tests verts.**
+- [x] **Step 4: Commit** `feat(queue): keep the reminders in the queue until they fall due`.
 
 ### Task 6: Les sources à créer
 
@@ -164,9 +166,9 @@ qu'un écran ouvert retire le rappel sans geste.
 
 `warnAt80` s'enregistre aujourd'hui sans que rien ne s'en serve : c'est ce chantier qui lui donne son effet.
 
-- [ ] **Step 1: Tests**, un par ligne, plus `it('does not warn twice the same day')` et `it('warns again after the post came back and went down')`.
-- [ ] **Step 2: Implémenter, tests verts.**
-- [ ] **Step 3: Commit** `feat(events): tell when a routine, a post or a cap needs him`.
+- [x] **Step 1: Tests**, un par ligne, plus `it('does not warn twice the same day')` et `it('warns again after the post came back and went down')`.
+- [x] **Step 2: Implémenter, tests verts.**
+- [x] **Step 3: Commit** `feat(events): tell when a routine, a post or a cap needs him`.
 
 ### Task 7: Le service worker et l'écran
 
@@ -182,10 +184,10 @@ qu'un écran ouvert retire le rappel sans geste.
 `push-sw.js` : `push` affiche sauf P1 avec une fenêtre au premier plan ; `notificationclick` focalise ou ouvre sur `link`. À l'ouverture de l'app, `main.ts` ferme
 les notifications de `getNotifications()`.
 
-- [ ] **Step 1: Tests** : `it('offers the switch on a phone')` ; `it('tells the desktop it goes through voice and counters')`, sans mention d'une appli absente ;
+- [x] **Step 1: Tests** : `it('offers the switch on a phone')` ; `it('tells the desktop it goes through voice and counters')`, sans mention d'une appli absente ;
       `it('says how to restore a refused permission')` ; `it('sends a test')` ; `it('marks the devices that receive')` ; le test « Notifications non activées. » suit l'état réel.
-- [ ] **Step 2: Implémenter, tests verts**, build vérifié : `ui/dist/sw.js` contient `importScripts`.
-- [ ] **Step 3: Essai dans Chrome**, sur un core jetable, `localhost`, fenêtre étroite : recette 1 à 16 de la spec.
-- [ ] **Step 4: Commit** `feat(app): turn notifications on from the phone`, doc de `lun-anima` à jour, PR.
+- [x] **Step 2: Implémenter, tests verts**, build vérifié : `ui/dist/sw.js` contient `importScripts`.
+- [x] **Step 3: Essai dans Chrome**, sur un core jetable, `localhost`, fenêtre étroite : recette 1 à 16 de la spec.
+- [x] **Step 4: Commit** `feat(app): turn notifications on from the phone`, doc de `lun-anima` à jour, PR.
 
 **Reste après la PR :** recette 17 et 18, sur le vrai téléphone en HTTPS, dès que le core lui est joignable.

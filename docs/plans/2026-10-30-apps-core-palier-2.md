@@ -1,6 +1,8 @@
 # Apps du core, chantier 6, palier 2 : Journal, Écosystème, catalogue des postes et contrat v1.3
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#19](https://github.com/Lun-Ecosystem/lun-anima/pull/19). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** L'app du core remplace le terminal et le `.env`. Le Journal raconte ce qui a été fait,
 Écosystème règle les postes, les dépenses, la clé, les routines et les appareils sans redémarrer le
@@ -143,13 +145,13 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
   - `link` est un chemin dans le front du poste qui commence par `/` ou `#/`, sans hôte ;
   - le client l'ajoute à l'adresse du front qu'il connaît.
 
-- [ ] **Step 1 :** passer la version à **v1.3** et ajouter `link?: string` aux deux types, avec le
+- [x] **Step 1 :** passer la version à **v1.3** et ajouter `link?: string` aux deux types, avec le
   commentaire « chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse ».
-- [ ] **Step 2 :** ajouter dans « Fronts » une phrase. Le core ouvre le front à ce chemin, à une
+- [x] **Step 2 :** ajouter dans « Fronts » une phrase. Le core ouvre le front à ce chemin, à une
   adresse qu'il règle lui-même, et le front n'en sait rien.
-- [ ] **Step 3 :** compléter « Versionnement » avec « la v1.3 `link` sur `Card` et `LunEvent` ».
-- [ ] **Step 4 : `npm run check`.** Attendu : PASS.
-- [ ] **Step 5 : commit** `docs(contract): satellite contract v1.3 with an optional link`. PR en
+- [x] **Step 3 :** compléter « Versionnement » avec « la v1.3 `link` sur `Card` et `LunEvent` ».
+- [x] **Step 4 : `npm run check`.** Attendu : PASS.
+- [x] **Step 5 : commit** `docs(contract): satellite contract v1.3 with an optional link`. PR en
   brouillon, avec le plan et la planche 06 sur la même branche `docs/core-apps-palier-2`.
 
 ### Task 2 : les réglages vivants du core
@@ -179,7 +181,7 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
     - `model` est un texte de 1 à 64 caractères, en `[\w.:-]+` ;
     - la route rend le nouvel état comme `GET`, ou un 400 avec la raison.
 
-- [ ] **Step 1 : écrire les tests qui échouent** (`settings/routes.test.ts`, avec le `createApp` de
+- [x] **Step 1 : écrire les tests qui échouent** (`settings/routes.test.ts`, avec le `createApp` de
   test) :
   - `GET /settings gives the .env values when nothing was set` ;
   - `PATCH /settings stores the cap and the next chat message uses it` : poser
@@ -188,15 +190,15 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
   - `PATCH /settings refuses a negative cap, NaN and text, and keeps the old value` ;
   - `PATCH /settings changes the model of the next reply`, vérifié avec le faux fournisseur ;
   - `GET /settings never contains the key`.
-- [ ] **Step 2 : `npm test -w core -- settings`.** Attendu : FAIL, module absent.
-- [ ] **Step 3 : implémenter `live.ts`, les routes, puis brancher `ChatService` et la nuit.**
+- [x] **Step 2 : `npm test -w core -- settings`.** Attendu : FAIL, module absent.
+- [x] **Step 3 : implémenter `live.ts`, les routes, puis brancher `ChatService` et la nuit.**
   - Garder les messages `… invalide` de `ChatService`, appliqués à la valeur lue.
   - `main.ts` passe `() => readSettings(db, defaultsFromEnv)`.
-- [ ] **Step 4 : écrire l'ADR 0004** : le contexte, la décision (settings l'emporte sur `.env`, lu à
+- [x] **Step 4 : écrire l'ADR 0004** : le contexte, la décision (settings l'emporte sur `.env`, lu à
   chaque appel), et l'alternative écartée (un redémarrage du core).
-- [ ] **Step 5 : `npm test && npm run typecheck`.** Attendu : PASS, et les tests du palier 1
+- [x] **Step 5 : `npm test && npm run typecheck`.** Attendu : PASS, et les tests du palier 1
   restent verts.
-- [ ] **Step 6 : commit** `feat(core): live settings read per call, settings routes`.
+- [x] **Step 6 : commit** `feat(core): live settings read per call, settings routes`.
 
 ### Task 3 : remplacer la clé depuis l'app
 
@@ -216,17 +218,17 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
     - 502 `{ error: <raison> }` si OpenAI ne répond pas ;
     - 400 si le corps est invalide.
 
-- [ ] **Step 1 : écrire les tests qui échouent** :
+- [x] **Step 1 : écrire les tests qui échouent** :
   - `PUT /settings/key saves a checked key and serves it at once` : le faux `onKeySaved` est appelé
     avec la clé ;
   - `PUT /settings/key keeps the old key when OpenAI refuses it (422)` ;
   - `PUT /settings/key keeps the old key when OpenAI does not answer (502)` ;
   - `the key never comes back` : ni `GET /settings`, ni la réponse du `PUT`, ni les logs.
-- [ ] **Step 2 : `npm test -w core -- settings`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter la route.** Sans `secretKey` lisible, elle rend 503
+- [x] **Step 2 : `npm test -w core -- settings`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter la route.** Sans `secretKey` lisible, elle rend 503
   « ANIMA_SECRET_KEY absente ».
-- [ ] **Step 4 : `npm test -w core`.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(core): replace the OpenAI key from the app`.
+- [x] **Step 4 : `npm test -w core`.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(core): replace the OpenAI key from the app`.
 
 ### Task 4 : relier un poste et régler l'adresse de son front
 
@@ -250,7 +252,7 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
     - l'adresse gardée est `new URL(url).origin` ;
     - `{ url: null }` efface l'adresse.
 
-- [ ] **Step 1 : écrire les tests qui échouent** :
+- [x] **Step 1 : écrire les tests qui échouent** :
   - `POST /satellites pairs with a 6-digit code and the post shows in the list`, avec un faux
     `fetch` qui répond à `/lun/v1/pair` ;
   - `POST /satellites says why when the post refuses the code` ;
@@ -258,12 +260,12 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
     `http://nas.local:8787` ;
   - `PUT front refuses ftp: and an unreadable address with the reason` ;
   - `GET /satellites gives front and lastContact`.
-- [ ] **Step 2 : `npm test -w core -- satellites`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter.**
+- [x] **Step 2 : `npm test -w core -- satellites`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter.**
   - L'adresse de front est gardée avec `putSetting(db, 'front:' + id, origin)`.
   - `lastContact` est lu par une seule requête groupée par `satellite_id`.
-- [ ] **Step 4 : `npm test -w core`.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(core): link a post and set its front address from the app`.
+- [x] **Step 4 : `npm test -w core`.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(core): link a post and set its front address from the app`.
 
 ### Task 5 : les appareils depuis l'app
 
@@ -282,15 +284,15 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
   - les trois routes sont sous le jeton, et les règles d'échec d'appairage restent celles du
     palier 1.
 
-- [ ] **Step 1 : écrire les tests qui échouent** :
+- [x] **Step 1 : écrire les tests qui échouent** :
   - `lists the devices and marks the current one` ;
   - `a revoked device is refused at its next call (401)` ;
   - `issues a 10-minute pairing code` ;
   - `the pairing code routes need a token`.
-- [ ] **Step 2 : `npm test -w core -- auth`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter.** `requireToken` lit l'id avec la même requête que `isValidToken`.
-- [ ] **Step 4 : `npm test -w core`.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(core): devices and pairing codes from the app`.
+- [x] **Step 2 : `npm test -w core -- auth`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter.** `requireToken` lit l'id avec la même requête que `isValidToken`.
+- [x] **Step 4 : `npm test -w core`.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(core): devices and pairing codes from the app`.
 
 ### Task 6 : le relevé des gestes, le `link` des événements, la route du Journal
 
@@ -321,18 +323,18 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
       dollars ;
     - un événement `info` ou `log` : `outcome` vaut `info`, et `detail` vaut `événement du poste`.
 
-- [ ] **Step 1 : écrire les tests qui échouent** (`journal.test.ts`) :
+- [x] **Step 1 : écrire les tests qui échouent** (`journal.test.ts`) :
   - `a relayed accept is noted with its origin and outcome` ;
   - `a refused relay (409, unreachable) notes nothing` ;
   - `entries are grouped by Paris day, newest first` : vérifier qu'une entrée de 0 h 30 heure de
     Paris tombe dans son jour civil ;
   - `post filters gestures, events and seen alerts; lunanima gives the routines` ;
   - `an urgent event keeps its link through /home and /events`.
-- [ ] **Step 2 : `npm test -w core -- journal`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter.** Une requête par source, fusionnées et triées en mémoire : sept
+- [x] **Step 2 : `npm test -w core -- journal`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter.** Une requête par source, fusionnées et triées en mémoire : sept
   jours restent petits.
-- [ ] **Step 4 : `npm test -w core`.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(core): journal of relayed gestures, routines and events`.
+- [x] **Step 4 : `npm test -w core`.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(core): journal of relayed gestures, routines and events`.
 
 ### Task 7 : l'écran Journal
 
@@ -343,22 +345,22 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
 **Interfaces:**
 - Consumes : `GET /api/journal`, et `nameOf` et `worldOf` (`ui/src/posts.ts`).
 
-- [ ] **Step 1 : écrire les tests qui échouent** :
+- [x] **Step 1 : écrire les tests qui échouent** :
   - `days come newest first with their date` : « Aujourd'hui », puis « vendredi 30 octobre » ;
   - `a row gives the hour, the post and the outcome, in its world` : `data-monde` vaut `acedia`, et
     l'heure s'écrit « 10 h 12 » ;
   - `the post chips filter the list` : Tout, puis Lun'Acedia, puis Lun'Avaritia, puis Lun'Anima ;
   - `an empty week says so` : « Rien de fait ces sept derniers jours. » ;
   - `"Plus ancien" loads the week before`.
-- [ ] **Step 2 : `npm test -w ui -- Journal`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter** sur la planche 06 :
+- [x] **Step 2 : `npm test -w ui -- Journal`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter** sur la planche 06 :
   - au bureau, les lignes `.trace` : l'heure, le filet du poste, ce qui s'est passé et d'où, puis
     le badge d'issue ;
   - au téléphone, l'issue passe sous le texte ;
   - les chips sont des boutons `aria-pressed`.
-- [ ] **Step 4 : `npm test -w ui && npm run typecheck`.** Attendu : PASS.
-- [ ] **Step 5 : vérifier dans Chrome** en 1440 et 390 px contre la planche 06.
-- [ ] **Step 6 : commit** `feat(ui): journal screen`.
+- [x] **Step 4 : `npm test -w ui && npm run typecheck`.** Attendu : PASS.
+- [x] **Step 5 : vérifier dans Chrome** en 1440 et 390 px contre la planche 06.
+- [x] **Step 6 : commit** `feat(ui): journal screen`.
 
 ### Task 8 : l'écran Écosystème
 
@@ -379,7 +381,7 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
   - `GET /costs?since=<7 jours>`, `GET /home` (les routines) et `POST /routines/{night,morning}`.
 - Produces : `roleOf`, consommé par Task 9.
 
-- [ ] **Step 1 : écrire les tests qui échouent**, un par thème, plus la navigation :
+- [x] **Step 1 : écrire les tests qui échouent**, un par thème, plus la navigation :
   - `desktop shows the themes column and the cards; phone shows the list, then one theme` ;
   - `Relier un poste` : l'adresse et le code envoient `POST /satellites`, puis le poste paraît. Une
     erreur 502 dit la raison du poste ;
@@ -398,16 +400,16 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
     - « Révoquer » sur « cet appareil » demande une confirmation, puis l'appel suivant ramène à
       l'appairage ;
   - `Notifications says it arrives with palier 3`.
-- [ ] **Step 2 : `npm test -w ui -- ecosysteme`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter** sur la planche 06.
+- [x] **Step 2 : `npm test -w ui -- ecosysteme`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter** sur la planche 06.
   - Chaque thème charge seul ; un thème en erreur le dit sans masquer les autres.
   - Le thème mobile ouvert garde son nom dans la requête (`/app/ecosysteme?theme=cle`), car
     `routeFromPath` ne connaît que les quatre chemins ; le retour du téléphone revient à la
     liste.
-- [ ] **Step 4 : `npm test -w ui && npm run typecheck && npm run lint`.** Attendu : PASS.
-- [ ] **Step 5 : vérifier dans Chrome** en 1440 et 390 px, chaque thème contre la planche 06. Les
+- [x] **Step 4 : `npm test -w ui && npm run typecheck && npm run lint`.** Attendu : PASS.
+- [x] **Step 5 : vérifier dans Chrome** en 1440 et 390 px, chaque thème contre la planche 06. Les
   thèmes Appareils et Notifications, absents de la planche au bureau, suivent la même carte.
-- [ ] **Step 6 : commit** `feat(ui): ecosystem screen replaces the terminal and the .env`.
+- [x] **Step 6 : commit** `feat(ui): ecosystem screen replaces the terminal and the .env`.
 
 ### Task 9 : le lanceur Postes et les liens profonds
 
@@ -428,7 +430,7 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
   - Un `link` qui commence par `/` ou `#/` (et pas par `//`) donne `front + link`.
   - Tout autre `link` est ignoré et donne `front + '/'`.
 
-- [ ] **Step 1 : écrire les tests qui échouent** :
+- [x] **Step 1 : écrire les tests qui échouent** :
   - `frontHref` :
     - `joins a path and a hash route to the front` ;
     - `ignores https://, //host, javascript: and an empty link` ;
@@ -440,18 +442,18 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
     - `a post without a front address has no button and says where to set it` ;
     - `phone: the icon opens the posts as a sheet` ;
   - `Accueil` : `an urgent row with a link offers "Ouvrir le mail" to the right place`.
-- [ ] **Step 2 : `npm test -w ui -- Postes frontHref Accueil`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter.**
+- [x] **Step 2 : `npm test -w ui -- Postes frontHref Accueil`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter.**
   - Au bureau, un popover Bits ; au téléphone, la feuille Dialog du palier 1.
   - Le libellé du bouton suit le poste : « Ouvrir le mail » pour Acedia, « Voir la fiche » pour
     Avaritia, « Ouvrir » pour un autre poste.
-- [ ] **Step 4 : `npm test -w ui && npm run typecheck`.** Attendu : PASS.
-- [ ] **Step 5 : vérifier dans Chrome** en 1440 et 390 px contre la planche 06.
-- [ ] **Step 6 : mettre à jour la doc.**
+- [x] **Step 4 : `npm test -w ui && npm run typecheck`.** Attendu : PASS.
+- [x] **Step 5 : vérifier dans Chrome** en 1440 et 390 px contre la planche 06.
+- [x] **Step 6 : mettre à jour la doc.**
   - Dans `README.md` et `CLAUDE.md` : Écosystème fait ce que font `connect`, `set-key`,
     `pair-code`, `clients` et `revoke`, et les commandes restent pour le terminal.
   - Dans `.env.example` : les quatre réglages ne donnent que la valeur de départ.
-- [ ] **Step 7 : commit** `feat(ui): posts launcher and deep links to the posts' fronts`. PR
+- [x] **Step 7 : commit** `feat(ui): posts launcher and deep links to the posts' fronts`. PR
   lun-anima en brouillon, Tasks 2 à 9.
 
 ### Task 10 : Lun'Acedia remplit `link` et ouvre un mail par son adresse
@@ -473,15 +475,15 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
   - `agenda.reminder` porte `link: '#/agenda'` ;
   - `#/mail/<id>` ouvre la boîte sur ce mail, et un id inconnu ouvre la boîte seule.
 
-- [ ] **Step 1 : écrire les tests qui échouent** :
+- [x] **Step 1 : écrire les tests qui échouent** :
   - `a mail card carries its link` ;
   - `mail.triaged and agenda.reminder carry their link` ;
   - `#/mail/42 opens the mail 42` ;
   - `#/mail/inconnu opens the box`.
-- [ ] **Step 2 : `npm test`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter.** Le front ne gagne aucun texte ni lien vers le core.
-- [ ] **Step 4 : `npm test && npm run typecheck && npm run lint`.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(contract): v1.3 links to mails and the agenda`. PR en brouillon.
+- [x] **Step 2 : `npm test`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter.** Le front ne gagne aucun texte ni lien vers le core.
+- [x] **Step 4 : `npm test && npm run typecheck && npm run lint`.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(contract): v1.3 links to mails and the agenda`. PR en brouillon.
 
 ### Task 11 : Lun'Avaritia remplit `link` pour les fiches
 
@@ -497,17 +499,17 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
   que `app/src/App.svelte` ouvre déjà, aujourd'hui `/memoire?fiche=<id>`. Une fiche à créer n'a pas
   de `link`.
 
-- [ ] **Step 1 : écrire les tests qui échouent** :
+- [x] **Step 1 : écrire les tests qui échouent** :
   - `an enrichment card links to its fiche` ;
   - `a new fiche card has no link`.
-- [ ] **Step 2 : `npm test`.** Attendu : FAIL.
-- [ ] **Step 3 : implémenter dans `cardOf`.**
-- [ ] **Step 4 : `npm test && npm run typecheck`.** Attendu : PASS.
-- [ ] **Step 5 : commit** `feat(contract): v1.3 links to fiches`. PR en brouillon.
+- [x] **Step 2 : `npm test`.** Attendu : FAIL.
+- [x] **Step 3 : implémenter dans `cardOf`.**
+- [x] **Step 4 : `npm test && npm run typecheck`.** Attendu : PASS.
+- [x] **Step 5 : commit** `feat(contract): v1.3 links to fiches`. PR en brouillon.
 
 ### Task 12 : la recette du palier 2
 
-- [ ] Avec les trois apps lancées en local (comptes de test), dans Chrome en 1440 et 390 px :
+- [x] Avec les trois apps lancées en local (comptes de test), dans Chrome en 1440 et 390 px :
   - changer le plafond de la conversation dans Écosystème : il est pris en compte sans redémarrer
     le core ;
   - révoquer un appareil : il est refusé à l'appel suivant ;
@@ -516,4 +518,4 @@ Standards : `standards/design.md`, `standards/contrat-satellite.md`.
   - le Journal montre le geste ;
   - depuis une urgence d'Acedia, « Ouvrir le mail » ouvre ce mail ; le front ne montre rien du
     core.
-- [ ] Noter dans chaque PR les captures, sans donnée réelle.
+- [x] Noter dans chaque PR les captures, sans donnée réelle.

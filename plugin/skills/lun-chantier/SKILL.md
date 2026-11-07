@@ -41,4 +41,6 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
 
 - Chaque critère de fin est **prouvé en local**, de bout en bout, par une commande ou une capture.
 - `superpowers:verification-before-completion` avant d'annoncer que c'est fini.
+- Le plan, dans `lun-docs/docs/plans/`, a ses cases cochées et le lien de la PR qui livre en tête. Une tâche non
+  faite reste vide, et la PR dit pourquoi (`structure-projet.md`).
 - Livraison avec `lun-livrer`. CrOliX merge.

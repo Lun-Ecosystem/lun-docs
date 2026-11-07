@@ -1,6 +1,8 @@
 # Core, chantier 5, palier 2 : la veille nocturne et la mémoire de la relation
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#15](https://github.com/Lun-Ecosystem/lun-anima/pull/15). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Chaque nuit à 5 h, le core relit la journée écoulée (fils, alertes, bilan d'Acedia), en tire
 des observations neutres pour Lun'Avaritia et des souvenirs pour le journal de la relation, sans rien
@@ -87,7 +89,7 @@ caractères au plus, `source.kind: 'core'`).
   - `FakeOpenAi.json(value, usage?)` (une réponse non diffusée) ; `FakeSatellite.queueAction(name, reply: Scripted<unknown>)`
     et `actionBodies: { name; body }[]`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it('keeps the chat cap on chat spend only', () => {
@@ -112,22 +114,22 @@ it('asks for a JSON answer in the given schema, without streaming', async () => 
 Dans `service.test.ts` : une dépense `purpose: 'night'` au-delà du plafond du chat n'empêche pas une
 réponse. Test de migration : après `openDb(':memory:')`, `night.since` existe et les quatre tables aussi.
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx vitest run core/src/chat`
 Expected: FAIL (`purpose`, `complete`, `fake.json` inconnus).
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Le commentaire de `createOpenAiProvider` est remonté au-dessus de la fonction (la constante
 `REASONING_OFF_WITH_TOOLS` s'était glissée entre les deux).
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `npm test`
 Expected: PASS, les tests existants du chat et des coûts compris.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git commit -m "feat(core): night storage, spend by purpose and JSON answers from the provider"
@@ -154,7 +156,7 @@ La liste fermée, et rien d'autre :
 - **numéro officiel** : n° de sécurité sociale (15 chiffres, 1 ou 2 en tête, clé valide), et la valeur
   qui suit « passeport » ou « carte d'identité ».
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```ts
 it.each([
@@ -180,22 +182,22 @@ it.each([
 Les numéros des tests sont fictifs et choisis pour que les clés (Luhn, mod 97) soient valides ou
 fausses comme annoncé.
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx vitest run core/src/memory/secrets.test.ts`
 Expected: FAIL, le module n'existe pas.
 
-- [ ] **Step 3: Implement `maskSecrets`**
+- [x] **Step 3: Implement `maskSecrets`**
 
 Expressions régulières par famille, appliquées dans l'ordre ci-dessus ; cartes et IBAN vérifiés par
 leur clé avant masquage. Aucun appel au modèle.
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `npx vitest run core/src/memory/secrets.test.ts`
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git commit -m "feat(core): mask a closed list of secrets"
@@ -242,7 +244,7 @@ invalide est redemandée une fois, puis la journée échoue. Le prompt système 
 (wiki ou relation, règle des `deja_note`, données entre balises) ; l'entrée est dans le message
 utilisateur, en blocs `<messages>`, `<alertes>`, `<bilan>`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Noms et assertions :
 - `sends observations to Lun'Avaritia and writes memories, masked` : `fake.actionBodies` contient un
@@ -265,22 +267,22 @@ Noms et assertions :
   `purpose: 'night'`.
 - `an invalid answer is asked again once, then the day fails`.
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx vitest run core/src/routines core/src/memory`
 Expected: FAIL, modules absents.
 
-- [ ] **Step 3: Implement `runNightDay`, `addMemories`, `listMemories`, le prompt et le schéma du tri**
+- [x] **Step 3: Implement `runNightDay`, `addMemories`, `listMemories`, le prompt et le schéma du tri**
 
 Le schéma de sortie est écrit avec zod (`z.strictObject`, champs `nullable` plutôt qu'optionnels, pour
 le mode strict d'OpenAI) et passé par `z.toJSONSchema`.
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `npm test`
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git commit -m "feat(core): the night pass of one day, step by step, into observations and memories"
@@ -310,7 +312,7 @@ git commit -m "feat(core): the night pass of one day, step by step, into observa
   - `POST /api/routines/night` (jeton Bearer) : lance une veille tout de suite, rend le `RunRecord` ;
     409 si une veille tourne. `npm run night` appelle cette route, comme `npm run chat`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 - `engine` : `runs a missed routine once at start, not again before its next hour` (horloge à 9 h,
   dernière veille la veille à 5 h : un passage ; 9 h 01 : aucun ; lendemain 5 h : un passage) ;
@@ -322,23 +324,23 @@ git commit -m "feat(core): the night pass of one day, step by step, into observa
   `a running night refuses a second one`.
 - `routes` : `POST /api/routines/night needs a token, answers 409 while one runs`.
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx vitest run core/src/routines`
 Expected: FAIL, modules absents.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `main.ts` démarre `startRoutines` avec la veille (`hour: 5, minute: 0`) après les satellites, et
 l'arrête au `shutdown` avant `chat.settled()` ; une veille en cours est attendue dans le même délai de
 10 s. `NIGHT_DAILY_CAP_USD` est lu comme `CHAT_DAILY_CAP_USD`.
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `npm test`
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git commit -m "feat(core): the night watch at 5:00, catch-up at start, run on demand"
@@ -358,26 +360,26 @@ git commit -m "feat(core): the night watch at 5:00, catch-up at start, run on de
   récents que lui, un appel `complete` (portrait précédent + souvenirs depuis), dans le plafond de la
   journée `day`, ajoute une version. Les versions anciennes restent.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 - `writes a first portrait from the journal, then not again within 7 days`.
 - `keeps every version` (deux portraits à 8 jours d'écart : deux lignes).
 - `without new memories, no call`.
 - `the portrait never changes the journal` (journal identique avant et après).
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx vitest run core/src/memory/portrait.test.ts`
 Expected: FAIL.
 
-- [ ] **Step 3: Implement `refreshPortrait` et l'appeler en fin de `runNight` (journée = dernière couverte)**
+- [x] **Step 3: Implement `refreshPortrait` et l'appeler en fin de `runNight` (journée = dernière couverte)**
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `npm test`
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git commit -m "feat(core): a weekly portrait of CrOliX from the journal"
@@ -396,24 +398,24 @@ git commit -m "feat(core): a weekly portrait of CrOliX from the journal"
   texte de chaque souvenir et de chaque portrait, et ne réécrit que ceux qui changent. Le CLI ouvre la
   base directement (hors de l'app, comme `set-key`) et affiche les deux nombres.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 - `masks a secret that got into the journal, and only that` : un souvenir avec un IBAN valide est
   masqué ; un souvenir sur la santé et un sur une adresse restent identiques ; `{ memories: 1 }`.
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx vitest run core/src/cli/purge-secrets.test.ts`
 Expected: FAIL.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `npm test`
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git commit -m "feat(core): purge secrets from the journal, from the command line"
@@ -428,7 +430,7 @@ git commit -m "feat(core): purge secrets from the journal, from the command line
 - Consumes: tâches 1 à 6 ; les trois serveurs en local avec les vraies clés (Acedia 8787, core 8788,
   Avaritia 8789).
 
-- [ ] **Step 1: Une journée réaliste**
+- [x] **Step 1: Une journée réaliste**
 
 Dans `npm run chat`, une conversation fictive mais réaliste (un client, un rendez-vous, une humeur,
 un « note que… », un mot de passe Wi-Fi), puis `npm run night`.
@@ -436,17 +438,17 @@ Expected: la ligne `routine_runs` est `ok` ; Avaritia a reçu un lot (« À vali
 brouillons tirés des observations, aucun pour l'échange déjà noté) ; le journal a des souvenirs, le
 mot de passe y est `[masqué]` ; le coût `night` de la journée est noté.
 
-- [ ] **Step 2: Rattrapage**
+- [x] **Step 2: Rattrapage**
 
 Core arrêté, horloge réelle : relancer le core le lendemain après 5 h.
 Expected: une veille au démarrage, une seule, qui couvre la période depuis la précédente.
 
-- [ ] **Step 3: Acedia arrêtée**
+- [x] **Step 3: Acedia arrêtée**
 
 `npm run night` avec Acedia arrêtée, puis relancée et `npm run night` à nouveau.
 Expected: première veille `ok` sans bilan (partie `digest` en attente), la seconde envoie le bilan seul.
 
-- [ ] **Step 4: Écrire la démarche et le coût mesuré dans `docs/README.md`, puis commit**
+- [x] **Step 4: Écrire la démarche et le coût mesuré dans `docs/README.md`, puis commit**
 
 Le coût d'un lot réel d'Avaritia (resté ouvert au chantier 4) est relevé dans ses coûts après le
 traitement du lot, et écrit dans la preuve.

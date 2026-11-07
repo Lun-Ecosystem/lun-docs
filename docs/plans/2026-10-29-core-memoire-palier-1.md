@@ -1,6 +1,8 @@
 # Core, chantier 5, palier 1 : Avaritia branchée au core
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Livré** par [lun-anima#13](https://github.com/Lun-Ecosystem/lun-anima/pull/13). Cases cochées le 07/11/2026 d'après cette livraison, sans recontrôle tâche par tâche.
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Natsume confie à Lun'Avaritia « note ça » et les questions sur le savoir, comme elle confie
 déjà le mail, l'agenda et les tâches à Lun'Acedia ; les cartes d'Avaritia arrivent par le relais
@@ -59,7 +61,7 @@ Le parcours de délégation (un seul appel du modèle, résumé du poste, cartes
   - `postRule(offered: Post[]): string` dans `chat/prompt.ts`, qui remplace `DELEGATION_RULE` et
     `NO_POST_RULE` (supprimés). Le prompt système devient `${SYSTEM_PROMPT} ${postRule(offered)}`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Dans `delegation.test.ts`, remplacer les deux tests de règle par ceux-ci, et ajouter un `setup`
 paramétré par l'identité du faux satellite (`setup({ id: 'lunavaritia', nom: "Lun'Avaritia" })`) :
@@ -114,12 +116,12 @@ vérifie que cette règle dit le mail, l'agenda, les tâches **et** la mémoire 
 `systemOf(openai)` lit le premier tour du premier appel (factoriser les deux lectures existantes). Le
 champ exact du corps reçu par `POST /agent` suit celui des tests existants (`fake.agentBodies`).
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `npx vitest run core/src/chat/delegation.test.ts core/src/chat/service.test.ts`
 Expected: FAIL, `postRule` n'existe pas.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 - `ROLES` : ajouter `lunavaritia` avec le rôle ci-dessus ; supprimer le commentaire `shortcut:`
   (la table reste la source des rôles, c'est la décision de la spec).
@@ -133,12 +135,12 @@ Expected: FAIL, `postRule` n'existe pas.
     et les fiches »).
 - `service.ts` : le prompt système utilise `postRule(offered)`.
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `npm test`
 Expected: PASS, tous les fichiers, dont les tests existants de délégation à Acedia.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add core/src/chat
@@ -154,24 +156,24 @@ git commit -m "feat(core): Lun'Avaritia as a post, for notes and knowledge"
 - Consumes: tâche 1 ; la démo d'Avaritia (`DEMO_FICHES=3000 npm run demo` dans lun-avaritia, port
   8798) et l'appairage existant du core (`npm run connect`).
 
-- [ ] **Step 1: Relier le core à la démo d'Avaritia**
+- [x] **Step 1: Relier le core à la démo d'Avaritia**
 
 Run, dans lun-avaritia : `npm run demo` ; dans lun-anima : `npm run connect -- http://127.0.0.1:8798 <code>`
 Expected: `npm run clients` (ou la santé du core) montre `lunavaritia` relié.
 
-- [ ] **Step 2: « Note ça »**
+- [x] **Step 2: « Note ça »**
 
 Run: `npm run chat`, puis taper « note que le studio Exemple a déménagé à Nantes »
 Expected: la réponse est le résumé d'Avaritia ; une carte de brouillon apparaît dans `GET /api/cards`
 du core et dans « À valider » d'Avaritia ; l'accepter depuis le core écrit la fiche.
 
-- [ ] **Step 3: Une question sur le savoir**
+- [x] **Step 3: Une question sur le savoir**
 
 Run: dans le même `npm run chat`, taper « qu'est-ce qu'on sait du studio Exemple ? »
 Expected: une réponse tirée des fiches de la démo, sans carte, en un seul appel du modèle côté core
 (une ligne de coût pour ce tour dans `costs`).
 
-- [ ] **Step 4: Écrire la démarche dans la doc du core, puis commit**
+- [x] **Step 4: Écrire la démarche dans la doc du core, puis commit**
 
 ```bash
 git add docs
