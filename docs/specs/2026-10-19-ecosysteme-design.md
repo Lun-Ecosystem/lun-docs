@@ -301,6 +301,18 @@ locales). Les jalons deviennent les valeurs du champ « Jalon » du Projects.
 | **J4 Nuit, voix, contrôle** | Cycle de nuit et briefing ; voix et RVC ; VTube Studio ; modes ; coûts et pause agrégés | 22/12 |
 | **J5 Rodage** | Une semaine d'usage réel en prod, corrections ; releases groupées ; anciens dépôts archivés | 31/12 |
 
+**Recalage du 07/11** (décision de CrOliX, lun-docs#73). Depuis le 27/10, l'ordre suit les huit chantiers de la
+[spec de liaison](2026-10-27-liaison-core-satellites-design.md) (§11). Les valeurs du champ « Jalon » restent, avec ce sens
+et les mêmes dates :
+
+| Jalon | Chantiers de la spec de liaison | État au 07/11 |
+|---|---|---|
+| J0, J1 | avant le 27/10 | fait |
+| J2 Core v1 | 1 à 5 : contrat, Acedia, délégation, Avaritia, mémoire et routines | fait |
+| J3 Apps v1 | 6 : mobile, puis desktop | mobile fait. **Lun'Luxuria remplace l'app desktop** du core (décision du 07/11) |
+| J4 Nuit, voix, contrôle | 7 : personnalité, voix, avatar, modes | en cours (lun-docs#61) ; avatar après le MVP (lun-docs#62) ; modes pas commencés |
+| J5 Rodage | 8 : une semaine d'usage en local | à faire ; le NAS vient une fois le MVP validé |
+
 **Ligne de coupe si le calendrier glisse** : l'avatar part d'abord, puis RVC (voix de synthèse
 seule), puis les dépôts de brouillons. L'assistante au quotidien et le contrôle ne sont jamais
 coupés.
