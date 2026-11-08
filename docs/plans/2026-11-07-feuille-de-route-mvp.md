@@ -190,7 +190,8 @@ tranchées (audit, Q5).
 
 ### M. Le kit tenu partout
 
-lun-luxuria, lun-avaritia, lun-acedia, et lun-docs pour le kit : une PR par dépôt. Niveau `standard`. *Show*.
+lun-luxuria, lun-avaritia, lun-acedia, lun-anima (la barre de saisie de Natsume), et lun-docs pour le kit : une PR par
+dépôt. Niveau `standard`. *Show*.
 
 - La vérification des jetons dans la CI de Luxuria et d'Avaritia, comme dans celles du core et d'Acedia ; celle du kit
   dans la CI de Luxuria, dont la copie est générée. Acedia et Avaritia gardent leur copie à part jusqu'à lun-docs#43.

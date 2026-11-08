@@ -268,7 +268,7 @@ règle, c'est qu'elle n'est pas devant l'agent au bon moment (§ 5.3, point 2).
 |---|---|---|
 | Q1 | Le compte Google du rodage | le vrai, sur le desktop, qui devient la prod du rodage ; le laptop garde le compte de test ; l'app Google passe en Production et le consentement se refait (B10, § 8.2) |
 | Q2 | La langue parlée (B2) | ouverte : à l'oreille sur le desktop, avant la semaine ; puis un ADR qui remplace 0011 |
-| Q3 | lun-acedia#30 (C2) : révocation douce ou doublons affichés ? | reportée après le MVP, avec l'appairage par code affiché ; le choix se fait alors (la révocation douce reste recommandée) |
+| Q3 | lun-acedia#30 (feuille de route, C2) : révocation douce ou doublons affichés ? | reportée après le MVP, avec l'appairage par code affiché ; le choix se fait alors (la révocation douce reste recommandée) |
 | Q4 | La barre de la personnalité | 10 à 12 scènes tirées de la vraie vie de CrOliX, jouées sur le desktop et notées de 1 à 5 ; atteinte si la moyenne vaut 4 au moins et qu'aucune scène n'est à 2 ou moins ; toute retouche du SOCLE passe par CrOliX |
 | Q5 | Les cinq questions de la spec Luxuria au quotidien | deux cartes à l'arrivée ; la consigne s'efface au premier tour ; le partage du § 4, avec trois préréglages d'Écoute (« Pièce calme », « Normal », « Bruit autour ») et « Personnalisé » dès qu'une valeur est touchée, valeurs mesurées sur le desktop ; l'agent neutre partout (« Identité ») |
 | Q6 | Copier les bases d'Acedia et d'Avaritia | oui : les trois bases chaque nuit avant la semaine, et une restauration essayée |
