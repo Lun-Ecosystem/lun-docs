@@ -16,4 +16,5 @@ au fil de l'eau et n'ouvre aucun chantier de lui-même.
    - **Rattacher à la feuille de route** du MVP (`lun-docs/docs/plans/2026-11-07-feuille-de-route-mvp.md`).
 3. Présente le tout à CrOliX dans un tableau (dépôt, n°, titre, proposition, raison).
 4. Applique **uniquement** ce que CrOliX valide : fermer (`gh issue close`), retirer `inbox` et poser
-   le niveau (`gh issue edit`), ajouter au projet (`gh project item-add`).
+   le niveau (`gh issue edit`), inscrire à la feuille de route ce qui s'y rattache (dans la PR du
+   chantier qui la touche).

@@ -1,6 +1,6 @@
 ---
 name: lun-chantier
-description: Use when starting, executing or closing any piece of work (chantier) in a Lun' project - from a GitHub issue to a merged PR. Freezes scope, sets the level label, routes to the right dev agent and requires local proof.
+description: Use when starting, executing or closing any piece of work (chantier) in a Lun' project - from a GitHub issue to a merged PR. Freezes scope, sets the level label, has the plan challenged and the diff reviewed, and requires local proof.
 ---
 
 # Chantier Lun'

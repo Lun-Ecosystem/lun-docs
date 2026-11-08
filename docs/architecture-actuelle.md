@@ -61,5 +61,6 @@ Une origine par app, la même partout.
   ([spec, être présent](specs/2026-11-05-natsume-etre-presence-design.md), § 1 et § 2).
 - **Le pilotage : l'app du core**, au bureau comme au téléphone : les cartes et leurs boutons, le Journal, les
   réglages. Luxuria n'a aucune notion de carte ([spec Luxuria](specs/2026-11-06-lun-luxuria-design.md)).
-- **En secours : les fronts d'Acedia et d'Avaritia**, pour agir à la source (une règle de tri, une fiche) ou quand le
-  core est arrêté : chaque satellite fonctionne seul (spec écosystème, § 3, principe 1).
+- **En secours : les fronts d'Acedia et d'Avaritia** **[choix Claude, à valider]**, pour agir à la source (une
+  règle de tri, une fiche) ou quand le core est arrêté : chaque satellite fonctionne seul (spec écosystème, § 3,
+  principe 1).
