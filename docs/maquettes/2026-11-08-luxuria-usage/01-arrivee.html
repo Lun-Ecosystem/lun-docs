@@ -14,6 +14,7 @@
   .sous { margin: -10px 0 8px; text-align: center; color: var(--texte-2); font-size: 14.5px; }
   .choix { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .carte {
+    display: flex; flex-direction: column; /* a button centres its content: the titles align at the top */
     text-align: left; font: inherit; color: inherit; cursor: pointer;
     padding: 16px 16px 18px; border-radius: var(--r-3);
     background: var(--surface-1); border: 1px solid var(--bordure);
@@ -54,15 +55,15 @@
     <h1>Agent</h1>
     <p class="sous">Un compagnon qui t’écoute et te répond à voix haute, sur ce poste.</p>
 
-    <div class="choix" role="radiogroup" aria-label="Ce qui le fait répondre">
+    <div class="choix" role="radiogroup" aria-label="Sa façon de répondre">
       <button class="carte" role="radio" aria-checked="true" data-mode="seul">
         <span class="t"><span class="rond"></span>Seul</span>
-        <p>Il répond avec un modèle que tu choisis : un modèle local, ou un service en ligne avec sa clé.</p>
+        <p>Ses réponses viennent d’un modèle que tu choisis : un modèle local, ou un service en ligne avec sa clé.</p>
         <p class="faut">Il faut : l’adresse du modèle et son nom. Le coût est celui du modèle.</p>
       </button>
       <button class="carte" role="radio" aria-checked="false" data-mode="relie">
         <span class="t"><span class="rond"></span>Relié à un serveur</span>
-        <p>Un serveur pense pour lui : la mémoire et les décisions restent là-bas.</p>
+        <p>Un serveur pense à sa place : la mémoire et les décisions restent <span style="white-space: nowrap">là-bas</span>.</p>
         <p class="faut">Il faut : l’adresse du serveur et un code d’appairage.</p>
       </button>
     </div>
@@ -96,7 +97,7 @@
         <div class="code" aria-labelledby="c-lib">
           <span>4</span><span>1</span><span>7</span><span class="vide">·</span><span class="vide">·</span><span class="vide">·</span>
         </div>
-        <p class="aide">Le code s’affiche sur le serveur, là où il ajoute un appareil. Un seul usage, quelques minutes.</p>
+        <p class="aide">Le code s’affiche sur le serveur, là où on ajoute un appareil. Un seul usage, quelques minutes.</p>
       </div>
     </section>
 

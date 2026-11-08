@@ -76,7 +76,7 @@
   <div class="panneau">
     <nav aria-label="Thèmes">
       <h2>Réglages</h2>
-      <p class="g">Lui</p>
+      <p class="g">Identité</p>
       <a href="#" id="n-agent" aria-current="page">L’agent</a>
       <a href="#">Corps</a>
       <p class="g">La conversation</p>
@@ -97,7 +97,7 @@
             <div class="v"><input class="champ" value="Agent"></div>
           </div>
           <div class="ligne pleine" id="ton">
-            <div><div class="l">Ton et contexte</div><div class="h" id="ton-aide">Ce qu’il sait de lui et de toi. Il le relit à chaque réponse.</div></div>
+            <div><div class="l">Ton et contexte</div><div class="h" id="ton-aide">Son rôle, et ce qu’il faut savoir de toi. Relu à chaque réponse.</div></div>
             <textarea class="champ" rows="8">Tu parles à voix haute : des phrases courtes, sans liste ni mise en forme.</textarea>
           </div>
           <div class="ligne">
@@ -109,7 +109,7 @@
           <summary>Réglages avancés : le modèle, la clé, le plafond</summary>
           <div class="ligne"><div><div class="l">Adresse du modèle</div><div class="h">Compatible OpenAI, souvent terminée par /v1.</div></div><div class="v"><input class="champ" value="http://127.0.0.1:11434/v1"></div></div>
           <div class="ligne"><div><div class="l">Nom du modèle</div></div><div class="v"><input class="champ" value="llama3.1:8b"></div></div>
-          <div class="ligne"><div><div class="l">Plafond par jour</div><div class="h">Au-delà, il se tait jusqu’au lendemain. 0 : sans plafond.</div></div><div class="v"><input class="champ mini" value="100 000"><span class="unite">jetons</span></div></div>
+          <div class="ligne"><div><div class="l">Plafond par jour</div><div class="h">Au-delà, plus de réponse jusqu’au lendemain. 0 : sans plafond.</div></div><div class="v"><input class="champ mini" value="100 000"><span class="unite">jetons</span></div></div>
         </details>
       </div>
 
@@ -152,7 +152,7 @@
         <details id="avance">
           <summary>Réglages avancés : fin de phrase, interruption, applis ignorées, mesures</summary>
           <div class="ligne"><div><div class="l">Silence de fin de phrase</div><div class="h">Conseillé : 0,5 s.</div></div><div class="v"><input class="champ mini" value="0,5"><span class="unite">s</span></div></div>
-          <div class="ligne"><div><div class="l">Répondre dès une courte pause</div><div class="h">Il reprend sa réponse si tu continues. Chaque essai coûte un appel.</div></div><div class="v"><input class="champ mini" value="0,16"><span class="unite">s</span><span class="interrupteur on"></span></div></div>
+          <div class="ligne"><div><div class="l">Répondre dès une courte pause</div><div class="h">La réponse préparée est retirée si tu continues. Chaque essai coûte un appel.</div></div><div class="v"><input class="champ mini" value="0,16"><span class="unite">s</span><span class="interrupteur on"></span></div></div>
           <div class="ligne"><div><div class="l">Seuil du silence</div><div class="h">En dessous, le micro entend le silence. Conseillé : -50 dB.</div></div><div class="v"><input class="champ mini" value="-50"><span class="unite">dB</span></div></div>
           <div class="ligne"><div><div class="l">Parole la plus courte</div><div class="h">Plus court, c’est un bruit.</div></div><div class="v"><input class="champ mini" value="0,25"><span class="unite">s</span></div></div>
           <div class="ligne"><div><div class="l">L’écouter après sa phrase</div><div class="h">Sans dire son nom, pendant ce temps.</div></div><div class="v"><input class="champ mini" value="15"><span class="unite">s</span><span class="interrupteur on"></span></div></div>
@@ -187,7 +187,7 @@
     document.getElementById('ton').classList.toggle('grise', relie);
     document.getElementById('ton-aide').textContent = relie
       ? 'Relié, c’est le serveur qui décide de son ton. Ce texte ne sert qu’en fonctionnement seul.'
-      : 'Ce qu’il sait de lui et de toi. Il le relit à chaque réponse.';
+      : 'Son rôle, et ce qu’il faut savoir de toi. Relu à chaque réponse.';
     document.getElementById('f-seul').setAttribute('aria-checked', String(!relie));
     document.getElementById('f-relie').setAttribute('aria-checked', String(relie));
     document.getElementById('avance').open = v === 'ecoute-avance';

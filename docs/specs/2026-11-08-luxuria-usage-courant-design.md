@@ -25,15 +25,15 @@ Une seule page, qui reste celle d'avant l'entrée. Maquette `01-arrivee.html`.
 1. **Le nom en titre**, puis une ligne qui dit ce qu'est l'appli : « Un compagnon qui t'écoute et te répond à voix
    haute, sur ce poste. » Le nom par défaut reste « Agent » (agent neutre, réglage).
 2. **Deux cartes au lieu d'un sélecteur**, chacune avec ce qu'elle demande **[choix Claude]** :
-   - **Seul** : « Il répond avec un modèle que tu choisis : un modèle local, ou un service en ligne avec sa clé. Le coût
+   - **Seul** : « Ses réponses viennent d'un modèle que tu choisis : un modèle local, ou un service en ligne avec sa clé. Le coût
      est celui du modèle. »
-   - **Relié à un serveur** : « Un serveur pense pour lui : la mémoire et les décisions restent là-bas. Il faut son
+   - **Relié à un serveur** : « Un serveur pense à sa place : la mémoire et les décisions restent là-bas. Il faut son
      adresse et un code d'appairage. »
 3. **Les champs de la carte choisie, sur la page même** :
    - Seul : adresse du modèle (« Compatible OpenAI, souvent terminée par /v1 »), nom du modèle (exemple en
      placeholder), clé facultative.
    - Relié : adresse du serveur, dans la fenêtre seulement (le navigateur passe par son proxy), puis le code, avec « Le
-     code s'affiche sur le serveur, là où il ajoute un appareil. »
+     code s'affiche sur le serveur, là où on ajoute un appareil. »
 4. **« Entrer » attend ce qui manque**, et le dit : « Il manque le nom du modèle. » Relié, le code complet fait entrer,
    comme aujourd'hui.
 
@@ -45,7 +45,7 @@ Maquette `02-scene.html`.
 
 1. **Une consigne sous le halo**, tant que rien n'a été dit dans la session, et qui suit la façon de parler réglée
    **[choix Claude]** :
-   - micro ouvert : « Parle-lui : dis son nom, ou parle juste après lui. »
+   - micro ouvert : « Parle-lui : dis son nom, ou parle juste après sa réponse. »
    - touche : « Tiens F9 pour lui parler. »
    - micro coupé : « Micro coupé. Écris-lui, ou rallume le micro. », avec le bouton.
    Elle s'efface au premier tour et ne revient qu'au lancement suivant.
@@ -80,11 +80,15 @@ Maquette `03-reglages.html`. Les thèmes restent (L'agent, Corps, Écoute, Voix,
    (elles vont dans le README), et les titres répétés (le thème « L'agent » n'a plus de carte « L'agent »).
 6. **« Mesures de cette session »** sort des réglages courants : en bas de l'avancé de l'Écoute.
 7. **Grand écran** : la colonne de contenu passe à 720 px, le texte de base à 14 px, la liste des thèmes reste à gauche.
+8. **Neutre** : l'écran ne donne pas de genre à l'agent, dont le nom est un réglage. « Identité » remplace « Lui » dans
+   la liste des thèmes ; « parle juste après sa réponse », « Son rôle, et ce qu'il faut savoir de toi » **[choix
+   Claude]**. L'app dit aujourd'hui « Lui » et « ce qu'il sait de lui » : un nom féminin les rend faux.
 
 ## 5. Hors périmètre
 
 Les écrans propres à l'exe (thème Fenêtre, icône, petit mode réel) déjà repris en #33 ; la personnalité (#39, recette
-avec CrOliX) ; le mot d'éveil ; un sélecteur de fichier.
+avec CrOliX) ; le mot d'éveil ; un sélecteur de fichier pour les autres chemins (dossier du service, fichier de la voix,
+dossier du corps), devenu simple avec le plugin de dialogue de lun-luxuria#40.
 
 ## 6. À trancher par CrOliX
 
@@ -92,3 +96,4 @@ avec CrOliX) ; le mot d'éveil ; un sélecteur de fichier.
 2. La consigne de la scène : s'efface au premier tour (proposé), ou reste discrète tant que le fil est vide ?
 3. Les préréglages d'Écoute : oui, ou seulement des valeurs conseillées affichées à côté de chaque champ ?
 4. Le partage courant / avancé du tableau du § 4.
+5. L'agent à l'écran : neutre partout (proposé, § 4.8), ou un réglage « il / elle » qui accorde les textes ?
