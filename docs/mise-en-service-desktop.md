@@ -66,25 +66,46 @@ port.
 
 ## 5. Appairer Luxuria
 
-1. Construire Luxuria (`npm run tauri build -- --no-bundle` dans `lun-luxuria`) et lancer l'exe.
-2. Dans ses Réglages : « Relié à un serveur », adresse `http://127.0.0.1:8788`.
-3. Depuis `D:\lun-service\lun-anima` : `npm run pair-code`, puis taper le code dans Luxuria.
-4. Sa voix, dans Réglages > Voix, par des champs nommés (aucune ligne d'arguments à écrire) :
+1. **Construire et poser l'exe.** Dans `lun-luxuria` à jour sur `main` : `npm ci`, puis
+   `npm run tauri build -- --no-bundle`. Copier `src-tauri\target\release\lun-luxuria.exe` dans un dossier qui ne
+   bouge pas, par exemple `D:\lun-service\luxuria\`, et le lancer **depuis là**. « Démarrer avec Windows » retient le
+   chemin de l'exe qui l'active : depuis `target\release`, une reconstruction ou un nettoyage du dépôt le casserait. Les
+   réglages et l'appairage ne dépendent pas de cet emplacement. Mettre à jour : quitter Luxuria, reconstruire, recopier
+   l'exe au même endroit.
+2. **Appairer, par l'écran.** Dans l'app du core, Atelier > Appareils > « Ajouter un appareil » : un code à six
+   chiffres, valable quelques minutes. Dans Luxuria : « Relié à un serveur », puis le code. L'adresse par défaut,
+   `http://127.0.0.1:8788`, est celle du core sur ce poste. Recours en terminal, depuis `D:\lun-service\lun-anima` :
+   `npm run pair-code`.
+3. **Sa voix**, dans Réglages > Voix, par des champs nommés (aucune ligne d'arguments à écrire) :
    - « Lancer le service voix avec l'appli », et le dossier qui contient `service.py` ;
    - Transcription : « Locale » (un modèle chargé dans le service) ou « whisper-server » et son adresse ;
    - Sa voix : le chemin du fichier Piper `.onnx` ;
    - RVC, facultatif : son adresse et son gain.
 
-   whisper-server et RVC sont des programmes à part : on les lance soi-même avant Luxuria, l'appli vérifie seulement
-   qu'ils répondent à leur adresse. Chaque brique dit son état (répond, en démarrage, absente) et quoi faire quand elle
-   manque. « Lancer ou vérifier » attend que rien ne manque, et la scène dit quand la voix ne répond pas, avec un lien
-   vers ce thème. Une installation qui avait des lignes d'arguments les retrouve rangées dans ces champs.
+   Une installation qui avait des lignes d'arguments les retrouve rangées dans ces champs.
+4. **whisper-server et RVC**, deux programmes à part. Pour que l'appli les lance, dans la carte de chacun :
+   - « Choisir… » ouvre la boîte de dialogue de Windows : y choisir son `.exe`. L'appli le garde de son côté,
+     « Oublier » le retire ;
+   - ses arguments, un par ligne, tels qu'on les taperait (modèle, port) ;
+   - « Lancer … avec l'appli » pour qu'il parte au démarrage, ou « Lancer … » pour le lancer tout de suite.
 
-5. Réglages > Fenêtre : « Démarrer avec Windows » si Luxuria doit s'ouvrir avec la session. L'icône près de l'horloge
-   arrive sous la flèche ^ de la barre des tâches : la glisser sur la barre pour la garder visible. Pleine et colorée :
-   présente ; pleine et grise : en sourdine ; creuse : injoignable.
-6. Quitter : Réglages, « Quitter l'appli » (ou le menu de l'icône). La présence se termine d'abord, le service voix
-   lancé par l'appli s'arrête avec elle.
+   L'appli les lance avant le service voix, sans console, chacun dans son dossier, et ne lance rien si quelque chose
+   répond déjà à son adresse. Elle les suit jusqu'à ce qu'ils répondent ; un programme qui s'arrête aussitôt est dit
+   avec son journal. Elle les arrête en quittant, et Windows les arrête aussi si elle plante, avec ce qu'ils ont
+   ouvert eux-mêmes : si RVC ouvre un navigateur au lancement, couper cette ouverture dans ses arguments, sinon ce
+   navigateur se ferme avec Luxuria. Leurs sorties vont dans `whisper-server.log` et `rvc.log`, vidés à chaque
+   lancement, près de `voix.log`, dans `%LOCALAPPDATA%\io.github.lun-ecosystem.luxuria\logs`. Sans programme choisi,
+   on les lance soi-même avant Luxuria : l'appli vérifie seulement qu'ils répondent.
+5. **Ce que dit l'écran.** Chaque brique dit son état (répond, en démarrage, absente) et quoi faire quand elle manque.
+   « Lancer ou vérifier » montre qu'il travaille, puis donne son résultat. Un champ changé alors que le service tourne
+   n'est pris qu'au prochain lancement : chaque carte dit ce qu'utilise le service en marche (« En marche : Locale »)
+   et ce qui attend, et « Relancer le service » le relance aussitôt. Un service lancé à la main se relance à la main.
+   La scène dit quand la voix ne répond pas, avec un lien vers ce thème.
+6. Réglages > Fenêtre : « Démarrer avec Windows » si Luxuria doit s'ouvrir avec la session (après l'étape 1). L'icône
+   près de l'horloge arrive sous la flèche ^ de la barre des tâches : la glisser sur la barre pour la garder visible.
+   Pleine et colorée : présente ; pleine et grise : en sourdine ; creuse : injoignable.
+7. Quitter : Réglages, « Quitter l'appli » (ou le menu de l'icône). La présence se termine d'abord ; le service voix,
+   whisper-server et RVC lancés par l'appli s'arrêtent avec elle.
 
 ## 6. Le téléphone
 
