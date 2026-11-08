@@ -13,7 +13,7 @@ au fil de l'eau et n'ouvre aucun chantier de lui-même.
 2. Pour chacune, lis-la (`gh issue view <n> -R <owner/repo>`) et propose **une** décision :
    - **Jeter** : plus d'actualité, doublon, ou contraire à la vision.
    - **Chantier futur** : avec un niveau proposé (`niveau:*`) et une phrase de critère de fin.
-   - **Rattacher à un jalon** du GitHub Projects « Lun'Ecosystem » (un MVP).
+   - **Rattacher à la feuille de route** du MVP (`lun-docs/docs/plans/2026-11-07-feuille-de-route-mvp.md`).
 3. Présente le tout à CrOliX dans un tableau (dépôt, n°, titre, proposition, raison).
 4. Applique **uniquement** ce que CrOliX valide : fermer (`gh issue close`), retirer `inbox` et poser
    le niveau (`gh issue edit`), ajouter au projet (`gh project item-add`).

@@ -1,7 +1,7 @@
 ---
 name: reviewer
 description: Revue d'un diff contre la tâche, ses critères de fin et les standards lun-docs. À lancer après chaque tâche implémentée et avant d'ouvrir une PR.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash
 ---
 

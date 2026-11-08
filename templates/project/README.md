@@ -26,7 +26,7 @@
 
 ```bash
 cp .env.example .env    # renseigner les clés de développement et le compte Google de test
-<la commande unique qui démarre tout>
+<le démarrage, tel qu'il se fait : une ligne par terminal>
 ```
 
 Aucune dépendance au NAS : tout tourne sur le poste.

@@ -7,7 +7,7 @@
 
 | Fichier | Contenu |
 |---|---|
-| `README.md` | Ce que fait le projet, son rôle (core ou satellite), **le démarrage local en une commande**. Même forme partout, celle de `templates/project/README.md` ; badges d'un dépôt public : version si publiée, CI, licence si posée, Node, stack, écosystème, à la couleur du monde |
+| `README.md` | Ce que fait le projet, son rôle (core ou satellite), **le démarrage local, tel qu'il se fait**. Même forme partout, celle de `templates/project/README.md` ; badges d'un dépôt public : version si publiée, CI, licence si posée, Node, stack, écosystème, à la couleur du monde |
 | `CLAUDE.md` | 100 lignes max : renvoie à lun-docs et au plugin, ne garde que le spécifique au projet |
 | `docs/` | Ce qui **existe** : utilisateur, technique, exploitation. Jamais l'historique |
 | `docs/decisions/` | Les ADR propres au projet (une page, remplacés et jamais modifiés) |
@@ -18,7 +18,8 @@
 
 ## Ce qui n'a pas sa place dans un dépôt
 
-- Un fichier d'avancement, une roadmap, des « paliers » : c'est le GitHub Projects.
+- Un fichier d'avancement, une roadmap, des « paliers » : l'avancement vit dans la feuille de route du MVP, dans
+  lun-docs.
 - Un journal des observations : ce sont les issues `inbox`.
 - Un plan de chantier : il vit dans `lun-docs/docs/plans/`. À la clôture, ses cases sont cochées et sa tête donne le
   lien de la PR qui livre. Une tâche non faite reste vide, et la PR dit pourquoi.

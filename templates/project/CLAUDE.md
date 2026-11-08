@@ -6,14 +6,14 @@
 
 ## Ce projet
 
-- **Rôle** : <core | satellite | vitrine>, inscrit dans `registry.yaml` de lun-docs.
+- **Rôle** : <core | satellite | vitrine | referentiel>, inscrit dans `registry.yaml` de lun-docs.
 - **Possède** : <les fonctions dont ce projet est le seul propriétaire>.
 - **Ne possède pas** : <ce qu'il consomme d'un autre projet, et par quel contrat>.
 
 ## Lancer en local
 
 ```bash
-<la commande unique qui démarre tout en local>
+<le démarrage local, tel qu'il se fait : une ligne par terminal>
 ```
 
 Prérequis : <outils et versions>. Variables : copier `.env.example` en `.env` (compte Google de test,

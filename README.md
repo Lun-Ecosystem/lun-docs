@@ -10,7 +10,7 @@ aucun code applicatif.
 [![CI](https://img.shields.io/github/actions/workflow/status/Lun-Ecosystem/lun-docs/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/Lun-Ecosystem/lun-docs/actions/workflows/ci.yml)
 [![Licence](https://img.shields.io/github/license/Lun-Ecosystem/lun-docs?style=flat-square&label=licence)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D22-5FA04E?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
-[![Écosystème Lun'](https://img.shields.io/badge/%C3%A9cosyst%C3%A8me-Lun'-555555?style=flat-square)](https://crolix-website.vercel.app)
+[![Écosystème Lun'](https://img.shields.io/badge/%C3%A9cosyst%C3%A8me-Lun'-555555?style=flat-square)](https://github.com/Lun-Ecosystem)
 
 </div>
 
@@ -31,7 +31,7 @@ aucun code applicatif.
 | Les projets, leur rôle, leur dépôt | [`registry.yaml`](registry.yaml) |
 | Squelette d'un nouveau projet | [`templates/project/`](templates/project/) |
 | Skills communautaires retenus et écartés | [`community-skills.md`](community-skills.md) |
-| L'avancement | le GitHub Projects « Lun'Ecosystem » (jamais dans ce dépôt) |
+| L'avancement | la [feuille de route du MVP](docs/plans/2026-11-07-feuille-de-route-mvp.md) |
 
 En cas de conflit entre lun-docs et un projet, lun-docs fait foi, ou on le change par une PR.
 

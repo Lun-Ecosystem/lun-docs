@@ -8,7 +8,7 @@
     {
       "name": "lun",
       "source": "./plugin",
-      "description": "Méthode de travail, agents par niveau de tâche, skills lun-* et garde-fous de l'écosystème Lun'.",
+      "description": "Méthode de travail, skills lun-*, agents de relecture et de recherche, garde-fous de l'écosystème Lun'.",
       "version": "0.1.0"
     }
   ]

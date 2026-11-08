@@ -16,8 +16,9 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
    l'étiquette : `gh issue edit <n> --add-label niveau:<trivial|standard|critique|exceptionnel>`.
 3. Le périmètre est **figé** à partir d'ici.
 4. Cadrage et plan : `superpowers:brainstorming` si le besoin n'est pas clair, puis
-   `superpowers:writing-plans`. Fais attaquer le plan par l'agent `plan-challenger`, intègre ou
-   réfute ses objections, puis CrOliX valide. **Pas de code avant.**
+   `superpowers:writing-plans`, en un plan court dans `lun-docs/docs/plans/`. Fais attaquer le plan
+   par l'agent `plan-challenger`, intègre ou réfute ses objections par écrit, puis CrOliX valide.
+   **Pas de code avant.**
 
 ## Exécuter
 
@@ -29,9 +30,9 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
   plan est un ou plusieurs commits sur cette branche, jamais une branche poussée ni une PR à part.
   Des worktrees locaux pour des tâches parallèles, fusionnés dans la branche du chantier, au besoin.
   La PR s'ouvre en brouillon au premier push (`lun-livrer`).
-- Agent de dev selon l'étiquette : `niveau:trivial` → `dev-haiku`, `niveau:standard` → `dev-sonnet`,
-  `niveau:critique` → `dev-opus`. **`dev-fable` uniquement si CrOliX le demande explicitement dans
-  la conversation**, même avec `niveau:exceptionnel` (sinon : `dev-opus`, et le signaler).
+- La session principale code, tâche par tâche, tests d'abord quand c'est pertinent. Fable
+  uniquement si CrOliX le demande explicitement dans la conversation, même avec
+  `niveau:exceptionnel`.
 - Après chaque tâche : agent `reviewer` sur le diff. Corrige les points bloquants.
 - Une observation hors périmètre devient une issue `inbox`
   (`gh issue create --label inbox --title "…" --body "…"`), **sauf** si elle empêche d'atteindre les

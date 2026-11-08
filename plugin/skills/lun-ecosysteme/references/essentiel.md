@@ -15,11 +15,11 @@ Le nord est [`vision.md`](../vision.md).
 |---|---|
 | Décision structurante, coûteuse à défaire | ADR d'une page (`adr/` ou `docs/decisions/` du projet), jamais modifié : remplacé |
 | Observation, retour, idée | Issue GitHub étiquetée `inbox` |
-| Plan d'un chantier | Dans l'issue ou la PR du chantier |
-| Avancement | Le GitHub Projects « Lun'Ecosystem », jamais recopié dans une doc |
+| Plan d'un chantier | `lun-docs/docs/plans/`, lié depuis l'issue et la PR du chantier |
+| Avancement | La feuille de route du MVP (`lun-docs/docs/plans/2026-11-07-feuille-de-route-mvp.md`) ; les issues gardent étiquettes et niveaux |
 | Doc produit | `docs/` du projet : ce qui **est**, jamais l'historique |
 
-Pas de fichier d'avancement, pas de « paliers » en Markdown, pas d'ADR pour une observation.
+Un seul fichier d'avancement, la feuille de route ; pas d'ADR pour une observation.
 
 ## 3. Un chantier se ferme
 
@@ -28,10 +28,11 @@ Pas de fichier d'avancement, pas de « paliers » en Markdown, pas d'ADR pour un
   empêche d'atteindre ses critères de fin.
 - Le chantier se ferme quand ses critères sont remplis et **prouvés en local**.
 
-## 4. On teste en local, jamais sur le NAS
+## 4. On teste en local, jamais sur la prod
 
-Toute la pile démarre en local en une commande, sans dépendre du NAS. La prod sert à l'usage, pas aux
-essais. Aucune doc du type « à tester sur le NAS ».
+Toute la pile démarre en local, sans dépendre du NAS ni du desktop. La prod (le desktop pendant le
+rodage, le NAS ensuite) sert à l'usage ; ce que seul le desktop prouve s'y essaie à part
+([`environnements.md`](environnements.md)). Aucune doc du type « à tester sur le NAS ».
 
 ## 5. Seul CrOliX merge
 
