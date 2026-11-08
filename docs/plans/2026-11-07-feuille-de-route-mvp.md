@@ -6,6 +6,15 @@
 
 ## 1. Où on en est
 
+**Au 08/11.** La liste A est faite côté laptop : F (lun-anima, lun-luxuria#22), G (lun-anima#69 et #71,
+lun-luxuria#24, la page [`mise-en-service-desktop.md`](../mise-en-service-desktop.md)), H sans ses relevés
+(lun-luxuria#10), A4. La première mise en service du desktop a fait remonter huit écarts de Luxuria (lun-luxuria#25 à
+#32), corrigés en un chantier : lun-luxuria#33 et lun-docs#98 (voix réglée par l'écran, réglages par thèmes, quitter,
+icône lisible). Décision de CrOliX le 08/11 : **le rodage se fait sur le desktop**, le NAS passe après (§ D) ; son
+chantier peut se préparer en parallèle. Reste avant le MVP : la liste B, sur le desktop ou par CrOliX, et C2.
+
+Le tableau ci-dessous garde l'état du 07/11.
+
 | Jalon (spec écosystème §10.3) | État au 07/11 |
 |---|---|
 | J0, J1, J2 | faits |
@@ -23,9 +32,9 @@ partie vide, son relevé est fait (lun-luxuria#9).
 
 | # | Point | Où | Chantier |
 |---|---|---|---|
-| A1 | **Le mute du bureau** : couper ses sens, urgences en exception réglable | lun-luxuria, lun-anima | [F](#f-le-mute-du-bureau) |
-| A2 | **Le poste qui tourne seul** : serveurs sans console qui redémarrent, journaux, sauvegarde de la base, Luxuria avec Windows et dans la zone de notification, téléphone par Tailscale | les cinq dépôts | [G](#g-le-poste-qui-tourne-seul) ; côté laptop : lun-anima#69, lun-luxuria#24, la page [`mise-en-service-desktop.md`](../mise-en-service-desktop.md) ; l'installation est B8 |
-| A3 | **La confiance de whisper-server** fixée à 0,9 : un « Oui » a validé une carte (lun-luxuria#6, critique), et RVC par blocs (lun-luxuria#7, première étape). La partie code se prouve sur le laptop contre des faux ; seuls les relevés demandent le desktop | lun-luxuria | [H](#h-la-confiance-de-la-voix), plan déjà écrit |
+| A1 | **Le mute du bureau** : couper ses sens, urgences en exception réglable | lun-luxuria, lun-anima | [F](#f-le-mute-du-bureau) ; fait : lun-luxuria#22 |
+| A2 | **Le poste qui tourne seul** : serveurs sans console qui redémarrent, journaux, sauvegarde de la base, Luxuria avec Windows et dans la zone de notification, téléphone par Tailscale | les cinq dépôts | [G](#g-le-poste-qui-tourne-seul) ; côté laptop : lun-anima#69, lun-luxuria#24, la page [`mise-en-service-desktop.md`](../mise-en-service-desktop.md) ; l'installation est B8 ; fait côté laptop, mise en service du desktop le 08/11 |
+| A3 | **La confiance de whisper-server** fixée à 0,9 : un « Oui » a validé une carte (lun-luxuria#6, critique), et RVC par blocs (lun-luxuria#7, première étape). La partie code se prouve sur le laptop contre des faux ; seuls les relevés demandent le desktop | lun-luxuria | [H](#h-la-confiance-de-la-voix) ; code fait (lun-luxuria#10), relevés en B1 |
 | A4 | Les specs qui se contredisent sur les modes (J4, notifications, Luxuria §6.6), et l'app desktop du §8 de la spec écosystème (mises à jour) | lun-docs | fait : lun-docs#95, la PR qui le ferme (le §8 disait déjà « sans mise à jour automatique au MVP ») |
 
 ### B. Bloque le MVP, attend le desktop ou CrOliX
@@ -46,7 +55,7 @@ partie vide, son relevé est fait (lun-luxuria#9).
 
 | # | Point | Dépôt | Rangé dans |
 |---|---|---|---|
-| C1 | Test instable « Logged once, not at each retry » (lun-anima#7, trivial) | lun-anima | F |
+| C1 | Test instable « Logged once, not at each retry » (lun-anima#7, trivial) | lun-anima | F ; fermé |
 | C2 | Une nouvelle liaison du core remplace l'ancienne au lieu d'en ajouter une (lun-acedia#30). Elle attend un choix de cadrage, révocation douce ou doublons affichés, et aucun critère de G ne l'exige avec des bases neuves | lun-acedia | à cadrer avec CrOliX |
 
 ### D. Après le MVP
