@@ -125,6 +125,8 @@ Ce qui change pour I à N :
 
 ### I. Les normes à jour
 
+Plan : [`2026-11-08-normes-a-jour.md`](2026-11-08-normes-a-jour.md) ; issue lun-docs#104.
+
 lun-docs, et `.github` pour son lien mort (C3). Niveau `trivial`. *Show*. Corrige les contradictions de l'audit
 (§ 3.1) :
 
@@ -150,6 +152,9 @@ Preuve : `npm run check` et `npm run sync:check` verts ; aucune des contradictio
 
 ### J. Des états qui disent vrai
 
+Plan : [`2026-11-08-etats-vrais.md`](2026-11-08-etats-vrais.md) ; issues lun-anima#74 et #73, lun-acedia#56,
+lun-avaritia#21.
+
 lun-anima, lun-acedia, lun-avaritia : une PR par dépôt. Niveau `standard`. *Show* : se prouve sur le laptop, sur des
 bases de démo. Chaque écran dit ce qui est (`design.md`, « Honnêteté ») :
 
@@ -162,6 +167,8 @@ bases de démo. Chaque écran dit ce qui est (`design.md`, « Honnêteté ») :
 Preuve : les démos de l'audit rejouées, une capture par écran corrigé.
 
 ### K. Le poste prêt pour la semaine
+
+Plan : [`2026-11-08-poste-pret.md`](2026-11-08-poste-pret.md) ; issues lun-acedia#57, lun-avaritia#22, lun-docs#106.
 
 lun-acedia et lun-avaritia (le code), lun-docs (la procédure). Niveau `standard`. *Show* pour le code, prouvé par ses
 tests ; la restauration se constate sur le desktop (§ 4).
@@ -201,6 +208,8 @@ dépôt. Niveau `standard`. *Show*.
 - La publication du paquet de vues d'Acedia retirée (Q11) ; le dossier reste tant que l'app l'importe.
 
 ### N. La barre de la personnalité
+
+Plan : [`2026-11-08-barre-personnalite.md`](2026-11-08-barre-personnalite.md) ; issue lun-anima#78.
 
 lun-anima, dépôt privé : les scènes viennent de la vie de CrOliX. lun-luxuria#39 porte la recette. Niveau `standard`.
 *Ask* : les scènes se jouent sur le desktop.
