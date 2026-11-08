@@ -83,20 +83,23 @@ port.
    - RVC, facultatif : son adresse et son gain.
 
    Une installation qui avait des lignes d'arguments les retrouve rangées dans ces champs.
-4. **whisper-server et RVC**, deux programmes à part. Pour que l'appli les lance, donner à chacun, dans sa carte :
-   - le chemin complet de son `.exe` (seul un `.exe` existant est accepté) ;
+4. **whisper-server et RVC**, deux programmes à part. Pour que l'appli les lance, dans la carte de chacun :
+   - « Choisir… » ouvre la boîte de dialogue de Windows : y choisir son `.exe`. L'appli le garde de son côté,
+     « Oublier » le retire ;
    - ses arguments, un par ligne, tels qu'on les taperait (modèle, port) ;
    - « Lancer … avec l'appli » pour qu'il parte au démarrage, ou « Lancer … » pour le lancer tout de suite.
 
    L'appli les lance avant le service voix, sans console, chacun dans son dossier, et ne lance rien si quelque chose
-   répond déjà à son adresse. Elle les arrête en quittant. Leurs sorties vont dans `whisper-server.log` et `rvc.log`,
-   près de `voix.log`, dans `%LOCALAPPDATA%\io.github.lun-ecosystem.luxuria\logs`. Sans chemin, on les lance soi-même
-   avant Luxuria : l'appli vérifie seulement qu'ils répondent.
+   répond déjà à son adresse. Elle les suit jusqu'à ce qu'ils répondent ; un programme qui s'arrête aussitôt est dit
+   avec son journal. Elle les arrête en quittant, et Windows les arrête aussi si elle plante. Leurs sorties vont dans
+   `whisper-server.log` et `rvc.log`, vidés à chaque lancement, près de `voix.log`, dans
+   `%LOCALAPPDATA%\io.github.lun-ecosystem.luxuria\logs`. Sans programme choisi, on les lance soi-même avant Luxuria :
+   l'appli vérifie seulement qu'ils répondent.
 5. **Ce que dit l'écran.** Chaque brique dit son état (répond, en démarrage, absente) et quoi faire quand elle manque.
    « Lancer ou vérifier » montre qu'il travaille, puis donne son résultat. Un champ changé alors que le service tourne
-   n'est pris qu'au prochain lancement : l'écran dit « Des réglages attendent », et « Relancer le service » le relance
-   aussitôt. Un service lancé à la main se relance à la main. La scène dit quand la voix ne répond pas, avec un lien vers
-   ce thème.
+   n'est pris qu'au prochain lancement : chaque carte dit ce qu'utilise le service en marche (« En marche : Locale »)
+   et ce qui attend, et « Relancer le service » le relance aussitôt. Un service lancé à la main se relance à la main.
+   La scène dit quand la voix ne répond pas, avec un lien vers ce thème.
 6. Réglages > Fenêtre : « Démarrer avec Windows » si Luxuria doit s'ouvrir avec la session (après l'étape 1). L'icône
    près de l'horloge arrive sous la flèche ^ de la barre des tâches : la glisser sur la barre pour la garder visible.
    Pleine et colorée : présente ; pleine et grise : en sourdine ; creuse : injoignable.
