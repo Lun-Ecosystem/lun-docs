@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luxuria, l'arrivée</title>
+<link rel="stylesheet" href="maquette.css">
+<style>
+  .seuil {
+    max-width: 640px; margin: 0 auto; padding: 72px 16px 48px;
+    display: flex; flex-direction: column; gap: 22px;
+  }
+  h1 { margin: 0; font: 400 44px/1.1 var(--serif); letter-spacing: .01em; text-align: center; }
+  .sous { margin: -10px 0 8px; text-align: center; color: var(--texte-2); font-size: 14.5px; }
+  .choix { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .carte {
+    text-align: left; font: inherit; color: inherit; cursor: pointer;
+    padding: 16px 16px 18px; border-radius: var(--r-3);
+    background: var(--surface-1); border: 1px solid var(--bordure);
+  }
+  .carte:hover { background: color-mix(in srgb, var(--surface-1), var(--ivoire) 3%); }
+  .carte[aria-checked='true'] { border-color: var(--accent-bord); box-shadow: inset 0 0 0 1px var(--accent-bord); background: color-mix(in srgb, var(--surface-1), var(--accent) 10%); }
+  .carte .t { display: flex; align-items: center; gap: 10px; font: 500 15px var(--sans); }
+  .carte .rond { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--bordure-forte); flex: none; }
+  .carte[aria-checked='true'] .rond { border-color: var(--accent-texte); box-shadow: inset 0 0 0 3.5px var(--surface-1); background: var(--accent-texte); }
+  .carte p { margin: 8px 0 0 26px; font-size: 13px; color: var(--texte-2); }
+  .carte .faut { margin-top: 10px; color: var(--texte-3); font-size: 12.5px; }
+  .champs {
+    display: flex; flex-direction: column; gap: 16px; padding: 18px;
+    border-radius: var(--r-3); background: var(--surface-1); border: 1px solid var(--bordure);
+  }
+  .code { display: flex; gap: 8px; }
+  .code span {
+    width: 44px; height: 52px; border-radius: var(--r-2); border: 1px solid var(--bordure-forte);
+    display: grid; place-items: center; font: 400 22px var(--sans); background: var(--fond);
+  }
+  .code span.vide { color: var(--texte-3); }
+  .pied { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .pied .bouton { min-width: 200px; height: 42px; font-size: 14px; }
+  [hidden] { display: none !important; }
+  @media (max-width: 560px) { .choix { grid-template-columns: 1fr; } h1 { font-size: 36px; } }
+</style>
+</head>
+<body>
+<div class="planche" role="group" aria-label="Variante de la maquette">
+  <b>01 · L'arrivée (#36)</b>
+  <button aria-pressed="true" data-v="seul">Seul</button>
+  <button aria-pressed="false" data-v="relie">Relié</button>
+  <button aria-pressed="false" data-v="manque">Seul, un champ manque</button>
+</div>
+
+<div class="ecran" data-monde="luxuria">
+  <main class="seuil">
+    <h1>Agent</h1>
+    <p class="sous">Un compagnon qui t’écoute et te répond à voix haute, sur ce poste.</p>
+
+    <div class="choix" role="radiogroup" aria-label="Ce qui le fait répondre">
+      <button class="carte" role="radio" aria-checked="true" data-mode="seul">
+        <span class="t"><span class="rond"></span>Seul</span>
+        <p>Il répond avec un modèle que tu choisis : un modèle local, ou un service en ligne avec sa clé.</p>
+        <p class="faut">Il faut : l’adresse du modèle et son nom. Le coût est celui du modèle.</p>
+      </button>
+      <button class="carte" role="radio" aria-checked="false" data-mode="relie">
+        <span class="t"><span class="rond"></span>Relié à un serveur</span>
+        <p>Un serveur pense pour lui : la mémoire et les décisions restent là-bas.</p>
+        <p class="faut">Il faut : l’adresse du serveur et un code d’appairage.</p>
+      </button>
+    </div>
+
+    <section class="champs" data-pour="seul">
+      <div>
+        <label class="lib" for="m-url">Adresse du modèle</label>
+        <input class="champ" id="m-url" value="http://127.0.0.1:11434/v1">
+        <p class="aide">Compatible OpenAI, souvent terminée par /v1. Ici, un modèle local sur ce poste.</p>
+      </div>
+      <div>
+        <label class="lib" for="m-nom">Nom du modèle</label>
+        <input class="champ" id="m-nom" placeholder="par exemple llama3.1:8b" value="llama3.1:8b">
+        <p class="manque" data-pour="manque" hidden>Il manque le nom du modèle.</p>
+      </div>
+      <div>
+        <label class="lib" for="m-cle">Clé <span style="color:var(--texte-3)">(facultative)</span></label>
+        <input class="champ" id="m-cle" type="password" placeholder="Seulement pour un service en ligne">
+        <p class="aide">Elle reste sur ce poste.</p>
+      </div>
+    </section>
+
+    <section class="champs" data-pour="relie" hidden>
+      <div>
+        <label class="lib" for="s-url">Adresse du serveur</label>
+        <input class="champ" id="s-url" value="http://127.0.0.1:8788">
+        <p class="aide">Sur ce poste, l’adresse par défaut convient. Pour un autre poste, son adresse en https.</p>
+      </div>
+      <div>
+        <p class="lib" id="c-lib">Code d’appairage</p>
+        <div class="code" aria-labelledby="c-lib">
+          <span>4</span><span>1</span><span>7</span><span class="vide">·</span><span class="vide">·</span><span class="vide">·</span>
+        </div>
+        <p class="aide">Le code s’affiche sur le serveur, là où il ajoute un appareil. Un seul usage, quelques minutes.</p>
+      </div>
+    </section>
+
+    <div class="pied">
+      <span class="bouton principal" role="button" id="entrer">Entrer</span>
+      <p class="aide" id="pied-aide">Tout se change ensuite dans ses réglages.</p>
+    </div>
+  </main>
+</div>
+
+<ul class="note">
+  <li>Deux cartes à la place du sélecteur : chacune dit ce qu’elle est, ce qu’il faut, ce que ça coûte.</li>
+  <li>Les champs de la carte choisie sont sur la page : plus besoin d’entrer « Seul » pour changer l’adresse du serveur.</li>
+  <li>Relié : le code complet fait entrer, comme aujourd’hui ; « Entrer » n’apparaît pas.</li>
+  <li>Dans le navigateur, l’adresse du serveur disparaît (le proxy de la page décide).</li>
+</ul>
+
+<script>
+  const set = (v) => {
+    document.querySelectorAll('.planche button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+    const relie = v === 'relie';
+    document.querySelectorAll('.carte').forEach((c) => c.setAttribute('aria-checked', String((c.dataset.mode === 'relie') === relie)));
+    document.querySelector('[data-pour="seul"]').hidden = relie;
+    document.querySelector('section[data-pour="relie"]').hidden = !relie;
+    document.querySelector('[data-pour="manque"]').hidden = v !== 'manque';
+    document.getElementById('m-nom').value = v === 'manque' ? '' : 'llama3.1:8b';
+    const entrer = document.getElementById('entrer');
+    entrer.hidden = relie;
+    entrer.setAttribute('aria-disabled', String(v === 'manque'));
+    document.getElementById('pied-aide').textContent = relie
+      ? 'Le code complet fait entrer.'
+      : 'Tout se change ensuite dans ses réglages.';
+  };
+  document.querySelectorAll('.planche button').forEach((b) => b.addEventListener('click', () => set(b.dataset.v)));
+  document.querySelectorAll('.carte').forEach((c) => c.addEventListener('click', () => set(c.dataset.mode)));
+</script>
+</body>
+</html>
