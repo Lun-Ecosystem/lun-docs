@@ -69,7 +69,22 @@ port.
 1. Construire Luxuria (`npm run tauri build -- --no-bundle` dans `lun-luxuria`) et lancer l'exe.
 2. Dans ses Réglages : « Relié à un serveur », adresse `http://127.0.0.1:8788`.
 3. Depuis `D:\lun-service\lun-anima` : `npm run pair-code`, puis taper le code dans Luxuria.
-4. Si Luxuria doit s'ouvrir avec la session : carte « La fenêtre », « Démarrer avec Windows ».
+4. Sa voix, dans Réglages > Voix, par des champs nommés (aucune ligne d'arguments à écrire) :
+   - « Lancer le service voix avec l'appli », et le dossier qui contient `service.py` ;
+   - Transcription : « Locale » (un modèle chargé dans le service) ou « whisper-server » et son adresse ;
+   - Sa voix : le chemin du fichier Piper `.onnx` ;
+   - RVC, facultatif : son adresse et son gain.
+
+   whisper-server et RVC sont des programmes à part : on les lance soi-même avant Luxuria, l'appli vérifie seulement
+   qu'ils répondent à leur adresse. Chaque brique dit son état (répond, en démarrage, absente) et quoi faire quand elle
+   manque. « Lancer ou vérifier » attend que rien ne manque, et la scène dit quand la voix ne répond pas, avec un lien
+   vers ce thème. Une installation qui avait des lignes d'arguments les retrouve rangées dans ces champs.
+
+5. Réglages > Fenêtre : « Démarrer avec Windows » si Luxuria doit s'ouvrir avec la session. L'icône près de l'horloge
+   arrive sous la flèche ^ de la barre des tâches : la glisser sur la barre pour la garder visible. Pleine et colorée :
+   présente ; pleine et grise : en sourdine ; creuse : injoignable.
+6. Quitter : Réglages, « Quitter l'appli » (ou le menu de l'icône). La présence se termine d'abord, le service voix
+   lancé par l'appli s'arrête avec elle.
 
 ## 6. Le téléphone
 
