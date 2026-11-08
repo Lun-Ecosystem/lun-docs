@@ -325,8 +325,7 @@ septième jour, et le briefing avec lui.
 - Tauri v2 passe des arguments au navigateur de la fenêtre (`additionalBrowserArgs`). Les donner remplace ceux que wry
   met par défaut (`--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection`), qu'il faut donc recopier ; deux
   fenêtres aux arguments différents demandent deux dossiers de données
-  ([configuration Tauri](https://v2.tauri.app/reference/config/),
-  [WebView2](https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions)).
+  ([configuration Tauri](https://v2.tauri.app/reference/config/), [WebView2][wv2]).
   WebView2 est un Chromium : `--autoplay-policy=no-user-gesture-required` y lève l'exigence d'un geste avant le son.
 - AIRI, compagnon open source, a quitté Tauri pour Electron après environ trois mois de lutte avec WebKit, Web Audio et
   les outils de développement ([journal d'octobre 2025](https://airi.moeru.ai/docs/en/blog/devlog-2025.10.20/), par
@@ -335,6 +334,8 @@ septième jour, et le briefing avec lui.
 **Ce que cela change.** Le seuil « Entrer » n'a de raison que dans un onglet. Chantier L : la fenêtre entre seule, la
 demande d'accès au micro se règle pour la seule origine de l'app, le seuil reste pour la page ouverte dans un
 navigateur. Preuve sur le desktop. Le cas AIRI se rouvre si Luxuria vise un jour macOS ou Linux.
+
+[wv2]: https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions
 
 ### 8.4 La latence de la voix
 
