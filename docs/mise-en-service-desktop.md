@@ -91,10 +91,11 @@ port.
 
    L'appli les lance avant le service voix, sans console, chacun dans son dossier, et ne lance rien si quelque chose
    répond déjà à son adresse. Elle les suit jusqu'à ce qu'ils répondent ; un programme qui s'arrête aussitôt est dit
-   avec son journal. Elle les arrête en quittant, et Windows les arrête aussi si elle plante. Leurs sorties vont dans
-   `whisper-server.log` et `rvc.log`, vidés à chaque lancement, près de `voix.log`, dans
-   `%LOCALAPPDATA%\io.github.lun-ecosystem.luxuria\logs`. Sans programme choisi, on les lance soi-même avant Luxuria :
-   l'appli vérifie seulement qu'ils répondent.
+   avec son journal. Elle les arrête en quittant, et Windows les arrête aussi si elle plante, avec ce qu'ils ont
+   ouvert eux-mêmes : si RVC ouvre un navigateur au lancement, couper cette ouverture dans ses arguments, sinon ce
+   navigateur se ferme avec Luxuria. Leurs sorties vont dans `whisper-server.log` et `rvc.log`, vidés à chaque
+   lancement, près de `voix.log`, dans `%LOCALAPPDATA%\io.github.lun-ecosystem.luxuria\logs`. Sans programme choisi,
+   on les lance soi-même avant Luxuria : l'appli vérifie seulement qu'ils répondent.
 5. **Ce que dit l'écran.** Chaque brique dit son état (répond, en démarrage, absente) et quoi faire quand elle manque.
    « Lancer ou vérifier » montre qu'il travaille, puis donne son résultat. Un champ changé alors que le service tourne
    n'est pris qu'au prochain lancement : chaque carte dit ce qu'utilise le service en marche (« En marche : Locale »)
