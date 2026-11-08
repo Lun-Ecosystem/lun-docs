@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luxuria, les réglages</title>
+<link rel="stylesheet" href="maquette.css">
+<style>
+  .ecran { display: grid; place-items: start center; padding: 40px 16px; background: rgba(5, 2, 4, .72); }
+  .panneau {
+    width: min(1040px, 100%); display: grid; grid-template-columns: 220px 1fr; min-height: 640px;
+    background: var(--fond); border: 1px solid var(--bordure); border-radius: var(--r-3); box-shadow: var(--ombre-2);
+    overflow: hidden;
+  }
+  nav { border-right: 1px solid var(--bordure); padding: 18px 10px; display: flex; flex-direction: column; gap: 2px; }
+  nav h2 { margin: 0 8px 14px; font: 400 22px var(--serif); }
+  nav .g { margin: 14px 8px 6px; font-size: 11.5px; color: var(--texte-3); letter-spacing: .04em; text-transform: uppercase; }
+  nav a {
+    display: block; padding: 7px 10px; border-radius: var(--r-1); color: var(--texte-2); text-decoration: none; font-size: 13.5px;
+  }
+  nav a[aria-current='page'] { background: var(--appui); color: var(--texte); box-shadow: inset 2px 0 0 var(--accent-texte); }
+  nav .bas { margin-top: auto; padding: 0 8px; }
+  .contenu { padding: 24px 32px 40px; overflow: auto; }
+  .contenu > div { max-width: 720px; display: flex; flex-direction: column; gap: 14px; }
+  .titre { display: flex; justify-content: space-between; align-items: baseline; }
+  h3 { margin: 0; font: 400 26px var(--serif); }
+  .titre span { font-size: 12.5px; color: var(--texte-3); }
+  .carte { border: 1px solid var(--bordure); border-radius: var(--r-3); background: var(--surface-1); }
+  .carte > header { padding: 14px 18px 4px; }
+  .carte > header b { font-weight: 500; font-size: 14px; }
+  .carte > header p { margin: 2px 0 0; font-size: 12.5px; color: var(--texte-3); }
+  .ligne {
+    display: grid; grid-template-columns: minmax(180px, 1fr) minmax(220px, 300px); gap: 16px; align-items: center;
+    padding: 12px 18px; border-top: 1px solid var(--bordure);
+  }
+  .carte > header + .ligne { border-top: none; }
+  .ligne .l { font-size: 13.5px; }
+  .ligne .h { font-size: 12px; color: var(--texte-3); margin-top: 2px; }
+  .ligne .v { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+  .ligne.haut { align-items: start; }
+  .ligne.pleine { grid-template-columns: 1fr; }
+  .seg { display: inline-flex; padding: 2px; border-radius: var(--r-2); border: 1px solid var(--bordure); background: var(--fond); }
+  .seg span { padding: 5px 11px; border-radius: 8px; font-size: 12.5px; color: var(--texte-2); }
+  .seg span[aria-checked='true'] { background: var(--surface-3); color: var(--texte); }
+  .curseur { width: 100%; display: flex; align-items: center; gap: 10px; }
+  .curseur .piste { flex: 1; height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--accent-texte) 80%, var(--surface-3) 80%); position: relative; }
+  .curseur .piste::after { content: ''; position: absolute; left: 80%; top: -6px; width: 16px; height: 16px; border-radius: 50%; background: var(--ivoire); translate: -50% 0; }
+  .curseur b { font-weight: 400; font-size: 12.5px; color: var(--texte-2); width: 36px; text-align: right; }
+  details { border: 1px solid var(--bordure); border-radius: var(--r-3); }
+  summary { padding: 12px 18px; cursor: pointer; font-size: 13.5px; color: var(--texte-2); list-style: none; display: flex; justify-content: space-between; }
+  summary::after { content: '▸'; color: var(--texte-3); }
+  details[open] summary::after { content: '▾'; }
+  details .ligne { background: var(--surface-1); }
+  .mini { width: 90px; text-align: right; }
+  .unite { font-size: 12.5px; color: var(--texte-3); }
+  .grise { opacity: .55; }
+  [hidden] { display: none !important; }
+  @media (max-width: 760px) {
+    .panneau { grid-template-columns: 1fr; }
+    nav { border-right: none; border-bottom: 1px solid var(--bordure); }
+    .ligne { grid-template-columns: 1fr; }
+    .ligne .v { justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="planche" role="group" aria-label="Variante de la maquette">
+  <b>03 · Les réglages (#38)</b>
+  <button aria-pressed="true" data-v="agent">L’agent, seul</button>
+  <button aria-pressed="false" data-v="agent-relie">L’agent, relié</button>
+  <button aria-pressed="false" data-v="ecoute">Écoute</button>
+  <button aria-pressed="false" data-v="ecoute-avance">Écoute, avancé ouvert</button>
+</div>
+
+<div class="ecran" data-monde="luxuria">
+  <div class="panneau">
+    <nav aria-label="Thèmes">
+      <h2>Réglages</h2>
+      <p class="g">Identité</p>
+      <a href="#" id="n-agent" aria-current="page">L’agent</a>
+      <a href="#">Corps</a>
+      <p class="g">La conversation</p>
+      <a href="#" id="n-ecoute">Écoute</a>
+      <a href="#">Voix</a>
+      <p class="g">Ce poste</p>
+      <a href="#">Fenêtre</a>
+      <div class="bas"><span class="bouton petit" style="width:100%">Quitter l’appli</span></div>
+    </nav>
+
+    <div class="contenu">
+      <!-- L'agent -->
+      <div id="t-agent">
+        <div class="titre"><h3>L’agent</h3><span>Agit tout de suite</span></div>
+        <section class="carte">
+          <div class="ligne">
+            <div><div class="l">Nom</div><div class="h">C’est aussi le mot qui l’appelle.</div></div>
+            <div class="v"><input class="champ" value="Agent"></div>
+          </div>
+          <div class="ligne pleine" id="ton">
+            <div><div class="l">Ton et contexte</div><div class="h" id="ton-aide">Son rôle, et ce qu’il faut savoir de toi. Relu à chaque réponse.</div></div>
+            <textarea class="champ" rows="8">Tu parles à voix haute : des phrases courtes, sans liste ni mise en forme.</textarea>
+          </div>
+          <div class="ligne">
+            <div><div class="l">Fonctionnement</div><div class="h">Changer relance l’appli.</div></div>
+            <div class="v"><span class="seg"><span aria-checked="true" id="f-seul">Seul</span><span aria-checked="false" id="f-relie">Relié à un serveur</span></span></div>
+          </div>
+        </section>
+        <details>
+          <summary>Réglages avancés : le modèle, la clé, le plafond</summary>
+          <div class="ligne"><div><div class="l">Adresse du modèle</div><div class="h">Compatible OpenAI, souvent terminée par /v1.</div></div><div class="v"><input class="champ" value="http://127.0.0.1:11434/v1"></div></div>
+          <div class="ligne"><div><div class="l">Nom du modèle</div></div><div class="v"><input class="champ" value="llama3.1:8b"></div></div>
+          <div class="ligne"><div><div class="l">Plafond par jour</div><div class="h">Au-delà, plus de réponse jusqu’au lendemain. 0 : sans plafond.</div></div><div class="v"><input class="champ mini" value="100 000"><span class="unite">jetons</span></div></div>
+        </details>
+      </div>
+
+      <!-- Écoute -->
+      <div id="t-ecoute" hidden>
+        <div class="titre"><h3>Écoute</h3><span>Agit tout de suite</span></div>
+        <section class="carte">
+          <header><b>Comment lui parler</b><p>Pour chaque mode d’affichage.</p></header>
+          <div class="ligne">
+            <div><div class="l">Sur la scène</div></div>
+            <div class="v"><span class="seg"><span aria-checked="true">Micro ouvert</span><span aria-checked="false">Touche</span><span aria-checked="false">Coupé</span></span></div>
+          </div>
+          <div class="ligne">
+            <div><div class="l">En petit mode</div><div class="h">Seules les phrases qui lui sont adressées partent.</div></div>
+            <div class="v"><span class="seg"><span aria-checked="true">Micro ouvert</span><span aria-checked="false">Touche</span><span aria-checked="false">Coupé</span></span></div>
+          </div>
+          <div class="ligne">
+            <div><div class="l">Touche à tenir</div></div>
+            <div class="v"><kbd style="font:500 12.5px var(--sans);padding:4px 10px;border:1px solid var(--bordure-forte);border-radius:6px;background:var(--surface-2)">F9</kbd><span class="bouton petit">Changer</span></div>
+          </div>
+          <div class="ligne">
+            <div><div class="l">Son nom l’appelle</div><div class="h">Son nom et les mots que tu ajoutes ; une transcription proche compte aussi.</div></div>
+            <div class="v"><span class="interrupteur on"></span></div>
+          </div>
+        </section>
+        <section class="carte">
+          <header><b>La pièce</b><p>Règle d’un coup la fin de phrase et le seuil du silence.</p></header>
+          <div class="ligne">
+            <div><div class="l">Autour de toi</div><div class="h" id="pre-aide">Valeurs conseillées pour une pièce sans bruit de fond.</div></div>
+            <div class="v"><span class="seg" id="preset"><span aria-checked="false">Pièce calme</span><span aria-checked="true">Normal</span><span aria-checked="false">Bruit autour</span></span></div>
+          </div>
+        </section>
+        <section class="carte">
+          <header><b>Sa voix</b></header>
+          <div class="ligne">
+            <div><div class="l">Volume</div></div>
+            <div class="v"><div class="curseur"><span class="piste"></span><b>80 %</b></div></div>
+          </div>
+        </section>
+        <details id="avance">
+          <summary>Réglages avancés : fin de phrase, interruption, applis ignorées, mesures</summary>
+          <div class="ligne"><div><div class="l">Silence de fin de phrase</div><div class="h">Conseillé : 0,5 s.</div></div><div class="v"><input class="champ mini" value="0,5"><span class="unite">s</span></div></div>
+          <div class="ligne"><div><div class="l">Répondre dès une courte pause</div><div class="h">La réponse préparée est retirée si tu continues. Chaque essai coûte un appel.</div></div><div class="v"><input class="champ mini" value="0,16"><span class="unite">s</span><span class="interrupteur on"></span></div></div>
+          <div class="ligne"><div><div class="l">Seuil du silence</div><div class="h">En dessous, le micro entend le silence. Conseillé : -50 dB.</div></div><div class="v"><input class="champ mini" value="-50"><span class="unite">dB</span></div></div>
+          <div class="ligne"><div><div class="l">Parole la plus courte</div><div class="h">Plus court, c’est un bruit.</div></div><div class="v"><input class="champ mini" value="0,25"><span class="unite">s</span></div></div>
+          <div class="ligne"><div><div class="l">L’écouter après sa phrase</div><div class="h">Sans dire son nom, pendant ce temps.</div></div><div class="v"><input class="champ mini" value="15"><span class="unite">s</span><span class="interrupteur on"></span></div></div>
+          <div class="ligne"><div><div class="l">L’interrompre à la voix</div></div><div class="v"><span class="seg"><span aria-checked="false">Doucement</span><span aria-checked="true">Tout de suite</span></span><span class="interrupteur on"></span></div></div>
+          <div class="ligne"><div><div class="l">Applis qui prennent le micro</div><div class="h">Une appli en appel le met en « occupé ». Celles-ci sont ignorées.</div></div><div class="v"><input class="champ" value="obs64.exe"></div></div>
+          <div class="ligne"><div><div class="l">Mesures de cette session</div><div class="h">Latence par tour, pour régler la fin de phrase.</div></div><div class="v"><span class="bouton petit">Voir</span></div></div>
+        </details>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ul class="note">
+  <li>Le courant d’abord ; l’avancé replié, toujours présent (rien n’est figé, spec Luxuria § 6.8).</li>
+  <li>Les préréglages de la pièce remplissent les valeurs avancées ; une valeur touchée à la main affiche « Personnalisé ». Valeurs à prendre sur le desktop.</li>
+  <li>Unités lisibles (secondes), volume en curseur, « Mesures » au bout de l’avancé.</li>
+  <li>Relié, le ton se décide sur le serveur : la zone se grise et le dit.</li>
+  <li>Grand écran : 220 px de thèmes, 720 px de contenu, texte de base à 14 px.</li>
+</ul>
+
+<script>
+  const set = (v) => {
+    document.querySelectorAll('.planche button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+    const ecoute = v.startsWith('ecoute');
+    document.getElementById('t-agent').hidden = ecoute;
+    document.getElementById('t-ecoute').hidden = !ecoute;
+    document.getElementById('n-agent').toggleAttribute('aria-current', !ecoute);
+    document.getElementById('n-ecoute').toggleAttribute('aria-current', ecoute);
+    if (!ecoute) document.getElementById('n-agent').setAttribute('aria-current', 'page');
+    else document.getElementById('n-ecoute').setAttribute('aria-current', 'page');
+    const relie = v === 'agent-relie';
+    document.getElementById('ton').classList.toggle('grise', relie);
+    document.getElementById('ton-aide').textContent = relie
+      ? 'Relié, c’est le serveur qui décide de son ton. Ce texte ne sert qu’en fonctionnement seul.'
+      : 'Son rôle, et ce qu’il faut savoir de toi. Relu à chaque réponse.';
+    document.getElementById('f-seul').setAttribute('aria-checked', String(!relie));
+    document.getElementById('f-relie').setAttribute('aria-checked', String(relie));
+    document.getElementById('avance').open = v === 'ecoute-avance';
+  };
+  document.querySelectorAll('.planche button').forEach((b) => b.addEventListener('click', () => set(b.dataset.v)));
+</script>
+</body>
+</html>

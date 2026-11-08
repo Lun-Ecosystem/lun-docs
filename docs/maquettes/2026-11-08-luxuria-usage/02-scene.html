@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luxuria, la scène vide</title>
+<link rel="stylesheet" href="maquette.css">
+<style>
+  .ecran { display: flex; }
+  .plateau { flex: 1; position: relative; min-height: calc(100vh - 46px); }
+  .halo {
+    position: absolute; left: 50%; top: 44%; width: 220px; height: 220px; translate: -50% -50%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(231,169,203,.22), rgba(138,30,90,.10) 48%, transparent 70%);
+  }
+  .consigne {
+    position: absolute; left: 50%; top: calc(44% + 150px); translate: -50% 0; width: min(520px, 90%);
+    text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .consigne p { margin: 0; font: 400 22px/1.35 var(--serif); color: var(--texte); }
+  .consigne small { font-size: 13px; color: var(--texte-3); }
+  kbd {
+    font: 500 12px var(--sans); padding: 2px 7px; border-radius: 5px;
+    border: 1px solid var(--bordure-forte); background: var(--surface-2); color: var(--texte-2);
+  }
+  .etat { position: absolute; top: 16px; left: 16px; }
+  .controles { position: absolute; top: 12px; right: 12px; display: flex; gap: 4px; }
+  .ib {
+    width: 36px; height: 36px; border-radius: var(--r-2); display: grid; place-items: center;
+    color: var(--texte-2); border: 1px solid transparent; background: none; position: relative;
+  }
+  .ib:hover { background: var(--survol); border-color: var(--bordure); color: var(--texte); }
+  .ib svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+  .ib.actif { color: var(--accent-texte); background: var(--accent-doux); border-color: var(--accent-bord); }
+  .ib .bulle {
+    position: absolute; top: 42px; right: 0; white-space: nowrap; font-size: 12px; color: var(--texte-2);
+    background: var(--surface-2); border: 1px solid var(--bordure); border-radius: var(--r-1); padding: 4px 8px;
+    display: none;
+  }
+  .ib:hover .bulle, .ib.montre .bulle { display: block; }
+  .fil {
+    width: 380px; border-left: 1px solid var(--bordure); background: color-mix(in srgb, var(--scene), var(--encre-2) 60%);
+    display: flex; flex-direction: column;
+  }
+  .fil header { height: 60px; display: flex; align-items: center; padding: 0 18px; border-bottom: 1px solid var(--bordure); }
+  .fil h2 { margin: 0; font: 400 20px var(--serif); }
+  .fil .vide { flex: 1; display: grid; place-content: center; text-align: center; padding: 24px 32px; gap: 6px; }
+  .fil .vide b { font-weight: 500; color: var(--texte-2); }
+  .fil .vide span { font-size: 12.5px; color: var(--texte-3); }
+  .fil footer { padding: 12px; border-top: 1px solid var(--bordure); display: flex; gap: 8px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="planche" role="group" aria-label="Variante de la maquette">
+  <b>02 · La scène vide (#37)</b>
+  <button aria-pressed="true" data-v="ouvert">Micro ouvert</button>
+  <button aria-pressed="false" data-v="touche">Touche</button>
+  <button aria-pressed="false" data-v="coupe">Micro coupé</button>
+  <button aria-pressed="false" data-v="fil">Fil ouvert, vide</button>
+</div>
+
+<div class="ecran" data-monde="luxuria">
+  <div class="plateau">
+    <div class="halo"></div>
+    <div class="etat"><span class="pastille accent" id="etat">Disponible</span></div>
+    <div class="controles" id="controles">
+      <span class="ib" id="b-sourdine"><svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><span class="bulle">Mettre en sourdine · Ctrl+Maj+M</span></span>
+      <span class="ib" id="b-micro"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="bulle">Couper le micro</span></span>
+      <span class="ib" id="b-fil"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span class="bulle">Le fil</span></span>
+      <span class="ib" id="b-petit"><svg viewBox="0 0 24 24"><path d="M14 10h6V4M20 4l-6 6M10 14H4v6M4 20l6-6"/></svg><span class="bulle">Petit mode · Ctrl+Maj+L (fenêtre seulement)</span></span>
+      <span class="ib"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg><span class="bulle">Réglages</span></span>
+    </div>
+    <div class="consigne" id="consigne">
+      <p id="c-texte">Parle-lui : dis son nom, ou parle juste après sa réponse.</p>
+      <small id="c-aide">Tu peux aussi lui écrire, depuis le fil.</small>
+      <span class="bouton petit" id="c-bouton" hidden>Rallumer le micro</span>
+    </div>
+  </div>
+  <aside class="fil" id="fil" hidden>
+    <header><h2>Le fil</h2></header>
+    <div class="vide">
+      <b>Rien encore aujourd’hui.</b>
+      <span>Ce que vous vous dites s’écrit ici, à la voix comme à l’écrit.</span>
+    </div>
+    <footer><input class="champ" placeholder="Lui écrire"><span class="bouton petit principal">Envoyer</span></footer>
+  </aside>
+</div>
+
+<ul class="note">
+  <li>La consigne suit la façon de parler réglée, et s’efface au premier tour de la session.</li>
+  <li>L’état passe de l’étiquette minuscule à une pastille lisible ; les contrôles ont 36 px de cible et une infobulle avec leur raccourci.</li>
+  <li>Le fil ouvert décale la scène : les contrôles ne passent plus sur son en-tête.</li>
+  <li>Dans le navigateur, le bouton du petit mode n’existe pas.</li>
+</ul>
+
+<script>
+  const V = {
+    ouvert: ['Disponible', 'accent', 'Parle-lui : dis son nom, ou parle juste après sa réponse.', 'Tu peux aussi lui écrire, depuis le fil.', false],
+    touche: ['Disponible', 'accent', 'Tiens <kbd>F9</kbd> pour lui parler.', 'Lâche la touche quand tu as fini.', false],
+    coupe: ['Micro coupé', 'attention', 'Micro coupé. Écris-lui, ou rallume le micro.', '', true],
+  };
+  const set = (v) => {
+    document.querySelectorAll('.planche button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+    const fil = v === 'fil';
+    const [etat, ton, texte, aide, bouton] = V[fil ? 'ouvert' : v];
+    const e = document.getElementById('etat');
+    e.textContent = etat; e.className = 'pastille ' + ton;
+    document.getElementById('c-texte').innerHTML = texte;
+    document.getElementById('c-aide').textContent = aide;
+    document.getElementById('c-aide').hidden = !aide;
+    document.getElementById('c-bouton').hidden = !bouton;
+    document.getElementById('b-micro').classList.toggle('actif', v === 'coupe');
+    document.getElementById('b-fil').classList.toggle('actif', fil);
+    document.getElementById('fil').hidden = !fil;
+    document.getElementById('consigne').hidden = fil;
+  };
+  document.querySelectorAll('.planche button').forEach((b) => b.addEventListener('click', () => set(b.dataset.v)));
+</script>
+</body>
+</html>

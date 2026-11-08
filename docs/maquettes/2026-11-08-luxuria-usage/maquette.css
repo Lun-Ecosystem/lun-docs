@@ -1,0 +1,74 @@
+/* Maquettes du 08/11 : jetons de lun-docs (design/tokens.css), Luxuria en accent seulement. */
+@import url('../../../design/tokens.css');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap');
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--fond);
+  color: var(--texte);
+  font: 400 14px/1.5 var(--sans);
+  color-scheme: dark;
+}
+
+/* Le bandeau de la maquette elle-même : hors de l'écran dessiné. */
+.planche {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  padding: 10px 16px; border-bottom: 1px solid var(--bordure);
+  font-size: 12.5px; color: var(--texte-3);
+}
+.planche b { color: var(--texte-2); font-weight: 500; margin-right: 8px; }
+.planche button {
+  font: inherit; color: var(--texte-2); background: none; cursor: pointer;
+  border: 1px solid var(--bordure); border-radius: var(--r-rond); padding: 3px 10px;
+}
+.planche button[aria-pressed='true'] { border-color: var(--bordure-forte); color: var(--texte); background: var(--appui); }
+.note {
+  max-width: 760px; margin: 14px auto 32px; padding: 0 16px;
+  font-size: 12.5px; color: var(--texte-3);
+}
+.note li { margin: 4px 0; }
+
+/* L'écran dessiné */
+.ecran { min-height: calc(100vh - 46px); background: var(--scene); position: relative; overflow: hidden; }
+
+/* Le kit, en simplifié */
+.bouton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 36px; padding: 0 16px; border-radius: var(--r-2);
+  font: 500 13.5px var(--sans); color: var(--texte); cursor: pointer;
+  border: 1px solid var(--bordure-forte); background: var(--surface-2);
+}
+.bouton.principal { background: var(--accent); border-color: var(--accent-bord); }
+.bouton.principal:hover { background: var(--accent-survol); }
+.bouton.petit { height: 30px; padding: 0 12px; font-size: 12.5px; }
+.bouton[aria-disabled='true'] { opacity: .45; cursor: not-allowed; }
+.champ {
+  width: 100%; height: 36px; padding: 0 12px; border-radius: var(--r-1);
+  border: 1px solid var(--bordure-forte); background: var(--surface-1);
+  font: 400 13.5px var(--sans); color: var(--texte);
+}
+.champ::placeholder { color: var(--texte-3); }
+textarea.champ { height: auto; padding: 10px 12px; line-height: 1.5; resize: vertical; }
+label.lib { display: block; font-size: 12.5px; color: var(--texte-2); margin: 0 0 6px; }
+.aide { font-size: 12px; color: var(--texte-3); margin: 6px 0 0; }
+.manque { font-size: 12.5px; color: var(--attention); margin: 8px 0 0; }
+.pastille {
+  display: inline-flex; align-items: center; gap: 7px; height: 26px; padding: 0 11px;
+  border-radius: var(--r-rond); font-size: 12.5px; color: var(--texte-2);
+  background: rgba(16, 4, 9, .6); border: 1px solid var(--bordure);
+}
+.pastille::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--texte-3); }
+.pastille.ok::before { background: var(--ok); }
+.pastille.attention::before { background: var(--attention); }
+.pastille.accent::before { background: var(--accent-texte); }
+.interrupteur {
+  width: 34px; height: 20px; border-radius: var(--r-rond); background: var(--surface-3);
+  border: 1px solid var(--bordure-forte); position: relative; flex: none;
+}
+.interrupteur::after {
+  content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--texte-2);
+}
+.interrupteur.on { background: var(--accent); border-color: var(--accent-bord); }
+.interrupteur.on::after { left: 16px; background: var(--ivoire); }
