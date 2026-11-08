@@ -69,7 +69,7 @@ partie vide, son relevé est fait (lun-luxuria#9).
 |---|---|---|---|
 | C1 | Test instable « Logged once, not at each retry » (lun-anima#7, trivial) | lun-anima | F ; fermé |
 | C2 | Une nouvelle liaison du core remplace l'ancienne au lieu d'en ajouter une (lun-acedia#30) | lun-acedia | après le MVP (audit, Q3), avec l'appairage par code affiché (§ D) |
-| C3 | Le lien du site rend une 404 dans les README et le profil de l'organisation (veille C14) : le retirer tant que l'hébergement du site n'est pas tranché (lun-docs#21) **[choix Claude]** | lun-docs, `.github`, lun-acedia, lun-avaritia, lun-luxuria | I pour lun-docs et `.github` ; J, K ou M pour les autres |
+| C3 | Le lien du site rend une 404 dans les README et le profil de l'organisation (veille C14) : le retirer tant que l'hébergement du site n'est pas tranché (lun-docs#21) ; là où `structure-projet.md` exige le badge « écosystème » (README d'un dépôt public), le pointer vers l'organisation **[choix Claude]** | lun-docs, `.github`, lun-acedia, lun-avaritia, lun-luxuria | I pour lun-docs et `.github` ; J, K ou M pour les autres |
 
 ### D. Après le MVP
 

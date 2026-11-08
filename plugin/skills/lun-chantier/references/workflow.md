@@ -36,7 +36,9 @@ Le niveau est fixé au cadrage. Il dit le soin attendu, pas le modèle qui code.
 | `niveau:trivial` | Renommage, config, doc, correction évidente | Rien |
 | `niveau:standard` | Fonctionnalité qui suit un modèle existant | Un test par comportement changé |
 | `niveau:critique` | Contrat core/satellites, sécurité, OAuth Google, mémoire, refonte transverse, bug difficile | Les cas limites testés, une preuve bout en bout décrite dans la PR |
-| `niveau:exceptionnel` | Échec répété, ou décision d'architecture pour tout l'écosystème | Fable, **sur demande explicite de CrOliX uniquement** |
+| `niveau:exceptionnel` | Échec répété, ou décision d'architecture pour tout l'écosystème | Ce que demande `critique` |
+
+Aucun niveau ne choisit le modèle : Fable ne code que **sur demande explicite de CrOliX**.
 
 Rôles :
 

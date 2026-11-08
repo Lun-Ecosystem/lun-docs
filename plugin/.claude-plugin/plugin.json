@@ -1,7 +1,7 @@
 {
   "name": "lun",
   "version": "0.1.0",
-  "description": "Méthode de travail, skills lun-*, agents de relecture et de recherche, garde-fous de l'écosystème Lun'.",
+  "description": "Méthode, skills lun-*, agents de relecture et garde-fous de l'écosystème Lun'.",
   "author": { "name": "CrOliX-AltF4" },
   "homepage": "https://github.com/Lun-Ecosystem/lun-docs",
   "repository": "https://github.com/Lun-Ecosystem/lun-docs",

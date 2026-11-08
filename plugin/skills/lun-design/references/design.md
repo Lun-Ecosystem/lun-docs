@@ -108,10 +108,10 @@ avant d’être reprise ailleurs.
 - **Champs** : texte (libellé au-dessus, aide en dessous, erreur à la place de l’aide), liste
   déroulante, curseur avec sa valeur, date, bascule, case, commande segmentée, saisie de code (une
   case par chiffre, collage accepté).
-- **L’IA** : pastille de proposition, carte de proposition complète (à verser au kit), marque « rangé seul », ton IA
-  dédié (violet).
-- **Calques** : menus avec filtre et raccourcis (à verser au kit), bulle de détail, info-bulle, fenêtre de dialogue et
-  de confirmation, toast avec annulation, bannière d’état.
+- **L’IA** : pastille de proposition (à verser au kit), carte de proposition complète (à verser au
+  kit), marque « rangé seul » (à verser au kit), ton IA dédié (violet).
+- **Calques** : menus avec filtre et raccourcis (à verser au kit), bulle de détail (à verser au kit),
+  info-bulle, fenêtre de dialogue et de confirmation, toast avec annulation, bannière d’état.
 - **Structures** : rangée de liste avec actions au survol, groupe par jour (à verser au kit), carte de réglages faite
   de lignes, état vide qui explique, squelette de chargement, pastilles de filtre, badge d’état,
   touche de clavier.

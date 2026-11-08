@@ -8,7 +8,7 @@ label "inbox"               "8A9BAE" "Observation à trier (tri hebdomadaire)"
 label "niveau:trivial"      "C8C0B0" "Renommage, config, doc, correction évidente"
 label "niveau:standard"     "3A6080" "Fonctionnalité qui suit un modèle existant, avec tests"
 label "niveau:critique"     "7A1818" "Contrat, sécurité, OAuth, mémoire, refonte transverse, bug difficile"
-label "niveau:exceptionnel" "5A1880" "Sur demande explicite de CrOliX"
+label "niveau:exceptionnel" "5A1880" "Échec répété, ou décision d'architecture pour tout l'écosystème"
 
 # Public repositories: protect main with the ecosystem ruleset (PR, CI "checks", squash only,
 # no deletion, no force push). Private repositories on the free plan cannot use rulesets.

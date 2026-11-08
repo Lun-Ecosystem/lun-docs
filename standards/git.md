@@ -44,8 +44,8 @@
 - Le gabarit est obligatoire : issue liée, critères de fin cochés, **preuves** (sortie des tests,
   capture, commande de démo), niveau de la tâche.
 - La CI doit être verte.
-- Fusion en **squash** : un commit propre par PR sur `main`. C'est la seule fusion permise dans les
-  réglages des dépôts.
+- Fusion en **squash** : un commit propre par PR sur `main`. Les réglages de chaque dépôt n'en permettent
+  pas d'autre.
 - **Seul CrOliX merge.** L'agent ouvre la PR, ne la merge jamais, et n'active pas l'auto-merge.
 
 ## Protection de `main`

@@ -36,7 +36,8 @@ export function checkRegistry(yamlText) {
   for (const p of projects) {
     const name = p.id ?? '(no id)';
     for (const key of REQUIRED) if (!p[key]) errors.push(`registry: ${name}: missing ${key}`);
-    if (p.id && !/^[a-z0-9]+$/.test(p.id)) errors.push(`registry: ${name}: id must be lowercase letters and digits only`);
+    if (p.id && !/^[a-z0-9]+$/.test(p.id))
+      errors.push(`registry: ${name}: id must be lowercase letters and digits only`);
     for (const [key, allowed] of Object.entries(ENUMS)) {
       if (p[key] && !allowed.includes(p[key])) errors.push(`registry: ${name}: ${key} must be one of ${allowed.join(', ')}`);
     }

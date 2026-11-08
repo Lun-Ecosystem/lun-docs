@@ -17,6 +17,7 @@ Le nord est [`vision.md`](../vision.md).
 | Plan d'un chantier | `lun-docs/docs/plans/`, lié depuis l'issue et la PR du chantier |
 | Avancement | La feuille de route du MVP (`lun-docs/docs/plans/2026-11-07-feuille-de-route-mvp.md`) ; les issues gardent étiquettes et niveaux |
 | Doc produit | `docs/` du projet : ce qui **est**, jamais l'historique |
+| Ce qui tourne (dépôts, postes, ports, liaisons) | `lun-docs/docs/architecture-actuelle.md`, mise à jour par la PR qui le change |
 
 Un seul fichier d'avancement, la feuille de route ; pas d'ADR pour une observation.
 

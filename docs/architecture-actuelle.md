@@ -23,11 +23,13 @@ Le [registre](../registry.yaml) fait foi pour la liste, le rôle et l'état.
 
 ## Les postes
 
-- **Le laptop** : le local. On y code et on y teste, avec le compte Google de test. Aucun service n'y reste lancé.
-- **Le desktop** : la prod du rodage, avec le vrai compte Google. Le core, Acedia et Avaritia y tournent en tâches
-  lancées au démarrage de Windows ([mise en service](mise-en-service-desktop.md)) ; Luxuria et son service voix s'y
-  ouvrent le soir. Les recettes *Ask* s'y jouent dans une copie de travail à part, sur des bases de recette.
-- **Le téléphone** : l'app du core, installée depuis le navigateur, jointe en HTTPS par le réseau privé ; les push.
+- **Le laptop** : le local. On y code et on y teste, avec le compte Google de test ; rien n'y sert à l'usage.
+- **Le desktop** : la prod du rodage. Le core, Acedia et Avaritia y tournent en tâches lancées au démarrage de
+  Windows ([mise en service](mise-en-service-desktop.md)) ; Luxuria et son service voix s'y ouvrent le soir. Le
+  vrai compte Google y entre avec l'app Google passée en Production (B10). Les recettes *Ask* s'y jouent sur des
+  bases de recette, jamais sur celles du rodage.
+- **Le téléphone** : l'app du core, installée depuis le navigateur et jointe en HTTPS par le réseau privé, pour
+  les push ; à prouver de bout en bout (B11).
 - **Le NAS** : après le rodage. Rien n'y tourne encore.
 
 ## Les adresses
@@ -51,16 +53,18 @@ Une origine par app, la même partout.
 - **Le core et Luxuria** : Luxuria se relie au core par un code d'appairage et écoute ce qu'il doit dire. Relié, il ne
   décide de rien.
 - **Le core et ses clients** : l'app, au bureau comme au téléphone, s'appaire au core par un code.
-- **Les copies** : la base du core est copiée chaque nuit, sept copies gardées. Celles d'Acedia et d'Avaritia viennent
+- **Les copies** : la base du core est copiée avant chaque veille de la nuit, sept copies gardées ; une veille
+  en pause n'en fait pas. Celles d'Acedia et d'Avaritia viennent
   avec le chantier K.
 
 ## Le soir : quelle fenêtre
 
-- **L'entrée : Luxuria**, sur le deuxième écran, ou en petit mode dans un coin quand un jeu le prend. On y parle à
-  Natsume ; sa transcription et un petit champ d'écriture restent en second plan
-  ([spec, être présent](specs/2026-11-05-natsume-etre-presence-design.md), § 1 et § 2).
+- **L'entrée : Luxuria**, sur le deuxième écran, ou en petit mode dans un coin quand un jeu le prend
+  ([spec Luxuria](specs/2026-11-06-lun-luxuria-design.md), § 4). On y parle à Natsume ; sa transcription et un
+  petit champ d'écriture restent en second plan
+  ([spec, être présent](specs/2026-11-05-natsume-etre-presence-design.md), § 1 et § 3).
 - **Le pilotage : l'app du core**, au bureau comme au téléphone : les cartes et leurs boutons, le Journal, les
-  réglages. Luxuria n'a aucune notion de carte ([spec Luxuria](specs/2026-11-06-lun-luxuria-design.md)).
-- **En secours : les fronts d'Acedia et d'Avaritia** **[choix Claude, à valider]**, pour agir à la source (une
-  règle de tri, une fiche) ou quand le core est arrêté : chaque satellite fonctionne seul (spec écosystème, § 3,
-  principe 1).
+  réglages. Luxuria n'a aucune notion de carte (spec Luxuria, § 6).
+- **À la source : les fronts d'Acedia et d'Avaritia**, ouverts depuis l'app du core ou directement, pour agir là
+  où vit la donnée (une règle de tri, une fiche). Ce sont aussi les fenêtres de secours quand le core est arrêté :
+  chaque satellite fonctionne seul ([`contrat-satellite.md`](../standards/contrat-satellite.md), « Fronts »).

@@ -31,8 +31,8 @@ Luxuria `127.0.0.1:5180`.
 
 - Il suit `main`, avec le vrai compte Google ; sa mise en service et ses mises à jour sont dans
   [`mise-en-service-desktop.md`](../docs/mise-en-service-desktop.md).
-- Une PR *Ask* ([`git.md`](git.md)) s'y essaie dans une copie de travail à part, sur des bases de
-  recette : les bases du rodage ne servent jamais à un essai.
+- Une PR *Ask* ([`git.md`](git.md)) s'y essaie sur une base de recette, jamais sur celles du rodage ;
+  sa PR dit comment (service arrêté ou non, port, origine).
 
 ## Prod ensuite : le NAS
 

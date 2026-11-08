@@ -21,7 +21,7 @@
 | Outil | Ce qu'on en attend | Quand |
 |---|---|---|
 | **Context7** (documentation à jour des bibliothèques) | Éviter que l'agent invente des API obsolètes | Au choix de la stack (étape 2) |
-| **Caveman** | Moins de tokens dans les rapports des sous-agents et les fichiers mémoire. Jamais sur ce qui est destiné à CrOliX | Pendant les deux semaines de mesure |
+| **Caveman** | Moins de tokens dans les rapports des sous-agents et les fichiers mémoire. Jamais sur ce qui est destiné à CrOliX | Sans date : la mesure de consommation est retirée (lun-docs#8) |
 | **web-design-guidelines** (vercel-labs/agent-skills) | Relecture accessibilité et ergonomie des écrans, en complément de `frontend-design` et `lun-design` ; à écarter s'il contredit la DA | Pendant le recadrage front, sur un ou deux écrans |
 | **Revue de PR par l'API Claude en CI** | Une relecture automatique de chaque PR | À la CI du premier projet de l'étape 2 |
 
