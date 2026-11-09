@@ -52,8 +52,12 @@ Tout le reste (méthode, git, design) vient du plugin et de lun-docs.
 
 ## Langues
 
-- Code, noms techniques, commits : **anglais**.
-- Docs, issues, PR, échanges avec CrOliX : **français**.
+- Ce qui entre dans git et le code : **anglais**. Le code, ses noms et ses commentaires, les tests, les commits, et
+  le titre d'une PR, dont le squash fait le commit de `main`.
+- Ce qu'une personne lit : **français**. Les docs, les README (celui de l'organisation compris), les issues, le corps
+  d'une PR, les textes des écrans et les échanges avec CrOliX.
+- Deux exceptions, par choix : le site, bilingue, et les devises des projets, en anglais
+  ([`design.md`](design.md), « Ton des textes »).
 
 ## Doc et code ensemble
 

@@ -20,7 +20,8 @@ branche : la PR se met à jour.
 1. Barrières locales vertes (format, lint, typage, tests) : lance-les et lis la sortie.
 2. `git push -u origin <branche>` (jamais `main`).
 3. Premier push du chantier : `gh pr create --draft` avec le gabarit du dépôt (issue liée,
-   `Closes #n`, niveau).
+   `Closes #n`, niveau). Le titre en Conventional Commits, en anglais, car le squash en fait le
+   commit de `main` ; le corps en français.
 4. `gh pr checks --watch` : la CI doit être verte.
 5. Critères de fin prouvés : gabarit complété (critères cochés, **preuves** : sortie des tests,
    capture, commande de démo). *Show* : `gh pr ready`, puis dis à CrOliX que la PR est prête, avec son
