@@ -54,8 +54,8 @@ Une origine par app, la même partout.
   décide de rien.
 - **Le core et ses clients** : l'app, au bureau comme au téléphone, s'appaire au core par un code.
 - **Les copies** : la base du core est copiée avant chaque veille de la nuit, sept copies gardées ; une veille
-  en pause n'en fait pas. Celles d'Acedia et d'Avaritia viennent
-  avec le chantier K.
+  en pause n'en fait pas. Acedia et Avaritia copient chacune la leur une fois par jour, même en pause, dans
+  `data\backups\` à côté de leur base, sept gardées (chantier K).
 
 ## Le soir : quelle fenêtre
 

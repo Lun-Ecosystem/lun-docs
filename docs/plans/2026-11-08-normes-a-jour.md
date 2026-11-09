@@ -8,7 +8,7 @@ relit et fusionne, à quoi ressemble l'écosystème aujourd'hui.
 **Source :** [audit du 08/11](2026-11-08-audit-ecosysteme.md), § 3.1 et § 6 ; décisions Q1, Q7, Q8, Q9 et Q12 ;
 [feuille de route](2026-11-07-feuille-de-route-mvp.md), chantier I.
 
-**Livré :** lun-docs#108 et Lun-Ecosystem/.github#3, le 09/11 ; le Project fermé le même jour. Reste vide : le
+**Livré :** lun-docs#108 et Lun-Ecosystem/.github#3 ; le Project fermé le 09/11. Reste vide : le
 graphe global, qui se met à jour quand les copies principales des dépôts suivent `main`.
 
 **Cadre :** aucune modification avant la validation de ce plan par CrOliX. Niveau `trivial`, *Show* : la PR passe

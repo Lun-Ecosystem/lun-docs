@@ -161,21 +161,41 @@ jour manque. Un poste éteint la nuit se rattrape donc à son démarrage.
 
 ### Restaurer une copie
 
-Une copie remet une base au jour où elle a été faite : tout ce qui a été écrit depuis est perdu, y compris les appareils
-reliés, les liaisons et les abonnements aux notifications pris entre-temps. Pour une base, dans un PowerShell
-administrateur ouvert dans le dossier de sa base (`data\` par défaut) :
+Une copie remet une base au jour où elle a été faite : tout ce qui a été écrit depuis en est absent, y compris les
+appareils reliés, les liaisons et les abonnements aux notifications pris entre-temps. Pour une base, dans un PowerShell
+administrateur. Les commandes sont celles d'Acedia ; pour le core ou Avaritia, remplacer `lun-acedia`, `acedia`,
+`'Lun Acedia'` et 8787 par `lun-anima`, `anima`, `'Lun core'` et 8788, ou par `lun-avaritia`, `avaritia`,
+`'Lun Avaritia'` et 8789.
 
-1. Arrêter son serveur : `Stop-ScheduledTask 'Lun Acedia'` (ou `'Lun core'`, `'Lun Avaritia'`). Vérifier que son port
-   n'écoute plus : `Get-NetTCPConnection -LocalPort 8787 -State Listen -ErrorAction Ignore` ne rend rien (8788 pour le
-   core, 8789 pour Avaritia). S'il rend une ligne, le serveur a survécu à sa tâche :
-   `Stop-Process -Id (Get-NetTCPConnection -LocalPort 8787 -State Listen).OwningProcess`.
-2. Mettre la base de côté avec ses fichiers `-wal` et `-shm` s'ils existent, sans en supprimer aucun : `acedia.db`,
-   `acedia.db-wal` et `acedia.db-shm` vont ensemble, sous leurs noms, dans un dossier à part
-   (`data\avant-restauration\`, à créer). Le `-wal` peut garder ce qui a été écrit depuis le dernier point de
-   contrôle : sans lui, la base mise de côté perdrait ses dernières heures ; laissé à côté de la copie, il s'y
-   mêlerait.
-3. Copier, et non déplacer, la copie choisie de `backups\` en `acedia.db`. Puis relancer :
-   `Start-ScheduledTask 'Lun Acedia'`.
+1. Arrêter son serveur, puis vérifier que son port n'écoute plus :
+
+   ```powershell
+   Stop-ScheduledTask 'Lun Acedia'
+   Get-NetTCPConnection -LocalPort 8787 -State Listen -ErrorAction Ignore
+   ```
+
+   La seconde commande ne doit rien rendre. Si elle rend une ligne, le serveur a survécu à sa tâche :
+   `Stop-Process -Id (Get-NetTCPConnection -LocalPort 8787 -State Listen).OwningProcess`, puis vérifier de nouveau.
+2. Mettre la base de côté avec ses fichiers `-wal` et `-shm`, dans un dossier daté créé d'abord. Rien ne se supprime :
+   le `-wal` peut garder ses dernières heures, et, laissé à côté de la copie, SQLite le rejouerait sur elle sans rien
+   dire.
+
+   ```powershell
+   cd D:\lun-service\lun-acedia\data
+   $cote = "avant-restauration-$(Get-Date -Format 'yyyy-MM-dd-HHmm')"
+   New-Item -ItemType Directory $cote
+   Get-ChildItem acedia.db* | Move-Item -Destination $cote
+   Get-ChildItem acedia.db*
+   ```
+
+   La dernière commande ne doit rien rendre : si elle rend un fichier, s'arrêter là.
+3. Copier, et non déplacer, la copie choisie, puis relancer :
+
+   ```powershell
+   Copy-Item backups\acedia-AAAA-MM-JJ.db acedia.db
+   Start-ScheduledTask 'Lun Acedia'
+   ```
+
 4. Pour Acedia ou Avaritia, le relier de nouveau au core, même s'il paraît relié. La base restaurée reprend la
    numérotation de ses événements au jour de la copie, alors que le core ne demande que ceux qui suivent le dernier
    reçu : sans une nouvelle liaison, qui remet ce compte à zéro, urgences, alertes et entrées du Journal n'arrivent
@@ -185,16 +205,36 @@ administrateur ouvert dans le dossier de sa base (`data\` par défaut) :
    Avaritia, puis le code que donne le satellite, dans Réglages › Appareils et applications › Relier un appareil, ou
    par `npm run pair-code` dans son dossier de service si plus aucun appareil n'y est relié. La commande du § 4,
    `npm run connect`, fait la même chose depuis le terminal.
-5. Vérifier : pour un satellite, un événement neuf arrive au Journal du core ; pour le core, ses postes restent
-   joignables à la Constellation. Ce qui a été relié après la copie se relie de nouveau : un appareil (Atelier ›
-   Appareils pour le core, Réglages › Appareils et applications pour un satellite), un poste (comme à l'étape 4). Le
-   téléphone rouvre ses notifications s'il s'y était abonné depuis.
+5. Vérifier : pour un satellite, un événement qu'il émet après la liaison arrive au Journal du core, comme le prochain
+   courrier trié par Acedia ; l'entrée « … relié. », que le core écrit lui-même, ne le prouve pas. Pour le core, ses
+   postes restent joignables à la Constellation. Ce qui a été relié après la copie se relie de nouveau : un appareil
+   (Atelier › Appareils pour le core, Réglages › Appareils et applications pour un satellite), un poste (comme à
+   l'étape 4). Le téléphone rouvre ses notifications s'il s'y était abonné depuis.
 
-Revenir en arrière : arrêter le serveur de nouveau comme à l'étape 1, mettre de côté à leur tour la base restaurée et
-ses fichiers `-wal` et `-shm`, puis remettre à leur place les fichiers de `data\avant-restauration\`.
+Revenir en arrière : arrêter le serveur comme à l'étape 1, puis mettre de côté la base restaurée dans un second
+dossier daté :
 
-Une copie s'ouvre sans clé : seuls ses secrets demandent la clé de sa base d'origine. Garder chaque clé hors du dossier
-de service, par exemple dans un gestionnaire de mots de passe : le `.env` qui la porte est à côté des copies.
+```powershell
+cd D:\lun-service\lun-acedia\data
+$restauree = "restauree-$(Get-Date -Format 'yyyy-MM-dd-HHmm')"
+New-Item -ItemType Directory $restauree
+Get-ChildItem acedia.db* | Move-Item -Destination $restauree
+Get-ChildItem acedia.db*
+```
+
+La dernière commande ne doit rien rendre. Puis remettre les fichiers de l'étape 2 à leur place, et relancer :
+
+```powershell
+Get-ChildItem avant-restauration-AAAA-MM-JJ-HHMM\acedia.db* | Move-Item -Destination .
+Start-ScheduledTask 'Lun Acedia'
+```
+
+Un satellite remis ainsi se relie de nouveau, comme à l'étape 4 : le core ne garde que le jeton reçu de la base
+restaurée, que la base d'origine ne connaît pas.
+
+Une copie s'ouvre sans clé : seuls ses secrets demandent la clé de sa base d'origine. Garder aussi une copie de chaque
+clé hors du dossier de service, par exemple dans un gestionnaire de mots de passe : le `.env` qui la porte est à côté
+des copies.
 
 | Base | Clé | Ce qu'elle protège | Avec une autre clé |
 |---|---|---|---|

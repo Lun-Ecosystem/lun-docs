@@ -36,9 +36,9 @@ dans les mêmes dépôts, jamais empilées.
 1. - [x] `server/src/backup.ts` : `backupDatabase(db, path, now, keep = 7)`, copies nommées `acedia-AAAA-MM-JJ.db`
    (`avaritia-…` chez Avaritia), du nom de la base : une autre base ne fait pas tourner ses copies. Tests d'abord :
    copie lisible et complète, rotation à sept, fichier temporaire nettoyé, échec sans perte des copies précédentes.
-2. - [x] La cadence, sans horloge nouvelle : au démarrage puis chaque heure, avec les `setInterval` d'une heure qui
-   existent déjà dans `main.ts`, une copie si celle du jour manque. **[choix Claude]** Pas d'heure fixe : un poste
-   éteint la nuit se rattrape dès qu'il revient.
+2. - [x] La cadence, sans horloge nouvelle : au démarrage puis chaque heure, par un `setInterval` d'une heure comme
+   ceux qui existent déjà dans `main.ts`, une copie si celle du jour manque. **[choix Claude]** Pas d'heure fixe :
+   un poste éteint la nuit se rattrape dès qu'il revient.
 3. - [x] Le dossier : `backups/` à côté de la base (`DB_PATH`), comme le core, donc sous `data/`, déjà hors de
    git ; dit dans le README.
 4. - [x] Une copie ratée laisse une ligne au journal du serveur et se retente à l'heure suivante.
