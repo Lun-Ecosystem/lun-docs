@@ -10,7 +10,8 @@
 **Au 09/11.** I et J sont faits : lun-docs#108 et Lun-Ecosystem/.github#3, lun-anima#81, lun-acedia#59,
 lun-avaritia#24 ; le Project est fermé. K : la procédure (lun-docs#111, reprise par lun-docs#112) et les copies
 d'Acedia et d'Avaritia (lun-acedia#61, lun-avaritia#29) ; reste la restauration, à essayer au § 4. N : le
-brouillon de la barre est relu, en brouillon jusqu'au desktop (lun-anima#88). Tout le reste est sur `main`.
+brouillon de la barre est relu, en brouillon jusqu'au desktop (lun-anima#88). O : lun-anima#91, lun-acedia#63,
+lun-avaritia#30. Tout le reste est sur `main`.
 
 Le même jour : la session sur le desktop (§ 4) est décalée, CrOliX n'étant pas chez lui. Les plans de L et M sont
 écrits, et un chantier O s'ajoute, validé par CrOliX : les écarts vus en route que la semaine de rodage peut
