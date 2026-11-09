@@ -132,7 +132,7 @@ prototype :
 | En pause | « Natsume est en pause depuis 14:15. Rien d'automatique ne tourne, sauf les urgences ; tu peux toujours lui écrire. » | Reprendre |
 | Poste injoignable | « Lun'Acedia ne répond pas depuis 14:12. Ses cartes sont en lecture seule ; nouvel essai automatique. » | Voir le poste |
 | Poste muet | « Lun'Acedia est en pause dans ses propres réglages. Ses cartes sont en lecture seule. » ou « Lun'Acedia doit être mis à jour pour que ses cartes arrivent ici. » **[choix de rédaction]** | Voir le poste |
-| Mise en route | « Mise en route : le Bureau s'ouvre quand elle est finie. », suivi, tant que la clé manque, de « Natsume ne converse pas encore et ses routines tournent sans le modèle. » Les routines rattrapent leurs créneaux dès le démarrage : le bandeau ne dit plus que rien ne tourne (lun-anima#82). | Mise en route, caché sur ce lieu |
+| Mise en route | « Mise en route : le Bureau s'ouvre quand elle est finie. », suivi, tant que la clé manque, de « Natsume ne converse pas encore et ses routines tournent sans le modèle. » | Mise en route, caché sur ce lieu |
 
 Plafond du mois : « Plafond du mois atteint : 40,00 $ sur 40,00 $. Natsume est en pause jusqu'au 1er
 décembre, sauf les urgences. » Plafond atteint avec « Prévenir seulement » : la première phrase
