@@ -199,9 +199,10 @@ lun-luxuria. Niveau `standard`. *Ask* : la fenêtre ne se prouve que sur le desk
 [`2026-11-08-luxuria-usage-courant-design.md`](../specs/2026-11-08-luxuria-usage-courant-design.md), ses cinq questions
 tranchées (audit, Q5).
 
-- La fenêtre entre seule : `additionalBrowserArgs` avec `--autoplay-policy=no-user-gesture-required` et les arguments
-  par défaut de wry recopiés ; la demande d'accès au micro réglée pour la seule origine de l'app ; le seuil « Entrer »
-  ne reste que dans un onglet (audit, § 8.3). Une issue à ouvrir au départ.
+- La fenêtre entre seule : le son sans geste, que wry permet déjà, et la demande d'accès au micro se constatent
+  d'abord dans l'exe ; le micro se règle pour la seule origine de l'app s'il le faut ; le seuil « Entrer » ne reste
+  que dans un onglet (audit, § 8.3). Sans le seuil, ce que vaut « présent » se tranche avec CrOliX. Une issue à
+  ouvrir au départ.
 - L'arrivée en deux cartes (lun-luxuria#36) ; la consigne qui s'efface au premier tour (#37) ; les réglages partagés
   comme au § 4 de la spec, trois préréglages d'Écoute et « Personnalisé », l'agent neutre, « Identité » (#38).
 - Les valeurs des préréglages se mesurent sur le desktop (§ 4).
@@ -215,8 +216,8 @@ dépôt. Niveau `standard`. *Show*.
 
 - La vérification des jetons dans la CI de Luxuria et d'Avaritia, comme dans celles du core et d'Acedia ; celle du kit
   dans la CI de Luxuria, dont la copie est générée. Acedia et Avaritia gardent leur copie à part jusqu'à lun-docs#43.
-- Une place réservée, au bas d'une liste, sous un élément flottant (audit, § 4.2, point 4) : dans le kit, puis dans
-  chaque copie.
+- Les recouvrements sous un élément flottant (audit, § 4.2, point 4) : la place existe déjà dans les trois apps, la
+  cause se cherche d'abord ; la règle s'écrit dans `design.md`, sans jeton nouveau.
 - Les toasts d'Acedia et d'Avaritia ramenés au code du kit, annulation comprise.
 - La publication du paquet de vues d'Acedia retirée (Q11) ; le dossier reste tant que l'app l'importe.
 
@@ -241,12 +242,14 @@ Plan : [`2026-11-09-ecarts-avant-semaine.md`](2026-11-09-ecarts-avant-semaine.md
 lun-anima, lun-acedia, lun-avaritia : une PR par dépôt. Niveau `standard`. *Show*. Les issues `inbox` des chantiers
 I, J et K que la semaine peut rencontrer :
 
-- un passage sauté affiché « faite », une lettre du matin sans son contexte du jour (lun-anima#80, #85) ;
+- un passage sauté affiché « faite », une lettre du matin sans son contexte du jour, une recherche du Journal par
+  « échec » (lun-anima#80, #85, #84) ;
 - la copie du core détachée de la veille, sous la forme de celles des satellites (lun-anima#86, #87) ;
 - la barre d'Acedia et celle d'Avaritia, qui disent faux sur une clé, une pause ou un plafond (lun-acedia#60,
   lun-avaritia#25, #27, #28) ;
-- une note ou un dépôt traité et payé pendant une pause locale d'Avaritia (lun-avaritia#26) ;
-- la copie ratée d'un satellite, dite sur son propre écran (lun-docs#110) ;
+- la carte d'Avaritia en pause, qui dit les lots arrêtés et les dépôts qui passent (lun-avaritia#26) ;
+- la copie ratée de chacune des trois bases, dite au Journal du core, qu'aucun écran ne montre aujourd'hui
+  (lun-docs#110) ;
 - le test qui rougit au hasard (lun-acedia#58, lun-avaritia#23).
 
 **Ordre de I à O** : I et J en parallèle, K en même temps que J (dépôts communs, mais deux PR séparées, jamais
