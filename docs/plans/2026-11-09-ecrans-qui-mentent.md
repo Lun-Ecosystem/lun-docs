@@ -59,7 +59,7 @@ copies ensuite.
 
 ### Le kit (lun-docs#119)
 
-1. - [ ] `design/kit/toasts.svelte.ts` : pendant qu'un toast annulable compte, ou pendant que son annulation tourne,
+1. - [x] `design/kit/toasts.svelte.ts` : pendant qu'un toast annulable compte, ou pendant que son annulation tourne,
    l'attente garde le plus grave. Une information qui arrive ne remplace pas une erreur en attente ; une erreur remplace
    ce qui attend ; entre deux informations, ou deux erreurs, la dernière gagne (comme aujourd'hui). La règle vaut pour
    les deux branches de `toast()` : celle qui met en attente, et celle qui vide l'attente quand un toast simple prend
@@ -71,12 +71,20 @@ copies ensuite.
    enregistré ») montre l'échec après les 5 s, en ton `danger` ; une erreur arrivée après une information prend sa
    place ; une erreur en attente survit à une information arrivée pendant que « Annuler » tourne. Rouges sur le code
    d'aujourd'hui, verts après, joués dans lun-anima (tâche 5).
-2. - [ ] La spec `2026-11-02-natsume-au-centre-design.md`, § 4.3 : la ligne « Mise en route » du tableau prend le nouveau
+
+   **Fait :** `errorWaits` dans `toast()` : une erreur en attente n'est remplacée que par une erreur, dans la branche
+   qui met en attente et dans celle qui vide l'attente. Quatre tests (l'exemple de l'issue, une erreur après une
+   information, deux erreurs, une erreur pendant « Annuler ») ; deux étaient rouges sur l'ancienne copie de lun-anima,
+   29 verts après. `shortcut:` sur l'attente sans limite ; issue lun-docs#124 pour l'erreur à l'écran.
+2. - [x] La spec `2026-11-02-natsume-au-centre-design.md`, § 4.3 : la ligne « Mise en route » du tableau prend le nouveau
    texte et son bouton (tâche 3). `npm run check` et `npm run sync:check` verts.
+
+   **Fait :** la ligne « Mise en route » du tableau du § 4.3 : le nouveau texte, et « Mise en route, caché sur ce lieu
+   ».
 
 ### Le core (lun-anima#82, #83)
 
-3. - [ ] Le bandeau de la mise en route (`ui/src/shell/bande.ts`) dit ce qui attend vraiment, à partir de `state.route`
+3. - [x] Le bandeau de la mise en route (`ui/src/shell/bande.ts`) dit ce qui attend vraiment, à partir de `state.route`
    que l'écran reçoit déjà (`types.ts`, `CoreState.route`). Deux variantes, vraies dans tous les cas : toujours
    « Mise en route : le Bureau s'ouvre quand elle est finie. » ; sans la clé, la phrase continue : « Natsume ne converse
    pas encore et ses routines tournent sans le modèle. » Le bouton « Mise en route » mène à `/app/mise-en-route`, et ne
@@ -84,30 +92,51 @@ copies ensuite.
    ses cartes arrivent avec le premier poste ») dit la même chose : « Le Bureau s'ouvre quand la mise en route est finie ;
    ses cartes arrivent avec le premier poste. » **[choix Claude]** Les routines continuent de tourner (contraintes).
    Tests dans `bande.test.ts` : avec et sans clé, le bouton et son absence sur son propre lieu.
-4. - [ ] La région `status` de `Bande.svelte` ne réannonce qu'au changement de `kind:post` : la clé ajoutée, elle dirait
+
+   **Fait :** `bande.ts` lit `state.route.key` : deux variantes, le bouton « Mise en route » vers `/app/mise-en-route`,
+   caché sur ce lieu seulement (`Bande.svelte`, resserré après la relecture : la règle valait d'abord pour tous les
+   bandeaux). Le pied de la mise en route dit la même chose. Captures avant et après dans lun-anima#92.
+4. - [x] La région `status` de `Bande.svelte` ne réannonce qu'au changement de `kind:post` : la clé ajoutée, elle dirait
    encore « ne converse pas ». La clé d'annonce prend l'état de la route (`mise-en-route:` plus `route.key`). Test dans
    `Bande.svelte.test.ts` : la clé posée, la région dit le nouveau texte.
-5. - [ ] Le rang des plafonds au téléphone (`ui/src/lieux/MiseEnRoute.svelte`) : le repli existe déjà sous 768 px
+
+   **Fait :** la clé d'annonce ajoute `route.key` pour le bandeau de la mise en route ; test dans `Bande.svelte.test.ts`
+   : la clé posée, la région dit le nouveau texte.
+5. - [x] Le rang des plafonds au téléphone (`ui/src/lieux/MiseEnRoute.svelte`) : le repli existe déjà sous 768 px
    (`flex-wrap: wrap`) mais ne joue jamais, `.lib` partant d'une largeur de base nulle. Dans cette même règle, les gestes
    prennent toute la largeur sous le texte, alignés sous le titre (`flex-basis: 100%`, retrait de 34 px : la coche de
    20 px et l'écart de 14 px, `justify-content: flex-start`). Tous les rangs, pas seulement celui à deux boutons.
    Preuve par capture à 390 px et à 1440 px, avant et après, sur un core jetable sans clé.
-6. - [ ] La copie du kit : `node <lun-docs>/tools/sync-kit.mjs ui/src/lib/ui` depuis la branche de lun-docs, un commit
+
+   **Fait :** dans la media query existante, `.gestes` prend toute la largeur sous le texte, retrait de 34 px ; capture
+   à 390 px avant et après, 1440 px inchangé. Au Journal à 390 px, le bandeau sur quatre lignes avec son bouton reste
+   lisible : pas d'issue.
+6. - [x] La copie du kit : `node <lun-docs>/tools/sync-kit.mjs ui/src/lib/ui` depuis la branche de lun-docs, un commit
    `chore(kit): …`. C'est ici que le kit se prouve : les trois tests de la tâche 1 rouges avant la synchro, verts après ;
    puis les barrières complètes (`format:check`, `lint`, `typecheck`, `test`, `build`). La PR reste en brouillon jusqu'à la
    fusion de lun-docs, puis `gh run rerun`.
 
+   **Fait :** `sync-kit.mjs ui/src/lib/ui`, `kit: OK` contre la branche ; barrières complètes vertes (140 fichiers, 2009
+   tests). lun-anima#92 en brouillon jusqu'à la fusion de lun-docs#123.
+
 ### Les trois autres copies
 
-7. - [ ] lun-luxuria (`src/lib/ui`) : la même commande, un commit, une PR brouillon, les barrières complètes
+7. - [x] lun-luxuria (`src/lib/ui`) : la même commande, un commit, une PR brouillon, les barrières complètes
    (`svelte-check --fail-on-warnings` compris), prête après la fusion de lun-docs.
-8. - [ ] lun-acedia (`views/src/lib/ui`) et lun-avaritia (`app/src/lib/ui`) : `toasts.svelte.ts` recopié à l'identique,
+
+   **Fait :** lun-luxuria#45 : copie entière, `kit: OK`, barrières complètes vertes (27 fichiers, 269 tests).
+8. - [x] lun-acedia (`views/src/lib/ui`) et lun-avaritia (`app/src/lib/ui`) : `toasts.svelte.ts` recopié à l'identique,
    sans en-tête, et le bloc `describe('toast')` de leur `overlays.test.ts` repris du kit ; rien d'autre. `npm test` et
    `npm run typecheck` verts dans chacune. Une PR brouillon chacune.
 
+   **Fait :** lun-acedia#65 et lun-avaritia#32 : `toasts.svelte.ts` et le bloc `describe('toast')` seuls ; format, lint,
+   typage et tests verts (742 et 514 tests).
+
 ### La doc
 
-9. - [ ] Ce plan coché, et la feuille de route (§ 1) qui dit P livré ; dans la même PR lun-docs que les tâches 1 et 2.
+9. - [x] Ce plan coché, et la feuille de route (§ 1) qui dit P livré ; dans la même PR lun-docs que les tâches 1 et 2.
+
+   **Fait :** coché dans lun-docs#123, avec la feuille de route.
 
 ## Preuves
 

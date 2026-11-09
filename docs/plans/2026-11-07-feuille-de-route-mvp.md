@@ -18,6 +18,9 @@ Le même jour : la session sur le desktop (§ 4) est décalée, CrOliX n'étant 
 écrits, et un chantier O s'ajoute, validé par CrOliX : les écarts vus en route que la semaine de rodage peut
 rencontrer. Les autres restent en `inbox`.
 
+**Au 10/11.** P livré, en brouillon jusqu'à la fusion de lun-docs#123 (le kit et la spec) : lun-anima#92, puis les copies
+lun-luxuria#45, lun-acedia#65 et lun-avaritia#32. L (lun-luxuria#44) attend la recette du desktop.
+
 **Au 08/11 au soir, après l'audit.** L'[audit](2026-11-08-audit-ecosysteme.md) a posé douze questions ; CrOliX les a
 tranchées (audit, § 7), sauf la langue parlée (B2, à l'oreille) et lun-acedia#30 (après le MVP). Appliqué le jour
 même, hors dépôt : squash seul sur les cinq dépôts, plugin `lun` à la racine du laptop. Confronté aux sources (audit,
