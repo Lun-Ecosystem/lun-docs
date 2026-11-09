@@ -38,17 +38,17 @@ saute leurs `.env`.
 
 ## 3. Les bases qui entrent en service
 
-**Question ouverte, à trancher ce jour-là.** Rien ne copie de base tout seul.
+**Question ouverte, à trancher ce jour-là.** L'installation n'apporte aucune base.
 
 - **Trois bases neuves** (le défaut) : le service démarre vide dans son dossier.
   - `anima.db` vide : la mémoire de la relation, le tempérament et le fil repartent de zéro ;
   - `acedia.db` vide : Acedia se resynchronise depuis Google, mais ses règles de tri et ses cartes repartent de zéro ;
   - `avaritia.db` vide : le wiki repart de zéro.
 - **Des bases existantes copiées** (celles du laptop ou du desktop), avant le premier démarrage, serveurs arrêtés :
-  - prendre une copie cohérente, en un seul fichier : une copie du jour (`backups/anima-AAAA-MM-JJ.db`, `acedia-…`,
-    `avaritia-…`, à côté de chaque base), ou la base de son serveur arrêté, avec ses fichiers `-wal` et `-shm` s'il y en
-    a ;
-  - la poser au chemin du `DB_PATH` du service ;
+  - prendre une copie cohérente : soit une copie du jour, en un seul fichier (`backups/anima-AAAA-MM-JJ.db`,
+    `acedia-…`, `avaritia-…`, à côté de chaque base), soit la base de son serveur arrêté, avec ses fichiers `-wal` et
+    `-shm` s'il y en a ;
+  - la copier au chemin du `DB_PATH` du service, ses fichiers `-wal` et `-shm` à côté, sous le même nom ;
   - une `anima.db` copiée exige le **même `ANIMA_SECRET_KEY`** dans le `.env` du service que là d'où elle vient, sinon
     les jetons des satellites et la clé du modèle ne se déchiffrent plus ; la clé qui va avec chaque base est au § 9,
     « Restaurer une copie ».
@@ -144,9 +144,9 @@ jour manque. Un poste éteint la nuit se rattrape donc à son démarrage.
 - Les journaux du jour : `data\logs\<nom>-AAAA-MM-JJ.log` dans chaque dépôt du service. Un serveur qui s'arrête dit
   pourquoi dans ses premières lignes.
 - Les copies : `backups\anima-AAAA-MM-JJ.db`, `backups\acedia-AAAA-MM-JJ.db` et `backups\avaritia-AAAA-MM-JJ.db`,
-  chacune à côté de sa base, sept au plus. Celle du core dit « Base copiée » au Journal, et un échec se lit dans sa
-  santé. Celles d'Acedia et d'Avaritia ne le disent que dans le journal de leur serveur (« Base copiée », « Copie de
-  la base ratée ») : c'est ici qu'on les voit (lun-docs#110).
+  chacune à côté de sa base, sept au plus. Chaque serveur le dit dans son journal du jour (« Base copiée », « Copie de
+  la base ratée ») ; un échec du core se lit aussi dans sa santé. Rien ne passe au Journal de l'app : c'est ici qu'on
+  les voit (lun-docs#110, lun-anima#89).
 - La Constellation : le core, Acedia et Avaritia joignables, Luxuria présente.
 - Un redémarrage de Windows, sans rien taper : tout revient, sans fenêtre de console.
 
@@ -161,29 +161,85 @@ jour manque. Un poste éteint la nuit se rattrape donc à son démarrage.
 
 ### Restaurer une copie
 
-Une copie remet une base au jour où elle a été faite : tout ce qui a été écrit depuis est perdu, y compris les appareils
-reliés, les liaisons et les abonnements aux notifications pris entre-temps. Pour une base, dans un PowerShell :
+Une copie remet une base au jour où elle a été faite : tout ce qui a été écrit depuis en est absent, y compris les
+appareils reliés, les liaisons et les abonnements aux notifications pris entre-temps. Pour une base, dans un PowerShell
+administrateur. Les commandes sont celles d'Acedia ; pour le core ou Avaritia, remplacer `lun-acedia`, `acedia`,
+`'Lun Acedia'` et 8787 par `lun-anima`, `anima`, `'Lun core'` et 8788, ou par `lun-avaritia`, `avaritia`,
+`'Lun Avaritia'` et 8789.
 
-1. Arrêter son serveur : `Stop-ScheduledTask 'Lun Acedia'` (ou `'Lun core'`, `'Lun Avaritia'`).
-2. Dans le dossier de sa base (`data\` par défaut), mettre la base de côté sous un autre nom, poser la copie choisie à
-   sa place sous le nom de la base (`acedia.db`), et supprimer `acedia.db-wal` et `acedia.db-shm` s'ils restent.
-3. Relancer : `Start-ScheduledTask 'Lun Acedia'`.
-4. Pour Acedia ou Avaritia, le relier de nouveau depuis le core (Atelier › Postes › Relier). La base restaurée reprend
-   la numérotation de ses événements au jour de la copie, alors que le core ne demande que ceux qui suivent le dernier
-   reçu : sans une nouvelle liaison, qui remet ce compte à zéro, urgences et cartes n'arrivent plus, sans aucune erreur.
-   Le code se demande dans le satellite (Réglages › Appareils et applications › Relier un appareil), ou par
-   `npm run pair-code` dans son dossier de service si plus aucun appareil n'y est relié.
-5. Vérifier : pour un satellite, un événement neuf arrive au Journal du core ; pour le core, ses postes restent
-   joignables à la Constellation. Ce qui a été relié après la copie se relie de nouveau : un appareil (Atelier ›
-   Appareils pour le core, Réglages › Appareils et applications pour un satellite), un poste (Atelier › Postes). Le
-   téléphone rouvre ses notifications s'il s'y était abonné depuis.
+1. Arrêter son serveur, puis vérifier que son port n'écoute plus :
 
-Une copie s'ouvre sans clé : seuls ses secrets demandent la clé de sa base d'origine, à garder à part des copies.
+   ```powershell
+   Stop-ScheduledTask 'Lun Acedia'
+   Get-NetTCPConnection -LocalPort 8787 -State Listen -ErrorAction Ignore
+   ```
+
+   La seconde commande ne doit rien rendre. Si elle rend une ligne, le serveur a survécu à sa tâche :
+   `Stop-Process -Id (Get-NetTCPConnection -LocalPort 8787 -State Listen).OwningProcess`, puis vérifier de nouveau.
+2. Mettre la base de côté avec ses fichiers `-wal` et `-shm`, dans un dossier daté créé d'abord. Rien ne se supprime :
+   le `-wal` peut garder ses dernières heures, et, laissé à côté de la copie, SQLite le rejouerait sur elle sans rien
+   dire.
+
+   ```powershell
+   cd D:\lun-service\lun-acedia\data
+   $cote = "avant-restauration-$(Get-Date -Format 'yyyy-MM-dd-HHmm')"
+   New-Item -ItemType Directory $cote
+   Get-ChildItem acedia.db* | Move-Item -Destination $cote
+   Get-ChildItem acedia.db*
+   ```
+
+   La dernière commande ne doit rien rendre : si elle rend un fichier, s'arrêter là.
+3. Copier, et non déplacer, la copie choisie, puis relancer :
+
+   ```powershell
+   Copy-Item backups\acedia-AAAA-MM-JJ.db acedia.db
+   Start-ScheduledTask 'Lun Acedia'
+   ```
+
+4. Pour Acedia ou Avaritia, le relier de nouveau au core, même s'il paraît relié. La base restaurée reprend la
+   numérotation de ses événements au jour de la copie, alors que le core ne demande que ceux qui suivent le dernier
+   reçu : sans une nouvelle liaison, qui remet ce compte à zéro, urgences, alertes et entrées du Journal n'arrivent
+   plus, sans aucune erreur. Les cartes, relues toutes les deux minutes, arrivent encore : elles ne prouvent pas la
+   liaison. Dans le core, Ctrl K, « Relier un poste » (l'Atelier ne propose pas « Relier » à un poste qui paraît
+   relié, lun-anima#90) : son adresse locale, `http://localhost:8787` pour Acedia ou `http://127.0.0.1:8789` pour
+   Avaritia, puis le code que donne le satellite, dans Réglages › Appareils et applications › Relier un appareil, ou
+   par `npm run pair-code` dans son dossier de service si plus aucun appareil n'y est relié. La commande du § 4,
+   `npm run connect`, fait la même chose depuis le terminal.
+5. Vérifier : pour un satellite, un événement qu'il émet après la liaison arrive au Journal du core, comme le prochain
+   courrier trié par Acedia ; l'entrée « … relié. », que le core écrit lui-même, ne le prouve pas. Pour le core, ses
+   postes restent joignables à la Constellation. Ce qui a été relié après la copie se relie de nouveau : un appareil
+   (Atelier › Appareils pour le core, Réglages › Appareils et applications pour un satellite), un poste (comme à
+   l'étape 4). Le téléphone rouvre ses notifications s'il s'y était abonné depuis.
+
+Revenir en arrière : arrêter le serveur comme à l'étape 1, puis mettre de côté la base restaurée dans un second
+dossier daté :
+
+```powershell
+cd D:\lun-service\lun-acedia\data
+$restauree = "restauree-$(Get-Date -Format 'yyyy-MM-dd-HHmm')"
+New-Item -ItemType Directory $restauree
+Get-ChildItem acedia.db* | Move-Item -Destination $restauree
+Get-ChildItem acedia.db*
+```
+
+La dernière commande ne doit rien rendre. Puis remettre les fichiers de l'étape 2 à leur place, et relancer :
+
+```powershell
+Get-ChildItem avant-restauration-AAAA-MM-JJ-HHMM\acedia.db* | Move-Item -Destination .
+Start-ScheduledTask 'Lun Acedia'
+```
+
+Un satellite remis ainsi se relie de nouveau, comme à l'étape 4 : le core ne garde que le jeton reçu de la base
+restaurée, que la base d'origine ne connaît pas.
+
+Une copie s'ouvre sans clé : seuls ses secrets demandent la clé de sa base d'origine. Garder aussi une copie de chaque
+clé hors du dossier de service, par exemple dans un gestionnaire de mots de passe : le `.env` qui la porte est à côté
+des copies.
 
 | Base | Clé | Ce qu'elle protège | Avec une autre clé |
 |---|---|---|---|
 | `anima.db` | `ANIMA_SECRET_KEY` | la clé du modèle, les jetons des satellites, la clé des notifications | à éviter : la clé du modèle se ressaisit et les postes se relient de nouveau, mais les notifications ne partent plus, et aucun écran ne les refait. Garder la même clé. |
-| `acedia.db` | `ACEDIA_SECRET_KEY` | les jetons Google, les clés d'IA saisies dans Réglages | reconnecter Google, ressaisir les clés |
+| `acedia.db` | `ACEDIA_SECRET_KEY` | les jetons Google, les clés d'IA saisies dans Réglages | à éviter : les clés d'IA se ressaisissent, mais l'écran du compte Google reste sur « Vérification… », sans proposer de connecter (lun-acedia#62). Garder la même clé. |
 | `avaritia.db` | `AVARITIA_SECRET_KEY` | les clés d'IA saisies dans Réglages | ressaisir les clés |
 
 Les jetons des appareils sont hachés, pas chiffrés : ils ne dépendent d'aucune clé.
@@ -203,9 +259,10 @@ qui pourrait le redemander a sa réponse sans terminal, en place ou à mettre av
 |---|---|---|
 | Le jeton Google en « Test », qui tombe au bout de 7 jours | Google en Production, consentement refait sur le vrai compte | à mettre : B10, sur le desktop |
 | Un redémarrage ou une mise à jour de Windows | Les trois tâches planifiées relancent les serveurs au démarrage, sans fenêtre | en place (§ 2), à constater : B12 |
-| Un serveur tombé trois fois de suite | Le lanceur l'abandonne : la Constellation montre un satellite injoignable, le core ne répond plus. Redémarrer Windows le relance | en place |
+| Un serveur qui retombe après ses trois relances | Le lanceur l'abandonne : la Constellation montre un satellite injoignable, le core ne répond plus. Le Planificateur de tâches, ouvert en administrateur, le relance (clic droit sur la tâche, Exécuter), ou un redémarrage de Windows | en place |
 | Un nouveau téléphone | Le relier depuis un appareil déjà relié : Atelier › Appareils pour le core, Réglages › Appareils et applications pour un satellite | en place |
 | Un code d'appairage expiré | Un nouveau code depuis l'écran du poste, qui affiche le temps restant | en place |
 | Un navigateur qui perd son jeton | Un autre appareil relié lui donne un code ; sans lui, seul `npm run pair-code` en donne un | à mettre : garder le téléphone relié à chaque app |
-| La clé d'un fournisseur qui arrive à échéance | Son échéance, déclarée dans l'écran, prévient avant ; la clé se remplace depuis le même écran | en place |
+| La clé d'un fournisseur qui arrive à échéance | Son échéance, déclarée dans l'écran, prévient à J-14 puis J-3 ; la clé se remplace depuis le même écran | à mettre : déclarer l'échéance de chaque clé, aucune base neuve n'en a |
 | Un correctif à passer en cours de semaine | `mettre-a-jour.ps1`, dans un PowerShell administrateur (§ 9) | terminal, pour un correctif voulu seulement |
+| Un correctif de Luxuria | Quitter Luxuria, reconstruire, recopier l'exe au même endroit (§ 5, étape 1) : `mettre-a-jour.ps1` ne le fait pas | terminal, pour un correctif voulu seulement |

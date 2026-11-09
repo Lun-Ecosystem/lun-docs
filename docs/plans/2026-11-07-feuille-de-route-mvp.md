@@ -2,10 +2,15 @@
 
 > Demande de CrOliX, le 07/11 : « reprendre l'état global actuel de l'écosystème, identifier les points à traiter au vu
 > du MVP, les classer et préparer les prochains chantiers complets en autonomie ». Depuis le 08/11, ce document fait foi
-> pour l'avancement (décision de CrOliX après l'[audit](2026-11-08-audit-ecosysteme.md), Q8) : le Project GitHub sera
-> archivé avec le chantier I, les issues gardent leurs étiquettes et leurs niveaux.
+> pour l'avancement (décision de CrOliX après l'[audit](2026-11-08-audit-ecosysteme.md), Q8) : le Project GitHub est
+> fermé depuis le 09/11 (chantier I), les issues gardent leurs étiquettes et leurs niveaux.
 
 ## 1. Où on en est
+
+**Au 09/11.** I et J sont faits : lun-docs#108 et Lun-Ecosystem/.github#3, lun-anima#81, lun-acedia#59,
+lun-avaritia#24 ; le Project est fermé. K : la procédure (lun-docs#111, reprise par lun-docs#112) et les copies
+d'Acedia et d'Avaritia (lun-acedia#61, lun-avaritia#29) ; reste la restauration, à essayer au § 4. N : le
+brouillon de la barre est relu, en brouillon jusqu'au desktop (lun-anima#88). Les écarts vus en route sont en `inbox`.
 
 **Au 08/11 au soir, après l'audit.** L'[audit](2026-11-08-audit-ecosysteme.md) a posé douze questions ; CrOliX les a
 tranchées (audit, § 7), sauf la langue parlée (B2, à l'oreille) et lun-acedia#30 (après le MVP). Appliqué le jour

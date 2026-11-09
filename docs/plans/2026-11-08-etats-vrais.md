@@ -8,6 +8,8 @@ la recette du 08/11 se ferment.
 **Source :** [audit du 08/11](2026-11-08-audit-ecosysteme.md), § 4.2 ;
 [feuille de route](2026-11-07-feuille-de-route-mvp.md), chantier J.
 
+**Livré :** lun-anima#81, lun-acedia#59 et lun-avaritia#24, le 09/11.
+
 **Cadre :** aucun code avant la validation de ce plan par CrOliX. Niveau `standard`, *Show* : tout se prouve sur le
 laptop, sur des bases de démo. Une PR par dépôt ; elles ne dépendent pas l'une de l'autre, ni de celles de K.
 
@@ -33,37 +35,37 @@ laptop, sur des bases de démo. Une PR par dépôt ; elles ne dépendent pas l'u
    jamais à l'écran. **[choix Claude]** La routine reste `ok`, avec la raison « sans le modèle » ; l'Atelier dit
    « faite 05:00, sans le modèle », le Journal « Fait · sans le modèle ». Un jour de veille qui demandait le modèle
    échoue déjà, et le dit.
-   - [ ] Tests : sur une base sans clé, les deux routines finissent `ok` avec cette raison ; avec une clé, sans raison.
-   - [ ] `endRun` garde la raison d'un passage `ok` ; `journalRun`, `Routines.svelte` et `MotConstellation.svelte`
+   - [x] Tests : sur une base sans clé, les deux routines finissent `ok` avec cette raison ; avec une clé, sans raison.
+   - [x] `endRun` garde la raison d'un passage `ok` ; `journalRun`, `Routines.svelte` et `MotConstellation.svelte`
      l'affichent.
 2. **Un échec dit une fois.** Le Journal montre « Veille de la nuit : en échec » (l'événement `routine.failed`, fait
    pour le téléphone) puis « Veille de la nuit · Échoué » (le passage).
-   - [ ] Test : un passage en échec laisse une entrée au Journal, et l'événement part toujours vers le téléphone
+   - [x] Test : un passage en échec laisse une entrée au Journal, et l'événement part toujours vers le téléphone
      (`journalEvent` passe `routine.failed`).
 3. **La mise en route compte juste.** « 3 réglages avant de commencer » compte les quatre premiers rangs, « 1 sur 6 »
    les six, alors que l'écran cède la place au Bureau dès les quatre faits. **[choix Claude]** La section compte les
    mêmes quatre (« 1 sur 4 ») ; les deux derniers rangs se disent facultatifs.
-   - [ ] Test du composant : les deux nombres s'accordent, à chaque étape.
+   - [x] Test du composant : les deux nombres s'accordent, à chaque étape.
 4. **Relier un poste dit vrai** (lun-anima#73, ses quatre critères).
-   - [ ] La section s'appelle « Appareils et applications », comme chez Acedia et Avaritia.
-   - [ ] Rien ne se décompte avant qu'un code soit saisi ; la durée annoncée est celle que le poste affiche.
-   - [ ] Une étape n'est cochée qu'une fois faite.
-   - [ ] Le champ propose et accepte `http://localhost:<port>` pour un poste local.
+   - [x] La section s'appelle « Appareils et applications », comme chez Acedia et Avaritia.
+   - [x] Rien ne se décompte avant qu'un code soit saisi ; la durée annoncée est celle que le poste affiche.
+   - [x] Une étape n'est cochée qu'une fois faite.
+   - [x] Le champ propose et accepte `http://localhost:<port>` pour un poste local.
 
 ### lun-acedia
 
 5. **Le pied de la barre sans fournisseur** (lun-acedia#56).
-   - [ ] Un état de service de plus, quand aucun fournisseur n'est en service : « Tri par les règles », détail
+   - [x] Un état de service de plus, quand aucun fournisseur n'est en service : « Tri par les règles », détail
      « Aucun fournisseur d'IA en service », les mots de Réglages. Dans `status.ts` et la copie de `ServiceCard`.
-   - [ ] Tests de `status.ts` : sans fournisseur, avec un fournisseur, clé refusée.
-6. - [ ] Le badge du site, lien mort, retiré du README (feuille de route, C3).
+   - [x] Tests de `status.ts` : sans fournisseur, avec un fournisseur, clé refusée.
+6. - [x] Le badge du site, lien mort, retiré du README (feuille de route, C3).
 
 ### lun-avaritia
 
 7. **Le pied de la barre sans fournisseur** (lun-avaritia#21).
-   - [ ] « Traitement à l'arrêt », détail « Aucune clé de fournisseur d'IA » : sans clé, l'IA ne travaille pas.
-   - [ ] Tests du calcul de l'état.
-8. - [ ] Le badge du site retiré du README.
+   - [x] « Traitement à l'arrêt », détail « Aucune clé de fournisseur d'IA » : sans clé, l'IA ne travaille pas.
+   - [x] Tests du calcul de l'état.
+8. - [x] Le badge du site retiré du README.
 
 ## Preuves
 
