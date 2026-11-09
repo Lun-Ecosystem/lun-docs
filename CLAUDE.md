@@ -10,7 +10,7 @@
   kit et les jetons de design (`design/`), le plugin `lun` (`plugin/`), les specs, les plans et la feuille de route
   (`docs/`).
 - **Ne possède pas** : aucun code applicatif. Les apps recopient le kit et les jetons par `tools/sync-kit.mjs` et
-  `tools/sync-tokens.mjs` ; toutes ne vérifient pas encore leur copie en CI (chantier M).
+  `tools/sync-tokens.mjs`, et leur CI vérifie la copie ; Acedia et Avaritia gardent leur propre kit jusqu'à #43.
 
 ## Lancer en local
 

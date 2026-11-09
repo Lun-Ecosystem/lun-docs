@@ -86,6 +86,9 @@ Le défaut à corriger est l'usage, pas l'identité.
 - Desktop et mobile partagent les tokens, les noms et les icônes ; la mise en page s'adapte.
 - Un seul seuil mobile, **768 px** : la mise en page téléphone s'applique sous 768 px
   (`max-width: 767.98px`), dans le kit comme dans les écrans.
+- Ce qui défile sous un élément flottant (lanceur de l'agent, bouton flottant, barre de saisie) finit par une
+  place au moins égale à son décalage depuis le bas, plus sa hauteur, plus un écart, pour que rien n'y reste caché
+  en fin de défilement ; chaque app la tient avec ses propres variables.
 - Le front public d'un satellite ne montre **rien qui pointe vers le core**, qui est privé : ni
   réglage, ni état de liaison, ni source « le core ». Le satellite se présente comme un produit
   autonome ; ce qui vient du core passe par le contrat sous un nom neutre (client autorisé,
