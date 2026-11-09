@@ -258,6 +258,18 @@ I, J et K que la semaine peut rencontrer :
 empilées) ; le brouillon des scènes de N dès le début ; L, M et O ensuite. Tout s'écrit sur le laptop ; L, N et la
 restauration de K se prouvent sur le desktop.
 
+### P. Trois écrans qui mentent encore
+
+Plan : [`2026-11-09-ecrans-qui-mentent.md`](2026-11-09-ecrans-qui-mentent.md). Ajouté le 09/11 ; ordre validé par CrOliX : L,
+puis P, puis le cadrage d'un nouvel axe.
+
+lun-docs (le kit et la spec), lun-anima, puis les copies du kit (entière dans lun-luxuria, les toasts seuls dans
+lun-acedia et lun-avaritia, qui gardent leur kit jusqu'à #43) : une PR par dépôt. Niveau `standard`. *Show*. Les trois écarts vus pendant J et M :
+
+- le bandeau de la mise en route qui dit « Rien ne tourne encore » pendant que les routines tournent (lun-anima#82) ;
+- le rang des plafonds qui se replie mot par mot au téléphone (lun-anima#83) ;
+- une erreur en attente derrière un toast annulable, écrasée par une information (lun-docs#119).
+
 ## 4. La session sur le desktop
 
 Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en une ou plusieurs fois :
