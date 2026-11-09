@@ -10,7 +10,11 @@
 **Au 09/11.** I et J sont faits : lun-docs#108 et Lun-Ecosystem/.github#3, lun-anima#81, lun-acedia#59,
 lun-avaritia#24 ; le Project est fermé. K : la procédure (lun-docs#111, reprise par lun-docs#112) et les copies
 d'Acedia et d'Avaritia (lun-acedia#61, lun-avaritia#29) ; reste la restauration, à essayer au § 4. N : le
-brouillon de la barre est relu, en brouillon jusqu'au desktop (lun-anima#88). Les écarts vus en route sont en `inbox`.
+brouillon de la barre est relu, en brouillon jusqu'au desktop (lun-anima#88). Tout le reste est sur `main`.
+
+Le même jour : la session sur le desktop (§ 4) est décalée, CrOliX n'étant pas chez lui. Les plans de L et M sont
+écrits, et un chantier O s'ajoute, validé par CrOliX : les écarts vus en route que la semaine de rodage peut
+rencontrer. Les autres restent en `inbox`.
 
 **Au 08/11 au soir, après l'audit.** L'[audit](2026-11-08-audit-ecosysteme.md) a posé douze questions ; CrOliX les a
 tranchées (audit, § 7), sauf la langue parlée (B2, à l'oreille) et lun-acedia#30 (après le MVP). Appliqué le jour
@@ -49,7 +53,7 @@ partie vide, son relevé est fait (lun-luxuria#9).
 | A2 | **Le poste qui tourne seul** : serveurs sans console qui redémarrent, journaux, sauvegarde de la base, Luxuria avec Windows et dans la zone de notification, téléphone par Tailscale | les cinq dépôts | [G](#g-le-poste-qui-tourne-seul) ; côté laptop : lun-anima#69, lun-luxuria#24, la page [`mise-en-service-desktop.md`](../mise-en-service-desktop.md) ; l'installation est B8 ; fait côté laptop, mise en service du desktop le 08/11 |
 | A3 | **La confiance de whisper-server** fixée à 0,9 : un « Oui » a validé une carte (lun-luxuria#6, critique), et RVC par blocs (lun-luxuria#7, première étape). La partie code se prouve sur le laptop contre des faux ; seuls les relevés demandent le desktop | lun-luxuria | [H](#h-la-confiance-de-la-voix) ; code fait (lun-luxuria#10), relevés en B1 |
 | A4 | Les specs qui se contredisent sur les modes (J4, notifications, Luxuria §6.6), et l'app desktop du §8 de la spec écosystème (mises à jour) | lun-docs | fait : lun-docs#95, la PR qui le ferme (le §8 disait déjà « sans mise à jour automatique au MVP ») |
-| A5 | **Ce que l'audit du 08/11 ajoute** : les normes à jour, des états vrais, les trois bases copiées, Luxuria au quotidien, le kit tenu, la barre de la personnalité | les cinq dépôts | [I](#i-les-normes-à-jour) à [N](#n-la-barre-de-la-personnalité) |
+| A5 | **Ce que l'audit du 08/11 ajoute** : les normes à jour, des états vrais, les trois bases copiées, Luxuria au quotidien, le kit tenu, la barre de la personnalité | les cinq dépôts | [I](#i-les-normes-à-jour) à [N](#n-la-barre-de-la-personnalité), puis [O](#o-les-écarts-avant-la-semaine) |
 
 ### B. Bloque le MVP, attend le desktop ou CrOliX
 
@@ -189,6 +193,8 @@ tests ; la restauration se constate sur le desktop (§ 4).
 
 ### L. Luxuria au quotidien
 
+Plan : [`2026-11-09-luxuria-quotidien.md`](2026-11-09-luxuria-quotidien.md).
+
 lun-luxuria. Niveau `standard`. *Ask* : la fenêtre ne se prouve que sur le desktop. Spec :
 [`2026-11-08-luxuria-usage-courant-design.md`](../specs/2026-11-08-luxuria-usage-courant-design.md), ses cinq questions
 tranchées (audit, Q5).
@@ -201,6 +207,8 @@ tranchées (audit, Q5).
 - Les valeurs des préréglages se mesurent sur le desktop (§ 4).
 
 ### M. Le kit tenu partout
+
+Plan : [`2026-11-09-kit-tenu.md`](2026-11-09-kit-tenu.md).
 
 lun-luxuria, lun-avaritia, lun-acedia, lun-anima (la barre de saisie de Natsume), et lun-docs pour le kit : une PR par
 dépôt. Niveau `standard`. *Show*.
@@ -226,8 +234,23 @@ lun-anima, dépôt privé : les scènes viennent de la vie de CrOliX. lun-luxuri
 - Sous la barre, la piste de la veille (C7, une fiche de personnage) se travaille avec CrOliX : ni le SOCLE, ni la voix
   de Natsume, ni la graine du tempérament ne s'écrivent sans lui.
 
-**Ordre de I à N** : I et J en parallèle, K en même temps que J (dépôts communs, mais deux PR séparées, jamais
-empilées) ; le brouillon des scènes de N dès le début ; L et M ensuite. Tout s'écrit sur le laptop ; L, N et la
+### O. Les écarts avant la semaine
+
+Plan : [`2026-11-09-ecarts-avant-semaine.md`](2026-11-09-ecarts-avant-semaine.md). Ajouté le 09/11.
+
+lun-anima, lun-acedia, lun-avaritia : une PR par dépôt. Niveau `standard`. *Show*. Les issues `inbox` des chantiers
+I, J et K que la semaine peut rencontrer :
+
+- un passage sauté affiché « faite », une lettre du matin sans son contexte du jour (lun-anima#80, #85) ;
+- la copie du core détachée de la veille, sous la forme de celles des satellites (lun-anima#86, #87) ;
+- la barre d'Acedia et celle d'Avaritia, qui disent faux sur une clé, une pause ou un plafond (lun-acedia#60,
+  lun-avaritia#25, #27, #28) ;
+- une note ou un dépôt traité et payé pendant une pause locale d'Avaritia (lun-avaritia#26) ;
+- la copie ratée d'un satellite, dite sur son propre écran (lun-docs#110) ;
+- le test qui rougit au hasard (lun-acedia#58, lun-avaritia#23).
+
+**Ordre de I à O** : I et J en parallèle, K en même temps que J (dépôts communs, mais deux PR séparées, jamais
+empilées) ; le brouillon des scènes de N dès le début ; L, M et O ensuite. Tout s'écrit sur le laptop ; L, N et la
 restauration de K se prouvent sur le desktop.
 
 ## 4. La session sur le desktop
@@ -256,7 +279,7 @@ Proposition de Claude, à corriger par CrOliX.
 | Quand | Quoi |
 |---|---|
 | semaine du 09/11 | I et J en parallèle ; le code de K ; le brouillon des scènes de N |
-| semaine du 16/11 | L et M |
+| semaine du 16/11 | L, M et O |
 | dès que CrOliX est sur le desktop | la session du § 4 |
 | Black Week, fin novembre | la RTX si une carte passe à 750 au plus (ADR 0011) : la latence se remesure, sans rien bloquer |
 | semaine du 30/11 ou du 07/12 | B8, la semaine de rodage (J5) |
