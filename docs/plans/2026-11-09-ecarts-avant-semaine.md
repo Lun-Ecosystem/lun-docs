@@ -8,6 +8,8 @@ ou un plafond ; une copie de base qui saute ou rate sans que personne ne le voie
 **Source :** les issues `inbox` vues pendant les chantiers I, J et K ; proposition de Claude du 09/11, validée par
 CrOliX ; [feuille de route](2026-11-07-feuille-de-route-mvp.md), chantier O.
 
+**Livré :** lun-anima#91, lun-acedia#63 et lun-avaritia#30, le 09/11.
+
 **Cadre :** aucun code avant la validation de ce plan par CrOliX. Niveau `standard`. *Show* : tout se prouve sur le
 laptop, sur des bases de démo ou un core jetable. Une PR par dépôt ; elles ne dépendent pas l'une de l'autre, ni de
 celles de L et M.
@@ -43,7 +45,7 @@ Aucun écran ne lit la santé du core (`GET /api/health` n'est lue que par les t
 part, pas plus que celle d'un satellite. Le chemin existe déjà : le core porte à son Journal tout événement qui n'est
 pas `log`, le sien comme celui d'un satellite, et pousse au téléphone ceux en `normal`.
 
-1. - [ ] Dans chaque dépôt, une copie ratée émet un événement `backup.failed`, une fois par jour au plus, avec la
+1. - [x] Dans chaque dépôt, une copie ratée émet un événement `backup.failed`, une fois par jour au plus, avec la
    raison. **[choix Claude]** En importance `normal` : un échec de copie est rare, et la semaine ne doit pas le cacher ;
    il arrive au Journal et au téléphone. Le core par `emitCoreEvent`, sur le modèle de `push.down`. Les satellites par
    leur `emitEvent`, dans le `catch` de `backupIfMissing`. À vérifier d'abord : un satellite en pause locale envoie-t-il
@@ -52,7 +54,7 @@ pas `log`, le sien comme celui d'un satellite, et pousse au téléphone ceux en 
 
 ### lun-anima
 
-2. - [ ] **La copie du core, sous la forme de celles des satellites** (lun-anima#86, #87 ; le code de lun-acedia#61) :
+2. - [x] **La copie du core, sous la forme de celles des satellites** (lun-anima#86, #87 ; le code de lun-acedia#61) :
    - une copie au démarrage, puis chaque heure si celle du jour manque, détachée de la veille : une pause ne l'arrête
      plus. La copie du démarrage précède le premier passage du moteur (à 60 s) : une veille rattrapée au redémarrage
      (B12) suit toujours une copie. La première copie du jour tombe à la première heure après minuit, donc avant la
@@ -65,56 +67,56 @@ pas `log`, le sien comme celui d'un satellite, et pousse au téléphone ceux en 
      pas. Son test est gardé ;
    - tests repris des satellites : copie lisible et complète, rotation à sept, autre base dans le même dossier,
      fichier tenu ouvert.
-3. - [ ] **Un passage sauté ne s'affiche plus « faite »** (lun-anima#80). Le type `Run` de `Routines.svelte` connaît
+3. - [x] **Un passage sauté ne s'affiche plus « faite »** (lun-anima#80). Le type `Run` de `Routines.svelte` connaît
    `skipped`, et `result()` dit `sautée, <raison>`, comme le Journal : « en pause » ou « sans rattrapage ». Test pour
    chacune.
-4. - [ ] **La lettre du matin dit le contexte du jour manqué** (lun-anima#85). Quand `composeWarm` rend `failed`
+4. - [x] **La lettre du matin dit le contexte du jour manqué** (lun-anima#85). Quand `composeWarm` rend `failed`
    alors qu'un fournisseur est en service, la routine reste `ok`, car la lettre est écrite. **[choix Claude]** Elle
    porte la raison « sans le contexte du jour ». L'Atelier, le Journal et la Constellation l'affichent comme « sans le
    modèle », car J les a fait parler tous les trois. Tests : l'échec avec un fournisseur, et rien de changé sans
    fournisseur. La capture passe par une clé fausse ou un modèle sans prix, car une base sans clé donne « sans le
    modèle ».
-5. - [ ] **La recherche du Journal trouve une exécution en échec par « échec »** (lun-anima#84). Test.
-6. - [ ] **Le README** (lun-anima#89) : la cadence de la tâche 2 ; une copie ratée se lit au Journal, et au journal du
+5. - [x] **La recherche du Journal trouve une exécution en échec par « échec »** (lun-anima#84). Test.
+6. - [x] **Le README** (lun-anima#89) : la cadence de la tâche 2 ; une copie ratée se lit au Journal, et au journal du
    serveur ; la restauration renvoie à la page de mise en service de lun-docs, comme les README d'Acedia et
    d'Avaritia.
 
 ### lun-acedia
 
-7. - [ ] **La barre et Réglages ne disent plus « Tri en pause » pour la clé de l'agent** (lun-acedia#60). Dans la barre
+7. - [x] **La barre et Réglages ne disent plus « Tri en pause » pour la clé de l'agent** (lun-acedia#60). Dans la barre
    (`app/src/shell/status.ts`, `problem`) comme dans la bannière de Réglages (`views/src/lib/settings/Settings.svelte`),
    seule la clé du fournisseur du tri compte (`getModelChoice()`). La clé refusée de l'agent se dit dans Réglages, sur
    sa ligne, avec le nom réglé de l'agent ou « l'agent » s'il n'en a pas. Tests dans l'app et dans le paquet de vues :
    la clé de l'agent refusée, le tri actif. La démo refuse la clé du tri : ce cas-là se prouve par les tests.
-8. - [ ] **Le test « rejects a tampered blob » n'échoue plus au hasard** (lun-acedia#58). Le caractère altéré est
+8. - [x] **Le test « rejects a tampered blob » n'échoue plus au hasard** (lun-acedia#58). Le caractère altéré est
    toujours remplacé par un autre que lui-même, et le test le vérifie : la preuve tient en un passage.
 
 ### lun-avaritia
 
-9. - [ ] **Une note ou un dépôt pendant une pause** (lun-avaritia#26). **[choix Claude]** Ils passent : ils sont
+9. - [x] **Une note ou un dépôt pendant une pause** (lun-avaritia#26). **[choix Claude]** Ils passent : ils sont
    demandés à la main, et la règle de l'écosystème laisse passer ce qui est demandé. Ce qui change, ce sont les mots :
    en pause, la carte dit que les lots attendent et que les dépôts passent, au lieu de « Traitement en pause ». Tests :
    un dépôt pendant une pause locale puis pendant une pause du core, traité ; la carte dans les deux cas.
-10. - [ ] **La barre relit la santé** (lun-avaritia#25) : `readHealth()` dans le minuteur de 30 s, à côté des compteurs
+10. - [x] **La barre relit la santé** (lun-avaritia#25) : `readHealth()` dans le minuteur de 30 s, à côté des compteurs
     et des clés. Test avec le faux minuteur de `App.test.ts` : une pause posée pendant la session se lit sans
     recharger.
-11. - [ ] **Le plafond atteint se dit, et seulement lui** (lun-avaritia#27) :
+11. - [x] **Le plafond atteint se dit, et seulement lui** (lun-avaritia#27) :
     - la carte passe à « Plafond atteint » quand la dépense du mois atteint le plafond, avec les mots du Tableau ;
       la pause, puis le service dégradé, passent avant elle ;
     - la bannière du Tableau, « Plafond de coût atteint », ne compte plus que les lots gardés pour la raison
       `cost-cap`, et non ceux gardés sans fournisseur ou sur une panne ;
     - tests : le plafond, une panne de fournisseur qui ne dit pas « plafond ».
-12. - [ ] **Les réponses 409 et 503 disent vrai** (lun-avaritia#28) :
+12. - [x] **Les réponses 409 et 503 disent vrai** (lun-avaritia#28) :
     - sans aucune clé, la réponse dit d'ajouter une clé dans Réglages, et non de choisir un modèle, comme la barre
       depuis lun-avaritia#24. `inputs.ts` lit pour cela les fournisseurs configurés (`configuredProviders`) ;
     - « le texte est gardé » ne promet plus un traitement que rien ne relance : la réponse dit ce qui arrive vraiment
       au texte gardé ;
     - tests.
-13. - [ ] **Le test « rejects a tampered blob »** (lun-avaritia#23), comme à la tâche 8.
+13. - [x] **Le test « rejects a tampered blob »** (lun-avaritia#23), comme à la tâche 8.
 
 ### lun-docs, à la clôture
 
-14. - [ ] La cadence de la copie du core et l'endroit où se lit une copie ratée, au Journal :
+14. - [x] La cadence de la copie du core et l'endroit où se lit une copie ratée, au Journal :
     - `architecture-actuelle.md` ;
     - `mise-en-service-desktop.md`, au § 7 (la copie à 5 h, la veille sautée qui ne copie pas) et au § 8 (« un échec du
       core se lit aussi dans sa santé ») ;

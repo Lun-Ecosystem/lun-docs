@@ -130,13 +130,13 @@ tailscale serve status                       # les trois adresses https://<machi
 
 ## 7. La nuit
 
-La veille de nuit et la copie de la base du core tournent à 5 h. Laisser le PC allumé (veille prolongée désactivée), ou
-compter sur le rattrapage : une nuit manquée est jouée une fois, une minute après le démarrage suivant (sauf
-`ROUTINES_CATCHUP=0` dans le `.env` du core). Une veille sautée pendant une pause ne copie pas la base du core
-(lun-anima#86).
+La veille de nuit tourne à 5 h. Laisser le PC allumé (veille prolongée désactivée), ou compter sur le rattrapage : une
+nuit manquée est jouée une fois, une minute après le démarrage suivant (sauf `ROUTINES_CATCHUP=0` dans le `.env` du
+core).
 
-Acedia et Avaritia copient leur base eux-mêmes, sans heure fixe : dès qu'ils écoutent, puis chaque heure si la copie du
-jour manque. Un poste éteint la nuit se rattrape donc à son démarrage.
+Les copies ne dépendent pas de la veille : le core, Acedia et Avaritia copient chacun leur base, sans heure fixe, dès
+qu'ils écoutent, puis chaque heure si la copie du jour manque. Un poste éteint la nuit se rattrape donc à son
+démarrage, et une pause n'arrête pas la copie.
 
 ## 8. Vérifier
 
@@ -145,8 +145,8 @@ jour manque. Un poste éteint la nuit se rattrape donc à son démarrage.
   pourquoi dans ses premières lignes.
 - Les copies : `backups\anima-AAAA-MM-JJ.db`, `backups\acedia-AAAA-MM-JJ.db` et `backups\avaritia-AAAA-MM-JJ.db`,
   chacune à côté de sa base, sept au plus. Chaque serveur le dit dans son journal du jour (« Base copiée », « Copie de
-  la base ratée ») ; un échec du core se lit aussi dans sa santé. Rien ne passe au Journal de l'app : c'est ici qu'on
-  les voit (lun-docs#110, lun-anima#89).
+  la base ratée »). Une copie ratée arrive aussi au Journal de l'app, au nom de son poste, une fois par jour au plus,
+  et au téléphone : celle d'un satellite, s'il est relié au core.
 - La Constellation : le core, Acedia et Avaritia joignables, Luxuria présente.
 - Un redémarrage de Windows, sans rien taper : tout revient, sans fenêtre de console.
 

@@ -53,9 +53,9 @@ Une origine par app, la même partout.
 - **Le core et Luxuria** : Luxuria se relie au core par un code d'appairage et écoute ce qu'il doit dire. Relié, il ne
   décide de rien.
 - **Le core et ses clients** : l'app, au bureau comme au téléphone, s'appaire au core par un code.
-- **Les copies** : la base du core est copiée avant chaque veille de la nuit, sept copies gardées ; une veille
-  en pause n'en fait pas. Acedia et Avaritia copient chacune la leur une fois par jour, même en pause, dans
-  `data\backups\` à côté de leur base, sept gardées (chantier K).
+- **Les copies** : le core, Acedia et Avaritia copient chacun leur base à leur démarrage, puis chaque heure si la
+  copie du jour manque, même en pause, dans `data\backups\` à côté de la base, sept gardées (chantiers K et O). Une
+  copie ratée arrive au Journal du core, une fois par jour au plus, et au téléphone.
 
 ## Le soir : quelle fenêtre
 
