@@ -18,6 +18,9 @@ Le même jour : la session sur le desktop (§ 4) est décalée, CrOliX n'étant 
 écrits, et un chantier O s'ajoute, validé par CrOliX : les écarts vus en route que la semaine de rodage peut
 rencontrer. Les autres restent en `inbox`.
 
+**Au 10/11.** P livré, en brouillon jusqu'à la fusion de lun-docs#123 (le kit et la spec) : lun-anima#92, puis les copies
+lun-luxuria#45, lun-acedia#65 et lun-avaritia#32. L (lun-luxuria#44) attend la recette du desktop.
+
 **Au 08/11 au soir, après l'audit.** L'[audit](2026-11-08-audit-ecosysteme.md) a posé douze questions ; CrOliX les a
 tranchées (audit, § 7), sauf la langue parlée (B2, à l'oreille) et lun-acedia#30 (après le MVP). Appliqué le jour
 même, hors dépôt : squash seul sur les cinq dépôts, plugin `lun` à la racine du laptop. Confronté aux sources (audit,
@@ -257,6 +260,18 @@ I, J et K que la semaine peut rencontrer :
 **Ordre de I à O** : I et J en parallèle, K en même temps que J (dépôts communs, mais deux PR séparées, jamais
 empilées) ; le brouillon des scènes de N dès le début ; L, M et O ensuite. Tout s'écrit sur le laptop ; L, N et la
 restauration de K se prouvent sur le desktop.
+
+### P. Trois écrans qui mentent encore
+
+Plan : [`2026-11-09-ecrans-qui-mentent.md`](2026-11-09-ecrans-qui-mentent.md). Ajouté le 09/11 ; ordre validé par CrOliX : L,
+puis P, puis le cadrage d'un nouvel axe.
+
+lun-docs (le kit et la spec), lun-anima, puis les copies du kit (entière dans lun-luxuria, les toasts seuls dans
+lun-acedia et lun-avaritia, qui gardent leur kit jusqu'à #43) : une PR par dépôt. Niveau `standard`. *Show*. Les trois écarts vus pendant J et M :
+
+- le bandeau de la mise en route qui dit « Rien ne tourne encore » pendant que les routines tournent (lun-anima#82) ;
+- le rang des plafonds qui se replie mot par mot au téléphone (lun-anima#83) ;
+- une erreur en attente derrière un toast annulable, écrasée par une information (lun-docs#119).
 
 ## 4. La session sur le desktop
 
