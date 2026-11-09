@@ -1,7 +1,7 @@
 # Mettre le desktop en service
 
 La liste à suivre le jour où le core, Acedia et Avaritia passent sur le desktop pour de bon : lancés au démarrage de
-Windows sans fenêtre, joints par le téléphone en HTTPS, la base du core copiée chaque nuit. Spec :
+Windows sans fenêtre, joints par le téléphone en HTTPS, chaque base copiée une fois par jour. Spec :
 [`specs/2026-11-07-poste-autonome-design.md`](specs/2026-11-07-poste-autonome-design.md). Les scripts sont dans
 `lun-anima/deploy/windows/` (leur `LISEZMOI.md` dit ce que fait chacun).
 
@@ -45,11 +45,13 @@ saute leurs `.env`.
   - `acedia.db` vide : Acedia se resynchronise depuis Google, mais ses règles de tri et ses cartes repartent de zéro ;
   - `avaritia.db` vide : le wiki repart de zéro.
 - **Des bases existantes copiées** (celles du laptop ou du desktop), avant le premier démarrage, serveurs arrêtés :
-  - prendre une copie cohérente, en un seul fichier : pour le core, une copie de nuit (`backups/anima-AAAA-MM-JJ.db`
-    à côté de sa base) ; pour les autres, la base de son serveur arrêté, avec ses fichiers `-wal` et `-shm` s'il y en a ;
+  - prendre une copie cohérente, en un seul fichier : une copie du jour (`backups/anima-AAAA-MM-JJ.db`, `acedia-…`,
+    `avaritia-…`, à côté de chaque base), ou la base de son serveur arrêté, avec ses fichiers `-wal` et `-shm` s'il y en
+    a ;
   - la poser au chemin du `DB_PATH` du service ;
   - une `anima.db` copiée exige le **même `ANIMA_SECRET_KEY`** dans le `.env` du service que là d'où elle vient, sinon
-    les jetons des satellites et la clé du modèle ne se déchiffrent plus.
+    les jetons des satellites et la clé du modèle ne se déchiffrent plus ; la clé qui va avec chaque base est au § 9,
+    « Restaurer une copie ».
 
 ## 4. Relier les satellites
 
@@ -128,17 +130,23 @@ tailscale serve status                       # les trois adresses https://<machi
 
 ## 7. La nuit
 
-La veille de nuit et la copie de la base tournent à 5 h. Laisser le PC allumé (veille prolongée désactivée), ou compter
-sur le rattrapage : une nuit manquée est jouée une fois, une minute après le démarrage suivant (sauf
-`ROUTINES_CATCHUP=0` dans le `.env` du core).
+La veille de nuit et la copie de la base du core tournent à 5 h. Laisser le PC allumé (veille prolongée désactivée), ou
+compter sur le rattrapage : une nuit manquée est jouée une fois, une minute après le démarrage suivant (sauf
+`ROUTINES_CATCHUP=0` dans le `.env` du core). Une veille sautée pendant une pause ne copie pas la base du core
+(lun-anima#86).
+
+Acedia et Avaritia copient leur base eux-mêmes, sans heure fixe : dès qu'ils écoutent, puis chaque heure si la copie du
+jour manque. Un poste éteint la nuit se rattrape donc à son démarrage.
 
 ## 8. Vérifier
 
 - Les trois tâches : `Get-ScheduledTask 'Lun *' | Get-ScheduledTaskInfo` (dernier résultat `267009` : en cours).
 - Les journaux du jour : `data\logs\<nom>-AAAA-MM-JJ.log` dans chaque dépôt du service. Un serveur qui s'arrête dit
   pourquoi dans ses premières lignes.
-- La copie de la nuit : `backups\anima-AAAA-MM-JJ.db` à côté de la base du core, sept copies au plus, et l'événement
-  « Base copiée » au Journal. Un échec se lit dans la santé du core.
+- Les copies : `backups\anima-AAAA-MM-JJ.db`, `backups\acedia-AAAA-MM-JJ.db` et `backups\avaritia-AAAA-MM-JJ.db`,
+  chacune à côté de sa base, sept au plus. Celle du core dit « Base copiée » au Journal, et un échec se lit dans sa
+  santé. Celles d'Acedia et d'Avaritia ne le disent que dans le journal de leur serveur (« Base copiée », « Copie de
+  la base ratée ») : c'est ici qu'on les voit (lun-docs#110).
 - La Constellation : le core, Acedia et Avaritia joignables, Luxuria présente.
 - Un redémarrage de Windows, sans rien taper : tout revient, sans fenêtre de console.
 
@@ -150,10 +158,54 @@ sur le rattrapage : une nuit manquée est jouée une fois, une minute après le 
   `main` ou modifiée à la main ; sinon, dépôt par dépôt : arrêt, `git pull --ff-only`, `npm ci`, build, relance.
 - **Retirer** : `.\retirer.ps1 -Service D:\lun-service`. Les tâches et les serveurs partent, le dossier et les bases
   restent.
-- **Restaurer la base du core** : voir « La copie de la base » dans le `README.md` de lun-anima.
+
+### Restaurer une copie
+
+Une copie remet une base au jour où elle a été faite : tout ce qui a été écrit depuis est perdu, y compris les appareils
+reliés, les liaisons et les abonnements aux notifications pris entre-temps. Pour une base, dans un PowerShell :
+
+1. Arrêter son serveur : `Stop-ScheduledTask 'Lun Acedia'` (ou `'Lun core'`, `'Lun Avaritia'`).
+2. Dans le dossier de sa base (`data\` par défaut), mettre la base de côté sous un autre nom, poser la copie choisie à
+   sa place sous le nom de la base (`acedia.db`), et supprimer `acedia.db-wal` et `acedia.db-shm` s'ils restent.
+3. Relancer : `Start-ScheduledTask 'Lun Acedia'`.
+4. Pour Acedia ou Avaritia, le relier de nouveau depuis le core (Atelier › Postes › Relier). La base restaurée reprend
+   la numérotation de ses événements au jour de la copie, alors que le core ne demande que ceux qui suivent le dernier
+   reçu : sans une nouvelle liaison, qui remet ce compte à zéro, urgences et cartes n'arrivent plus, sans aucune erreur.
+   Le code se demande dans le satellite (Réglages › Appareils et applications › Relier un appareil), ou par
+   `npm run pair-code` dans son dossier de service si plus aucun appareil n'y est relié.
+5. Vérifier : pour un satellite, un événement neuf arrive au Journal du core ; pour le core, ses postes restent
+   joignables à la Constellation. Ce qui a été relié après la copie se relie de nouveau : un appareil (Atelier ›
+   Appareils pour le core, Réglages › Appareils et applications pour un satellite), un poste (Atelier › Postes). Le
+   téléphone rouvre ses notifications s'il s'y était abonné depuis.
+
+Une copie s'ouvre sans clé : seuls ses secrets demandent la clé de sa base d'origine, à garder à part des copies.
+
+| Base | Clé | Ce qu'elle protège | Avec une autre clé |
+|---|---|---|---|
+| `anima.db` | `ANIMA_SECRET_KEY` | la clé du modèle, les jetons des satellites, la clé des notifications | à éviter : la clé du modèle se ressaisit et les postes se relient de nouveau, mais les notifications ne partent plus, et aucun écran ne les refait. Garder la même clé. |
+| `acedia.db` | `ACEDIA_SECRET_KEY` | les jetons Google, les clés d'IA saisies dans Réglages | reconnecter Google, ressaisir les clés |
+| `avaritia.db` | `AVARITIA_SECRET_KEY` | les clés d'IA saisies dans Réglages | ressaisir les clés |
+
+Les jetons des appareils sont hachés, pas chiffrés : ils ne dépendent d'aucune clé.
 
 ## 10. Ce qui reste à la main
 
 - Les notifications de Windows, si elles sont coupées (`ToastEnabled = 0` dans le registre de l'utilisateur).
 - Le pare-feu du service de conversion de voix, s'il écoute au-delà de la boucle locale.
 - Le `tailscale serve` de chaque appli (§ 6), qui survit aux redémarrages une fois posé avec `--bg`.
+
+## 11. Rien ne force le terminal pendant la semaine
+
+Le terminal sert à l'installation, à la restauration et aux correctifs voulus. Pendant la semaine de rodage, chaque cas
+qui pourrait le redemander a sa réponse sans terminal, en place ou à mettre avant :
+
+| Cas | Réponse | État |
+|---|---|---|
+| Le jeton Google en « Test », qui tombe au bout de 7 jours | Google en Production, consentement refait sur le vrai compte | à mettre : B10, sur le desktop |
+| Un redémarrage ou une mise à jour de Windows | Les trois tâches planifiées relancent les serveurs au démarrage, sans fenêtre | en place (§ 2), à constater : B12 |
+| Un serveur tombé trois fois de suite | Le lanceur l'abandonne : la Constellation montre un satellite injoignable, le core ne répond plus. Redémarrer Windows le relance | en place |
+| Un nouveau téléphone | Le relier depuis un appareil déjà relié : Atelier › Appareils pour le core, Réglages › Appareils et applications pour un satellite | en place |
+| Un code d'appairage expiré | Un nouveau code depuis l'écran du poste, qui affiche le temps restant | en place |
+| Un navigateur qui perd son jeton | Un autre appareil relié lui donne un code ; sans lui, seul `npm run pair-code` en donne un | à mettre : garder le téléphone relié à chaque app |
+| La clé d'un fournisseur qui arrive à échéance | Son échéance, déclarée dans l'écran, prévient avant ; la clé se remplace depuis le même écran | en place |
+| Un correctif à passer en cours de semaine | `mettre-a-jour.ps1`, dans un PowerShell administrateur (§ 9) | terminal, pour un correctif voulu seulement |
