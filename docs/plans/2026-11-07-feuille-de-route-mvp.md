@@ -201,8 +201,8 @@ tranchées (audit, Q5).
 
 - La fenêtre entre seule : le son sans geste, que wry permet déjà, et la demande d'accès au micro se constatent
   d'abord dans l'exe ; le micro se règle pour la seule origine de l'app s'il le faut ; le seuil « Entrer » ne reste
-  que dans un onglet (audit, § 8.3). Sans le seuil, ce que vaut « présent » se tranche avec CrOliX. Une issue à
-  ouvrir au départ.
+  que dans un onglet (audit, § 8.3). Sans le seuil, une absence simple arrête la présence (tranché par CrOliX le
+  09/11). Une issue à ouvrir au départ.
 - L'arrivée en deux cartes (lun-luxuria#36) ; la consigne qui s'efface au premier tour (#37) ; les réglages partagés
   comme au § 4 de la spec, trois préréglages d'Écoute et « Personnalisé », l'agent neutre, « Identité » (#38).
 - Les valeurs des préréglages se mesurent sur le desktop (§ 4).

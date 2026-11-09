@@ -51,20 +51,20 @@ second écran attendent le desktop. Une PR.
      (`webview.url()`) est celle de l'app, `http://tauri.localhost`, ou le `devUrl` en développement ; tout le reste
      garde le comportement par défaut. Le test de l'origine est une fonction pure, vérifiée par `cargo test`. Le
      gestionnaire n'est pas appelé quand une décision est déjà enregistrée : le README le dit.
-3. - [ ] **Ce que vaut « présent ».** **À trancher par CrOliX avant le code.** Entrer annonce la présence au serveur
-   relié. Une présence active fait dire une urgence à voix haute au lieu de l'envoyer au téléphone, et ouvre la parole
-   spontanée. Le seuil « Entrer » est aujourd'hui la seule chose qui remet la présence à zéro après un redémarrage.
-   Sans lui, une mise à jour de Windows la nuit donne une présence dans une pièce vide. Rien ne détecte l'absence :
-   la spec Luxuria la renvoie après le MVP (§ 11). Trois façons de faire :
-   - (a) assumer « poste ouvert, présent », et l'écrire dans la liste « rien ne force le terminal » de la page de
-     mise en service ;
-   - (b) une absence simple, avec son interrupteur : aucune saisie au clavier ni à la souris depuis un temps réglé, ou
-     la session verrouillée, et la présence s'arrête ; la première saisie la reprend. `GetLastInputInfo`, par
-     `windows-sys`, déjà là ;
-   - (c) entrer seule, mais n'annoncer la présence qu'à la première saisie après le lancement.
-
-   Recommandation de Claude : (b). Elle ferme aussi le cas d'aujourd'hui, une fenêtre entrée le matin qui reste
-   « présente » toute la journée, et une urgence de l'après-midi qui ne part plus au téléphone.
+3. - [ ] **Ce que vaut « présent » : une absence simple** (tranché par CrOliX le 09/11). Entrer annonce la présence au
+   serveur relié. Une présence active fait dire une urgence à voix haute au lieu de l'envoyer au téléphone, et ouvre
+   la parole spontanée. Le seuil « Entrer » était la seule chose qui remettait la présence à zéro après un
+   redémarrage, et rien ne détectait l'absence (spec Luxuria, § 11). Désormais, dans la fenêtre :
+   - sans saisie au clavier ni à la souris depuis un temps réglé, la présence s'arrête ; une session verrouillée ne
+     reçoit aucune saisie, elle compte donc aussi ; la première saisie la reprend. Côté Rust, une commande lit le
+     temps écoulé (`GetLastInputInfo`, par `windows-sys`, déjà là, avec ses features
+     `Win32_UI_Input_KeyboardAndMouse` et `Win32_System_SystemInformation` en plus) ; la page la relit toutes les
+     30 s ;
+   - **[choix Claude]** 15 minutes par défaut, avec son interrupteur et son délai dans Réglages › Fenêtre, comme tout
+     mécanisme de perception ;
+   - l'absence ne change que ce qui est annoncé au serveur : l'écoute et la sourdine restent ce qu'elles sont ;
+   - tests : la fonction qui passe d'une durée sans saisie à présent ou absent ; l'interrupteur coupé, toujours
+     présent ; la reprise à la première saisie. Dans un onglet, rien ne change.
 4. - [ ] **Entrer seule.** Une fonction pure dit si rien ne manque. Relié : un jeton ; seul : l'adresse et le nom du
    modèle. Dans la fenêtre, la page entre alors seule, une seule fois, après le premier verdict du service de la voix
    (prêt ou absent), pour que l'accueil ne parte pas dans un service qui démarre. Sinon, elle montre l'arrivée de la
@@ -145,8 +145,8 @@ second écran attendent le desktop. Une PR.
 - Sur le laptop, dans l'exe compilé, car `tauri dev` ne sert ni l'origine réelle ni `frontendDist` :
   - réglée, la fenêtre s'ouvre sur la scène sans clic, et un `AudioContext` y vaut `running` ;
   - le micro s'ouvre selon le constat de la tâche 2 ;
-  - avec « Démarrer avec Windows », la session fermée puis rouverte : la fenêtre entre seule, et la présence suit la
-    tâche 3 ;
+  - avec « Démarrer avec Windows », la session fermée puis rouverte : la fenêtre entre seule ; sans saisie pendant
+    le délai réglé, la présence s'arrête, et la première saisie la reprend ;
   - les variantes propres à la fenêtre, en capture : l'adresse du serveur à l'arrivée, le petit mode, les raccourcis.
   - Piège : un exe déjà lancé au démarrage garde la main, `tauri dev` ne fait que le montrer (`single-instance`).
 - Sur le desktop (feuille de route, § 4, étape 4) : la vraie chaîne de la voix au démarrage, les trois préréglages
