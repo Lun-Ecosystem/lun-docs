@@ -29,6 +29,13 @@ test('checkRegistry reports an invalid enum value', () => {
   assert.ok(errors.some((e) => e.includes('visibilite')), errors.join('\n'));
 });
 
+test('checkRegistry reports an id with a hyphen or a capital', () => {
+  for (const id of ['lun-docs', 'LunDocs']) {
+    const errors = checkRegistry('projets:\n' + project({ ...valid, id }));
+    assert.ok(errors.some((e) => e.includes(`${id}: id must be`)), errors.join('\n'));
+  }
+});
+
 test('checkRegistry reports two cores', () => {
   const text = 'projets:\n' + project(valid) + project({ ...valid, id: 'core2' });
   assert.ok(checkRegistry(text).some((e) => e.includes('more than one core')));
@@ -38,7 +45,7 @@ test('checkRegistry accepts the new roles', () => {
   const text =
     'projets:\n' +
     project({ ...valid, id: 'website', role: 'vitrine' }) +
-    project({ ...valid, id: 'lun-docs', role: 'referentiel', visibilite: 'public' });
+    project({ ...valid, id: 'lundocs', role: 'referentiel', visibilite: 'public' });
   assert.deepEqual(checkRegistry(text), []);
 });
 

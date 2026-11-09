@@ -21,8 +21,9 @@ et peuvent être câblés au core.**
   une option.
 - Une surface (panel, mobile) **affiche et pilote** ; elle ne porte pas de logique métier propre.
 - Le branchement passe par le contrat commun : `references/contrat-satellite.md` (routes `/lun/v1`,
-  appairage, pause, coûts, événements SSE, vues publiées en paquet). Un front autonome ne connaît que
-  son satellite ; les apps de Lun'Anima intègrent les vues sans les réécrire.
+  appairage, pause, coûts, événements SSE). Un front autonome ne connaît que son satellite ; les apps
+  de Lun'Anima ont leurs propres écrans et n'intègrent jamais ceux d'un satellite : elles y renvoient
+  par son `link`.
 
 ## Quand une question d'architecture se pose
 

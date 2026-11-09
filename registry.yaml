@@ -6,7 +6,7 @@
 # aucun secret. Ces valeurs vivent dans les .env non versionnés des projets.
 #
 # Champs obligatoires par projet :
-#   id          identifiant court, en minuscules
+#   id          identifiant court : minuscules et chiffres, sans trait d'union (« lunanima »)
 #   nom         nom affiché (« Lun'Xxx »)
 #   role        core | satellite | vitrine | referentiel (un seul core)
 #   depot       owner/nom sur GitHub
@@ -20,7 +20,7 @@
 version: 1
 
 projets:
-  - id: lun-docs
+  - id: lundocs
     nom: "Lun'Docs"
     role: referentiel
     depot: Lun-Ecosystem/lun-docs
@@ -67,3 +67,11 @@ projets:
     visibilite: public
     etat: en-dev
     description: "Un compagnon vocal de bureau : sa scène, sa voix, ce qu'il écoute. Seul sur un modèle, ou corps de Natsume relié au core (ADR 0009, 0010)."
+
+  - id: lunsandbox
+    nom: "Lun'Sandbox"
+    role: referentiel
+    depot: Lun-Ecosystem/lun-sandbox
+    visibilite: public
+    etat: archive
+    description: "Essai à blanc de la méthode lun-docs (jetable)."

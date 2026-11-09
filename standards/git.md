@@ -9,10 +9,11 @@
 - **Un chantier = une branche = une PR** : `feat/<sujet>`, `fix/<sujet>`, `docs/<sujet>`, `chore/<sujet>`.
   Jamais une PR par tâche ou par étape du plan.
 - Chaque chantier part de `main` à jour : `git switch main && git pull --ff-only`, puis
-  `git switch -c <type>/<sujet>`.
+  `git switch -c <type>/<sujet>` ; ou, sans toucher la copie principale, son propre worktree :
+  `git fetch` puis `git worktree add <dossier> -b <type>/<sujet> origin/main`.
 - Les **étapes** du chantier se font sur sa branche : un ou plusieurs commits par étape, chacune
   contrôlée (barrières vertes) avant la suivante.
-- **Worktrees** permis pour des étapes indépendantes menées en parallèle : leurs branches restent
+- **Worktrees** permis aussi pour des étapes indépendantes d'un même chantier : leurs branches restent
   locales, sont fusionnées dans la branche du chantier puis supprimées. Jamais poussées, jamais de PR.
 - **Pas de branches empilées poussées** (une par étape, chacune partant de la précédente) : avec la
   fusion en squash, la suivante entre en conflit dès que la première est mergée.
@@ -33,12 +34,18 @@
 ## Pull requests
 
 - Une seule par chantier, **ouverte en brouillon dès le premier push** : la CI tourne à chaque étape
-  poussée. Elle passe « prête » quand les critères de fin sont prouvés.
+  poussée.
+- Elle passe « prête » selon ce qui porte la preuve
+  ([Ship/Show/Ask](https://martinfowler.com/articles/ship-show-ask.html), audit du 08/11, Q7).
+  *Show* : ce qui se prouve sur le laptop (doc, code couvert par ses tests) passe « prête » dès ses
+  critères prouvés. *Ask* : ce que seul le desktop prouve (voix, fenêtre Tauri, services) reste en
+  brouillon jusqu'à la recette de CrOliX. Le plan du chantier dit lequel.
 - Les corrections de revue arrivent dans la même PR, jamais dans une nouvelle.
 - Le gabarit est obligatoire : issue liée, critères de fin cochés, **preuves** (sortie des tests,
   capture, commande de démo), niveau de la tâche.
 - La CI doit être verte.
-- Fusion en **squash** : un commit propre par PR sur `main`.
+- Fusion en **squash** : un commit propre par PR sur `main`. Les réglages de chaque dépôt n'en permettent
+  pas d'autre.
 - **Seul CrOliX merge.** L'agent ouvre la PR, ne la merge jamais, et n'active pas l'auto-merge.
 
 ## Protection de `main`

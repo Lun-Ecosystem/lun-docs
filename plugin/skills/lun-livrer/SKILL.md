@@ -23,7 +23,9 @@ branche : la PR se met à jour.
    `Closes #n`, niveau).
 4. `gh pr checks --watch` : la CI doit être verte.
 5. Critères de fin prouvés : gabarit complété (critères cochés, **preuves** : sortie des tests,
-   capture, commande de démo), `gh pr ready`, puis dis à CrOliX que la PR est prête, avec son lien.
+   capture, commande de démo). *Show* : `gh pr ready`, puis dis à CrOliX que la PR est prête, avec son
+   lien. *Ask* (ce que seul le desktop prouve) : elle reste en brouillon ; dis à CrOliX quoi essayer,
+   elle passe « prête » après sa recette (`references/git.md`).
 
 ## Après le merge
 

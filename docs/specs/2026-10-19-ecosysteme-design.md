@@ -1,5 +1,8 @@
 # Écosystème Lun' : architecture et MVP au 31/12/2026
 
+> **Ce qui tourne aujourd'hui :** [`architecture-actuelle.md`](../architecture-actuelle.md). Elle fait foi là où
+> le corps de cette spec a vieilli (dépôts, postes, ports, fenêtres).
+
 > **Révisée le 2026-10-27** par [`2026-10-27-liaison-core-satellites-design.md`](2026-10-27-liaison-core-satellites-design.md)
 > (§8) : le paquet de vues, le cerveau dans le core et le majordome hors MVP ne tiennent plus.
 

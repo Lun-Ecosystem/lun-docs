@@ -57,7 +57,7 @@ Depuis `D:\lun-service\lun-anima`, une fois les trois serveurs lancés :
 
 ```powershell
 npm run connect -- http://localhost:8787
-npm run connect -- http://localhost:8789
+npm run connect -- http://127.0.0.1:8789
 ```
 
 Chaque commande ouvre la page d'autorisation du satellite dans le navigateur. Avec une base Acedia neuve, refaire

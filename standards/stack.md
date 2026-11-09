@@ -48,6 +48,8 @@ prend pas en charge la 7. L'outillage de lun-docs lui-même reste sans dépendan
 
 ## Déploiement
 
-Dans le cadre de [`environnements.md`](environnements.md) : image Docker **amd64** publiée sur GHCR
-au tag de version, récupérée par le NAS (UGREEN DXP2800, Intel N100). Les apps desktop et mobile se
+Dans le cadre de [`environnements.md`](environnements.md). Pendant le rodage, le desktop suit `main` :
+`deploy/windows/` de lun-anima l'installe et le met à jour
+([mise en service](../docs/mise-en-service-desktop.md)). Ensuite, image Docker **amd64** publiée sur
+GHCR au tag de version, récupérée par le NAS (UGREEN DXP2800, Intel N100). Les apps desktop et mobile se
 distribuent par les releases GitHub de leur dépôt.
