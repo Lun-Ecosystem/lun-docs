@@ -64,26 +64,61 @@ laptop. Une PR dans le core, une ici pour le plan et le relevé.
    messages (le plus chargé : 32). Deux choses en sortent. Le core n'a pas encore d'usage réel sur ce poste : ce que
    le cache ferait gagner ne servira qu'avec la semaine d'usage. Et le poids d'un vrai prompt d'aujourd'hui reste à
    lire : la tâche 3 le rend, par le décompte du fournisseur.
-2. - [ ] **Garder la mesure, par appel** (core). Le fournisseur rend les jetons relus avec son décompte ; le core note le
+2. - [x] **Garder la mesure, par appel** (core). Le fournisseur rend les jetons relus avec son décompte ; le core note le
    temps entre l'envoi et le premier mot de texte. Les deux voyagent en champs facultatifs, pour ne casser aucun faux
    fournisseur des tests, et sont gardés sur la ligne de coût de l'appel, qui n'est jamais purgée (un tour avec outil
    fait deux appels : leurs temps ne s'additionnent pas). Preuve : tests sur un flux simulé ; les tests existants
    passent.
-3. - [ ] **Le relevé, à bras forcés** (core). Une commande joue quatre prompts contre le vrai modèle, en alternance,
+3. - [x] **Le relevé, à bras forcés** (core). Une commande joue quatre prompts contre le vrai modèle, en alternance,
    trente appels chacun, le premier de chaque bras jeté : (a) un prompt minuscule, le plancher du réseau ; (b) le vrai
    prompt avec un mot neuf en tête, donc jamais relu ; (c) le vrai prompt répété, donc relu ; (d) le vrai prompt, l'heure
    et la situation déplacées juste avant le dernier message de CrOliX. Le vrai prompt vient du vrai assemblage, postes
    déclarés reliés, fenêtre pleine, sans appel d'outil ; la commande réordonne elle-même, `service.ts` n'est pas touché.
    Elle rend la médiane et l'écart interquartile du premier mot, et les jetons relus. Moins de dix centimes, lancée
    par CrOliX ou avec son accord. Preuve : le relevé, écrit ici.
-4. - [ ] **La décision.** Écrite ici. On réordonne seulement si (d) gagne au moins 100 ms en médiane sur l'ordre
+4. - [x] **La décision.** Écrite ici. On réordonne seulement si (d) gagne au moins 100 ms en médiane sur l'ordre
    actuel, et plus que l'écart interquartile. Sinon le chantier s'arrête, avec ce qu'il a appris : (a) contre (b) dit ce
    que pèse la lecture du prompt dans les 1130 ms.
-5. - [ ] **Réordonner, si la mesure le dit** (core). L'heure et la situation passent juste avant le dernier message de
+5. - [ ] ~~**Réordonner, si la mesure le dit**~~ *(retirée : la mesure dit non, voir le relevé)* (core). L'heure et la situation passent juste avant le dernier message de
    CrOliX, qui reste le dernier lu, aux trois endroits où le core appelle le modèle (`service.ts:553`, `:620`, `:696`).
    Preuve : les tests qui fixent l'ordre sont repris (`service.test.ts`, `delegation.test.ts`, `situation.test.ts`) ;
    quelques dialogues de plusieurs tours, joués par la commande avec le vrai modèle, sont relus par CrOliX ; le relevé
    est refait.
+
+## Le relevé du 10/11, et la décision
+
+`npm run first-word` sur le laptop, modèle `gpt-6-luna`, vingt-neuf appels gardés par bras, joués en alternance.
+Un bras de plus que prévu : « tel quel » rejoue l'ordre d'aujourd'hui avec l'heure et la situation qui changent à
+chaque appel, pour le comparer à l'ordre proposé dans les mêmes conditions.
+
+| Bras | Premier mot, médiane | Écart interquartile | Jetons d'entrée | Relus du cache |
+|---|---|---|---|---|
+| Minuscule (deux lignes, sans outil) | 1 095 ms | 317 ms | 20 | 0 |
+| Neuf (le vrai prompt, un mot neuf en tête) | 1 193 ms | 313 ms | 2 956 | 0 |
+| Répété (le vrai prompt, identique) | 1 311 ms | 392 ms | 2 945 | 2 942 |
+| Tel quel (l'ordre d'aujourd'hui) | 1 231 ms | 417 ms | 2 950 | 0 |
+| Réordonné (l'heure et la situation avant le dernier message) | 1 324 ms | 388 ms | 2 954 | 1 566 |
+
+Ce que le relevé dit :
+
+- **Le cache ne raccourcit pas le premier mot.** Un prompt entièrement relu (1 311 ms) n'arrive pas plus vite qu'un
+  prompt entièrement neuf (1 193 ms) : l'écart est dans le bruit, et dans le mauvais sens.
+- **Le prompt ne pèse presque rien dans l'attente.** Vingt jetons ou trois mille : 1 095 ms contre 1 193. Environ
+  100 ms pour lire le prompt ; le reste, plus d'une seconde, est le plancher du modèle et du réseau.
+- **Les 1 130 ms de l'essai du 07/11 sont ce plancher.** Aucun réglage du prompt ne les entame.
+- **Aujourd'hui, rien n'est relu du cache** : dans l'ordre actuel, zéro jeton. Le fournisseur le rend bien dans son
+  décompte en flux, et un vrai prompt pèse environ 2 950 jetons, fenêtre pleine.
+
+**Décision : on ne réordonne pas.** Le gain mesuré de l'ordre proposé est de −93 ms en médiane, pour un écart
+interquartile de 417 ms : la tâche 5 est retirée. Réordonner ferait relire 1 566 jetons au dixième du prix, soit
+quelques centimes par mois : pas une raison de toucher à ce que Natsume lit en dernier.
+
+**Ce que cela laisse comme leviers** pour le temps du premier mot, hors de ce chantier : le tour à l'essai (le modèle
+travaille pendant le silence de fin de parole, jamais mesuré), un modèle ou une file plus rapides chez le fournisseur,
+et le silence de fin lui-même. Tous se mesurent sur le desktop, avec la voix ; la mesure par appel livrée ici y servira.
+
+Limites : un seul poste, une seule soirée, une seule connexion ; le prompt du relevé a deux postes reliés et une
+fenêtre pleine de messages inventés, sans les outils de cartes ni les notes de la nuit.
 
 ## Hors périmètre
 
@@ -99,6 +134,7 @@ laptop. Une PR dans le core, une ici pour le plan et le relevé.
 
 - Le diagnostic était faux : ce n'est pas l'heure qui casse le cache sur le fil principal, c'est la situation, à
   chaque tour.
+- Après le relevé : la tâche 5 est retirée, et un bras « tel quel » a été ajouté à la commande.
 - Le relevé prévu (vingt tours, deux espacements) ne pouvait pas distinguer un début relu d'un début neuf : quatre bras
   forcés, alternés.
 - Le prompt d'une base vide n'est pas celui d'un vrai tour : postes reliés, fenêtre pleine.
