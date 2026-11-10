@@ -277,10 +277,21 @@ lun-acedia et lun-avaritia, qui gardent leur kit jusqu'à #43) : une PR par dép
 
 Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en une ou plusieurs fois :
 
-1. Mettre le poste à jour depuis `origin` ; activer le plugin `lun` à la racine (Q10).
-2. B1 : les relevés de confiance et de latence, puis le verrou de l'ADR 0011.
+1. Mettre le poste à jour depuis `origin` ; activer le plugin `lun` à la racine (Q10), et le mettre à jour (les
+   agents de dev en sont retirés depuis lun-docs#108). Reprendre la mémoire de la session du laptop, déposée le 10/11
+   sur le Drive de CrOliX (`memoire-lun-2026-11-10.zip`), dans le dossier de mémoire du projet sur ce poste.
+2. B1 : les relevés de confiance et de latence, puis le verrou de l'ADR 0011. Depuis le 10/11, trois mesures de plus :
+   - vingt tours avec le tour à l'essai coupé, puis vingt avec lui : il est en service par défaut, et n'a jamais été
+     mesuré (l'essai du 07/11 l'avait coupé) ;
+   - `npm run first-word` dans le core, à comparer au laptop : là-bas, le premier mot attend environ 1,1 s quel que
+     soit le prompt, et le cache du fournisseur n'y change rien
+     ([relevé](2026-11-10-premier-mot.md)) ;
+   - le temps du premier mot gardé par appel (`costs.first_text_ms`), à lire après les tours.
 3. B4, B5, B9 : les touches globales, Discord, le mute.
-4. L : la fenêtre qui entre seule, le micro, le son ; les trois préréglages mesurés.
+4. L : la fenêtre qui entre seule, le micro, le son ; les trois préréglages mesurés. Avec elle, deux points de la
+   [ligne d'arrivée](../specs/2026-11-10-etat-cible-cadrage.md) de Lun'Luxuria à éprouver, déjà codés : la couper en
+   cours de phrase (tout de suite, puis en fin de phrase) et vérifier ce qu'elle dit avoir été entendue ; la file du
+   core avec la carte du kit sur de vraies cartes, et la bande restée au-dessus de la feuille (lun-docs#143).
 5. K : la liste « rien ne force le terminal » parcourue, une restauration essayée.
 6. B10 : Google en Production, consentement refait sur le vrai compte.
 7. B11 : le téléphone Android, une notification reçue.
