@@ -294,6 +294,16 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
    [ligne d'arrivée](../specs/2026-11-10-etat-cible-cadrage.md) de Lun'Luxuria à éprouver, déjà codés : la couper en
    cours de phrase (tout de suite, puis en fin de phrase) et vérifier ce qu'elle dit avoir été entendue ; la file du
    core avec la carte du kit sur de vraies cartes, et la bande restée au-dessus de la feuille (lun-docs#143).
+   Après le chantier [« le tour de parole »](2026-11-10-tour-de-parole.md) (lun-luxuria#51, lun-anima#99), à
+   réentendre :
+   - deux phrases à trois secondes d'écart pendant qu'elle réfléchit : une seule réponse, qui a lu les deux ;
+   - une toux, ou une phrase qui n'est pas pour elle, pendant qu'elle réfléchit : sa réponse sort quand même ;
+   - la couper au milieu d'une réponse longue, entre deux phrases ;
+   - une carte seule en attente, à la voix : une question sans rapport reçoit une vraie réponse ; « montre-moi la
+     carte » puis « oui » la tranche ;
+   - dire « oui » sur une carte, puis reparler avant d'entendre « tu as 5 secondes » : rien n'est tranché ;
+   - l'heure : si elle répond encore « je n'ai pas retrouvé l'heure », compter les lignes de coût de cette réponse
+     dans la base de service (deux disent que `relire` a été appelé) et le noter dans lun-anima#97.
 5. K : la liste « rien ne force le terminal » parcourue, une restauration essayée.
 6. B10 : Google en Production, consentement refait sur le vrai compte.
 7. B11 : le téléphone Android, une notification reçue.
