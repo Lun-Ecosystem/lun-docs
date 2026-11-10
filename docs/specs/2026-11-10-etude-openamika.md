@@ -32,18 +32,22 @@ tâches extérieurs, pilotés par un pont) tiennent la place de nos postes.
 
 ## 2. Ce qui se transpose à Lun'Luxuria
 
-| Idée | Ce qu'ils font | Ce que cela demande chez nous |
+> **Corrigé le 10/11 au soir.** La première version de cette table disait ce que chaque idée « demanderait chez nous »
+> sans avoir relu notre code. Relue contre Lun'Luxuria et le core : **cinq de ces dix idées y sont déjà, et deux à moitié**, écrites avant
+> cette étude. Elles ne sont pas encore éprouvées sur le desktop.
+
+| Idée | Ce qu'ils font | Où nous en sommes |
 |---|---|---|
-| **Le tour à l'essai** | Dès la première trame de silence (32 ms), la parole est transcrite et envoyée au cerveau « à l'essai ». Si le silence tient environ 480 ms, le tour est confirmé et reprend la génération déjà lancée (`speech/api.py:3099-3109`, `3252-3260`). | Que le core accepte un message à l'essai, puis sa confirmation ou son abandon. Le prix : des appels au modèle perdus quand la parole reprend. À chiffrer avant tout. |
-| **La première phrase courte** | La première phrase part en synthèse dès 2 caractères utiles ; les suivantes entre 5 et 40 (`speech/sentence_splitter.py:39-45`). | Un réglage du découpage, côté voix. Aucun coût, aucune dépendance. |
-| **La porte d'interruption** | Couper demande 400 ms de parole continue, dans une fenêtre de 400 à 600 ms (`speech/api.py:4112-4143`). Écarte une toux et une partie de l'écho. | De la logique seule, sans matériel. Luxuria n'a pas d'interruption aujourd'hui. |
-| **L'ancrage** | L'écran accuse le début et la fin réels de chaque phrase jouée ; à l'interruption, le cerveau reçoit où elle en était (`speech/api.py:4155-4192`, `ui/use.js:140-155`). La position est estimée par la durée, sans alignement. | Deux accusés de lecture de Luxuria vers le core, et un champ « entendu jusqu'ici » dans le message suivant. |
-| **Un message par phrase** | L'audio, le texte, l'émotion et la pause d'une phrase partent ensemble ; l'expression se joue au début réel de la lecture (`speech/api.py:3875-3892`, `ui/live2d-engine.js:740`). | Que la réponse du core porte une émotion par phrase. C'est la couture entre le visage et la voix. |
-| **Les lèvres tirées du son** | Le volume et trois bandes de fréquences de l'audio joué donnent A, I, U, E, O (`ui/live2d-engine.js:400-441`). Aucun phonème demandé à la synthèse. | Rien que la fenêtre de Luxuria ne puisse faire. Marche avec toute voix, donc après la conversion RVC. |
-| **L'émotion du visage n'est pas celle de la voix** | Un adaptateur réécrit l'étiquette pour la voix ; le visage garde l'étiquette d'origine (`docs/TTS.md:79-87`). | Une table par voix, en réglage : conforme à « le lore est une configuration ». |
-| **Le texte reporté** | Une parole coupée de force à 30 s est reprise en tête du message suivant, tant que le tour n'est pas confirmé (`speech/stt_carry.py:12-39`). | Une fonction pure, facile à porter. Aucune perte sur un long monologue. |
-| **Un chien de garde par étape** | 2 s pour le premier audio, 5 s par phrase, sinon la file est vidée (`speech/api.py:3963-4010`). | À reprendre, mais en le disant à l'écran : chez eux la parole se perd sans un mot. |
-| **Le filtre avant de voir** | Une description par seconde au plus, et seulement si l'image a changé (signature 64×48 en gris) ; seul le texte part au cerveau, l'image reste sur le poste (`vision/vlm_service.py:302-307`, `379-382`, `420-423`). | Le même principe pour « voir l'écran ». Leur modèle (Qwen3-VL, 4,3 Go de mémoire vidéo) demande une carte NVIDIA. |
+| **Le tour à l'essai** | Dès la première trame de silence (32 ms), la parole est transcrite et envoyée au cerveau « à l'essai ». Si le silence tient environ 480 ms, le tour est confirmé et reprend la génération déjà lancée (`speech/api.py:3099-3109`, `3252-3260`). | **Déjà là.** Lun'Luxuria envoie à la première pause (160 ms), retient les mots, puis confirme ou retire (`src/conversation.ts`, `endOfSpeech.speculate`, en service par défaut). Pas mesuré : l'essai du 07/11 l'avait coupé. |
+| **La première phrase courte** | La première phrase part en synthèse dès 2 caractères utiles ; les suivantes entre 5 et 40 (`speech/sentence_splitter.py:39-45`). | **Déjà là dans le core**, depuis le 06/11 : la première pièce s'arrête à la première virgule (`core/src/natsume/speech.ts`, `FIRST_MIN`). **Manque en mode seul** : `src/local.ts` de Luxuria ne coupe qu'en fin de phrase. |
+| **La porte d'interruption** | Couper demande 400 ms de parole continue, dans une fenêtre de 400 à 600 ms (`speech/api.py:4112-4143`). Écarte une toux et une partie de l'écho. | **Déjà là** : 400 ms de voix tenue coupent la parole, tout de suite ou en fin de phrase (`bargeIn`, `src/listen/endpoint.ts`, en service par défaut). Pas de fenêtre de 400 à 600 ms. |
+| **L'ancrage** | L'écran accuse le début et la fin réels de chaque phrase jouée ; à l'interruption, le cerveau reçoit où elle en était (`speech/api.py:4155-4192`, `ui/use.js:140-155`). La position est estimée par la durée, sans alignement. | **Déjà là** : à la coupure, Luxuria rend au core les phrases dites et la part entendue de la phrase en cours, estimée par la durée (`Speaker.stop`, `wordsHeard`, `brain.cut`). |
+| **Un message par phrase** | L'audio, le texte, l'émotion et la pause d'une phrase partent ensemble ; l'expression se joue au début réel de la lecture (`speech/api.py:3875-3892`, `ui/live2d-engine.js:740`). | **À moitié** : le core publie déjà une phrase par événement (`speech`), sans émotion ni pause. Reste l'émotion par phrase : c'est la couture entre le visage et la voix. |
+| **Les lèvres tirées du son** | Le volume et trois bandes de fréquences de l'audio joué donnent A, I, U, E, O (`ui/live2d-engine.js:400-441`). Aucun phonème demandé à la synthèse. | **Le principe est là** : la bouche s'ouvre sur le son réellement joué, entre deux images (`Mouth`, `src/body/body.ts`). Restent les voyelles, avec un avatar animé. |
+| **L'émotion du visage n'est pas celle de la voix** | Un adaptateur réécrit l'étiquette pour la voix ; le visage garde l'étiquette d'origine (`docs/TTS.md:79-87`). | Rien aujourd'hui : pas d'émotion par phrase. Une table par voix, en réglage, le jour venu. |
+| **Le texte reporté** | Une parole coupée de force à 30 s est reprise en tête du message suivant, tant que le tour n'est pas confirmé (`speech/stt_carry.py:12-39`). | Luxuria coupe aussi une parole à 30 s (`maxSpeechMs`). Non vérifié : ce que devient le texte coupé. |
+| **Un chien de garde par étape** | 2 s pour le premier audio, 5 s par phrase, sinon la file est vidée (`speech/api.py:3963-4010`). | **Déjà là, en mieux** : 5 s par phrase, et une phrase sans voix s'affiche à l'écran le temps de la lire (`SYNTH_TIMEOUT_MS`, `readingMs`). |
+| **Le filtre avant de voir** | Une description par seconde au plus, et seulement si l'image a changé (signature 64×48 en gris) ; seul le texte part au cerveau, l'image reste sur le poste (`vision/vlm_service.py:302-307`, `379-382`, `420-423`). | Rien aujourd'hui. Le même principe pour « voir l'écran ». Leur modèle (Qwen3-VL, 4,3 Go de mémoire vidéo) demande une carte NVIDIA. |
 
 **La parole d'elle-même.** Elle ouvre un tour après 30 s de silence, une seule fois par silence, et au plus deux fois
 sans réponse (`brain/webui.py:2814-2903`). Elle ne parle que si rien n'est en cours et qu'un écran est relié. C'est un
@@ -108,16 +112,23 @@ Le code lui-même est sous licence MIT : une idée ou un algorithme se reprend, 
 
 La ligne proposée dans l'état cible (§ 4.1) a cinq points : un visage qui vit ; elle perçoit ce que fait CrOliX et s'y
 accorde ; elle parle d'elle-même, à propos, sans lasser ; elle peut faire sur le poste ; elle peut être vue et entendue
-par d'autres. OpenAmika montre deux choses qui n'y sont pas, et qui font la présence :
+par d'autres. OpenAmika montre deux choses qui n'y étaient pas écrites, et qui font la présence :
 
-- **Elle se laisse couper, et sait où elle en était.** Sans cela, la conversation reste un échange de tours.
+- **Elle se laisse couper, et sait où elle en était.** Sans cela, la conversation reste un échange de tours. Le code de
+  Luxuria le fait déjà (§ 2) : le point entre dans la ligne pour être éprouvé, pas pour être construit.
 - **Son visage suit sa voix, phrase par phrase.** Un avatar animé qui ne suit pas ce qui est dit n'est qu'un décor.
+  Il manque l'émotion par phrase.
 
 Et elle précise le troisième point par un garde-fou simple : elle parle d'elle-même après un silence, une fois, et se
 tait si on ne lui répond pas.
 
-Deux gains sont à part, parce qu'ils ne demandent ni avatar ni matériel : la première phrase courte, et le cache par
-paliers côté core. Ils peuvent se mesurer dès la recette du desktop.
+Un gain est à part, parce qu'il ne demande ni avatar ni matériel : le cache par paliers côté core. La première phrase
+courte, elle, est déjà dans le core ; il ne lui manque que le mode seul de Luxuria.
+
+**Où part le temps aujourd'hui** (essai du 07/11, 2776 ms en médiane du dernier son de voix au premier son joué) : le
+silence de fin (600 ms), la transcription (563), l'attente du premier mot du modèle (environ 1130), la synthèse (79) et le
+premier bloc de conversion de voix (131). Les leviers qui restent sont donc le tour à l'essai, coupé pendant cet essai et
+jamais mesuré, et le temps du modèle ; pas le découpage.
 
 ## 7. Ce qui n'a pas été vérifié
 
@@ -128,6 +139,6 @@ paliers côté core. Ils peuvent se mesurer dès la recette du desktop.
   `pricing.json` et le corps des tests n'ont pas été lus.
 - Non établi : qu'un fonctionnement tout local marche vraiment (le code pour Ollama existe, aucune configuration n'est
   fournie) ; le coût réel d'un tour ; l'absence de tout oubli dans leur mémoire.
-- Aucune comparaison ligne à ligne avec le code de Luxuria et du core : les colonnes « ce que cela demande chez nous »
-  sont des estimations, à reprendre au cadrage de chaque marche.
+- La colonne « où nous en sommes » du § 2 a été relue contre le code de Luxuria et du core le 10/11 au soir. Le § 3 (le
+  core) ne l'a pas été : le cache, la mémoire et le coût du core restent à comparer avant d'en tirer un chantier.
 - À essayer pour de bon quand la RTX arrive.
