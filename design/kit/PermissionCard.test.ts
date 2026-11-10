@@ -27,6 +27,12 @@ describe('PermissionCard', () => {
     expect(onanswer.mock.calls).toEqual([['once'], ['always'], ['refuse']]);
   });
 
+  it('waiting without a function to answer, shows no answer', () => {
+    render(PermissionCard, { props: base });
+    expect(screen.getByRole('article')).toBeInTheDocument();
+    expect(screen.queryByRole('button')).toBeNull();
+  });
+
   it('an « always » without a scope is said alone', () => {
     render(PermissionCard, { props: { what: base.what, onanswer: vi.fn() } });
     expect(bouton('Toujours')).toBeInTheDocument();
@@ -46,7 +52,7 @@ describe('PermissionCard', () => {
     ['once', `Autorisé une fois : ${base.what}`],
     ['always', `Toujours autorisé pour ce dossier : ${base.what}`],
     ['refused', `Refusé : ${base.what}`],
-    ['unanswered', 'Sans réponse : l’action n’a pas eu lieu.'],
+    ['unanswered', `Sans réponse, rien n’a eu lieu : ${base.what}`],
   ] as const)('%s folds into one line, without the answers', (status, texte) => {
     render(PermissionCard, { props: { ...base, status, onanswer: vi.fn() } });
     expect(screen.queryByRole('article')).toBeNull();
@@ -57,10 +63,10 @@ describe('PermissionCard', () => {
   it('only an « always » can be taken back', async () => {
     const onrevoke = vi.fn();
     const { unmount } = render(PermissionCard, { props: { ...base, status: 'always', onrevoke } });
-    await userEvent.click(bouton('Retirer'));
+    await userEvent.click(bouton('Ne plus autoriser'));
     expect(onrevoke).toHaveBeenCalledOnce();
     unmount();
     render(PermissionCard, { props: { ...base, status: 'once', onrevoke } });
-    expect(screen.queryByRole('button', { name: 'Retirer' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Ne plus autoriser' })).toBeNull();
   });
 });

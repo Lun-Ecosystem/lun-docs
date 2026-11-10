@@ -9,7 +9,8 @@
    * always, refuse). Not a card: nothing was prepared and nothing waits in a queue. It is drawn on the same sheet,
    * shorter, in the color of the world, and folds into one line once answered.
    *
-   * It only draws: asking, remembering an « always » and taking it back are the app's.
+   * It only draws: asking, remembering an « always » and taking it back are the app's. Without `onanswer` it shows no
+   * answer. An answered permission offers nothing but taking an « always » back: no undo, no dismissal.
    */
   type Props = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
     /** The action that asks (« Ouvrir le dossier Téléchargements »). */
@@ -20,7 +21,7 @@
     reason?: string | undefined;
     /** The eyebrow after « Permission »: the post, the moment. */
     meta?: string[] | undefined;
-    /** What an « always » covers (« pour ce dossier »); without it, « Toujours » alone. */
+    /** What an « always » covers, as a whole phrase with its preposition (« pour ce dossier »); « Toujours » alone without it. */
     scope?: string | undefined;
     status?: 'pending' | 'once' | 'always' | 'refused' | 'unanswered' | undefined;
     /** The answer is on its way: it spins, the others wait. */
@@ -60,7 +61,7 @@
           lineText: `${scope ? `Toujours autorisé ${scope}` : 'Toujours autorisé'} : ${what}`,
         },
         refused: { status: 'refused', lineText: `Refusé : ${what}` },
-        unanswered: { status: 'expired', lineText: 'Sans réponse : l’action n’a pas eu lieu.' },
+        unanswered: { status: 'expired', lineText: `Sans réponse, rien n’a eu lieu : ${what}` },
       } as const
     )[status],
   );
@@ -95,7 +96,7 @@
   {/snippet}
   {#snippet doneActions()}
     {#if status === 'always' && onrevoke}
-      <Button variant="fantome" size="petit" onclick={onrevoke}>Retirer</Button>
+      <Button variant="fantome" size="petit" onclick={onrevoke}>Ne plus autoriser</Button>
     {/if}
   {/snippet}
 </DecisionCard>
