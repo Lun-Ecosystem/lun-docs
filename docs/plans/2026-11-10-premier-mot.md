@@ -137,8 +137,8 @@ Le plancher est le même que sur le laptop (1 142 ms contre 1 095). L'ordre réo
 où il en perdait 93 sur le laptop ; l'écart interquartile de « tel quel » est de 622 ms, la règle de la tâche 4 n'est
 donc pas remplie. Un seul passage.
 
-**Le tour à l'essai, mesuré le même soir** : deux séries de vingt tours à la voix dans Luxuria, silence de fin à
-600 ms. Du dernier son de voix au premier son joué : 3 379 ms en médiane sans lui, 3 072 ms avec lui. Le premier mot
+**Le tour à l'essai, mesuré le même soir** : deux séries à la voix dans Luxuria (vingt tours, puis dix-neuf comptés), silence de fin à
+600 ms. Du dernier son de voix au premier son joué : 3 379 ms en médiane spéculation coupée, 3 072 ms spéculation allumée. Le premier mot
 gardé par appel (`costs.first_text_ms`) : 1 055 ms en médiane sur 16 appels, puis 973 ms sur 15 ; aucun jeton relu du
 cache. Les phrases différaient d'une série à l'autre : l'écart de 0,3 s n'est pas établi. Le détail est dans
 `lun-luxuria/docs/essai-2026-11-07.md`.

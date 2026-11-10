@@ -70,8 +70,8 @@ le CORS du service pour Tauri, une autre brique de transcription.
 
 - [x] `docs/README.md`, section du service voix : la confiance de whisper-server et sa différence avec faster-whisper,
       les blocs RVC, `--rvc-gain`. Dans le même commit que le code.
-- [x] Sur le desktop : les deux relevés du critère 4. Le script de relevé de confiance reste hors dépôt, dans
-      `luxuria-essai/banc/`. Faits le 10/11 : 3 faux acceptés et 4 faux rejets sur 21 énoncés ; premier son à 3 379 ms
+- [ ] Sur le desktop : les deux relevés du critère 4 (faits le 10/11, sauf le 95ᵉ centile de la latence). Le script de relevé de confiance reste hors dépôt, dans
+      `luxuria-essai/banc/`. Relevé : 3 faux acceptés et 4 faux rejets sur 21 énoncés ; premier son à 3 379 ms
       en médiane sur 20 tours, spéculation coupée. Le 95ᵉ centile manque, l'écran ne le rend pas.
 - [ ] Dans #7 : un commentaire qui dit ce qui reste (le flux) et ce qu'en dit le relevé. Le reste est posté ; le relevé suivra B1.
 - [x] PR avec `lun-livrer`, critères cochés et preuves (lun-luxuria#10, fusionnée le 07/11).

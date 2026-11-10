@@ -280,7 +280,8 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
 1. Mettre le poste à jour depuis `origin` ; activer le plugin `lun` à la racine (Q10), et le mettre à jour (les
    agents de dev en sont retirés depuis lun-docs#108). Reprendre la mémoire de la session du laptop, déposée le 10/11
    sur le Drive de CrOliX (`memoire-lun-2026-11-10.zip`), dans le dossier de mémoire du projet sur ce poste.
-2. B1 : les relevés de confiance et de latence, puis le verrou de l'ADR 0011. Depuis le 10/11, trois mesures de plus :
+2. B1 : les relevés de confiance et de latence (faits le 10/11, comme les trois mesures ci-dessous), puis le verrou
+   de l'ADR 0011. Depuis le 10/11, trois mesures de plus :
    - vingt tours avec le tour à l'essai coupé, puis vingt avec lui : il est en service par défaut, et n'a jamais été
      mesuré (l'essai du 07/11 l'avait coupé) ;
    - `npm run first-word` dans le core, à comparer au laptop : là-bas, le premier mot attend environ 1,1 s quel que
