@@ -1,5 +1,9 @@
 # Le nouvel axe : le travail de dev. Cadrage
 
+> **Axe mis de côté par CrOliX le 10/11**, après la [spec de fondation](2026-11-10-lun-ira-design.md) : l'architecture du
+> moment le limite trop, et un abonnement à un agent de code couvre déjà l'essentiel. Voir le § 13. La veille (§ 7) reste
+> ouverte.
+
 > Cadrage du 10/11, à discuter avec CrOliX **avant toute spec**. Il ouvre des possibilités et n'en tranche aucune. Demande
 > de CrOliX le 09/11 : partir des besoins d'aujourd'hui, challenger [`vision.md`](../../vision.md), dire comment le satellite
 > s'intègre aux autres, revoir le nom. Le 10/11, CrOliX a dit son besoin (§ 2) : ses points sont « des idées à valider,
@@ -187,3 +191,22 @@ Pris : Acedia, Avaritia, Luxuria. Restent Ira, Gula, Superbia, Invidia. Les note
 5. Le nom, puis la correction de `vision.md`, dans la PR de la spec.
 
 Ensuite : une spec de design pour le premier palier, puis son plan.
+
+## 13. Mis de côté, le 10/11
+
+CrOliX, après réflexion :
+
+1. **L'architecture limite trop.** Aujourd'hui : un NAS sur le réseau local, deux PC dont aucun n'est toujours allumé, un
+   téléphone. À terme, il veut un serveur dédié, qui ferait aussi tourner en local les modèles les plus légers, et un NAS
+   ramené à l'archivage et au stockage. C'est une révision de l'[ADR 0008](../../adr/0008-acces-exterieur.md), qui fait tout
+   tourner sur le NAS : à cadrer pour elle-même.
+2. **La plus-value est moindre.** Son abonnement à un agent de code fait déjà ce que ferait le satellite. Le seul ajout
+   serait la présence : voir que c'est Natsume, ou l'agent du poste, qui a poussé et ouvert une PR. « C'est de la com et
+   de l'image, mais c'est tout. »
+
+Ce qui reste ouvert : la veille (un satellite, une fonction du core, ou une capacité d'Avaritia qui garde les résultats,
+met en forme les évolutions et les contradictions entre sources), ou un tout autre point de tension à supprimer.
+
+Ce que ce cadrage laisse d'utile : la règle de coût en trois niveaux (sans modèle, l'abonnement par l'outil officiel,
+une clé plafonnée) ; ce que les textes officiels permettent avec un abonnement (spec, § 4) ; GitHub comme fil entre les
+machines et la passation comme geste, que la méthode applique déjà à la main.

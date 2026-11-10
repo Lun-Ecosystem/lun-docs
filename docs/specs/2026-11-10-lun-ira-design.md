@@ -1,5 +1,11 @@
 # Lun'Ira : l'atelier de dev. Fondations
 
+> **Mise de côté par CrOliX le 10/11, le jour même.** Deux raisons. L'architecture du moment limite trop : aucun PC
+> toujours allumé, un NAS qu'il veut ramener au stockage, et à terme un serveur dédié qui ferait aussi tourner les modèles
+> les plus légers en local. Et la plus-value est faible : son abonnement à un agent de code fait déjà ce que ferait le
+> satellite ; le seul ajout serait la présence (voir que c'est Natsume ou l'agent du poste qui a ouvert une PR), « de la
+> com et de l'image, mais c'est tout ». Cette spec reste comme trace de la réflexion ; rien n'en est planifié.
+
 > Spec de fondation du 10/11, à valider par CrOliX **avant tout plan**. Elle suit le
 > [cadrage](2026-11-10-axe-dev-cadrage.md) et ce que CrOliX y a tranché (§ 1). Elle pose ce que le satellite est, ce qu'il
 > possède, sa règle de coût, son harnais, son format et ses paliers ; elle ne dessine aucun écran et ne choisit aucune
