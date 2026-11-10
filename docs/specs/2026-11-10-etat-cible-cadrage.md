@@ -124,6 +124,7 @@ graphique à venir. La 8 est l'horizon : elle justifie de bien faire les sept au
 | 5 | **L'architecture** : un serveur dédié, le NAS au stockage, la porte d'entrée ; l'ADR 0008 à revoir (lun-docs#109) | CrOliX, le 10/11 |
 | 6 | **Le premier contact sans terminal** : le premier appareil, Google depuis l'interface, la liaison d'un poste | lun-anima#72, #90, lun-acedia#55, #30 |
 | 7 | **La bibliothèque cherchée par le sens** | § 4.3 |
+| 8 | **Les mots et les composants partagés** : le [dictionnaire](../../standards/dictionnaire.md), puis la galerie du kit en trois paliers (le kit tel qu'il est ; les cartes et la permission ; la convergence des kits) | CrOliX, le 10/11 ; [plan](../plans/2026-11-10-galerie-kit.md) |
 
 **[avis Claude]** 1 à 4 d'abord : ils coûtent peu et remettent les textes d'accord avec ce que CrOliX veut. 5 se cadre
 quand l'achat se précise. 6 et 7 sont de vrais chantiers, à ordonner contre les marches de la présence.

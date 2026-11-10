@@ -1,0 +1,32 @@
+/*
+ * The page base of the gallery: the core's (lun-anima/ui/src/lib/base.css), without what is its own. The kit renders
+ * on it as it does in the core: no global box-sizing (Luxuria sets border-box everywhere, the core does not).
+ */
+html,
+body {
+  margin: 0;
+  background: var(--fond);
+  color-scheme: dark;
+}
+
+.galerie {
+  font-family: var(--sans);
+  font-weight: 300;
+  color: var(--texte);
+  background: var(--fond);
+  scrollbar-color: var(--bordure-forte) transparent;
+}
+
+:where(.galerie) :where(button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--accent-bord);
+  outline-offset: 1px;
+}
+
+:where(.galerie) :where(input, select, textarea) {
+  font: inherit;
+  color: var(--texte);
+  background: var(--surface-2);
+  border: 1px solid var(--bordure);
+  border-radius: var(--r-2);
+  padding: 0.35rem 0.55rem;
+}
