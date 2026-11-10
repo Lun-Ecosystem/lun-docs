@@ -24,6 +24,7 @@ aucun code applicatif.
 | Branches, commits, PR, release | [`standards/git.md`](standards/git.md) |
 | Local et prod | [`standards/environnements.md`](standards/environnements.md) |
 | Paliers et rendu des notifications | [`standards/notifications.md`](standards/notifications.md) |
+| Les mots de l'écosystème | [`standards/dictionnaire.md`](standards/dictionnaire.md) |
 | Structure d'un projet | [`standards/structure-projet.md`](standards/structure-projet.md) |
 | Qualité, sécurité, stack, design | [`standards/`](standards/) |
 | Jetons de design de référence (copiés dans chaque dépôt) | [`design/tokens.css`](design/tokens.css) |

@@ -6,6 +6,8 @@ description: Use when a task touches the Lun' ecosystem architecture - deciding 
 # Écosystème Lun'
 
 Le nord est `references/vision.md` ; les règles non négociables sont dans `references/essentiel.md`.
+Les mots ont un sens fixé dans `references/dictionnaire.md` : le lire avant d'écrire un texte, un écran ou une
+réplique de Natsume, et y ajouter un terme avant de l'employer ailleurs.
 Lis-les avant de trancher une question d'architecture.
 
 ## Le principe
