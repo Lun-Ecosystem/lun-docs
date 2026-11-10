@@ -101,11 +101,19 @@ commodité.
 | **3b. Un éditeur existant qui parle le protocole** | Adopter un éditeur ouvert aux agents externes ; y brancher les trois agents officiels | les abonnements marchent, légitimement ; rien à écrire | on s'adapte à l'éditeur |
 | **3c. Un poste de pilotage, pas un éditeur** | Une surface du satellite : les chantiers, les sessions, les PR, la CI, ce qui attend CrOliX ; elle ouvre l'éditeur ou la session au bon endroit | c'est ce qui manque vraiment ; cohérent avec les points 1 et 2 | ne remplace pas l'éditeur |
 | **3d. La forge maison** | L'ancien Ira : des agents à soi | — | écarté par la vision et par le § 3 |
+| **3e. Un atelier à soi, sur des briques existantes** | Ce qu'Acedia est à Gmail : une surface à soi, cadrée sur le besoin, posée sur ce qui existe. Ici : un composant d'édition existant, les agents officiels pilotés par le protocole, et par-dessus les chantiers, les sessions, la revue des diffs, l'agent du satellite et Natsume dans la boucle | sur mesure et évolutif sans réécrire un moteur ; autonome, comme tout satellite ; Natsume et l'agent du poste y ont une vraie place | le plus gros des choix retenus ; chaque fonction d'IDE ajoutée (débogage, extensions, langages) se paie |
 
-**[avis Claude]** 3b pour écrire le code, 3c pour piloter : ne pas construire d'IDE. Le besoin « adapté à l'intégration de
-l'IA » est déjà servi par les éditeurs qui parlent le protocole ; ce qu'aucun ne donne, c'est la vue des chantiers à
-travers les dépôts et les sessions, et c'est ce que le satellite peut posséder. Plusieurs abonnements : oui, par les
-outils officiels pilotés, jamais par leurs jetons recopiés.
+**Objection de CrOliX, le 10/11 :** écarter l'IDE à soi « nous limite trop », pour l'intégration de Natsume et de l'agent
+du satellite dans la boucle de travail, et pour l'autonomie du satellite. « Si on suit cette logique, Acedia est une
+reconstruction de Gmail, juste cadrée pour correspondre à mon besoin, qui pourra évoluer sans être limitée. »
+
+**[avis Claude, révisé]** L'objection tient, et l'analogie dit où couper. Acedia n'a pas réécrit un serveur de mail : elle
+pose sa surface et son agent sur l'API de Gmail. L'équivalent ici est 3e : ne réécrire ni le moteur d'édition ni les
+agents de code, et posséder tout ce qui est autour. 3a reste écarté, 3b seul aussi : dans un éditeur tiers, Natsume et
+l'agent du poste ne seraient que des invités. 3c devient le premier palier de 3e, pas une alternative. Ce qui reste à
+cadrer est la liste des fonctions : dans un travail conduit par des agents, l'atelier sert surtout à lancer et suivre
+des sessions, relire des diffs, lire des fichiers, ouvrir un terminal ; la frappe de code y pèse peu. Plusieurs
+abonnements : oui, par les agents officiels pilotés, jamais par leurs jetons recopiés ; une clé d'API en repli.
 
 ## 7. La veille : trois approches
 
@@ -113,16 +121,22 @@ Aujourd'hui, la veille se fait à la main, avec Perplexity, dans `perplexity/` :
 
 | | Ce que c'est | Pour | Contre |
 |---|---|---|---|
-| **V1. La tech, dans ce satellite** | Les sorties des dépendances, les dépôts suivis, les avis de sécurité : tout vient de GitHub | même source et même identité que le § 5 ; rien de plus à brancher | ne couvre que la tech liée au code |
+| **V1. Ce qui touche mes dépôts, dans ce satellite** | Les sorties des dépendances, les avis de sécurité, les dépôts suivis : ce que GitHub sait déjà | même source et même identité que le § 5 ; rien de plus à brancher | ce n'est pas « la veille tech » : une seule source, et seulement ce qui touche le code en place |
 | **V2. Un outil dédié, par thèmes** | Des veilles réglables : un thème, des sources, un rythme, une synthèse | couvre tout (tech, VTubeuses, sorties) ; un métier net | un projet de plus pour un besoin encore flou ; la recherche est le métier d'outils déjà bons |
 | **V3. Brancher l'existant** | Un serveur de recherche pour agents (Perplexity en publie un, officiel, avec une clé d'API payée à l'usage) appelé par une routine : un thème, une question, un rythme | la recherche est faite par un outil dont c'est le métier ; très peu de code | un coût par appel ; dépend d'un fournisseur |
 
 Qui reçoit le résultat se décide à part : ce qui mérite de rester devient une fiche sourcée dans Avaritia, dont c'est le
 métier ; le reste passe au point du matin.
 
-**[avis Claude]** V1 dans ce satellite, parce que c'est gratuit et lié. V3 pour le reste, réglé par thèmes : cela donne
-l'essentiel de V2 sans écrire un moteur de veille. Qui porte la routine de V3 reste à trancher : pas le core (il ne
-possède aucun métier), plutôt Avaritia, qui range déjà ce qu'on lui apporte.
+**Objection de CrOliX, le 10/11 :** une veille tech limitée à GitHub, c'est une seule source d'information : pas
+convaincant.
+
+**[avis Claude, révisé]** Il a raison, V1 était mal nommée. Ce que GitHub donne est un suivi des dépendances, utile et
+gratuit, que ce satellite garde. La veille tech, elle, a plusieurs sources (annonces des fournisseurs de modèles, blogs,
+articles, sorties d'outils, communautés) : c'est un thème parmi d'autres d'une veille par thèmes, donc V2 ou V3, pas V1.
+Entre les deux : V3 d'abord (des thèmes, des questions, un rythme, la recherche confiée à un outil dont c'est le
+métier), et V2 seulement si le réglage des thèmes et des sources devient un besoin en soi. Qui porte la routine reste à
+trancher : pas le core (il ne possède aucun métier), plutôt Avaritia, qui range déjà ce qu'on lui apporte.
 
 ## 8. Ce que le satellite posséderait, et comment il s'intègre
 
@@ -149,17 +163,19 @@ Pris : Acedia, Avaritia, Luxuria. Restent Ira, Gula, Superbia, Invidia. Les note
 
 ## 10. Un ordre possible, par paliers
 
-1. **GitHub, en lecture** (§ 5) : l'identité, le bilan, les alertes, « où en est P ? ». Avec la veille tech (V1).
+1. **GitHub, en lecture** (§ 5) : l'identité, le bilan, les alertes, « où en est P ? ». Avec le suivi des dépendances (V1).
 2. **GitHub, les gestes par cartes** (§ 5).
 3. **Le registre des sessions et la surface de pilotage** (§ 4, 1d ; § 6, 3c), une fois l'hôte unique choisi (1a).
-4. **La veille par thèmes** (V3), à part, quand son porteur est tranché.
+4. **L'atelier** (§ 6, 3e) : les sessions pilotées par le protocole, la revue des diffs, puis l'édition, fonction par
+   fonction.
+5. **La veille par thèmes** (V3), tech comprise, à part, quand son porteur est tranché.
 
 ## 11. Ce qui reste à trancher, dans l'ordre
 
-1. Point 3 : pas d'IDE à soi, un éditeur existant et une surface de pilotage (3b et 3c) ?
+1. Point 3 : un atelier à soi sur des briques existantes (3e), et quelles fonctions il doit avoir d'abord ?
 2. Point 1 : un hôte unique pour les sessions (1a), et lequel ?
 3. Point 2 : l'identité de Natsume sur GitHub, compte machine ou application ?
-4. La veille : V1 ici et V3 pour le reste, et qui porte V3 ?
+4. La veille : le suivi des dépendances ici ; la veille par thèmes, tech comprise, par V3 ou V2, et qui la porte ?
 5. Le nom, puis la correction de `vision.md`, dans la PR de la spec.
 
 Ensuite : une spec de design pour le premier palier, puis son plan.
