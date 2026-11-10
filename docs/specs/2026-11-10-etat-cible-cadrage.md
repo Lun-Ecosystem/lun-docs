@@ -77,9 +77,15 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
   postes, la nuit, la lettre du matin, les cartes, les coûts, la pause, l'app.
 - **Mis de côté** : les rôles (assistante, experte, streameuse) ; l'humeur calculée par les événements ; la porte des
   pensées, le budget de parole ; le point du soir ; la validation par lot ; le premier appareil sans terminal ; le NAS.
-- **Ligne d'arrivée [avis Claude]** : 1) sa personnalité passe la barre (les scènes de référence, notées par CrOliX) ;
-  2) son humeur change avec ce qui arrive et se voit dans sa voix et son corps ; 3) elle prend l'initiative à bon
-  escient ; 4) une semaine d'usage sans point de tension ; 5) tout se règle sans terminal.
+- **Ligne d'arrivée, validée par CrOliX le 10/11** :
+  1. sa personnalité passe la barre : les scènes de référence, notées par CrOliX ;
+  2. son humeur change avec ce qui arrive, et se voit dans sa voix et son corps ;
+  3. elle prend l'initiative à bon escient : le core décide quand parler et quoi dire, dans un budget de parole ;
+     Lun'Luxuria le dit ;
+  4. une journée d'usage tient dans son plafond de coût, sans que CrOliX y pense ;
+  5. elle a un visage public, séparé du privé, pour être vue et entendue par d'autres ;
+  6. une semaine d'usage sans point de tension ;
+  7. tout se règle sans terminal.
 - **Ne fera jamais** : refaire le métier d'un poste ; recopier ses données.
 
 ### 4.3 Lun'Avaritia, la bibliothèque
