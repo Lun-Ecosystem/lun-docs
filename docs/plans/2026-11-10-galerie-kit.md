@@ -116,7 +116,7 @@ laptop. Une PR, dans lun-docs.
    famille, sans les rendre. Une légende en tête de page explique les trois statuts. **[choix Claude]** L'inventaire est
    écrit à la main et daté : un script qui lirait les quatre dépôts ferait dépendre lun-docs des apps.
 
-   **Fait :** `inventaire.ts` : 34 communs, 13 variantes, 16 éléments propres, dont les huit cartes. La légende est dite
+   **Fait :** `inventaire.ts` : 34 communs, 13 variantes, 14 éléments propres, dont les huit cartes. La légende est dite
    une fois en tête de page et une fois par groupe, pas sous chaque pièce : c'était du bruit. Les variantes et les
    éléments propres sont nommés au pied de leur famille, avec leur projet et leur fichier.
 5. - [x] **Les garde-fous**, dans `design/galerie/` : un test liste les fichiers `.svelte` de `design/kit/` (hors
