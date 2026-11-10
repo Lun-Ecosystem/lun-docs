@@ -17,6 +17,8 @@ hors d'une app : ses 65 tests passent et son typage est propre, avec la configur
 (une section des boutons, rangés par type d'action puis par variante), et qu'une légende dise de chaque élément s'il est
 commun à tous, une variante, ou propre à un projet.
 
+**Livré :** lun-docs#133, le 10/11. Preuves : https://claude.ai/artifact/3WimLVGBUdABwrb46M7Wdb (page privée).
+
 **Trois paliers, un plan par palier.** Celui-ci : le kit tel qu'il est. Le suivant : la famille des cartes (dessinées
 trois fois aujourd'hui, dans Acedia, le core et Avaritia, aucune dans le kit), la permission et les variantes, en
 maquettes d'abord. Le dernier : la convergence des kits d'Acedia et d'Avaritia (lun-docs#43).
@@ -65,19 +67,27 @@ laptop. Une PR, dans lun-docs.
 
 ## Tâches
 
-1. - [ ] **`design/package.json` et l'outillage.** Les dépendances aux versions du verrou du core ; `package-lock.json`.
+1. - [x] **`design/package.json` et l'outillage.** Les dépendances aux versions du verrou du core ; `package-lock.json`.
    La configuration de test des apps : le plugin de test de Svelte, `jest-dom`, un faux `ResizeObserver`, et les
    bibliothèques à passer par Vite (`bits-ui`, `@lucide/svelte`, `svelte-toolbelt`, `runed`). Le `tsconfig` du core
    (`allowImportingTsExtensions`, `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, `verbatimModuleSyntax`).
    Scripts : `galerie`, `build`, `test`, `typecheck`, `format:check`. Ignorés par git : `design/node_modules`,
    `design/galerie/dist` ; `dist/` s'ajoute à `.graphifyignore`. Preuve : les 65 tests du kit passent dans lun-docs et
    `svelte-check` est propre, sans qu'un fichier du kit ait changé.
-2. - [ ] **Le squelette** : `design/galerie/index.html`, `main.ts`, `base.css` (la base du core), `Galerie.svelte`. Un
+
+   **Fait :** `design/package.json` aux versions du verrou du core, son `package-lock.json`, la configuration de test et
+   le `tsconfig` des apps. Les 65 tests du kit passent dans lun-docs et `svelte-check` est propre, sans qu'un fichier du
+   kit ait changé.
+2. - [x] **Le squelette** : `design/galerie/index.html`, `main.ts`, `base.css` (la base du core), `Galerie.svelte`. Un
    en-tête avec le sélecteur de monde, un `Segmented` du kit ; l'en-tête porte lui aussi `data-monde`, sinon l'accent
    n'y est défini nulle part. Les vitrines se remontent quand le monde change (`{#key}`) : `Dialog`, `ConfirmDialog`,
    `CommandPalette` et `Select` lisent leur monde une fois, à l'ouverture. Un sommaire ; une vitrine par section ; la
    page tient à 390 px.
-3. - [ ] **Les sections**, un fichier Svelte par section sous `design/galerie/sections/`. Chaque section importe ses
+
+   **Fait :** `design/galerie/` : la page, sa base (celle du core, sans `box-sizing` global), le sélecteur de monde sur
+   l'en-tête et sur les vitrines, remontées par `{#key}`. Un dialogue ouvert après le passage à Luxuria prend bien son
+   accent. La page tient à 390 px, sur deux colonnes.
+3. - [x] **Les sections**, un fichier Svelte par section sous `design/galerie/sections/`. Chaque section importe ses
    composants fichier par fichier, pas par le baril `index.ts`, qui n'exporte ni `CommandPalette`, ni `Dialog`, ni
    `Select`, ni `Switch`, ni `NavGroup`. Chaque composant dans ses états : normal, survol, focus, désactivé, erreur,
    chargement, vide, selon ce qu'il a ; le survol et le focus par l'attribut que le kit prévoit pour cela (`data-etat`).
@@ -91,7 +101,10 @@ laptop. Une PR, dans lun-docs.
    - *Navigation* : `Rail`, `NavGroup`, `NavLink`, `BottomNav` ;
    - *Les variables de design* : ce que `tokens.css` contient vraiment (couleurs, tons, rayons, ombres, polices, cadre
      de focus), lu depuis le fichier lui-même pour qu'une variable ajoutée paraisse seule.
-4. - [ ] **L'inventaire et la légende** : `design/galerie/inventaire.ts` liste chaque élément d'interface réutilisable de
+
+   **Fait :** Huit sections, un fichier chacune, les composants importés un par un. Les rendus sont sur une grille :
+   dans les boutons, une variante par ligne et ses six états en colonnes.
+4. - [x] **L'inventaire et la légende** : `design/galerie/inventaire.ts` liste chaque élément d'interface réutilisable de
    l'écosystème : son nom, sa famille, son usage, son statut (commun, variante, propre), ses projets, son fichier. Relevé
    du 10/11 : 34 composants communs ; Acedia garde 10 variantes (`Badge`, `Button`, `ConfirmDialog`, `Dialog`,
    `EmptyState`, `Rail`, `Segmented`, `ServiceCard`, `SettingsRow`, `StandaloneCard`) et 8 éléments propres
@@ -102,18 +115,33 @@ laptop. Une PR, dans lun-docs.
    détruit ; puis les tailles, puis l'icône seule), et nomme sous eux les variantes et les éléments propres de la même
    famille, sans les rendre. Une légende en tête de page explique les trois statuts. **[choix Claude]** L'inventaire est
    écrit à la main et daté : un script qui lirait les quatre dépôts ferait dépendre lun-docs des apps.
-5. - [ ] **Les garde-fous**, dans `design/galerie/` : un test liste les fichiers `.svelte` de `design/kit/` (hors
+
+   **Fait :** `inventaire.ts` : 34 communs, 13 variantes, 16 éléments propres, dont les huit cartes. La légende est dite
+   une fois en tête de page et une fois par groupe, pas sous chaque pièce : c'était du bruit. Les variantes et les
+   éléments propres sont nommés au pied de leur famille, avec leur projet et leur fichier.
+5. - [x] **Les garde-fous**, dans `design/galerie/` : un test liste les fichiers `.svelte` de `design/kit/` (hors
    `fixtures/`) et échoue si la balise de l'un d'eux n'apparaît dans le balisage d'aucune section, ou s'il manque à
    l'inventaire ; un test de rendu
    monte `Galerie.svelte` et vérifie que chaque section s'affiche, dans un monde puis dans un autre.
-6. - [ ] **La CI** : à la fin du job `checks`, le seul que le ruleset exige, après les étapes actuelles qui tournent donc
+
+   **Fait :** `galerie.test.ts` : la balise de chaque composant du kit dans le balisage d'une section, sa ligne dans
+   l'inventaire, aucun commun fantôme, et la page montée dans deux mondes. Éprouvé : `Kbd` retiré d'une section fait
+   échouer le test, puis il repasse.
+6. - [x] **La CI** : à la fin du job `checks`, le seul que le ruleset exige, après les étapes actuelles qui tournent donc
    avant toute installation : `npm ci`, `typecheck`, `test`, `format:check` et `build`, dans `design/`. Pas de second
    job : il ne bloquerait aucune fusion. `format:check` ne couvre que `galerie/`, avec la configuration des apps ; le
    kit en est exempté, car le reformater romprait la première contrainte (issue `inbox`).
-7. - [ ] **La doc** : `standards/design.md` (« le catalogue des composants » devient la galerie, avec sa commande ; 8
+
+   **Fait :** Une étape de plus à la fin du job `checks`, dans `design/` : `npm ci`, `typecheck`, `test`,
+   `format:check`, `build`. Les étapes d'avant tournent sans installation.
+7. - [x] **La doc** : `standards/design.md` (« le catalogue des composants » devient la galerie, avec sa commande ; 8
    lignes de marge sous la limite de 150) ; `CLAUDE.md` et `README.md` de lun-docs (la racine sans dépendance, `design/`
    avec les siennes et son Node) ; le cadrage de l'état cible, § 6 (la galerie dans l'axe de révision) ; `npm run sync`,
    car `design.md` est recopié dans le plugin.
+
+   **Fait :** `design.md` renvoie à la galerie ; `CLAUDE.md` et `README.md` disent la racine sans dépendance et
+   `design/` avec les siennes ; le cadrage de l'état cible liste le chantier ; `npm run sync`. Issues ouvertes :
+   lun-docs#134 (`box-sizing`), #135 (format du kit, import inutilisé), #136 (variables annoncées et absentes).
 
 ## Preuves
 
