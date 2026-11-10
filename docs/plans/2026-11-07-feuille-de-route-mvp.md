@@ -67,12 +67,12 @@ partie vide, son relevé est fait (lun-luxuria#9).
 | B1 | Relevés de confiance et de latence (critère 4 du plan `voix-confiance-blocs`), puis levée du verrou de l'ADR 0011. **Relevés faits le 10/11** (`lun-luxuria/docs/essai-2026-11-07.md`, et le [premier mot](2026-11-10-premier-mot.md) rejoué) ; le verrou reste à CrOliX | CrOliX |
 | B2 | La langue parlée : français direct contre réponse en anglais sous-titrée ; puis un ADR qui remplace 0011 (la langue, la mesure de la latence, une cible d'après le MVP) | CrOliX, à l'oreille |
 | B3 | Le flux RVC dès le premier bloc (reste de lun-luxuria#7), décidé après B1 | desktop |
-| B4 | Preuve manuelle des touches globales de l'exe (critère 4 du plan Tauri) : `Ctrl+Maj+L` depuis une autre fenêtre, F9 tenue puis lâchée | CrOliX |
-| B5 | Rejoindre un salon Discord passe en `occupée` (écart 2 de la recette, corrigé sur le laptop, à constater) | desktop |
+| B4 | Preuve manuelle des touches globales de l'exe (critère 4 du plan Tauri) : `Ctrl+Maj+L` depuis une autre fenêtre, F9 tenue puis lâchée. **Constaté par CrOliX le 10/11** | fait |
+| B5 | Rejoindre un salon Discord passe en `occupée` (écart 2 de la recette, corrigé sur le laptop, à constater). **Non constaté le 10/11** : en salon vocal, `/micro` ne voit personne (lun-luxuria#50) | desktop |
 | B6 | Une soirée réelle : latence par tour et coût, puis décision sur le plafond de 1 $ par jour (spec Luxuria §6.7) ; noter le silence pendant une délégation à un poste (veille C2) | desktop |
 | B7 | Notifications Windows coupées (`ToastEnabled = 0`) ; vcclient sur `0.0.0.0:18000` et règles du pare-feu | CrOliX : réglages système |
 | B8 | La semaine de rodage elle-même (J5), sur le poste mis en service par G ; noter la lassitude des cartes du matin (veille C9). Proposition : juger l'assistante et le contrôle sur la semaine, la présence à part, par la barre de N | CrOliX |
-| B9 | Recette du mute, points 1, 3 et 5 : aucune capture en sourdine, la parole spontanée repart à son heure, en appel un P0 n'est pas dit | desktop |
+| B9 | Recette du mute, points 1, 3 et 5 : aucune capture en sourdine, la parole spontanée repart à son heure, en appel un P0 n'est pas dit. **Le 10/11 : points 1 et 3 constatés** (lun-anima#98 pour un message vide après la levée) ; le point 5 attend B5 | desktop |
 | B10 | Google en Production sur le vrai compte, consentement refait : en Test, le jeton tombe au bout de 7 jours (audit, Q1 et § 8.2) | CrOliX, sur le desktop |
 | B11 | Le téléphone Android : la PWA du core par le HTTPS du tailnet, une notification reçue de bout en bout (reportée à la recette du 07/11) | CrOliX, desktop |
 | B12 | Redémarrer le desktop : les services repartent seuls, la veille de 5 h manquée est rattrapée (rattrapage par défaut, veille C5) | desktop |
