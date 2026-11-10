@@ -23,10 +23,11 @@ solutions. Le code relu le 10/11 sur `main` (core 9089124, Luxuria 0f61b32). Pla
   passe.
 - Core : un silence choisi par Natsume laisse une trace distincte d'un échec.
 
-**À valider par CrOliX.** Aucun appel payant. *Show* : tout se prouve par des tests sur le laptop ; l'oreille, elle, ne
+**Validé par CrOliX le 10/11**, niveaux compris. **Livré par** lun-luxuria#51 (tâches 1 et 2) et lun-anima#99
+(tâches 3 à 7). Aucun appel payant. *Show* : tout se prouve par des tests sur le laptop ; l'oreille, elle, ne
 se prouve que sur le desktop, à la prochaine recette.
 
-| Dépôt, branche | Issue | Niveau proposé |
+| Dépôt, branche | Issue | Niveau |
 |---|---|---|
 | `lun-luxuria`, `fix/tour-de-parole` | lun-luxuria#48 | `standard` |
 | `lun-anima`, `fix/garde-fou-cartes` | lun-anima#97, lun-anima#98 | `critique` (touche à ce qui autorise un geste) |
@@ -89,7 +90,7 @@ se prouve que sur le desktop, à la prochaine recette.
 
 ### Luxuria
 
-1. - [ ] **Reparler reprend la main sur une réponse non entendue, si la phrase est pour elle.**
+1. - [x] **Reparler reprend la main sur une réponse non entendue, si la phrase est pour elle.**
    - `Conversation` sait qu'une réponse confirmée attend son premier son : remis à zéro au premier son, au sous-titre
      muet et à l'erreur ; si la réponse n'a pas encore d'identifiant, l'intention est gardée et appliquée à son
      arrivée (comme `conversation.ts:204`).
@@ -100,18 +101,18 @@ se prouve que sur le desktop, à la prochaine recette.
    - Sous l'interrupteur de la coupure (`bargeIn.on`). La réflexion affichée et le chronomètre suivent.
    - Tests (`conversation.test.ts`, `speaker.test.ts`) : phrase pour elle ; toux ; phrase écartée ; réponse sans
      identifiant encore ; une réponse déjà entendue n'est jamais coupée après coup ; interrupteur coupé.
-2. - [ ] **Sa voix coupe aussi entre deux phrases.** `Speaker.speaking` reste vrai tant qu'un tour qui a déjà sonné
+2. - [x] **Sa voix coupe aussi entre deux phrases.** `Speaker.speaking` reste vrai tant qu'un tour qui a déjà sonné
    n'est pas fini (seul `conversation.ts:119` le lit). Test dans `speaker.test.ts`. Une parole qui n'est pas une
    réponse (accueil, urgence, spontanée) n'est pas touchée par ce chantier.
 
 ### Core
 
-3. - [ ] **Une réponse que personne n'a entendue ne garde aucun geste.** `cut(id, '')` annule les gestes que ce tour
+3. - [x] **Une réponse que personne n'a entendue ne garde aucun geste.** `cut(id, '')` annule les gestes que ce tour
    tenait, comme `withdraw` le fait déjà (`service.ts:429`). Une coupure avec des mots entendus ne change pas. Test.
-4. - [ ] **Deux phrases, une réponse : le test d'abord.** Dans `service.test.ts` : message A, message B, coupure vide
+4. - [x] **Deux phrases, une réponse : le test d'abord.** Dans `service.test.ts` : message A, message B, coupure vide
    de A ; on vérifie que l'appel de B porte A et B, et on compte les délégations quand A en demandait une. Si A et B
    délèguent deux fois la même chose, la correction se décide là, avec CrOliX si elle dépasse quelques lignes.
-5. - [ ] **L'outil `trancher_carte` n'est offert que si son message peut être un geste.**
+5. - [x] **L'outil `trancher_carte` n'est offert que si son message peut être un geste.**
    - Dans `#generate`, l'outil et sa règle ne partent que si le message contient un mot de geste (`ACCEPT`, `REFUSE`,
      `SEND` de `authorize.ts`) ou l'un des choix d'une carte en attente.
    - « Tranche-la sans jamais demander de confirmation » (`prompt.ts:39`) passe dans le paragraphe de l'outil. Sans
@@ -119,18 +120,36 @@ se prouve que sur le desktop, à la prochaine recette.
    - Le garde-fou lui-même (`speaksGesture`) ne change pas : on réduit quand l'outil existe, jamais ce qu'il accepte.
    - Tests : les six phrases de l'issue (trois sans mot de geste n'ont plus l'outil) ; un « oui » nu, « refuse-la »,
      « envoie » et un choix listé l'ont toujours.
-6. - [ ] **La phrase du refus dit ce qui passe.** « Je n'ai rien tranché. Dis accepte ou refuse avec le nom de la
+6. - [x] **La phrase du refus dit ce qui passe.** « Je n'ai rien tranché. Dis accepte ou refuse avec le nom de la
    carte, ou tranche-la à l'écran. », quel que soit le nombre de cartes. Les phrases propres aux cartes qui envoient
    et aux cartes à choix (`SEND_HINT`, `QUESTION`) restent. Test.
-7. - [ ] **Le silence choisi laisse une trace.** Quand elle répond « RIEN », une ligne au journal de service du core
+7. - [x] **Le silence choisi laisse une trace.** Quand elle répond « RIEN », une ligne au journal de service du core
    (« parole spontanée : silence choisi »), écrite dans `#composed` ; un échec écrit la sienne. Pas de ligne au
    Journal de l'app : elle la relirait comme une donnée de sa journée (`reread.ts:93-107`). Test.
 
 ### Ici
 
-8. - [ ] Cocher ce plan, lier les PR, et écrire dans la feuille de route ce que le desktop doit réentendre : deux
+8. - [x] Cocher ce plan, lier les PR, et écrire dans la feuille de route ce que le desktop doit réentendre : deux
    phrases à trois secondes d'écart, une toux pendant qu'elle réfléchit, une coupure sur une réponse longue, une
    carte seule à la voix, et la requête de l'heure ci-dessous.
+
+## Ce que l'exécution a trouvé
+
+- **Tâche 1.** La relecture du diff a trouvé trois défauts, corrigés avec leur test : une phrase encore en cours de
+  transcription pouvait s'oublier elle-même ; un micro coupé au milieu d'une phrase laissait la réponse retenue sans
+  issue ; une réponse tue par la sourdine pouvait être reprise bien plus tard. Une phrase écartée par le filtre ne
+  prend plus la place de la réponse encore en route.
+- **Tâche 3.** L'annulation est bornée au tour coupé, sur le fil principal : une coupure tardive d'une réponse plus
+  ancienne aurait annulé le geste du tour suivant, que CrOliX avait entendu confirmer (trouvé à la relecture).
+- **Tâche 4.** Le test a montré le trou : une réponse coupée sans être entendue, alors qu'un poste avait préparé des
+  cartes, ne laissait rien au tour suivant. Elle garde maintenant le résumé du poste.
+- **Tâche 5.** Si le modèle appelle l'outil sans qu'il soit offert, la phrase du code répond toujours, jamais sa
+  parole. « Trancher ne se confie jamais à un poste » reste dit avec ou sans l'outil.
+- **Tâche 6.** La phrase prévue était fausse pour une carte au titre d'un seul mot, comme la fiche du 10/11 : le
+  garde-fou veut deux mots du titre. La phrase livrée : « Je n'ai rien tranché. Demande-moi de te montrer la carte,
+  puis dis oui ou non ; ou tranche-la à l'écran. »
+- **Tâche 7.** Deux lignes au journal de service : « silence choisi », ou « échec » avec sa raison.
+- **Preuves.** Luxuria : 402 tests, douze nouveaux. Core : 2 073 tests. Rien n'est encore entendu sur le desktop.
 
 ## Hors périmètre
 
