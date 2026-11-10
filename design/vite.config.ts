@@ -8,7 +8,12 @@ export default defineConfig({
   plugins: [svelte(), ...(process.env.VITEST ? [svelteTesting()] : [])],
   // strictPort: CLAUDE.md gives this address; a taken port must say so, not move quietly to the next one.
   server: { host: '127.0.0.1', port: 5190, strictPort: true },
-  build: { outDir: 'dist', emptyOutDir: true },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    // Two pages: the gallery of the kit, and the mock-ups drawn with it.
+    rollupOptions: { input: ['galerie/index.html', 'galerie/maquettes.html'] },
+  },
   test: {
     root: '.',
     environment: 'jsdom',
