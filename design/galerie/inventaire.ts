@@ -27,13 +27,24 @@ const LUXURIA = "Lun'Luxuria";
 const TOUS = [ANIMA, ACEDIA, AVARITIA, LUXURIA];
 const KIT_ACEDIA = 'views/src/lib/ui';
 const KIT_AVARITIA = 'app/src/lib/ui';
-/** In the kit, but not in Acedia's own copy. */
-const SANS_ACEDIA = ['DropZone', 'StatCard', 'TextArea'];
+/** In the kit, but not in the own kit of these projects. */
+const ABSENT: Record<string, string[]> = {
+  DropZone: [ACEDIA],
+  StatCard: [ACEDIA],
+  TextArea: [ACEDIA],
+  DecisionCard: [ACEDIA, AVARITIA],
+};
 
 const commun = (famille: Famille, ...noms: string[]): Element[] =>
   noms.map((nom) =>
-    SANS_ACEDIA.includes(nom)
-      ? { nom, famille, statut: 'commun', projets: [ANIMA, AVARITIA, LUXURIA], absentDe: [ACEDIA] }
+    ABSENT[nom]
+      ? {
+          nom,
+          famille,
+          statut: 'commun',
+          projets: TOUS.filter((p) => !ABSENT[nom]!.includes(p)),
+          absentDe: ABSENT[nom],
+        }
       : { nom, famille, statut: 'commun', projets: TOUS },
   );
 const variante = (famille: Famille, projet: string, dossier: string, ...noms: string[]): Element[] =>
@@ -106,7 +117,8 @@ export const INVENTAIRE: Element[] = [
   ...commun('navigation', 'Rail', 'NavGroup', 'NavLink', 'BottomNav'),
   ...variante('navigation', ACEDIA, KIT_ACEDIA, 'Rail'),
 
-  // The card of the dictionary (a proposal that waits) is drawn three times, and none is in the kit: tier 2.
+  // The card of the dictionary (a proposal that waits): the kit has its sheet; each project still draws its own.
+  ...commun('cartes', 'DecisionCard'),
   propre(
     'cartes',
     ACEDIA,

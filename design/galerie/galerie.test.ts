@@ -1,9 +1,10 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { render, screen } from '@testing-library/svelte';
+import { render, screen, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import { dismissAll } from '../kit/toasts.svelte.ts';
+import { FILE } from './cartes.ts';
 import Galerie from './Galerie.svelte';
 import { INVENTAIRE, type Famille } from './inventaire.ts';
 
@@ -60,6 +61,9 @@ describe('the gallery shows the whole kit', () => {
   it('a common element a project lacks says so', () => {
     render(Galerie);
     expect(screen.getAllByText("Dans le kit, mais pas encore dans Lun'Acedia.")).toHaveLength(3);
+    expect(
+      screen.getByText("Dans le kit, mais pas encore dans Lun'Acedia, Lun'Avaritia."),
+    ).toBeInTheDocument();
   });
 });
 
@@ -104,5 +108,30 @@ describe('the gallery page', () => {
   it('mounts one toaster and one command palette only', () => {
     const { container } = render(Galerie);
     expect(container.querySelectorAll('.toaster')).toHaveLength(1);
+  });
+});
+
+describe('the queue of cards under load', () => {
+  it('keeps 54 cards short: five a page, filtered by kind', async () => {
+    const { container } = render(Galerie);
+    const f = within(container.querySelector<HTMLElement>('#cartes .file')!);
+    expect(f.getAllByRole('article')).toHaveLength(5);
+    expect(f.getByText(`Page 1 sur ${Math.ceil(FILE.length / 5)}`)).toBeInTheDocument();
+    expect(f.getByRole('button', { name: /Précédentes/ })).toBeDisabled();
+
+    await userEvent.click(f.getByRole('button', { name: /Suivantes/ }));
+    expect(f.getByText(/^Page 2 sur/)).toBeInTheDocument();
+
+    // A filter comes back to the first page and counts only its kind; two filters add up.
+    const questions = FILE.filter((c) => c.kind === 'Question').length;
+    const suppressions = FILE.filter((c) => c.kind === 'Suppression').length;
+    await userEvent.click(f.getByRole('button', { name: /Question/ }));
+    expect(f.getByText(`Page 1 sur ${Math.ceil(questions / 5)}`)).toBeInTheDocument();
+    for (const carte of f.getAllByRole('article')) expect(carte).toHaveTextContent(/^Question/);
+    await userEvent.click(f.getByRole('button', { name: /Suppression/ }));
+    expect(f.getByText(`${questions + suppressions} en attente`)).toBeInTheDocument();
+
+    await userEvent.click(f.getByRole('button', { name: /Tout/ }));
+    expect(f.getByText(`${FILE.length} en attente`)).toBeInTheDocument();
   });
 });

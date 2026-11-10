@@ -12,7 +12,7 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     // Two pages: the gallery of the kit, and the mock-ups drawn with it.
-    rollupOptions: { input: ['galerie/index.html', 'galerie/maquettes.html'] },
+    rollupOptions: { input: ['galerie/index.html'] },
   },
   test: {
     root: '.',
