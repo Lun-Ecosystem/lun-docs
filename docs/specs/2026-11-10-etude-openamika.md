@@ -141,4 +141,82 @@ jamais mesuré, et le temps du modèle ; pas le découpage.
   fournie) ; le coût réel d'un tour ; l'absence de tout oubli dans leur mémoire.
 - La colonne « où nous en sommes » du § 2 a été relue contre le code de Luxuria et du core le 10/11 au soir. Le § 3 (le
   core) ne l'a pas été : le cache, la mémoire et le coût du core restent à comparer avant d'en tirer un chantier.
+- Une seconde passe, directe, a relu les prompts, la documentation et quelques parties du cerveau (§ 8). N'ont été
+  lus qu'une fois, par les premiers lecteurs : le gros de `speech/api.py`, `brain/f_memory.py` et `brain/f_tools.py`,
+  `ui/`, `servers/`, `launch.py`, `messengers/`, les tests, et le guide du dépôt pour les agents.
 - À essayer pour de bon quand la RTX arrive.
+
+## 8. Seconde passe : les prompts du personnage, et ce que les premières lectures avaient manqué
+
+Passe faite le 10/11 au soir, à la demande de CrOliX, par une lecture directe et non plus par des lecteurs en
+parallèle. Lus : `brain/defaults/` (les quatre fichiers), `docs/PERSONALITY.md`, `docs/AVATAR.md`, `docs/TOOLS.md` (les
+parties sur le consentement), `brain/PROTOCOL.md`, `config/build_f.json`, `avatar/`, et dans `brain/webui.py` le rendu
+de l'historique, la veille du silence et le bloc des outils. Le reste du code n'a pas été relu une seconde fois (§ 7).
+
+### 8.1 Trois rôles, trois prompts (`brain/defaults/`)
+
+| Fichier | Rôle | Ce qu'il contient |
+|---|---|---|
+| `表层.txt` | Le premier jet, en une demi-seconde | Qui elle est, en une page ; puis une sortie en quatre lignes : statut, ton, mode, réplique |
+| `例子.txt` | La réponse, sa vraie voix | Cinq règles, puis son histoire racontée sur une centaine de lignes |
+| `思考.txt` | Un metteur en scène, entre les tours | Il l'observe de l'extérieur et la guide |
+| `scenes.json` | Sa journée | Pour chaque moment d'un jour de semaine et d'un week-end, cinq possibilités ; une est tirée par jour et par moment, et ne change plus |
+
+- **Le premier jet décide d'abord si on lui parle.** Sa première ligne est un statut : la phrase est finie et pour
+  elle ; pas finie ; ou pas pour elle (il parle à quelqu'un d'autre, au téléphone, tout seul, ou il a dit « attends que
+  je t'appelle »). Dans les deux derniers cas elle se tait. C'est le modèle, pas un seuil de silence, qui tranche la fin
+  de tour et l'adresse.
+- **Elle choisit comment répondre avant de répondre** : dire tout de suite, amorcer puis réfléchir, ou réfléchir. Le
+  premier jet n'a droit qu'à une réplique réflexe ; tout ce qui porte un avis, une raison ou son histoire part à la
+  réponse. Dans le doute, il ne conclut pas.
+- **Le ton en deux crans** : un registre (sérieux, poli, familier, intime, chuchoté), puis une émotion permise dans ce
+  registre. Les mariages absurdes sont impossibles par construction ; la même clé conduit la voix, l'expression et le
+  mouvement. Une réponse à voix haute est demandée en quatre phrases environ ; un texte lu garde sa longueur.
+- **Une règle de voix, une seule** : ce qu'elle doit produire est à la première personne ; tout ce que le système lui
+  dit est à la deuxième. Ses pensées (« je me dis : ») ne sont jamais dites ; elles restent dans l'historique des trois
+  derniers tours et la rendent cohérente.
+- **Le metteur en scène écrit en « je ».** Il analyse à la troisième personne, mais ce qu'il lui glisse est écrit comme
+  sa propre pensée. Trois formes : un indice pour les deux prochaines phrases ; un plan, tenu jusqu'à ce qu'un autre le
+  remplace ; une ouverture, qu'elle dit d'elle-même. Sa règle : le vrai avant le but. Il peut grossir une émotion
+  qu'elle a, jamais en fabriquer une.
+- **L'histoire est racontée, pas listée** : des phrases courtes et concrètes, à la deuxième personne. La liste de
+  traits vient après, en dix lignes.
+
+### 8.2 Ce que les premières lectures avaient manqué
+
+- **L'historique est un récit, pas une liste de tours.** Il est rendu en texte : « j'ai dit », et « j'allais dire »
+  pour un tour coupé. Entre deux tours éloignés de plus de vingt minutes, une ligne dit le temps passé ; en tête et en
+  fin, « ce qui suit date d'hier soir », « le dernier tour date de ce matin, ceci est un nouveau moment »
+  (`brain/webui.py`, `_history_time_notes`). Le temps est dit comme on le perçoit (« il y a trois mois, un matin »),
+  jamais en horodatage.
+- **Le silence se compte quand sa voix s'arrête**, pas quand son texte finit : sinon elle demandait pourquoi on se
+  tait quelques secondes après avoir fini de parler.
+- **Un résultat en attente d'être dit.** Le résultat d'une tâche lui arrive deux fois : comme un tour à dire au
+  premier silence, et dans le bloc de ce qu'elle a sous la main, marqué « pas encore dit ». Après chaque tour, un
+  appel vérifie ce qu'elle a transmis. Si elle annonce un résultat qu'aucune aide n'a rendu, c'est relevé et elle se
+  reprend (`docs/TOOLS.md`, « She decides, the clerk transcribes »).
+- **Elle sait ce qu'elle a sous la main, à chaque tour** : la liste de ses outils, lesquels ne répondent pas, ce qui
+  est en cours et depuis quand, avec l'interdiction d'en donner un nom ou un chiffre tant que rien n'est rendu.
+- **Une approbation sans réponse finit seule** : quinze minutes. Une question restée ouverte tombe après trente.
+- **Voir, plus précisément** : la description de la caméra est ajoutée à la suite de la phrase de l'utilisateur, tant
+  que la caméra est allumée. Rien n'est versé dans le prompt du cerveau dans cette version.
+- **Le rappel de la mémoire** mêle les mots (BM25) et le sens (les vecteurs) : la première lecture ne disait que le
+  second.
+- **L'avatar d'attente** : pendant que la réponse se fait, une expression « en charge » se pose par-dessus son visage,
+  sans interrompre le mouvement en cours (`avatar/models/README.md`). Un second modèle joue ses aides : il pense quand
+  une tâche tourne, écoute quand elle lui parle, sursaute à une question.
+- **Les mouvements se réutilisent d'un modèle à l'autre** quand ils partagent les mêmes paramètres
+  (`avatar/retarget_motions.py`).
+
+### 8.3 Ce que cela dit pour nous **[avis Claude]**, à relire contre notre code avant d'en tirer un chantier
+
+- **Pour l'écriture de Natsume** (le core) : l'histoire racontée plutôt que listée ; la règle « je » et « tu » ; le
+  ton en deux crans. C'est la partie la plus utile de ce dépôt pour sa personnalité.
+- **Pour « elle parle d'elle-même »** : un rôle à part qui décide, entre les tours, de se taire, de glisser une pensée
+  ou d'ouvrir.
+- **Pour l'écoute** : laisser le modèle dire « ce n'était pas pour moi ». Non relu chez nous : le filtre d'écoute de
+  Lun'Luxuria (`src/listen/filter.ts`) en fait peut-être déjà une part.
+- **Pour l'historique** : dire le temps passé entre deux tours. Non relu chez nous : ce que la « situation » du core dit
+  déjà.
+- **À ne pas reprendre tel quel** : leur personnage est écrit pour nier être une IA et ne pas comprendre le mot
+  « prompt ». C'est leur choix d'écriture, pas le nôtre.
