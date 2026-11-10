@@ -62,7 +62,7 @@
     {/each}
   </Groupe>
 
-  <Groupe titre="Les polices" sens="La serif pour les titres, la sans pour le reste.">
+  <Groupe titre="Les polices" colonnes={2} sens="La serif pour les titres, la sans pour le reste.">
     {#each polices as v (v.nom)}
       <div class="var police">
         <span style:font-family="var({v.nom})">Natsume veille sur la journée.</span><code>{v.nom}</code>
@@ -80,7 +80,7 @@
     font-size: 12px;
   }
   .var.police {
-    width: 300px;
+    width: auto;
     font-size: 22px;
   }
   .pastille,
