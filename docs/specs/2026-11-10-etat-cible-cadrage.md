@@ -2,8 +2,8 @@
 
 > Cadrage du 10/11, à discuter avec CrOliX **avant toute spec et tout plan**. Il reprend ce qu'il a redit ce jour-là
 > (§ 1), pose une page par projet avec une ligne d'arrivée, et ordonne deux axes : la présence, et la révision de
-> l'existant. Les lignes d'arrivée et les ordres marqués **[avis Claude]** sont des propositions : c'est à CrOliX de les
-> écrire. Rien ici n'ajoute de satellite.
+> l'existant. Les quatre lignes d'arrivée (§ 4) sont validées par CrOliX depuis le 10/11. Les ordres marqués
+> **[avis Claude]** restent des propositions. Rien ici n'ajoute de satellite.
 
 ## 1. Ce que CrOliX a redit, le 10/11
 
@@ -58,9 +58,17 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
 - **Mis de côté** (spec Luxuria, § 11) : l'avatar animé ; les modes de présence ; les pensées et relances ; le mot d'éveil
   et les enceintes ; la mascotte ; la perception (fenêtre active, puis l'écran) ; le compagnon qui agit sur le poste par
   cartes ; le compagnon de jeu ; le stream ; la voix apprise.
-- **Ligne d'arrivée [avis Claude]** : 1) elle a un visage qui vit (un avatar animé, lèvres et regard) ; 2) elle perçoit
-  ce que fait CrOliX sur son poste et s'y accorde sans qu'il règle rien ; 3) elle parle d'elle-même, à propos, sans
-  lasser ; 4) elle peut faire sur le poste, par cartes ; 5) elle peut être vue et entendue par d'autres.
+- **Ligne d'arrivée, validée par CrOliX le 10/11** :
+  1. elle a un visage qui vit, et il suit sa voix phrase par phrase : lèvres, regard, expression ;
+  2. elle se laisse couper, et sait où elle en était ;
+  3. elle perçoit ce que fait CrOliX sur son poste et s'y accorde sans qu'il règle rien ;
+  4. elle voit l'écran ;
+  5. elle parle d'elle-même, à propos, sans lasser : après un silence, une fois, et elle se tait si on ne lui répond pas ;
+  6. elle peut faire sur le poste : avec une permission pour l'immédiat, une carte pour ce qui attend ;
+  7. elle accompagne en jeu ;
+  8. elle peut être vue et entendue par d'autres.
+
+  Les points 1, 2 et le garde-fou du point 5 viennent de l'[étude d'OpenAmika](2026-11-10-etude-openamika.md).
 - **Ne fera jamais** : décider de ce qui est dit quand elle est reliée ; garder une mémoire à elle.
 
 ### 4.2 Lun'Anima, le cœur et le cerveau
@@ -69,9 +77,15 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
   postes, la nuit, la lettre du matin, les cartes, les coûts, la pause, l'app.
 - **Mis de côté** : les rôles (assistante, experte, streameuse) ; l'humeur calculée par les événements ; la porte des
   pensées, le budget de parole ; le point du soir ; la validation par lot ; le premier appareil sans terminal ; le NAS.
-- **Ligne d'arrivée [avis Claude]** : 1) sa personnalité passe la barre (les scènes de référence, notées par CrOliX) ;
-  2) son humeur change avec ce qui arrive et se voit dans sa voix et son corps ; 3) elle prend l'initiative à bon
-  escient ; 4) une semaine d'usage sans point de tension ; 5) tout se règle sans terminal.
+- **Ligne d'arrivée, validée par CrOliX le 10/11** :
+  1. sa personnalité passe la barre : les scènes de référence, notées par CrOliX ;
+  2. son humeur change avec ce qui arrive, et se voit dans sa voix et son corps ;
+  3. elle prend l'initiative à bon escient : le core décide quand parler et quoi dire, dans un budget de parole ;
+     Lun'Luxuria le dit ;
+  4. une journée d'usage tient dans son plafond de coût, sans que CrOliX y pense ;
+  5. elle a un visage public, séparé du privé, pour être vue et entendue par d'autres ;
+  6. une semaine d'usage sans point de tension ;
+  7. tout se règle sans terminal.
 - **Ne fera jamais** : refaire le métier d'un poste ; recopier ses données.
 
 ### 4.3 Lun'Avaritia, la bibliothèque
@@ -80,9 +94,12 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
   Obsidian, la recherche plein texte.
 - **Mis de côté** : la recherche sémantique (« pas en v1 », `stack.md`), alors que la vision la veut vectorielle ; la
   migration vers le kit commun.
-- **Ligne d'arrivée [avis Claude]** : 1) Natsume y retrouve ce qu'il faut sans que la question reprenne les mots de la
-  fiche (la recherche par le sens) ; 2) ce qu'elle apprend en conversation y entre sans geste de CrOliX au-delà de la
-  validation ; 3) la base tient des milliers de fiches sans ralentir.
+- **Ligne d'arrivée, validée par CrOliX le 10/11** :
+  1. Natsume y retrouve ce qu'il faut sans que la question reprenne les mots de la fiche : la recherche par le sens ;
+  2. ce qu'elle apprend en conversation y entre sans geste de CrOliX au-delà de la validation ; un fait n'entre que s'il
+     cite mot pour mot la parole de celui à qui il est attribué, et seulement après une parole réellement entendue ;
+  3. la base tient des milliers de fiches sans ralentir ;
+  4. ses écrans sont faits du kit commun (lun-docs#43).
 - **Ne fera jamais** : garder les souvenirs de la relation (ils sont au core).
 
 ### 4.4 Lun'Acedia, la journée
@@ -90,8 +107,12 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
 - **Existe** : le tri, les boîtes, les réponses préparées, l'agenda, les tâches, l'agent, les règles.
 - **Mis de côté** : Google branché depuis l'interface ; le confort (couleurs, listes, archivage du journal) ; Gmail en
   push ; le nom de l'agent encore écrit en dur ; le poids du build.
-- **Ligne d'arrivée [avis Claude]** : 1) une semaine sans ouvrir Gmail ni Agenda pour le courant ; 2) installée et
-  reliée à Google sans terminal ni fichier ; 3) son agent n'a plus aucun nom en dur.
+- **Ligne d'arrivée, validée par CrOliX le 10/11** :
+  1. une semaine sans ouvrir Gmail ni Agenda pour le courant : le confort mis de côté se juge là, pas à part ;
+  2. installée et reliée à Google sans terminal ni fichier ;
+  3. son agent n'a plus aucun nom en dur ;
+  4. ses écrans sont faits du kit commun (lun-docs#43) ;
+  5. ses cartes sont celles du kit : la feuille commune, avec ses états.
 - **Ne fera jamais** : la conversation ; les fiches.
 
 ## 5. L'axe 1 : la présence
@@ -138,7 +159,7 @@ quand l'achat se précise. 6 et 7 sont de vrais chantiers, à ordonner contre le
 
 ## 8. Ce qui reste à trancher, dans l'ordre
 
-1. Les quatre lignes d'arrivée (§ 4) : les corriger, une par une, en commençant par Luxuria.
+1. ~~Les quatre lignes d'arrivée (§ 4)~~ : écrites et validées par CrOliX le 10/11, une par une.
 2. La première marche de la présence (§ 5).
 3. La place de la session du desktop et de la semaine d'usage : une porte, ou le premier chantier de la révision (§ 3).
 4. La réécriture de `vision.md` (§ 6, points 3 et 4).
