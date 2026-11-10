@@ -2,6 +2,7 @@
   import Button from '../../kit/Button.svelte';
   import Chip from '../../kit/Chip.svelte';
   import DecisionCard from '../../kit/DecisionCard.svelte';
+  import PermissionCard from '../../kit/PermissionCard.svelte';
   import { ChevronLeft, ChevronRight } from '../../kit/Icon.ts';
   import { CARTES, FILE, type CarteDemo } from '../cartes.ts';
   import Groupe from '../Groupe.svelte';
@@ -14,6 +15,23 @@
    */
   const rien = () => {};
   const rangement = CARTES[0]!;
+  const PERMISSION = {
+    what: 'Ouvrir le dossier Téléchargements',
+    target: 'C:\\Users\\…\\Downloads',
+    reason: 'Pour retrouver le fichier dont il vient d’être question.',
+    meta: ["Lun'Luxuria", 'maintenant'],
+    scope: 'pour ce dossier',
+    onanswer: rien,
+    onrevoke: rien,
+  };
+  const REPONSES = [
+    ['pending', 'en attente', {}],
+    ['pending', 'occupée', { busy: true }],
+    ['once', 'autorisée une fois', {}],
+    ['always', 'toujours autorisée', {}],
+    ['refused', 'refusée', {}],
+    ['unanswered', 'sans réponse', {}],
+  ] as const;
   const PAR_PAGE = 5;
 
   let gardes = $state<string[]>([]);
@@ -56,7 +74,7 @@
 <Section
   id="cartes"
   titre="Cartes"
-  intro="La carte, au sens du dictionnaire : une proposition de traitement préparée par un agent, qui attend d’être tranchée. Elle est une feuille : elle dit tout sans un geste. Le kit en tient le dessin ; le corps, les gestes en plus et les touches restent à chaque projet."
+  intro="La carte, au sens du dictionnaire : une proposition de traitement préparée par un agent, qui attend d’être tranchée. Elle est une feuille : elle dit tout sans un geste. Le kit en tient le dessin ; le corps, les gestes en plus et les touches restent à chaque projet. La permission, elle, valide une action immédiate : elle reprend la feuille, sans file."
 >
   <Groupe
     titre="Les sortes"
@@ -97,6 +115,16 @@
     <Piece nom="DecisionCard" etat="expirée">
       {@render carte(rangement, { status: 'expired', ondismiss: rien })}
     </Piece>
+  </Groupe>
+
+  <Groupe
+    titre="La permission"
+    sens="Une action immédiate sur le poste, qui attend une réponse : la même feuille, plus courte, dans la couleur du monde."
+    colonnes={2}
+  >
+    {#each REPONSES as [status, etat, plus] (etat)}
+      <Piece nom="PermissionCard" {etat}><PermissionCard {...PERMISSION} {status} {...plus} /></Piece>
+    {/each}
   </Groupe>
 
   <Groupe
