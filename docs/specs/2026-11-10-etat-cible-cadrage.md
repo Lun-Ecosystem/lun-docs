@@ -2,8 +2,8 @@
 
 > Cadrage du 10/11, à discuter avec CrOliX **avant toute spec et tout plan**. Il reprend ce qu'il a redit ce jour-là
 > (§ 1), pose une page par projet avec une ligne d'arrivée, et ordonne deux axes : la présence, et la révision de
-> l'existant. Les lignes d'arrivée et les ordres marqués **[avis Claude]** sont des propositions : c'est à CrOliX de les
-> écrire. Rien ici n'ajoute de satellite.
+> l'existant. Les quatre lignes d'arrivée (§ 4) sont validées par CrOliX depuis le 10/11. Les ordres marqués
+> **[avis Claude]** restent des propositions. Rien ici n'ajoute de satellite.
 
 ## 1. Ce que CrOliX a redit, le 10/11
 
