@@ -94,9 +94,12 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
   Obsidian, la recherche plein texte.
 - **Mis de côté** : la recherche sémantique (« pas en v1 », `stack.md`), alors que la vision la veut vectorielle ; la
   migration vers le kit commun.
-- **Ligne d'arrivée [avis Claude]** : 1) Natsume y retrouve ce qu'il faut sans que la question reprenne les mots de la
-  fiche (la recherche par le sens) ; 2) ce qu'elle apprend en conversation y entre sans geste de CrOliX au-delà de la
-  validation ; 3) la base tient des milliers de fiches sans ralentir.
+- **Ligne d'arrivée, validée par CrOliX le 10/11** :
+  1. Natsume y retrouve ce qu'il faut sans que la question reprenne les mots de la fiche : la recherche par le sens ;
+  2. ce qu'elle apprend en conversation y entre sans geste de CrOliX au-delà de la validation ; un fait n'entre que s'il
+     cite mot pour mot la parole de celui à qui il est attribué, et seulement après une parole réellement entendue ;
+  3. la base tient des milliers de fiches sans ralentir ;
+  4. ses écrans sont faits du kit commun (lun-docs#43).
 - **Ne fera jamais** : garder les souvenirs de la relation (ils sont au core).
 
 ### 4.4 Lun'Acedia, la journée
