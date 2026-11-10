@@ -37,13 +37,17 @@ second écran attendent le desktop. Une PR.
 
 ### La fenêtre qui entre seule
 
-1. - [ ] **Le son, un constat d'abord.** wry passe déjà `--autoplay-policy=no-user-gesture-required` quand on ne lui
+1. - [x] **Le son, un constat d'abord.** wry passe déjà `--autoplay-policy=no-user-gesture-required` quand on ne lui
    donne aucun argument, et Tauri ne lui en donne pas (wry 0.57, `src/webview2/mod.rs`). Dans l'exe compilé à
    `origin/main`, `new AudioContext().state` vaut-il `running` sans clic ?
    - Oui : rien à ajouter dans `tauri.conf.json`, recopier les arguments par défaut les figerait. Le commentaire
      « A click starts it » (`session.svelte.ts`) et le README se corrigent.
    - Non : `additionalBrowserArgs` sur la fenêtre `main`, avec les arguments par défaut de wry recopiés.
-2. - [ ] **Le micro, un constat d'abord**, dans l'exe compilé, car une décision ne vaut que pour une origine : la
+
+   **Fait :** dans l'exe compilé sur le laptop, `new AudioContext().state` vaut `running` sans aucun clic (lu par le
+   protocole de débogage de WebView2, `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port`). Aucun code : le
+   commentaire de `session.svelte.ts` et les README le disent.
+2. - [x] **Le micro, un constat d'abord**, dans l'exe compilé, car une décision ne vaut que pour une origine : la
    demande d'accès revient-elle après un « Autoriser » et une relance ?
    - Non : aucun code. Le README dit qu'une installation la pose une fois, et comment revenir sur un « Bloquer »
      **[choix Claude]**.
@@ -51,7 +55,13 @@ second écran attendent le desktop. Une PR.
      (`webview.url()`) est celle de l'app, `http://tauri.localhost`, ou le `devUrl` en développement ; tout le reste
      garde le comportement par défaut. Le test de l'origine est une fonction pure, vérifiée par `cargo test`. Le
      gestionnaire n'est pas appelé quand une décision est déjà enregistrée : le README le dit.
-3. - [ ] **Ce que vaut « présent » : une absence simple** (tranché par CrOliX le 09/11). Entrer annonce la présence au
+
+   **Fait :** dans l'exe : `permissions.query` dit `prompt`, « Autoriser » dans la boîte de WebView2 (une page
+   `edge://permission-request-dialog/`), relance, `granted` et `getUserMedia` passe sans boîte. La décision vit dans
+   `EBWebView\Default\Preferences` du profil (`media_stream_mic`, origine `http://tauri.localhost`) ; ce fichier supprimé,
+   appli fermée, elle redemande et les réglages restent. Aucun code ; `docs/README.md` dit comment revenir sur un «
+   Bloquer ».
+3. - [x] **Ce que vaut « présent » : une absence simple** (tranché par CrOliX le 09/11). Entrer annonce la présence au
    serveur relié. Une présence active fait dire une urgence à voix haute au lieu de l'envoyer au téléphone, et ouvre
    la parole spontanée. Le seuil « Entrer » était la seule chose qui remettait la présence à zéro après un
    redémarrage, et rien ne détectait l'absence (spec Luxuria, § 11). Désormais, dans la fenêtre :
@@ -65,7 +75,13 @@ second écran attendent le desktop. Une PR.
    - l'absence ne change que ce qui est annoncé au serveur : l'écoute et la sourdine restent ce qu'elles sont ;
    - tests : la fonction qui passe d'une durée sans saisie à présent ou absent ; l'interrupteur coupé, toujours
      présent ; la reprise à la première saisie. Dans un onglet, rien ne change.
-4. - [ ] **Entrer seule.** Une fonction pure dit si rien ne manque. Relié : un jeton ; seul : l'adresse et le nom du
+
+   **Fait :** `idle_ms` côté Rust (`GetLastInputInfo`, `windows-sys`, 40 lignes), `src/desktop/away.ts` décide, la page
+   relit toutes les 30 s et toutes les 3 s pendant l'absence. Une phrase qui passe le filtre compte aussi comme une
+   saisie : une vidéo ou une autre personne, filtre coupé, gardent la présence (README, limites). Relié seulement ; 15
+   minutes par défaut, de 1 à 240, dans Réglages › La fenêtre. Tests dans `away.test.ts`. La manette ne compte pas :
+   lun-luxuria#43.
+4. - [x] **Entrer seule.** Une fonction pure dit si rien ne manque. Relié : un jeton ; seul : l'adresse et le nom du
    modèle. Dans la fenêtre, la page entre alors seule, une seule fois, après le premier verdict du service de la voix
    (prêt ou absent), pour que l'accueil ne parte pas dans un service qui démarre. Sinon, elle montre l'arrivée de la
    tâche 5. Dans un onglet, rien ne change.
@@ -75,9 +91,14 @@ second écran attendent le desktop. Une PR.
    - « L'accueil, à ton arrivée » devient « au lancement ».
    - Tests : la fonction pure, le refus du jeton, un seul `enter()`, l'onglet comme aujourd'hui.
 
+   **Fait :** `arrival.ts` dit ce qui manque ; `enter.svelte.ts` entre une fois après le premier verdict du service
+   voix, avec « Sa voix se prépare… » et « Entrer sans attendre » en attendant. Un 401 oublie le jeton et l'arrivée
+   revient avec « Ce poste n'est plus reconnu par le serveur », gardé le temps d'un rechargement (`sessionStorage`). «
+   Au lancement ». Tests dans `arrival.test.ts`, `enter.svelte.test.ts`, `core.test.ts`.
+
 ### L'arrivée (lun-luxuria#36)
 
-5. - [ ] La page d'arrivée de la maquette `01-arrivee.html` (spec, § 2) :
+5. - [x] La page d'arrivée de la maquette `01-arrivee.html` (spec, § 2) :
    - le nom en titre, et la ligne qui dit ce qu'est l'appli ;
    - deux cartes, « Seul » et « Relié à un serveur », chacune avec ce qu'elle demande ;
    - les champs de la carte choisie, sur la page même. Seul : l'adresse du modèle, avec son aide, le nom du modèle et
@@ -88,9 +109,14 @@ second écran attendent le desktop. Une PR.
    Le détour par « Seul » pour changer l'adresse du serveur disparaît. Tests : chaque carte, chaque manque dit, le
    code qui fait entrer.
 
+   **Fait :** `Arrivee.svelte` : les deux cartes en boutons radio, les champs de la carte choisie, l'adresse du serveur
+   dans la fenêtre seulement avec `serverWarning`, le code en six cases qui fait entrer. L'écran dit ce qui manque dès
+   que le champ est vide et « Entrer » reste éteint. Tests dans `Arrivee.test.ts`. Capture à côté de la maquette dans la
+   page de preuves de la PR.
+
 ### La scène et le fil vides (lun-luxuria#37)
 
-6. - [ ] La scène de la maquette `02-scene.html` (spec, § 3) :
+6. - [x] La scène de la maquette `02-scene.html` (spec, § 3) :
    - la consigne sous le halo suit ce qui l'atteint vraiment dans le mode affiché, pas seulement la façon de parler :
      filtre coupé, « Parle-lui. » ; filtre du nom, « Dis son nom, ou parle juste après sa réponse. » ; touche, la
      touche réglée ; micro coupé, « Écris-lui, ou rallume le micro. », avec le bouton ; en sourdine, la sourdine et
@@ -106,12 +132,20 @@ second écran attendent le desktop. Une PR.
 
    Tests (`Scene.test.ts`) : chaque consigne, son effacement au premier tour de la personne, l'onglet sans petit mode.
 
+   **Fait :** `Scene.svelte` : la consigne par ce qui atteint vraiment (filtre, nom, touche, micro coupé, sourdine,
+   service voix absent), effacée au premier tour de la personne ; `Badge` et `IconButton` de 34 px avec le raccourci en
+   infobulle dans la fenêtre ; « Faire taire » seulement pendant qu'il parle ; `Fil.svelte` vide dit « Rien encore
+   aujourd'hui. » ou « Rien encore. » et décale les contrôles. Tests dans `Scene.test.ts`.
+
 ### Les réglages (lun-luxuria#38)
 
-7. - [ ] Le quotidien d'abord : chaque thème montre ce qui se change au jour le jour, et le reste passe sous « Réglages
+7. - [x] Le quotidien d'abord : chaque thème montre ce qui se change au jour le jour, et le reste passe sous « Réglages
    avancés », replié, selon le tableau de la spec (§ 4.1). Rien ne disparaît : un test passe chaque champ
    d'aujourd'hui et le retrouve.
-8. - [ ] Écoute, trois préréglages : « Pièce calme », « Normal », « Bruit autour ». Ils ne touchent que la fin de phrase
+
+   **Fait :** `Reglages.svelte` : chaque thème ouvre sur son quotidien, le reste sous `Avance.svelte` replié, selon le
+   tableau de la spec. `reglages.test.ts` passe chaque champ d'aujourd'hui et le retrouve.
+8. - [x] Écoute, trois préréglages : « Pièce calme », « Normal », « Bruit autour ». Ils ne touchent que la fin de phrase
    et le seuil du silence : `endOfSpeech.silenceMs`, `pauseMs`, `minSpeechMs` et `floorDb`.
    - « Normal » reprend les valeurs par défaut d'aujourd'hui.
    - Les deux autres ont des valeurs provisoires, marquées `shortcut:` dans le code : elles se mesurent sur le desktop
@@ -119,7 +153,11 @@ second écran attendent le desktop. Une PR.
    - « Personnalisé » se lit en comparant ces quatre valeurs aux trois préréglages, sans réglage de plus.
    - Tests : un préréglage remplit les valeurs ; une valeur touchée montre « Personnalisé » ; une appli ignorée
      ajoutée ne le montre pas.
-9. - [ ] Le reste de la spec (§ 4.3 à 4.8) :
+
+   **Fait :** `src/listen/presets.ts` : les trois préréglages sur `silenceMs`, `pauseMs`, `minSpeechMs` et `floorDb`, «
+   Normal » aux valeurs par défaut, les deux autres `shortcut:` à mesurer sur le desktop ; « Personnalisé » se lit par
+   comparaison. Tests dans `presets.test.ts` et `reglages.test.ts`.
+9. - [x] Le reste de la spec (§ 4.3 à 4.8) :
    - des unités qui se lisent (« 0,8 s ») ; les décibels restent dans l'avancé, avec la valeur conseillée ; le volume
      devient un curseur ;
    - « Ton et contexte » sur huit lignes. Relié, la zone est grisée et dit que le serveur décide du ton ;
@@ -133,10 +171,18 @@ second écran attendent le desktop. Une PR.
    lui », « Qui il est », « Ce que la scène montre de lui », « quand il se tait », « il ne t'entend pas », « Ce qui le
    fait répondre ».
 
+   **Fait :** Secondes et dB lisibles, le volume en curseur, « Ton et contexte » sur huit lignes et grisé relié, les
+   commandes au README, « Mesures de cette session » au bas de l'avancé, 720 px et 14 px sur grand écran, « Identité »
+   et des textes neutres. `noCore.test.ts` vert et un test refuse la liste des textes genrés.
+
 ### La doc
 
-10. - [ ] README : les commandes retirées de l'écran ; la fenêtre entre seule, l'onglet attend un clic ; le micro et le
+10. - [x] README : les commandes retirées de l'écran ; la fenêtre entre seule, l'onglet attend un clic ; le micro et le
     son selon les constats des tâches 1 et 2 ; la présence selon la tâche 3.
+
+   **Fait :** README et `docs/README.md` : les commandes au README, l'arrivée qui demande ce qui manque, la fenêtre qui
+   entre seule et l'onglet qui attend un clic, le son par wry, le micro gardé par le profil WebView2, l'absence et ses
+   limites (manette, filtre coupé).
 
 ## Preuves
 
