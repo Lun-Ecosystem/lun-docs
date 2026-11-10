@@ -64,7 +64,7 @@ partie vide, son relevé est fait (lun-luxuria#9).
 
 | # | Point | Qui |
 |---|---|---|
-| B1 | Relevés de confiance et de latence (critère 4 du plan `voix-confiance-blocs`), puis levée du verrou de l'ADR 0011 | desktop, puis CrOliX |
+| B1 | Relevés de confiance et de latence (critère 4 du plan `voix-confiance-blocs`), puis levée du verrou de l'ADR 0011. **Relevés faits le 10/11** (`lun-luxuria/docs/essai-2026-11-07.md`, et le [premier mot](2026-11-10-premier-mot.md) rejoué) ; le verrou reste à CrOliX | CrOliX |
 | B2 | La langue parlée : français direct contre réponse en anglais sous-titrée ; puis un ADR qui remplace 0011 (la langue, la mesure de la latence, une cible d'après le MVP) | CrOliX, à l'oreille |
 | B3 | Le flux RVC dès le premier bloc (reste de lun-luxuria#7), décidé après B1 | desktop |
 | B4 | Preuve manuelle des touches globales de l'exe (critère 4 du plan Tauri) : `Ctrl+Maj+L` depuis une autre fenêtre, F9 tenue puis lâchée | CrOliX |
