@@ -138,5 +138,6 @@ Aucune police ni ressource ne vient d’un CDN. Pas d’alerte native (`alert`, 
 ## Vérification avant toute PR de front
 
 Un écran ou un composant de front est **vérifié dans Chrome**, en largeur bureau (1440 px) et mobile
-(390 px), contre sa planche ou le catalogue des composants, avant l’ouverture de la PR. Les captures
+(390 px), contre sa planche ou la galerie du kit (`npm run galerie`, dans `design/` de lun-docs : chaque
+composant commun dans ses états et dans les cinq mondes), avant l’ouverture de la PR. Les captures
 ne contiennent aucune donnée réelle.

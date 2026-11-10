@@ -20,6 +20,14 @@ npm test && npm run check && npm run sync:check
 
 Prérequis : Node 22 ou plus, sans dépendance à installer. Pas de `.env` : rien de secret ici.
 
+Le kit et sa galerie ont leurs propres dépendances, dans `design/` seulement (Node `^22.22.2 || >=24.15`) :
+
+```bash
+cd design && npm ci
+npm run galerie                                  # la galerie locale : http://127.0.0.1:5190
+npm run typecheck && npm test && npm run format:check && npm run build
+```
+
 ## Spécificités
 
 - **Dépôt public** : aucune adresse interne (`npm run check` les cherche), aucun secret (rien ne les cherche :
@@ -27,6 +35,9 @@ Prérequis : Node 22 ou plus, sans dépendance à installer. Pas de `.env` : rie
 - **Les copies du plugin** : `plugin/skills/*/references/` sont générées depuis `standards/` et `vision.md`
   (`tools/standards-map.json`). Modifier l'original, puis `npm run sync` ; `npm run sync:check` échoue sur une
   copie retouchée à la main.
+- **Le kit ne se retouche pas pour la galerie**, et rien de la galerie ne vit dans `design/kit/`, que
+  `tools/sync-kit.mjs` recopie en entier dans les apps. Un composant ajouté au kit a sa vitrine dans
+  `design/galerie/sections/` et sa ligne dans `design/galerie/inventaire.ts` : un test le vérifie.
 - **Les limites** (`npm run check`) : un standard tient en 150 lignes, le gabarit `CLAUDE.md` en 100, un ADR en 60
   avec sa ligne « Statut : ».
 - **Le registre est lu par le site** sur `main`, à son build : un rôle, une visibilité ou un état hors des listes de

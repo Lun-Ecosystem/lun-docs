@@ -28,6 +28,7 @@ aucun code applicatif.
 | Structure d'un projet | [`standards/structure-projet.md`](standards/structure-projet.md) |
 | Qualité, sécurité, stack, design | [`standards/`](standards/) |
 | Jetons de design de référence (copiés dans chaque dépôt) | [`design/tokens.css`](design/tokens.css) |
+| Le kit de composants communs, et sa galerie locale (`cd design && npm ci && npm run galerie`) | [`design/kit/`](design/kit/), [`design/galerie/`](design/galerie/) |
 | Décisions d'écosystème | [`adr/`](adr/) |
 | Les projets, leur rôle, leur dépôt | [`registry.yaml`](registry.yaml) |
 | Squelette d'un nouveau projet | [`templates/project/`](templates/project/) |

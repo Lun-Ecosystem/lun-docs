@@ -28,3 +28,12 @@ jobs:
           npx -y @anthropic-ai/claude-code@2.1.303 plugin validate --strict plugin
           npx -y @anthropic-ai/claude-code@2.1.303 plugin validate --strict plugin/agents
           npx -y @anthropic-ai/claude-code@2.1.303 plugin validate --strict plugin/skills
+      # Everything above runs before any install: the root stays without dependencies. design/ has its own.
+      - name: Kit and gallery (install, types, tests, format, build)
+        working-directory: design
+        run: |
+          npm ci
+          npm run typecheck
+          npm test
+          npm run format:check
+          npm run build
