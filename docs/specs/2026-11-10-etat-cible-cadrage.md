@@ -58,9 +58,17 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
 - **Mis de côté** (spec Luxuria, § 11) : l'avatar animé ; les modes de présence ; les pensées et relances ; le mot d'éveil
   et les enceintes ; la mascotte ; la perception (fenêtre active, puis l'écran) ; le compagnon qui agit sur le poste par
   cartes ; le compagnon de jeu ; le stream ; la voix apprise.
-- **Ligne d'arrivée [avis Claude]** : 1) elle a un visage qui vit (un avatar animé, lèvres et regard) ; 2) elle perçoit
-  ce que fait CrOliX sur son poste et s'y accorde sans qu'il règle rien ; 3) elle parle d'elle-même, à propos, sans
-  lasser ; 4) elle peut faire sur le poste, par cartes ; 5) elle peut être vue et entendue par d'autres.
+- **Ligne d'arrivée, validée par CrOliX le 10/11** :
+  1. elle a un visage qui vit, et il suit sa voix phrase par phrase : lèvres, regard, expression ;
+  2. elle se laisse couper, et sait où elle en était ;
+  3. elle perçoit ce que fait CrOliX sur son poste et s'y accorde sans qu'il règle rien ;
+  4. elle voit l'écran ;
+  5. elle parle d'elle-même, à propos, sans lasser : après un silence, une fois, et elle se tait si on ne lui répond pas ;
+  6. elle peut faire sur le poste : avec une permission pour l'immédiat, une carte pour ce qui attend ;
+  7. elle accompagne en jeu ;
+  8. elle peut être vue et entendue par d'autres.
+
+  Les points 1, 2 et le garde-fou du point 5 viennent de l'[étude d'OpenAmika](2026-11-10-etude-openamika.md).
 - **Ne fera jamais** : décider de ce qui est dit quand elle est reliée ; garder une mémoire à elle.
 
 ### 4.2 Lun'Anima, le cœur et le cerveau
