@@ -23,8 +23,8 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
 ## Exécuter
 
 - Partir de `main` à jour, puis créer la branche du chantier, jamais `main` :
-  `git switch main && git pull --ff-only && git switch -c <type>/<sujet>`. Ne pas rester sur la
-  branche d'un chantier précédent. (`git pull --ff-only` plutôt que `git checkout main && git pull` :
+  `git switch main`, `git pull --ff-only`, puis `git switch -c <type>/<sujet>`. Ne pas rester sur la
+  branche d'un chantier précédent. (`git pull --ff-only` plutôt que `git checkout main` puis `git pull` :
   le mode auto de Claude Code prend parfois ce dernier pour un merge.)
 - **Une seule branche et une seule PR pour tout le chantier** (`references/git.md`) : chaque tâche du
   plan est un ou plusieurs commits sur cette branche, jamais une branche poussée ni une PR à part.

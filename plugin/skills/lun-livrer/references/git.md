@@ -9,7 +9,7 @@
 - `main` est protégée. Jamais de push direct, jamais de push forcé.
 - **Un chantier = une branche = une PR** : `feat/<sujet>`, `fix/<sujet>`, `docs/<sujet>`, `chore/<sujet>`.
   Jamais une PR par tâche ou par étape du plan.
-- Chaque chantier part de `main` à jour : `git switch main && git pull --ff-only`, puis
+- Chaque chantier part de `main` à jour : `git switch main`, `git pull --ff-only`, puis
   `git switch -c <type>/<sujet>` ; ou, sans toucher la copie principale, son propre worktree :
   `git fetch` puis `git worktree add <dossier> -b <type>/<sujet> origin/main`.
 - Les **étapes** du chantier se font sur sa branche : un ou plusieurs commits par étape, chacune
