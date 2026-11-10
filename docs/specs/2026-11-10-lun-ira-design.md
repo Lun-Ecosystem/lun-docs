@@ -2,9 +2,10 @@
 
 > Spec de fondation du 10/11, à valider par CrOliX **avant tout plan**. Elle suit le
 > [cadrage](2026-11-10-axe-dev-cadrage.md) et ce que CrOliX y a tranché (§ 1). Elle pose ce que le satellite est, ce qu'il
-> possède, ses règles de sécurité et ses paliers ; elle ne dessine aucun écran et ne choisit aucune bibliothèque. Les choix
-> marqués **[choix Claude]** se changent avant le plan. Après le MVP : rien ici n'entre dans ce que la semaine de rodage
-> juge. Issue : lun-docs#125.
+> possède, sa règle de coût, son harnais, son format et ses paliers ; elle ne dessine aucun écran et ne choisit aucune
+> bibliothèque. Les choix marqués **[choix Claude]** se changent avant le plan. Ce qui vient des textes officiels lus le
+> 10/11 est marqué **[vérifié le 10/11]** et se relit avant chaque palier : ces règles changent. Après le MVP de
+> l'écosystème : rien ici n'entre dans ce que la semaine de rodage juge. Issue : lun-docs#125.
 
 ## 1. Ce qui est tranché
 
@@ -20,109 +21,132 @@ Par CrOliX, le 10/11 :
   réglable, et de la vigilance sur le 100 % automatique.
 - **La veille tech n'est pas le suivi de GitHub.** Ce satellite suit ce qui touche ses dépôts ; la veille par thèmes,
   tech comprise, se cadre à part (cadrage, § 7).
+- **Aucun PC n'est toujours allumé.** Le NAS l'est, sur le réseau local ; la tension entre connectivité et exposition
+  reste, et l'architecture d'ensemble est à revoir.
+- **Avancer par paliers, brique par brique.** Pour commencer : un outil qui permet à l'agent du satellite, relié ou non
+  à Natsume, d'assister et de piloter le travail de dev, avec « un travail béton sur la limitation du coût des appels ».
+  D'où l'idée d'utiliser un abonnement plutôt que des appels d'API.
+- **Le format du satellite reste ouvert** : comme Acedia et Avaritia, comme un paquet npm (l'ancien Lun'Ira), ou autre.
 
 ## 2. Ce que c'est
 
 Un atelier où CrOliX pilote son travail de dev avec des agents : il y voit ses chantiers à travers les dépôts, y lance et
 suit des sessions d'agent de code, y relit ce qu'elles produisent, y retouche à la main, et y décide ce qui part sur
-GitHub. L'agent de l'atelier connaît l'état du travail et le dit ; relié au core, c'est par lui que Natsume sait où en
-est chaque chantier et agit sur GitHub.
+GitHub. L'agent de l'atelier connaît l'état du travail, le dit, et prépare les gestes. Relié au core, c'est par lui que
+Natsume sait où en est chaque chantier.
 
 **Nom : Lun'Ira [choix Claude]**, l'atelier, la forge où le travail se fait. Le nom se confirme à la validation.
 
 ## 3. Ce qu'il possède, et ce qu'il ne possède pas
 
-- **Il possède** : l'état des dépôts, des chantiers et de la CI ; une identité sur GitHub et les gestes faits en son nom ;
-  le registre des sessions d'agent (lesquelles, où, sur quel chantier, ce qu'elles attendent) ; la surface de l'atelier
-  (pilotage, revue des diffs, lecture et retouche de fichiers, terminal) ; le harnais (§ 5) ; le suivi des dépendances de
-  ses dépôts.
-- **Il ne possède pas** : le moteur d'édition (un composant existant, embarqué) ; les agents de code et leurs
-  abonnements (les outils officiels, pilotés) ; la méthode de travail (lun-docs et son plugin, pour l'écosystème Lun') ;
-  les fiches et le savoir (Avaritia) ; la veille par thèmes ; la conversation et la personnalité (le core).
-- **Autonome et public**, comme Acedia et Avaritia : il sert quelqu'un qui n'a ni core ni Natsume. Son agent est neutre
-  et se règle (nom, ton, contexte). Rien à l'écran ne nomme le core.
+- **Il possède** : l'état des dépôts, des chantiers et de la CI ; les gestes sur GitHub et leur trace ; le registre des
+  sessions d'agent ; la passation d'un poste à l'autre ; le compteur de coût et ses plafonds ; le harnais (§ 6) ; plus
+  tard, la surface de l'atelier (revue des diffs, retouche, terminal, bac à sable) ; le suivi des dépendances.
+- **Il ne possède pas** : le moteur d'édition ; les agents de code et leurs abonnements (les outils officiels, non
+  modifiés) ; la méthode de travail (lun-docs et son plugin, pour l'écosystème Lun') ; les fiches (Avaritia) ; la veille
+  par thèmes ; la conversation et la personnalité (le core).
+- **Autonome et public** : il sert quelqu'un qui n'a ni core ni Natsume. Son agent est neutre et se règle. Rien à
+  l'écran ne nomme le core.
 
-## 4. Les trois métiers
+## 4. La règle de coût
 
-### 4.1 GitHub, vu et contrôlé
+C'est la contrainte première. Trois niveaux, du moins cher au plus cher ; un niveau ne s'emploie que si le précédent ne
+suffit pas.
 
-- **Lire** : dépôts, issues, PR, CI, notifications. Un bilan du jour, des alertes (une CI rouge sur la branche
-  principale, une PR verte qui attend), et l'agent répond : « où en est tel chantier ? ». Un chantier se lit à travers
-  plusieurs dépôts : ses PR, leur ordre de fusion, ce qui les bloque.
-- **Agir, toujours par une carte** : fusionner dans l'ordre, relancer une CI, ouvrir une issue depuis une phrase, tenir
-  un document d'avancement à jour à la fusion.
-- **L'identité : une application GitHub [choix Claude]**, pour ses droits dépôt par dépôt et ses jetons courts. Un compte
-  machine reste possible si « une collègue qui commente » compte plus ; la spec du palier 1 tranche. Jamais de jeton à
-  haut privilège pour une commodité.
+- **C0, sans modèle.** Tout ce qui se calcule se calcule : l'état d'un chantier à travers ses dépôts, l'ordre de fusion,
+  une CI rouge attendue ou réelle, le bilan du jour, les alertes. Coût nul. C'est le socle, et la plupart des questions
+  (« où en est P ? », « qu'est-ce qui m'attend ? ») s'y répondent.
+- **C1, l'abonnement, par l'outil officiel.** Le raisonnement de l'agent tourne dans l'agent de code officiel, non
+  modifié, où CrOliX est connecté avec son propre abonnement ; l'atelier lui apporte ses outils et son rôle (§ 5).
+  **[vérifié le 10/11]** La documentation du fournisseur dit qu'un utilisateur peut se connecter au binaire non modifié
+  avec son abonnement, que le mode sans interface et le kit d'agents puisent alors dans les limites de l'abonnement, et
+  que ces limites supposent un usage ordinaire et individuel. Elle interdit à un outil de recueillir, stocker ou
+  relayer ces identifiants : l'atelier n'y touche jamais.
+- **C2, une clé d'API.** Coupée par défaut. Si elle est posée : un plafond par tâche, par jour et par mois, et l'arrêt
+  net au plafond, comme le core le fait déjà.
 
-### 4.2 Les sessions d'agent
+Ce que l'abonnement impose : ses limites (par fenêtre de cinq heures et par semaine) sont **partagées** avec tout le
+reste de l'usage de CrOliX, et un lancement en éventail peut vider la semaine. L'atelier compte donc aussi le quota :
+un nombre de tours borné par tâche, pas de sessions en parallèle par défaut, rien de lancé sans que CrOliX le voie, et
+l'état du quota affiché quand l'outil le donne.
 
-- L'atelier **pilote les agents officiels** par le protocole ouvert des éditeurs (Agent Client Protocol) : chaque agent
-  garde sa propre connexion, abonnement compris. L'atelier ne lit, ne recopie et ne stocke aucun jeton d'abonnement. Une
-  clé d'API reste possible en repli, avec son coût affiché.
-- Il **tient le registre** des sessions : en cours, en attente d'une réponse, finies, perdues ; le chantier et le dépôt
-  de chacune ; ce qu'elle a coûté quand l'agent le dit.
-- **Tout centraliser : un hôte unique [choix Claude].** L'atelier tourne sur une machine toujours allumée (le desktop,
-  puis le NAS) et les sessions y vivent ; le laptop et le téléphone s'y relient par son front. Une session ne se
-  « transporte » plus : elle reste où elle est, et on la rejoint.
-- **Un essai avant le plan** : brancher un agent officiel par le protocole depuis un programme à soi, y lancer une
-  session, lire ses événements, répondre à une demande d'autorisation. Si l'essai échoue, ce métier se recadre.
+## 5. Le format
 
-### 4.3 L'atelier
+| | Ce que c'est | Pour | Contre |
+|---|---|---|---|
+| **F1. Serveur et front**, comme Acedia et Avaritia | Un conteneur, sur le NAS | toujours allumé ; le contrat satellite y est chez lui | les sessions ne peuvent pas y tourner (trop faible, Linux, pas d'outils) ; et un agent sur le NAS ne peut pas se servir de l'abonnement du poste |
+| **F2. Un paquet npm**, comme l'ancien Lun'Ira | Une commande et un petit service local, sur le PC où l'on travaille | marche sur n'importe quel poste, sans hôte ; le plus simple à adopter pour un outil public | pas de présence quand tous les PC sont éteints |
+| **F3. Une extension de l'agent de code** | Un greffon et un serveur d'outils (MCP) : l'agent de l'atelier est un rôle dans l'outil officiel | le plus léger ; vit là où le travail se fait ; **c'est ce qui rend C1 possible** | aucune surface à soi ; dépend de l'outil hôte |
+| **F4. Une appli de bureau**, comme Luxuria | Une fenêtre | une vraie surface | le plus lourd, pour une surface qui ne vient qu'au dernier palier |
 
-Dans l'ordre où les fonctions arrivent : piloter (chantiers, sessions, ce qui attend CrOliX) ; relire un diff et le
-commenter ; lire un fichier et le retoucher à la main ; un terminal ; un bac à sable où essayer sans toucher au dépôt.
-Chaque fonction d'IDE de plus (débogage, extensions, serveurs de langage) est un chantier à part, décidé quand le besoin
-se montre.
+**[choix Claude] Un seul paquet npm (F2), à trois visages.** Son cœur calcule l'état (C0). Il s'offre aux agents de code
+par un serveur d'outils et un greffon (F3) : c'est par là que l'agent de l'atelier existe sous l'abonnement. Plus tard,
+le même paquet lancé en mode serveur sur le NAS devient le poste de contrôle et parle le contrat satellite (F1). Une
+base de code, pas trois projets ; F4 se décide au palier de la surface.
 
-## 5. Le harnais
+## 6. Le harnais
 
-Ce que l'atelier garantit, quel que soit l'agent piloté :
+Ce que l'atelier garantit, quel que soit l'agent :
 
 - **Rien n'est 100 % automatique par défaut.** Un agent propose ; ce qui sort du poste (pousser, fusionner, publier,
-  commenter au nom de l'identité) passe par une carte.
+  commenter) passe par une carte.
 - **Une sécurité réglable**, par dépôt et par session : ce qu'un agent peut lire, écrire, lancer ; ce qui demande une
-  validation ; ce qui est interdit. Les demandes d'autorisation des agents arrivent dans l'atelier, pas dans un terminal
-  perdu.
+  validation ; ce qui est interdit.
 - **Le bac à sable** : une session peut travailler dans une copie isolée du dépôt ; ce qu'elle produit n'entre dans le
   dépôt que par une revue.
 - **La main reste possible partout** : arrêter une session, reprendre à sa place, retoucher son diff.
-- **La trace** : qui a fait quoi (CrOliX, l'agent de l'atelier, une session, Natsume), et ce que ça a coûté.
+- **La trace** : qui a fait quoi (CrOliX, l'agent de l'atelier, une session, Natsume), et ce que ça a coûté, en dollars
+  ou en quota.
 
-## 6. Relié au core
+## 7. Où le travail se fait, et comment il passe d'un poste à l'autre
 
-Un poste comme les autres, par le [contrat satellite](../../standards/contrat-satellite.md) v1.4, sans y toucher
-[choix Claude] : `health`, `costs`, `pause`, `events` (CI rouge, PR prête, session qui attend), `agent` (« où en est
-P ? »), `cards` (les gestes sur GitHub). Son bilan entre au point du matin. Deux satellites ne se parlent jamais : une
-décision de chantier qui mérite une fiche passe par le core vers Avaritia.
-
-## 7. La forme du dépôt
-
-Celle des autres satellites : un serveur, un front, une base locale, le kit et les jetons de design recopiés de lun-docs,
-une couleur de monde à choisir [choix Claude : à la spec du premier écran]. Dépôt public `Lun-Ecosystem/lun-ira`, parti
-de `templates/project/`, inscrit au registre à sa création.
+- **Une session travaille là où est son dépôt cloné : sur un PC.** Jamais sur le NAS.
+- **GitHub est le fil commun entre les machines.** L'état des chantiers s'y lit depuis n'importe quel poste ; rien n'a à
+  se synchroniser entre le desktop et le laptop pour que l'atelier dise la même chose sur les deux.
+- **Rejoindre** une session qui tourne sur un PC allumé : par le contrôle à distance de l'agent officiel, tant que
+  l'atelier n'a pas mieux.
+- **Passer la main** quand le PC va s'éteindre : aucun outil ne migre une session vivante. L'atelier en fait un geste
+  propre : pousser le travail en cours sur sa branche, écrire la note de passation (où on en est, ce qui reste, ce qui
+  attendait) dans la PR du chantier, puis ouvrir une session neuve sur l'autre poste à partir des deux.
+- **Rien de nouveau n'est exposé.** L'atelier interroge GitHub ; GitHub n'appelle jamais chez CrOliX. Quand le poste de
+  contrôle arrive sur le NAS, il prend la porte de l'[ADR 0008](../../adr/0008-acces-exterieur.md), et les PC s'y relient
+  en sortie seulement.
 
 ## 8. Les paliers
 
-1. **GitHub en lecture** : l'identité, les dépôts suivis, le bilan, les alertes, l'agent qui répond, le suivi des
-   dépendances. Se prouve seul, sans agent de code.
-2. **Les gestes par cartes** sur GitHub.
-3. **Les sessions** : l'essai du protocole, puis le registre et le pilotage d'un agent, avec le harnais.
-4. **L'atelier** : la revue des diffs, la lecture et la retouche, le terminal, le bac à sable.
+Le MVP de l'atelier est fait des paliers 0 à 3. Chacun a sa spec de design et son plan.
 
-Chaque palier a sa spec de design et son plan ; ses écrans se cadrent par des maquettes avant le code.
+| | Brique | Ce qu'elle prouve | Coût |
+|---|---|---|---|
+| **0. L'essai** | Dans l'agent officiel, sous l'abonnement : un outil de l'atelier appelé par un rôle, puis une tâche bornée en mode sans interface ; la mesure de ce que ça consomme | que C1 tient, et combien il coûte en quota | C1 |
+| **1. Voir** | Le paquet : les dépôts suivis, un chantier lu à travers ses dépôts, l'ordre de fusion, la CI attendue ou réelle, le bilan, les alertes ; en ligne de commande et en outils pour agents | que l'état se calcule sans modèle | C0 |
+| **2. Assister** | L'agent de l'atelier : un rôle et ses outils dans l'agent de code ; il répond, résume, propose la suite ; le compteur de coût et ses bornes | que l'agent pilote sans appel d'API | C0, C1 |
+| **3. Agir** | Les gestes sur GitHub par cartes : fusionner dans l'ordre, relancer une CI, ouvrir une issue, tenir l'avancement à jour ; la trace | le harnais | C0, C1 |
+| **4. Passer la main** | Le registre des sessions du poste ; la passation par GitHub | la tension « tout centraliser », sans hôte | C0, C1 |
+| **5. Relié** | Le mode serveur sur le NAS : le contrat satellite, le bilan au point du matin, Natsume qui demande ; l'identité GitHub propre à Natsume | le poste dans l'écosystème | C0 quand aucun PC n'est allumé |
+| **6. L'atelier** | La surface : revue des diffs, retouche, terminal, bac à sable ; d'autres agents (GPT, Gemini) par le protocole ouvert des éditeurs | l'IDE à soi, fonction par fonction | selon l'agent |
+
+Au palier 5, le poste sur le NAS ne répond qu'en C0 quand aucun PC n'est allumé : il dit l'état, il ne raisonne pas. Un
+raisonnement demande un PC allumé (C1) ou une clé (C2). C'est une limite connue, pas un défaut à cacher.
+
+**L'identité sur GitHub.** Jusqu'au palier 4, l'atelier agit avec la connexion de CrOliX, par cartes. Une identité
+propre à Natsume vient au palier 5 : une application GitHub **[choix Claude]**, pour ses droits dépôt par dépôt et ses
+jetons courts, ou un compte machine si « une collègue qui commente » compte plus. Jamais de jeton à haut privilège pour
+une commodité.
 
 ## 9. Ce que cette spec change ailleurs
 
 - [`vision.md`](../../vision.md) : dire qui possède le travail de dev ; garder « hors VIP » la fabrication de code par des
   agents maison, et y distinguer le pilotage d'agents existants.
-- Un ADR d'écosystème : Lun'Ira, l'atelier de dev, satellite public autonome.
+- Un ADR d'écosystème : Lun'Ira, l'atelier de dev, satellite public autonome, et son format.
 - `registry.yaml` : l'entrée `lunira`, à la création du dépôt.
+- Le contrat satellite : rien avant le palier 5 ; un poste qui n'est pas toujours joignable s'y cadre alors.
 
-Ces trois changements se font à la validation de cette spec, pas avant.
+Ces changements se font à la validation de cette spec, pas avant.
 
 ## 10. Hors périmètre
 
 - Écrire un éditeur de texte, ou des agents de code à soi (l'ancien Lun'Ira).
+- Recueillir, stocker ou relayer un identifiant d'abonnement, de quelque fournisseur que ce soit.
 - La veille par thèmes, tech comprise : cadrage, § 7, à trancher à part.
 - Le stream, le jeu, l'imitation : hors de cet axe.
