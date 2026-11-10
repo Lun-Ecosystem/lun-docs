@@ -107,8 +107,12 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
 - **Existe** : le tri, les boîtes, les réponses préparées, l'agenda, les tâches, l'agent, les règles.
 - **Mis de côté** : Google branché depuis l'interface ; le confort (couleurs, listes, archivage du journal) ; Gmail en
   push ; le nom de l'agent encore écrit en dur ; le poids du build.
-- **Ligne d'arrivée [avis Claude]** : 1) une semaine sans ouvrir Gmail ni Agenda pour le courant ; 2) installée et
-  reliée à Google sans terminal ni fichier ; 3) son agent n'a plus aucun nom en dur.
+- **Ligne d'arrivée, validée par CrOliX le 10/11** :
+  1. une semaine sans ouvrir Gmail ni Agenda pour le courant : le confort mis de côté se juge là, pas à part ;
+  2. installée et reliée à Google sans terminal ni fichier ;
+  3. son agent n'a plus aucun nom en dur ;
+  4. ses écrans sont faits du kit commun (lun-docs#43) ;
+  5. ses cartes sont celles du kit : la feuille commune, avec ses états.
 - **Ne fera jamais** : la conversation ; les fiches.
 
 ## 5. L'axe 1 : la présence
@@ -155,7 +159,7 @@ quand l'achat se précise. 6 et 7 sont de vrais chantiers, à ordonner contre le
 
 ## 8. Ce qui reste à trancher, dans l'ordre
 
-1. Les quatre lignes d'arrivée (§ 4) : les corriger, une par une, en commençant par Luxuria.
+1. ~~Les quatre lignes d'arrivée (§ 4)~~ : écrites et validées par CrOliX le 10/11, une par une.
 2. La première marche de la présence (§ 5).
 3. La place de la session du desktop et de la semaine d'usage : une porte, ou le premier chantier de la révision (§ 3).
 4. La réécriture de `vision.md` (§ 6, points 3 et 4).
