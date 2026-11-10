@@ -170,9 +170,17 @@ Pris : Acedia, Avaritia, Luxuria. Restent Ira, Gula, Superbia, Invidia. Les note
    fonction.
 5. **La veille par thèmes** (V3), tech comprise, à part, quand son porteur est tranché.
 
-## 11. Ce qui reste à trancher, dans l'ordre
+## 11. Ce que CrOliX a tranché le 10/11
 
-1. Point 3 : un atelier à soi sur des briques existantes (3e), et quelles fonctions il doit avoir d'abord ?
+- La lecture du § 6 est bonne : « à l'ère de l'IA, il n'y a plus de gain à taper soi-même le code ». L'atelier (3e) est
+  retenu.
+- L'écriture à la main ne disparaît pas pour autant : la retouche, la révision spontanée et le bac à sable restent, dans
+  une logique de harnais, avec une sécurité réglable et de la vigilance sur le 100 % automatique.
+- « On a une bonne base pour poser les fondations du satellite de dev » : la suite est dans
+  [`2026-11-10-lun-ira-design.md`](2026-11-10-lun-ira-design.md).
+
+## 12. Ce qui reste à trancher, dans l'ordre
+
 2. Point 1 : un hôte unique pour les sessions (1a), et lequel ?
 3. Point 2 : l'identité de Natsume sur GitHub, compte machine ou application ?
 4. La veille : le suivi des dépendances ici ; la veille par thèmes, tech comprise, par V3 ou V2, et qui la porte ?
