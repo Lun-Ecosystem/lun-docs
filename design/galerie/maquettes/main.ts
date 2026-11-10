@@ -6,6 +6,6 @@ import '@fontsource/cormorant-garamond/500.css';
 import '../../tokens.css';
 import '../base.css';
 import { mount } from 'svelte';
-import Pistes from './Pistes.svelte';
+import Maquettes from './Maquettes.svelte';
 
-mount(Pistes, { target: document.getElementById('maquettes')! });
+mount(Maquettes, { target: document.getElementById('maquettes')! });
