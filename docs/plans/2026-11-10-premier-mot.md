@@ -120,6 +120,29 @@ et le silence de fin lui-même. Tous se mesurent sur le desktop, avec la voix ; 
 Limites : un seul poste, une seule soirée, une seule connexion ; le prompt du relevé a deux postes reliés et une
 fenêtre pleine de messages inventés, sans les outils de cartes ni les notes de la nuit.
 
+## Le relevé du desktop, le 10/11 au soir
+
+La même commande sur le desktop, core de service, la clé et le modèle du core (`gpt-6-luna`), vingt-neuf appels gardés
+par bras.
+
+| Bras | Premier mot, médiane | Écart interquartile | Jetons d'entrée | Relus du cache |
+|---|---|---|---|---|
+| Minuscule | 1 142 ms | 450 ms | 20 | 0 |
+| Neuf | 1 373 ms | 1 328 ms | 2 956 | 0 |
+| Répété | 1 327 ms | 727 ms | 2 945 | 2 942 |
+| Tel quel | 1 410 ms | 622 ms | 2 950 | 0 |
+| Réordonné | 1 180 ms | 262 ms | 2 954 | 1 566 |
+
+Le plancher est le même que sur le laptop (1 142 ms contre 1 095). L'ordre réordonné gagne ici 230 ms en médiane, là
+où il en perdait 93 sur le laptop ; l'écart interquartile de « tel quel » est de 622 ms, la règle de la tâche 4 n'est
+donc pas remplie. Un seul passage.
+
+**Le tour à l'essai, mesuré le même soir** : deux séries à la voix dans Luxuria (vingt tours, puis dix-neuf comptés), silence de fin à
+600 ms. Du dernier son de voix au premier son joué : 3 379 ms en médiane spéculation coupée, 3 072 ms spéculation allumée. Le premier mot
+gardé par appel (`costs.first_text_ms`) : 1 055 ms en médiane sur 16 appels, puis 973 ms sur 15 ; aucun jeton relu du
+cache. Les phrases différaient d'une série à l'autre : l'écart de 0,3 s n'est pas établi. Le détail est dans
+`lun-luxuria/docs/essai-2026-11-07.md`.
+
 ## Hors périmètre
 
 - **La fenêtre par paliers** : elle ne sert que les jours où la fenêtre se remplit (la tâche 1 dit combien), et elle
