@@ -59,6 +59,9 @@
         {#snippet children(c)}<TextInput id={c.id} value="" aria-describedby={c.describedBy} />{/snippet}
       </Field>
     </Piece>
+    <Piece nom="TextInput" etat="survol"
+      ><TextInput value="Agent" aria-label="Nom" data-etat="survol" /></Piece
+    >
     <Piece nom="TextInput" etat="focus"><TextInput value="Agent" aria-label="Nom" data-etat="focus" /></Piece>
     <Piece nom="TextInput" etat="désactivé"><TextInput value="Agent" aria-label="Nom" disabled /></Piece>
     <Piece nom="TextInput" etat="icône et suffixe">
@@ -68,7 +71,7 @@
       <TextInput value="" placeholder="Chercher" aria-label="Chercher" icon={icons.Search} size="petit" />
     </Piece>
     <Piece nom="TextArea" large>
-      <Field label="Ton et contexte" hint="Son rôle, et ce qu’il faut savoir de toi.">
+      <Field label="Ton et contexte" hint="Son rôle, et ce qu’il faut savoir de la personne.">
         {#snippet children(c)}
           <TextArea
             id={c.id}
@@ -77,6 +80,38 @@
           />
         {/snippet}
       </Field>
+    </Piece>
+  </Groupe>
+
+  <Groupe
+    titre="Saisir un texte long"
+    colonnes={3}
+    sens="La zone de texte, avec les mêmes états que le champ."
+  >
+    <Piece nom="TextArea" etat="normal"
+      ><TextArea value="Des phrases courtes." aria-label="Ton" rows={3} /></Piece
+    >
+    <Piece nom="TextArea" etat="erreur">
+      <TextArea value="" aria-label="Ton" rows={3} invalid />
+    </Piece>
+    <Piece nom="TextArea" etat="désactivé">
+      <TextArea value="Des phrases courtes." aria-label="Ton" rows={3} disabled />
+    </Piece>
+  </Groupe>
+
+  <Groupe
+    titre="Saisir un texte long"
+    colonnes={3}
+    sens="La zone de texte, avec les mêmes états que le champ."
+  >
+    <Piece nom="TextArea" etat="normal"
+      ><TextArea value="Des phrases courtes." aria-label="Ton" rows={3} /></Piece
+    >
+    <Piece nom="TextArea" etat="erreur">
+      <TextArea value="" aria-label="Ton" rows={3} invalid />
+    </Piece>
+    <Piece nom="TextArea" etat="désactivé">
+      <TextArea value="Des phrases courtes." aria-label="Ton" rows={3} disabled />
     </Piece>
   </Groupe>
 
@@ -103,6 +138,12 @@
     >
     <Piece nom="Segmented" etat="normal">
       <Segmented options={VUES} value={vue} label="Vue" onchange={(v) => (vue = v)} />
+    </Piece>
+    <Piece nom="Segmented" etat="focus">
+      <Segmented options={VUES} value="liste" label="Vue" data-etat="focus" etatValue="jour" />
+    </Piece>
+    <Piece nom="Segmented" etat="focus">
+      <Segmented options={VUES} value="liste" label="Vue" data-etat="focus" etatValue="jour" />
     </Piece>
     <Piece nom="Segmented" etat="survol">
       <Segmented options={VUES} value="liste" label="Vue" data-etat="survol" etatValue="jour" />

@@ -3,12 +3,20 @@
   import Badge from '../kit/Badge.svelte';
   import { ailleurs, LEGENDE, type Famille } from './inventaire.ts';
 
-  /* One family of the gallery: what the kit renders, then what lives elsewhere, named and not rendered. */
-  type Props = { id: Famille | 'variables'; titre: string; intro: string; children: Snippet };
+  /*
+   * One family of the gallery: what the kit renders, then what the projects have of their own, named and not
+   * rendered. A family without anything in the kit (the cards) has only that list.
+   */
+  type Props = {
+    id: Famille | 'variables';
+    titre: string;
+    intro: string;
+    children?: Snippet | undefined;
+  };
   let { id, titre, intro, children }: Props = $props();
 
   const autres = $derived(id === 'variables' ? [] : ailleurs(id));
-  const ton = { variante: 'attention', propre: 'info' } as const;
+  const ton = { commun: 'ok', variante: 'attention', propre: 'info' } as const;
 </script>
 
 <section class="famille" {id} aria-labelledby="t-{id}">
@@ -16,18 +24,22 @@
     <h2 id="t-{id}">{titre}</h2>
     <p>{intro}</p>
   </header>
-  {@render children()}
+  {@render children?.()}
   {#if autres.length > 0}
     <div class="ailleurs">
-      <h3>Dans les projets, hors du kit</h3>
+      <h3>Dans les projets</h3>
       <ul>
-        {#each autres as e (e.nom + e.projets[0])}
+        {#each autres as e (e.nom + e.statut + e.projets[0])}
           <li>
-            {#if e.statut !== 'commun'}<Badge tone={ton[e.statut]}>{LEGENDE[e.statut].mot}</Badge>{/if}
+            <Badge tone={ton[e.statut]}>{LEGENDE[e.statut].mot}</Badge>
             <span class="nom">{e.nom}</span>
-            <span class="ou">{e.projets.join(', ')}</span>
-            <code>{e.fichier}</code>
-            {#if e.note}<span class="note">{e.note}</span>{/if}
+            {#if e.absentDe}
+              <span class="note">Dans le kit, mais pas encore dans {e.absentDe.join(', ')}.</span>
+            {:else}
+              <span class="ou">{e.projets.join(', ')}</span>
+              <code>{e.fichier}</code>
+              {#if e.note}<span class="note">{e.note}</span>{/if}
+            {/if}
           </li>
         {/each}
       </ul>

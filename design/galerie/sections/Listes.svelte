@@ -52,14 +52,14 @@
   </Groupe>
 
   <Groupe
-    titre="Une carte de réglages"
-    sens="Un titre, ce qu’elle règle, puis un rang par réglage : le libellé, l’aide, le contrôle."
+    titre="Un bloc de réglages"
+    sens="Un titre, ce qu’il règle, puis un rang par réglage : le libellé, l’aide, le contrôle."
     colonne
   >
     <Piece nom="SettingsCard" etat="avec SettingsRow" large>
       <SettingsCard title="Compte" description="Ce que l’agent peut lire et modifier.">
         {#snippet aside()}<Badge tone="ok" dot>Connecté</Badge>{/snippet}
-        <SettingsRow label="compte.test@example.com" hint="Relié le 14 sept. 2026" />
+        <SettingsRow label="compte.test@example.com" hint="Connecté le 14 sept. 2026" />
         <SettingsRow label="Accès" hint="Lecture et modification">
           <Button variant="fantome" size="petit">Détails</Button>
         </SettingsRow>
@@ -73,6 +73,22 @@
     </Piece>
   </Groupe>
 
+  <Groupe titre="Un rang de réglage" sens="Seul : le libellé et son aide, un contrôle, une erreur." colonne>
+    <Piece nom="SettingsRow" etat="libellé et aide" large>
+      <SettingsRow label="Démarrer avec Windows" hint="À l’ouverture de la session." />
+    </Piece>
+    <Piece nom="SettingsRow" etat="avec un contrôle" large>
+      <SettingsRow label="Filtre dans la scène" hint="Seules les phrases adressées partent.">
+        {#snippet children({ labelId })}<Switch aria-labelledby={labelId} />{/snippet}
+      </SettingsRow>
+    </Piece>
+    <Piece nom="SettingsRow" etat="erreur" large>
+      <SettingsRow label="Délai d’absence" error="De 1 à 240 minutes.">
+        <Button variant="secondaire" size="petit">Corriger</Button>
+      </SettingsRow>
+    </Piece>
+  </Groupe>
+
   <Groupe
     titre="Quand il n’y a rien"
     colonnes={3}
@@ -81,7 +97,7 @@
     <Piece nom="EmptyState" etat="neutre">
       <EmptyState
         title="Rien encore aujourd’hui."
-        message="Ce que vous vous dites s’écrit ici."
+        message="La conversation s’écrit ici."
         icon={icons.Inbox}
       />
     </Piece>

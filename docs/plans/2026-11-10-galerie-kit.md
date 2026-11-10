@@ -97,7 +97,7 @@ laptop. Une PR, dans lun-docs.
    - *Ce qui flotte* : `Tooltip`, `Dialog`, `ConfirmDialog`, `CommandPalette` (une seule par page), `Toaster` en mode
      contenu et ses toasts, `Banner` ;
    - *Listes et réglages* : `ListRow`, `SettingsCard`, `SettingsRow`, `EmptyState`, `Skeleton`, `Steps` ;
-   - *Cartes d'information* : `StatCard`, `ServiceCard`, `StandaloneCard` (qui rend déjà son `<main>`) ;
+   - *Tuiles et écrans seuls* (d'abord nommée « cartes d'information », mot réservé par le dictionnaire) : `StatCard`, `ServiceCard`, `StandaloneCard` (qui rend déjà son `<main>`) ;
    - *Navigation* : `Rail`, `NavGroup`, `NavLink`, `BottomNav` ;
    - *Les variables de design* : ce que `tokens.css` contient vraiment (couleurs, tons, rayons, ombres, polices, cadre
      de focus), lu depuis le fichier lui-même pour qu'une variable ajoutée paraisse seule.
@@ -142,6 +142,31 @@ laptop. Une PR, dans lun-docs.
    **Fait :** `design.md` renvoie à la galerie ; `CLAUDE.md` et `README.md` disent la racine sans dépendance et
    `design/` avec les siennes ; le cadrage de l'état cible liste le chantier ; `npm run sync`. Issues ouvertes :
    lun-docs#134 (`box-sizing`), #135 (format du kit, import inutilisé), #136 (variables annoncées et absentes).
+
+## Ce que la relecture a corrigé
+
+Le reviewer a rendu « à corriger » sur la première livraison, avec six points bloquants. Tous repris :
+
+- **Les huit cartes de l'inventaire ne s'affichaient nulle part** : aucune section ne portait leur famille. Une section
+  « Cartes » les nomme, sans rendu, et dit que le palier suivant les met côte à côte.
+- **Trois composants étaient dits communs à tort** : `DropZone`, `StatCard` et `TextArea` sont dans le kit, mais pas dans
+  la copie d'Acedia. L'inventaire le dit (`absentDe`), le pied de leur famille aussi, et la légende devient « le même
+  dans chaque projet qui l'a ».
+- **`format:check` échouait après un build** : `design/.prettierignore` écarte `galerie/dist`.
+- **La page débordait à 390 px** (465 px de large) : sous 768 px, un groupe de pièces larges passe sur une colonne.
+  Mesuré après correction : 390 px.
+- **« Carte » hors de son sens** : la famille s'appelle « Tuiles et écrans seuls », `SettingsCard` est « un bloc de
+  réglages » ; « relier » ne sert plus que pour un satellite ; les textes de la galerie ne tutoient plus.
+- **Des états manquaient** : `TextArea` en erreur et désactivée, l'échec d'une `ConfirmDialog`, le survol d'un
+  `TextInput`, le focus d'un `Segmented`, et le `Toaster` en mode contenu, dans son cadre.
+
+Les garde-fous sont refaits sur la page montée, et non sur le texte des sections : chaque composant du kit doit paraître
+sous une pièce rendue, chaque variante et chaque élément propre doit être nommé avec son fichier, chaque famille de
+l'inventaire doit avoir sa section, et un calque ouvert après un changement de monde doit porter le nouveau monde. Ce
+garde-fou plus strict a trouvé deux composants sans vitrine à eux (`NavGroup`, `SettingsRow`), ajoutées.
+
+Non repris, dits ici : la page a plusieurs `main` et plusieurs `h1`, parce que `StandaloneCard` rend les siens ; la
+lecture de `tokens.css` ne prend que le premier bloc `:root`.
 
 ## Preuves
 

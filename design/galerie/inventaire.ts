@@ -4,14 +4,16 @@
  */
 export type Statut = 'commun' | 'variante' | 'propre';
 export type Famille =
-  'boutons' | 'champs' | 'bascules' | 'calques' | 'listes' | 'cartes-info' | 'navigation' | 'cartes';
+  'boutons' | 'champs' | 'bascules' | 'calques' | 'listes' | 'tuiles' | 'navigation' | 'cartes';
 
 export interface Element {
   nom: string;
   famille: Famille;
   statut: Statut;
-  /** Which projects have it: all four for a common element. */
+  /** Which projects have it. */
   projets: string[];
+  /** For a common element: the projects whose copy of the kit does not have it yet. */
+  absentDe?: string[];
   /** Where it lives, for a variant or an own element. */
   fichier?: string;
   /** What differs, or what it is for. */
@@ -21,12 +23,19 @@ export interface Element {
 const ANIMA = "Lun'Anima";
 const ACEDIA = "Lun'Acedia";
 const AVARITIA = "Lun'Avaritia";
-const TOUS = [ANIMA, ACEDIA, AVARITIA, "Lun'Luxuria"];
+const LUXURIA = "Lun'Luxuria";
+const TOUS = [ANIMA, ACEDIA, AVARITIA, LUXURIA];
 const KIT_ACEDIA = 'views/src/lib/ui';
 const KIT_AVARITIA = 'app/src/lib/ui';
+/** In the kit, but not in Acedia's own copy. */
+const SANS_ACEDIA = ['DropZone', 'StatCard', 'TextArea'];
 
 const commun = (famille: Famille, ...noms: string[]): Element[] =>
-  noms.map((nom) => ({ nom, famille, statut: 'commun', projets: TOUS }));
+  noms.map((nom) =>
+    SANS_ACEDIA.includes(nom)
+      ? { nom, famille, statut: 'commun', projets: [ANIMA, AVARITIA, LUXURIA], absentDe: [ACEDIA] }
+      : { nom, famille, statut: 'commun', projets: TOUS },
+  );
 const variante = (famille: Famille, projet: string, dossier: string, ...noms: string[]): Element[] =>
   noms.map((nom) => ({
     nom,
@@ -90,9 +99,9 @@ export const INVENTAIRE: Element[] = [
   ...variante('listes', ACEDIA, KIT_ACEDIA, 'SettingsRow', 'EmptyState'),
   propre('listes', ACEDIA, `${KIT_ACEDIA}/DayGroup.svelte`, 'DayGroup', 'Un groupe de lignes sous un jour.'),
 
-  ...commun('cartes-info', 'StatCard', 'ServiceCard', 'StandaloneCard'),
-  ...variante('cartes-info', ACEDIA, KIT_ACEDIA, 'ServiceCard', 'StandaloneCard'),
-  ...variante('cartes-info', AVARITIA, KIT_AVARITIA, 'StandaloneCard'),
+  ...commun('tuiles', 'StatCard', 'ServiceCard', 'StandaloneCard'),
+  ...variante('tuiles', ACEDIA, KIT_ACEDIA, 'ServiceCard', 'StandaloneCard'),
+  ...variante('tuiles', AVARITIA, KIT_AVARITIA, 'StandaloneCard'),
 
   ...commun('navigation', 'Rail', 'NavGroup', 'NavLink', 'BottomNav'),
   ...variante('navigation', ACEDIA, KIT_ACEDIA, 'Rail'),
@@ -157,11 +166,11 @@ export const INVENTAIRE: Element[] = [
 ];
 
 export const LEGENDE: Record<Statut, { mot: string; sens: string }> = {
-  commun: { mot: 'Commun', sens: 'Dans le kit : le même dans tous les projets.' },
+  commun: { mot: 'Commun', sens: 'Dans le kit : le même dans chaque projet qui l’a.' },
   variante: { mot: 'Variante', sens: 'Un projet garde sa propre version d’un composant du kit.' },
   propre: { mot: 'Propre', sens: 'N’existe que dans un projet.' },
 };
 
-/** The variants and own elements of a family: named in the gallery, rendered at tier 3. */
+/** What a family has outside the plain common case: variants, own elements, and common ones a project lacks. */
 export const ailleurs = (famille: Famille): Element[] =>
-  INVENTAIRE.filter((e) => e.famille === famille && e.statut !== 'commun');
+  INVENTAIRE.filter((e) => e.famille === famille && (e.statut !== 'commun' || e.absentDe));

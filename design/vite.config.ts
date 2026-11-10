@@ -6,7 +6,8 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   root: 'galerie',
   plugins: [svelte(), ...(process.env.VITEST ? [svelteTesting()] : [])],
-  server: { host: '127.0.0.1', port: 5190 },
+  // strictPort: CLAUDE.md gives this address; a taken port must say so, not move quietly to the next one.
+  server: { host: '127.0.0.1', port: 5190, strictPort: true },
   build: { outDir: 'dist', emptyOutDir: true },
   test: {
     root: '.',

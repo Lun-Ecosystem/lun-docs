@@ -13,20 +13,24 @@
     sens?: string | undefined;
     /** Stacks wide pieces, one per row. */
     colonne?: boolean | undefined;
-    /** Fixed number of columns, when each variant shows the same states. */
+    /** Fixed number of columns, when each variant shows the same states. Three or fewer: wide pieces. */
     colonnes?: number | undefined;
+    /** No legend: what is shown is not a component (the design variables). */
+    sansLegende?: boolean | undefined;
     children: Snippet;
   };
-  let { titre, sens, colonne = false, colonnes, children }: Props = $props();
+  let { titre, sens, colonne = false, colonnes, sansLegende = false, children }: Props = $props();
+  // On a phone a wide piece (a field, a code input) takes the whole row: two columns would push the page wider.
+  const larges = $derived(colonnes !== undefined && colonnes <= 3);
 </script>
 
 <div class="groupe">
   <div class="tete">
     <h3>{titre}</h3>
     {#if sens}<p>{sens}</p>{/if}
-    <span class="statut"><Badge tone="ok">{LEGENDE.commun.mot}</Badge></span>
+    {#if !sansLegende}<span class="statut"><Badge tone="ok">{LEGENDE.commun.mot}</Badge></span>{/if}
   </div>
-  <div class={['pieces', { colonne, fixe: colonnes !== undefined }]} style:--colonnes={colonnes}>
+  <div class={['pieces', { colonne, fixe: colonnes !== undefined, larges }]} style:--colonnes={colonnes}>
     {@render children()}
   </div>
 </div>
@@ -78,7 +82,8 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       padding: 14px;
     }
-    .pieces.colonne {
+    .pieces.colonne,
+    .pieces.larges {
       grid-template-columns: minmax(0, 1fr);
     }
   }

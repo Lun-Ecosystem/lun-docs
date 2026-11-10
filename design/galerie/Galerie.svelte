@@ -6,10 +6,11 @@
   import Bascules from './sections/Bascules.svelte';
   import Boutons from './sections/Boutons.svelte';
   import Calques from './sections/Calques.svelte';
-  import CartesInfo from './sections/CartesInfo.svelte';
+  import Cartes from './sections/Cartes.svelte';
   import Champs from './sections/Champs.svelte';
   import Listes from './sections/Listes.svelte';
   import Navigation from './sections/Navigation.svelte';
+  import Tuiles from './sections/Tuiles.svelte';
   import Variables from './sections/Variables.svelte';
 
   /*
@@ -29,8 +30,9 @@
     ['bascules', 'Bascules et pastilles'],
     ['calques', 'Ce qui flotte'],
     ['listes', 'Listes et réglages'],
-    ['cartes-info', 'Cartes d’information'],
+    ['tuiles', 'Tuiles et écrans seuls'],
     ['navigation', 'Navigation'],
+    ['cartes', 'Cartes'],
     ['variables', 'Variables de design'],
   ] as const;
 
@@ -48,7 +50,7 @@
       </p>
     </div>
     <div class="monde">
-      <span id="l-monde">Monde</span>
+      <span>Monde</span>
       <Segmented options={MONDES} value={monde} label="Monde" onchange={(v) => (monde = v)} />
     </div>
     <dl class="legende" aria-label="Légende">
@@ -78,8 +80,9 @@
       <Bascules />
       <Calques />
       <Listes />
-      <CartesInfo />
+      <Tuiles />
       <Navigation />
+      <Cartes />
       <Variables />
     </div>
   {/key}

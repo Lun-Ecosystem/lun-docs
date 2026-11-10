@@ -57,7 +57,7 @@
   >
     <Piece nom="Rail" etat="principal, avec NavGroup">
       <div class="cadre">
-        <Rail label="Navigation de la galerie">
+        <Rail label="Exemple de rail">
           {#snippet header()}<Button variant="principal" icon={icons.Plus}>Nouveau</Button>{/snippet}
           <NavLink href="#navigation" label="Réception" icon={icons.Inbox} count={12} current />
           <NavLink href="#navigation" label="À valider" icon={icons.Sparkles} count={3} countTone="ia" />
@@ -85,6 +85,25 @@
     </Piece>
   </Groupe>
 
+  <Groupe titre="Un groupe de liens" sens="Un titre au-dessus de ses liens, avec ou sans geste." colonnes={2}>
+    <Piece nom="NavGroup" etat="avec un geste">
+      <div class="groupe-seul">
+        <NavGroup title="Boîtes">
+          {#snippet action()}<IconButton icon={icons.Plus} label="Nouvelle boîte" size="petit" />{/snippet}
+          <NavLink href="#navigation" label="Factures" color="var(--attention)" count={2} />
+          <NavLink href="#navigation" label="Administratif" color="var(--info)" />
+        </NavGroup>
+      </div>
+    </Piece>
+    <Piece nom="NavGroup" etat="sans geste">
+      <div class="groupe-seul">
+        <NavGroup title="Identité">
+          <NavLink href="#navigation" label="L’agent" icon={icons.Sparkles} />
+        </NavGroup>
+      </div>
+    </Piece>
+  </Groupe>
+
   <Groupe titre="La barre du bas" sens="La navigation du téléphone, quatre destinations au plus." colonne>
     <Piece nom="BottomNav" etat="au téléphone" large>
       <div class="tel"><BottomNav items={BAS} current="#bureau" label="Navigation du téléphone" /></div>
@@ -93,6 +112,10 @@
 </Section>
 
 <style>
+  .groupe-seul {
+    width: 240px;
+    max-width: 100%;
+  }
   /* A rail fills the height it is given: a frame gives it one, as an app's shell does. */
   .cadre {
     display: flex;

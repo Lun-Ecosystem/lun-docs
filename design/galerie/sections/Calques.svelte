@@ -31,7 +31,7 @@
 <Section
   id="calques"
   titre="Ce qui flotte"
-  intro="Les calques posés au-dessus de l’écran. Ils sortent de la vue : ils recopient son monde pour garder son accent. Change de monde, puis rouvre-les."
+  intro="Les calques posés au-dessus de l’écran. Ils sortent de la vue : ils recopient son monde pour garder son accent. Après un changement de monde, les rouvrir pour le voir."
 >
   <Groupe
     titre="Nommer au survol"
@@ -39,7 +39,7 @@
   >
     <Piece nom="Tooltip" etat="au survol ou au focus">
       <Tooltip label="Archiver" shortcut="E">
-        {#snippet children({ props })}<Button variant="secondaire" {...props}>Survole-moi</Button>{/snippet}
+        {#snippet children({ props })}<Button variant="secondaire" {...props}>Au survol</Button>{/snippet}
       </Tooltip>
     </Piece>
     <Piece nom="Tooltip" etat="à droite">
@@ -54,7 +54,7 @@
     sens="Le dialogue pour un contenu ; la confirmation pour ce qui ne se rattrape pas."
   >
     <Piece nom="Dialog" etat="fermé, à ouvrir">
-      <Dialog title="Relier un poste" description="Le code s’affiche sur le poste à relier.">
+      <Dialog title="Relier un satellite" description="Le code s’affiche sur le satellite à relier.">
         {#snippet trigger({ props })}<Button variant="secondaire" {...props}>Ouvrir le dialogue</Button
           >{/snippet}
         {#snippet children()}<p class="texte">
@@ -74,6 +74,16 @@
         onconfirm={() => wait(400)}
       >
         {#snippet trigger({ props })}<Button variant="danger" {...props}>Révoquer</Button>{/snippet}
+      </ConfirmDialog>
+    </Piece>
+    <Piece nom="ConfirmDialog" etat="l’action échoue">
+      <ConfirmDialog
+        title="Révoquer cet appareil ?"
+        message="Confirmer montre l’erreur, et le dialogue reste ouvert."
+        confirmLabel="Révoquer"
+        onconfirm={() => wait(300).then(() => Promise.reject(new Error('Le serveur ne répond pas.')))}
+      >
+        {#snippet trigger({ props })}<Button variant="danger" {...props}>Révoquer, en échec</Button>{/snippet}
       </ConfirmDialog>
     </Piece>
     <Piece nom="ConfirmDialog" etat="danger plein">
@@ -99,7 +109,7 @@
 
   <Groupe
     titre="Dire ce qui vient de se passer"
-    sens="Un toast à la fois. Un geste annulable reste 5 s ; une erreur qui attend passe avant une information."
+    sens="Un toast à la fois. Un geste annulable reste 5 s ; une erreur qui attend passe avant une information. Le toast paraît dans le cadre ci-dessous : le mode contenu, celui d’une vue qui n’occupe pas toute la page."
   >
     <Piece nom="Toaster" etat="information">
       <Button variant="secondaire" size="petit" onclick={() => toast('Réglage enregistré.')}
@@ -131,9 +141,15 @@
     </Piece>
   </Groupe>
 
+  <!-- One Toaster for the page, in its contained mode: it stays inside this frame instead of the window's corner. -->
+  <div class="cadre-toasts">
+    <p class="ici">Les toasts paraissent ici.</p>
+    <Toaster contained />
+  </div>
+
   <Groupe titre="Dire ce qui dure" sens="Le bandeau reste tant que l’état dure, avec un seul bouton." colonne>
     <Piece nom="Banner" etat="danger" large>
-      <Banner title="Clé refusée : le tri par l’agent est en pause.">
+      <Banner title="Clé refusée : le tri par l’agent est arrêté.">
         Les règles continuent de s’appliquer.
         {#snippet action()}<Button variant="principal" size="petit">Remplacer la clé</Button>{/snippet}
       </Banner>
@@ -150,9 +166,21 @@
 </Section>
 
 <CommandPalette bind:open={palette} commands={COMMANDES} placeholder="Chercher une commande" />
-<Toaster />
 
 <style>
+  .cadre-toasts {
+    position: relative;
+    height: 96px;
+    border: 1px dashed var(--bordure-forte);
+    border-radius: var(--r-3);
+    overflow: hidden;
+  }
+  .ici {
+    margin: 0;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--texte-3);
+  }
   .texte {
     margin: 0;
     font-size: 14px;
