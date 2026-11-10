@@ -27,20 +27,20 @@ Corrigée par CrOliX le 10/11 : le cerveau sert à réfléchir et à projeter l'
 | | Ce que c'est | Projet |
 |---|---|---|
 | **Le cœur et le cerveau** | Qui elle est, ses souvenirs propres, ses émotions ; la réflexion, la décision ; le centre de pilotage, l'agent manager | Lun'Anima, le core |
-| **La mémoire** (la bibliothèque, les archives) | Ce qui se sait et se garde : des fiches liées, des faits sourcés | Lun'Avaritia |
+| **La bibliothèque** | Ce qui se sait et se garde : des fiches liées, des faits sourcés | Lun'Avaritia |
 | **Le corps** | Lui parler et la voir ; ses sens (voir, entendre) et ses mains (faire) ; être vue et entendue par d'autres (le stream) | Lun'Luxuria |
 | **La journée** | Les mails, l'agenda, les tâches, triés à la source | Lun'Acedia |
 
-**Une dette de vocabulaire.** Les textes appellent encore Avaritia « le cerveau » : `vision.md` (« second cerveau »),
+**Une dette de vocabulaire** (voir le [dictionnaire](../../standards/dictionnaire.md), lun-docs#131, et lun-docs#130). Les textes appellent encore Avaritia « le cerveau » : `vision.md` (« second cerveau »),
 `standards/stack.md` et `notifications.md`, l'ADR 0005, les README et `CLAUDE.md` d'Avaritia et du core, et le code
 (`brain` dans une trentaine de fichiers, `brain.due` dans le contrat). Les textes se corrigent dans l'axe de révision ; le
 code et le contrat, seulement si le renommage vaut une rupture **[avis Claude : les textes oui, le code non]**.
 
 ## 3. Ce que le socle a livré, et ce qu'il n'a pas encore prouvé
 
-Livré, sur `main` : le tri des mails, l'agenda et les tâches avec leur agent ; la mémoire en fiches avec son agent et son
-lot du jour ; le core, sa conversation, sa veille de nuit, son point du matin, ses cartes, ses coûts et sa pause, son
-app au bureau et au téléphone ; Luxuria, une voix, une scène, des images, un mute.
+Livré, sur `main` : le tri des mails, l'agenda et les tâches avec leur agent ; la bibliothèque en fiches avec son agent et son
+lot du jour ; le core, sa conversation, sa nuit, sa lettre du matin, ses cartes, ses coûts et sa pause, son
+app au bureau et au téléphone ; Luxuria, une voix, une scène, des images, la sourdine.
 
 **Pas encore prouvé** : la session sur le desktop (douze points, feuille de route § 2.B) et la semaine de rodage n'ont pas
 eu lieu. Le socle est écrit, pas éprouvé par l'usage. **[avis Claude]** Ne plus en faire une porte à franchir avant la
@@ -53,7 +53,7 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
 
 ### 4.1 Lun'Luxuria, le corps
 
-- **Existe** : la scène et le petit mode, la voix (écoute, filtre, synthèse, RVC), le corps en images fixes, le mute,
+- **Existe** : la scène et le petit mode, la voix (écoute, filtre, synthèse, RVC), le corps en images fixes, la sourdine,
   l'icône, le démarrage avec Windows, le mode seul et le mode relié.
 - **Mis de côté** (spec Luxuria, § 11) : l'avatar animé ; les modes de présence ; les pensées et relances ; le mot d'éveil
   et les enceintes ; la mascotte ; la perception (fenêtre active, puis l'écran) ; le compagnon qui agit sur le poste par
@@ -65,8 +65,8 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
 
 ### 4.2 Lun'Anima, le cœur et le cerveau
 
-- **Existe** : l'identité, l'humeur, le tempérament, la mémoire de la relation, la conversation, la délégation aux
-  postes, la veille, le matin, les cartes, les coûts, la pause, l'app.
+- **Existe** : l'identité, l'humeur, le tempérament, les souvenirs de la relation, la conversation, la délégation aux
+  postes, la nuit, la lettre du matin, les cartes, les coûts, la pause, l'app.
 - **Mis de côté** : les rôles (assistante, experte, streameuse) ; l'humeur calculée par les événements ; la porte des
   pensées, le budget de parole ; le point du soir ; la validation par lot ; le premier appareil sans terminal ; le NAS.
 - **Ligne d'arrivée [avis Claude]** : 1) sa personnalité passe la barre (les scènes de référence, notées par CrOliX) ;
@@ -74,7 +74,7 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
   escient ; 4) une semaine d'usage sans point de tension ; 5) tout se règle sans terminal.
 - **Ne fera jamais** : refaire le métier d'un poste ; recopier ses données.
 
-### 4.3 Lun'Avaritia, la mémoire
+### 4.3 Lun'Avaritia, la bibliothèque
 
 - **Existe** : les fiches, les faits sourcés et datés, les contradictions soumises, le lot du jour, l'import et l'export
   Obsidian, la recherche plein texte.
@@ -83,7 +83,7 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
 - **Ligne d'arrivée [avis Claude]** : 1) Natsume y retrouve ce qu'il faut sans que la question reprenne les mots de la
   fiche (la recherche par le sens) ; 2) ce qu'elle apprend en conversation y entre sans geste de CrOliX au-delà de la
   validation ; 3) la base tient des milliers de fiches sans ralentir.
-- **Ne fera jamais** : garder la mémoire affective de la relation (elle est au core).
+- **Ne fera jamais** : garder les souvenirs de la relation (ils sont au core).
 
 ### 4.4 Lun'Acedia, la journée
 
@@ -92,7 +92,7 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
   push ; le nom de l'agent encore écrit en dur ; le poids du build.
 - **Ligne d'arrivée [avis Claude]** : 1) une semaine sans ouvrir Gmail ni Agenda pour le courant ; 2) installée et
   reliée à Google sans terminal ni fichier ; 3) son agent n'a plus aucun nom en dur.
-- **Ne fera jamais** : la conversation ; la mémoire.
+- **Ne fera jamais** : la conversation ; les fiches.
 
 ## 5. L'axe 1 : la présence
 
@@ -102,7 +102,7 @@ Ce qui fait défaut, du plus près de l'existant au plus loin. Chaque marche se 
 |---|---|---|---|
 | 1 | **Un visage qui vit** : l'avatar animé | Luxuria (lun-docs#62) | un modèle et une illustration ; l'interface du corps existe déjà |
 | 2 | **Une humeur qui se voit** : calculée par les événements, lue par la voix et le visage | core, puis Luxuria | rien de matériel |
-| 3 | **Elle s'accorde à ce que fait CrOliX** : fenêtre active, inactivité, jeu ; les modes de présence | Luxuria | rien de matériel ; reprend les signaux du mute et de l'absence |
+| 3 | **Elle s'accorde à ce que fait CrOliX** : fenêtre active, inactivité, jeu ; les modes de présence | Luxuria | rien de matériel ; reprend les signaux de la sourdine et de l'absence |
 | 4 | **Elle parle d'elle-même, à propos** : les pensées, le seuil, le budget de parole | core, Luxuria | un coût à borner |
 | 5 | **Elle voit l'écran** | Luxuria | un modèle de vision : coût, ou modèle local |
 | 6 | **Compagne de jeu** | Luxuria | la marche 5 ; des intégrations par jeu |
@@ -123,7 +123,7 @@ graphique à venir. La 8 est l'horizon : elle justifie de bien faire les sept au
 | 4 | **La vision** : l'incarnation d'abord, l'assistance comme tâche ; le stream n'est plus « hors périmètre » mais à l'horizon | § 1 |
 | 5 | **L'architecture** : un serveur dédié, le NAS au stockage, la porte d'entrée ; l'ADR 0008 à revoir (lun-docs#109) | CrOliX, le 10/11 |
 | 6 | **Le premier contact sans terminal** : le premier appareil, Google depuis l'interface, la liaison d'un poste | lun-anima#72, #90, lun-acedia#55, #30 |
-| 7 | **La mémoire par le sens** | § 4.3 |
+| 7 | **La bibliothèque cherchée par le sens** | § 4.3 |
 
 **[avis Claude]** 1 à 4 d'abord : ils coûtent peu et remettent les textes d'accord avec ce que CrOliX veut. 5 se cadre
 quand l'achat se précise. 6 et 7 sont de vrais chantiers, à ordonner contre les marches de la présence.
