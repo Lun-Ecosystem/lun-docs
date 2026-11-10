@@ -13,6 +13,10 @@ gardée dans le dépôt de doc, rien de publié. Cadrage de l'[état cible](../s
 révision. Plan relu par le plan-challenger le 10/11 : ses douze objections sont reprises ci-dessous. Il a éprouvé le kit
 hors d'une app : ses 65 tests passent et son typage est propre, avec la configuration des apps.
 
+**Validé par CrOliX le 10/11**, avec une demande de plus : que la galerie range les rendus par type et par rapprochement
+(une section des boutons, rangés par type d'action puis par variante), et qu'une légende dise de chaque élément s'il est
+commun à tous, une variante, ou propre à un projet.
+
 **Trois paliers, un plan par palier.** Celui-ci : le kit tel qu'il est. Le suivant : la famille des cartes (dessinées
 trois fois aujourd'hui, dans Acedia, le core et Avaritia, aucune dans le kit), la permission et les variantes, en
 maquettes d'abord. Le dernier : la convergence des kits d'Acedia et d'Avaritia (lun-docs#43).
@@ -21,6 +25,10 @@ maquettes d'abord. Le dernier : la convergence des kits d'Acedia et d'Avaritia (
 
 - `npm run galerie`, dans `design/`, ouvre une page où chaque fichier `.svelte` du kit se voit dans ses états, et où un
   sélecteur change de monde (neutre, anima, acedia, avaritia, luxuria), calques compris.
+- Les rendus sont rangés par famille, puis par usage, puis par variante ; chaque élément porte sa légende : **commun**
+  (dans le kit, le même partout), **variante** (un projet garde sa propre version d'un composant du kit), **propre** (il
+  n'existe que dans un projet). Les variantes et les éléments propres sont nommés à leur place dans la famille, avec leur
+  projet et leur fichier ; leur rendu vient au palier 3.
 - Un test échoue si un composant du kit n'est rendu par aucune section.
 - Les tests du kit tournent dans lun-docs, et sa CI les lance avec le typage, le format de la galerie et son build, dans
   le job qui bloque la fusion.
@@ -83,14 +91,26 @@ laptop. Une PR, dans lun-docs.
    - *Navigation* : `Rail`, `NavGroup`, `NavLink`, `BottomNav` ;
    - *Les variables de design* : ce que `tokens.css` contient vraiment (couleurs, tons, rayons, ombres, polices, cadre
      de focus), lu depuis le fichier lui-même pour qu'une variable ajoutée paraisse seule.
-4. - [ ] **Les garde-fous**, dans `design/galerie/` : un test liste les fichiers `.svelte` de `design/kit/` (hors
-   `fixtures/`) et échoue si la balise de l'un d'eux n'apparaît dans le balisage d'aucune section ; un test de rendu
+4. - [ ] **L'inventaire et la légende** : `design/galerie/inventaire.ts` liste chaque élément d'interface réutilisable de
+   l'écosystème : son nom, sa famille, son usage, son statut (commun, variante, propre), ses projets, son fichier. Relevé
+   du 10/11 : 34 composants communs ; Acedia garde 10 variantes (`Badge`, `Button`, `ConfirmDialog`, `Dialog`,
+   `EmptyState`, `Rail`, `Segmented`, `ServiceCard`, `SettingsRow`, `StandaloneCard`) et 8 éléments propres
+   (`AutoMark`, `DayGroup`, `Fab`, `Menu`, `Popover`, `ProposalCard`, `ProposalChip`, `Tabs`) ; Avaritia garde 3
+   variantes (`ConfirmDialog`, `Dialog`, `StandaloneCard`) ; le core et Luxuria n'en ont aucune. S'y ajoutent les cartes,
+   propres à trois projets (Acedia, le core, Avaritia). Chaque section lit l'inventaire : elle rend les communs, groupés
+   par usage puis par variante (les boutons : l'action principale, l'action secondaire, l'action discrète, l'action qui
+   détruit ; puis les tailles, puis l'icône seule), et nomme sous eux les variantes et les éléments propres de la même
+   famille, sans les rendre. Une légende en tête de page explique les trois statuts. **[choix Claude]** L'inventaire est
+   écrit à la main et daté : un script qui lirait les quatre dépôts ferait dépendre lun-docs des apps.
+5. - [ ] **Les garde-fous**, dans `design/galerie/` : un test liste les fichiers `.svelte` de `design/kit/` (hors
+   `fixtures/`) et échoue si la balise de l'un d'eux n'apparaît dans le balisage d'aucune section, ou s'il manque à
+   l'inventaire ; un test de rendu
    monte `Galerie.svelte` et vérifie que chaque section s'affiche, dans un monde puis dans un autre.
-5. - [ ] **La CI** : à la fin du job `checks`, le seul que le ruleset exige, après les étapes actuelles qui tournent donc
+6. - [ ] **La CI** : à la fin du job `checks`, le seul que le ruleset exige, après les étapes actuelles qui tournent donc
    avant toute installation : `npm ci`, `typecheck`, `test`, `format:check` et `build`, dans `design/`. Pas de second
    job : il ne bloquerait aucune fusion. `format:check` ne couvre que `galerie/`, avec la configuration des apps ; le
    kit en est exempté, car le reformater romprait la première contrainte (issue `inbox`).
-6. - [ ] **La doc** : `standards/design.md` (« le catalogue des composants » devient la galerie, avec sa commande ; 8
+7. - [ ] **La doc** : `standards/design.md` (« le catalogue des composants » devient la galerie, avec sa commande ; 8
    lignes de marge sous la limite de 150) ; `CLAUDE.md` et `README.md` de lun-docs (la racine sans dépendance, `design/`
    avec les siennes et son Node) ; le cadrage de l'état cible, § 6 (la galerie dans l'axe de révision) ; `npm run sync`,
    car `design.md` est recopié dans le plugin.
