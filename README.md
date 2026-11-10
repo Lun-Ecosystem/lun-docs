@@ -28,7 +28,7 @@ aucun code applicatif.
 | Structure d'un projet | [`standards/structure-projet.md`](standards/structure-projet.md) |
 | Qualité, sécurité, stack, design | [`standards/`](standards/) |
 | Jetons de design de référence (copiés dans chaque dépôt) | [`design/tokens.css`](design/tokens.css) |
-| Le kit de composants communs, et sa galerie locale (`cd design && npm ci && npm run galerie`) | [`design/kit/`](design/kit/), [`design/galerie/`](design/galerie/) |
+| Le kit de composants communs, et sa galerie locale (dans `design/` : `npm ci`, puis `npm run galerie`) | [`design/kit/`](design/kit/), [`design/galerie/`](design/galerie/) |
 | Décisions d'écosystème | [`adr/`](adr/) |
 | Les projets, leur rôle, leur dépôt | [`registry.yaml`](registry.yaml) |
 | Squelette d'un nouveau projet | [`templates/project/`](templates/project/) |
@@ -60,17 +60,20 @@ garde qui interdit à l'agent de merger, de pousser sur `main` ou de forcer un p
 
 ```bash
 gh repo create Lun-Ecosystem/<nom> --private|--public --add-readme
-git clone https://github.com/Lun-Ecosystem/<nom> && cd <nom> && git switch -c chore/socle
+git clone https://github.com/Lun-Ecosystem/<nom>
+cd <nom>
+git switch -c chore/socle
 cp -r <lun-docs>/templates/project/. .
 cp -r <lun-docs>/templates/ts/. .      # projet TypeScript (voir standards/stack.md)
-git add hooks && git update-index --chmod=+x hooks/*   # Windows perd le bit exécutable à la copie
+git add hooks
+git update-index --chmod=+x hooks/*    # Windows perd le bit exécutable à la copie
 git config core.hooksPath hooks
 sh <lun-docs>/tools/setup-github.sh Lun-Ecosystem/<nom>
 ```
 
-Remplacer ensuite tous les `<…>` (README, CLAUDE.md, `package.json`, `src/`), vérifier
-`npm run format:check && npm run lint && npm run typecheck && npm test`, ouvrir la PR, puis inscrire
-le projet dans [`registry.yaml`](registry.yaml).
+Remplacer ensuite tous les `<…>` (README, CLAUDE.md, `package.json`, `src/`), lancer `npm run format:check`,
+`npm run lint`, `npm run typecheck` et `npm test`, ouvrir la PR, puis inscrire le projet dans
+[`registry.yaml`](registry.yaml).
 
 ## Travailler sur lun-docs
 

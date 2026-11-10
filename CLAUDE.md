@@ -15,7 +15,9 @@
 ## Lancer en local
 
 ```bash
-npm test && npm run check && npm run sync:check
+npm test
+npm run check
+npm run sync:check
 ```
 
 Prérequis : Node 22 ou plus, sans dépendance à installer. Pas de `.env` : rien de secret ici.
@@ -23,10 +25,16 @@ Prérequis : Node 22 ou plus, sans dépendance à installer. Pas de `.env` : rie
 Le kit et sa galerie ont leurs propres dépendances, dans `design/` seulement (Node `^22.22.2 || >=24.15`) :
 
 ```bash
-cd design && npm ci
-npm run galerie                                  # la galerie locale : http://127.0.0.1:5190
-npm run typecheck && npm test && npm run format:check && npm run build
+cd design
+npm ci
+npm run galerie          # la galerie locale : http://127.0.0.1:5190
+npm run typecheck
+npm test
+npm run format:check
+npm run build
 ```
+
+Une commande par ligne, sans `&&` : PowerShell 5.1 ne le connaît pas.
 
 ## Spécificités
 
