@@ -2,7 +2,7 @@
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **À valider par CrOliX.** Les choix marqués **[avis]** sont des propositions. Rien n'est codé.
+> **Validé par CrOliX le 11/11**, par écrit, avec les choix marqués **[avis]** et la voie 2 pour le point 10.
 
 **But :** qu'un point de la liste d'écoute devienne un fichier qu'une machine joue et juge. Le fichier dit ce que la
 personne dit et quand, ce qu'il y a autour, ce que le modèle et sa voix font, et ce qui est attendu, en événements
@@ -47,7 +47,7 @@ le plan-challenger le 11/11 : « à amender », ses dix objections sont reprises
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
-| `lun-luxuria`, `feat/scenarios-presence` | à ouvrir à la validation | `standard` |
+| `lun-luxuria`, `feat/scenarios-presence` | lun-luxuria#62 | `standard` |
 | `lun-docs`, `docs/deroule-tour` | la même | `trivial` |
 
 Lun'Anima n'est pas touché : ses scénarios viendront avec son propre joueur (voir « Hors périmètre »).
