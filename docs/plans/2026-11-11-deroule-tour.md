@@ -33,8 +33,8 @@ fin).
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
-| `lun-luxuria`, `feat/deroule-tour` | à ouvrir à la validation | `standard` |
-| `lun-anima`, `feat/delais-reponse` | à ouvrir à la validation | `standard` |
+| `lun-luxuria`, `feat/deroule-tour` | lun-luxuria#59 | `standard` |
+| `lun-anima`, `feat/delais-reponse` | lun-anima#103 | `standard` |
 | `lun-docs`, `docs/deroule-tour` | les mêmes | `trivial` |
 
 ## Ce que le code fait aujourd'hui
