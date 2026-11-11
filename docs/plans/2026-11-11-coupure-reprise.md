@@ -1,6 +1,6 @@
 # La coupure qui se reprend, l'urgence devant, le tour à l'essai borné. Plan
 
-> **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
+> **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [x]`) pour le suivi.
 
 **But :** qu'un bruit ne coûte plus une réponse. Aujourd'hui, 400 ms de son pendant qu'elle parle arrêtent sa réponse
 pour de bon, que ce soit une phrase pour elle, une toux ou un mot dit à quelqu'un d'autre. Et deux petits défauts de la
@@ -24,11 +24,11 @@ la réponse pas encore commencée. Code relu sur `main` de Lun'Luxuria après lu
 - Le tour à l'essai est borné, si le banc montre que la borne sert.
 - La coupure a toujours son interrupteur ; le bouton « la faire taire » reste définitif.
 
-**À valider par CrOliX.**
+**Validé par CrOliX le 11/11** (lun-docs#157 fusionnée). **Codé le 11/11** : lun-luxuria#58, issue lun-luxuria#57.
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
-| `lun-luxuria`, `feat/coupure-reprise` | à ouvrir à la validation | `standard` |
+| `lun-luxuria`, `feat/coupure-reprise` | lun-luxuria#57 | `standard` |
 | `lun-docs`, `docs/coupure-reprise` | la même | `trivial` |
 
 ## Ce que le code fait aujourd'hui
@@ -71,15 +71,15 @@ la réponse pas encore commencée. Code relu sur `main` de Lun'Luxuria après lu
 
 ## Tâches
 
-1. - [ ] **Compter d'abord, sur le banc** : les pauses par phrase au silence de 700 ms, sur les 163 fichiers. Si
+1. - [x] **Compter d'abord, sur le banc** : les pauses par phrase au silence de 700 ms, sur les 163 fichiers. Si
    moins d'une phrase sur vingt dépasse trois pauses et qu'aucune ne dépasse dix secondes, la tâche 6 est retirée et
    le plan le dit.
-2. - [ ] **Suspendre, dans `Speaker`.** Tests d'abord (`speaker.test.ts`) : suspendu au milieu d'une phrase, le son
+2. - [x] **Suspendre, dans `Speaker`.** Tests d'abord (`speaker.test.ts`) : suspendu au milieu d'une phrase, le son
    s'arrête et `speaking` est faux ; relâché, la même phrase resonne depuis son début, puis la suite ; coupé pour de
    bon pendant la suspension, il rend les mots entendus avant elle, et un autre tour déjà réservé sonne ensuite ;
    une phrase en fabrication au moment de la suspension ne sonne pas avant la reprise ; `stop()` pendant une
    suspension reste définitif.
-3. - [ ] **La coupure en deux temps, dans `Conversation`.** Tests d'abord (`conversation.test.ts`) :
+3. - [x] **La coupure en deux temps, dans `Conversation`.** Tests d'abord (`conversation.test.ts`) :
    - phrase pour elle, essai en service : la réponse suspendue est coupée, `brain.cut` reçoit les mots entendus une
      seule fois, et **la réponse à la phrase qui coupe sonne** ;
    - phrase filtrée, transcription vide, transcription en échec, micro arrêté, sourdine : elle reprend, le serveur
@@ -89,18 +89,18 @@ la réponse pas encore commencée. Code relu sur `main` de Lun'Luxuria après lu
    - une seconde phrase commence pendant la transcription de la première : la réponse à la première ne sonne pas
      par-dessus ;
    - mode doux ; coupure éteinte (rien ne change) ; bouton « la faire taire » pendant une suspension.
-4. - [ ] **La fenêtre du filtre.** Test : coupée à vingt secondes d'une longue réponse par une phrase sans son nom,
+4. - [x] **La fenêtre du filtre.** Test : coupée à vingt secondes d'une longue réponse par une phrase sans son nom,
    la coupure est réelle.
-5. - [ ] **L'urgence devant.** Tests : arrivée pendant une réponse de trois phrases, elle sonne après la première et
+5. - [x] **L'urgence devant.** Tests : arrivée pendant une réponse de trois phrases, elle sonne après la première et
    les deux autres suivent ; deux urgences sonnent dans leur ordre d'arrivée ; arrivée pendant une suspension, elle
    sonne ; le bouton, pendant qu'une urgence attend, rend le tour qui sonnait et ses mots. Raccourci noté dans le
    code : la synthèse reste dans l'ordre d'arrivée, donc l'urgence attend les phrases déjà en fabrication.
-6. - [ ] **Les bornes de l'essai** (si la tâche 1 les garde). Tests : quatre pauses dans une phrase, trois essais ;
+6. - [x] **Les bornes de l'essai** (si la tâche 1 les garde). Tests : quatre pauses dans une phrase, trois essais ;
    une phrase de douze secondes, aucun essai après dix ; la fin de phrase répond dans les deux cas.
-7. - [ ] **La chaîne entière sur le banc** : un mot court et un silence de `banc-sons`, rejoués comme « son pendant
+7. - [x] **La chaîne entière sur le banc** : un mot court et un silence de `banc-sons`, rejoués comme « son pendant
    qu'elle parle » à travers la détection, la fin de phrase et la conversation, transcription simulée : l'un coupe,
    l'autre reprend.
-8. - [ ] Relecture séparée du diff, PR en brouillon, ce plan coché, et la liste d'écoute du desktop complétée dans la
+8. - [x] Relecture séparée du diff, PR en brouillon, ce plan coché, et la liste d'écoute du desktop complétée dans la
    feuille de route (§ 4).
 
 ## À trancher par CrOliX
@@ -142,3 +142,20 @@ la réponse pas encore commencée. Code relu sur `main` de Lun'Luxuria après lu
 5. L'urgence entre après les urgences en file, et l'arrêt lit le tour qui sonne.
 6. La reprise sur une phrase déjà commencée est écrite en limite.
 7. Le comptage du banc passe en tête et décide des bornes de l'essai.
+
+## Ce que l'exécution a trouvé (11/11)
+
+- **Le comptage** (tâche 1) : 22 fichiers sur 174 ont plus de trois pauses (8 au plus) et 22 ont une phrase de plus de
+  dix secondes. Les bornes de l'essai sont gardées. Au silence de 700 ms, la détection donne 159 phrases justes sur
+  163, contre 150 à 500 ms.
+- **Un mot court ne tient pas 400 ms** : 8 des 18 mots courts de CrOliX (« non », « oui ») ne déclenchent pas la voix
+  tenue, donc ne suspendaient rien. Ajouté au plan : une phrase reconnue pour elle la coupe à sa fin, même sans
+  suspension.
+- **La chaîne entière sur le banc** (tâche 7) : les 160 fichiers qui portent une phrase la coupent pour de bon ; les 3
+  silences ne la dérangent pas. Aucun enregistrement de toux : la reprise n'est prouvée que par les tests.
+- **La relecture du diff** a trouvé quatre défauts, corrigés avec leurs tests : une urgence en attente perdue à la
+  coupure ; une reprise pendant qu'une phrase finie attend encore son verdict, ou par-dessus une phrase en cours (la
+  limite écrite plus haut est donc levée dans ces deux cas) ; la coupure d'une réponse non signalée quand une urgence
+  sonnait pendant la suspension ; une coupure signalée deux fois en mode doux.
+- **Non fait** : l'écran ne dit pas la suspension (le sous-titre reste, le bouton reste visible).
+- **L'écoute** : la liste est dans la [feuille de route](2026-11-07-feuille-de-route-mvp.md), § 4.
