@@ -283,9 +283,9 @@ La tâche 5 peut s'écrire en même temps qu'elles, et se jouer après.
      règle rendue ; `scenario.test.ts`, chaque refus de `charger`. Les tests existants passent sans autre changement.
    - Exclu : la session, l'écran, le banc.
 2. - [ ] **Le joueur** (`src/presence/player.ts`, `dev-luxuria`). *Parallélisable avec 3 et 4.*
-   - `jouer(s: Scenario): Promise<{ page: readonly TraceEvent[]; banc: readonly BancEvent[] }>`. Monte un `Endpointer` (seuils tirés des
-     réglages comme `session.svelte.ts:187-196`), une `Conversation` et un `Speaker` sur un `Trace`, branchés comme la
-     session (`:245-273`, `:369-385`, `:522-533`).
+   - `jouer(s: Scenario): Promise<{ page: readonly TraceEvent[]; banc: readonly BancEvent[] }>`. Monte un
+     `Endpointer` (seuils tirés des réglages comme `session.svelte.ts:187-196`), une `Conversation` et un `Speaker`
+     sur un `Trace`, branchés comme la session (`:245-273`, `:369-385`, `:522-533`).
    - Le temps **[avis]** : le joueur ne sert qu'aux tests, il prend les minuteries fausses de vitest
      (`vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] })`, l'heure posée à zéro) et avance trame
      par trame par `vi.advanceTimersByTimeAsync(32)`. L'horloge de la conversation et du déroulé est `Date.now()` :
