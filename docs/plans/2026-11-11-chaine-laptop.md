@@ -3,8 +3,10 @@
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
 > **Palier 1 fait** : validé par CrOliX le 11/11 (« ok »), sans toux, et joué le même jour ; ses mesures sont
-> écrites sous « Ce que la tâche 0 a mesuré ». **Palier 2 à valider** : les tâches 1 à 10, révisées avec ces
-> mesures ; aucune ligne de leur code avant sa validation. Les choix marqués **[avis]** sont des propositions.
+> écrites sous « Ce que la tâche 0 a mesuré ». **Palier 2 validé par CrOliX le 11/11 (« je valide »)**, avec chaque
+> recommandation de « À trancher » : Piper (la fausse synthèse pour `oui-puis-reparler`), `tiny`, la source
+> `transcription` seulement quand la réponse change, le son par la page et les ancres, la transcription vraie, les
+> mutations dans la CI.
 >
 > **Deux paliers.** **Palier 1 : la tâche 0 seule**, une partie de bout en bout jetable, qui a mesuré ce que la suite
 > suppose. **Palier 2 : les tâches 1 à 10.** Les quatre scénarios de toux attendent une toux.
@@ -62,8 +64,8 @@ plan-challenger le 11/11 : « à amender », architecture tenue ; ses objections
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
-| `lun-luxuria`, `feat/chaine-laptop` | à ouvrir à la validation du palier 2 | `standard` |
-| `lun-anima`, `feat/chaine-laptop` | à ouvrir à la validation du palier 2 | `standard` |
+| `lun-luxuria`, `feat/chaine-laptop` | lun-luxuria#65 | `standard` |
+| `lun-anima`, `feat/chaine-laptop` | lun-anima#105 | `standard` |
 | `lun-docs`, `docs/deroule-tour` | les mêmes ; la tâche 0 n'en ouvre pas | `trivial` |
 
 ## Ce que le code fait aujourd'hui
