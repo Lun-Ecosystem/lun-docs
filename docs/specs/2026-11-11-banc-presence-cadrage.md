@@ -101,6 +101,45 @@ jeu de données de prise de parole, ni outil d'appelant simulé. Les entrées «
 (synthèse, transcription, fin de tour), pas sur leur preuve. Un écart à noter : elle donne le modèle de fin de tour
 à moins de 100 ms ; nous l'avons mesuré à 500 ms dans la page (plan « la fin de phrase »).
 
+### Les quatorze fiches du 11/11
+
+Une seconde recherche de CrOliX, déposée dans le même dossier : assistants vocaux, IA VTubeuses, synthèse,
+transcription, conversion de voix. Lues en entier. Ce qu'elles apportent à ce banc :
+
+- **Des cibles plus dures que la première veille**, et une mesure que nous n'avons pas : la fin de parole détectée
+  en moins de 150 ms, le premier jeton du modèle en moins de 300 ms, le premier son en moins de 500 ms, audible en
+  0,8 à 1 s, et **une interruption effective en moins de 200 ms**. Chez nous, la voix doit tenir 400 ms avant de la
+  suspendre : par construction, nous sommes au double. Le déroulé doit porter ce délai.
+- **« L'IA ne doit pas s'écouter elle-même »** : annulation d'écho, fenêtre de silence après sa parole, détection de
+  sa propre voix. C'est un scénario à écrire : sa voix rejouée dans le micro ne doit pas la suspendre.
+- **Deux transcriptions** (Persona Engine) : une rapide pour décider d'une coupure, une précise pour le texte. Une
+  piste pour « ignorer un hm hm », que nous avions écartée faute de transcription pendant qu'on parle.
+- **Un vocabulaire d'états** pour le déroulé (à l'écoute, réfléchit, parle, interrompue, exécute un outil, attend
+  une confirmation, en erreur) et l'ordre d'une file de priorités, l'interruption de la personne en tête.
+- **Des principes** qui disent la même chose que CrOliX : mesurer la latence de bout en bout, journaliser les
+  décisions, construire l'observabilité dès le début.
+
+Ce qu'elles ne contiennent pas : **toujours rien sur la façon de tester**. La grille d'évaluation (fiche 11) note
+des projets de 1 à 5 sans dire comment la note se mesure ; la feuille de route (fiche 12) écrit « tests » en phase
+6, sans contenu. Aucune source n'est citée au fil du texte : les chiffres de latence sont des cibles, pas des
+mesures.
+
+### Qui, parmi les projets cités, publie des tests
+
+Vérifié le 11/11 sur GitHub, par les noms de fichiers seulement.
+
+| Projet | Tests publiés |
+|---|---|
+| kimjammer/Neuro, AI-Vtube-Chat-Bot, Open-LLM-VTuber | Aucun |
+| Amica | Deux tests unitaires de texte |
+| Persona Engine | Un projet de tests unitaires (sept fichiers) |
+| OpenAmika | Des tests unitaires, dont l'horloge du silence et le report de transcription |
+| **Unmute** (Kyutai, MIT) | **Un client de charge** : il joue des fichiers son comme une personne, contre le vrai service, et rend la distribution des délais (médiane, 90e et 95e centile) ; un faux service de synthèse ; un module de mesures |
+| Pipecat, AIRI, LiveKit Agents | Les bancs décrits plus haut |
+
+Les compagnes à avatar ne testent presque pas leur voix. Les références utiles viennent des cadres d'agents vocaux
+(Pipecat, LiveKit, Unmute) et d'AIRI. Unmute est à lire en entier avant le premier plan : survolé seulement.
+
 ### Au passage
 
 Pipecat fait dire au modèle, en tête de chaque réponse, si la phrase de la personne était finie, coupée, ou si elle
