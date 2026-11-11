@@ -1,6 +1,6 @@
 # La phrase d'attente : elle dit ce qu'elle va faire avant de confier une demande. Plan
 
-> **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
+> **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [x]`) pour le suivi.
 
 **But :** qu'à la voix, on n'entende plus un long blanc quand Natsume confie une demande à un poste. Elle dit
 d'abord, avec ses mots, une courte phrase sur ce qu'elle va faire ; et la durée d'une délégation est enfin mesurée.
@@ -21,11 +21,11 @@ objections sont reprises ici (voir la fin).
 - Coupée pendant l'attente, après cette phrase, ce que le poste a préparé n'est pas perdu.
 - La durée d'une délégation faite en conversation est écrite avec elle.
 
-**À valider par CrOliX.**
+**Validé par CrOliX le 11/11** (lun-docs#159 fusionnée). **Codé le 11/11** : lun-anima#102, issue lun-anima#100.
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
-| `lun-anima`, `feat/phrase-attente` | à ouvrir à la validation | `standard` |
+| `lun-anima`, `feat/phrase-attente` | lun-anima#100 | `standard` |
 | `lun-docs`, `docs/phrase-attente` | la même | `trivial` |
 
 ## Ce que le code fait aujourd'hui
@@ -46,12 +46,12 @@ objections sont reprises ici (voir la fin).
 
 ## Tâches
 
-1. - [ ] **La consigne.** Savoir, là où elle est écrite, que la réponse sera dite. Alors, si au moins un poste est
+1. - [x] **La consigne.** Savoir, là où elle est écrite, que la réponse sera dite. Alors, si au moins un poste est
    offert, une phrase de plus en fin de consigne des postes (pour ne pas défaire le cache du début) : avant
    d'appeler un poste, dire en quelques mots ce qu'elle va regarder ou faire, sans annoncer de résultat ni promettre
    de réussite ; rien de tel avant les autres outils. Tests : présente à la voix, absente à l'écrit, absente sans
    poste.
-2. - [ ] **Le comptage sur le vrai modèle**, depuis le laptop, avant tout autre code. Le script importe la consigne et
+2. - [x] **Le comptage sur le vrai modèle**, depuis le laptop, avant tout autre code. Le script importe la consigne et
    les outils du code, joue seulement le premier appel, n'appelle aucun poste, n'écrit jamais d'en-tête ; la clé
    reste dans l'environnement. Deux passes de chaque série, **avec la consigne et sans elle** :
    - vingt demandes qui relèvent d'un poste ;
@@ -64,19 +64,46 @@ objections sont reprises ici (voir la fin).
    phrase à côté d'un autre outil. **Le plan s'arrête ici** si, sur les deux passes, elle appelle sans un mot plus
    d'une fois sur quatre, ou annonce sans appeler ne serait-ce que deux fois, ou si le témoin sans consigne fait
    aussi bien.
-3. - [ ] **Avant le poste.** Avant d'exécuter un outil, ce qu'elle a déjà dit part à la voix, même une phrase seule.
+3. - [x] **Avant le poste.** Avant d'exécuter un outil, ce qu'elle a déjà dit part à la voix, même une phrase seule.
    Test, qui échoue aujourd'hui : avec le faux modèle, « Je regarde tes mails. » puis l'appel ; la phrase est
    publiée avant que le poste ait répondu, et une seule fois.
-4. - [ ] **Le second appel sait.** Ce qu'elle a dit au premier appel lui est rendu comme sa propre parole avant le
+4. - [x] **Le second appel sait.** Ce qu'elle a dit au premier appel lui est rendu comme sa propre parole avant le
    résultat. Test : le second appel reçoit la phrase ; le message gardé porte la phrase, puis le résultat.
-5. - [ ] **Coupée pendant l'attente.** Si le poste a préparé des cartes et que rien du résultat n'a été dit, le
+5. - [x] **Coupée pendant l'attente.** Si le poste a préparé des cartes et que rien du résultat n'a été dit, le
    message garde ses mots entendus puis le résumé du poste. Test : coupée après la phrase d'attente, le résumé et
    les cartes restent ; coupée au milieu du résultat, comme aujourd'hui.
-6. - [ ] **La durée**, pour la conversation seulement : une colonne facultative, en millisecondes, du départ de la
+6. - [x] **La durée**, pour la conversation seulement : une colonne facultative, en millisecondes, du départ de la
    demande à la réponse du poste, échec compris. Test : une délégation faite, une échouée ; une base d'avant la
    colonne s'ouvre encore.
-7. - [ ] Relecture séparée du diff, PR en brouillon, ce plan coché avec le comptage, et dans la feuille de route
+7. - [x] Relecture séparée du diff, PR en brouillon, ce plan coché avec le comptage, et dans la feuille de route
    (§ 4) ce que le desktop doit entendre : une demande de mails à la voix, le blanc avant et après.
+
+## Le comptage (11/11)
+
+`npm run wait-phrase` dans Lun'Anima, `gpt-6-luna`, deux passes, 200 appels. La voix porte la consigne, l'écrit sert de
+témoin.
+
+| Série | Voix, avec la consigne | Écrit, sans |
+|---|---|---|
+| 20 demandes pour un poste | phrase puis appel 32 ; appel sans un mot 6 ; autre outil 2 | appel sans un mot 37 ; autre outil 3 |
+| 20 demandes sans poste | aucun appel 37 ; autre outil 3 | aucun appel 37 ; autre outil 3 |
+| 10 demandes après trois anciennes annonces | phrase puis appel 16 ; appel sans un mot 4 | appel sans un mot 20 |
+
+- Elle dit la phrase 48 fois sur 60 ; sans la consigne, jamais. Elle n'a **jamais annoncé sans appeler** le poste, et
+  la consigne ne lui fait confier aucune demande à tort.
+- Les seuils d'arrêt ne sont pas atteints : le plan continue.
+- Ses phrases sont courtes et disent ce qu'elle fait : « Je vérifie ton agenda de demain. », « Je cherche la fiche de
+  Thomas. », « Je prépare la réponse à Camille. ».
+- « Autre outil » : elle relit son fil au lieu de confier la demande, autant avec que sans la consigne. Non regardé
+  de plus près.
+
+## Ce que l'exécution a trouvé (11/11)
+
+- La relecture du diff a trouvé deux écarts, corrigés : une coupure arrivée une fois le tour fini, la voix encore sur
+  la phrase d'attente, perdait le résultat ; la longueur des mots entendus se compare au texte tel qu'il est dit.
+- Reste ouvert, en inbox (lun-anima#101) : coupée après la phrase d'attente, une lecture sans carte perd son
+  résultat.
+- L'écoute : la liste est dans la [feuille de route](2026-11-07-feuille-de-route-mvp.md), § 4.
 
 ## Hors périmètre
 

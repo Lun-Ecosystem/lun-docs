@@ -313,6 +313,11 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
    - une phrase dite à quelqu'un d'autre pendant qu'elle parle, au-delà de quinze secondes de réponse : elle reprend ;
    - son propre son repris par le micro : elle ne doit pas se suspendre en boucle ;
    - recommencer à parler juste après une toux : noter si elle reprend par-dessus.
+   Après [« la phrase d'attente »](2026-11-11-phrase-attente.md) (lun-anima#102), à entendre :
+   - « j'ai des mails ? » à la voix : elle dit d'abord ce qu'elle fait, puis le résultat, sans redire la phrase ;
+   - le blanc entre la phrase et le résultat, sur cinq demandes ; les durées sont dans la base
+     (`delegations.duration_ms`) ;
+   - la couper pendant ce blanc, sur une demande qui prépare une carte : la carte reste et elle ne la redemande pas.
 5. K : la liste « rien ne force le terminal » parcourue, une restauration essayée.
 6. B10 : Google en Production, consentement refait sur le vrai compte.
 7. B11 : le téléphone Android, une notification reçue.
