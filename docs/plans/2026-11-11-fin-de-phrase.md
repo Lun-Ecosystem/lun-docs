@@ -20,11 +20,13 @@ Le code relu sur la branche `feat/ecoute` de Lun'Luxuria (lun-luxuria#54). Plan 
   longtemps, jusqu'à un plafond. À la touche, rien ne change.
 - Le modèle a son interrupteur ; coupé, ou s'il ne se charge pas, l'écoute est celle d'aujourd'hui.
 
-**À valider par CrOliX.** Niveau proposé : `standard`. Aucune dépendance nouvelle : le moteur est celui de Silero.
+**Validé par CrOliX le 11/11** (plan fusionné avec lun-docs#155). **Arrêté à la tâche 2, le 11/11 : le relevé dit non**
+(voir « Le relevé qui a décidé »). Issue lun-luxuria#55 ; le code des tâches 1 et 2 est sur la branche
+`feat/fin-de-phrase`, non poussée.
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
-| `lun-luxuria`, `feat/fin-de-phrase` (après la fusion de lun-luxuria#54) | à ouvrir à la validation | `standard` |
+| `lun-luxuria`, `feat/fin-de-phrase` | lun-luxuria#55 | `standard` |
 | `lun-docs`, `docs/ecoute-releve` | la même | `trivial` |
 
 ## Les relevés du 11/11
@@ -94,18 +96,18 @@ Mesuré sur des prises entières, qui finissent par 0,4 à 0,8 s de silence, alo
 
 ## Tâches
 
-1. - [ ] **L'entrée du modèle, en TypeScript.** `src/listen/turn.ts`, porté du module numpy que Pipecat publie
+1. - [x] **L'entrée du modèle, en TypeScript.** `src/listen/turn.ts`, porté du module numpy que Pipecat publie
    (BSD 2) : les 8 dernières secondes, complétées de silence devant, 80 bandes, fenêtres de 25 ms tous les 10 ms, son
    normalisé. La CI tient un signal fabriqué par une formule, dans trois cas (moins de 8 s, plus de 8 s, que du
    silence), avec les valeurs attendues écrites dans le dépôt à 0,001 près, et la probabilité du modèle. Les scripts
    de mesure entrent dans `tools/`.
-2. - [ ] **Le relevé qui décide.** Le modèle (8,7 Mo, licence relue ici, rangé dans le dépôt avec sa source) interrogé
+2. - [x] **Le relevé qui décide.** Le modèle (8,7 Mo, licence relue ici, rangé dans le dépôt avec sa source) interrogé
    par le banc à chaque `pause`, sur le son jusqu'à cette pause. La vérité : une pause suivie d'une reprise est « pas
    finie » ; la dernière porte l'étiquette de la fiche. Le relevé donne, pour le silence fixe et pour le modèle, à
    plusieurs seuils : coupées trop tôt, attentes pour rien, délai avant la fin ; les mots courts à part ; et le temps
    d'un jugement dans le moteur de la page. **Si le modèle ne fait pas mieux que le silence fixe à la pause, ou si un
    jugement bloque la page plus de 100 ms, le plan s'arrête ici** et le relevé le dit.
-3. - [ ] **Deux délais, choisis hors d'`Endpointer`.** `Endpointer` reste synchrone : il gagne seulement un silence
+3. - [ ] ~~**Deux délais, choisis hors d'`Endpointer`.**~~ *(non faite : le relevé dit non, comme les tâches 4 et 5)* `Endpointer` reste synchrone : il gagne seulement un silence
    de fin qu'on lui donne pour la phrase en cours, remis à zéro à `start` et à `resume`. À `pause`, la session attend
    le verdict dans sa chaîne de trames, puis le lui donne : court si « finie », long si « pas finie », celui
    d'aujourd'hui sans verdict. Le banc passe par le même chemin. Le seuil penche vers « finie » : attendre pour rien
@@ -117,6 +119,43 @@ Mesuré sur des prises entières, qui finissent par 0,4 à 0,8 s de silence, alo
    « pas finie » joués comme micro ; les deux délais se lisent dans la suite des états.
 6. - [ ] Cocher ce plan avec le relevé, lier la PR, et écrire dans la feuille de route ce que le desktop doit
    réentendre.
+
+## Le relevé qui a décidé (11/11)
+
+`npm run banc` sur le laptop : 163 fichiers étiquetés (les 122 phrases de synthèse, 20 phrases et 18 mots de
+CrOliX, 3 silences), 348 pauses jugées, chacune sur le son entendu jusqu'à elle. Chaque façon de décider est ensuite
+jouée sur ces pauses.
+
+| Façon de décider | Phrases coupées avant leur fin | Finies : attente moyenne | Finies qui attendent le plafond | En suspens closes en moins d'1 s | Mots : attente moyenne |
+|---|---|---|---|---|---|
+| Silence fixe, 500 ms (aujourd'hui) | 16 sur 163 | 500 ms | aucune | toutes (45) | 500 ms |
+| Silence fixe, 700 ms | 3 sur 163 | 700 ms | aucune | toutes (53) | 700 ms |
+| Modèle, seuil 0,5, délais 704 / 1 500 ms | 3 sur 163 | 741 ms | 4 sur 86 | 6 sur 53 | 748 ms |
+| Modèle, seuil 0,5, délais 256 / 1 500 ms, si le verdict venait à temps | 38 sur 163 | 328 ms | 4 sur 69 | 4 sur 35 | 325 ms |
+
+Ce que le relevé dit :
+
+- **Un jugement prend environ 500 ms dans le moteur de la page**, dont 215 ms pour le modèle seul et 40 à 90 ms pour
+  transformer le son ; 63 ms en Python, sur le même processeur. Le seuil d'arrêt du plan était 100 ms. Le verdict ne
+  pourrait servir qu'après 700 ms de silence : plus tard que le silence fixe d'aujourd'hui.
+- **À une pause au milieu d'une phrase, le modèle dit souvent « finie »** : 0,93 puis 0,96 aux deux pauses de
+  « Attends… laisse-moi réfléchir… non en fait, ok », 0,91 au milieu de « …ce que j'ai fait aujourd'hui, et je suis… ». Avec un délai court, il couperait
+  38 phrases sur 163, contre 16 aujourd'hui. Les 116 justes sur 122 étaient vraies du clip entier, pas de ses pauses.
+- **Son seul gain** : il attend les phrases laissées en suspens (47 sur 53), que le silence fixe clôt toutes. Ces
+  phrases sont de synthèse, et quatre phrases finies sur 86 attendraient le plafond en échange.
+- **Un silence fixe de 700 ms coupe aussi peu que le modèle** (3 sur 163), sans modèle et sans calcul.
+
+**Décision : le modèle n'entre pas dans la page.** Les tâches 3 à 5 ne sont pas faites. Le port de son entrée et le
+relevé restent sur la branche, pour le banc ; rien n'est chargé par l'appli.
+
+Ce que cela laisse, à trancher par CrOliX :
+
+- **Allonger le silence fixe** de 500 à 700 ms divise par cinq les phrases coupées en deux. Avec le tour à l'essai en
+  service, la réponse se prépare dès la première pause : ces 200 ms ne devraient presque rien coûter, puisque la
+  réponse n'est de toute façon pas prête avant. À vérifier par une mesure de latence sur le desktop ; non mesuré.
+- **Le modèle hors de la page** (dans le service voix, en Python : 63 ms) redonnerait le temps, pas la justesse aux
+  pauses. Sans objet tant que le second point tient.
+- **Dire d'attendre par le sens** reste la vraie réponse aux hésitations : c'est au cerveau, pas à l'oreille.
 
 ## À trancher par CrOliX
 
@@ -145,6 +184,13 @@ Mesuré sur des prises entières, qui finissent par 0,4 à 0,8 s de silence, alo
   de 0,5 s. D'où le seuil qui penche, et les mots courts comptés à part.
 - Les clips de Pipecat ont été ramenés à 16 kHz sans filtre quand ils n'y étaient pas ; les 122 l'étaient déjà.
 - Rien n'est entendu : l'écoute sur le desktop reste la dernière étape.
+
+## Ce que l'exécution a trouvé
+
+- Le port de l'entrée du modèle colle à la référence Python au millième, du premier coup ; la licence du modèle est
+  BSD 2 (sa fiche, lue le 11/11).
+- La mesure « un jugement par clip entier » flattait le modèle deux fois : par des phrases de synthèse, et par le
+  silence qui suit la fin d'un clip. La règle d'arrêt écrite à la relecture du plan a servi.
 
 ## Ce que le plan-challenger a changé
 
