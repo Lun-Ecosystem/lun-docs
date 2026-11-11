@@ -140,6 +140,51 @@ Vérifié le 11/11 sur GitHub, par les noms de fichiers seulement.
 Les compagnes à avatar ne testent presque pas leur voix. Les références utiles viennent des cadres d'agents vocaux
 (Pipecat, LiveKit, Unmute) et d'AIRI. Unmute est à lire en entier avant le premier plan : survolé seulement.
 
+### La recherche du 11/11 sur les tests
+
+Troisième recherche de CrOliX, ciblée cette fois sur la façon de tester et de mesurer. Chaque dépôt cité a été
+vérifié le 11/11 sur GitHub (il existe, sa licence, son âge) ; l'article sur le banc français a été lu.
+
+| Source | Vérifié | Ce qu'on en retient |
+|---|---|---|
+| [ServiceNow EVA](https://github.com/servicenow/eva) | MIT, 236 étoiles, actif | Des conversations sonores entières contre l'agent, des bruits et des coupures de liaison ajoutés, des juges validés contre des humains. Lourd : son appelant et ses juges passent par des services payants. Une mise en garde utile : **recoller les traces de l'appelant et de l'agent est une source connue d'erreurs subtiles**. |
+| [Full-Duplex-Bench](https://github.com/DanielLin94144/Full-Duplex-Bench) | 348 étoiles, licence non déclarée | Les définitions de référence : tenir une pause, le « hm hm », le tour pris sans à-coup, la coupure. En anglais. |
+| [Le banc français](https://arxiv.org/html/2609.10765) (CALLFC-FDB, MEDIA-FDB) | Article lu, septembre 2026 | Les mêmes épreuves en français, avec leurs seuils. **Le son n'est pas libre** : seules les annotations sont publiées, les enregistrements s'obtiennent chez leurs distributeurs. Sa chaîne de référence française est une cascade comme la nôtre. |
+| [voice-eval-toolkit](https://github.com/AQIB-NAWAB/voice-eval-toolkit) | MIT, créé la veille, aucune étoile | **Mesurer depuis le son des deux voies**, sans rien demander à l'agent : délai d'arrêt après une coupure, fausses coupures, blanc entre deux tours, chevauchement. Ses chiffres viennent d'un faux agent. Une idée, pas une dépendance. |
+| [voice-agent-kit](https://github.com/wananing/voice-agent-kit) | MIT, trois semaines, aucune étoile | Une trace par tour, et **deux premiers sons distincts : le premier bruit et le premier contenu**. C'est notre phrase d'attente : « je regarde » n'est pas la réponse. |
+| [voice-evals](https://github.com/Gjusev/voice-evals), [voice-eval](https://github.com/rand0wn/voice-eval) | Apache 2.0, récents, peu suivis | Des seuils qui font échouer la CI ; un délai d'étape n'est jamais déduit s'il n'a pas été observé. |
+| [finchvox](https://github.com/finchvox/finchvox) | MIT, 34 étoiles | Rejouer le son d'une conversation à côté de sa ligne de temps. |
+| Micro simulé dans Playwright (trois petits dépôts) | MIT, aucune étoile | Remplacer `getUserMedia` au lieu de passer par les options de Chromium : le fichier se pilote pendant l'essai. |
+
+Les seuils du banc français, utilisables tels quels dans nos scénarios :
+
+| Épreuve | Définition |
+|---|---|
+| Tenir une pause | Un silence de plus de 0,7 s à l'intérieur d'une phrase : elle ne doit pas prendre la parole |
+| Prendre son tour | Moins de 1 s entre la fin de la personne et le début de la réponse |
+| Se laisser couper | La personne commence avant la fin de sa parole : elle s'arrête ; MTR-DuplexBench compte un arrêt réussi sous 2 s et demande une reprise cohérente |
+| Changer de tour | Un blanc de plus de 2 s sépare deux tours |
+
+Ce que cette recherche change à la cible du § 4 :
+
+1. **Deux horloges, pas une.** Le déroulé dit ce que le système croit avoir fait ; le son des deux voies dit ce
+   qui s'est entendu. Le banc enregistre le micro joué et la voix qu'elle rend, et mesure dessus : délai d'arrêt,
+   blanc entre les tours, chevauchement. Un écart entre les deux horloges est lui-même un défaut.
+2. **Des noms de mesures arrêtés** : blanc de tour, premier bruit, premier contenu, délai d'arrêt après coupure,
+   chevauchement, taux de fausses coupures ; par étape : transcription, premier jeton, premier son synthétisé.
+   Médiane et 95e centile, jamais une moyenne seule.
+3. **Juger par des règles d'abord** : un appel d'outil, un texte contenu, un événement dans un délai. Un modèle
+   juge ne sert que de signal, sur le français parlé il se trompe trop ; les phrases d'attente se comptent à part.
+4. **Les données françaises se fabriquent.** Le seul banc français n'a pas de son libre : synthèse depuis du texte,
+   avec au moins deux voix différentes de la sienne, plus de la parole spontanée libre (Common Voice) pour les
+   hésitations.
+5. **Son propre écho devient un scénario** : sa voix mêlée au micro ne doit ouvrir ni écoute, ni transcription, ni
+   réponse ; une vraie voix par-dessus doit la suspendre.
+
+À garder en tête : quatre des cinq sources que la recherche met en tête sont des dépôts de quelques jours ou
+semaines, sans utilisateurs. Leurs définitions sont bonnes à prendre ; aucun n'est à installer. Les versions de
+Common Voice citées n'ont pas été vérifiées, ni l'effet des options de Chromium dans la fenêtre Tauri.
+
 ### Au passage
 
 Pipecat fait dire au modèle, en tête de chaque réponse, si la phrase de la personne était finie, coupée, ou si elle
@@ -189,28 +234,13 @@ Un plan par étape, chacun validé avant son code. L'étape 1 est petite et sert
 - **Le faux modèle.** Sur le laptop, la chaîne peut tourner avec une réponse écrite d'avance (rien à payer, résultat
   stable) ou avec le vrai modèle (quelques centimes, résultat variable). Je recommande le faux modèle pour les
   mécanismes, le vrai pour les suites de consigne comme `wait-phrase`.
-- **Les références.** CrOliX les élargit de son côté ; ce que la recherche devrait ramener est au § 7. Faut-il
-  attendre ce retour avant le premier plan, ou commencer par le déroulé, qui n'en dépend pas ?
+- **Les références** sont élargies (§ 3 et § 7) : le premier plan peut s'écrire.
 
-## 7. Élargir les références
+## 7. Les références
 
-CrOliX élargit lui-même les sources : les trois projets lus ici ne suffisent pas, et la veille ne couvre pas la
-question. Ce qu'il faudrait qu'une recherche ramène, par ordre d'utilité pour ce banc :
-
-1. **Des bancs d'évaluation d'agents vocaux, libres** : qui joue un appelant (écrit ou simulé) contre un agent, en
-   son, et rend des délais par étape et des taux. Au-delà de Pipecat, AIRI et LiveKit.
-2. **Des mesures publiées de la prise de parole** : comment la recherche chiffre une coupure, une relance, un
-   silence trop long, une parole qui se chevauche ; avec quelles données, et s'il en existe en français.
-3. **Des traces de bout en bout pour la voix** : comment un tour est tracé du micro au haut-parleur chez ceux qui
-   exploitent des agents vocaux ; le vocabulaire d'OpenTelemetry pour ces étapes.
-4. **Des voix françaises pour fabriquer des locuteurs** : synthèse locale et libre, plusieurs timbres, de quoi
-   insérer hésitations et bruits.
-5. **Des compagnes vocales à avatar qui publient leurs tests** : la moitié des projets de la veille n'en ont
-   peut-être aucun ; savoir lesquels en ont.
-
-Des noms que je connais sans les avoir vérifiés, à confirmer avant de s'en servir : Full-Duplex-Bench, Talking
-Turns (prise de parole) ; les plateformes d'essai d'agents vocaux (Hamming, Coval, Cekura), qui sont payantes mais
-publient leurs méthodes.
+Élargies par CrOliX le 11/11 en trois recherches, toutes lues (§ 3). Ce qui reste sans source : des délais
+**mesurés** par étape sur du matériel grand public (les veilles donnent des cibles), et des retours d'équipes sur ce
+qui a échoué en construisant un tel banc, à part la mise en garde d'EVA sur le recollage des traces.
 
 ## 8. Limites de ce cadrage
 
