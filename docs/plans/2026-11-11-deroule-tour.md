@@ -1,6 +1,9 @@
 # Le déroulé d'un tour : chaque décision datée, chaque délai nommé. Plan
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
+>
+> **PR :** [lun-luxuria#61](https://github.com/Lun-Ecosystem/lun-luxuria/pull/61) (#59) et lun-anima#104 (#103),
+> en brouillon.
 
 **But :** qu'un tour de parole laisse derrière lui la suite datée de ce qui s'est passé, du premier son de la
 personne au dernier mot de Natsume, et que chaque délai en soit tiré sous un nom arrêté. C'est la première pièce du
@@ -88,30 +91,30 @@ laquelle de ses phrases précède un poste : hors de ce plan.
 
 ## Tâches
 
-1. - [ ] **Une seule horloge** (Lun'Luxuria). La session, la conversation et la voix reçoivent la même, qui ne recule
+1. - [x] **Une seule horloge** (Lun'Luxuria). La session, la conversation et la voix reçoivent la même, qui ne recule
    pas. Chaque événement de l'écoute porte l'instant du son et l'instant de la décision. Au banc, l'horloge est le
    temps du son rejoué. Fait d'un bloc, avant le reste : la mesure d'aujourd'hui, la fenêtre du filtre et les bornes
    de l'essai en dépendent. Tests : les tests existants passent ; au banc, une conversation n'est plus à l'instant
    zéro.
-2. - [ ] **Le déroulé, une pièce à part** (`src/trace.ts`). Une liste d'événements : l'instant, le nom, le numéro de
+2. - [x] **Le déroulé, une pièce à part** (`src/trace.ts`). Une liste d'événements : l'instant, le nom, le numéro de
    phrase, le rang d'essai, le numéro de réponse quand il existe, quelques valeurs. Bornée aux derniers tours.
    Tests : l'ordre ; deux phrases qui se chevauchent restent séparées ; un essai retiré puis repris garde ses deux
    numéros de réponse sous la même phrase ; la borne.
-3. - [ ] **Les trois pièces écrivent**, en option : sans déroulé, rien ne change. Un test par cas tient la suite
+3. - [x] **Les trois pièces écrivent**, en option : sans déroulé, rien ne change. Un test par cas tient la suite
    attendue : un tour simple ; une phrase à l'essai retirée puis confirmée ; une phrase écartée (sans son texte) ;
    un bruit ; une suspension reprise ; une coupure franche ; une parole sans phrase.
-4. - [ ] **Les délais nommés** : une fonction qui lit le déroulé et rend les délais du tableau. Tests sur des
+4. - [x] **Les délais nommés** : une fonction qui lit le déroulé et rend les délais du tableau. Tests sur des
    déroulés écrits à la main, dont les cas où une borne manque ; et l'égalité de `blanc_de_tour` avec la mesure
    d'aujourd'hui, qui reste émise.
-5. - [ ] **Les durées du serveur** (Lun'Anima). Cumulées pendant le tour, jointes une seule fois à la réponse finie,
+5. - [x] **Les durées du serveur** (Lun'Anima). Cumulées pendant le tour, jointes une seule fois à la réponse finie,
    non gardées en base : l'attente dans la file, le premier mot, le poste, le second premier mot. Tests : une
    réponse simple, une délégation, une réponse coupée avant son premier mot (aucune durée inventée), une phrase
    fixe. Un corps plus ancien ignore le champ ; la page l'écrit dans le déroulé s'il est là, et seule sur un modèle
    mesure son premier mot elle-même.
-6. - [ ] **Le fichier.** Le banc écrit le déroulé de sa chaîne à côté du relevé, une ligne par événement. Dans la
+6. - [x] **Le fichier.** Le banc écrit le déroulé de sa chaîne à côté du relevé, une ligne par événement. Dans la
    page, un bouton des réglages avancés l'enregistre, à côté des mesures de la session, qui ne changent pas. Le
    dépôt ignore ces fichiers.
-7. - [ ] Relecture séparée de chaque diff, deux PR en brouillon, ce plan coché.
+7. - [x] Relecture séparée de chaque diff, deux PR en brouillon, ce plan coché.
 
 ## Hors périmètre
 
@@ -132,6 +135,25 @@ laquelle de ses phrases précède un poste : hors de ce plan.
 - Le premier son du déroulé est l'instant où la page donne le son à jouer, pas celui où il sort du haut-parleur.
 - Le déroulé contient ce que la personne a dit à Natsume. Il reste en mémoire dans la page et ne s'écrit en fichier
   que sur son geste, ou dans le dossier du banc, hors dépôt.
+- `blanc_de_tour` n'est égal à la mesure d'aujourd'hui que là où elle est émise. Une réponse retenue par un bruit
+  puis relâchée a un `blanc_de_tour` qui compte la retenue, sans mesure d'aujourd'hui.
+- Le texte d'une phrase qui finit sans réponse (écartée, bruit, échec de transcription ou d'envoi) est effacé du
+  déroulé, même s'il avait été écrit à un essai.
+
+## Ce que l'exécution a trouvé
+
+- **Le banc devient fidèle.** Rejoué sur `main` puis sur la branche : coupure réelle 160/160 sur `main`, 157/160 sur
+  la branche. Le déroulé en donne la cause. Au banc, la conversation vivait à l'instant zéro : la fenêtre de 15 s du
+  filtre ne se fermait jamais. Trois phrases de 15 s voient maintenant leur fenêtre se fermer. La page ne change pas.
+  `performance.now()` sert partout sur le tour ; `heardAt` et `busySince` restent sur `Date.now()`, sans comparaison
+  croisée.
+- **Écarts au plan.** La voix reçoit l'horloge par le déroulé. `premier_son` est écrit par la conversation, pour
+  l'égalité stricte de `blanc_de_tour` avec la mesure d'aujourd'hui. `durees` garde les noms du serveur, traduits par
+  `delays()`.
+- **Le texte effacé va plus loin que prévu.** Décision de CrOliX : le texte d'une phrase finalement écartée est
+  effacé du déroulé. Cela vaut aussi sur échec de transcription ou d'envoi.
+- **L'export depuis la fenêtre Tauri** reste à faire : le bouton ne marche que dans un onglet de navigateur
+  ([lun-luxuria#60](https://github.com/Lun-Ecosystem/lun-luxuria/issues/60)).
 
 ## Ce que le plan-challenger a changé
 
