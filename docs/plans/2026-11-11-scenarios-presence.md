@@ -251,8 +251,8 @@ que le scénario prouve de plus que `conversation.test.ts` et `turns.test.ts`.
 7. **Le délai de réponse avec 0,7 s de silence de fin.** `delai-de-reponse` (essai coupé) et `delai-a-l-essai` (essai
    en service, une pause de 300 ms dans la parole). Attend : `attente_fin` dans [700, 736] ; `blanc_de_tour` égal à
    la somme des briques fausses à une trame près ; plus court à l'essai. Une variante, `delai-modele-lent`
-   (`modeleMs: 40`), montre le retard du modèle de voix dans `attente_fin`. Apport : le blanc passe par la vraie écoute ; il prouve que la page
-   n'attend rien qu'on ne voie. Hors niveau : les vingt tours et les vrais délais, au desktop (étape 5).
+   (`modeleMs: 40`), montre le retard du modèle de voix dans `attente_fin`. Apport : le blanc passe par la vraie
+   écoute ; il prouve que la page n'attend rien qu'on ne voie. Hors niveau : les vingt tours et les vrais délais, au desktop (étape 5).
 8. **Une toux pendant qu'elle parle : elle se tait, redit sa phrase, continue.** `toux-parole` (450 ms) et
    `toux-courte` (300 ms). Attend, à 450 ms : `suspendue` à 400 ms du début de la toux, à une trame près ;
    `reprise_voix` ; le `joue` suivant porte le texte de la phrase coupée ; le blanc entre `arrete` et ce `joue` est
