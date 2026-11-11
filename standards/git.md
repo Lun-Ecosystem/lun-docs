@@ -41,6 +41,12 @@
   critères prouvés. *Ask* : ce que seul le desktop prouve (voix, fenêtre Tauri, services) reste en
   brouillon jusqu'à la recette de CrOliX. Le plan du chantier dit lequel.
 - Les corrections de revue arrivent dans la même PR, jamais dans une nouvelle.
+- **Dans lun-docs, une PR par axe**, pas par plan ni par coche : le cadrage, les plans et leurs coches
+  voyagent dans la même PR en brouillon, fusionnée quand le palier de l'axe est fini. Avant d'en
+  ouvrir une, regarder si l'axe en a déjà une (`gh pr list --state open`) et y pousser. Un plan s'y
+  valide par le « validé » écrit de CrOliX, pas par la fusion.
+- Des chantiers voisins d'un même axe s'**agrègent en local** quand ils se suivent de près : poussés
+  ensemble sur une même branche, une PR par dépôt, plutôt qu'une PR chacun à quelques heures d'écart.
 - Le gabarit est obligatoire : issue liée, critères de fin cochés, **preuves** (sortie des tests,
   capture, commande de démo), niveau de la tâche.
 - La CI doit être verte.
