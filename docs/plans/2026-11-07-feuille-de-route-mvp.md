@@ -310,9 +310,10 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
    - le délai de réponse avec 0,7 s de silence de fin, sur vingt tours, comparé aux 3,4 s du 10/11 ;
    - une toux pendant qu'elle parle : elle se tait, puis redit sa phrase et continue ; compter le blanc ;
    - « arrête » ou « non » pendant une longue réponse : elle se tait pour de bon ;
-   - une phrase dite à quelqu'un d'autre pendant qu'elle parle, au-delà de quinze secondes de réponse : elle reprend ;
    - son propre son repris par le micro : elle ne doit pas se suspendre en boucle ;
    - recommencer à parler juste après une toux : noter si elle reprend par-dessus.
+   L'aparté pendant qu'elle parle est sorti de la liste : CrOliX a choisi le 11/11 qu'il la coupe (voie 2 du
+   [plan des scénarios](2026-11-11-scenarios-presence.md)), et le scénario `aparte-parole-longue` le prouve.
    Après [« la phrase d'attente »](2026-11-11-phrase-attente.md) (lun-anima#102), à entendre :
    - « j'ai des mails ? » à la voix : elle dit d'abord ce qu'elle fait, puis le résultat, sans redire la phrase ;
    - le blanc entre la phrase et le résultat, sur cinq demandes ; les durées sont dans la base

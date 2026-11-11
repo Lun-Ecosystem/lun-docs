@@ -3,6 +3,8 @@
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
 > **Validé par CrOliX le 11/11**, par écrit, avec les choix marqués **[avis]** et la voie 2 pour le point 10.
+>
+> **PR :** [lun-luxuria#64](https://github.com/Lun-Ecosystem/lun-luxuria/pull/64), en brouillon.
 
 **But :** qu'un point de la liste d'écoute devienne un fichier qu'une machine joue et juge. Le fichier dit ce que la
 personne dit et quand, ce qu'il y a autour, ce que le modèle et sa voix font, et ce qui est attendu, en événements
@@ -307,7 +309,7 @@ l'écho sous le seuil, la coupure douce. Restent quinze fichiers.
 Les tâches 2 et 3 partent en parallèle une fois la tâche 1 faite : elles ne partagent que ses types. La tâche 4
 peut s'écrire en même temps qu'elles, et se jouer après.
 
-1. - [ ] **Le déroulé, version 2, et le format** (Lun'Luxuria, `dev-luxuria`). Seul, d'abord : les autres le lisent.
+1. - [x] **Le déroulé, version 2, et le format** (Lun'Luxuria, `dev-luxuria`). Seul, d'abord : les autres le lisent.
    - `src/conversation.ts` : `retenue` dans `#holdBack`, une fois la réponse vraiment retenue (la réponse, la phrase
      qui la retient) ; `relachee` dans `#letGo`, seulement quand une réponse retenue sort (après le
      `if (waiting === by) return`, `:275`) ; `oubliee` dans `#forget` (`:301`), qui couvre l'oubli par
@@ -326,7 +328,7 @@ peut s'écrire en même temps qu'elles, et se jouer après.
      retenue est celle qui retient) et le `par` du verdict ; `filter.test.ts`, la règle rendue ; `scenario.test.ts`,
      chaque refus de `charger`. Les tests existants passent sans autre changement.
    - Exclu : la session, l'écran, le banc.
-2. - [ ] **Les briques fausses et le joueur** (`src/presence/fakes.ts`, `src/presence/player.ts`, `dev-luxuria`).
+2. - [x] **Les briques fausses et le joueur** (`src/presence/fakes.ts`, `src/presence/player.ts`, `dev-luxuria`).
    *Parallélisable avec 3.*
    - `fakes.ts`, exporté pour les tests et les étapes suivantes :
      - la transcription : le son reçu couvre sa durée, jusqu'à maintenant ; elle rend, joints par un espace, les
@@ -356,7 +358,7 @@ peut s'écrire en même temps qu'elles, et se jouer après.
      transcription d'un essai à une pause ne rend que la parole commencée ; l'écho suit le son et s'arrête avec lui ;
      un scénario de 60 s virtuelles se joue en moins d'une seconde.
    - Exclu : le son, Silero, la page construite, le vrai serveur.
-3. - [ ] **Le juge et le relevé** (`src/presence/judge.ts`, `src/presence/releve.ts`, `dev-luxuria`).
+3. - [x] **Le juge et le relevé** (`src/presence/judge.ts`, `src/presence/releve.ts`, `dev-luxuria`).
    *Parallélisable avec 2.*
    - `juger(s, partie)` : refuse un déroulé d'un format plus ancien que 2. Rend un verdict par attendu :
      `{ id, niveau, mecanisme, etat, espece?, trouve?, source?, couverture, extrait }`, selon les règles, les espèces
@@ -372,14 +374,14 @@ peut s'écrire en même temps qu'elles, et se jouer après.
      quand tous ont écrit ; un `connus` dont l'espèce change ne passe pas ; le chevauchement de deux intervalles
      connus ; un déroulé de format 1 refusé. Un relevé tiré de verdicts écrits à la main, comparé ligne à ligne.
    - Exclu : tout modèle, tout texte jugé autrement que par égalité ou inclusion.
-4. - [ ] **Les scénarios de départ** (`src/presence/scenarios/*.ts`, `testeur`). Écriture parallélisable avec 2 et 3.
+4. - [x] **Les scénarios de départ** (`src/presence/scenarios/*.ts`, `testeur`). Écriture parallélisable avec 2 et 3.
    - Les quinze fichiers de « Les scénarios de départ », chacun avec `source` mot pour mot, son `apport`, chaque
      borne avec son calcul en commentaire, et le `niveau` de chaque attente : `tous` pour ce que la chaîne doit
      tenir aussi, `exact` pour une borne qui ne vaut qu'avec les briques fausses. La moitié serveur d'un point est
      écrite en tête de son fichier.
    - Un seul défaut connu au départ : le chevauchement nul de `toux-puis-parole`, avec son issue.
    - Exclu : changer un mécanisme pour qu'un scénario tienne. Un écart trouvé devient une issue.
-5. - [ ] **La suite** (`src/presence/scenarios.test.ts`, `dev-luxuria`). Après 1 à 4.
+5. - [x] **La suite** (`src/presence/scenarios.test.ts`, `dev-luxuria`). Après 1 à 4.
    - Charge chaque scénario, vérifie qu'il passe tel quel par `JSON.stringify`, le joue deux fois (les déroulés
      doivent être égaux) et échoue sur toute attente ratée ou non jouée, et sur un `connus` qui ne rend plus son
      espèce ou sa valeur.
@@ -388,7 +390,9 @@ peut s'écrire en même temps qu'elles, et se jouer après.
      Une ligne au `.gitignore` pour `releve-scenarios.md`. Une ligne au `CLAUDE.md` du dépôt.
    - Critère : `npm test` ne prend pas plus de cinq secondes de plus sur la CI.
 6. - [ ] Relecture séparée du diff, la PR en brouillon, ce plan coché avec « Ce que l'exécution a trouvé » ; le point
-   10 retiré de la liste d'écoute de la feuille de route si CrOliX suit la recommandation.
+   10 retiré de la liste d'écoute de la feuille de route si CrOliX suit la recommandation. Fait : la PR en
+   brouillon, le plan coché, le point 10 retiré (voie 2). Reste : une seconde relecture, en cours, des deux derniers
+   commits.
 
 ## Hors périmètre
 
@@ -416,6 +420,43 @@ peut s'écrire en même temps qu'elles, et se jouer après.
 - Non vérifié : que `vi.advanceTimersByTimeAsync` de vitest 5 vide assez les promesses entre deux échéances pour
   la chaîne `then` du `Speaker` (`speaker.ts:178`) ; la tâche 2 le teste d'abord. Unmute (son client de charge) n'a
   pas été relu : il sert les taux, à l'étape 4.
+
+## Ce que l'exécution a trouvé
+
+**Les écarts au plan.**
+
+- Seize scénarios au lieu de quinze : `phrase-ecartee` est ajouté, car aucun scénario n'exerçait le refus du filtre.
+- La phrase qui suit un poste arrive `poste.ms + premierMotMs` après la précédente, comme dans Anima. D'où la borne
+  `phrase-attente/blanc` : [1640, 1672].
+- La parole de `toux-puis-parole` est placée 192 ms après la reprise, soit 894 ms après la toux. Plus tôt, elle
+  continuerait la phrase de la toux.
+- `non-court` coupe à la fin de phrase (`confirmee`), pas au verdict.
+
+**Le contrat, retouché au rapprochement** du joueur et du juge. `Partie` porte sa `fin`. Une `erreur` du joueur est
+rendue dans la partie. `envoi_recu` est numéroté. Un mécanisme hors de la chaîne du scénario n'est admis que dans une
+attente `absent`.
+
+**La règle de la source, réécrite.** Chaque attente cherche d'abord dans la fenêtre de son propre maillon. Une
+`non_jouee` prend la source de l'attente qui lui sert d'ancre. Un défaut ne nomme qu'un maillon. Le risque : deux
+défauts dans une même partie ne nomment que le premier.
+
+**Les mutations**, faites par la relecture séparée, chacune remise ensuite. Les scénarios en échec, et la source
+nommée avant et après la correction du juge :
+
+| Mutation | Scénarios en échec | Source avant | Source après |
+|---|---|---|---|
+| a. tenue doublée | 9 | ecoute 12, suspension 6, voix 3, coupure 2, retenue 1, essai 1 | ecoute 25 |
+| b. suspension coupée | 6 | suspension 8, essai 5, ecoute 3, coupure 2, voix 2 | suspension 20 |
+| c. retenue coupée | 3 | retenue 9, essai 4 | retenue 13 |
+| d1. filtre qui laisse tout passer | 7 | 16 échecs sur sept sources | filtre 22 |
+| d2. phrase écartée qui passe | aucun avant | aucun échec | `phrase-ecartee`, filtre 3 |
+| e. silence de 500 ms | 6 | ecoute 6, voix 3, coupure 2 | ecoute 10, voix 1 |
+
+Avant la correction, une mutation dispersait ses échecs sur plusieurs maillons. Après, elle nomme le sien. Le d2
+montre le trou que `phrase-ecartee` comble.
+
+**Le défaut connu.** Le chevauchement nul de `toux-puis-parole/chevauchement-nul` : 384 ms aujourd'hui, suivi dans
+lun-luxuria#63.
 
 ## Ce que le plan-challenger a changé
 
