@@ -16,9 +16,10 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
    l'étiquette : `gh issue edit <n> --add-label niveau:<trivial|standard|critique|exceptionnel>`.
 3. Le périmètre est **figé** à partir d'ici.
 4. Cadrage et plan : `superpowers:brainstorming` si le besoin n'est pas clair, puis
-   `superpowers:writing-plans`, en un plan court dans `lun-docs/docs/plans/`. Fais attaquer le plan
-   par l'agent `plan-challenger`, intègre ou réfute ses objections par écrit, puis CrOliX valide.
-   **Pas de code avant.**
+   `superpowers:writing-plans` : l'agent `redacteur-plan` écrit un plan court dans
+   `lun-docs/docs/plans/`, poussé sur la PR lun-docs de l'axe (une seule par axe). Fais attaquer le
+   plan par l'agent `plan-challenger`, intègre ou réfute ses objections par écrit, puis CrOliX valide
+   par écrit (« validé »), sans fusionner. **Pas de code avant.**
 
 ## Exécuter
 
@@ -30,10 +31,15 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
   plan est un ou plusieurs commits sur cette branche, jamais une branche poussée ni une PR à part.
   Des worktrees locaux pour des tâches parallèles, fusionnés dans la branche du chantier, au besoin.
   La PR s'ouvre en brouillon au premier push (`lun-livrer`).
-- La session principale code, tâche par tâche, tests d'abord quand c'est pertinent. Fable
-  uniquement si CrOliX le demande explicitement dans la conversation, même avec
+- La session principale **pilote** : elle confie chaque tâche au spécialiste de son dépôt
+  (`dev-luxuria`, `dev-core`, `dev-front`, les tests à `testeur`), avec un brief complet (tâche,
+  critères, fichiers, ce qui est exclu, « graphe d'abord »). Les tâches indépendantes partent en
+  parallèle, chacune dans un worktree que la session crée depuis la branche du chantier et dont elle
+  donne le chemin (l'isolation automatique part de `main`, pas du chantier). Elle ne code que le
+  trivial. Fable uniquement si CrOliX le demande explicitement dans la conversation, même avec
   `niveau:exceptionnel`.
-- Après chaque tâche : agent `reviewer` sur le diff. Corrige les points bloquants.
+- Après chaque tâche : agent `reviewer` sur le diff. Les points bloquants repartent au développeur.
+- Le développeur commite sa tâche ; push et PR : agent `livreur`, qui suit `lun-livrer`.
 - Une observation hors périmètre devient une issue `inbox`
   (`gh issue create --label inbox --title "…" --body "…"`), **sauf** si elle empêche d'atteindre les
   critères de fin.

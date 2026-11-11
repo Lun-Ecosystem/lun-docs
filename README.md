@@ -46,7 +46,8 @@ Les gabarits de projet déclarent déjà la marketplace dans `.claude/settings.j
 /plugin install lun@lun-docs
 ```
 
-Le plugin apporte les agents de relecture et de recherche, les skills `lun-*` et le hook de
+Le plugin apporte les agents spécialisés (recherche, veille, plan, développement par dépôt, tests,
+relecture, livraison ; voir `standards/workflow.md`), les skills `lun-*` et le hook de
 garde qui interdit à l'agent de merger, de pousser sur `main` ou de forcer un push.
 
 ## Par où commencer

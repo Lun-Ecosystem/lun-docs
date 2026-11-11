@@ -15,7 +15,9 @@ Les règles sont dans `references/git.md` et `references/qualite.md`.
 ## Pull request
 
 **Une seule PR par chantier**, jamais une par tâche. Si le chantier a déjà sa PR, pousse sur sa
-branche : la PR se met à jour.
+branche : la PR se met à jour. **Dans lun-docs, une seule PR par axe** : plans et coches y voyagent
+ensemble ; `gh pr list --state open` avant d'en ouvrir une. Avant tout push, `gh pr view --json state` :
+une PR fusionnée ne reçoit plus rien, la suite va dans une nouvelle.
 
 1. Barrières locales vertes (format, lint, typage, tests) : lance-les et lis la sortie.
 2. `git push -u origin <branche>` (jamais `main`).
