@@ -11,7 +11,12 @@
 > **Deux paliers.** **Palier 1 : la tâche 0 seule**, une partie de bout en bout jetable, qui a mesuré ce que la suite
 > suppose. **Palier 2 : les tâches 1 à 10.** Les quatre scénarios de toux attendent une toux.
 >
-> **PR :** aucune encore. Au palier 2, une par dépôt, ouvertes en brouillon à la première tâche.
+> **Palier 2 codé et éprouvé le 11/11**, en brouillon : lun-luxuria#66, lun-anima#106 (voir « Ce que l'exécution a
+> trouvé »). **À confirmer par CrOliX** : les trois scénarios ajustés par B2 (`toux-parole`, `echo-fort`,
+> `non-court`), sans borne élargie.
+>
+> **PR :** lun-luxuria#66, lun-anima#106, et celle-ci (lun-docs#162), en brouillon. Issues `inbox` : lun-luxuria#67
+> à #72.
 
 **But :** rejouer les scénarios écrits à travers la vraie chaîne, sans personne. La page construite tourne dans un
 Chrome sans écran ; son micro est un son joué à des instants choisis ; elle parle au vrai serveur Lun'Anima, dont le
@@ -62,11 +67,11 @@ plan-challenger le 11/11 : « à amender », architecture tenue ; ses objections
   survit ou ne nomme pas son maillon. Le bouton « Faire taire » a son scénario.
 - `npm test` des deux dépôts ne change pas de durée de plus de cinq secondes ; aucun test de la chaîne n'y tourne.
 
-| Dépôt, branche | Issue | Niveau |
-|---|---|---|
-| `lun-luxuria`, `feat/chaine-laptop` | lun-luxuria#65 | `standard` |
-| `lun-anima`, `feat/chaine-laptop` | lun-anima#105 | `standard` |
-| `lun-docs`, `docs/deroule-tour` | les mêmes ; la tâche 0 n'en ouvre pas | `trivial` |
+| Dépôt, branche | Issue | PR | Niveau |
+|---|---|---|---|
+| `lun-luxuria`, `feat/chaine-laptop` | lun-luxuria#65 | lun-luxuria#66 | `standard` |
+| `lun-anima`, `feat/chaine-laptop` | lun-anima#105 | lun-anima#106 | `standard` |
+| `lun-docs`, `docs/deroule-tour` | les mêmes ; la tâche 0 n'en ouvre pas | lun-docs#162 | `trivial` |
 
 ## Ce que le code fait aujourd'hui
 
@@ -345,8 +350,8 @@ change.
 
 Aucune attente `tous` jouée ici ne lit l'instant d'une ligne du serveur (voir « Ce que le code fait aujourd'hui ») :
 le journal du serveur est fondu dans la partie par son ordre et ses numéros, chaque ligne posée à l'instant de
-l'événement de la page qui porte le même numéro (`envoi_recu` sur `numero`, `coupure_recue` sur `coupee`,
-`retrait_recu` sur `retiree`). `charger` refuse, au niveau de la chaîne, une attente `tous` sur une ligne du serveur
+l'événement de la page qui porte le même numéro (`envoi_recu` sur `numero`, `coupure_recue` sur `coupee`, sinon
+`oubliee`, sinon `arretee`, `retrait_recu` sur `retiree`). `charger` refuse, au niveau de la chaîne, une attente `tous` sur une ligne du serveur
 qui a des bornes ou sert d'ancre : le jour où il en faut une, la conversion reviendra, avec un aller-retour au début
 et à la fin de la partie et une borne tirée de sa durée.
 
@@ -414,7 +419,7 @@ recopié dans Lun'Anima avec un commentaire vers ce plan.
 
 | Scénario | À ce niveau | Pourquoi |
 |---|---|---|
-| `deux-phrases` | joué, et témoin | avec `small`, `phrase-pendant` (`exact`) ne se produit pas : une mesure |
+| `deux-phrases` | joué, et témoin | `phrase-pendant` (`exact`) tenue avec `tiny`, et aussi avec `small` : une mesure |
 | `couper-le-blanc`, `oui-puis-reparler`, `phrase-attente` | joués | |
 | `delai-a-l-essai`, `delai-de-reponse` | joués | des mesures surtout : le blanc de tour réel, étape par étape |
 | `arrete-net`, `non-court` | joués | « non » : sa prise du 10/11 si elle est posée, sinon Hortense |
@@ -432,7 +437,7 @@ Le relevé recopie la raison de chaque scénario non joué.
 après 1, 3, 4, 6 et 8 ; 10 en dernier. Les tâches 5 et 9 ajoutent chacune une ligne à `package.json` : la seconde
 reprend la première.
 
-1. - [ ] **Le format, le joueur exact et le juge pour la chaîne** (Lun'Luxuria, `dev-luxuria`).
+1. - [x] **Le format, le joueur exact et le juge pour la chaîne** (Lun'Luxuria, `dev-luxuria`).
    - `src/presence/scenario.ts` : `Parole.apres?: { joue: number; phrase?: number; ms: number } | { envoi: number;
      ms: number }`, exclusif de `a` ; `Scenario.gestes?: { geste: 'silence'; a?: number; apres?: … }[]` ; les noms
      `geste` et `parole_sautee` au journal du joueur, écrits par aucun mécanisme ; `ancre(apres, journal)`, pure, qui
@@ -462,7 +467,7 @@ reprend la première.
      change la réponse, une qui ne la change pas, comme « demand »), une `exact` ratée qui ne nomme plus la source des
      autres ; un relevé de chaîne écrit à la main, comparé ligne à ligne. Les seize scénarios passent sans changement.
    - Exclu : convertir les scénarios (tâche 2), le navigateur.
-2. - [ ] **Les scénarios ancrés et `faire-taire`** (`src/presence/scenarios/`, `testeur`). Après 1.
+2. - [x] **Les scénarios ancrés et `faire-taire`** (`src/presence/scenarios/`, `testeur`). Après 1.
    - Chaque parole dont le sens dépend d'elle devient ancrée : `toux-parole`, `toux-courte`, `toux-reflexion`,
      `toux-puis-parole`, `arrete-net`, `non-court`, `couper-le-blanc`, `oui-puis-reparler`, `deux-phrases`, les autres
      si le calcul le montre. `ms` vaut l'ancien `a` moins l'instant de l'ancre au niveau exact.
@@ -473,7 +478,7 @@ reprend la première.
      dans la trame qui suit le geste, ce que la page écrit de la coupure, la coupure reçue, plus aucun `joue` de la
      réponse. `tous` pour ce que la chaîne doit tenir, `exact` pour les bornes à la trame. Dix-sept scénarios.
    - Exclu : changer un mécanisme pour qu'un scénario tienne ; un écart devient une issue.
-3. - [ ] **Les sons de la personne et le plan de partie** (`src/presence/chaine/sons.ts`, `dev-luxuria`).
+3. - [x] **Les sons de la personne et le plan de partie** (`src/presence/chaine/sons.ts`, `dev-luxuria`).
    *Parallélisable.*
    - `sonsDe(s, dir, synth)` : pour chaque parole et chaque bruit, un son et sa durée, ou la raison de son absence.
      Ordre : `dir/sons/<nom>.wav`, puis le cache `dir/sons/sapi/<empreinte>.wav`, puis la synthèse. Un `dit` entre
@@ -489,21 +494,22 @@ reprend la première.
    - Lecture et écriture par `readWav`, `writeWav` (`src/listen/replay.ts`).
    - Tests (synthèse injectée) : la réduction du nom, l'ordre de recherche, le cache, la toux manquante, le bruit
      coupé, le retrait des silences, les trous, le plan, le WAV du témoin. Exclu : le navigateur.
-4. - [ ] **Le service de voix sans synthèse** (`voix/service.py`, `voix/test_service.py`, `dev-luxuria`).
+4. - [x] **Le service de voix sans synthèse** (`voix/service.py`, `voix/test_service.py`, `dev-luxuria`).
    *Parallélisable ; inutile si CrOliX choisit Piper partout.*
    - `--tts aucun` (et l'absence de `--tts`) : `/tts` répond 503, `/ping` dit `"tts": "aucun"`. Une ligne au
      `docs/README.md`. Tests : le 503, le `/ping`, aucun module de synthèse importé.
-5. - [ ] **La contre-épreuve dans le dépôt** (`npm run mutations`, `dev-luxuria`). *Parallélisable ; f2 attend 2.*
+5. - [x] **La contre-épreuve dans le dépôt** (`npm run mutations`, `dev-luxuria`). *Parallélisable ; f2 attend 2.*
    - Une mutation est appliquée au chargement par un plugin `transform` de vitest (`MUTATION=<nom>`), dans une config
      à part : aucun fichier n'est touché. Seulement la suite de `src/presence`.
    - Chaque mutation porte le maillon qu'elle doit faire nommer (a et e `ecoute`, b `suspension`, c `retenue`, d1 et
-     d2 `filtre`, f1 `suspension`, f2 `coupure`). La commande échoue si un motif manque (la table se met à jour), si
+     d2 `filtre`, f1 `suspension`, f2 `voix` : la mutation retire l'arrêt du son dans `speaker.stop()`, le bouton et la
+     coupure tiennent, c'est la sortie qui sonne encore). La commande échoue si un motif manque (la table se met à jour), si
      une mutation survit, ou si la source majoritaire n'est pas la sienne. La sortie : une ligne par mutation, puis un
      tableau Markdown à recopier dans un plan.
    - Un job `mutations` dans `ci.yml`, à côté de `checks` ; sa durée mesurée sur la première PR et écrite ici. Une
      ligne au `CLAUDE.md`.
    - Dans le même job, une étape qui échoue si `git ls-files` suit un `.wav`, `.flac`, `.mp3` ou `.ogg`.
-6. - [ ] **La sonde dans la page** (`src/presence/chaine/sonde.ts`, `dev-luxuria`). *Parallélisable.*
+6. - [x] **La sonde dans la page** (`src/presence/chaine/sonde.ts`, `dev-luxuria`). *Parallélisable.*
    - Une fonction posée avant la page (`addInitScript`), construite par Vite en un seul fichier avec `ancre` de
      `scenario.ts`. Elle reçoit le plan de partie et va chercher les sons par `/banc/sons/<n>.wav`.
    - Elle remplace `navigator.mediaDevices.getUserMedia` par un `MediaStream` tiré d'un `AudioContext` à 48 kHz,
@@ -520,14 +526,14 @@ reprend la première.
    - Tests (jsdom, Web Audio simulé à la main) : le remplacement de `getUserMedia`, `jouer()` qui attend des trames
      régulières, une ancre `joue`, deux sources à 100 ms l'une de l'autre datées à part, `arrete` écrit une seule
      fois, le texte retrouvé derrière un silence de tête. Exclu : lancer un navigateur.
-7. - [ ] **Le faux modèle** (Lun'Anima, `core/src/testing/faux-modele.ts`, `dev-core`). *Parallélisable.*
+7. - [x] **Le faux modèle** (Lun'Anima, `core/src/testing/faux-modele.ts`, `dev-core`). *Parallélisable.*
    - `fauxModele(dir, journal)` rend un `fetch` à brancher dans `createOpenAiProvider`, qui parle comme `FakeOpenAi`
      (dont il reprend l'écriture du flux) avec les délais de « Le faux modèle », et relit `partie.json` à chaque
      demande. Écrit `modele_appele` ; une demande sans réponse prévue, ou `complete`, écrit `modele_inattendu` et rend
      une erreur 500. Le type `Reponse` recopié.
    - Tests (horloge fausse) : le choix par `si`, la réponse sans `si`, les délais, le blanc du poste, l'erreur,
      l'arrêt par le signal, l'inattendu ; une réponse entière lue par le vrai fournisseur.
-8. - [ ] **Le serveur de la chaîne** (Lun'Anima, `core/src/cli/chaine.ts`, `core/src/testing/`, `dev-core`).
+8. - [x] **Le serveur de la chaîne** (Lun'Anima, `core/src/cli/chaine.ts`, `core/src/testing/`, `dev-core`).
    *Parallélisable ; branche le faux modèle quand 7 est là.*
    - Sortir de `testing/harness.ts` l'assemblage de `createApp` (base, horloge, santé, conversation, présence) dans
      une fonction sans vitest ; `makeHarness` la garde, avec son horloge à la main et `onTestFinished`. Les tests
@@ -542,7 +548,7 @@ reprend la première.
      requête refusée ; `parle` sans jeton refusé ; un envoi de bout en bout (code, appairage, envoi, flux, journal)
      sur `app.request`.
    - Revue de sécurité de ce diff : rien de ce point d'entrée n'est atteignable depuis `main.ts`.
-9. - [ ] **Le joueur réel** (`src/presence/chaine.test.ts`, `npm run chaine`, `dev-luxuria`). Après 1, 3, 4, 6 et 8.
+9. - [x] **Le joueur réel** (`src/presence/chaine.test.ts`, `npm run chaine`, `dev-luxuria`). Après 1, 3, 4, 6 et 8.
    - `// @vitest-environment node`, ne joue qu'en mode `chaine` (comme `banc.test.ts:174`) ; dépendance de dév.
      `playwright-core`, Chrome du poste (`channel: 'chrome'`, sans écran, `--mute-audio`,
      `--autoplay-policy=no-user-gesture-required`).
@@ -565,11 +571,48 @@ reprend la première.
      joués et leur raison.
    - Exclu : répéter une partie, la fenêtre Tauri.
 10. - [ ] **La première suite, et le plan coché** (`testeur`). Après tout le reste.
-    - Lancer les deux `npm run chaine` sur le laptop. Recopier le relevé ici, sous « Ce que l'exécution a trouvé » :
-      les verdicts, les délais par maillon, les écarts au niveau exact, le témoin, la durée de la suite.
-    - Une issue par écart d'un mécanisme, et un `connus` qui la nomme ; jamais une borne élargie.
-    - Relecture séparée de chaque diff, les deux PR en brouillon ; la feuille de route mise à jour ; les scripts de la
-      tâche 0 retirés de `banc-sons`, avec `node_modules` et `uv-cache` de `chaine/essai/` (environ 600 Mo).
+    - [x] Lancer les deux `npm run chaine` sur le laptop. Recopier le relevé ici, sous « Ce que l'exécution a
+      trouvé » : les verdicts, les délais par maillon, les écarts au niveau exact, le témoin, la durée de la suite.
+    - [x] Une issue par écart d'un mécanisme, et un `connus` qui la nomme ; jamais une borne élargie. Aucun écart de
+      mécanisme : les six observations du banc sont des issues `inbox`.
+    - [x] Relecture séparée de chaque diff, les deux PR en brouillon ; la feuille de route mise à jour.
+    - [ ] Les scripts de la tâche 0 retirés de `banc-sons`, avec `node_modules` et `uv-cache` de `chaine/essai/`
+      (environ 600 Mo) : à la fusion.
+
+## Ce que l'exécution a trouvé
+
+Le 11/11. Tâches 1, 3 à 6 (Lun'Luxuria) et 7, 8 (Lun'Anima) en parallèle, rassemblées sur `feat/chaine-laptop` ;
+puis 2, 9, une relecture séparée de chaque diff et deux suites réelles.
+
+- **Relectures, « à corriger » toutes deux, reprises.** Lun'Anima : `modele_appele` écrit avant son `envoi_recu`
+  (rattachés par `texte`, ordre figé par un test) ; un code d'appairage neuf après chaque appairage ; `head()`
+  protégé ; `cli/chaine.ts` exclu du build. Lun'Luxuria, bloquant : la sonde écrivait le geste sans `etape: 'fait'`,
+  `faire-taire` était toujours raté. Aussi : l'appel rattaché par texte, l'envoi refusé non compté, la prise datée de
+  `bufferSize/sr` plus tôt, le micro rouvert (`clone()`), l'ancre `phrase` par numéro, `parle` surveillé.
+- **Tâche 2** : huit scénarios ancrés (`toux-parole`, `toux-courte` `joue:1`+580 ; `toux-reflexion` `envoi:1`+682 ;
+  `arrete-net`, `non-court` `joue:1`+708 ; `couper-le-blanc` `joue:1`+1444 ; `oui-puis-reparler` `envoi:1`+458 ;
+  `deux-phrases` `envoi:1`+2730). Déroulés exacts d'avant et d'après : 16 identiques ligne pour ligne, relevé
+  identique. `toux-puis-parole` reste aux instants absolus ; `faire-taire` est le 17e ; `phrase-ecartee` est refusé
+  par `charger(s, 'chaine')`.
+- **Première suite** : `tiny` 17 tenues, 5 ratées, 3 non jouées ; `small` 16, 4, 5. Aucun écart de mécanisme, tout
+  venait du banc : B1 le poste du faux modèle n'était pas un appel d'outil (vrai appel de `relire_journee`) ; B2 le
+  faux serveur exact ne coupait pas la première phrase à la virgule ; B3 le retrait du silence trompé par un clic
+  (enveloppe RMS de 20 ms) ; B4 `modele_inattendu` ignoré par la source `transcription` ; B6 la partie finie avant la
+  réponse ; B7 `coupure_recue` mal rattachée. `small` coûte 1,8 s de plus par tour.
+- **Deuxième suite** (`tiny`, trois passages d'environ 140 s) : **25 attentes `tous` tenues sur 25, trois fois**. Un
+  passage échoue : « Arrête » transcrit « Arret. » (2 fois sur 6), `modele_inattendu` sur `couper-le-blanc`.
+- **Délais**, chaîne contre exact : attente de fin 701-710 (704) ; transcription `tiny` 353-371 (150) ; file du
+  serveur 2-13 ; premier mot +4 à +25 ; première phrase +15 à +60 ; synthèse Piper −98 à +92 contre 150 ; blanc de
+  tour +137 à +447 ; arrêt à la coupure 0-1 ; second mot = poste + ~405.
+- **Bord de l'écoute** : début de voix 34-91 ms après le son, fin 6-111 (exact −12), tenue du silence 698-712 pour
+  700, tenue de parole 414-481 (384 exact). `non-court` : `son-arrete` 771-781 pour [692,724], la fin de voix lue
+  ~80 ms après le son plus 700 de tenue ; ni défaut du banc ni écart de mécanisme.
+- **Variabilité** : Piper 0-190 ms de silence de tête, la même phrase 1506-1691 ms ; mots entendus ±1 ; blanc de tour
+  jusqu'à 130 ms d'écart. Témoin Chromium : jusqu'à 74 ms d'écart, presque constant (lun-luxuria#69).
+- **Durées** : environ 140 s la suite `tiny`, 155 s `small` ; mutations 10 s en local, 8 tuées.
+- **Issues `inbox`** : lun-luxuria#67 (verdicts des mutations en JSON), #68 (`voix/test_service.py` ne tourne nulle
+  part), #69 (témoin), #70 (attentes `exact` trop justes), #71 (`synthese-pendant` jamais jouée), #72 (`tiny` et les
+  mots courts).
 
 ## Hors périmètre
 
