@@ -389,10 +389,12 @@ peut s'écrire en même temps qu'elles, et se jouer après.
      `deroule-<nom>.jsonl` par scénario dans `BANC_DIR/scenarios` (par défaut `../banc-sons/scenarios`), hors dépôt.
      Une ligne au `.gitignore` pour `releve-scenarios.md`. Une ligne au `CLAUDE.md` du dépôt.
    - Critère : `npm test` ne prend pas plus de cinq secondes de plus sur la CI.
-6. - [ ] Relecture séparée du diff, la PR en brouillon, ce plan coché avec « Ce que l'exécution a trouvé » ; le point
+6. - [x] Relecture séparée du diff, la PR en brouillon, ce plan coché avec « Ce que l'exécution a trouvé » ; le point
    10 retiré de la liste d'écoute de la feuille de route si CrOliX suit la recommandation. Fait : la PR en
-   brouillon, le plan coché, le point 10 retiré (voie 2). Reste : une seconde relecture, en cours, des deux derniers
-   commits.
+   brouillon, le plan coché, le point 10 retiré (voie 2). La seconde relecture a trouvé un fichier mal encodé et une
+   coupure franche qui n'arrêtait plus le son sans aucun échec : corrigés (`sortie-arretee` dans `arrete-net` et
+   `non-court`, le maillon propre gardé dans le verdict). Trou connu : le bouton « silence » qui n'arrête plus le
+   son ne casse rien, aucun scénario ne joue ce bouton.
 
 ## Hors périmètre
 
