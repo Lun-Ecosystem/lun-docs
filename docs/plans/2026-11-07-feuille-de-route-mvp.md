@@ -304,6 +304,15 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
    - dire « oui » sur une carte, puis reparler avant d'entendre « tu as 5 secondes » : rien n'est tranché ;
    - l'heure : si elle répond encore « je n'ai pas retrouvé l'heure », compter les lignes de coût de cette réponse
      dans la base de service (deux disent que `relire` a été appelé) et le noter dans lun-anima#97.
+   Après les chantiers de l'écoute (lun-luxuria#54, #56) et de
+   [« la coupure qui se reprend »](2026-11-11-coupure-reprise.md) (lun-luxuria#58), à réentendre. D'abord choisir de
+   nouveau la pièce « normale » dans les réglages : une installation déjà réglée garde 0,5 s de silence de fin.
+   - le délai de réponse avec 0,7 s de silence de fin, sur vingt tours, comparé aux 3,4 s du 10/11 ;
+   - une toux pendant qu'elle parle : elle se tait, puis redit sa phrase et continue ; compter le blanc ;
+   - « arrête » ou « non » pendant une longue réponse : elle se tait pour de bon ;
+   - une phrase dite à quelqu'un d'autre pendant qu'elle parle, au-delà de quinze secondes de réponse : elle reprend ;
+   - son propre son repris par le micro : elle ne doit pas se suspendre en boucle ;
+   - recommencer à parler juste après une toux : noter si elle reprend par-dessus.
 5. K : la liste « rien ne force le terminal » parcourue, une restauration essayée.
 6. B10 : Google en Production, consentement refait sur le vrai compte.
 7. B11 : le téléphone Android, une notification reçue.
