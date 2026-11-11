@@ -29,7 +29,7 @@ fin).
 - Rien ne change à ce que la personne entend ou voit. La mesure d'aujourd'hui reste, et le déroulé rend la même.
 - Le texte d'une phrase écartée par le filtre n'est pas écrit dans le déroulé.
 
-**À valider par CrOliX.**
+**Validé par CrOliX le 11/11**, par écrit en conversation.
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
