@@ -2,7 +2,8 @@
 
 > Cadrage du 11/11, à discuter avec CrOliX **avant tout plan**. Suite de l'étude
 > [« La présence : où nous en sommes »](2026-11-10-presence-etat-comparaison.md), § 3.5. Les choix marqués
-> **[avis Claude]** sont des propositions. Rien n'est codé.
+> **[avis Claude]** sont des propositions. Rien n'est codé. **Les deux recommandations du § 6 sont validées par
+> CrOliX le 11/11** ; le plan : [« la phrase d'attente »](../plans/2026-11-11-phrase-attente.md).
 
 ## 1. Le besoin
 
@@ -14,8 +15,9 @@ puis elle en fait un second pour dire ce qu'il a rendu. La veille l'avait déjà
 
 Relu le 11/11 sur `main` de Lun'Anima.
 
-1. Son premier appel au modèle peut rendre du texte et un appel d'outil. Le texte rendu à côté de l'appel part déjà
-   à la voix, phrase par phrase : rien ne l'empêche de dire un mot avant de déléguer.
+1. Son premier appel au modèle peut rendre du texte et un appel d'outil. Le texte rendu à côté de l'appel part à la
+   voix phrase par phrase, mais une phrase seule attend qu'une autre commence : en l'état, « Je regarde tes
+   mails. » ne sortirait qu'après le poste (corrigé le 11/11 par la relecture du plan).
 2. Rien ne le lui demande. La consigne dit seulement d'appeler l'outil avec une demande complète, sans demander de
    confirmation. En pratique elle appelle l'outil sans un mot.
 3. Le serveur attend le poste, jusqu'à 120 s au plus.
@@ -38,7 +40,7 @@ pendant l'attente retient ou reprend la réponse au lieu de lancer une seconde d
 
 | | Façon | Pour | Contre |
 |---|---|---|---|
-| A | **Elle le dit elle-même** : la consigne lui demande une courte phrase avant d'appeler un poste (« Je regarde tes mails. ») | Ses mots, son ton. Aucun minuteur, aucun appel de plus : la phrase sort du premier appel, avant l'outil. Rien à changer dans Lun'Luxuria. Le premier son arrive plus tôt. | Le modèle peut l'oublier, ou la dire même quand le poste répond en une seconde. À mesurer sur le vrai modèle. |
+| A | **Elle le dit elle-même** : la consigne lui demande une courte phrase avant d'appeler un poste (« Je regarde tes mails. ») | Ses mots, son ton. Aucun minuteur, aucun appel de plus. Rien à changer dans Lun'Luxuria ; dans le serveur, faire partir la phrase avant l'outil. Le premier son arrive plus tôt. | Le modèle peut l'oublier, ou la dire même quand le poste répond en une seconde. À mesurer sur le vrai modèle. |
 | B | **Une phrase fixe du code**, si le poste dépasse un délai | Sûr : elle part toujours, et seulement si l'attente dure. | Une phrase de nous dans sa bouche, toujours la même. Contraire à ce qui a été tenu jusqu'ici : son écriture n'est pas figée, et le code ne parle à sa place que pour trancher une carte. |
 | C | **Des phrases de relance à intervalle** (LiveKit), pour une attente longue | Couvre les postes lents. | Mêmes défauts que B, en pire ; inutile tant qu'on ne sait pas combien dure une délégation. |
 | D | **Sans mots** : l'avatar et l'écran montrent qu'un poste travaille, et lequel | Rien à faire dire. | Ne comble pas le blanc pour qui n'a pas l'écran sous les yeux ; l'avatar n'existe pas encore. |
