@@ -2,11 +2,12 @@
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **À valider par CrOliX.** Les choix marqués **[avis]** sont des propositions ; rien n'est codé.
+> **Palier 1 fait** : validé par CrOliX le 11/11 (« ok »), sans toux, et joué le même jour ; ses mesures sont
+> écrites sous « Ce que la tâche 0 a mesuré ». **Palier 2 à valider** : les tâches 1 à 10, révisées avec ces
+> mesures ; aucune ligne de leur code avant sa validation. Les choix marqués **[avis]** sont des propositions.
 >
-> **Deux paliers.** **Palier 1 : la tâche 0 seule**, à valider maintenant. Une partie de bout en bout jetable, qui
-> mesure ce que la suite suppose. **Palier 2 : les tâches 1 à 10**, écrites ici comme cible ; elles seront révisées
-> avec les mesures de la tâche 0, et ce plan revalidé, avant la moindre ligne de leur code.
+> **Deux paliers.** **Palier 1 : la tâche 0 seule**, une partie de bout en bout jetable, qui a mesuré ce que la suite
+> suppose. **Palier 2 : les tâches 1 à 10.** Les quatre scénarios de toux attendent une toux.
 >
 > **PR :** aucune encore. Au palier 2, une par dépôt, ouvertes en brouillon à la première tâche.
 
@@ -138,7 +139,7 @@ plan-challenger le 11/11 : « à amender », architecture tenue ; ses objections
 
 ## Palier 1 : la tâche 0
 
-0. - [ ] **Une partie jetable, et ce qu'elle mesure** (`testeur`, avec des scripts jetables dans
+0. - [x] **Une partie jetable, et ce qu'elle mesure** (`testeur`, avec des scripts jetables dans
    `banc-sons/chaine/essai/`, hors git ; rien dans un dépôt). Seule.
    - **La partie** : `deux-phrases`, les deux phrases dites par Hortense (`System.Speech`, WAV 16 kHz), à leurs
      instants absolus, sans ancre, sans conversion d'horloge, sans juge ni mutations. Le serveur : `createApp` monté
@@ -173,9 +174,59 @@ plan-challenger le 11/11 : « à amender », architecture tenue ; ses objections
      s'il tient, change ou tombe. Les scripts restent dans `banc-sons/chaine/essai/` jusqu'à la fusion du palier 2,
      puis sont retirés.
 
+## Ce que la tâche 0 a mesuré
+
+Jouée le 11/11 par le `testeur`, sans toux : quatre parties de `deux-phrases`, par la sonde puis par le faux
+périphérique de Chromium, écho et bruit allumés puis éteints. Le serveur sur `:memory:` avec `FakeOpenAi` (4000 ms
+puis 400 ms avant le flux, 150 ms entre deux morceaux), la page par `vite preview`, le service de voix
+(`faster:small`, Piper siwis, `--origin`), Chrome sans écran et muet par `playwright-core`. Aucun dépôt touché.
+
+1. **Le flux SSE par `vite preview`** : chaque `delta` arrive 2 à 14 ms après sa sortie du serveur (12 deltas), les
+   150 ms entre deux conservées. **Tient.**
+2. **L'horloge de Web Audio**, une minute, trois contextes : dérive de +26, −150 et −106 ppm (9 ms par minute au
+   plus), sous le bruit de lecture de `currentTime` (11 à 15 ms, par blocs). `getOutputTimestamp` est stable à
+   0,2 ms mais annonce 40 à 58 ms de latence de sortie, même muet. **Change** : une convention écrite (« Les deux
+   horloges »), sinon 50 ms d'écart sans cause.
+3. **Le `MediaStream` de la sonde** (48 kHz vers 16 kHz) : corrélation 0,997, gain 0,997, 22 à 23 dB de rapport
+   signal sur bruit. Le son commence dans une trame de la page 20 à 30 ms après sa pose ; trames de 30 ms en médiane,
+   40 ms au 95e centile, aucune perdue. Un arrêt de 366 à 395 ms à l'ouverture, avant `t0` (les clics, le chargement
+   de Silero). **Tient**, et `__banc.jouer()` attend des trames régulières.
+4. **Le traitement du son de Chrome** : la sonde le contourne (allumé ou éteint : 0,997, 22 dB). Le faux périphérique
+   allumé le subit (corrélation 0,71 à 0,74, gain 0,55 à 0,71, environ 0 dB) ; éteint, 0,996 et 21 dB. Les décisions
+   de la page sont les mêmes à 35 ms près dans les quatre variantes, les textes aussi. L'enregistrement de la page par
+   le faux périphérique est décalé d'environ 170 ms sur l'arrivée des trames, sans perte. **Change** : le témoin se
+   joue écho et bruit allumés (le défaut réel, la seule voie qui passe par le traitement), recalé sur les trames.
+5. **faster-whisper**, cinq essais par phrase (Hortense, 2323 et 1551 ms) : `small` 1923 à 2046 ms, confiance 0,68 à
+   0,72 ; `tiny` 325 à 392 ms, confiance 0,63 à 0,70. Le même texte juste cinq fois sur cinq, aucun tirage. Dans la
+   chaîne, `small` rend la phrase 2 « et aussi la météo de demand. » quatre fois sur quatre (le fichier seul :
+   « demain »). **À trancher** (voir la fin) : le modèle, et la règle de la source `transcription`.
+6. **Silero** (`replay()`) sur Hortense : 0,99 à 1 dès la première ou la deuxième trame, un seul bloc, aucune pause.
+   Hortense parle 2240 ms pour la phrase 1 (le scénario en écrit 1280) et 1568 ms pour la phrase 2 (2048). Tenue à
+   384 ms à chaque fois. **Tient** : les ancres sont nécessaires, Hortense ne tient pas les `duree`.
+7. **Lun'Anima sur `:memory:`** : démarre en une seconde, appaire par la vraie route, répond deux fois, reçoit la
+   coupure de la réponse 1 (`said` vide), rien sur le disque, aucun appel inattendu. L'assemblage recopié de
+   `harness.ts` sans vitest tient en 30 lignes. **Tient** (tâche 8).
+8. **Piper par le service** : 148 à 233 ms de synthèse pour 3,1 à 3,8 s de son ; la durée varie d'environ 350 ms d'un
+   essai à l'autre, même texte. Dans la chaîne, 79 à 116 ms par morceau. La fausse synthèse aurait rendu 2040 et
+   1440 ms de son ; Piper en rend 2113 et 1347. **Tient** (plus rapide), durée non constante.
+9. **La prise sur la sortie** (marche dans Chrome sans écran) : Piper met 191 ms de silence en tête, 70 à 104 ms en
+   fin. Premier échantillon non silencieux : `start()` + 191 ms + 0 à 9 ms à l'heure du rappel (+ 64 à 73 ms selon
+   `getOutputTimestamp`). Le son n'est pas tronqué. La page écrit `premier_son` à `start()`. Sept sons sur huit datés :
+   deux sons à moins de 250 ms l'un de l'autre se fondent. **Tient**, découpée par source et non par silence.
+10. **La durée d'une partie** : 16,7 et 17,4 s par la sonde ; 23,4 et 23,5 s par le faux périphérique (dont 8 s
+    d'attente en tête du fichier). **Tient.**
+
+**Sur `deux-phrases`**, lu dans le déroulé : la transcription de `small` (2 s) fait partir la réponse 1 à 4,8 s, après
+le début de la parole 2 (4,6 s). L'attente `exact` `phrase-pendant` ne peut donc pas se produire ; les cinq attentes
+`tous` tiennent quatre fois sur quatre. Premier son de la réponse 2 : 8,97 à 9,20 s.
+
+**Installé**, hors dépôt : `playwright-core` 1.65.0, 13,3 Mo ; l'environnement `uv` du service (il manquait),
+589,7 Mo avec son cache. **Non mesuré** : la toux ; le flux de la réponse 1 (coupée avant son premier mot) ; l'instant
+réellement entendu (pas de vraie sortie sans écran) ; des centiles (une partie par variante).
+
 ## Palier 2 : les choix **[avis]**
 
-À réviser avec les mesures de la tâche 0.
+Révisés avec les mesures de la tâche 0.
 
 ### Le son de la personne
 
@@ -196,26 +247,39 @@ sous licence CC0 seulement.
 
 La sonde remplace `getUserMedia` par un `MediaStream` tiré d'un `AudioContext` à 48 kHz, comme un vrai micro, que la
 page rééchantillonne. Il démarre au signal du joueur, à un instant lu sur l'horloge de la page, et peut poser une
-parole au moment où elle commence à parler. Une fois par suite, `deux-phrases` est aussi joué par le faux périphérique
-de Chromium (`--use-file-for-fake-audio-capture`, un fichier construit d'avance) : le relevé compare ce que la page a
-décidé par les deux voies (`voix`, `tenue`, `fin`). Ce que la sonde ne traverse pas, la tâche 0 le mesure (point 4).
+parole au moment où elle commence à parler. `__banc.jouer()` ne démarre qu'après des trames régulières : la page
+s'arrête 366 à 395 ms à l'ouverture (point 3). La sonde contourne le traitement du son de Chrome (point 4) : elle
+prouve la page, pas la capture.
+
+Une fois par suite, `deux-phrases` est aussi joué par le faux périphérique de Chromium
+(`--use-file-for-fake-audio-capture`, un fichier construit d'avance), **écho et bruit allumés** : c'est le défaut des
+réglages et la seule voie qui passe par le traitement. Ses instants sont recalés sur l'arrivée de la première trame
+de son, pas sur l'ouverture (environ 170 ms de retard pris au démarrage, point 4). Le relevé compare ce que la page a
+décidé par les deux voies (`voix`, `tenue`, `fin`) ; la tâche 0 les a trouvées identiques à 35 ms près.
 
 ### Une parole ancrée sur la partie
 
-À ce niveau, le premier son arrive plus tard qu'au niveau exact : la vraie transcription prend une seconde, pas
-150 ms. Une toux posée à 3008 ms tomberait avant qu'elle parle. Une parole peut donc être ancrée :
+À ce niveau, le premier son arrive plus tard qu'au niveau exact : la vraie transcription prend 0,3 à 2 s, pas
+150 ms, et Hortense ne tient pas les `duree` (2240 ms pour 1280 écrites, point 6). Une toux posée à 3008 ms
+tomberait avant qu'elle parle. La tâche 0 confirme qu'il faut des ancres. Une parole peut donc être ancrée :
 `apres: { joue: 1, phrase?: 1, ms: 1000 }` (1 s après le début du son de sa phrase 1 de la réponse 1) ou
 `apres: { envoi: 1, ms: 3000 }` (3 s après le premier envoi). La résolution d'une ancre est une seule fonction pure de
 `scenario.ts`, que le joueur exact appelle et que la sonde embarque par un build. Les gestes suivent la même règle.
 
 ### La transcription : la vraie
 
-faster-whisper, le modèle tranché par la tâche 0 (`small` par défaut). Ce qu'elle prouve : la coupe du son que la page
-envoie, le délai réel, la confiance réelle, et ce qu'elle fait d'une toux (un « Merci. » inventé est un défaut à
-trouver ici). Ce qu'elle coûte : `entendu`, `confiance`, `transcriptionMs` et `echec` sont ignorés ; le relevé écrit
-pour chaque phrase `dit`, `entendu` et la confiance, et une attente `tous` ne compare jamais un texte transcrit. Le
-tirage de température rend un texte différent d'une partie à l'autre sur un bruit : un écart de ce genre se lit dans
-le relevé, il ne se rejoue pas.
+faster-whisper, le modèle tranché par CrOliX (voir « À trancher » : `tiny` recommandé). Le modèle de la partie est
+écrit au relevé. Ce qu'elle prouve : la coupe du son que la page envoie, le délai réel, la confiance réelle, et ce
+qu'elle fait d'une toux (un « Merci. » inventé est un défaut à trouver ici). Ce qu'elle coûte : `entendu`,
+`confiance`, `transcriptionMs` et `echec` sont ignorés ; le relevé écrit pour chaque phrase `dit`, `entendu` et la
+confiance, et une attente `tous` ne compare jamais un texte transcrit. Sur Hortense, aucun tirage de température en
+cinq essais (point 5) ; sur un bruit, un texte qui change d'une partie à l'autre se lit dans le relevé, il ne se
+rejoue pas.
+
+**[avis] La source `transcription`** ne se nomme pas sur un texte qui diverge seulement : « demand » pour « demain »
+divergerait à chaque partie, sans effet. Elle se nomme quand la divergence change la réponse du faux modèle : la
+réponse choisie par `si` sur le texte reçu n'est pas celle qu'il aurait choisie sur le `dit`. Toute divergence reste
+écrite au relevé.
 
 ### Sa voix : Piper par le service, ou une fausse synthèse
 
@@ -223,16 +287,30 @@ Voir « À trancher ». **Piper par le service** (déjà sur le laptop) fait jou
 service, sa file, le vrai temps de synthèse et la vraie durée d'une phrase. `syntheseMs`, `msParCaractere` et
 `echoue` sont alors ignorés et dits au relevé. **La fausse synthèse servie par le joueur** (il répond lui-même à
 `/voix/tts`, comme `FausseVoix`, `fakes.ts:66-74`) garde ces réglages, mais le maillon `voix` s'arrête au `Speaker` et
-à Web Audio : ni le service, ni sa file, ni le temps de synthèse ne sont mesurés. Je recommande Piper si la tâche 0
-le trouve assez rapide, la fausse synthèse pour les seuls scénarios qui en ont besoin (`oui-puis-reparler` et sa
-synthèse d'une seconde).
+à Web Audio : ni le service, ni sa file, ni le temps de synthèse ne sont mesurés. **Piper est recommandé** : la
+tâche 0 le trouve plus rapide que la fausse synthèse (79 à 233 ms, point 8). Sa durée varie d'environ 350 ms d'une
+partie à l'autre pour un même texte : une ancre `joue` absorbe ce jeu, un instant absolu après sa voix non. La fausse
+synthèse reste pour les seuls scénarios qui en ont besoin (`oui-puis-reparler` et sa synthèse d'une seconde).
 
 ### Les deux horloges
 
 La page écrit ce qu'elle décide (`son`, `premier_son`). La sonde branche une prise sur la sortie de sa voix et date le
 premier et le dernier échantillon non silencieux de chaque phrase, sur l'horloge de la page : ce sont ses `joue` et
-`arrete`. Le départ d'un `AudioBufferSourceNode` ne sert qu'à retrouver le texte (par les premiers échantillons du son
-rendu par `/voix/tts`). Un écart entre ce que la page croit et ce qui sonne est une mesure du relevé.
+`arrete`. La prise est **découpée par source** : chaque `AudioBufferSourceNode` a la sienne, et deux sons à moins de
+250 ms ne se fondent plus (point 9). Le départ d'une source ne sert qu'à retrouver son texte.
+
+**La convention, écrite une fois** (point 2). L'horloge commune est `performance.now()` de la page. Un instant de
+Web Audio s'y rapporte par un couple (`currentTime`, `performance.now()`) lu au même rappel, **sans ajouter la
+latence de sortie** que `getOutputTimestamp` annonce (40 à 58 ms, même muet). `t0` de la sonde est l'instant de son
+contexte qui sort par la `MediaStreamDestination`, rapporté ainsi. « Ce qui sonne » est, par choix, l'instant où
+l'échantillon atteint la prise sur la sortie, rapporté de même : pas ce qu'un haut-parleur rendrait. Le relevé donne la
+latence de sortie annoncée à part, une fois par partie.
+
+**`premier_son` et ce qui sonne.** La page écrit `premier_son` à `start()` ; Piper met 191 ms de silence en tête, et
+rien ne sonne avant. La page ne change pas : ce qu'elle croit est une mesure. Le relevé écrit, par phrase, l'écart
+`joue − premier_son`, le silence de tête du son rendu (lu dans les échantillons de `/voix/tts`), et leur différence,
+qui est ce que coûte Web Audio (0 à 9 ms sur le laptop). Les délais de la chaîne se comptent jusqu'à `joue`, et le
+délai de la page jusqu'à `premier_son` se lit à côté.
 
 ### Le faux modèle, côté Lun'Anima
 
@@ -274,12 +352,14 @@ et à la fin de la partie et une borne tirée de sa durée.
 
 `juger(s, partie, 'chaine')` : une attente `exact` est jugée comme avant, marquée `horsNiveau` ; elle ne fait jamais
 échouer et n'entre pas dans le calcul de la source des autres. Une attente `tous` ne peut pas s'ancrer sur une
-`exact`. La règle de la source gagne un cas : quand le texte transcrit d'une phrase diverge de son `dit` (sans
-accents, casse ni ponctuation), un échec qui suit cette phrase nomme `transcription`.
+`exact`. La règle de la source gagne un cas : quand le texte transcrit d'une phrase change la réponse que le faux
+modèle choisit (voir « La transcription »), un échec qui suit cette phrase nomme `transcription`.
 
 ### Le temps réel, et où ça tourne
 
-Une partie par scénario jouable, une seule fois (les répétitions et les taux sont l'étape 4). Sur le laptop seulement,
+Une partie par scénario jouable, une seule fois (les répétitions et les taux sont l'étape 4). Une partie dure 17 s par
+la sonde, 23 s par le faux périphérique (point 10) : neuf scénarios sans toux et le témoin, quelques minutes, mesurées
+à la tâche 10. L'environnement `uv` du service pèse 590 Mo, hors dépôt. Sur le laptop seulement,
 à la main : la chaîne demande Chrome, `uv`, un modèle de transcription, la synthèse de Windows et le serveur privé.
 Rien en CI. Les mutations tournent sur le niveau exact, dans un job à part de la CI ; sa durée sera mesurée.
 
@@ -322,15 +402,18 @@ recopié dans Lun'Anima avec un commentaire vers ce plan.
   les gestes ; les `reponses`.
 - **Les sons** : `/banc/sons/<n>.wav`, servis depuis `CHAINE_DIR`, jamais en JSON dans le script posé.
 - **L'ancre** : une fonction pure, embarquée dans la sonde par un build de Vite.
-- **Le texte de ce qui sonne** : les 64 premiers échantillons rendus par `/voix/tts`, retrouvés au départ du son ; la
-  fausse synthèse met en plus un numéro dans son premier échantillon.
-- **Le journal de la sonde** : `window.__banc.journal`, des `BancEvent` datés par `performance.now()`.
+- **Le texte de ce qui sonne** : la sonde garde chaque réponse de `/voix/tts` avec son texte ; au départ d'une
+  source, les 64 premiers échantillons **non silencieux** de son tampon la retrouvent (les premiers sont du silence
+  chez Piper). La fausse synthèse met en plus un numéro dans son premier échantillon.
+- **Le journal de la sonde** : `window.__banc.journal`, des `BancEvent` datés par `performance.now()`, selon la
+  convention de « Les deux horloges ».
 
 ## Les scénarios à ce niveau
 
 | Scénario | À ce niveau | Pourquoi |
 |---|---|---|
-| `deux-phrases`, `couper-le-blanc`, `oui-puis-reparler`, `phrase-attente` | joués | |
+| `deux-phrases` | joué, et témoin | avec `small`, `phrase-pendant` (`exact`) ne se produit pas : une mesure |
+| `couper-le-blanc`, `oui-puis-reparler`, `phrase-attente` | joués | |
 | `delai-a-l-essai`, `delai-de-reponse` | joués | des mesures surtout : le blanc de tour réel, étape par étape |
 | `arrete-net`, `non-court` | joués | « non » : sa prise du 10/11 si elle est posée, sinon Hortense |
 | `faire-taire` (nouveau) | joué | le bouton, cliqué dans la page |
@@ -361,18 +444,21 @@ reprend la première.
    - `src/presence/judge.ts` : `juger(s, partie, niveau: 'exact' | 'chaine' = 'exact')`. En `chaine`, un verdict
      `exact` porte `horsNiveau: true`, `passe` le laisse passer, et il n'entre pas dans `premier` (`judge.ts:282`).
      Une parole sautée : l'attente qui la vise est `non_jouee`, sa source est le maillon de l'ancre (`voix` pour
-     `joue`, `serveur` pour `envoi`). La source `transcription` quand le texte transcrit diverge du `dit`.
+     `joue`, `serveur` pour `envoi`). La source `transcription` quand la réponse choisie sur le texte reçu
+     (`modele_appele`) n'est pas celle que la règle du faux serveur (`fakes.ts:153-199`, sortie en fonction pure)
+     choisit sur le `dit` ; une divergence sans ce changement ne nomme rien.
    - `src/presence/releve.ts` : une section « Mesures » pour les verdicts hors niveau ; `releveChaine(parties)`
      ajoute par scénario : chaque phrase (`dit`, `entendu`, confiance) ; les délais de chaque tour (`delays()`,
      `trace.ts:164`), exact et chaîne côte à côte, l'écart et son maillon (`attente_fin` → `ecoute`,
      `transcription` → `transcription`, `file_serveur`, `premier_mot`, `premiere_phrase` → `serveur`, chaque
      `synthese` → `voix`, `arret_coupure` → `suspension`) ; la latence de capture (de `parole` début à la `voix` de
-     la page) ; l'écart entre `son` et ce qui a sonné ; la comparaison du témoin par Chromium ; les champs ignorés ;
-     la raison d'une partie non jouée.
+     la page) ; par phrase, `joue − premier_son`, le silence de tête du son et leur différence (« Les deux
+     horloges ») ; la latence de sortie annoncée ; le modèle de transcription ; la comparaison du témoin par
+     Chromium ; les champs ignorés ; la raison d'une partie non jouée.
    - Tests : chaque refus nouveau de `charger` ; `ancre` sur `joue` et sur `envoi`, une ancre jamais venue, un geste
-     `silence` ; `horsNiveau`, `passe`, la source d'une parole sautée, la source `transcription`, une `exact` ratée qui
-     ne nomme plus la source des autres ; un relevé de chaîne écrit à la main, comparé ligne à ligne. Les seize
-     scénarios passent sans changement.
+     `silence` ; `horsNiveau`, `passe`, la source d'une parole sautée, la source `transcription` (une divergence qui
+     change la réponse, une qui ne la change pas, comme « demand »), une `exact` ratée qui ne nomme plus la source des
+     autres ; un relevé de chaîne écrit à la main, comparé ligne à ligne. Les seize scénarios passent sans changement.
    - Exclu : convertir les scénarios (tâche 2), le navigateur.
 2. - [ ] **Les scénarios ancrés et `faire-taire`** (`src/presence/scenarios/`, `testeur`). Après 1.
    - Chaque parole dont le sens dépend d'elle devient ancrée : `toux-parole`, `toux-courte`, `toux-reflexion`,
@@ -393,7 +479,9 @@ reprend la première.
      sont retirés ; un son plus long que `duree` est gardé, et sa vraie durée est rendue. Les `trous` : le texte est
      coupé au mot le plus proche, chaque morceau synthétisé, les silences insérés.
    - `planDePartie(s, sons)` : le plan du contrat interne, données seules. Et le fichier du témoin par Chromium :
-     les sons posés à leurs instants dans un seul WAV.
+     les sons posés à leurs instants dans un seul WAV, avec en tête l'attente d'ouverture mesurée par la tâche 0
+     (8 s), dont le joueur retire la durée au recalage. Les ancres ne s'y résolvent pas : le témoin reste
+     `deux-phrases`, aux instants absolus.
    - `synthSapi(texte)` : `powershell.exe` avec des arguments fixes, le texte sur l'entrée standard, jamais dans la
      ligne de commande ; `System.Speech`, Hortense, 16 kHz mono. Hors Windows ou sans Hortense : une erreur qui le dit.
    - Lecture et écriture par `readWav`, `writeWav` (`src/listen/replay.ts`).
@@ -417,14 +505,19 @@ reprend la première.
    - Une fonction posée avant la page (`addInitScript`), construite par Vite en un seul fichier avec `ancre` de
      `scenario.ts`. Elle reçoit le plan de partie et va chercher les sons par `/banc/sons/<n>.wav`.
    - Elle remplace `navigator.mediaDevices.getUserMedia` par un `MediaStream` tiré d'un `AudioContext` à 48 kHz,
-     silencieux jusqu'à `__banc.jouer()`. `t0` est l'instant de la page où ce contexte commence à sonner. Chaque son est
-     posé à `t0 + a`, ou à son ancre.
-   - Sa voix : une prise sur la sortie du contexte de la page (là où il rejoint sa destination) date le premier et le
-     dernier échantillon non silencieux de chaque phrase : `joue` et `arrete`. Le départ d'un son retrouve son texte.
-     Les envois de la page (`fetch` vers `/api/threads/…/messages`) servent aux ancres `envoi`.
+     silencieux jusqu'à `__banc.jouer()`. `jouer()` attend des trames régulières de la page (dix de suite à moins de
+     45 ms d'écart, lues en enveloppant le `port.onmessage` du worklet `frames`, `audio.ts:73`, sans changer la page),
+     puis démarre. `t0` est l'instant où ce contexte commence à sonner, rapporté à `performance.now()` sans latence
+     de sortie. Chaque son est posé à `t0 + a`, ou à son ancre.
+   - Sa voix : une prise par `AudioBufferSourceNode` de la page (posée à son `connect`, vers une prise à elle en plus
+     de sa destination) date le premier et le dernier échantillon non silencieux de cette source : `joue` et
+     `arrete`, selon la convention de « Les deux horloges ». Les réponses de `/voix/tts` sont gardées avec leur texte
+     et leur silence de tête ; le départ d'une source retrouve son texte. Les envois de la page (`fetch` vers
+     `/api/threads/…/messages`) servent aux ancres `envoi`.
    - Un geste `silence` clique `[aria-label="Faire taire"]` à son instant.
-   - Tests (jsdom, Web Audio simulé à la main) : le remplacement de `getUserMedia`, une ancre `joue`, `arrete` écrit
-     une seule fois, le texte retrouvé. Exclu : lancer un navigateur.
+   - Tests (jsdom, Web Audio simulé à la main) : le remplacement de `getUserMedia`, `jouer()` qui attend des trames
+     régulières, une ancre `joue`, deux sources à 100 ms l'une de l'autre datées à part, `arrete` écrit une seule
+     fois, le texte retrouvé derrière un silence de tête. Exclu : lancer un navigateur.
 7. - [ ] **Le faux modèle** (Lun'Anima, `core/src/testing/faux-modele.ts`, `dev-core`). *Parallélisable.*
    - `fauxModele(dir, journal)` rend un `fetch` à brancher dans `createOpenAiProvider`, qui parle comme `FakeOpenAi`
      (dont il reprend l'écriture du flux) avec les délais de « Le faux modèle », et relit `partie.json` à chaque
@@ -459,7 +552,8 @@ reprend la première.
      les réglages du scénario fusionnés sur `DEFAULTS`, plus `brain: 'linked'`, `busy.on: false`,
      `speak.ritual: false`) ; la sonde et son plan ; `/banc/sons/*` servis ; `/voix/tts` servi s'il le faut ; le clic
      d'entrée ; le micro ouvert ; `__banc.jouer()` ; `parle` à son instant. La partie finit `finApresMs` après la
-     dernière parole posée, au plus 90 s. Puis le témoin `deux-phrases` par le faux périphérique de Chromium.
+     dernière parole posée, au plus 90 s. Puis le témoin `deux-phrases` par le faux périphérique de Chromium, écho et
+     bruit allumés (les réglages par défaut), recalé sur l'arrivée de sa première trame de son.
    - À la fin d'une partie : le déroulé par le bouton d'export ; le journal de la sonde ; celui du serveur, fondu par
      ordre et numéros ; tout décalé de `t0`. `juger(s, partie, 'chaine')`, et `jouer(s)` du niveau exact pour les
      délais.
@@ -473,7 +567,7 @@ reprend la première.
       les verdicts, les délais par maillon, les écarts au niveau exact, le témoin, la durée de la suite.
     - Une issue par écart d'un mécanisme, et un `connus` qui la nomme ; jamais une borne élargie.
     - Relecture séparée de chaque diff, les deux PR en brouillon ; la feuille de route mise à jour ; les scripts de la
-      tâche 0 retirés de `banc-sons`.
+      tâche 0 retirés de `banc-sons`, avec `node_modules` et `uv-cache` de `chaine/essai/` (environ 600 Mo).
 
 ## Hors périmètre
 
@@ -486,35 +580,46 @@ reprend la première.
 
 ## Limites
 
-- **La capture de Chrome.** Le micro fabriqué n'est pas une capture : on ne sait pas encore si Chrome applique
-  l'annulation d'écho, la suppression de bruit et le gain à un `MediaStream` tiré d'un `AudioContext`, ni au faux
-  périphérique par fichier. La tâche 0 le mesure (point 4) ; ce plan sera réécrit d'après elle. Aucune des deux voies
-  ne passe par un vrai pilote ni un vrai micro : le desktop le fera.
+- **La capture de Chrome.** La sonde contourne l'annulation d'écho et la suppression de bruit (point 4) : elle ne dit
+  rien d'eux. Seul le témoin par le faux périphérique les traverse, une fois par suite, et sur Hortense ils dégradent
+  le son (corrélation 0,71 à 0,74) sans changer les décisions de la page. Aucune des deux voies ne passe par un vrai
+  pilote ni un vrai micro : le desktop le fera.
+- **Ce qui sonne n'est pas ce qui s'entend** : la prise date l'échantillon à la sortie du graphe, par convention ; la
+  latence jusqu'au haut-parleur (40 à 58 ms annoncés) n'est pas mesurée sans vraie sortie.
+- La durée d'une phrase de Piper varie d'environ 350 ms d'une partie à l'autre : un délai lu après sa voix change
+  d'autant.
 - La synthèse d'Hortense est une voix propre, lente et sans hésitation : elle ne dit rien de la détection sur sa voix
   à lui, que le banc couvre sur ses enregistrements.
 - Les délais sont ceux du laptop : la transcription sur son processeur n'est pas celle du desktop.
 - Le blanc du poste est fabriqué par le faux modèle ; le délai `poste` du serveur manque.
-- Le texte d'une toux transcrite change d'une partie à l'autre : une seule partie ne le dit qu'une fois.
-- Le palier 2 suppose ce que la tâche 0 mesure ; tout ce qui n'y est pas mesuré reste non vérifié, en particulier la
-  taille de `playwright-core` et l'environnement `uv` du service.
+- Le texte d'une toux transcrite change d'une partie à l'autre : une seule partie ne le dit qu'une fois. La toux n'a
+  pas été mesurée : ni sa transcription, ni sa tenue par Silero.
+- Une partie par variante à la tâche 0 : aucun centile. Le flux de la réponse 1 n'a pas été vu (coupée avant son
+  premier mot).
 
 ## À trancher par CrOliX
 
-Pour le palier 1 :
+**Valider le palier 2 entier** (tâches 1 à 10, révisées avec la tâche 0), avec ces choix :
 
-- **Valider la tâche 0 seule**, sans le palier 2.
-- **La toux** : il en enregistre une (et un bruit), ou il choisit une toux sous licence CC0 ; sinon la tâche 0 mesure
-  sans toux, et les quatre scénarios de toux attendent.
-
-Pour le palier 2, après les mesures :
-
-- **Sa voix** : Piper par le service, déjà sur le laptop (le maillon `voix` entier, ses réglages de scénario ignorés),
-  ou la fausse synthèse (les réglages gardés, le service et le temps de synthèse non mesurés). Le cadrage (§ 8)
-  supposait une synthèse locale. Je recommande Piper, la fausse synthèse pour `oui-puis-reparler` seulement.
+- **Sa voix** : Piper par le service (le maillon `voix` entier, ses réglages de scénario ignorés), ou la fausse
+  synthèse (les réglages gardés, le service et le temps de synthèse non mesurés). Je recommande Piper : plus rapide
+  que la fausse synthèse (point 8) ; sa durée variable est absorbée par les ancres. La fausse synthèse pour
+  `oui-puis-reparler` seulement.
+- **`small` ou `tiny`** pour la transcription. Le code prend `small` par défaut (`voix/service.py:312`,
+  `src/settings.ts:107`), mais le desktop passe par whisper-server, hors de ce niveau : `small` sur le processeur du
+  laptop n'est fidèle au desktop que par le nom du modèle, pas par son délai. Je recommande **`tiny`** : cinq fois
+  plus rapide (325 à 392 ms contre 2 s), le même texte juste sur Hortense, et les scénarios gardent leur forme :
+  avec `small`, la réponse 1 de `deux-phrases` part après le début de la parole 2. `small` reste un réglage du
+  joueur (`--stt faster:small`), et le modèle de chaque partie est écrit au relevé. Le délai de `tiny` dans la chaîne
+  et son texte sur la phrase 2 (« demain » ou « demand ») sont à lire sur la première suite.
+- **La source `transcription`** : nommée seulement quand le texte reçu change la réponse du faux modèle, pas sur toute
+  divergence (« demand » pour « demain » la nommerait à chaque partie, sans effet). Je le recommande.
 - **Le son par la page, et une parole ancrée sur la partie** : un changement du format, gardé par une comparaison des
-  déroulés exacts faite une fois.
+  déroulés exacts faite une fois. La tâche 0 confirme les ancres (Hortense ne tient pas les `duree`).
 - **La transcription vraie dès ce niveau**, au prix des champs `entendu` et `confiance` ignorés.
-- **Les mutations dans la CI** de Lun'Luxuria, à la durée mesurée.
+- **Les mutations dans la CI** de Lun'Luxuria, à la durée mesurée sur la première PR.
+
+La toux : les quatre scénarios de toux attendent qu'il en enregistre une (et un bruit) ou choisisse une toux CC0.
 
 ## Ce que le plan-challenger a changé
 
