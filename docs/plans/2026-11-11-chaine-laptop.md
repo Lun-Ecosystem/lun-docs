@@ -4,7 +4,11 @@
 >
 > **À valider par CrOliX.** Les choix marqués **[avis]** sont des propositions ; rien n'est codé.
 >
-> **PR :** aucune encore. Une par dépôt, ouvertes en brouillon à la première tâche.
+> **Deux paliers.** **Palier 1 : la tâche 0 seule**, à valider maintenant. Une partie de bout en bout jetable, qui
+> mesure ce que la suite suppose. **Palier 2 : les tâches 1 à 10**, écrites ici comme cible ; elles seront révisées
+> avec les mesures de la tâche 0, et ce plan revalidé, avant la moindre ligne de leur code.
+>
+> **PR :** aucune encore. Au palier 2, une par dépôt, ouvertes en brouillon à la première tâche.
 
 **But :** rejouer les scénarios écrits à travers la vraie chaîne, sans personne. La page construite tourne dans un
 Chrome sans écran ; son micro est un son joué à des instants choisis ; elle parle au vrai serveur Lun'Anima, dont le
@@ -20,38 +24,46 @@ lu dans le déroulé.
 
 **Source :** le cadrage [« Prouver la présence sans l'oreille »](../specs/2026-11-11-banc-presence-cadrage.md),
 validé par CrOliX le 11/11 (lun-docs#161), § 3, § 4 pièce 3 (« la chaîne sur le laptop »), § 5 étape 3, § 6 (le faux
-modèle pour les mécanismes, validé avec le cadrage). Les plans fusionnés [du déroulé](2026-11-11-deroule-tour.md) et
-[des scénarios](2026-11-11-scenarios-presence.md), avec ce que leur exécution a trouvé. Code relu sur `main` de
-Lun'Luxuria (`b1d8761`) et de Lun'Anima (`84618a3`). Références relues, rien lancé : AIRI
-(`packages/testing-audio`, `packages/vitest-plugin-fakemic`), Pipecat (`evals/`), LiveKit Agents (`tests/fake_*.py`),
-la preuve dans la page du 10/11 (un script hors dépôt, CDP brut).
+modèle pour les mécanismes, validé avec le cadrage), § 8 (la synthèse locale supposée). Les plans fusionnés
+[du déroulé](2026-11-11-deroule-tour.md) et [des scénarios](2026-11-11-scenarios-presence.md), avec ce que leur
+exécution a trouvé. Code relu sur `main` de Lun'Luxuria (`b1d8761`) et de Lun'Anima (`84618a3`). Références relues,
+rien lancé : AIRI (`packages/testing-audio`, `packages/vitest-plugin-fakemic`), Pipecat (`evals/`), LiveKit Agents
+(`tests/fake_*.py`), la preuve dans la page du 10/11 (un script hors dépôt, CDP brut). Plan relu par le
+plan-challenger le 11/11 : « à amender », architecture tenue ; ses objections sont reprises (voir la fin).
 
-**Critères de fin :**
+**Critères de fin du palier 1 :**
 
-- `npm run chaine` (Lun'Luxuria) construit la page, la sert, lance le service de voix, ouvre Chrome sans écran, et
-  joue chaque scénario jouable à ce niveau contre un serveur lancé par `npm run chaine` (Lun'Anima). Une partie dure
-  le temps réel du scénario ; la suite tient en moins de huit minutes sur le laptop.
+- Une partie de `deux-phrases` a tourné de bout en bout sur le laptop, et chaque mesure de la tâche 0 est écrite
+  dans ce plan, avec sa valeur et ce qu'elle change au palier 2.
+- Rien n'est entré dans un dépôt : les scripts jetables vivent dans `banc-sons`, et en sont retirés à la fusion du
+  palier 2.
+
+**Critères de fin du palier 2 :**
+
+- `npm run chaine` (Lun'Luxuria) construit la page, la sert, lance son propre service de voix, ouvre Chrome sans
+  écran, et joue chaque scénario jouable à ce niveau contre un serveur lancé par `npm run chaine` (Lun'Anima). Une
+  partie dure le temps réel du scénario ; la durée de la suite est mesurée et écrite ici.
 - Aucun appel payant, aucune clé : le faux modèle répond dans le serveur, sans réseau. Le serveur de la chaîne tourne
-  sur une base en mémoire et refuse de démarrer hors de la boucle locale.
+  sur une base en mémoire, par un point d'entrée à lui ; `main.ts` n'est pas touché.
 - Le micro de la page est un `MediaStream` fabriqué dans la page : chaque parole est un son posé à son instant, ou
-  ancré sur un événement de la partie (« 1 s après le début de sa phrase 1 »). Aucun enregistrement de voix n'entre
-  dans le dépôt ; les sons vivent dans `banc-sons`, hors git.
-- Une seule horloge : celle de la page. Ce que le serveur écrit est daté sur l'heure du système et ramené à l'horloge
-  de la page par `performance.timeOrigin`, sur la même machine ; une dérive de plus de 5 ms entre le début et la fin
-  de la partie la fait échouer (`joueur`, « horloge »).
+  ancré sur un événement de la partie. Un scénario témoin passe aussi par le faux périphérique de Chromium, pour
+  comparer ce que voit Silero. Aucun enregistrement de voix n'entre dans le dépôt, et la CI le vérifie.
+- Deux horloges, comme le veut le cadrage (§ 3) : ce que la page décide, et ce qui sonne. La sonde date le premier et
+  le dernier échantillon non silencieux de sa voix, sur l'horloge de la page.
 - Le juge est le même. Au niveau de la chaîne, une attente `exact` n'échoue jamais : elle est rendue comme une
-  mesure, avec sa borne et ce qui a été trouvé. Une attente `tous` ratée ou non jouée fait échouer la suite.
-- Le relevé donne, par scénario : les verdicts, les délais de chaque tour au niveau exact et à la chaîne et leur
-  écart rangé par maillon, les champs du scénario ignorés à ce niveau, et la raison de tout scénario non joué.
-- `npm run mutations` (Lun'Luxuria) joue chaque mutation connue contre le niveau exact et échoue si l'une survit ou ne
-  nomme pas son maillon. Le bouton « Faire taire » a son scénario, et sa mutation ne survit plus.
+  mesure. Une attente `tous` ratée ou non jouée fait échouer la suite.
+- Le relevé donne, par scénario : les verdicts ; pour chaque phrase, `dit`, `entendu` et la confiance ; les délais de
+  chaque tour au niveau exact et à la chaîne, leur écart et son maillon ; les champs ignorés ; et pourquoi chaque
+  scénario manquant manque.
+- `npm run mutations` (Lun'Luxuria) mute le code au chargement, sans toucher un fichier, et échoue si une mutation
+  survit ou ne nomme pas son maillon. Le bouton « Faire taire » a son scénario.
 - `npm test` des deux dépôts ne change pas de durée de plus de cinq secondes ; aucun test de la chaîne n'y tourne.
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
-| `lun-luxuria`, `feat/chaine-laptop` | à ouvrir à la validation | `standard` |
-| `lun-anima`, `feat/chaine-laptop` | à ouvrir à la validation | `standard` |
-| `lun-docs`, `docs/deroule-tour` | les mêmes | `trivial` |
+| `lun-luxuria`, `feat/chaine-laptop` | à ouvrir à la validation du palier 2 | `standard` |
+| `lun-anima`, `feat/chaine-laptop` | à ouvrir à la validation du palier 2 | `standard` |
+| `lun-docs`, `docs/deroule-tour` | les mêmes ; la tâche 0 n'en ouvre pas | `trivial` |
 
 ## Ce que le code fait aujourd'hui
 
@@ -64,12 +76,14 @@ la preuve dans la page du 10/11 (un script hors dépôt, CDP brut).
 - **Le petit mode n'existe que dans la fenêtre** : dans un onglet, la disposition est toujours `scene`
   (`session.svelte.ts:69`).
 - **Le micro** : `getUserMedia`, puis un `AudioContext` à 16 kHz et un worklet qui rend des trames de 512
-  échantillons (`audio.ts:61-83`). Chaque trame passe par Silero (`session.svelte.ts:478-506`), dans l'ordre.
+  échantillons (`audio.ts:61-83`). Chaque trame passe par Silero (`session.svelte.ts:478-506`), dans l'ordre. La page
+  sait enregistrer ce qu'elle entend (« Enregistrer un essai », `session.svelte.ts:509-520`, `Reglages.svelte:520`).
 - **Sa voix** : `synthesize` rend des échantillons bruts et leur fréquence (`voice.ts:21-28`) ; `webOutput` les joue
   dans un `AudioBufferSourceNode` copié tel quel, et `heard()` lit `ctx.currentTime` (`audio.ts:4-43`).
 - **Le service de voix** (`voix/service.py`) : `/stt` (faster-whisper ou whisper-server), `/tts` (Piper ou Kokoro,
   `--tts` obligatoire, `:313`). Il refuse toute origine hors de sa liste (`:32-39`), où une page servie sur un autre
-  port que 5180 n'est pas.
+  port que 5180 n'est pas. faster-whisper est appelé sans température (`:50`) : sur un son difficile, il réessaie à des
+  températures plus hautes, par tirage, et ne rend pas deux fois le même texte.
 - **Le déroulé** (`trace.ts`, format 2) garde les vingt derniers tours ; un bouton des réglages avancés de l'écoute
   l'exporte dans un onglet (`Reglages.svelte:592`). Le bouton « Faire taire » appelle `session.silence()`
   (`Scene.svelte:143`).
@@ -77,46 +91,91 @@ la preuve dans la page du 10/11 (un script hors dépôt, CDP brut).
   (`fakes.ts`), un joueur sur l'horloge fausse de vitest (`player.ts`, il importe `vi` : jamais en temps réel), un
   juge à règles (`judge.ts`), un relevé (`releve.ts`). Une parole a un instant absolu `a` (`scenario.ts:111-125`).
   Le juge résout `reponse: n` par le n-ième `envoi_recu` du journal du joueur (`judge.ts:122-130`).
-- **Ce que les scénarios demandent à ce niveau** : 46 attentes `tous` sur 16 fichiers. Trois ne jouent que des
-  briques fausses (`echo-fort`, `delai-modele-lent` : l'écho et le temps du modèle de voix sont des réglages du faux ;
-  `delai-de-reponse` n'a que des attentes `exact`, il reste utile pour ses mesures). Deux sont en petit mode
-  (`aparte-parole-longue`, `phrase-ecartee`). Quatre font tousser (`dit: '(toux)'`), et `toux-puis-parole` a un bruit.
-  Deux font dire au serveur une parole à lui (`modele.parle` : `toux-puis-parole`, et `aparte` déjà exclu).
-- **Les mutations** : un script hors dépôt (`mutations.mjs`) mute neuf motifs, joue la suite, résume les sources ; il
-  remet le fichier par `git checkout --`, ce qui efface aussi un travail non commité de ce fichier. La mutation f2 (le
-  bouton qui n'arrête plus le son) survit : aucun scénario ne joue ce bouton.
-- **Outillage** : vitest 5, jsdom ; ni Playwright ni navigateur piloté dans le dépôt. Le laptop a Chrome, `uv`, les
-  modèles faster-whisper `small` (464 Mo) et `tiny` (75 Mo) en cache, et trois voix françaises de Windows : Hortense
-  (SAPI, lisible par `System.Speech`), Julie et Paul (OneCore seulement).
+- **Ce que les scénarios demandent à ce niveau** : 46 attentes `tous` sur 16 fichiers. Deux ne jouent que des
+  briques fausses (`echo-fort`, `delai-modele-lent`). Deux sont en petit mode (`aparte-parole-longue`,
+  `phrase-ecartee`). Quatre font tousser (`dit: '(toux)'`), et `toux-puis-parole` a un bruit et une parole à elle
+  (`modele.parle`).
+- **Les attentes qui lisent ce que le serveur a reçu** : parmi les scénarios jouables ici, quatre attentes `tous`
+  (`couper-le-blanc/coupure-recue`, `deux-phrases/coupure-vide`, `oui-puis-reparler/coupure-vide`,
+  `toux-reflexion/pas-de-coupure`). Aucune n'a de bornes ni ne sert d'ancre : leur instant ne compte pas, seuls leur
+  présence et leur numéro de réponse comptent. `phrase-ecartee/rien-ne-part` en a, mais ce scénario n'est pas joué ici.
+- **Les mutations** : un script hors dépôt mute neuf motifs, joue la suite, résume les sources ; il remet le fichier
+  par `git checkout --`, ce qui efface aussi un travail non commité. La mutation f2 (le bouton qui n'arrête plus le
+  son) survit : aucun scénario ne joue ce bouton.
+- **La CI** (`.github/workflows/ci.yml`) ne vérifie pas qu'aucun son n'est suivi par git ; aucun ne l'est aujourd'hui.
+- **Outillage** : vitest 5, jsdom ; ni Playwright ni navigateur piloté dans le dépôt.
 
 **Lun'Anima**
 
 - **Le modèle** passe par `ChatProvider` (`core/src/chat/provider.ts:53-59`). `createOpenAiProvider` accepte un
   `fetch` injecté (`openai.ts:34-40`) : c'est ainsi que les tests le branchent sur `FakeOpenAi`
   (`core/src/testing/fake-openai.ts:90`), qui rend du SSE comme OpenAI, tout d'un coup, sans délai.
-- **Le démarrage** lit la clé dans la base ou l'environnement et ne crée un fournisseur qu'avec elle
-  (`core/src/main.ts:91-100`) ; la surveillance de la clé peut le remplacer (`:155-162`).
-- **Les routes de la conversation** : l'envoi connaît le message et le numéro de la réponse (`chat/routes.ts:93`),
-  la coupure ce qui a été entendu (`:65`), le retrait le message (`:72`).
-- **Les durées** d'une réponse sont mesurées sur `performance.now()` et jointes à `done` (`chat/service.ts:559-562`,
-  `:643`, `:1058`).
+- **L'assemblage de test** (`core/src/testing/harness.ts`) monte `createApp` (`app.ts:91`) sur une base en mémoire
+  (`:60`), avec une horloge réglée à la main et `onTestFinished` de vitest (`:4`) : il ne sert pas hors d'un test.
+- **Le démarrage du serveur** (`main.ts`) lit la clé et ne crée un fournisseur qu'avec elle (`:91-100`), et donne le
+  premier code d'appairage par `bootstrapPairing` (`:264`, `auth/pairing.ts:151`), qui rend le code.
+- **Les routes de la conversation** : l'envoi rend `user` puis `reply` `{ id }` en tête de son flux
+  (`chat/routes.ts:116-117`), la coupure prend le numéro et ce qui a été entendu (`:60-67`), le retrait le numéro
+  (`:69-74`). Toutes sont derrière le jeton (`app.ts:99`).
+- **Les durées** d'une réponse sont mesurées sur `performance.now()` et jointes à `done` (`chat/service.ts:559-562`).
 - **La présence** : un `started` avec `ritual` non faux compose un rituel par le modèle
   (`natsume/presence-routes.ts:41-44`) ; `chat.say` dit une phrase sans modèle (`:43`).
-- **La base jetable** : `seed:recette` refuse la base par défaut et toute base non vide (`cli/seed-recette.ts:156`).
-  `natsume:eval` et `first-word` tournent sur une base en mémoire. `pair-code` écrit un code dans la base.
+
+**Sur le laptop** (vérifié sans rien installer) : Chrome ; `uv` ; les modèles faster-whisper `small` (464 Mo) et
+`tiny` (75 Mo) en cache ; les voix françaises de Windows Hortense (SAPI, lisible par `System.Speech`), Julie et Paul
+(OneCore seulement) ; Piper et sa voix `fr_FR-siwis-medium` (63 Mo), hors des dépôts. Non vérifié : l'environnement
+`uv` du service en cache.
 
 ## Ce que les références apportent
 
 - **AIRI** : le fichier son devient le micro de Chromium (`--use-file-for-fake-audio-capture=<wav>%noloop`), la page
-  est sondée par un script posé avant elle (`addInitScript`), le modèle est une réponse écrite. Un fichier par
-  lancement de Chromium, qui part quand le micro s'ouvre.
-- **Pipecat** : un tour peut attendre ce que fait l'agent avant de parler ; la parole de la personne est synthétisée
-  et gardée en cache.
+  est sondée par un script posé avant elle, le modèle est une réponse écrite. Un fichier par lancement de Chromium.
+- **Pipecat** : un tour peut attendre ce que fait l'agent avant de parler ; la parole est synthétisée et gardée en
+  cache.
 - **LiveKit** : un veto sur l'état réel du serveur, qui peut faire échouer, jamais sauver.
-- **La recherche du 11/11** (cadrage § 3) : remplacer `getUserMedia` plutôt que passer par les options de Chromium,
-  pour piloter le son pendant l'essai ; et la mise en garde d'EVA sur le recollage de deux horloges.
+- **La recherche du 11/11** (cadrage § 3) : remplacer `getUserMedia` pour piloter le son pendant l'essai ; mesurer
+  ce qui s'entend, pas seulement ce qui est décidé ; la mise en garde d'EVA sur le recollage de deux horloges.
 
-## Les choix **[avis]**
+## Palier 1 : la tâche 0
+
+0. - [ ] **Une partie jetable, et ce qu'elle mesure** (`testeur`, avec des scripts jetables dans
+   `banc-sons/chaine/essai/`, hors git ; rien dans un dépôt). Seule.
+   - **La partie** : `deux-phrases`, les deux phrases dites par Hortense (`System.Speech`, WAV 16 kHz), à leurs
+     instants absolus, sans ancre, sans conversion d'horloge, sans juge ni mutations. Le serveur : `createApp` monté
+     à la main sur `openDb(':memory:')`, l'horloge réelle, `FakeOpenAi` avec ses deux réponses et un délai écrit à la
+     main avant le flux. La page construite servie par `vite preview`. Le service de voix lancé sur son propre port,
+     avec `--origin` de la page. Chrome sans écran et muet, piloté par `playwright-core` installé dans le dossier
+     jetable. Le déroulé pris par le bouton d'export.
+   - **Ce qu'elle mesure**, chaque point écrit ici avec sa valeur :
+     1. le flux SSE à travers `vite preview` : chaque `delta` daté côté serveur et côté page, pour voir s'il est
+        retenu ;
+     2. l'horloge de Web Audio dans un Chrome sans écran et muet : `currentTime` contre `performance.now()` sur une
+        minute, et `getOutputTimestamp` ;
+     3. le `MediaStream` entre le contexte de la sonde (48 kHz) et celui de la page (16 kHz) : le retard et la
+        fidélité, en comparant l'enregistrement d'essai de la page au son joué ;
+     4. le traitement du son de Chrome sur le faux périphérique par fichier, contre la sonde : la même partie par les
+        deux voies, annulation d'écho et suppression de bruit allumées puis éteintes, l'enregistrement d'essai de la
+        page comparé au fichier, et les `voix`, `tenue` et `fin` de la page comparés ;
+     5. faster-whisper `small` contre `tiny` sur le laptop : le délai et le texte de chaque phrase ; une toux
+        transcrite cinq fois, pour voir le tirage de température ;
+     6. Silero sur Hortense et sur une toux, rejoué par `replay()` (`src/listen/replay.ts`) : la probabilité de voix
+        trame par trame, et si la toux tient les 400 ms d'une tenue ;
+     7. Lun'Anima sur `:memory:` : qu'il démarre, appaire, réponde et coupe sans rien écrire sur le disque ;
+     8. Piper par le service (`--tts piper:<voix siwis>`) : le temps de synthèse de chaque phrase, contre la fausse
+        synthèse ;
+     9. la prise sur la sortie de sa voix : le premier et le dernier échantillon non silencieux, contre `start()` et
+        la fin du son ;
+     10. la durée de la partie, de l'ouverture de Chrome au déroulé exporté.
+   - **Ce qu'elle installe**, dans le dossier jetable seulement : `playwright-core` (taille mesurée et écrite ici) ;
+     l'environnement `uv` du service s'il manque (taille mesurée). Aucun navigateur téléchargé. Une toux enregistrée
+     par CrOliX, ou une toux sous licence CC0 qu'il choisit ; sans elle, les points 5 et 6 sont faits sans toux.
+   - **Ce qu'elle rend** : une section « Ce que la tâche 0 a mesuré » dans ce plan, et pour chaque choix du palier 2
+     s'il tient, change ou tombe. Les scripts restent dans `banc-sons/chaine/essai/` jusqu'à la fusion du palier 2,
+     puis sont retirés.
+
+## Palier 2 : les choix **[avis]**
+
+À réviser avec les mesures de la tâche 0.
 
 ### Le son de la personne
 
@@ -125,132 +184,147 @@ Les deux, par ordre de priorité, et rien dans le dépôt :
 1. **Un son posé à la main** : `BANC_DIR/chaine/sons/<nom>.wav`, où `<nom>` est le texte de `dit` réduit (minuscules,
    sans accents, tirets). C'est ainsi qu'entrent une toux, un bruit, ou une de ses prises (`non-propre.wav`,
    `oui-propre.wav` du 10/11 couvrent `non-court` et `oui-puis-reparler`).
-2. **Sinon, la synthèse locale de Windows** : Hortense, par `System.Speech`, en WAV 16 kHz mono, gardée en cache dans
-   `BANC_DIR/chaine/sons/sapi/`. Rien à installer, aucune clé, une voix qui n'est pas la sienne. Plusieurs voix et
-   les hésitations restent à l'étape 4.
+2. **Sinon, la synthèse locale de Windows** : Hortense, par `System.Speech`, gardée en cache dans
+   `BANC_DIR/chaine/sons/sapi/`. Rien à installer, aucune clé, une voix qui n'est pas la sienne. Plusieurs voix et les
+   hésitations restent à l'étape 4.
 
-Une parole entre parenthèses (`'(toux)'`) n'est pas un texte : sans son posé à la main, le scénario n'est pas joué
-et le relevé dit « son manquant : toux.wav ». Un `bruits` demande `bruit.wav`, coupé à sa durée. Les quatre scénarios
-de toux attendent donc une toux enregistrée une fois, ou une toux libre téléchargée par CrOliX (voir « À trancher »).
+Une parole entre parenthèses (`'(toux)'`) n'est pas un texte : sans son posé, le scénario n'est pas joué et le relevé
+dit « son manquant : toux.wav ». Un `bruits` demande `bruit.wav`. La toux est enregistrée par CrOliX, ou une toux
+sous licence CC0 seulement.
 
-**Pourquoi pas un fichier WAV par partie, par les options de Chromium** (le choix d'AIRI) : le fichier part quand le
-micro s'ouvre, à un instant que la page ne date pas, et il faut relancer Chromium à chaque partie. Un micro fabriqué
-dans la page démarre au signal du joueur, à un instant lu sur l'horloge de la page, et peut poser une parole au moment
-où elle commence à parler. Ce qu'il ne prouve pas : la capture de Chrome elle-même (annulation d'écho, suppression de
-bruit), qui ne compte qu'avec un vrai micro, au desktop.
+### Le micro : fabriqué dans la page, et un témoin par Chromium
+
+La sonde remplace `getUserMedia` par un `MediaStream` tiré d'un `AudioContext` à 48 kHz, comme un vrai micro, que la
+page rééchantillonne. Il démarre au signal du joueur, à un instant lu sur l'horloge de la page, et peut poser une
+parole au moment où elle commence à parler. Une fois par suite, `deux-phrases` est aussi joué par le faux périphérique
+de Chromium (`--use-file-for-fake-audio-capture`, un fichier construit d'avance) : le relevé compare ce que la page a
+décidé par les deux voies (`voix`, `tenue`, `fin`). Ce que la sonde ne traverse pas, la tâche 0 le mesure (point 4).
 
 ### Une parole ancrée sur la partie
 
 À ce niveau, le premier son arrive plus tard qu'au niveau exact : la vraie transcription prend une seconde, pas
-150 ms. Une toux posée à 3008 ms tomberait avant qu'elle parle, et le scénario ne dirait plus rien. Une parole peut
-donc être ancrée : `apres: { joue: 1, phrase?: 1, ms: 1000 }` (1 s après le début du son de sa phrase 1 de la réponse
-1) ou `apres: { envoi: 1, ms: 3000 }` (3 s après le n-ième envoi). Le niveau exact résout l'ancre de la même façon,
-sur son journal. Chaque scénario converti garde au niveau exact son déroulé ligne pour ligne : c'est le test de la
-conversion. Les gestes suivent la même règle (`gestes: [{ geste: 'silence', apres: … }]`).
+150 ms. Une toux posée à 3008 ms tomberait avant qu'elle parle. Une parole peut donc être ancrée :
+`apres: { joue: 1, phrase?: 1, ms: 1000 }` (1 s après le début du son de sa phrase 1 de la réponse 1) ou
+`apres: { envoi: 1, ms: 3000 }` (3 s après le premier envoi). La résolution d'une ancre est une seule fonction pure de
+`scenario.ts`, que le joueur exact appelle et que la sonde embarque par un build. Les gestes suivent la même règle.
 
 ### La transcription : la vraie
 
-faster-whisper `small`, sur le processeur du laptop, par `voix/service.py` tel qu'il est (le réglage par défaut de la
-page). Ce qu'elle prouve et qu'une fausse ne prouverait pas : la coupe du son que la page envoie à l'essai et à la fin,
-le délai de transcription réel, la confiance réelle, et ce qu'elle fait d'une toux (whisper invente souvent un
-« Merci. » sur un bruit : c'est un défaut à trouver ici, pas à masquer). Ce qu'elle coûte : `entendu`, `confiance`,
-`transcriptionMs` et `echec` du scénario sont ignorés, et le relevé le dit. Une attente `tous` ne doit donc pas
-dépendre d'un texte transcrit au mot près ; la tâche 1 le vérifie au chargement.
+faster-whisper, le modèle tranché par la tâche 0 (`small` par défaut). Ce qu'elle prouve : la coupe du son que la page
+envoie, le délai réel, la confiance réelle, et ce qu'elle fait d'une toux (un « Merci. » inventé est un défaut à
+trouver ici). Ce qu'elle coûte : `entendu`, `confiance`, `transcriptionMs` et `echec` sont ignorés ; le relevé écrit
+pour chaque phrase `dit`, `entendu` et la confiance, et une attente `tous` ne compare jamais un texte transcrit. Le
+tirage de température rend un texte différent d'une partie à l'autre sur un bruit : un écart de ce genre se lit dans
+le relevé, il ne se rejoue pas.
 
-Une fausse transcription n'est pas proposée : elle devrait deviner quelle parole couvre le son reçu, ce que seule
-une transcription sait faire. whisper-server reste au desktop.
+### Sa voix : Piper par le service, ou une fausse synthèse
 
-### Sa voix : une fausse synthèse, servie par le joueur
+Voir « À trancher ». **Piper par le service** (déjà sur le laptop) fait jouer le maillon `voix` en entier : l'appel au
+service, sa file, le vrai temps de synthèse et la vraie durée d'une phrase. `syntheseMs`, `msParCaractere` et
+`echoue` sont alors ignorés et dits au relevé. **La fausse synthèse servie par le joueur** (il répond lui-même à
+`/voix/tts`, comme `FausseVoix`, `fakes.ts:66-74`) garde ces réglages, mais le maillon `voix` s'arrête au `Speaker` et
+à Web Audio : ni le service, ni sa file, ni le temps de synthèse ne sont mesurés. Je recommande Piper si la tâche 0
+le trouve assez rapide, la fausse synthèse pour les seuls scénarios qui en ont besoin (`oui-puis-reparler` et sa
+synthèse d'une seconde).
 
-Le joueur répond lui-même à `/voix/tts`, au niveau du navigateur : il attend `syntheseMs`, échoue sur `echoue`, et
-rend un son discret de `msParCaractere × longueur`, comme `FausseVoix` (`fakes.ts:66-74`). Son premier échantillon
-porte un numéro, que la sonde lit au départ du son : le journal sait quelle phrase sonne. Le service de voix ne sert
-plus qu'à transcrire : il gagne `--tts aucun`. La vraie synthèse et sa durée sont celles du desktop (étape 5).
+### Les deux horloges
+
+La page écrit ce qu'elle décide (`son`, `premier_son`). La sonde branche une prise sur la sortie de sa voix et date le
+premier et le dernier échantillon non silencieux de chaque phrase, sur l'horloge de la page : ce sont ses `joue` et
+`arrete`. Le départ d'un `AudioBufferSourceNode` ne sert qu'à retrouver le texte (par les premiers échantillons du son
+rendu par `/voix/tts`). Un écart entre ce que la page croit et ce qui sonne est une mesure du relevé.
 
 ### Le faux modèle, côté Lun'Anima
 
-Il se branche là où se branche `FakeOpenAi` : un `fetch` injecté dans `createOpenAiProvider`, choisi au démarrage en
-mode « chaîne » seulement. Le vrai fournisseur, le vrai SDK et son analyse du flux tournent ; rien ne sort du
-processus ; la clé est un mot sans valeur.
+Il se branche là où se branche `FakeOpenAi` : un `fetch` injecté dans `createOpenAiProvider`. Le vrai fournisseur, le
+vrai SDK et son analyse du flux tournent ; rien ne sort du processus ; la clé est un mot sans valeur. Il lit les
+`reponses` de la partie et répond comme le faux serveur du niveau exact (`fakes.ts:153-199`) : la première réponse
+dont `si` est contenu dans le dernier message de la personne, sans accents ni casse, ou la première sans `si`. Il
+attend `premierMotMs`, envoie chaque phrase en trois morceaux, `entrePhrasesMs` entre deux ; `erreur` coupe le flux ;
+une coupure l'arrête.
 
-Il lit les `reponses` du scénario, envoyées au début de chaque partie, et répond comme le faux serveur du niveau exact
-(`fakes.ts:153-199`) : la première réponse dont `si` est contenu dans le dernier message de la personne, sans accents
-ni casse, ou la première sans `si`. Il attend `premierMotMs` avant la première phrase, `entrePhrasesMs` entre deux, et
-envoie chaque phrase en trois morceaux. `erreur` coupe le flux. Une coupure de la réponse arrête le flux.
+**Le poste est un blanc dans le flux** : après la phrase `apres`, il attend `poste.ms + premierMotMs`. Le délai `poste`
+du serveur manque donc ; l'attente qui le lit est `exact`. Toute autre demande au modèle est écrite au journal comme
+`modele_inattendu` et refusée.
 
-**Le poste est un blanc dans le flux** : après la phrase `apres`, il attend `poste.ms + premierMotMs`. Le vrai appel à
-un poste demande un satellite appairé ; le délai `poste` du serveur manque donc à ce niveau, et l'attente qui le lit
-est `exact`. Le vrai poste viendra avec un faux satellite servi en HTTP, plus tard.
+### Le serveur de la chaîne : un point d'entrée à lui
 
-Toute autre demande au modèle (un rituel, une scène, la nuit, un message sans réponse prévue) est écrite au journal
-comme `modele_inattendu` et refusée : elle se voit au lieu de répondre n'importe quoi.
+`npm run chaine` (Lun'Anima) lance `core/src/cli/chaine.ts`, qui assemble `createApp` comme l'assemblage de test, sorti
+de sa dépendance à vitest, sur une base en mémoire et l'horloge réelle. `main.ts` n'est pas touché : ni copie
+quotidienne, ni nuit, ni surveillance de clé, ni satellites n'y sont montés, parce qu'ils ne le sont pas. Il refuse de
+démarrer hors de la boucle locale, écoute sur un port à lui (8798), et donne le code d'appairage par
+`bootstrapPairing`.
 
-### Le serveur de la chaîne
+**[avis] Des fichiers plutôt que des routes**, la variante la plus simple : la partie et le journal passent par
+`BANC_DIR/chaine/serveur/`, que les deux dépôts trouvent au même endroit (`../banc-sons/chaine`, ou `CHAINE_DIR`).
+Une seule route, `parle`, parce qu'une parole à elle doit partir à son instant. Le journal est écrit par un middleware
+monté devant `createApp`, qui lit le corps de la requête et la tête du flux rendu : aucune route de la conversation ne
+change.
 
-`npm run chaine` (Lun'Anima) démarre le vrai serveur, avec :
+### Ce que le serveur a reçu, sans conversion d'horloge
 
-- une base en mémoire, rien sur le disque ; ni copie quotidienne, ni nuit, ni rattrapage, ni surveillance de clé, ni
-  satellites, ni envoi au téléphone ;
-- un refus de démarrer si `HOST` n'est pas la boucle locale ; un port à lui (8798) pour ne pas gêner un core qui
-  tournerait déjà ;
-- quatre routes sous `/api/chaine`, qui n'existent qu'en ce mode (le contrat ci-dessous).
-
-### La sonde et le joueur réel
-
-Le joueur réel est un fichier de vitest qui ne tourne qu'en mode `chaine`, comme le banc (`banc.test.ts:174`) : il
-réutilise le chargement, le juge, le relevé et, pour la comparaison, le joueur du niveau exact. Il pilote Chrome par
-`playwright-core`, sans télécharger de navigateur : celui du poste (`channel: 'chrome'`). La preuve du 10/11 l'a fait
-en CDP brut ; Playwright apporte d'un coup le script posé avant la page, les réponses fabriquées et le téléchargement
-du déroulé, qu'il faudrait réécrire.
-
-La sonde est un script posé avant la page. Elle remplace `getUserMedia`, pose les sons à leurs instants ou à leurs
-ancres, clique sur « Faire taire » à l'instant d'un geste, et écrit le journal du joueur sur l'horloge de la page :
-`parole`, `bruit_joue`, `geste`, `joue` (au départ d'un `AudioBufferSourceNode`, le texte retrouvé par son numéro),
-`arrete` (à son arrêt ou à sa fin). Le numéro de la réponse d'un `joue` est celui du dernier `son` de la page avant
-lui, comme au niveau exact (`player.ts:68-71`). Le déroulé de la page est pris par son bouton d'export, à la fin de la
-partie : rien ne change dans la page.
-
-Le journal du serveur (`envoi_recu`, `coupure_recue`, `retrait_recu`, `parle_recu`, `modele_inattendu`) est lu par
-la route du journal à la fin de la partie, et ramené à l'horloge de la page. C'est le veto de LiveKit : ce que le
-serveur a vraiment reçu, pas ce que la page croit avoir envoyé.
+Aucune attente `tous` jouée ici ne lit l'instant d'une ligne du serveur (voir « Ce que le code fait aujourd'hui ») :
+le journal du serveur est fondu dans la partie par son ordre et ses numéros, chaque ligne posée à l'instant de
+l'événement de la page qui porte le même numéro (`envoi_recu` sur `numero`, `coupure_recue` sur `coupee`,
+`retrait_recu` sur `retiree`). `charger` refuse, au niveau de la chaîne, une attente `tous` sur une ligne du serveur
+qui a des bornes ou sert d'ancre : le jour où il en faut une, la conversion reviendra, avec un aller-retour au début
+et à la fin de la partie et une borne tirée de sa durée.
 
 ### Le juge à ce niveau
 
-`juger(s, partie, 'chaine')` : une attente `exact` est jugée comme avant, mais marquée `horsNiveau` ; elle ne fait
-jamais échouer, n'entre pas dans le calcul de la source des autres, et le relevé la range sous « Mesures ». Une
-attente `tous` ne peut pas s'ancrer sur une attente `exact` : `charger` le refuse. Rien d'autre ne change : la règle
-de la source, les espèces, `connus`.
+`juger(s, partie, 'chaine')` : une attente `exact` est jugée comme avant, marquée `horsNiveau` ; elle ne fait jamais
+échouer et n'entre pas dans le calcul de la source des autres. Une attente `tous` ne peut pas s'ancrer sur une
+`exact`. La règle de la source gagne un cas : quand le texte transcrit d'une phrase diverge de son `dit` (sans
+accents, casse ni ponctuation), un échec qui suit cette phrase nomme `transcription`.
 
 ### Le temps réel, et où ça tourne
 
-Une partie dure son scénario plus le temps d'entrer, soit dix à quarante secondes ; une partie de chaque scénario
-jouable, une seule fois (les répétitions et les taux sont l'étape 4). Sur le laptop seulement, à la main : la chaîne
-demande Chrome, `uv`, un modèle de transcription de 464 Mo, la synthèse de Windows et le serveur privé. Rien en CI.
-Les mutations, elles, tournent sur le niveau exact : un job à part dans la CI de Lun'Luxuria, d'une à deux minutes.
+Une partie par scénario jouable, une seule fois (les répétitions et les taux sont l'étape 4). Sur le laptop seulement,
+à la main : la chaîne demande Chrome, `uv`, un modèle de transcription, la synthèse de Windows et le serveur privé.
+Rien en CI. Les mutations tournent sur le niveau exact, dans un job à part de la CI ; sa durée sera mesurée.
 
-## Le contrat entre les deux dépôts
+## Palier 2 : les contrats
 
-Les routes du mode « chaîne » de Lun'Anima. Elles n'existent qu'en ce mode ; toutes sauf la première demandent le
-jeton de l'appareil appairé.
+### Entre les deux dépôts
 
-| Route | Corps | Effet |
+Dans `CHAINE_DIR` (par défaut `../banc-sons/chaine` depuis chaque dépôt), sous `serveur/` :
+
+| Fichier ou route | Écrit par | Contenu |
 |---|---|---|
-| `GET /api/chaine/code` | | `{ code }`, un code d'appairage neuf |
-| `POST /api/chaine/partie` | `{ nom, reponses }` | les réponses du faux modèle ; le journal repart à vide ; 204 |
-| `POST /api/chaine/parle` | `{ pourquoi, phrases }` | une parole à elle, par `chat.say` ; 202 |
-| `GET /api/chaine/journal` | | `{ lignes }` depuis la dernière partie |
+| `serveur/code` | le serveur, au démarrage | le code de `bootstrapPairing` |
+| `serveur/partie.json` | le joueur, avant chaque partie | `{ nom, reponses }`, `reponses` de la forme de `Reponse` |
+| `serveur/journal.jsonl` | le serveur | une ligne par événement, `{ partie, t, name, ...valeurs }` |
+| `POST /api/chaine/parle` | le joueur, au jeton | `{ pourquoi, phrases }` : `chat.say`, puis 202 |
 
-`reponses` a la forme de `Reponse` (`scenario.ts:134-149`), recopiée dans Lun'Anima avec un commentaire qui renvoie à
-ce plan. Une ligne du journal : `{ t, name, ...valeurs }`, `t` en millisecondes depuis l'époque (`Date.now()`).
+Le faux modèle relit `partie.json` à chaque demande. `t` est `Date.now()`, pour le relevé seulement. `Reponse` est
+recopié dans Lun'Anima avec un commentaire vers ce plan.
 
 | `name` | Écrit par | Valeurs |
 |---|---|---|
-| `envoi_recu` | la route d'envoi | `texte`, `message`, `reponse` |
-| `coupure_recue` | la route de coupure | `reponse`, `entendu` |
-| `retrait_recu` | la route de retrait | `message` |
+| `envoi_recu` | le middleware, sur l'envoi | `texte`, `message`, `reponse` |
+| `coupure_recue` | le middleware, sur la coupure | `reponse`, `entendu` |
+| `retrait_recu` | le middleware, sur le retrait | `message` |
 | `parle_recu` | la route `parle` | `reponse` si `chat.say` le rend |
 | `modele_appele` | le faux modèle | `reponse` (l'index dans `reponses`), `texte` |
 | `modele_inattendu` | le faux modèle | `sorte` (`stream` ou `complete`), `extrait` (80 caractères) |
+
+### Dans Lun'Luxuria
+
+| Pièce | Rendu par | Lu par |
+|---|---|---|
+| Le plan de partie | `planDePartie(s, sons)`, tâche 3 | la sonde (6), le joueur (9) |
+| Les sons | le joueur (9), par une route du navigateur | la sonde |
+| La résolution d'une ancre | `ancre(apres, journal)` de `scenario.ts`, tâche 1 | le joueur exact, la sonde |
+| Le texte de ce qui sonne | la sonde | le juge |
+| Le journal de la sonde | la sonde | le joueur |
+
+- **Le plan de partie** : des données seules. Pour chaque parole et chaque bruit, `{ son, a }` ou `{ son, apres }` ;
+  les gestes ; les `reponses`.
+- **Les sons** : `/banc/sons/<n>.wav`, servis depuis `CHAINE_DIR`, jamais en JSON dans le script posé.
+- **L'ancre** : une fonction pure, embarquée dans la sonde par un build de Vite.
+- **Le texte de ce qui sonne** : les 64 premiers échantillons rendus par `/voix/tts`, retrouvés au départ du son ; la
+  fausse synthèse met en plus un numéro dans son premier échantillon.
+- **Le journal de la sonde** : `window.__banc.journal`, des `BancEvent` datés par `performance.now()`.
 
 ## Les scénarios à ce niveau
 
@@ -265,7 +339,9 @@ ce plan. Une ligne du journal : `{ t, name, ...valeurs }`, `t` en millisecondes 
 | `echo-fort` | non joué | l'écho passe par un vrai micro et une vraie sortie, étape 5 |
 | `delai-modele-lent` | non joué | `modeleMs` règle un faux ; ici le temps de Silero est le vrai |
 
-## Tâches
+Le relevé recopie la raison de chaque scénario non joué.
+
+## Palier 2 : les tâches
 
 **En parallèle d'emblée** : 1, 3, 4, 5, 6 (Lun'Luxuria, fichiers distincts) et 7, 8 (Lun'Anima). Puis 2 après 1 ; 9
 après 1, 3, 4, 6 et 8 ; 10 en dernier. Les tâches 5 et 9 ajoutent chacune une ligne à `package.json` : la seconde
@@ -273,174 +349,193 @@ reprend la première.
 
 1. - [ ] **Le format, le joueur exact et le juge pour la chaîne** (Lun'Luxuria, `dev-luxuria`).
    - `src/presence/scenario.ts` : `Parole.apres?: { joue: number; phrase?: number; ms: number } | { envoi: number;
-     ms: number }`, exclusif de `a` ; `Scenario.gestes?: { geste: 'silence'; a?: number; apres?: … }[]` ; les
-     noms `geste` et `parole_sautee` au journal du joueur (`BancNom`), écrits par aucun mécanisme. `charger` refuse :
-     ni `a` ni `apres`, les deux à la fois, une ancre vers une réponse ou une phrase que `modele` ne prévoit pas, une
-     attente `tous` ancrée sur une `exact`, une attente `tous` qui compare `texte` ou `entendu` d'une phrase de la
-     personne (la vraie transcription ne la rend pas au mot près). Le contrôle des paroles qui se chevauchent ne vaut
-     que pour les paroles à instant absolu.
-   - `src/presence/player.ts` : une parole ancrée est posée quand son ancre paraît au journal (`joue` de la réponse et
-     de la phrase, ou `envoi_recu`), plus `ms` ; une ancre jamais venue écrit `parole_sautee` à la fin. Un geste
-     `silence` appelle `convo.silence()`, comme le bouton (`session.svelte.ts:575`). `merged` passe dans
-     `scenario.ts`, exporté : le joueur réel en a besoin et ne doit pas importer `vi`.
+     ms: number }`, exclusif de `a` ; `Scenario.gestes?: { geste: 'silence'; a?: number; apres?: … }[]` ; les noms
+     `geste` et `parole_sautee` au journal du joueur, écrits par aucun mécanisme ; `ancre(apres, journal)`, pure, qui
+     rend l'instant ou `undefined`. `charger` refuse : ni `a` ni `apres`, les deux, une ancre vers une réponse ou une
+     phrase que `modele` ne prévoit pas, une attente `tous` ancrée sur une `exact`, une attente `tous` qui compare
+     `texte` ou `entendu` d'une phrase de la personne, et, au niveau de la chaîne, une attente `tous` sur une ligne du
+     serveur avec bornes ou ancre. Le contrôle des paroles qui se chevauchent ne vaut que pour les instants absolus.
+     `merged` passe ici, exporté : le joueur réel ne doit pas importer `vi`.
+   - `src/presence/player.ts` : une parole ancrée est posée à `ancre(...)` ; une ancre jamais venue écrit
+     `parole_sautee`. Un geste `silence` appelle `convo.silence()`, comme le bouton (`session.svelte.ts:575`).
    - `src/presence/judge.ts` : `juger(s, partie, niveau: 'exact' | 'chaine' = 'exact')`. En `chaine`, un verdict
      `exact` porte `horsNiveau: true`, `passe` le laisse passer, et il n'entre pas dans `premier` (`judge.ts:282`).
      Une parole sautée : l'attente qui la vise est `non_jouee`, sa source est le maillon de l'ancre (`voix` pour
-     `joue`, `serveur` pour `envoi`), pas `ecoute`.
-   - `src/presence/releve.ts` : une section « Mesures » pour les verdicts hors niveau ; `releveChaine(parties)` ajoute
-     par scénario le tableau des délais de chaque tour (`delays()`, `trace.ts:164`), exact et chaîne côte à côte,
-     l'écart et son maillon (`attente_fin` → `ecoute`, `transcription` → `transcription`, `file_serveur`,
-     `premier_mot`, `premiere_phrase` → `serveur`, chaque `synthese` → `voix`, `arret_coupure` → `suspension`), la
-     latence de capture (de `parole` début à la `voix` de la page), les champs ignorés et la raison d'une partie non
-     jouée. Médiane et 95e centile attendront les répétitions (étape 4).
-   - Tests : chaque refus nouveau de `charger` (`scenario.test.ts`) ; une parole ancrée sur `joue` et sur `envoi`, une
-     ancre jamais venue, un geste `silence` (`player.test.ts`) ; `horsNiveau`, `passe`, la source d'une parole sautée,
-     une `exact` ratée qui ne nomme plus la source des autres (`judge.test.ts`) ; un relevé de chaîne écrit à la main,
-     comparé ligne à ligne. Les seize scénarios passent sans changement.
+     `joue`, `serveur` pour `envoi`). La source `transcription` quand le texte transcrit diverge du `dit`.
+   - `src/presence/releve.ts` : une section « Mesures » pour les verdicts hors niveau ; `releveChaine(parties)`
+     ajoute par scénario : chaque phrase (`dit`, `entendu`, confiance) ; les délais de chaque tour (`delays()`,
+     `trace.ts:164`), exact et chaîne côte à côte, l'écart et son maillon (`attente_fin` → `ecoute`,
+     `transcription` → `transcription`, `file_serveur`, `premier_mot`, `premiere_phrase` → `serveur`, chaque
+     `synthese` → `voix`, `arret_coupure` → `suspension`) ; la latence de capture (de `parole` début à la `voix` de
+     la page) ; l'écart entre `son` et ce qui a sonné ; la comparaison du témoin par Chromium ; les champs ignorés ;
+     la raison d'une partie non jouée.
+   - Tests : chaque refus nouveau de `charger` ; `ancre` sur `joue` et sur `envoi`, une ancre jamais venue, un geste
+     `silence` ; `horsNiveau`, `passe`, la source d'une parole sautée, la source `transcription`, une `exact` ratée qui
+     ne nomme plus la source des autres ; un relevé de chaîne écrit à la main, comparé ligne à ligne. Les seize
+     scénarios passent sans changement.
    - Exclu : convertir les scénarios (tâche 2), le navigateur.
 2. - [ ] **Les scénarios ancrés et `faire-taire`** (`src/presence/scenarios/`, `testeur`). Après 1.
-   - Chaque parole dont le sens dépend d'elle (« pendant qu'elle parle », « pendant qu'elle réfléchit ») devient
-     ancrée : `toux-parole`, `toux-courte`, `toux-reflexion`, `toux-puis-parole`, `arrete-net`, `non-court`,
-     `couper-le-blanc`, `oui-puis-reparler`, `deux-phrases`, les autres si le calcul le montre. `ms` vaut l'ancien `a`
-     moins l'instant de l'ancre au niveau exact : le déroulé exact reste le même ligne pour ligne, et un test de la
-     suite le compare au déroulé d'avant la conversion, tiré de `main` dans un fichier de témoin hors dépôt.
+   - Chaque parole dont le sens dépend d'elle devient ancrée : `toux-parole`, `toux-courte`, `toux-reflexion`,
+     `toux-puis-parole`, `arrete-net`, `non-court`, `couper-le-blanc`, `oui-puis-reparler`, `deux-phrases`, les autres
+     si le calcul le montre. `ms` vaut l'ancien `a` moins l'instant de l'ancre au niveau exact.
+   - Le garde-fou : une comparaison faite une fois, pendant cette tâche, des déroulés exacts d'avant et d'après la
+     conversion, ligne pour ligne ; son résultat est écrit dans ce plan. Pas de test contre un témoin hors dépôt.
    - `faire-taire.ts` : une demande, une réponse de trois phrases, le geste `silence` 1 s après le début de la phrase
      1. Les attentes, à lire dans `conversation.ts` (`silence`) et `speaker.ts` (`stop`) : le son arrêté (`arrete`)
-     dans la trame qui suit le geste, ce que la page écrit de la coupure, la coupure reçue avec les mots entendus,
-     plus aucun `joue` de la réponse. Niveau `tous` pour ce que la chaîne doit tenir, `exact` pour les bornes à la
-     trame. Le compte de `scenarios.test.ts` passe à dix-sept.
+     dans la trame qui suit le geste, ce que la page écrit de la coupure, la coupure reçue, plus aucun `joue` de la
+     réponse. `tous` pour ce que la chaîne doit tenir, `exact` pour les bornes à la trame. Dix-sept scénarios.
    - Exclu : changer un mécanisme pour qu'un scénario tienne ; un écart devient une issue.
-3. - [ ] **Les sons de la personne** (`src/presence/chaine/sons.ts`, `dev-luxuria`). *Parallélisable.*
-   - `sonsDe(s, dir, synth)` rend, pour chaque parole et chaque bruit, un son 16 kHz mono et sa durée, ou la raison de
-     son absence. Ordre : `dir/sons/<nom>.wav` (le `dit` réduit : minuscules, sans accents, tirets), puis la synthèse
-     en cache `dir/sons/sapi/<empreinte>.wav`, puis la synthèse. Un `dit` entre parenthèses ne se synthétise pas.
-     Un bruit prend `bruit.wav`, coupé à sa durée. Les silences de début et de fin d'un son sont retirés (seuil sur le
-     niveau, comme `levelToVoice`) ; un son plus long que `duree` est gardé, et sa vraie durée est rendue.
-   - Les `trous` : le texte est coupé au mot le plus proche de chaque trou, chaque morceau synthétisé, les silences
-     insérés à leur place.
-   - `synthSapi(texte)` : lance `powershell.exe` avec des arguments fixes et lit le texte sur l'entrée standard,
-     jamais dans la ligne de commande ; `System.Speech`, voix Hortense, `SpeechAudioFormatInfo(16000, Sixteen,
-     Mono)`. Hors Windows ou sans Hortense : une erreur qui le dit.
-   - Lecture et écriture des WAV par `readWav`, `writeWav` (`src/listen/replay.ts`).
-   - Tests (`sons.test.ts`, synthèse injectée, aucune synthèse réelle) : la réduction du nom, l'ordre de recherche,
-     le cache, la toux manquante, le bruit coupé, le retrait des silences, les trous. Exclu : le navigateur.
-4. - [ ] **Le service de voix sans synthèse** (`voix/service.py`, `voix/test_service.py`, `dev-luxuria`).
+3. - [ ] **Les sons de la personne et le plan de partie** (`src/presence/chaine/sons.ts`, `dev-luxuria`).
    *Parallélisable.*
-   - `--tts` n'est plus obligatoire ; `--tts aucun` (et l'absence de `--tts`) : `/tts` répond 503 « pas de synthèse
-     dans ce service », `/ping` dit `"tts": "aucun"`. Rien d'autre ne change. Une ligne au `docs/README.md`.
-   - Tests : le 503, le `/ping`, et qu'aucun module de synthèse n'est importé dans ce cas.
-5. - [ ] **La contre-épreuve dans le dépôt** (`tools/mutations.mjs`, `npm run mutations`, `dev-luxuria`).
-   *Parallélisable ; la ligne de f2 attend la tâche 2.*
-   - Reprendre `mutations.mjs` : chaque mutation porte le maillon qu'elle doit faire nommer (a et e `ecoute`, b
-     `suspension`, c `retenue`, d1 et d2 `filtre`, f1 `suspension`, f2 `coupure`). Elle échoue si son motif manque
-     dans le fichier (le code a changé : la table se met à jour), si aucune attente ne tombe (la mutation survit), ou
-     si la source majoritaire n'est pas la sienne.
-   - Le fichier muté est remis depuis son texte d'avant, gardé en mémoire, dans un `finally` et sur `SIGINT` : jamais
-     par `git checkout`, qui effacerait un travail en cours. Les relevés vont dans un dossier temporaire, retiré à la
-     fin.
-   - La sortie : une ligne par mutation (échecs, scénarios, sources), puis un tableau Markdown à recopier dans un plan.
-   - Un job `mutations` dans `.github/workflows/`, à côté du job principal, sur chaque PR. Une ligne au `CLAUDE.md`.
-   - Exclu : muter au niveau de la chaîne.
+   - `sonsDe(s, dir, synth)` : pour chaque parole et chaque bruit, un son et sa durée, ou la raison de son absence.
+     Ordre : `dir/sons/<nom>.wav`, puis le cache `dir/sons/sapi/<empreinte>.wav`, puis la synthèse. Un `dit` entre
+     parenthèses ne se synthétise pas ; un bruit prend `bruit.wav`, coupé à sa durée. Les silences de début et de fin
+     sont retirés ; un son plus long que `duree` est gardé, et sa vraie durée est rendue. Les `trous` : le texte est
+     coupé au mot le plus proche, chaque morceau synthétisé, les silences insérés.
+   - `planDePartie(s, sons)` : le plan du contrat interne, données seules. Et le fichier du témoin par Chromium :
+     les sons posés à leurs instants dans un seul WAV.
+   - `synthSapi(texte)` : `powershell.exe` avec des arguments fixes, le texte sur l'entrée standard, jamais dans la
+     ligne de commande ; `System.Speech`, Hortense, 16 kHz mono. Hors Windows ou sans Hortense : une erreur qui le dit.
+   - Lecture et écriture par `readWav`, `writeWav` (`src/listen/replay.ts`).
+   - Tests (synthèse injectée) : la réduction du nom, l'ordre de recherche, le cache, la toux manquante, le bruit
+     coupé, le retrait des silences, les trous, le plan, le WAV du témoin. Exclu : le navigateur.
+4. - [ ] **Le service de voix sans synthèse** (`voix/service.py`, `voix/test_service.py`, `dev-luxuria`).
+   *Parallélisable ; inutile si CrOliX choisit Piper partout.*
+   - `--tts aucun` (et l'absence de `--tts`) : `/tts` répond 503, `/ping` dit `"tts": "aucun"`. Une ligne au
+     `docs/README.md`. Tests : le 503, le `/ping`, aucun module de synthèse importé.
+5. - [ ] **La contre-épreuve dans le dépôt** (`npm run mutations`, `dev-luxuria`). *Parallélisable ; f2 attend 2.*
+   - Une mutation est appliquée au chargement par un plugin `transform` de vitest (`MUTATION=<nom>`), dans une config
+     à part : aucun fichier n'est touché. Seulement la suite de `src/presence`.
+   - Chaque mutation porte le maillon qu'elle doit faire nommer (a et e `ecoute`, b `suspension`, c `retenue`, d1 et
+     d2 `filtre`, f1 `suspension`, f2 `coupure`). La commande échoue si un motif manque (la table se met à jour), si
+     une mutation survit, ou si la source majoritaire n'est pas la sienne. La sortie : une ligne par mutation, puis un
+     tableau Markdown à recopier dans un plan.
+   - Un job `mutations` dans `ci.yml`, à côté de `checks` ; sa durée mesurée sur la première PR et écrite ici. Une
+     ligne au `CLAUDE.md`.
+   - Dans le même job, une étape qui échoue si `git ls-files` suit un `.wav`, `.flac`, `.mp3` ou `.ogg`.
 6. - [ ] **La sonde dans la page** (`src/presence/chaine/sonde.ts`, `dev-luxuria`). *Parallélisable.*
-   - Une fonction autonome, sérialisable par Playwright (`addInitScript`), sans import, qui reçoit un plan de partie :
-     les sons (échantillons, instant ou ancre), les gestes, et la table numéro → texte de la fausse synthèse.
-   - Elle remplace `navigator.mediaDevices.getUserMedia` par un `MediaStream` tiré d'un `AudioContext` à 16 kHz
-     (`createMediaStreamDestination`), silencieux jusqu'au signal `__banc.jouer()`. `t0` est l'instant de la page où
-     ce contexte commence à sonner (`getOutputTimestamp`). Chaque son est posé à `t0 + a`, ou quand son ancre paraît.
-   - Elle observe sa voix : `AudioBufferSourceNode.prototype.start` écrit `joue` (texte retrouvé par le premier
-     échantillon), `stop` et la fin écrivent `arrete`, une seule fois par son. Elle observe les envois de la page
-     (`fetch` vers `/api/threads/…/messages`) pour les ancres `envoi`.
+   - Une fonction posée avant la page (`addInitScript`), construite par Vite en un seul fichier avec `ancre` de
+     `scenario.ts`. Elle reçoit le plan de partie et va chercher les sons par `/banc/sons/<n>.wav`.
+   - Elle remplace `navigator.mediaDevices.getUserMedia` par un `MediaStream` tiré d'un `AudioContext` à 48 kHz,
+     silencieux jusqu'à `__banc.jouer()`. `t0` est l'instant de la page où ce contexte commence à sonner. Chaque son est
+     posé à `t0 + a`, ou à son ancre.
+   - Sa voix : une prise sur la sortie du contexte de la page (là où il rejoint sa destination) date le premier et le
+     dernier échantillon non silencieux de chaque phrase : `joue` et `arrete`. Le départ d'un son retrouve son texte.
+     Les envois de la page (`fetch` vers `/api/threads/…/messages`) servent aux ancres `envoi`.
    - Un geste `silence` clique `[aria-label="Faire taire"]` à son instant.
-   - Le journal (`window.__banc.journal`), daté par `performance.now()`.
-   - Tests (jsdom, Web Audio simulé à la main) : le remplacement de `getUserMedia`, une ancre `joue` qui pose son son,
-     `arrete` écrit une seule fois, le texte retrouvé par son numéro. Exclu : lancer un navigateur.
+   - Tests (jsdom, Web Audio simulé à la main) : le remplacement de `getUserMedia`, une ancre `joue`, `arrete` écrit
+     une seule fois, le texte retrouvé. Exclu : lancer un navigateur.
 7. - [ ] **Le faux modèle** (Lun'Anima, `core/src/testing/faux-modele.ts`, `dev-core`). *Parallélisable.*
-   - `fauxModele(journal, now)` rend `{ fetch, partie(reponses) }`. Le `fetch` se branche dans `createOpenAiProvider`
-     et parle comme `FakeOpenAi` (`testing/fake-openai.ts`), dont il reprend l'écriture du flux, avec les délais du
-     choix « Le faux modèle » : `premierMotMs`, trois morceaux par phrase, `entrePhrasesMs`, le blanc du poste,
-     `erreur`, l'arrêt sur le signal de la requête.
-   - Le choix de la réponse : le dernier tour `user`, sans accents ni casse, comme `plain` (`fakes.ts` de
-     Lun'Luxuria). Écrit `modele_appele` ; une demande sans réponse prévue, ou non diffusée (`complete`), écrit
-     `modele_inattendu` et rend une erreur 500.
-   - Le type `Reponse` recopié, avec un commentaire vers ce plan.
-   - Tests (horloge fausse) : le choix par `si`, la réponse sans `si`, les délais à la milliseconde, le blanc du
-     poste, l'erreur, l'arrêt par le signal, l'inattendu ; et, branché dans `createOpenAiProvider`, une réponse
-     entière lue par le vrai fournisseur.
-8. - [ ] **Le mode « chaîne » du serveur** (Lun'Anima, `core/src/cli/chaine.ts`, `core/src/main.ts`,
-   `core/src/chat/routes.ts`, `dev-core`). *Parallélisable ; branche le faux modèle quand 7 est là.*
-   - `npm run chaine` : pose `ANIMA_CHAINE=1`, `DB_PATH=:memory:`, `PORT=8798` par défaut, puis importe `main.ts`.
-     `main.ts` refuse le mode si `HOST` n'est pas la boucle locale ; il y prend le faux modèle comme fournisseur, sans
-     surveillance de clé, et coupe la copie quotidienne, la nuit, le rattrapage des routines, les satellites et
-     l'envoi au téléphone. `dbPath()` rend `:memory:` tel quel.
-   - Les quatre routes du contrat, montées en ce mode seulement, et le journal en mémoire. `chatRoutes` reçoit un
-     `observe` facultatif, appelé après l'envoi (`routes.ts:93`), la coupure (`:65`) et le retrait (`:72`) ;
-     silencieux par défaut.
+   - `fauxModele(dir, journal)` rend un `fetch` à brancher dans `createOpenAiProvider`, qui parle comme `FakeOpenAi`
+     (dont il reprend l'écriture du flux) avec les délais de « Le faux modèle », et relit `partie.json` à chaque
+     demande. Écrit `modele_appele` ; une demande sans réponse prévue, ou `complete`, écrit `modele_inattendu` et rend
+     une erreur 500. Le type `Reponse` recopié.
+   - Tests (horloge fausse) : le choix par `si`, la réponse sans `si`, les délais, le blanc du poste, l'erreur,
+     l'arrêt par le signal, l'inattendu ; une réponse entière lue par le vrai fournisseur.
+8. - [ ] **Le serveur de la chaîne** (Lun'Anima, `core/src/cli/chaine.ts`, `core/src/testing/`, `dev-core`).
+   *Parallélisable ; branche le faux modèle quand 7 est là.*
+   - Sortir de `testing/harness.ts` l'assemblage de `createApp` (base, horloge, santé, conversation, présence) dans
+     une fonction sans vitest ; `makeHarness` la garde, avec son horloge à la main et `onTestFinished`. Les tests
+     existants passent sans changement.
+   - `cli/chaine.ts`, `npm run chaine` : cet assemblage sur `openDb(':memory:')`, l'horloge réelle, le faux modèle ;
+     refus si `HOST` n'est pas la boucle locale ; port 8798 ; `bootstrapPairing` écrit son code dans
+     `serveur/code`. Un middleware devant `createApp` écrit `envoi_recu`, `coupure_recue`, `retrait_recu` d'après le
+     corps de la requête et la tête du flux rendu, pour une réponse acceptée seulement. La route `parle`, au jeton.
+     `main.ts` n'est pas touché.
    - Une ligne au `CLAUDE.md` et au `README.md` du dépôt.
-   - Tests : le refus hors de la boucle locale ; les routes absentes hors du mode ; `observe` appelé avec le texte,
-     le message, la réponse, les mots entendus ; une partie qui remet le journal à vide ; un envoi de bout en bout
-     (appairage par le code, envoi, flux, journal) sur `app.request`, avec le faux modèle.
-   - Revue de sécurité de ce diff : aucune route du mode ne doit exister sans lui, et le mode ne peut pas toucher une
-     base sur le disque.
+   - Tests : le refus hors de la boucle locale ; le middleware sur un envoi, une coupure, un retrait, et rien sur une
+     requête refusée ; `parle` sans jeton refusé ; un envoi de bout en bout (code, appairage, envoi, flux, journal)
+     sur `app.request`.
+   - Revue de sécurité de ce diff : rien de ce point d'entrée n'est atteignable depuis `main.ts`.
 9. - [ ] **Le joueur réel** (`src/presence/chaine.test.ts`, `npm run chaine`, `dev-luxuria`). Après 1, 3, 4, 6 et 8.
    - `// @vitest-environment node`, ne joue qu'en mode `chaine` (comme `banc.test.ts:174`) ; dépendance de dév.
      `playwright-core`, Chrome du poste (`channel: 'chrome'`, sans écran, `--mute-audio`,
      `--autoplay-policy=no-user-gesture-required`).
-   - Au départ : `vite build`, puis `vite preview` sur un port libre avec `CORE_URL` (par défaut le serveur de la
-     chaîne) et `VOIX_URL` ; le service de voix lancé par `uv run voix/service.py --stt faster:small --tts aucun
-     --origin <la page>`, sauf si `VOIX_URL` répond déjà ; le serveur doit répondre, sinon un message qui dit de lancer
-     `npm run chaine` de l'autre côté. Un code par `/api/chaine/code`, l'appairage par la vraie route.
-   - Par scénario jouable : `POST /api/chaine/partie` ; un contexte neuf ; `localStorage` posé (le jeton, le micro
-     ouvert, les réglages du scénario fusionnés sur `DEFAULTS`, plus `brain: 'linked'`, `busy.on: false`,
-     `speak.ritual: false`) ; la sonde avec son plan (tâche 3) ; `/voix/tts` servi par le joueur ; le clic d'entrée ;
-     le micro ouvert ; `__banc.jouer()` ; une parole à elle (`modele.parle`) par `POST /api/chaine/parle` à son
-     instant. La partie finit `finApresMs` après la dernière parole posée, au plus 90 s.
-   - À la fin : le déroulé par le bouton d'export ; le journal de la sonde ; celui du serveur, ramené à l'horloge de la
-     page par `performance.timeOrigin`, la dérive contrôlée ; tout décalé de `t0`. Puis `juger(s, partie, 'chaine')`,
-     et `jouer(s)` du niveau exact pour la comparaison des délais.
+   - Au départ : `vite build`, `vite preview` sur un port libre avec `CORE_URL` et `VOIX_URL` ; toujours son propre
+     service de voix, sur son port, par `uv run voix/service.py --stt faster:<modèle> --tts <choix> --origin <page>`,
+     arrêté à la fin ; le serveur doit répondre, sinon un message qui dit de lancer `npm run chaine` de l'autre côté.
+     L'appairage par la vraie route, avec `serveur/code`.
+   - Par scénario jouable : `partie.json` écrit ; un contexte neuf ; `localStorage` posé (le jeton, le micro ouvert,
+     les réglages du scénario fusionnés sur `DEFAULTS`, plus `brain: 'linked'`, `busy.on: false`,
+     `speak.ritual: false`) ; la sonde et son plan ; `/banc/sons/*` servis ; `/voix/tts` servi s'il le faut ; le clic
+     d'entrée ; le micro ouvert ; `__banc.jouer()` ; `parle` à son instant. La partie finit `finApresMs` après la
+     dernière parole posée, au plus 90 s. Puis le témoin `deux-phrases` par le faux périphérique de Chromium.
+   - À la fin d'une partie : le déroulé par le bouton d'export ; le journal de la sonde ; celui du serveur, fondu par
+     ordre et numéros ; tout décalé de `t0`. `juger(s, partie, 'chaine')`, et `jouer(s)` du niveau exact pour les
+     délais.
    - Écrit `releve-chaine.md` et un `deroule-chaine-<nom>.jsonl` par partie dans `BANC_DIR/chaine`. Échoue sur toute
      attente `tous` ratée ou non jouée, hors `connus`. Une ligne au `.gitignore` et au `CLAUDE.md`.
-   - Tests : la conversion d'horloge et le refus d'une dérive, la fusion des journaux, la liste des scénarios non
-     joués et leur raison ; sur des entrées écrites à la main, sans navigateur.
-   - Exclu : répéter une partie, la fenêtre Tauri, la vraie synthèse.
-10. - [ ] **La première partie, et le plan coché** (`testeur`). Après tout le reste.
-    - Lancer les deux `npm run chaine` sur le laptop, une fois avec les seuls sons d'Hortense, une fois avec les sons
-      posés à la main s'il y en a. Recopier le relevé ici, sous « Ce que l'exécution a trouvé » : les verdicts, les
-      délais par maillon, les écarts au niveau exact, la durée de la suite.
+   - Tests, sur des entrées écrites à la main, sans navigateur : la fusion par numéros, la liste des scénarios non
+     joués et leur raison.
+   - Exclu : répéter une partie, la fenêtre Tauri.
+10. - [ ] **La première suite, et le plan coché** (`testeur`). Après tout le reste.
+    - Lancer les deux `npm run chaine` sur le laptop. Recopier le relevé ici, sous « Ce que l'exécution a trouvé » :
+      les verdicts, les délais par maillon, les écarts au niveau exact, le témoin, la durée de la suite.
     - Une issue par écart d'un mécanisme, et un `connus` qui la nomme ; jamais une borne élargie.
-    - Relecture séparée de chaque diff, les deux PR en brouillon ; la feuille de route mise à jour.
+    - Relecture séparée de chaque diff, les deux PR en brouillon ; la feuille de route mise à jour ; les scripts de la
+      tâche 0 retirés de `banc-sons`.
 
 ## Hors périmètre
 
 - Les voix synthétisées en nombre, les hésitations insérées, les répétitions et les taux (étape 4).
-- Le desktop, la fenêtre Tauri, le petit mode, l'écho, la vraie synthèse, whisper-server, RVC (étape 5).
+- Le desktop, la fenêtre Tauri, le petit mode, l'écho, whisper-server, RVC (étape 5).
 - La langue de la synthèse de sa voix.
 - Le vrai appel à un poste par un satellite ; les cartes ; ce que le serveur fait d'une coupure, au-delà de la recevoir.
 - Le vrai modèle : ses suites de consigne restent `first-word`, `wait-phrase` et `natsume:eval`.
-- Muter le code au niveau de la chaîne.
-- Corriger ce que la chaîne trouve : une issue par écart.
+- Muter le code au niveau de la chaîne. Corriger ce que la chaîne trouve : une issue par écart.
 
 ## Limites
 
-- Le micro fabriqué ne passe pas par la capture de Chrome : ni annulation d'écho, ni suppression de bruit, ni
-  pilote. Le desktop le prouvera avec le vrai micro.
-- La synthèse d'Hortense est une voix propre, lente et sans hésitation : elle ne dit rien de la détection sur sa
-  voix à lui, que le banc couvre déjà sur ses enregistrements.
+- **La capture de Chrome.** Le micro fabriqué n'est pas une capture : on ne sait pas encore si Chrome applique
+  l'annulation d'écho, la suppression de bruit et le gain à un `MediaStream` tiré d'un `AudioContext`, ni au faux
+  périphérique par fichier. La tâche 0 le mesure (point 4) ; ce plan sera réécrit d'après elle. Aucune des deux voies
+  ne passe par un vrai pilote ni un vrai micro : le desktop le fera.
+- La synthèse d'Hortense est une voix propre, lente et sans hésitation : elle ne dit rien de la détection sur sa voix
+  à lui, que le banc couvre sur ses enregistrements.
 - Les délais sont ceux du laptop : la transcription sur son processeur n'est pas celle du desktop.
 - Le blanc du poste est fabriqué par le faux modèle ; le délai `poste` du serveur manque.
-- Deux horloges du même poste restent deux horloges : la conversion par `performance.timeOrigin` est contrôlée par
-  sa dérive, pas prouvée exacte à la milliseconde.
-- Non vérifié : que `vite preview` reprenne le relais de `server.proxy` et laisse passer le flux SSE sans le retenir ;
-  qu'un Chrome sans écran et muet tienne l'horloge de Web Audio comme un Chrome visible ; le temps de faster-whisper
-  `small` et de Silero dans Chrome sur le laptop ; que la base en mémoire suffise à tout le démarrage de Lun'Anima ;
-  que l'environnement `uv` du service soit déjà en cache ; la taille de `playwright-core` (de l'ordre de 8 Mo) ;
-  qu'une toux libre de droits soit jugée voix par Silero.
+- Le texte d'une toux transcrite change d'une partie à l'autre : une seule partie ne le dit qu'une fois.
+- Le palier 2 suppose ce que la tâche 0 mesure ; tout ce qui n'y est pas mesuré reste non vérifié, en particulier la
+  taille de `playwright-core` et l'environnement `uv` du service.
 
 ## À trancher par CrOliX
 
-- **La toux.** Quatre scénarios en dépendent. Trois voies : il enregistre une toux et un bruit une fois, dans
-  `banc-sons/chaine/sons/` ; il télécharge une toux libre de droits ; ou les quatre scénarios attendent l'étape 4.
-  Je recommande la première : deux fichiers de quelques secondes, jamais dans un dépôt.
-- **Le son par la page plutôt que par les options de Chromium**, et une parole ancrée sur la partie : c'est un
-  changement du format, validé par le niveau exact inchangé ligne pour ligne.
+Pour le palier 1 :
+
+- **Valider la tâche 0 seule**, sans le palier 2.
+- **La toux** : il en enregistre une (et un bruit), ou il choisit une toux sous licence CC0 ; sinon la tâche 0 mesure
+  sans toux, et les quatre scénarios de toux attendent.
+
+Pour le palier 2, après les mesures :
+
+- **Sa voix** : Piper par le service, déjà sur le laptop (le maillon `voix` entier, ses réglages de scénario ignorés),
+  ou la fausse synthèse (les réglages gardés, le service et le temps de synthèse non mesurés). Le cadrage (§ 8)
+  supposait une synthèse locale. Je recommande Piper, la fausse synthèse pour `oui-puis-reparler` seulement.
+- **Le son par la page, et une parole ancrée sur la partie** : un changement du format, gardé par une comparaison des
+  déroulés exacts faite une fois.
 - **La transcription vraie dès ce niveau**, au prix des champs `entendu` et `confiance` ignorés.
-- **Les mutations dans la CI** de Lun'Luxuria, une à deux minutes par PR.
+- **Les mutations dans la CI** de Lun'Luxuria, à la durée mesurée.
+
+## Ce que le plan-challenger a changé
+
+1. **Deux paliers** : une tâche 0 jetable mesure d'abord ce que la suite suppose ; le reste attend ses mesures.
+2. **`main.ts` intact** : un point d'entrée à part, sur l'assemblage de test sorti de vitest ; un middleware au lieu
+   d'un `observe` dans les routes ; le code par `bootstrapPairing`, sans route ; des fichiers pour la partie et le
+   journal, `parle` seule en route.
+3. **Le micro** : un contexte à 48 kHz ; un témoin par le faux périphérique de Chromium ; la limite sur l'annulation
+   d'écho et la suppression de bruit réécrite, à mesurer.
+4. **Deux horloges** : la sonde date ce qui sonne sur la sortie de sa voix, pas seulement `start()` et `stop()`.
+5. **La conversion d'horloge du serveur disparaît** : aucune attente `tous` jouée ne lit un instant du serveur ; le
+   journal est fondu par ordre et numéros, et `charger` garde cette vérité.
+6. **Sa voix** passe dans « À trancher » : Piper est sur le laptop, et l'interception coûte au maillon `voix` le
+   service, sa file et le temps de synthèse.
+7. **La transcription** : le relevé écrit `dit`, `entendu` et la confiance ; la source nomme `transcription` quand le
+   texte diverge ; le tirage de température de faster-whisper est noté.
+8. **Les ancres** : une fonction pure de `scenario.ts`, embarquée dans la sonde ; leur garde-fou est une comparaison
+   faite une fois, pas un test contre un témoin hors dépôt.
+9. **Un contrat interne** à Lun'Luxuria : le plan de partie, les sons servis par une route, le texte de ce qui sonne.
+10. **Toujours son propre service de voix**, sur son port, avec `--origin`.
+11. **Les mutations** au chargement par un plugin de vitest, sans toucher un fichier, sur `src/presence` seul ; la
+    durée du job mesurée.
+12. **La couverture** : le relevé dit pourquoi chaque scénario manque ; la toux est la sienne, ou CC0.
+13. **Aucun son suivi par git**, vérifié par la CI.
