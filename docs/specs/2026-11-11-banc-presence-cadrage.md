@@ -82,6 +82,25 @@ Lu le 11/11 dans les dépôts clonés pour l'étude du 10/11 ; rien n'a été la
 - Une simulation rend deux verdicts : celui du juge, et un veto du développeur sur l'état réel (la base contient-elle
   bien ce qui a été demandé ?). Le veto peut faire échouer, jamais sauver.
 
+### La veille de CrOliX
+
+Relue le 11/11 : le dossier `perplexity/` de son poste, hors dépôt (195 entrées, les schémas du flux cible, les
+règles testables). Ce qu'elle apporte à ce banc :
+
+- **Un budget par étape**, qui donne ses seuils au déroulé : détection de voix sous 30 ms, fin de tour sous 100 ms,
+  transcription sous 300 ms, première phrase du modèle sous 700 ms, synthèse sous 400 ms, conversion de voix sous
+  100 ms ; du dernier mot au premier son, moins de 1,5 s en médiane sur le PC.
+- **Des tests d'acceptation déjà écrits**, qui sont des scénarios tout faits : une urgence reçue en conversation
+  est dite à la fin de la réplique, pas pendant ; deux relances ignorées font taire la parole spontanée vingt
+  minutes ; une journée rejouée ne dépasse pas six prises de parole par heure.
+- **Des règles de conception** (Cartesia) : parler avant l'outil, couper sur interruption, des blancs de 200 ms.
+- **Des outils de traces** : Langfuse, OpenLIT, tous deux sur OpenTelemetry.
+
+Ce qu'elle ne contient pas : **aucune source sur la façon de tester un agent vocal**. Ni banc d'évaluation, ni
+jeu de données de prise de parole, ni outil d'appelant simulé. Les entrées « voix » portent sur les briques
+(synthèse, transcription, fin de tour), pas sur leur preuve. Un écart à noter : elle donne le modèle de fin de tour
+à moins de 100 ms ; nous l'avons mesuré à 500 ms dans la page (plan « la fin de phrase »).
+
 ### Au passage
 
 Pipecat fait dire au modèle, en tête de chaque réponse, si la phrase de la personne était finie, coupée, ou si elle
@@ -131,18 +150,28 @@ Un plan par étape, chacun validé avant son code. L'étape 1 est petite et sert
 - **Le faux modèle.** Sur le laptop, la chaîne peut tourner avec une réponse écrite d'avance (rien à payer, résultat
   stable) ou avec le vrai modèle (quelques centimes, résultat variable). Je recommande le faux modèle pour les
   mécanismes, le vrai pour les suites de consigne comme `wait-phrase`.
-- **La veille Perplexity.** Je ne peux pas la lancer. Trois questions à lui poser sont au § 7.
+- **Les références.** CrOliX les élargit de son côté ; ce que la recherche devrait ramener est au § 7. Faut-il
+  attendre ce retour avant le premier plan, ou commencer par le déroulé, qui n'en dépend pas ?
 
-## 7. Pour la veille
+## 7. Élargir les références
 
-Des pistes que je connais de nom, **non vérifiées** : à confirmer par la veille avant de s'en servir.
+CrOliX élargit lui-même les sources : les trois projets lus ici ne suffisent pas, et la veille ne couvre pas la
+question. Ce qu'il faudrait qu'une recherche ramène, par ordre d'utilité pour ce banc :
 
-- Quels bancs publics mesurent la prise de parole d'un agent vocal (coupures, relances, silences), et leurs données
-  sont-elles en français ? Noms à vérifier : Full-Duplex-Bench, Talking Turns.
-- Quels outils libres jouent un appelant simulé contre un agent vocal et rendent des délais par étape ? Noms à
-  vérifier : les évaluations de Pipecat (lues ici), le cadre de tests de LiveKit (lu ici), d'autres.
-- Quelles voix de synthèse françaises, locales et libres, donnent des locuteurs variés pour fabriquer des phrases
-  de test ?
+1. **Des bancs d'évaluation d'agents vocaux, libres** : qui joue un appelant (écrit ou simulé) contre un agent, en
+   son, et rend des délais par étape et des taux. Au-delà de Pipecat, AIRI et LiveKit.
+2. **Des mesures publiées de la prise de parole** : comment la recherche chiffre une coupure, une relance, un
+   silence trop long, une parole qui se chevauche ; avec quelles données, et s'il en existe en français.
+3. **Des traces de bout en bout pour la voix** : comment un tour est tracé du micro au haut-parleur chez ceux qui
+   exploitent des agents vocaux ; le vocabulaire d'OpenTelemetry pour ces étapes.
+4. **Des voix françaises pour fabriquer des locuteurs** : synthèse locale et libre, plusieurs timbres, de quoi
+   insérer hésitations et bruits.
+5. **Des compagnes vocales à avatar qui publient leurs tests** : la moitié des projets de la veille n'en ont
+   peut-être aucun ; savoir lesquels en ont.
+
+Des noms que je connais sans les avoir vérifiés, à confirmer avant de s'en servir : Full-Duplex-Bench, Talking
+Turns (prise de parole) ; les plateformes d'essai d'agents vocaux (Hamming, Coval, Cekura), qui sont payantes mais
+publient leurs méthodes.
 
 ## 8. Limites de ce cadrage
 
