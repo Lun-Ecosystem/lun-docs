@@ -46,8 +46,6 @@
 - **Dans lun-docs aussi, une PR par chantier** : son plan, ses textes et ses coches y voyagent ensemble.
   Avant d'en ouvrir une, regarder si le chantier en a déjà une (`gh pr list --state open`) et y pousser.
   Un plan s'y valide par le « validé » écrit de CrOliX, pas par la fusion.
-- Des chantiers voisins d'un même axe s'**agrègent en local** quand ils se suivent de près : poussés
-  ensemble sur une même branche, une PR par dépôt, plutôt qu'une PR chacun à quelques heures d'écart.
 - Le gabarit est obligatoire : issue liée, critères de fin cochés, **preuves** (sortie des tests,
   capture, commande de démo), niveau de la tâche.
 - La CI doit être verte.
