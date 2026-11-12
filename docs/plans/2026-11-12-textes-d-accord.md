@@ -49,7 +49,7 @@ textes et sa CI.
 - Le code relu sur `main` le 12/11, par le graphe d'abord : lun-docs `139a3e2`, lun-luxuria `11eb3d1`, lun-acedia
   `1ae4457`, lun-avaritia `424c4ec`. Les sources de tauri 2.12.5, tauri-plugin-http 2.8.3 et tauri-plugin-dialog
   2.8.4, dans le cache de Cargo du laptop, pour l'issue de l'IPC. Les PR lun-docs#162 et le plan « tenir en continu »
-  (`wt\continu-docs`, `a505e63`), lus pour ce qu'ils touchent ici.
+  (branche `docs/tenir-en-continu`, `a505e63`), lus pour ce qu'ils touchent ici.
 
 **Critères de fin :**
 
@@ -297,7 +297,7 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
 `lun-chantier`, `livreur.md`, `guard.mjs`, le gabarit et le § 5 d'`essentiel.md` ; 7 dans `design.md`,
 `notifications.md` et `README.md` ; 8 dans la feuille.
 
-### lun-docs (session principale ou `dev-front`, worktree `wt\accord-docs`, branche `docs/textes-d-accord`)
+### lun-docs (session principale ou `dev-front`, branche `docs/textes-d-accord`)
 
 1. - [ ] **Les décisions du 12/11** (`docs/specs/2026-11-10-etat-cible-cadrage.md`, `standards/dictionnaire.md`,
    `standards/structure-projet.md`). *Parallélisable d'emblée.*
@@ -484,7 +484,7 @@ reste :
   parole » part sur sa propre branche depuis `main` ; la tâche 8 part de `main` après cette fusion. Avec (a), #162
   reste ouverte jusqu'au palier de son axe, et la tâche 8 attend sa fusion : #162 ajoute deux paragraphes après la
   ligne 23 de la feuille et change son § 4 (`:313-316`), et une seule PR à la fois récrit la feuille.
-- **« Tenir en continu »** (`wt\continu-docs`). Son plan est daté du 12/11 : la date de coupure le compte comme
+- **« Tenir en continu »** (lun-docs#164). Son plan est daté du 12/11 : la date de coupure le compte comme
   historique, et sa part du core va dans l'issue privée de lun-anima. **Le contrat satellite** (`server.crashed`,
   `lot.failed`, `lot.held`) lui revient, puisqu'il émet ces événements : son plan (`:450`) le renvoie aux textes
   d'accord, il doit le reprendre. La ligne `:133` de la mise en service (« La veille de nuit ») lui revient aussi. Il
