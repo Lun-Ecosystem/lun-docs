@@ -4,6 +4,8 @@
 >
 > **Issues :** lun-docs#166 (chapeau), lun-anima#107, lun-acedia#66, lun-avaritia#33.
 >
+> **PR qui livrent :** lun-anima#109 (tâches 1 et 2), lun-acedia#68 (tâches 4 à 7).
+>
 > **Validé par CrOliX le 12/11** (« je valide ») : les points de « À trancher » 1 à 3 selon leur recommandation
 > (l'erreur écrite, au plus un événement de chute par jour, la sortie en code 1 ; le lanceur relance toutes les 15 min
 > sans fin ; la règle vers une boîte retirée sautée, avec une ligne au journal). Point 4, selon la recommandation du
@@ -200,14 +202,14 @@ dépôts partent ensemble ; **dans un dépôt, les tâches passent en série**, 
 
 ### Lun'Anima (`dev-core`)
 
-1. - [ ] **Tâches 1 à 3, dans lun-anima#N (privée)** : 1, les filets du core ; 2, le lanceur ne lâche plus un
+1. - [x] **Tâches 1 à 3, dans lun-anima#107 (privée)** : 1, les filets du core ; 2, le lanceur ne lâche plus un
    serveur ; 3, en option, le flux en direct borné. Leur détail, fichiers compris, est dans l'issue. Elles portent,
    pour le core, les critères 1, 2, 3 et 6. Le lanceur relance le core comme les satellites : la tâche 2 vaut pour
-   les trois serveurs, et la tâche 9 la dit dans la page.
+   les trois serveurs, et la tâche 9 la dit dans la page. Livrées par lun-anima#109 : 1 et 2 ; la 3 n'est pas prise.
 
 ### Lun'Acedia (`dev-core`)
 
-4. - [ ] **Les filets d'Acedia.** *Part d'emblée.* `server/src/main.ts`, `server/src/agenda/reminders.ts`, leurs
+4. - [x] **Les filets d'Acedia.** *Part d'emblée.* `server/src/main.ts`, `server/src/agenda/reminders.ts`, leurs
    tests.
    - Les quatre minuteries passent par `startLoop` (`server/src/util.ts:12-33`) : l'échéance des clés
      (`main.ts:75-77`), la purge des événements (`:102`), le fil de l'agent (`:105-111`) et les rappels
@@ -223,7 +225,7 @@ dépôts partent ensemble ; **dans un dépôt, les tâches passent en série**, 
    - Tests : chaque minuterie, sa fonction rendue fausse, écrit l'erreur et repasse (minuteries simulées de vitest) ;
      `startReminderLoop` dont l'écriture lève continue (aucun test ne couvre cette boucle aujourd'hui).
    - Exclu : changer `startLoop`, la synchro Gmail, l'agenda, la copie ; un événement de chute (point 4).
-5. - [ ] **Le tri ne perd plus de mails.** Après 4. `server/src/triage/pipeline.ts`, `server/src/triage/queue.ts`,
+5. - [x] **Le tri ne perd plus de mails.** Après 4. `server/src/triage/pipeline.ts`, `server/src/triage/queue.ts`,
    leurs tests, `README.md` si le tri y est décrit.
    - Dans le `catch` de `triageNew` (`pipeline.ts:303-307`), l'erreur est classée :
      - **propre au mail** : `GoogleApiError` 404 ou 400, `NotFoundError`, `BadRequestError` (une cible qui n'est pas
@@ -253,7 +255,7 @@ dépôts partent ensemble ; **dans un dépôt, les tâches passent en série**, 
      - une règle vers une boîte retirée ne lève plus : le mail est trié par la règle suivante ou par l'IA, et une
        ligne le dit.
    - Exclu : désactiver les règles à l'écran ; un écran « non trié » ; changer le client Google ou ses relances.
-6. - [ ] **L'agenda, calendrier par calendrier.** Après 5. `server/src/agenda/calendar.ts`,
+6. - [x] **L'agenda, calendrier par calendrier.** Après 5. `server/src/agenda/calendar.ts`,
    `server/src/agenda/tasks.ts`, `server/src/agenda/unified.ts`, leurs tests.
    - Une erreur sur un calendrier (`calendar.ts:233`, hors 410) ou sur une liste de tâches (`tasks.ts:142-148`)
      n'arrête plus les suivants : les autres calendriers, puis les tâches, passent, et `agenda.changed` part pour ce
@@ -264,7 +266,7 @@ dépôts partent ensemble ; **dans un dépôt, les tâches passent en série**, 
    - Tests : deux calendriers, le premier rend 403 : le second et les tâches sont synchronisés, `agenda.changed`
      part, l'erreur remonte ; une liste de tâches en erreur n'empêche pas les autres.
    - Exclu : la fenêtre de la première synchro ; les relances de Google.
-7. - [ ] **L'action groupée journalise au fil.** Après 6. `server/src/gmail/actions.ts`, `server/src/gmail/routes.ts`,
+7. - [x] **L'action groupée journalise au fil.** Après 6. `server/src/gmail/actions.ts`, `server/src/gmail/routes.ts`,
    leurs tests.
    - Chaque mail touché est journalisé, et appris comme aujourd'hui par `journaled` (`routes.ts:34`), dès que Google
      l'a fait (`actions.ts:124-127`), pas à la fin (`routes.ts:100-101`). Au premier échec, la route rend l'erreur
