@@ -151,8 +151,12 @@ graphique à venir. La 8 est l'horizon : elle justifie de bien faire les sept au
 | 7 | **La bibliothèque cherchée par le sens** | § 4.3 |
 | 8 | **Les mots et les composants partagés** : le [dictionnaire](../../standards/dictionnaire.md), puis la galerie du kit en trois paliers (le kit tel qu'il est ; les cartes et la permission ; la convergence des kits) | CrOliX, le 10/11 ; [plan](../plans/2026-11-10-galerie-kit.md) |
 
-**[avis Claude]** 1 à 4 d'abord : ils coûtent peu et remettent les textes d'accord avec ce que CrOliX veut. 5 se cadre
-quand l'achat se précise. 6 et 7 sont de vrais chantiers, à ordonner contre les marches de la présence.
+**L'ordre, tranché par CrOliX le 12/11.** Le point 1 est la porte du MVP, et le premier appareil sans terminal
+(point 6, lun-anima#72) y entre : tous deux passent avant la révision. Jusqu'à la porte : en parallèle « tenir en
+continu », « écoute et parole » et « remettre les textes d'accord », qui fait une part des points 3 et 5 ; puis le banc
+et les mots des gestes ; le premier contact sans terminal ; la session sur le desktop ; le rodage, puis la bascule. La
+révision vient après le rodage, avec ce qui reste des points 2 à 8. **[avis Claude]** 5 se cadre quand l'achat se
+précise ; le reste du point 6 et le point 7 sont de vrais chantiers, à ordonner contre les marches de la présence.
 
 ## 7. Ce que cette démarche interdit
 
