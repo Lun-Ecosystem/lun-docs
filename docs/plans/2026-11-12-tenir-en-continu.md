@@ -2,10 +2,17 @@
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **État : à valider par CrOliX.** Le chantier est validé (« ok je valide », 12/11) ; ce plan ne l'est pas encore.
+> **Issues :** lun-docs#166 (chapeau), lun-anima#107, lun-acedia#66, lun-avaritia#33.
+>
+> **Validé par CrOliX le 12/11** (« je valide ») : les points de « À trancher » 1 à 3 selon leur recommandation
+> (l'erreur écrite, au plus un événement de chute par jour, la sortie en code 1 ; le lanceur relance toutes les 15 min
+> sans fin ; la règle vers une boîte retirée sautée, avec une ligne au journal). Point 4, selon la recommandation du
+> manager : **aucun signal des satellites au core dans ce chantier**, donc pas de tâche 10 ni de changement du
+> contrat ; le core prévient déjà d'un poste injoignable 15 min et le lanceur garde la trace de chaque chute ; les
+> signaux viennent avec le chantier suivant. La tâche 3 reste en option, non faite sauf demande.
 > Écrit le 12/11 depuis l'audit du même jour, code relu sur `main` : lun-anima `b457668`, lun-acedia `1ae4457`,
 > lun-avaritia `424c4ec`. Relu le même jour par le plan-challenger : son alternative est retenue, **un seul palier
-> avant le rodage**. Les purges et ce qui demande les vrais débits passent au chantier suivant. Aucune issue ouverte.
+> avant le rodage**. Les purges et ce qui demande les vrais débits passent au chantier suivant.
 >
 > **Le palier.** Huit tâches, plus la 3 en option et la 10 selon « À trancher », point 4.
 
