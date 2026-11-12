@@ -2,8 +2,10 @@
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **Relu par le plan-challenger (« à amender », treize objections reprises, voir la fin), à valider par CrOliX.**
-> Écrit et amendé le 12/11. Rien n'est codé.
+> **Relu par le plan-challenger (« à amender », treize objections reprises, voir la fin). Palier 1 validé par
+> CrOliX le 12/11 (« je valide »)**, avec ses recommandations : la tâche 0 et le seul téléchargement de
+> `fr_FR-upmc-medium` hors dépôt ; sans prise ni fichier CC0 de sa part, la toux synthétique est choisie sur Silero
+> seul ; Common Voice n'est pas pris à cette étape. Palier 2 à valider après les mesures. Rien n'est codé.
 >
 > **Deux paliers.** **Palier 1 : la tâche 0 seule**, jetable, qui mesure ce que la suite suppose : les voix qu'on
 > peut atteindre, ce qu'elles font de nos phrases, la toux, la variance de la chaîne sur dix lancements, le coût d'une
