@@ -4,168 +4,143 @@
 >
 > **État : à valider par CrOliX.** Le chantier est validé (« ok je valide », 12/11) ; ce plan ne l'est pas encore.
 > Écrit le 12/11 depuis l'audit du même jour, code relu sur `main` : lun-anima `b457668`, lun-acedia `1ae4457`,
-> lun-avaritia `424c4ec`. Pas encore relu par le plan-challenger. Aucune issue ouverte (voir « Les issues »).
+> lun-avaritia `424c4ec`. Relu le même jour par le plan-challenger : son alternative est retenue, **un seul palier
+> avant le rodage**. Les purges et ce qui demande les vrais débits passent au chantier suivant. Aucune issue ouverte.
 >
-> **Deux paliers.** Palier 1 : la tâche 0, une mesure jetable de ce que les bases deviennent en un an. Palier 2 :
-> les tâches 1 à 20. Seules les purges (6 et 18) attendent la tâche 0 et les durées que CrOliX tranche sur ses
-> chiffres ; les autres partent dès la validation.
+> **Le palier.** Huit tâches, plus la 3 en option et la 10 selon « À trancher », point 4.
 
-**But :** que le core, Acedia et Avaritia tournent des jours sans s'arrêter, sans perdre de données en silence et
-sans grossir sans fin. C'est le préalable à la semaine de rodage (feuille de route, B8), porte du MVP.
+**But :** que le core, Acedia et Avaritia tournent des jours sans s'arrêter et sans perdre de données en silence.
+C'est le préalable à la semaine de rodage (feuille de route, B8), porte du MVP. Qu'ils ne grossissent pas sans fin
+se tranche sur les débits du desktop, au chantier suivant.
 
 **Source :** l'audit de l'écosystème du 12/11, section « 1. Tenir en continu », et ses rapports sur Acedia et
 Avaritia. Chaque constat y a été lu par un agent, pas rejoué : chacun est relu ici dans le code ; ceux qui ne
-tiennent pas sont écartés, avec la raison (« Ce que l'audit disait et qui ne tient pas »). Les pages
-[`mise-en-service-desktop.md`](../mise-en-service-desktop.md) (§ 6 à 9) et le plan
-[« plafonds et pause »](2026-11-02-natsume-centre-tranche-5-plafonds-pause.md) pour ce qui est déjà décidé.
+tiennent pas sont écartés, avec la raison. La page [`mise-en-service-desktop.md`](../mise-en-service-desktop.md)
+(§ 6 à 9) et le plan [« plafonds et pause »](2026-11-02-natsume-centre-tranche-5-plafonds-pause.md) pour ce qui est
+déjà décidé.
 
 **Critères de fin**, tous vérifiables sur le laptop, sans appel payant ni vraie base :
 
-1. Aucune minuterie des trois serveurs ne peut les arrêter : chaque boucle a son filet, et un test par boucle la
-   fait lever puis la voit repasser.
-2. Une erreur restée hors de tout filet laisse une trace avant la sortie : une entrée au Journal du core, ou un
-   événement du satellite que le core reçoit à la relance. Un test le prouve dans un processus enfant.
-3. Le lanceur du desktop ne laisse plus un serveur arrêté pour de bon (selon « À trancher », point 3) : son test le
-   montre relancer après la troisième chute.
-4. Le flux en direct et la lecture du flux d'un poste ont une borne : un client qui ne lit plus ne fait plus grossir
-   le core. Un test le prouve.
-5. Avec les durées tranchées, une base nourrie sur 400 jours simulés cesse de grossir (un test par service purgé),
-   le Journal du core et la mémoire de la relation n'y perdent rien (même compte avant et après), et la tâche 20
-   rejoue la mesure de la tâche 0 avec le vrai code.
-6. Chaque copie du jour part aussi dans un second dossier, réglable, avec la même rotation (sept) ; son échec est
-   dit une fois par jour, comme une copie ratée ; une copie de ce dossier s'ouvre et passe le contrôle d'intégrité.
-7. Acedia : une action groupée qui échoue à mi-chemin laisse au journal, annulables, les mails déjà touchés ; un mail
-   en erreur n'arrête plus le tri des suivants ; une règle vers une boîte retirée est sautée ; un calendrier en
-   erreur n'arrête plus les autres ni les tâches. Un test chacun.
-8. Avaritia : un lot de 500 observations se traite par paquets ; un lot en attente repart dans l'heure ; un lot en
-   échec est repris une fois, puis dit au core ; un envoi rejoué ne crée rien de plus ; un brouillon en attente sur
-   une fiche fusionnée s'applique à la fiche gardée ; un modèle sans prix n'est jamais appelé sans être compté. Un
-   test chacun.
-9. Le core : des observations retenues par le plafond du jour d'Avaritia partent la nuit suivante (si « À trancher »,
-   point 8, le garde). Un test.
-10. Les barrières des trois dépôts vertes ; `mise-en-service-desktop.md` dit le nouveau lanceur, le second dossier et
-    les purges ; les données de mesure restent dans `banc-continu/`, hors des dépôts.
+1. Aucune minuterie des trois serveurs ne peut les arrêter : chaque boucle a son filet, et un test par boucle la fait
+   lever puis la voit repasser. Chaque PR joint la liste relevée des minuteries de son serveur, chacune avec son filet.
+2. Une erreur restée hors de tout filet est écrite sur la sortie d'erreur, que le lanceur garde au journal du jour ;
+   elle laisse au plus un événement de chute par jour et par serveur ; puis le serveur sort en code 1 (« À trancher »,
+   point 1). Un test le prouve dans un processus enfant, pour chacun des trois.
+3. Le lanceur du desktop ne laisse plus un serveur arrêté pour de bon (point 2) : son test le montre relancer après la
+   troisième chute.
+4. Acedia, un test chacun :
+   - une panne passagère ne sort aucun mail de la file : cinq mails en file, le réseau coupé, trois passes, les cinq
+     restent ;
+   - un mail en erreur qui lui est propre n'arrête plus les suivants ;
+   - un mail qui sort de la file laisse une ligne au journal du serveur ;
+   - une règle vers une boîte retirée est sautée (point 3) ;
+   - un calendrier en erreur n'arrête plus les autres ni les tâches ;
+   - une action groupée qui échoue à mi-chemin laisse au journal des gestes, annulables, les mails déjà touchés.
+5. Avaritia : un lot retenu repart dans l'heure, sans attendre l'envoi suivant ; un lot en échec est dit au core, au
+   plus une fois par jour. Un test chacun.
+6. Si la tâche 3 est prise : un client du flux en direct qui ne lit plus ne fait plus grossir le core. Un test.
+7. La page de mise en service dit le nouveau lanceur, le prix de chaque modèle utilisé, où vont les copies pendant le
+   rodage, et ce que devient la nuit quand le desktop dort. Si la tâche 10 entre, le contrat satellite dit les
+   événements que les postes portent au core. Les barrières des trois dépôts sont vertes.
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
-| `lun-anima`, `fix/tenir-en-continu` | à ouvrir (voir « Les issues ») | `critique` |
-| `lun-acedia`, `fix/tenir-en-continu` | à ouvrir | `standard` (`critique` si une purge y est tranchée) |
-| `lun-avaritia`, `fix/tenir-en-continu` | à ouvrir | `critique` |
-| `lun-docs`, `docs/tenir-en-continu` | l'issue chapeau, à ouvrir | `trivial` |
+| `lun-anima`, `fix/tenir-en-continu` | à ouvrir, privée : son corps est prêt, hors des dépôts | `standard` |
+| `lun-acedia`, `fix/tenir-en-continu` | à ouvrir | `standard` |
+| `lun-avaritia`, `fix/tenir-en-continu` | à ouvrir | `standard` |
+| `lun-docs`, `docs/tenir-en-continu` | l'issue chapeau, à ouvrir | `trivial`, `critique` si la tâche 10 entre |
 
-**Le niveau** (« À trancher », point 1). `critique` est proposé pour tout le chantier. Je le garde pour le core et
-Avaritia : on y supprime des données, sans retour, et on change ce que fait un processus qui rencontre une erreur ;
-le standard [`workflow.md`](../../standards/workflow.md) range la mémoire et le bug difficile en `critique`. Je le
-conteste pour Acedia : sans purge (point 5), chaque tâche y suit un modèle déjà là (`startLoop`, le journal des
-gestes), et `standard` demande un test par comportement changé, ce que chaque tâche a déjà.
+**Le niveau.** `standard` pour les trois dépôts. Aucune donnée n'est retirée dans ce palier : les purges passent au
+chantier suivant. Chaque tâche suit un modèle déjà là : `startLoop` pour les boucles, la marque du jour de
+`backup.failed` pour l'événement de chute, le journal des gestes pour l'action groupée. Le standard
+[`workflow.md`](../../standards/workflow.md) demande alors un test par comportement changé ; chaque tâche les a. La
+sortie en code 1 change ce que fait un processus en erreur : elle est tranchée avant le code (point 1). Un changement
+du contrat satellite est `critique` (`workflow.md:39`) : c'est la tâche 10, si CrOliX suit le point 4.
 
 **Les issues.** Une issue chapeau dans **lun-docs**, « Tenir en continu », qui porte ce plan et la liste des trois
-autres ; une issue dans chacun de **lun-anima**, **lun-acedia** et **lun-avaritia**, qui renvoie au chapeau. Chaque
-PR de code ferme l'issue de son dépôt ; la PR de lun-docs (le plan coché, la page de mise en service) ferme le
-chapeau, une fois les trois autres fusionnées.
+autres ; une issue dans chacun de **lun-anima** (privée), **lun-acedia** et **lun-avaritia**, qui renvoie au chapeau.
+Chaque PR de code ferme l'issue de son dépôt ; la PR de lun-docs (le plan coché, la page de mise en service, le
+contrat si la tâche 10 entre) ferme le chapeau, une fois les trois autres fusionnées.
 
 ## Ce que le code fait aujourd'hui
 
-### Lun'Anima (dépôt privé : décrit par ses fonctions)
+### Lun'Anima
 
-- **Aucun filet au niveau du processus.** Une exception levée hors d'un `catch`, dans une minuterie ou une promesse
-  laissée sans suite, arrête le core : c'est le comportement de Node par défaut, et rien ne le change. La plupart des
-  boucles ont leur filet : les routines, les notifications, la pause, l'échéance de la clé, la lecture des postes, le
-  relais des gestes, la copie. **Deux n'en ont pas** : le rafraîchissement de la liste des postes, toutes les 15 s,
-  et la relance d'un geste tenu dont la minuterie a sonné trop tôt. Une erreur y est peu probable (une lecture de la
-  base), mais rien ne la rattrape.
-- **Le lanceur du desktop** (dans le dépôt du core, pour les trois serveurs) relance un serveur tombé en erreur 60 s
+Le core est décrit dans son issue privée : lun-docs est public. Seul le lanceur du desktop est dit ici, comme la page
+de mise en service le fait déjà.
+
+- **Le lanceur** (`lun-anima/deploy/windows/run.mjs`, pour les trois serveurs) relance un serveur tombé en erreur 60 s
   plus tard, trois fois ; une course de plus de 10 min remet le compte à zéro ; après la troisième chute, il le laisse
-  arrêté (`mise-en-service-desktop.md`, § 9 et son tableau). **Une erreur qui revient chaque minute arrête donc le
-  serveur pour de bon en sept minutes** (quatre lancements, trois attentes), jusqu'à ce que CrOliX le relance au
-  Planificateur ou que Windows redémarre.
-  Il est hors de chez lui les trois quarts du temps.
-- **Le flux en direct des apps** garde, pour chaque client, une file sans borne. Un client qui ne lit plus, un
-  téléphone en veille dont la connexion n'est pas encore tombée, la fait grossir à chaque événement, les mots d'une
-  réponse dite compris. **La lecture du flux d'un poste** accumule sans borne une ligne sans fin de ligne et un
-  message sans ligne vide.
-- **Les événements des postes ne partent jamais.** Le core garde chaque événement reçu, ceux d'importance `log`
-  compris (le bruit de fond, qui n'entre pas au Journal) ; Acedia et Avaritia n'en gardent que sept jours chez eux.
-  L'accueil et la file des urgences cherchent les urgences de la journée **en parcourant tous les événements** :
-  aucun index sur leur date ni leur importance. Chaque mail trié par Acedia en est un (`info`).
-- **Ne partent jamais non plus** : les lignes de coût (chaque appel, avec ses jetons et le temps de son premier mot),
-  les délégations, les gestes tenus, les passages des routines, les évaluations des scènes, les marques « vu ».
-- **Ce que le core purge déjà** : la conversation une fois couverte par la nuit, la matière du jour une fois traitée,
-  les notifications terminées, les codes d'appairage expirés ou servis. Le tri de chaque nuit, lui, reste.
-- **Le Journal est permanent, par choix** : aucune fonction ne change ni ne retire une entrée. Il garde son titre,
-  sa date, son coût et ses étapes. Pour le détail d'une délégation, il relit encore la demande dans les délégations :
-  les purger retirerait ce détail du Journal. Une urgence encore « à trancher » y renvoie à son événement.
-- **La copie de la base** : au démarrage puis chaque heure si celle du jour manque, sept gardées, dans un dossier à
-  côté de la base, **sur le même disque**. Une copie ratée va à la santé et au Journal, une fois par jour. La copie
-  tient le serveur pendant qu'elle s'écrit (synchrone). Ses tests l'ouvrent et passent le contrôle d'intégrité.
-- **La nuit envoie ses observations** à Avaritia par paquets de 500. **Quand le plafond du jour d'Avaritia est
-  atteint**, ou sa nuit coupée, rien ne part et l'étape compte faite (décidé au plan « plafonds et pause ») : ces
-  observations n'atteignent jamais la bibliothèque. Un envoi raté (Avaritia injoignable, réponse perdue) n'est pas
-  marqué et repart en entier à la nuit suivante, même si Avaritia l'avait reçu.
-- **Le plafond du jour du core compte les postes** : il lit leurs coûts toutes les 2 min et les met en pause une
-  fois atteint. Le tri d'Acedia par l'IA s'y arrête aussi.
-- **Sur Windows, arrêter une tâche coupe le serveur net** : Node n'y envoie pas de signal, et l'arrêt propre du core
-  (finir les réponses, fermer la base) n'y joue pas. Une nuit coupée est reprise au démarrage suivant (« Limites »).
+  arrêté (`deploy/windows/LISEZMOI.md:9`, `mise-en-service-desktop.md` § 9 et son tableau). **Une erreur qui revient
+  chaque minute arrête donc le serveur pour de bon en sept minutes** (quatre lancements, trois attentes), jusqu'à ce
+  que CrOliX le relance au Planificateur ou que Windows redémarre. Il est hors de chez lui les trois quarts du temps.
+- **Il garde déjà la sortie d'erreur** : la sortie et les erreurs du serveur vont au journal du jour
+  (`run.mjs:92-93`), gardé 14 jours. Un filet de processus n'a qu'à écrire l'erreur sur la sortie d'erreur.
+- **Sur Windows, arrêter une tâche coupe le serveur net** : Node n'y envoie pas de signal, et l'arrêt propre d'un
+  serveur n'y joue pas (« Limites »).
 
 ### Lun'Acedia
 
-- **Minuteries sans filet** : l'échéance des clés (`server/src/main.ts:77`, chaque heure), la purge des événements
-  (`:102`), le fil de l'agent (`:105-111`), les rappels (`server/src/agenda/reminders.ts:97-107`, chaque minute, avec
-  une écriture). Aucun `uncaughtException`. La synchro Gmail et l'agenda passent par `startLoop`
-  (`server/src/util.ts:12-33`), qui attrape ; la copie aussi (`server/src/backup.ts:64-89`). Une écriture des rappels
-  qui lève (base tenue plus de 5 s par une commande, disque plein) arrête Acedia ; si elle revient, le lanceur
-  l'abandonne en sept minutes.
-- **L'action groupée** fait un mail après l'autre (`server/src/gmail/actions.ts:122-127`) et ne rend ses changements
-  qu'à la fin ; la route ne les journalise qu'après (`server/src/gmail/routes.ts:88-95`). Si le 12e de 20 échoue,
+- **Quatre minuteries sans filet** : l'échéance des clés (`server/src/main.ts:75-77`, au démarrage puis chaque heure),
+  la purge des événements (`:102`), le fil de l'agent (`:105-111`), les rappels
+  (`server/src/agenda/reminders.ts:99-109`, chaque minute, avec une écriture à `:103-105`). La synchro Gmail et
+  l'agenda passent par `startLoop` (`server/src/util.ts:12-33`), qui attrape ; la copie a son propre filet
+  (`server/src/backup.ts:71-88`). Aucun filet au niveau du processus. Une écriture des rappels qui lève (base tenue
+  plus de 5 s par une commande, disque plein) arrête Acedia ; si l'erreur revient, le lanceur l'abandonne en sept
+  minutes.
+- **Le tri compte un essai sur toute erreur** (`server/src/triage/pipeline.ts:289-312`). Il ne passe qu'après une
+  synchro Gmail réussie (`server/src/gmail/sync.ts:246-248`) : une coupure complète du réseau l'arrête avant lui. Mais
+  toute erreur d'un mail, passagère ou non, compte un essai (`pipeline.ts:304-305`) puis arrête la passe (`:306`) ;
+  au troisième, le mail sort de la file, sans trace (`server/src/triage/queue.ts:30-33`). Le commentaire de
+  `triageNew` dit le contraire (« leaves the mail queued », `pipeline.ts:287`). Exemple : le fournisseur d'IA en
+  panne une heure, Gmail joignable. Son erreur (`ProviderError` de sorte `unavailable`,
+  `server/src/llm/types.ts:73-90`) remonte (`pipeline.ts:172`). Une passe par minute : un mail sort de la file toutes
+  les trois passes, une vingtaine en une heure, jamais triés, sans une ligne.
+- **Les erreurs se distinguent déjà** : `GoogleApiError` porte son statut (`server/src/google/client.ts:45-52`) ; le
+  client relance lui-même 429 et 5xx avant de lever (`:168-171`) ; un rafraîchissement refusé devient
+  `GoogleReauthError` (`:100`, `:130`) ; sans compte, `GoogleNotConnectedError` (`:143`). Un mail absent de Gmail
+  donne `NotFoundError` (`server/src/gmail/actions.ts:40`, `:54`).
+- **Une règle vers une boîte retirée lève à chaque mail** : `setRole(null)` ne touche pas aux règles
+  (`server/src/triage/labels.ts:34-45`) ; la boîte n'est vérifiée qu'à la création et à la modification d'une règle
+  (`server/src/triage/rules.ts:82-84`, `:87`, `:114`). Au tri, la règle est prise (`pipeline.ts:191-193`), et
+  `fileMail` refuse une cible qui n'est plus une boîte (`server/src/gmail/actions.ts:76-78`). Trois passes plus tard,
+  le mail sort de la file.
+- **L'agenda, tout ou rien** : les calendriers puis les tâches, en série (`server/src/agenda/unified.ts:34`). Un
+  calendrier en erreur autre qu'un 410 lève (`server/src/agenda/calendar.ts:233`), une liste de tâches aussi
+  (`server/src/agenda/tasks.ts:142-148`) : les suivants et toutes les tâches attendent la minute d'après, et
+  `agenda.changed` ne part pas.
+- **L'action groupée** fait un mail après l'autre (`server/src/gmail/actions.ts:124-127`) et ne rend ses changements
+  qu'à la fin ; la route ne les journalise qu'après (`server/src/gmail/routes.ts:95-103`). Si le 12e de 20 échoue,
   les 11 premiers sont faits dans Gmail, absents du journal : ni annulables, ni appris.
-- **Le tri** (`server/src/triage/pipeline.ts:289-312`) : le premier mail qui lève arrête la passe (`:306`), ceux de
-  derrière attendent la minute suivante. Au troisième échec d'un mail, il sort de la file sans trace
-  (`server/src/triage/queue.ts:30-34`). Une règle qui mène à une boîte retirée lève à chaque mail qu'elle prend :
-  `setRole(null)` ne touche pas aux règles (`server/src/triage/labels.ts:33-44`), la boîte n'est vérifiée qu'à la
-  création et à la modification d'une règle (`server/src/triage/rules.ts:82-87`, `:114`), et `fileMail` refuse une
-  cible qui n'est plus une boîte (`server/src/gmail/actions.ts:76-78`).
-- **L'agenda** : les calendriers puis les tâches, en série (`server/src/agenda/unified.ts:33-35`) ; un calendrier en
-  erreur autre qu'un 410 lève (`server/src/agenda/calendar.ts:233`) et arrête les suivants et toutes les tâches,
-  rappels de tâches compris.
-- **La copie** : comme celle du core, à côté de la base (`server/src/backup.ts:18-22`, `:29-57`).
-- **Ce qui part déjà** : les événements après sept jours (`server/src/contract/events.ts:9`, `:73-75`), le fil de
-  l'agent (`server/src/pina/store.ts:152-158`), les rappels envoyés après 30 jours (`reminders.ts:103`), les mails
-  retirés de Gmail (`server/src/gmail/store.ts:102`). **Ce qui reste** : le journal des gestes (lun-acedia#33), les
-  propositions, les exemples appris, les coûts, les événements d'agenda passés, les tâches faites. Le cache des mails
-  ne garde ni corps ni pièce (`server/src/db.ts:44-57`) : quelques centaines d'octets par mail.
+- **Un modèle sans prix compte 0** : Mistral Small et Medium n'en ont pas (`server/src/llm/models.ts:81-82`). Le
+  `.env` les complète par `LLM_PRICES` (`:98-119`), que le `.env.example` ne cite pas. Le tri le dit par un
+  événement `log` (`pipeline.ts:118-125`, `:153-157`), qui n'entre pas au Journal.
 
 ### Lun'Avaritia
 
-- **Minuteries sans filet** : l'échéance des clés et la purge des événements (`server/src/main.ts:64-65`). Les lots
-  ne passent qu'au démarrage (`:51`) et à chaque envoi du core (`server/src/contract/routes.ts:136`).
-- **Un lot en échec n'est jamais repris** : `runPending` remet en file les lots `running` et `held`, jamais `failed`
-  (`server/src/brain/ingest.ts:63-66`). Un lot `held` (fournisseur absent, plafond) n'attend que l'envoi suivant ou
-  un redémarrage, raccourci assumé (`:53-56`) : une panne de 3 h attend 24 h. Le tableau de bord dit « Lot en
-  échec » (`server/src/brain/dashboard.ts:45`) ; **le core n'en sait rien** : Avaritia ne lui envoie que les
-  événements de clé et de copie.
-- **Un lot passe en deux appels, quelle que soit sa taille** : le tri à 2 000 jetons de sortie, la rédaction à
-  8 000 (`server/src/brain/process.ts:292`, `:342`), le plafond vérifié entre les deux seulement (`:298`). Les
-  candidats cherchent jusqu'à 12 mots par observation, en synchrone (`:93-100`), et sont coupés à 30. La nuit du core
-  sort au plus ce que ses 8 000 jetons permettent, soit de l'ordre d'une centaine d'observations, pas 500 ; mais une
-  nuit chargée donne beaucoup de groupes, et la rédaction de chacun tient mal dans 8 000 jetons : deux réponses
-  tronquées, le lot passe `failed`, payé deux fois.
-- **Un groupe peut disparaître** : rien ne vérifie que la rédaction rende une fiche par groupe
-  (`process.ts:170-198`). Un groupe oublié laisse le lot `done`, ses observations sans brouillon.
-- **Un modèle sans prix n'est pas compté** : `priceOf` rend `undefined`, le coût vaut 0 (`process.ts:229-230`,
-  `server/src/brain/agent.ts:237-243`). Mistral Small et Medium sont listés sans prix
-  (`server/src/llm/models.ts:81-82`). Le plafond du mois ne les voit pas, et le core non plus : il compte ce
-  qu'Avaritia lui rend.
-- **L'envoi n'est pas idempotent** : chaque `brain.ingest` crée un lot (`ingest.ts:31-48`). Le même envoi rejoué
-  par le core fait deux lots, deux fois les mêmes brouillons.
-- **Un brouillon en attente sur une fiche fusionnée** devient inapplicable : « Fiche absente. »
-  (`server/src/brain/drafts.ts:192`) ; il ne reste que « Refuser », et ses faits sourcés partent avec. Même sort
-  pour un fait à remplacer déjà barré (`:205`). La fusion (`:262-278`) ne réécrit pas les brouillons en attente, et
-  la synthèse de la fiche fusionnée sort de toute vue.
-- **Ce qui part déjà** : les événements après sept jours (`server/src/contract/events.ts:6`, `:62`). **Ce qui
-  reste** : les observations brutes, les lots, les passages, les coûts, les versions de fiche, les brouillons
-  décidés. Un fait garde sa source (origine, référence, date : `process.ts:350-356`), pas l'observation : retirer
-  une observation ne retire la source d'aucun fait.
-- **La copie** : le même module qu'Acedia, mot pour mot (`server/src/backup.ts`).
+- **Deux minuteries sans filet** : l'échéance des clés (`server/src/main.ts:62-64`) et la purge des événements
+  (`:65`). La copie a son filet (`server/src/backup.ts`, le module d'Acedia mot pour mot). Aucun filet au niveau du
+  processus.
+- **Les lots ne passent qu'à trois moments** : au démarrage (`main.ts:51`), à chaque envoi du core
+  (`server/src/contract/catalog.ts:22-24`) et à la reprise après une pause (`server/src/contract/routes.ts:131-138`).
+  Chaque passe remet en file les lots `running` (`server/src/brain/ingest.ts:64`) et les lots `held` quand le plafond
+  et les fournisseurs le permettent (`:65-66`), jamais `failed`. Un lot `held` attend donc la nuit suivante, raccourci
+  assumé (`:53-56`) : une panne de 3 h en coûte 24.
+- **Un lot en échec n'est dit qu'au tableau de bord** (`server/src/brain/dashboard.ts:45`, « Lot en échec ») :
+  `runLot` le marque (`ingest.ts:91-99`), et Avaritia n'envoie au core que les événements de clé et de copie
+  (`backup.ts:82`).
+- **Un modèle sans prix compte 0** (`server/src/brain/process.ts:229-230`, `server/src/brain/agent.ts:238-241`) ;
+  Mistral Small et Medium en sont (`server/src/llm/models.ts:81-82`). Le plafond du mois ne les voit pas, le core non
+  plus : il compte ce qu'Avaritia lui rend.
+
+### Le contrat satellite
+
+- Un événement a un `type` libre (`standards/contrat-satellite.md:44`). Le contrat ne recommande des types que pour
+  les clés (`:119-126`) : `key.invalid`, `key.restored`, `key.expiring`.
+- Il dit que le core ne retient du flux que `urgent` et les événements de contrôle (`:116`). Le code fait plus : le
+  core porte au Journal et au téléphone les événements `normal` d'un poste. C'est par là que `backup.failed`, émis par
+  Acedia et Avaritia depuis le plan [« écarts avant la semaine »](2026-11-09-ecarts-avant-semaine.md), arrive déjà,
+  sans être écrit au contrat.
 
 ### Ce que l'audit disait et qui ne tient pas
 
@@ -174,350 +149,282 @@ chapeau, une fois les trois autres fusionnées.
   la configuration du NAS. `127.0.0.1` y est voulu. Seul un `docker run -p` nu ne répondrait pas, et rien ne le
   prévoit. Écarté.
 - **« Le tri d'Acedia par l'IA n'a pas de plafond »** : il n'en a pas à lui, mais le plafond du jour du core compte
-  ses coûts, lus toutes les 2 min, et le met en pause une fois atteint. Le dépassement tient en deux minutes de tri.
-  Sans core, il n'a pas de borne, mais le rodage tourne avec le core. Écarté.
+  ses coûts et le met en pause une fois atteint (plan « plafonds et pause »). Sans core, il n'a pas de borne, mais le
+  rodage tourne avec le core. Écarté.
 - **« La copie `VACUUM INTO` est synchrone »** : vrai, et assumé par un commentaire `shortcut:` chez Acedia et
   Avaritia (0,1 s pour 30 Mo ; passer à la copie asynchrone à quelques centaines de Mo). Les bases font quelques Mo.
-  La tâche 0 mesure ce temps à un an ; écarté si la mesure reste sous la seconde.
-- **« Un lot de 500 observations »** : la nuit n'en sort pas 500 (voir plus haut). Le risque vrai est la rédaction
-  d'une grosse nuit en un seul appel ; il est gardé (tâche 13).
+  À revoir avec les vrais débits et le second dossier (« Le chantier suivant »).
+- **« Un lot de 500 observations »** : la nuit du core n'en sort pas 500, de l'ordre d'une centaine au plus. Le risque
+  vrai est la rédaction d'une grosse nuit en un seul appel ; il passe au chantier suivant.
 - **« Un lot déjà écrit est rejoué après un arrêt brutal »** (Avaritia) : aucune attente entre l'écriture des
   brouillons et le statut du lot, seulement quelques microsecondes. Écarté.
 - **« Le healthcheck des images ne lit que `/` »** : vrai, mais Docker ne relance pas un conteneur malade, et la
   cible est un serveur dédié. Hors périmètre : à revoir avec la bascule.
-- **Les purges de l'audit** pour le core : les délégations ne peuvent pas partir (le Journal les relit) ; les gestes
-  tenus, les passages des routines et les évaluations des scènes font quelques lignes par jour. Écartées, la tâche 0
-  le vérifie.
 
-## Palier 1 : la tâche 0
+## Les tâches
 
-0. - [ ] **Ce que les bases deviennent en un an, mesuré** (`testeur`, des scripts jetables dans `banc-continu/`, à
-   la racine de l'écosystème, hors de tout dépôt). Seule au palier 1 ; elle ne bloque que les tâches 6 et 18.
-   1. Pour chaque service, une base ouverte par le service lui-même (ses migrations, depuis sa copie sur `main`), à
-      un chemin jetable de `banc-continu/`, jamais `data/`. Nourrie sur 365 jours simulés, sans réseau ni modèle,
-      aux débits de la liste ci-dessous : ce sont des hypothèses, écrites comme telles au relevé.
-   2. À 7, 30, 90 et 365 jours : la taille du fichier ; la part de chaque sorte de données (par `dbstat` s'il est
-      compilé dans `node:sqlite`, sinon le nombre de lignes fois leur taille moyenne) ; le temps de l'accueil et de
-      la file des urgences du core, d'une fiche et du graphe d'Avaritia (médiane de 20 lectures) ; le temps de la
-      copie du jour.
-   3. Les mêmes, avec les purges recommandées (« À trancher », points 4 à 6) jouées par le script chaque jour
-      simulé : le jour où la taille cesse de monter, et sa valeur. Le fichier ne rétrécit pas sans `VACUUM` : on
-      vérifie que SQLite réutilise les pages libérées.
-   4. Elle rend « Ce que la tâche 0 a mesuré » dans ce plan, et pour chaque durée recommandée si elle tient. Le core
-      s'y décrit par ses fonctions (dépôt public : aucun nom de table) ; les fichiers bruts restent dans
-      `banc-continu/`.
-   - Exclu : toucher un dépôt, ouvrir une vraie base, tout appel payant.
+**Pour chaque tâche.** Les tests d'abord, vus échouer avant le code, écrits par le développeur. Le `reviewer` relit
+chaque diff contre sa tâche avant la PR de son dépôt. Les serveurs des satellites n'ont pas d'agent à eux : `dev-core`
+les code, le `CLAUDE.md` du satellite dans son brief. `dev-luxuria` n'a rien ici. Le `livreur` coche ce plan et ouvre
+les PR en brouillon.
 
-Les débits, par jour simulé (des hypothèses) :
+**Chaque PR joint la liste des minuteries de son serveur** : chaque `setInterval`, `setTimeout` qui se réarme,
+`startLoop` et promesse laissée à `void`, avec son fichier, sa ligne et son filet. C'est la preuve du critère 1 ; le
+`reviewer` la refait avant d'approuver.
 
-- **Acedia** : 100 mails reçus, triés et journalisés, dont 20 rangés à la main ; 100 appels de tri comptés ;
-  60 synchros avec changement ; 10 changements d'agenda, 5 rappels, 4 événements de calendrier, 3 tâches.
-- **Le core** : les événements reçus d'Acedia et d'Avaritia (environ 180) ; une entrée au Journal par événement qui
-  n'est pas du bruit de fond, plus 30 ; 60 lignes de coût ; 5 délégations ; 10 gestes tenus ; la nuit et le matin.
-- **Avaritia** : une nuit de 30 observations de 500 caractères ; 10 brouillons, 20 faits, 5 versions de fiche ;
-  4 lignes de coût.
+**En parallèle.** Un développeur par dépôt, chacun dans son worktree créé depuis la branche du chantier. Les trois
+dépôts partent ensemble, avec la tâche 10 ; **dans un dépôt, les tâches passent en série**, dans l'ordre du plan :
 
-## Ce que la tâche 0 a mesuré
+- **lun-anima** : 1, puis 2, puis 3 si elle est prise.
+- **lun-acedia** : 4, puis 5, 6 et 7.
+- **lun-avaritia** : 8. Elle commence par ses boucles et ses lots ; elle prend le module de chute de la tâche 4 une
+  fois relu, mot pour mot, comme `backup.ts`.
+- **lun-docs** : 10 dès la validation, si elle entre ; 9 au fil des fusions, en dernier.
 
-À remplir par la tâche 0.
+**Les fichiers partagés**, raison de la série :
 
-## Palier 2 : les tâches
-
-**Pour chaque tâche.** Les tests d'abord, vus échouer avant le code. Le `testeur` les écrit pour les tâches qui
-suppriment ou qui arrêtent un processus (1, 6, 7, 12, 18) ; ailleurs, le développeur les écrit lui-même. Le
-`reviewer` relit chaque diff contre sa tâche avant la PR de son dépôt. Les serveurs des satellites n'ont pas d'agent
-à eux : `dev-core` les code, le `CLAUDE.md` du satellite en main (« À trancher », point 12). `dev-luxuria` n'a rien
-ici. Les fichiers d'Anima sont donnés au développeur dans son brief, pas dans ce plan public.
-
-**En parallèle.** Les trois dépôts dès la validation, un développeur et un worktree chacun, créés depuis la branche
-du chantier. Dans un dépôt, un fichier n'a qu'une tâche à la fois :
-
-- **Anima** : 1, 2, 3 et 5 d'emblée ; 4 après 1 (le même démarrage du serveur) ; 6 après 0, les durées tranchées,
-  et 4.
-- **Acedia** : 7, 8, 9 et 10 d'emblée ; 11 après 7 (`server/src/main.ts`).
-- **Avaritia** : 12, 13 et 15 d'emblée ; 14 et 16 après 13 (`ingest.ts`, `process.ts`) ; 17 après 12
-  (`server/src/main.ts`) ; 18 après 0, les durées tranchées, 13, 14 et 17.
-- **lun-docs** : 19 au fil des fusions ; 20 en dernier.
+- `README.md` d'Acedia : les tâches 4 et 5 ; celui d'Avaritia : la tâche 8 seule.
+- `deploy/windows/LISEZMOI.md` de lun-anima : la tâche 2 seule.
+- `.env.example` d'Acedia et d'Avaritia : aucune tâche n'y touche. Un prix se règle dans le `.env` du service, et la
+  page de mise en service le dit (tâche 9). Une tâche qui doit y toucher le dit avant.
+- Le module de chute d'Acedia, recopié dans Avaritia : écrit par la tâche 4, repris par la tâche 8.
+- `docs/mise-en-service-desktop.md` : la tâche 9 seule. Le chantier « textes d'accord » la laisse à celui-ci jusqu'à
+  la bascule.
 
 ### Lun'Anima (`dev-core`)
 
-1. - [ ] **Les filets du core.** *Parallélisable d'emblée.*
-   - Les deux boucles sans filet en reçoivent un : le rafraîchissement de la liste des postes, et la relance d'un
-     geste tenu sonné trop tôt. Une erreur y est écrite au journal du jour, une fois par message tant qu'elle dure,
-     et la boucle repasse au tour suivant.
-   - Un filet au niveau du processus, pour une exception ou une promesse rejetée restée hors de tout filet, selon la
-     règle tranchée (« À trancher », point 2 ; recommandé : écrire l'erreur et son origine au journal du jour,
-     porter un événement du core « arrêt sur erreur » au Journal et au téléphone, comme une copie ratée, puis sortir
-     en code 1 pour que le lanceur relance). Si l'écriture de l'événement échoue (disque plein, base illisible), il
-     sort quand même.
-   - Tests : chaque boucle, sa lecture rendue fausse, écrit l'erreur et repasse ; aucune promesse rejetée ne
-     s'échappe (le motif des tests des routines, qui écoutent les rejets non traités) ; un processus enfant qui pose
-     le filet puis lève dans une minuterie sort en code 1, et sa base porte l'événement.
-   - Exclu : changer les filets qui existent ; relancer le core de l'intérieur.
-2. - [ ] **Le lanceur ne lâche plus un serveur.** *Parallélisable d'emblée.* Le lanceur du desktop, dans le dépôt du
-   core, qui lance aussi Acedia et Avaritia.
-   - Selon « À trancher », point 3 (recommandé) : après ses trois relances à 60 s, une relance toutes les 15 min,
-     sans fin ; chaque relance dite au journal du jour, avec le délai de la suivante. Une course de plus de 10 min
-     remet toujours le compte à zéro ; un arrêt demandé arrête toujours tout.
-   - Tests, dans ceux du lanceur, avec des délais courts : un serveur qui tombe toujours est relancé au-delà de la
-     troisième chute, au délai lent ; un arrêt demandé pendant l'attente lente arrête le lanceur.
-   - Exclu : le Planificateur de tâches, les scripts d'installation, l'arrêt propre sous Windows.
-3. - [ ] **Des files bornées.** *Parallélisable d'emblée.*
-   - Le flux en direct : au-delà d'une borne d'événements en attente pour un client (de l'ordre de 1 000), son flux
-     est fermé ; le client se reconnecte de lui-même, comme après une coupure. Le développeur vérifie que l'app relit
-     son état à la reconnexion ; sinon, il le dit avant de coder.
-   - La lecture du flux d'un poste : au-delà d'une borne de taille pour une ligne ou un message (de l'ordre de
-     1 Mo), le flux est coupé et l'écoute du poste reprend comme après une coupure, avec une ligne au journal.
-   - Tests : un client qui ne lit jamais, 10 000 événements publiés, sa file ne dépasse pas la borne et son flux se
-     ferme ; un poste qui envoie 2 Mo sans fin de ligne voit son flux coupé, puis repris.
-   - Exclu : changer le format du flux ou des événements.
-4. - [ ] **Le second dossier de copies, côté core.** Après 1.
-   - Un réglage d'installation, une variable du `.env` comme le chemin de la base : un second dossier. Vide, rien ne
-     change. Donné, la copie du jour y est recopiée après son écriture, sous le même nom, avec la même rotation
-     (sept). Une copie à moitié écrite n'y paraît jamais sous son nom final.
-   - Son échec (dossier absent, partage injoignable, disque plein) est dit comme une copie ratée : à la santé, au
-     Journal une fois par jour, sous son propre titre (« La copie hors machine a échoué ») et avec sa propre marque
-     du jour, pour qu'un échec local le même jour ne la cache pas. La copie locale n'en dépend pas.
-   - Tests : le second dossier reçoit la copie, en garde sept ; un second dossier en lecture seule n'empêche pas la
-     copie locale et le dit une fois par jour ; une copie du second dossier s'ouvre et passe le contrôle d'intégrité.
-   - Exclu : chiffrer les copies ; copier autre chose que la base.
-5. - [ ] **La nuit qui n'a pas pu envoyer.** *Parallélisable d'emblée.* Selon « À trancher », point 8.
-   - Recommandé : quand le plafond du jour d'Avaritia est atteint, l'envoi ne compte plus fait ; il repart à la nuit
-     suivante, avec une ligne au Journal (« observations retenues : plafond du jour »). La nuit coupée par CrOliX
-     reste comme aujourd'hui : rien ne part, l'étape compte faite.
-   - Tests : un plafond atteint laisse l'étape à faire, et la nuit suivante envoie les deux jours ; une nuit coupée
-     compte toujours faite, sans envoi.
-   - Exclu : le plafond lui-même ; la forme de l'envoi.
-6. - [ ] **Les événements des postes et les coûts ne grossissent plus sans fin.** Après 0, les durées tranchées
-   (« À trancher », point 4), et 4.
-   - Un index sur la date et l'importance des événements reçus, pour l'accueil et la file des urgences (une
-     migration ajoutée, jamais une migration réécrite).
-   - Une purge, à côté de la copie (chaque heure, même en pause : elle n'agit sur aucun poste), avec un filet. Elle
-     retire, selon les durées tranchées : les événements de bruit de fond ; les autres événements, sauf ceux dont
-     l'entrée au Journal est encore « à trancher » ; leurs marques « vu » ; les lignes de coût. Elle garde toujours
-     le dernier événement de chaque poste (sa date dit quand il a parlé pour la dernière fois).
-   - Elle ne touche jamais au Journal ni à ses étapes, ni à la mémoire de la relation (souvenirs, portrait,
-     tempérament, récits, lettres), ni aux délégations.
-   - Tests : une base nourrie sur 400 jours simulés cesse de grossir, en lignes et en taille ; le Journal, ses
-     étapes et la mémoire de la relation ont le même compte avant et après ; une urgence « à trancher » de 200 jours
-     reste ; le dernier événement d'un poste muet depuis un an reste ; le plafond du mois et la vue des sept jours
-     rendent les mêmes totaux avant et après.
-   - Exclu : `VACUUM` ; purger quoi que ce soit d'autre ; un écran.
+1. - [ ] **Tâches 1 à 3, dans lun-anima#N (privée)** : 1, les filets du core ; 2, le lanceur ne lâche plus un
+   serveur ; 3, en option, le flux en direct borné. Leur détail, fichiers compris, est dans l'issue. Elles portent,
+   pour le core, les critères 1, 2, 3 et 6. Le lanceur relance le core comme les satellites : la tâche 2 vaut pour
+   les trois serveurs, et la tâche 9 la dit dans la page.
 
 ### Lun'Acedia (`dev-core`)
 
-7. - [ ] **Les filets d'Acedia.** *Parallélisable d'emblée.* `server/src/main.ts`, `server/src/agenda/reminders.ts`,
+4. - [ ] **Les filets d'Acedia.** *Part d'emblée.* `server/src/main.ts`, `server/src/agenda/reminders.ts`, un module
+   neuf `server/src/crash.ts`, leurs tests, `README.md`.
+   - Les quatre minuteries passent par `startLoop` (`server/src/util.ts:12-33`) : l'échéance des clés
+     (`main.ts:75-77`), la purge des événements (`:102`), le fil de l'agent (`:105-111`) et les rappels
+     (`reminders.ts:99-109`, qui garde son `stop`). L'erreur va au journal du serveur par un `onError` comme
+     `logError` (`main.ts:78-84`), et la boucle repasse.
+   - `startLoop` passe aussi tout de suite (`util.ts:31`) : les appels du démarrage (`main.ts:76`, `:110`) partent.
+     Pour les rappels, qui passaient pour la première fois après une minute, vérifier qu'une passe au démarrage n'en
+     double aucun.
+   - Le filet du processus, selon « À trancher », point 1 (recommandé (a)). Il vit dans `server/src/crash.ts`, et
+     `main.ts` le pose dès la base ouverte. Sur `uncaughtException` comme sur `unhandledRejection` :
+     1. l'erreur et sa pile sur la sortie d'erreur, que le lanceur garde déjà au journal du jour (`run.mjs:92-93`) ;
+     2. une transaction restée ouverte est annulée : un `ROLLBACK` tenté, son échec ignoré. Sinon l'événement qui suit
+        s'écrirait dans la transaction à moitié faite, et partirait avec elle ;
+     3. au plus un `server.crashed` par jour, sur le modèle de `backup.failedDay` (`server/src/backup.ts:79-84`) :
+        une marque `server.crashedDay` ; importance `normal` ; titre « Acedia s'est arrêtée sur une erreur ». `data` ne
+        garde que le nom et le code de l'erreur (`{ name, code }`), jamais son message : un chemin, un sujet de mail.
+        Le core le reçoit à la relance, comme `backup.failed`. Selon le point 4, son type peut changer ;
+     4. la sortie en code 1, même si 2 ou 3 échouent (disque plein, base illisible). Une seconde erreur pendant ces
+        étapes sort aussitôt.
+   - Le `README.md` dit `server.crashed` à côté de `backup.failed` (`:65`).
+   - Tests :
+     - chaque minuterie, sa fonction rendue fausse, écrit l'erreur et repasse (minuteries simulées de vitest) ;
+       `startReminderLoop` dont l'écriture lève continue (aucun test ne couvre cette boucle aujourd'hui) ;
+     - un processus enfant (`node --experimental-strip-types`, une base jetable) qui pose le filet puis lève dans une
+       minuterie sort en code 1, et sa base porte un `server.crashed` sans message ;
+     - relancé le même jour et levant encore : toujours un seul ; le lendemain (horloge injectée) : un second ;
+     - le même avec une promesse rejetée, puis avec une transaction ouverte au moment de lever.
+   - Exclu : changer `startLoop`, la synchro Gmail, l'agenda, la copie.
+5. - [ ] **Le tri ne perd plus de mails.** Après 4. `server/src/triage/pipeline.ts`, `server/src/triage/queue.ts`,
+   leurs tests, `README.md` si le tri y est décrit.
+   - Dans le `catch` de `triageNew` (`pipeline.ts:303-307`), l'erreur est classée :
+     - **propre au mail** : `GoogleApiError` 404 ou 400, `NotFoundError`, `BadRequestError` (une cible qui n'est pas
+       une boîte). L'essai compte, et la passe continue au mail suivant ;
+     - **passagère** : une erreur du réseau (`fetch` qui lève), `GoogleApiError` 429 ou 5xx (déjà relancée par le
+       client), `GoogleReauthError`, `GoogleNotConnectedError`, `ProviderError` de sorte `unavailable`, la base
+       occupée (l'erreur de `node:sqlite` dont le code dit `SQLITE_BUSY` : sa forme, à vérifier par le développeur).
+       Le mail est rendu à la file sans essai compté, et la passe s'arrête : l'erreur remonte à la boucle comme
+       aujourd'hui ;
+     - **toute autre**, une inconnue ou un 403 : comme aujourd'hui, l'essai compte et la passe s'arrête. Une erreur
+       qui ne passe jamais ne bloque ainsi pas la file pour toujours : le mail sort au troisième essai, avec sa ligne.
+   - Un mail qui sort de la file au troisième essai, sur erreur ou sur une réponse inutilisable de l'IA (`:309`),
+     laisse une ligne au journal du serveur : son id et la raison. `failedAttempt` (`queue.ts:30-33`) dit s'il l'a
+     retiré ; le `log` est injectable, comme celui de `backupIfMissing`.
+   - Selon « À trancher », point 3 (recommandé (a)) : au tri, une règle dont la cible n'est plus une boîte est sautée
+     (`pipeline.ts:191-193`). La règle suivante ou l'IA décide ; une ligne au journal du serveur le dit, au plus une
+     fois par règle et par passe.
+   - Le commentaire de `triageNew` (`:283-288`) dit ce qui se passe vraiment.
+   - Tests (`failedAttempt` n'en a aucun aujourd'hui) :
+     - cinq mails en file, le réseau coupé, trois passes : les cinq restent, sans essai compté ;
+     - trois mails, le premier rend 404 : les deux autres sont triés ;
+     - un mail qui sort au troisième essai laisse sa ligne ;
+     - une règle vers une boîte retirée ne lève plus : le mail est trié par la règle suivante ou par l'IA, et une
+       ligne le dit.
+   - Exclu : désactiver les règles à l'écran ; un écran « non trié » ; changer le client Google ou ses relances.
+6. - [ ] **L'agenda, calendrier par calendrier.** Après 5. `server/src/agenda/calendar.ts`,
+   `server/src/agenda/tasks.ts`, `server/src/agenda/unified.ts`, leurs tests.
+   - Une erreur sur un calendrier (`calendar.ts:233`, hors 410) ou sur une liste de tâches (`tasks.ts:142-148`)
+     n'arrête plus les suivants : les autres calendriers, puis les tâches, passent, et `agenda.changed` part pour ce
+     qui a changé (`unified.ts:34-36`). L'erreur remonte ensuite à la boucle, qui l'écrit au journal du serveur comme
+     aujourd'hui (`main.ts:96-99`), en nommant le calendrier ou la liste.
+   - `GoogleReauthError` et `GoogleNotConnectedError` arrêtent tout de suite, comme aujourd'hui : elles valent pour
+     tous. Le 410 garde son traitement.
+   - Tests : deux calendriers, le premier rend 403 : le second et les tâches sont synchronisés, `agenda.changed`
+     part, l'erreur remonte ; une liste de tâches en erreur n'empêche pas les autres.
+   - Exclu : la fenêtre de la première synchro ; les relances de Google.
+7. - [ ] **L'action groupée journalise au fil.** Après 6. `server/src/gmail/actions.ts`, `server/src/gmail/routes.ts`,
    leurs tests.
-   - L'échéance des clés, la purge des événements, le fil de l'agent et les rappels passent par `startLoop`
-     (`server/src/util.ts:12`) ou un `try/catch` au même effet : l'erreur va au journal du serveur, la boucle
-     continue.
-   - Le filet du processus, la même règle que le core (tâche 1) : l'erreur au journal du jour, un événement
-     `server.crashed` (`normal`, la raison dans `data`, sans chemin ni secret) que le core reçoit à la relance, puis
-     la sortie en code 1.
-   - Tests : `startReminderLoop` dont l'écriture lève continue et le dit (aucun test ne couvre cette boucle
-     aujourd'hui) ; chaque minuterie horaire de même ; un processus enfant qui lève dans une minuterie sort en code 1
-     et sa base porte `server.crashed`.
-   - Exclu : changer `startLoop`, la synchro Gmail ou l'agenda.
-8. - [ ] **L'action groupée journalise au fil.** *Parallélisable d'emblée.* `server/src/gmail/actions.ts`,
-   `server/src/gmail/routes.ts`, leurs tests.
-   - Chaque mail touché est journalisé (et appris, comme aujourd'hui) dès que Google l'a fait, pas à la fin ; au
-     premier échec, la route rend l'erreur comme aujourd'hui, mais les mails déjà faits sont au journal, annulables.
-   - Tests : 20 mails dont le 12e rend 404 : les 11 premiers au journal, chacun annulable, les exemples appris ; la
-     réponse dit l'erreur. Une action qui passe en entier ne change pas.
+   - Chaque mail touché est journalisé, et appris comme aujourd'hui par `journaled` (`routes.ts:34`), dès que Google
+     l'a fait (`actions.ts:124-127`), pas à la fin (`routes.ts:100-101`). Au premier échec, la route rend l'erreur
+     comme aujourd'hui ; les mails déjà faits sont au journal, annulables.
+   - Tests : 20 mails dont le 12e rend 404 : les 11 premiers au journal, chacun annulable, leurs exemples appris ; la
+     réponse dit l'erreur. Une action qui passe en entier rend la même réponse qu'aujourd'hui.
    - Exclu : changer la forme de la réponse ou l'écran ; reprendre les mails après l'échec.
-9. - [ ] **Le tri continue.** *Parallélisable d'emblée.* `server/src/triage/pipeline.ts`, `server/src/triage/queue.ts`,
-   `server/src/triage/rules.ts`, leurs tests.
-   - Un mail qui lève compte son essai raté et laisse passer les suivants, au lieu d'arrêter la passe.
-   - Selon « À trancher », point 11 (recommandé) : au tri, une règle dont la cible n'est plus une boîte est sautée,
-     la règle suivante ou l'IA décide, et une ligne au journal du serveur le dit, une fois par règle et par jour.
-   - Un mail qui sort de la file au troisième échec laisse une ligne au journal du serveur, avec son id et la raison.
-   - Tests (`failedAttempt` n'en a aucun aujourd'hui) : trois mails, le premier lève, les deux autres sont triés ;
-     une règle vers une boîte retirée ne lève plus, le mail est trié par la suite ; le troisième échec laisse la
-     ligne.
-   - Exclu : désactiver les règles à l'écran ; un écran « non trié ».
-10. - [ ] **L'agenda, calendrier par calendrier.** *Parallélisable d'emblée.* `server/src/agenda/calendar.ts`,
-    `server/src/agenda/tasks.ts`, `server/src/agenda/unified.ts`, leurs tests.
-    - Une erreur sur un calendrier ou une liste de tâches est écrite au journal du serveur, une fois par conteneur tant
-      qu'elle dure, et les autres continuent ; les tâches passent même si un calendrier échoue. Le 410 garde son
-      traitement.
-    - Tests : deux calendriers, le premier rend 403, le second et les tâches sont synchronisés ; une liste de tâches
-      en erreur n'empêche pas les autres.
-    - Exclu : la fenêtre de la première synchro (hors périmètre) ; les reprises de Google.
-11. - [ ] **Le second dossier de copies, côté Acedia.** Après 7. `server/src/backup.ts`, `server/src/main.ts`,
-    `server/src/backup.test.ts`, `.env.example`.
-    - Le même comportement que la tâche 4 ; l'échec est dit par un événement `backup.failed` dont la raison nomme
-      le second dossier, une fois par jour, que le core porte au Journal et au téléphone.
-    - Tests : ceux de la tâche 4, dans `backup.test.ts`.
-    - Exclu : ce que la tâche 4 exclut.
 
 ### Lun'Avaritia (`dev-core`)
 
-12. - [ ] **Les filets d'Avaritia.** *Parallélisable d'emblée.* `server/src/main.ts`, ses tests.
-    - L'échéance des clés et la purge des événements avec un filet ; le filet du processus et `server.crashed`,
-      comme la tâche 7.
-    - Une passe des lots chaque heure (`runPending`, qui sait déjà sauter en pause), pour qu'un lot `held` reparte
-      dans l'heure où son fournisseur revient ou son plafond se lève.
-    - Tests : ceux de la tâche 7 ; un lot `held` repart à la passe horaire une fois le fournisseur revenu.
-    - Exclu : le traitement d'un lot (tâche 13).
-13. - [ ] **Les lots, par paquets, repris, dits au core.** *Parallélisable d'emblée.* `server/src/brain/ingest.ts`,
-    `server/src/brain/process.ts`, `server/src/db.ts`, leurs tests.
-    - **Par paquets** : un envoi est rangé en lots de 25 observations au plus, chacun traité seul ; l'accusé de
-      `brain.ingest` garde sa forme (le premier lot, toutes les observations acceptées). Le plafond est vérifié avant
-      chaque lot ; un lot raté n'empêche pas les autres.
-    - **Un groupe oublié** fait rejeter la réponse de la rédaction, comme une réponse invalide (la seconde tentative
-      comprise) : chaque groupe a sa fiche, ou le lot échoue.
-    - **Repris une fois** : selon « À trancher », point 9 (recommandé), un lot `failed` repart une seule fois, le
-      lendemain, à la passe horaire de la tâche 12 ; il reste en échec ensuite. Une migration ajoute le compte des
-      reprises. Le test appelle la passe lui-même : il n'attend pas la tâche 12.
-    - **Dit au core** : `lot.failed` (`normal`) quand un lot échoue pour de bon, et `lot.held` (`normal`) quand le
-      plafond du mois retient un lot ; chacun au plus une fois par jour, comme `backup.failed`.
-    - Tests : 500 observations deviennent 20 lots ; un paquet dont la rédaction échoue deux fois laisse les autres
-      `done` ; une rédaction qui oublie un groupe est rejetée ; un lot `failed` repart une fois, pas deux ; les deux
-      événements, une fois par jour.
-    - Exclu : changer le schéma de `brain.ingest` ou le contrat ; un bouton « Rejouer ».
-14. - [ ] **Un envoi rejoué ne crée rien.** Après 13. `server/src/brain/ingest.ts`, `server/src/db.ts`, leurs tests.
-    - Une observation déjà reçue (le même texte, la même origine, la même référence, la même date) est ignorée à
-      l'envoi ; un envoi dont tout est déjà là ne crée aucun lot. Une migration ajoute la clé et un index, sans unicité
-      imposée : une base qui a déjà des doublons migre sans rien perdre.
-    - Tests : le même envoi deux fois donne un seul jeu de lots et de brouillons ; un envoi à moitié nouveau ne garde
-      que la moitié nouvelle ; une base avec doublons migre.
-    - Exclu : une clé dans le contrat ; le côté du core.
-15. - [ ] **Les brouillons survivent à une fusion.** *Parallélisable d'emblée.* `server/src/brain/drafts.ts`, ses
-    tests.
-    - Accepter un brouillon sur une fiche fusionnée l'applique à la fiche gardée (en suivant la fusion, en chaîne si
-      elle-même l'est) ; un fait à remplacer déjà barré par une contradiction acceptée devient un fait ajouté, avec
-      un avertissement, au lieu de bloquer le brouillon.
-    - La fusion garde la synthèse de la fiche fusionnée en version de la fiche gardée.
-    - Tests (aucun ne couvre « Fiche absente. » aujourd'hui) : deux brouillons sur B, B fusionnée dans A, le second
-      accepté enrichit A ; un remplacement déjà barré passe avec son avertissement ; la synthèse de B est une version
-      de A.
-    - Exclu : le détecteur de doublons ; la fiche proposée deux fois.
-16. - [ ] **Un modèle sans prix n'est pas appelé sans être compté.** Après 13. `server/src/brain/process.ts`,
-    `server/src/brain/agent.ts`, `server/src/llm/models.ts`, leurs tests.
-    - Selon « À trancher », point 10 (recommandé) : un modèle d'un fournisseur payant sans prix connu (ni dans la
-      liste, ni dans `LLM_PRICES`) n'est pas appelé. Le lot attend (`held`, raison « modèle sans prix »), l'agent le
-      dit dans sa réponse, et `lot.held` le dit au core. Le point d'accès personnalisé, un modèle local, compte 0
-      comme aujourd'hui.
-    - Tests : Mistral Small sans prix retient le lot et ne l'appelle pas ; avec un prix dans `LLM_PRICES`, il est
-      appelé et compté ; le point d'accès personnalisé est appelé à 0.
-    - Exclu : inventer les prix manquants ; changer l'écran des modèles.
-17. - [ ] **Le second dossier de copies, côté Avaritia.** Après 12. Comme la tâche 11, dans les mêmes fichiers
-    d'Avaritia.
-18. - [ ] **Les observations traitées ne restent pas.** Après 0, les durées tranchées (« À trancher », point 6), 13,
-    14 et 17. `server/src/brain/ingest.ts` ou un module à côté, `server/src/main.ts`, leurs tests.
-    - Une purge horaire, même en pause, avec un filet : les observations des lots `done` plus vieilles que la durée
-      tranchée. Jamais celles d'un lot `queued`, `held`, `running` ou `failed`.
-    - Tests : 400 jours simulés d'un lot par nuit cessent de grossir ; un lot `failed` de 200 jours garde ses
-      observations ; les faits gardent leur source ; un envoi rejoué d'une observation purgée est accepté de nouveau
-      (connu, voir « Limites »).
-    - Exclu : retirer une fiche, un fait, une version, un brouillon ; l'oubli d'un tiers.
+8. - [ ] **Les filets d'Avaritia, et ses lots qui repartent.** *Part d'emblée* ; le module de chute après la tâche 4.
+   `server/src/main.ts`, `server/src/brain/ingest.ts`, `server/src/crash.ts`, leurs tests, `README.md`.
+   - L'échéance des clés (`main.ts:62-64`) et la purge des événements (`:65`) passent par `startLoop`
+     (`server/src/util.ts:12-33`), comme chez Acedia.
+   - Le filet du processus : le module de la tâche 4, mot pour mot ; titre « Avaritia s'est arrêtée sur une erreur ».
+   - **Une passe des lots chaque heure**, par `startLoop` (qui passe aussi au démarrage, à la place de `main.ts:51`).
+     `runPending` sait déjà sauter en pause et ne jamais tourner deux fois (`ingest.ts:60`) : un lot `held` repart
+     dans l'heure où son fournisseur revient ou son plafond se lève. Le commentaire `shortcut:` (`:53-56`) part.
+   - **`lot.failed`**, au plus une fois par jour : quand `runLot` marque un lot en échec (`ingest.ts:98-99`), sur le
+     modèle de `backup.failedDay` (`server/src/backup.ts:79-84`). Une marque `lot.failedDay` ; importance `normal` ;
+     titre « Un lot de la nuit a échoué » ; `data` ne garde que le numéro du lot, jamais la raison, qui peut citer une
+     observation. Selon le point 4, son type peut changer.
+   - Le `README.md` dit `server.crashed` et `lot.failed` à côté de `backup.failed` (`:63`).
+   - Tests :
+     - les deux minuteries, leur fonction rendue fausse, écrivent l'erreur et repassent ;
+     - un lot `held`, son fournisseur revenu : la passe suivante le traite, sans envoi du core (minuteries simulées) ;
+     - deux lots en échec le même jour : un seul `lot.failed` ; un troisième le lendemain : un second ;
+     - le processus enfant de la tâche 4, chez Avaritia.
+   - Exclu : reprendre un lot `failed` ; `lot.held` ; le traitement d'un lot (« Le chantier suivant »).
 
-### lun-docs et la fin
+### lun-docs (la session)
 
-19. - [ ] **La page de mise en service à jour** (la session, `trivial`). `docs/mise-en-service-desktop.md` : le
-    lanceur qui ne lâche plus (§ 9 et le tableau), le second dossier (§ 3 et § 8), les purges et leurs durées. Au
-    fil des fusions. Rien dans la feuille de route ni les ADR (le chantier « textes d'accord »).
-20. - [ ] **Le relevé final** (`testeur`). Après tout. La mesure de la tâche 0 rejouée avec le vrai code de chaque
-    service (ses purges, ses index) : la taille à un an, le jour du plateau, les lectures de l'accueil et d'une
-    fiche. Les barrières des trois dépôts. Un tableau : chaque critère de fin, sa preuve (test ou mesure). Le
-    `livreur` coche ce plan et ouvre les PR en brouillon.
+9. - [ ] **La page de mise en service à jour** (`trivial`). En dernier, au fil des fusions.
+   `docs/mise-en-service-desktop.md` :
+   - le lanceur qui ne lâche plus (§ 9 et la ligne du tableau, `:262`), une fois la tâche 2 fusionnée ;
+   - **un prix pour tout modèle utilisé** chez Acedia et chez Avaritia, à l'endroit où la page parle des clés des
+     fournisseurs : Mistral Small et Medium n'en ont pas. Soit un autre modèle, soit son prix dans le `.env` du
+     service, `LLM_PRICES={"mistral/mistral-small-latest":[entrée, sortie]}`, en dollars par million de jetons ;
+   - **les copies pendant le rodage** (§ 8) : aucune ne quitte le desktop. Si CrOliX en veut une ailleurs, le NAS tire
+     lui-même les dossiers `backups/`, sans code : un réglage du NAS, qui dit lui-même ses échecs ;
+   - **la nuit et la veille du desktop** (§ 7, `:133`, que le chantier « textes d'accord » rend à celui-ci) : en
+     veille, les trois serveurs s'arrêtent tous, tri, rappels et copies compris, et le rattrapage ne rejoue que la
+     nuit. Pendant le rodage, le desktop reste allumé, veille prolongée désactivée ;
+   - ce qu'un arrêt sur erreur et un lot en échec portent au Journal et au téléphone (§ 8, à côté de la copie ratée),
+     selon le point 4.
+   - Rien dans la feuille de route ni les ADR (le chantier « textes d'accord »).
+10. - [ ] **Le contrat satellite dit les événements de fonctionnement** (`critique`), si CrOliX suit le point 4 (a).
+    *Part d'emblée* : il fixe les types avant que les tâches 4 et 8 les émettent.
+    - `standards/contrat-satellite.md` : une table de types recommandés, comme celle des clés (`:119-126`) :
+      `backup.failed` (déjà émis), `server.crashed` et `lot.failed`, chacun `normal`, au plus une fois par jour, son
+      `data` sans message ni chemin.
+    - La ligne `:116` dit ce que le core fait vraiment : il porte aussi au Journal et au téléphone les événements
+      `normal`.
+    - Sans rupture : `type` reste libre et le core ne change pas. La version du contrat ne monte pas ; le `reviewer`
+      le confirme contre « Versionnement » (`:146-150`).
+    - `npm run sync` recopie le standard dans le plugin ; `npm run sync:check` le vérifie.
+    - La preuve de bout en bout, décrite dans la PR : sur le laptop, le core et Acedia lancés sur des bases jetables,
+      Acedia arrêtée par une erreur provoquée, l'événement au Journal du core après la relance.
+    - Exclu : `lot.held`, et tout type que ce palier n'émet pas.
+
+## Le chantier suivant, sur les débits réels
+
+Ce qui demande les vrais débits du desktop, ou le serveur dédié, part après le rodage. Rien n'y est simulé : la
+mesure jetable de l'ancienne version de ce plan est retirée. Chaque point garde ce que le plan-challenger y a objecté.
+
+- **Les purges**, du core et d'Avaritia, et leurs durées, tranchées sur les débits relevés. Trois règles :
+  - la rétention du core au moins égale à celle des satellites (sept jours chez eux) plus une marge, pour qu'un
+    événement qu'un poste garde encore ne manque jamais au core ;
+  - la purge après la copie du jour, jamais avant ;
+  - aucune observation purgée tant qu'un brouillon de son lot attend.
+  Le Journal (permanent par choix) et la mémoire de la relation (non supervisée) n'y entrent jamais.
+- **L'index de l'accueil** du core, qui cherche les urgences du jour dans tous les événements reçus.
+- **La rédaction d'Avaritia découpée** : un seul tri par lot, la rédaction par paquets ; un groupe oublié ne fait pas
+  échouer les autres. Aujourd'hui, un lot passe en deux appels quelle que soit sa taille
+  (`server/src/brain/process.ts:292`, `:342`), et rien ne vérifie qu'un groupe ait sa fiche (`:170-198`).
+- **L'envoi rejoué** : chaque `brain.ingest` crée un lot (`server/src/brain/ingest.ts:31-48`) ; le même envoi rejoué
+  par le core fait deux fois les mêmes brouillons.
+- **Les brouillons après une fusion** : « Fiche absente. » (`server/src/brain/drafts.ts:192`), le fait remplacé déjà
+  barré (`:205`), la fusion qui ne réécrit pas les brouillons en attente (`:262-278`).
+- **Un lot en échec repris une fois**, et `lot.held` quand le plafond du mois retient un lot.
+- **Un modèle sans prix jamais appelé sans être compté** : ce palier ne fait que le dire dans la page.
+- **La nuit retenue par le plafond d'Avaritia** : quand il est atteint, la nuit du core ne lui envoie rien et compte
+  l'étape faite (plan « plafonds et pause ») ; ces observations n'atteignent jamais la bibliothèque.
+- **La lecture du flux d'un poste**, côté core, bornée en taille.
+- **Le second dossier de copies, avec le serveur dédié**, le NAS servant au stockage : une copie asynchrone, une à la
+  fois, avec un délai de garde, pour qu'un partage figé ne tienne pas le serveur.
 
 ## Ce que le desktop vérifiera
 
 Rien de ce qui suit ne se prouve sur le laptop ; la semaine de rodage le regarde.
 
-- **Une tâche S4U peut-elle écrire sur le partage du NAS ?** Les tâches tournent sans mot de passe gardé (S4U) ; à
-  ma connaissance, une telle tâche n'a accès qu'aux ressources de la machine. À essayer avant de régler le second
-  dossier sur le NAS (« À trancher », point 7).
-- Les vrais débits : le nombre de lignes par jour dans les bases du desktop, sans en lire le contenu, contre les
-  hypothèses de la tâche 0.
-- Chaque jour : la mémoire des trois serveurs, les lignes « sorti avec le code » du lanceur, la taille des bases.
-- La restauration d'une copie prise dans le second dossier (feuille de route, § 4).
+- **Un partage réseau figé** : aucune base ni copie n'y vit pendant le rodage. Si le NAS tire les copies, un partage
+  qui ne répond plus ne doit tenir aucun serveur.
+- **Le téléphone qui se reconnecte** : après une relance du core, et après la fermeture d'un flux si la tâche 3 est
+  prise.
+- **« Un satellite tombe, le core reçoit l'événement à la relance »**, de bout en bout, jusqu'au téléphone.
+- **La mémoire** des trois serveurs, sur plusieurs jours.
+- **Les erreurs réelles de Google** : celles que le tri rencontre (un 403 de quota, des 5xx), et si le classement de
+  la tâche 5 les range bien.
+- **Les vrais débits** : le nombre de lignes par jour dans chaque base, sans en lire le contenu. Ils nourrissent le
+  chantier suivant.
+- Chaque jour : les relances du lanceur dans les journaux, la taille des bases.
 
 ## Hors périmètre
 
 - Le premier contact sans terminal : lun-acedia#62 (jeton illisible), #55, lun-anima#72 ; le verrou d'appairage
   global et les jetons sans expiration, des trois.
-- Le journal des gestes d'Acedia et son archivage (lun-acedia#33), et toute purge d'Acedia si CrOliX suit le point 5.
+- Le journal des gestes d'Acedia et son archivage (lun-acedia#33).
 - La fenêtre de l'agenda figée à la première synchro (Acedia) : à vérifier sur le compte de test, effet en mois.
-- Le tri qui retarde la synchro Gmail, les reprises de Google, `updatedMin` pris sur l'horloge, les trois « jours »
-  d'Acedia : mineurs, sans perte.
+- Le tri qui retarde la synchro Gmail, `updatedMin` pris sur l'horloge, les trois « jours » d'Acedia : mineurs, sans
+  perte.
 - Avaritia : les index de la ligne d'arrivée 3 (2,7 ms à 50 000 faits, mesuré par l'audit), l'écran Dépôts, les
   brouillons qui s'accumulent pendant une absence (l'affichage est borné, rien ne se perd), la fiche proposée deux
   fois, l'import Obsidian, `lower()`, l'oubli d'un tiers, la recherche par le sens, la citation mot pour mot.
 - Un bouton « Rejouer » pour un lot en échec ; un écran « non trié » chez Acedia.
-- Le healthcheck des images ; la copie asynchrone ; le chiffrement des copies ; l'arrêt propre sous Windows.
-- Inscrire `server.crashed`, `lot.failed` et `lot.held` au contrat satellite : avec les textes d'accord.
+- Le healthcheck des images ; le chiffrement des copies ; l'arrêt propre sous Windows.
 - Lun'Luxuria : son chantier « Écoute et parole ».
 
 ## Limites
 
-- **Les débits de la tâche 0 sont des hypothèses** : 100 mails par jour, une nuit de 30 observations. Le desktop
-  donnera les vrais.
-- **Sur Windows, l'arrêt d'une tâche coupe le serveur net** (Node n'y a pas de signal) : l'arrêt propre du core ne
-  joue que sous Docker ou au Ctrl+C. Lu dans la doc de Node, pas essayé ici. Une nuit coupée reprend au démarrage.
-- **La sortie sur erreur reste un redémarrage** : le filet le rend visible et le lanceur le rend court, il ne
-  l'évite pas. Ce qui l'évite, ce sont les filets des boucles.
-- **Une observation purgée puis renvoyée est acceptée de nouveau** : la clé d'un envoi rejoué ne vit que le temps de
-  la rétention. Le core ne renvoie que les nuits récentes.
-- **Le second dossier n'est pas « hors machine » s'il vise un disque du même poste.** Le NAS l'est, si une tâche S4U
-  peut y écrire (non vérifié).
-- Les copies, locales et hors machine, ne sont pas chiffrées : la base et ses copies gardent sujets, extraits,
-  fiches et observations en clair. La clé de chaque base n'est pas dans sa copie.
-- Un lot de 25 observations est une borne choisie, pas mesurée : aucun vrai lot n'a été pesé
-  (`docs/prouver-avaritia.md`, « à renseigner »).
+- **La sortie sur erreur reste un redémarrage** : le filet la rend visible et le lanceur la rend courte, il ne l'évite
+  pas. Ce qui l'évite, ce sont les filets des boucles.
+- **Sur Windows, l'arrêt d'une tâche coupe le serveur net** (Node n'y a pas de signal) : l'arrêt propre ne joue que
+  sous Docker ou au Ctrl+C. Lu dans la doc de Node, pas essayé ici. Une nuit coupée reprend au démarrage.
+- **Le classement des erreurs du tri** suit ce que le code lève, pas des erreurs réelles de Google : un 403 de quota
+  est rangé avec les inconnues et compte un essai. Le desktop le dira.
+- **Une panne passagère qui dure arrête le tri** à chaque passe, sans rien perdre : les mails attendent, et seule la
+  ligne de la boucle le dit, chaque minute, comme aujourd'hui.
+- **Un lot en échec est dit une fois par jour** : un second, le même jour, n'est vu qu'au tableau de bord.
+- **Les copies restent sur le disque du desktop** pendant le rodage, sauf si le NAS les tire : un disque perdu
+  emporte la base et ses copies. Elles ne sont pas chiffrées.
+- **Le prix d'un modèle se règle à la main** : un modèle choisi plus tard sans prix compte encore 0, jusqu'au chantier
+  suivant.
 
 ## À trancher par CrOliX
 
-1. **Le niveau.** Je recommande `critique` pour le core et Avaritia (des suppressions de données, la sortie d'un
-   processus), `standard` pour Acedia tant qu'aucune purge n'y entre, `trivial` pour lun-docs.
-2. **Ce que fait un serveur sur une erreur restée hors de tout filet** (les trois). (a) L'écrire au journal du jour,
-   la porter au Journal (un événement), puis sortir en code 1 : le lanceur relance en 60 s. (b) La même chose, mais
-   rester debout sur une promesse rejetée et ne sortir que sur une exception. (c) Rester debout toujours. **Je
-   recommande (a)** : une erreur hors filet peut laisser une écriture à moitié faite, et rester debout la cacherait ;
-   la relance coûte une minute, et les filets des boucles (tâches 1, 7, 12) rendent le cas rare. Le core redémarré
-   reste l'exception : c'est ce que ces filets protègent.
-3. **Le lanceur.** (a) Après ses trois relances à 60 s, une toutes les 15 min, sans fin. (b) Comme aujourd'hui, il
+1. **Ce que fait un serveur sur une erreur restée hors de tout filet** (les trois). (a) L'écrire sur la sortie
+   d'erreur, porter au plus un événement de chute par jour, puis sortir en code 1 : le lanceur relance en 60 s.
+   (b) La même chose, mais rester debout sur une promesse rejetée et ne sortir que sur une exception. (c) Rester
+   debout toujours. **Je recommande (a)** : une erreur hors filet peut laisser une écriture à moitié faite, et rester
+   debout la cacherait. La relance coûte une minute, et les filets des boucles (tâches 1, 4, 8) rendent le cas rare.
+   Le core redémarré reste l'exception : c'est ce que ces filets protègent.
+2. **Le lanceur.** (a) Après ses trois relances à 60 s, une toutes les 15 min, sans fin. (b) Comme aujourd'hui, il
    abandonne. **Je recommande (a)** : un abandon arrête le service jusqu'au retour de CrOliX, des jours parfois. Le
    coût : une ligne au journal par quart d'heure tant que le serveur tombe.
-4. **Les purges du core**, chacune avec ce qui reste (la tâche 0 confirme ou révise ces durées) :
-   - les événements de bruit de fond (`log`) : **7 jours**, comme les satellites chez eux. Il reste le dernier de
-     chaque poste. Rien de visible ne part : ils n'entrent pas au Journal ;
-   - les autres événements, des postes et du core, et leurs marques « vu » : **90 jours**. Il reste leur entrée au
-     Journal (titre, date, étapes), permanente ; une urgence encore « à trancher » est gardée, quel que soit son âge.
-     Part : le détail que le poste avait joint (ses lignes, son lien), qu'aucun écran du Journal ne relit ;
-   - les lignes de coût : **13 mois**. Le plafond du mois et la vue des sept jours n'en lisent pas plus ; le Journal
-     garde le coût de chaque entrée. Part : le détail par appel (modèle, jetons, temps du premier mot) au-delà ;
-   - **jamais** : le Journal et ses étapes (permanent par choix), la mémoire de la relation (non supervisée, sans
-     validation ni correction, voulu), les délégations (le Journal les relit). Les gestes tenus, les passages des
-     routines et les évaluations des scènes : quelques lignes par jour, sans purge, sauf si la tâche 0 dit le
-     contraire.
-5. **Acedia.** **Je recommande de n'y rien purger dans ce chantier** : son cache suit Gmail, ses tables grossissent
-   de quelques centaines d'octets par mail, et son journal a son issue (lun-acedia#33, chantier « Confort »). Si la
-   tâche 0 donne plus de quelques dizaines de Mo par an, une purge des coûts (13 mois) et des événements d'agenda
-   passés (90 jours, Google en reste la source) revient ici, et Acedia passe en `critique`.
-6. **Avaritia** : les observations des lots traités, **30 jours**. Il reste les fiches, les faits avec leur source,
-   les brouillons, les lots et leurs passages. Part : le texte brut de l'observation, déjà masqué par le core. Aucune
-   fiche, aucun fait, aucune version ne part : un fait démenti reste barré, jamais effacé.
-7. **La copie hors machine.** (a) Un second dossier réglable dans chaque service (tâches 4, 11, 17) ; sur le serveur
-   dédié, un dossier du NAS monté, le NAS servant au stockage (décision du 10/11) ; sur le desktop, le partage du NAS
-   si une tâche S4U peut y écrire (« Ce que le desktop vérifiera »), sinon rien pendant le rodage. (b) Le NAS tire
-   lui-même les dossiers `backups/`, sans code ; un échec n'est alors dit que par le NAS. (c) Rien avant le serveur
-   dédié. **Je recommande (a)** : l'échec est dit par le service, au Journal et au téléphone comme aujourd'hui, et se
-   prouve sur le laptop ; il sert tel quel au serveur dédié.
-8. **La nuit et le plafond d'Avaritia** (revient sur le plan « plafonds et pause »). (a) Un envoi retenu par le
-   plafond du jour d'Avaritia ne compte plus fait et repart la nuit suivante, avec une ligne au Journal. (b) Comme
-   aujourd'hui : ces observations n'atteignent jamais la bibliothèque. **Je recommande (a)** : sinon le plafond
-   perd des données en silence. La nuit coupée par CrOliX ne change pas.
-9. **Un lot d'Avaritia en échec.** (a) Repris une seule fois, le lendemain, puis `lot.failed` au core. (b) Un bouton
-   « Rejouer » dans son tableau de bord. (c) Les deux. **Je recommande (a)** : CrOliX est souvent absent, un lot raté
-   a déjà payé deux appels, et les paquets de 25 rendent une reprise petite. Le bouton peut venir après.
-10. **Un modèle sans prix chez Avaritia.** (a) Ne pas l'appeler : le lot attend, et l'événement le dit. (b) Le
-    compter à un prix de repli, le plus cher connu. (c) Un bandeau « plafond inopérant ». **Je recommande (a)** : pas
-    de chiffre faux, un seul endroit à changer, et `LLM_PRICES` le rend utilisable. Le point d'accès personnalisé
-    garde 0.
-11. **Une règle d'Acedia vers une boîte retirée.** (a) Au tri, la sauter, avec une ligne au journal. (b) Retirer le
-    rôle de boîte désactive ses règles. (c) Refuser de retirer le rôle tant qu'une règle y mène. **Je recommande
-    (a)** : il couvre toutes les façons dont une boîte disparaît, Gmail compris, sans toucher l'écran.
-12. **Qui code les serveurs des satellites** : aucun agent n'en a le métier. **Je recommande `dev-core`**, le plus
-    proche (Node, SQLite, contrat), avec le `CLAUDE.md` du satellite dans son brief.
+3. **Une règle d'Acedia vers une boîte retirée.** (a) Au tri, la sauter, avec une ligne au journal du serveur.
+   (b) Retirer le rôle de boîte désactive ses règles. (c) Refuser de retirer le rôle tant qu'une règle y mène. **Je
+   recommande (a)** : il couvre toutes les façons dont une boîte disparaît, Gmail compris, sans toucher l'écran.
+4. **Les événements que les satellites portent au core** (`server.crashed`, `lot.failed`). Les porter est un
+   changement du contrat satellite (`contrat-satellite.md:27`, `:116`), donc `critique`, et ce chantier en est le
+   propriétaire : c'est lui qui les émet.
+   - (a) La tâche 10 : le contrat les écrit, avec `backup.failed`, et corrige `:116`, dans la PR de lun-docs.
+   - (b) Reprendre un type que le contrat a déjà : il n'y a alors plus de changement de contrat.
+   - (c) Ne rien porter au core dans ce palier : la chute reste au journal du jour, le lot en échec au tableau de
+     bord.
+
+   **Je recommande (a).** (b) ne tient pas : le contrat n'a de types que pour les clés, et le core lit `key.invalid`
+   comme l'état de la clé d'un poste. Une chute dite par `key.invalid` montrerait une clé refusée qui ne l'est pas.
+   (c) laisse CrOliX sans rien savoir d'un serveur qui retombe pendant ses absences, ce que le lanceur sans fin rend
+   plus probable. (a) ne demande aucun code au core : il porte déjà les événements `normal` d'un poste au Journal et au
+   téléphone, et `backup.failed` y passe déjà sans être écrit au contrat.
