@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { checkRegistry, checkAdrs } from './check-registry.mjs';
+import { checkRegistry, checkAdrs, parseProjects } from './check-registry.mjs';
 
 const project = (fields) =>
   '  - ' + Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join('\n    ') + '\n';
@@ -44,8 +44,8 @@ test('checkRegistry reports two cores', () => {
 test('checkRegistry accepts the new roles', () => {
   const text =
     'projets:\n' +
-    project({ ...valid, id: 'website', role: 'vitrine' }) +
-    project({ ...valid, id: 'lundocs', role: 'referentiel', visibilite: 'public' });
+    project({ ...valid, id: 'website', role: 'vitrine', depot: 'Owner/website' }) +
+    project({ ...valid, id: 'lundocs', role: 'referentiel', visibilite: 'public', depot: 'Lun-Ecosystem/lun-docs' });
   assert.deepEqual(checkRegistry(text), []);
 });
 
@@ -61,6 +61,42 @@ test('checkRegistry rejects an unknown role', () => {
 
 test('checkRegistry ignores comments', () => {
   assert.deepEqual(checkRegistry('# header\nprojets:\n  # a comment\n' + project(valid)), []);
+});
+
+test('checkRegistry reports two projects with the same id', () => {
+  const text = 'projets:\n' + project(valid) + project({ ...valid, role: 'satellite', depot: 'Lun-Ecosystem/other' });
+  const errors = checkRegistry(text);
+  assert.ok(errors.some((e) => e.includes('duplicate id core')), errors.join('\n'));
+});
+
+test('checkRegistry reports two projects with the same depot, whatever the case', () => {
+  const text =
+    'projets:\n' + project(valid) + project({ ...valid, id: 'other', role: 'satellite', depot: 'lun-ecosystem/CORE' });
+  const errors = checkRegistry(text);
+  assert.ok(errors.some((e) => e.includes('core, other: same depot')), errors.join('\n'));
+});
+
+test('checkRegistry reports a nested list at its line, not a phantom project', () => {
+  const text = 'projets:\n' + project(valid) + '    contrats:\n      - id: z\n';
+  const errors = checkRegistry(text);
+  assert.ok(errors.some((e) => e.startsWith('registry.yaml:9: nested list')), errors.join('\n'));
+  assert.ok(!errors.some((e) => e.includes('missing')), errors.join('\n'));
+});
+
+test('checkRegistry reports a field without a value at its line', () => {
+  const errors = checkRegistry('projets:\n' + project({ ...valid, nom: '' }));
+  assert.ok(errors.some((e) => e.startsWith('registry.yaml:3: nom has no value')), errors.join('\n'));
+});
+
+test('checkRegistry reports a line it cannot read under projets', () => {
+  const errors = checkRegistry('projets:\n' + project(valid) + '    just text\n');
+  assert.ok(errors.some((e) => e.startsWith('registry.yaml:8: unreadable line')), errors.join('\n'));
+});
+
+test('checkRegistry accepts the registry of lun-docs', () => {
+  const text = fs.readFileSync(new URL('../registry.yaml', import.meta.url), 'utf8');
+  assert.deepEqual(checkRegistry(text), []);
+  assert.ok(parseProjects(text).projects.some((p) => p.id === 'lunanima' && p.visibilite === 'prive'));
 });
 
 function adrRoot(files) {
