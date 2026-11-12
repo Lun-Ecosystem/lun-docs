@@ -4,6 +4,10 @@
 > (§ 1), pose une page par projet avec une ligne d'arrivée, et ordonne deux axes : la présence, et la révision de
 > l'existant. Les quatre lignes d'arrivée (§ 4) sont validées par CrOliX depuis le 10/11. Les ordres marqués
 > **[avis Claude]** restent des propositions. Rien ici n'ajoute de satellite.
+>
+> **Tranché par CrOliX le 12/11** : la semaine de rodage est la porte du MVP (§ 3, § 6 point 1, § 8 point 3) ; le
+> premier appareil sans terminal entre dans le MVP (§ 4.2, § 6 point 6) ; la prod tournera sur un serveur dédié, le
+> NAS au stockage (§ 6 point 5, ADR 0012).
 
 ## 1. Ce que CrOliX a redit, le 10/11
 
@@ -43,9 +47,8 @@ lot du jour ; le core, sa conversation, sa nuit, sa lettre du matin, ses cartes,
 app au bureau et au téléphone ; Luxuria, une voix, une scène, des images, la sourdine.
 
 **Pas encore prouvé** : la session sur le desktop (douze points, feuille de route § 2.B) et la semaine de rodage n'ont pas
-eu lieu. Le socle est écrit, pas éprouvé par l'usage. **[avis Claude]** Ne plus en faire une porte à franchir avant la
-suite, mais le premier chantier de l'axe de révision : c'est l'usage quotidien qui dira quoi corriger, comme CrOliX le
-dit lui-même.
+eu lieu. Le socle est écrit, pas éprouvé par l'usage. **Tranché par CrOliX le 12/11** : la semaine de rodage sans
+tension sur le desktop est la porte du MVP ; la révision de l'état cible vient après.
 
 ## 4. Une page par projet
 
@@ -76,7 +79,8 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
 - **Existe** : l'identité, l'humeur, le tempérament, les souvenirs de la relation, la conversation, la délégation aux
   postes, la nuit, la lettre du matin, les cartes, les coûts, la pause, l'app.
 - **Mis de côté** : les rôles (assistante, experte, streameuse) ; l'humeur calculée par les événements ; la porte des
-  pensées, le budget de parole ; le point du soir ; la validation par lot ; le premier appareil sans terminal ; le NAS.
+  pensées, le budget de parole ; le point du soir ; la validation par lot ; la bascule vers le serveur dédié. Le
+  premier appareil sans terminal n'y est plus : il entre dans le MVP (lun-anima#72, tranché le 12/11).
 - **Ligne d'arrivée, validée par CrOliX le 10/11** :
   1. sa personnalité passe la barre : les scènes de référence, notées par CrOliX ;
   2. son humeur change avec ce qui arrive, et se voit dans sa voix et son corps ;
@@ -138,12 +142,12 @@ graphique à venir. La 8 est l'horizon : elle justifie de bien faire les sept au
 
 | | Quoi | D'où ça vient |
 |---|---|---|
-| 1 | **Éprouver le socle** : la session sur le desktop, puis l'usage quotidien, et corriger ce qu'il montre | feuille de route, § 2.B et § 4 |
+| 1 | **Éprouver le socle** : la session sur le desktop, puis la semaine de rodage. Ce n'est plus un point de la révision : c'est la porte du MVP, avant elle (tranché le 12/11) | feuille de route, § 2.B et § 4 |
 | 2 | **Les observations en attente** : dix-huit issues `inbox`, à trier en une fois (faire, plus tard, jamais) | les cinq dépôts |
 | 3 | **Les mots** : l'anatomie du § 2 dans `vision.md`, les standards et les README | § 2 |
 | 4 | **La vision** : l'incarnation d'abord, l'assistance comme tâche ; le stream n'est plus « hors périmètre » mais à l'horizon | § 1 |
-| 5 | **L'architecture** : un serveur dédié, le NAS au stockage, la porte d'entrée ; l'ADR 0008 à revoir (lun-docs#109) | CrOliX, le 10/11 |
-| 6 | **Le premier contact sans terminal** : le premier appareil, Google depuis l'interface, la liaison d'un poste | lun-anima#72, #90, lun-acedia#55, #30 |
+| 5 | **L'architecture** : un serveur dédié, le NAS au stockage, la porte d'entrée ; écrit dans l'ADR 0012, qui remplace l'ADR 0008 | CrOliX, le 10/11 ; ADR 0012 |
+| 6 | **Le premier contact sans terminal** : le premier appareil, Google depuis l'interface, la liaison d'un poste. Le premier appareil entre dans le MVP (tranché le 12/11) | lun-anima#72, #90, lun-acedia#55, #30 |
 | 7 | **La bibliothèque cherchée par le sens** | § 4.3 |
 | 8 | **Les mots et les composants partagés** : le [dictionnaire](../../standards/dictionnaire.md), puis la galerie du kit en trois paliers (le kit tel qu'il est ; les cartes et la permission ; la convergence des kits) | CrOliX, le 10/11 ; [plan](../plans/2026-11-10-galerie-kit.md) |
 
@@ -161,7 +165,8 @@ quand l'achat se précise. 6 et 7 sont de vrais chantiers, à ordonner contre le
 
 1. ~~Les quatre lignes d'arrivée (§ 4)~~ : écrites et validées par CrOliX le 10/11, une par une.
 2. La première marche de la présence (§ 5).
-3. La place de la session du desktop et de la semaine d'usage : une porte, ou le premier chantier de la révision (§ 3).
+3. ~~La place de la session du desktop et de la semaine d'usage~~ : tranchée par CrOliX le 12/11, la semaine de rodage
+   sans tension sur le desktop est la porte du MVP ; la révision de l'état cible vient après (§ 3).
 4. La réécriture de `vision.md` (§ 6, points 3 et 4).
 
-Ensuite : la feuille de route du MVP se clôt, et une nouvelle prend sa suite avec ces deux axes.
+La feuille de route du MVP se clôt après la semaine de rodage ; une nouvelle prend sa suite avec ces deux axes.

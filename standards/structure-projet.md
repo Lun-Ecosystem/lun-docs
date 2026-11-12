@@ -25,6 +25,10 @@
   lien de la PR qui livre. Une tâche non faite reste vide, et la PR dit pourquoi.
 - Une copie d'un standard de lun-docs : on y renvoie.
 - `graphify-out/` : le graphe est local à chaque poste et se reconstruit.
+- Un son : enregistrement, synthèse ou déroulé.
+- Un modèle, sauf s'il est petit, libre, nécessaire à l'app et tracé : un `SOURCE.md` dans son dossier donne sa
+  source, sa version, sa taille, son SHA-256 et sa licence. `check-repo.mjs --public` refuse un son, et un modèle sans
+  ce `SOURCE.md`.
 
 ## Graphe de connaissance
 
