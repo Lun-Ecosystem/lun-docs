@@ -429,7 +429,7 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
      (lun-anima#72) ; le desktop (§ 4) ; le rodage (B8), puis la bascule.
    - Preuve : `npm run check` ; chaque PR citée vue par `gh pr view`. Exclu : l'état des lignes d'arrivée, que l'audit
      a lu sans le rejouer ; la liste d'essais du § 4 au-delà des lignes dites ; un index des plans.
-9. - [ ] **Les preuves de lun-docs, la PR et les issues** (`livreur`). Après 1 à 8.
+9. - [x] **Les preuves de lun-docs, la PR et les issues** (`livreur`). Après 1 à 8.
    - L'issue chapeau ouverte avant le premier push (« L'issue chapeau ») ; la PR en brouillon au gabarit, avec « Les
      preuves » ; la relecture du diff par le `reviewer` ; les barrières de la tâche 5.
    - La PR ferme lun-docs#109, #136 et #41 ; elle commente lun-docs#130 avec ce qui reste (Lun'Anima).
