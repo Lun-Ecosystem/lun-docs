@@ -27,6 +27,8 @@ const LUXURIA = "Lun'Luxuria";
 const TOUS = [ANIMA, ACEDIA, AVARITIA, LUXURIA];
 const KIT_ACEDIA = 'views/src/lib/ui';
 const KIT_AVARITIA = 'app/src/lib/ui';
+/** The core is private: a public repository does not give its paths. */
+const DANS_LE_CORE = 'dans le core, privé';
 /** In the kit, but not in the own kit of these projects. */
 const ABSENT: Record<string, string[]> = {
   DropZone: [ACEDIA],
@@ -148,20 +150,8 @@ export const INVENTAIRE: Element[] = [
     'DraftCard',
     'La carte d’un brouillon de réponse.',
   ),
-  propre(
-    'cartes',
-    ANIMA,
-    'ui/src/file/File.svelte',
-    'File',
-    'La file « À trancher », avec Pile, Lot, Rangee, Depliee.',
-  ),
-  propre(
-    'cartes',
-    ANIMA,
-    'ui/src/natsume/CarteReduite.svelte',
-    'CarteReduite',
-    'La carte dans la conversation.',
-  ),
+  propre('cartes', ANIMA, DANS_LE_CORE, 'File', 'La file « À trancher », avec Pile, Lot, Rangee, Depliee.'),
+  propre('cartes', ANIMA, DANS_LE_CORE, 'CarteReduite', 'La carte dans la conversation.'),
   propre(
     'cartes',
     AVARITIA,

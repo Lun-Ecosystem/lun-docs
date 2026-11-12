@@ -7,10 +7,11 @@
 
 - **Rôle** : referentiel, inscrit dans `registry.yaml` (id `lundocs`).
 - **Possède** : les normes (`standards/`), les ADR d'écosystème (`adr/`), le registre, les gabarits (`templates/`), le
-  kit et les jetons de design (`design/`), le plugin `lun` (`plugin/`), les specs, les plans et la feuille de route
+  kit et les variables de design (`design/`), le plugin `lun` (`plugin/`), les specs, les plans et la feuille de route
   (`docs/`).
-- **Ne possède pas** : aucun code applicatif. Les apps recopient le kit et les jetons par `tools/sync-kit.mjs` et
-  `tools/sync-tokens.mjs`, et leur CI vérifie la copie ; Acedia et Avaritia gardent leur propre kit jusqu'à #43.
+- **Ne possède pas** : aucun code applicatif. Les apps recopient le kit et les variables de design par
+  `tools/sync-kit.mjs` et `tools/sync-tokens.mjs`, et leur CI vérifie la copie ; Acedia et Avaritia gardent leur
+  propre kit jusqu'à #43.
 
 ## Lancer en local
 
@@ -39,7 +40,8 @@ Une commande par ligne, sans `&&` : PowerShell 5.1 ne le connaît pas.
 ## Spécificités
 
 - **Dépôt public** : aucune adresse interne (`npm run check` les cherche), aucun secret (rien ne les cherche :
-  c'est à la relecture), rien des dépôts privés au-delà de leur nom.
+  c'est à la relecture), rien de l'intérieur d'un dépôt privé : la règle et ce que `npm run check` en cherche
+  sont dans `standards/securite.md`, « Dépôts publics » et « Le contrôle ».
 - **Les copies du plugin** : `plugin/skills/*/references/` sont générées depuis `standards/` et `vision.md`
   (`tools/standards-map.json`). Modifier l'original, puis `npm run sync` ; `npm run sync:check` échoue sur une
   copie retouchée à la main.

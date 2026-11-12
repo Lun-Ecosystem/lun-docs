@@ -43,7 +43,9 @@ par chantier (jamais une par tâche), CI verte, CrOliX merge.
 ## 6. Rien de privé dans un dépôt public
 
 Aucun secret, aucune adresse interne (IP du NAS, Tailscale, domaines privés), ni en clair ni dans
-l'historique. Ces valeurs vivent dans des `.env` non versionnés.
+l'historique. Ces valeurs vivent dans des `.env` non versionnés. D'un dépôt privé, un dépôt public ne dit que le
+nom, le rôle, les issues et les PR, le contrat public et l'adresse locale ; rien de son intérieur
+([`securite.md`](securite.md)).
 
 ## 7. La doc suit le code
 
