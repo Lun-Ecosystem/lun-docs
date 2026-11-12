@@ -9,7 +9,8 @@
 >
 > **Palier 1 fait le 12/11** : la tâche 0 a été jouée par le `testeur`, ses mesures sont écrites sous « Ce que la
 > tâche 0 a mesuré ». La toux synthétique n'a pas tenu son critère : la toux revient à CrOliX (« À trancher »).
-> **Palier 2 révisé d'après les mesures, à valider par CrOliX.** Rien n'est codé.
+> **Palier 2 révisé d'après les mesures, validé par CrOliX le 12/11** (« je valide avec tes recommandations ») :
+> les treize points de « À trancher » tels que recommandés, la toux par sa prise (a). Codage en cours.
 >
 > **Deux paliers.** **Palier 1 : la tâche 0 seule**, jetable, qui a mesuré ce que la suite suppose : les voix qu'on
 > peut atteindre, ce qu'elles font de nos phrases, la toux, la variance de la chaîne sur dix lancements, le coût d'une
@@ -912,6 +913,9 @@ dans `taux.ts`, `judge.ts` et `releve.ts`, que 3 reprend après elle ; 4 seule d
 **Tranché le 12/11, pour le palier 1** (« je valide ») : la tâche 0 et le seul téléchargement de
 `fr_FR-upmc-medium` ; la toux synthétique choisie sur Silero seul, faute de prise ou de CC0 ; Common Voice, pas à
 cette étape. La tâche 0 est faite ; la toux synthétique n'a pas tenu son critère.
+
+**Tranché le 12/11, pour le palier 2** (« je valide avec tes recommandations ») : les treize points ci-dessous,
+chacun selon sa recommandation ; la toux par sa prise (a).
 
 **Pour valider le palier 2** (chaque recommandation révisée avec les mesures de la tâche 0) :
 
