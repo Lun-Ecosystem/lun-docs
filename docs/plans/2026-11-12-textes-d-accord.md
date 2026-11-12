@@ -9,7 +9,7 @@
 > proposé, sans la raison du choix ; le NAS garde les copies et les fichiers, aucune base. La règle des PR de lun-docs
 > en (b), une PR par chantier partout : lun-docs#162 fusionne dès maintenant.
 >
-> **PR :** une par dépôt touché, en brouillon dès le premier push, *Show* partout. Celle de lun-docs fusionne la
+> **PR :** lun-docs#165 (brouillon) ; une par dépôt touché, en brouillon dès le premier push, *Show* partout. Celle de lun-docs fusionne la
 > première : la CI des trois satellites clone `main` de lun-docs pour lancer `check-repo.mjs --public`. Lun'Anima
 > n'est pas touché.
 
@@ -299,7 +299,7 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
 
 ### lun-docs (session principale ou `dev-front`, branche `docs/textes-d-accord`)
 
-1. - [ ] **Les décisions du 12/11** (`docs/specs/2026-11-10-etat-cible-cadrage.md`, `standards/dictionnaire.md`,
+1. - [x] **Les décisions du 12/11** (`docs/specs/2026-11-10-etat-cible-cadrage.md`, `standards/dictionnaire.md`,
    `standards/structure-projet.md`). *Parallélisable d'emblée.*
    - Le cadrage. En tête (`:3-5`) : ce qui est tranché le 12/11 et où. § 3 (`:45-48`) : l'**[avis Claude]** devient
      « Tranché par CrOliX le 12/11 : la semaine de rodage sans tension sur le desktop est la porte du MVP ; la révision
@@ -319,7 +319,7 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
    - Preuve : `npm run sync`, `npm run check`, `npm run sync:check` (le dictionnaire est recopié dans
      `lun-ecosysteme`).
    - Exclu : réécrire `vision.md` (lun-docs#127) ; la première marche de la présence (cadrage § 8, point 2).
-2. - [ ] **Le serveur dédié dans les normes** (`adr/`, `standards/environnements.md`, `standards/essentiel.md` § 4,
+2. - [x] **Le serveur dédié dans les normes** (`adr/`, `standards/environnements.md`, `standards/essentiel.md` § 4,
    `standards/stack.md`, `docs/plans/2026-11-08-bascule-nas.md`). Après 1, et le « validé » de CrOliX sur 0012.
    - `adr/0012-prod-machine-dediee.md` : le texte validé, tel quel. `adr/0013-methode-principes.md` : « L'ADR 0013 »
      ci-dessus, en 60 lignes au plus, avec sa ligne « Statut : ».
@@ -336,13 +336,13 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
    - Preuve : `npm run sync` (`essentiel.md` est recopié dans deux skills, `stack.md` et `environnements.md` non :
      `tools/standards-map.json`), `npm run check`, `npm run sync:check` ; la recherche du NAS (« Les preuves »).
    - Exclu : choisir la machine ; réécrire le plan de bascule ; la feuille de route (tâche 8).
-3. - [ ] **La carte de ce qui tourne** (`docs/architecture-actuelle.md`). Après 2.
+3. - [x] **La carte de ce qui tourne** (`docs/architecture-actuelle.md`). Après 2.
    - La date du jour de la PR (`:3`). `:16` « ses souvenirs » ; `:18` « la bibliothèque ». Les postes (`:24-33`) : la
      machine dédiée (la prod après le rodage, ADR 0012, pas encore achetée) et le NAS (les copies et les fichiers,
      rien n'y tourne). Les liaisons (`:50-51`) : le core relie un satellite par sa page d'autorisation et garde son
      jeton, chiffré, sans sa commande. Deux liens : les lignes d'arrivée (cadrage, § 4) et l'anatomie (dictionnaire).
    - Preuve : `npm run check`. Exclu : décrire la machine dédiée avant qu'elle existe.
-4. - [ ] **Le registre** (`registry.yaml`, `tools/check-registry.mjs`, `tools/check-registry.test.mjs`,
+4. - [x] **Le registre** (`registry.yaml`, `tools/check-registry.mjs`, `tools/check-registry.test.mjs`,
    `plugin/skills/lun-ecosysteme/SKILL.md`). *Parallélisable d'emblée.*
    - **[avis]** La recherche se retire, le champ ne se remplit pas : `SKILL.md:20-23` fait chercher le propriétaire
      dans le rôle et la description du registre, puis dans « Possède » et « Ne possède pas » du `CLAUDE.md` du projet ;
@@ -354,7 +354,7 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
    - Tests, écrits d'abord et vus rater : les deux doublons ; `contrats:` suivi de `- id: z` (une erreur à sa ligne, pas
      cinq champs manquants) ; un champ vide ; le registre d'aujourd'hui passe.
    - Preuve : `npm test`, `npm run check`, `npm run sync:check`. Exclu : un vrai parseur YAML ; ce que lit le site.
-5. - [ ] **Ce qu'un dépôt public tait** (`standards/essentiel.md` § 6, `standards/securite.md`, `CLAUDE.md`,
+5. - [x] **Ce qu'un dépôt public tait** (`standards/essentiel.md` § 6, `standards/securite.md`, `CLAUDE.md`,
    `plugin/agents/reviewer.md`, `tools/check-repo.mjs`, `tools/check-repo.test.mjs`, `design/galerie/inventaire.ts`,
    `design/galerie/base.css`). Après 2 (le même `essentiel.md`) et 4 (`parseProjects`).
    - La règle : une phrase dans `essentiel.md` § 6 (`:42-45`) ; dans `securite.md`, « Dépôts publics » (`:10-19`),
@@ -384,7 +384,7 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
      trois satellites, la sortie dans la PR ; dans `design/` : `npm ci`, `npm run typecheck`, `npm test`,
      `npm run format:check`, `npm run build`.
    - Exclu : réécrire un plan daté ; chercher commandes, tables et variables par motif ; Lun'Anima.
-6. - [ ] **Les règles du plugin et des PR** (`plugin/skills/lun-livrer/SKILL.md`, `plugin/hooks/guard.mjs`,
+6. - [x] **Les règles du plugin et des PR** (`plugin/skills/lun-livrer/SKILL.md`, `plugin/hooks/guard.mjs`,
    `standards/git.md`, `standards/essentiel.md` § 5, `templates/project/hooks/pre-push`, et selon la règle tranchée
    `plugin/agents/livreur.md`, `plugin/skills/lun-chantier/SKILL.md`). Après 5.
    - `lun-livrer/SKILL.md:29-31` : « *Show* : dis à CrOliX que la PR est prête, avec son lien ; c'est lui qui la passe
@@ -400,7 +400,7 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
    - Preuve : `npm test` (le test du hook ne change pas), `npm run sync`, `npm run check`, `npm run sync:check` ; la
      recherche de `gh pr ready` (« Les preuves »).
    - Exclu : bloquer `gh pr ready` dans le hook ; borner les outils des agents (`tools:`).
-7. - [ ] **Le design et les mots** (`standards/design.md`, `standards/notifications.md`, `README.md`).
+7. - [x] **Le design et les mots** (`standards/design.md`, `standards/notifications.md`, `README.md`).
    *Parallélisable d'emblée.*
    - `design.md:18` et `:31-32`, alignés sur `tokens.css:38-48` : l'accent d'Anima est `--anima`, distinct du rouge,
      avec son texte `--anima-texte` ; `--rouge` dit ce qu'il sert vraiment, d'après `tokens.css`.
@@ -412,7 +412,7 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
    - `README.md`, « Quoi fait foi » : deux lignes, ce qui tourne aujourd'hui (`docs/architecture-actuelle.md`) et
      l'état cible avec ses lignes d'arrivée (le cadrage).
    - Preuve : `npm run sync`, `npm run check`, `npm run sync:check`. Exclu : ajouter des variables à `tokens.css`.
-8. - [ ] **La feuille de route** (`docs/plans/2026-11-07-feuille-de-route-mvp.md`). Selon la règle des PR
+8. - [x] **La feuille de route** (`docs/plans/2026-11-07-feuille-de-route-mvp.md`). Selon la règle des PR
    (« Coordination »), partie de `main`.
    - Ce qui est faux. § 1 : L (`:15-16`, `:23`) et P (`:22`) disent fusionné, chacun vu par `gh pr view`
      (lun-luxuria#44, lun-docs#123) ; une ligne par chantier du 10 au 12/11, avec ses PR, chacune vue par
