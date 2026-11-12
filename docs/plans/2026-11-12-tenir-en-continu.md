@@ -14,7 +14,10 @@
 > lun-avaritia `424c4ec`. Relu le même jour par le plan-challenger : son alternative est retenue, **un seul palier
 > avant le rodage**. Les purges et ce qui demande les vrais débits passent au chantier suivant.
 >
-> **Le palier.** Huit tâches, plus la 3 en option et la 10 selon « À trancher », point 4.
+> **Le palier.** Huit tâches, plus la 3 en option. La 10 n'entre pas (point 4). Sans événement à porter, le filet du
+> processus d'Acedia et d'Avaritia est le comportement de Node lui-même : sur une exception ou une promesse rejetée
+> sans traitement, il écrit l'erreur et sa pile sur la sortie d'erreur et sort en code 1 (vérifié le 12/11 sur
+> Node 24). Leur module de chute et leurs événements sont retirés des tâches 4 et 8.
 
 **But :** que le core, Acedia et Avaritia tournent des jours sans s'arrêter et sans perdre de données en silence.
 C'est le préalable à la semaine de rodage (feuille de route, B8), porte du MVP. Qu'ils ne grossissent pas sans fin
@@ -30,9 +33,10 @@ déjà décidé.
 
 1. Aucune minuterie des trois serveurs ne peut les arrêter : chaque boucle a son filet, et un test par boucle la fait
    lever puis la voit repasser. Chaque PR joint la liste relevée des minuteries de son serveur, chacune avec son filet.
-2. Une erreur restée hors de tout filet est écrite sur la sortie d'erreur, que le lanceur garde au journal du jour ;
-   elle laisse au plus un événement de chute par jour et par serveur ; puis le serveur sort en code 1 (« À trancher »,
-   point 1). Un test le prouve dans un processus enfant, pour chacun des trois.
+2. Une erreur restée hors de tout filet est écrite sur la sortie d'erreur, que le lanceur garde au journal du jour,
+   puis le serveur sort en code 1 (« À trancher », point 1). Le core laisse en plus au plus un événement de chute par
+   jour à son Journal : un test le prouve dans un processus enfant. Chez Acedia et Avaritia, c'est le comportement de
+   Node ; le développeur vérifie qu'aucun écouteur ne l'annule, dans leur code ni dans leurs dépendances.
 3. Le lanceur du desktop ne laisse plus un serveur arrêté pour de bon (point 2) : son test le montre relancer après la
    troisième chute.
 4. Acedia, un test chacun :
@@ -43,31 +47,29 @@ déjà décidé.
    - une règle vers une boîte retirée est sautée (point 3) ;
    - un calendrier en erreur n'arrête plus les autres ni les tâches ;
    - une action groupée qui échoue à mi-chemin laisse au journal des gestes, annulables, les mails déjà touchés.
-5. Avaritia : un lot retenu repart dans l'heure, sans attendre l'envoi suivant ; un lot en échec est dit au core, au
-   plus une fois par jour. Un test chacun.
+5. Avaritia : un lot retenu repart dans l'heure, sans attendre l'envoi suivant. Un test.
 6. Si la tâche 3 est prise : un client du flux en direct qui ne lit plus ne fait plus grossir le core. Un test.
 7. La page de mise en service dit le nouveau lanceur, le prix de chaque modèle utilisé, où vont les copies pendant le
-   rodage, et ce que devient la nuit quand le desktop dort. Si la tâche 10 entre, le contrat satellite dit les
-   événements que les postes portent au core. Les barrières des trois dépôts sont vertes.
+   rodage, et ce que devient la nuit quand le desktop dort. Les barrières des trois dépôts sont vertes.
 
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
 | `lun-anima`, `fix/tenir-en-continu` | à ouvrir, privée : son corps est prêt, hors des dépôts | `standard` |
 | `lun-acedia`, `fix/tenir-en-continu` | à ouvrir | `standard` |
 | `lun-avaritia`, `fix/tenir-en-continu` | à ouvrir | `standard` |
-| `lun-docs`, `docs/tenir-en-continu` | l'issue chapeau, à ouvrir | `trivial`, `critique` si la tâche 10 entre |
+| `lun-docs`, `docs/tenir-en-continu` | l'issue chapeau, à ouvrir | `trivial` |
 
 **Le niveau.** `standard` pour les trois dépôts. Aucune donnée n'est retirée dans ce palier : les purges passent au
 chantier suivant. Chaque tâche suit un modèle déjà là : `startLoop` pour les boucles, la marque du jour de
 `backup.failed` pour l'événement de chute, le journal des gestes pour l'action groupée. Le standard
 [`workflow.md`](../../standards/workflow.md) demande alors un test par comportement changé ; chaque tâche les a. La
 sortie en code 1 change ce que fait un processus en erreur : elle est tranchée avant le code (point 1). Un changement
-du contrat satellite est `critique` (`workflow.md:39`) : c'est la tâche 10, si CrOliX suit le point 4.
+du contrat satellite serait `critique` (`workflow.md:39`) : la tâche 10 n'entre pas, le contrat ne change pas.
 
 **Les issues.** Une issue chapeau dans **lun-docs**, « Tenir en continu », qui porte ce plan et la liste des trois
 autres ; une issue dans chacun de **lun-anima** (privée), **lun-acedia** et **lun-avaritia**, qui renvoie au chapeau.
-Chaque PR de code ferme l'issue de son dépôt ; la PR de lun-docs (le plan coché, la page de mise en service, le
-contrat si la tâche 10 entre) ferme le chapeau, une fois les trois autres fusionnées.
+Chaque PR de code ferme l'issue de son dépôt ; la PR de lun-docs (le plan coché, la page de mise en service) ferme
+le chapeau, une fois les trois autres fusionnées.
 
 ## Ce que le code fait aujourd'hui
 
@@ -180,13 +182,12 @@ les PR en brouillon.
 `reviewer` la refait avant d'approuver.
 
 **En parallèle.** Un développeur par dépôt, chacun dans son worktree créé depuis la branche du chantier. Les trois
-dépôts partent ensemble, avec la tâche 10 ; **dans un dépôt, les tâches passent en série**, dans l'ordre du plan :
+dépôts partent ensemble ; **dans un dépôt, les tâches passent en série**, dans l'ordre du plan :
 
 - **lun-anima** : 1, puis 2, puis 3 si elle est prise.
 - **lun-acedia** : 4, puis 5, 6 et 7.
-- **lun-avaritia** : 8. Elle commence par ses boucles et ses lots ; elle prend le module de chute de la tâche 4 une
-  fois relu, mot pour mot, comme `backup.ts`.
-- **lun-docs** : 10 dès la validation, si elle entre ; 9 au fil des fusions, en dernier.
+- **lun-avaritia** : 8, d'emblée : sans module de chute, elle ne dépend plus d'Acedia.
+- **lun-docs** : 9 au fil des fusions, en dernier.
 
 **Les fichiers partagés**, raison de la série :
 
@@ -194,7 +195,6 @@ dépôts partent ensemble, avec la tâche 10 ; **dans un dépôt, les tâches pa
 - `deploy/windows/LISEZMOI.md` de lun-anima : la tâche 2 seule.
 - `.env.example` d'Acedia et d'Avaritia : aucune tâche n'y touche. Un prix se règle dans le `.env` du service, et la
   page de mise en service le dit (tâche 9). Une tâche qui doit y toucher le dit avant.
-- Le module de chute d'Acedia, recopié dans Avaritia : écrit par la tâche 4, repris par la tâche 8.
 - `docs/mise-en-service-desktop.md` : la tâche 9 seule. Le chantier « textes d'accord » la laisse à celui-ci jusqu'à
   la bascule.
 
@@ -207,8 +207,8 @@ dépôts partent ensemble, avec la tâche 10 ; **dans un dépôt, les tâches pa
 
 ### Lun'Acedia (`dev-core`)
 
-4. - [ ] **Les filets d'Acedia.** *Part d'emblée.* `server/src/main.ts`, `server/src/agenda/reminders.ts`, un module
-   neuf `server/src/crash.ts`, leurs tests, `README.md`.
+4. - [ ] **Les filets d'Acedia.** *Part d'emblée.* `server/src/main.ts`, `server/src/agenda/reminders.ts`, leurs
+   tests.
    - Les quatre minuteries passent par `startLoop` (`server/src/util.ts:12-33`) : l'échéance des clés
      (`main.ts:75-77`), la purge des événements (`:102`), le fil de l'agent (`:105-111`) et les rappels
      (`reminders.ts:99-109`, qui garde son `stop`). L'erreur va au journal du serveur par un `onError` comme
@@ -216,26 +216,13 @@ dépôts partent ensemble, avec la tâche 10 ; **dans un dépôt, les tâches pa
    - `startLoop` passe aussi tout de suite (`util.ts:31`) : les appels du démarrage (`main.ts:76`, `:110`) partent.
      Pour les rappels, qui passaient pour la première fois après une minute, vérifier qu'une passe au démarrage n'en
      double aucun.
-   - Le filet du processus, selon « À trancher », point 1 (recommandé (a)). Il vit dans `server/src/crash.ts`, et
-     `main.ts` le pose dès la base ouverte. Sur `uncaughtException` comme sur `unhandledRejection` :
-     1. l'erreur et sa pile sur la sortie d'erreur, que le lanceur garde déjà au journal du jour (`run.mjs:92-93`) ;
-     2. une transaction restée ouverte est annulée : un `ROLLBACK` tenté, son échec ignoré. Sinon l'événement qui suit
-        s'écrirait dans la transaction à moitié faite, et partirait avec elle ;
-     3. au plus un `server.crashed` par jour, sur le modèle de `backup.failedDay` (`server/src/backup.ts:79-84`) :
-        une marque `server.crashedDay` ; importance `normal` ; titre « Acedia s'est arrêtée sur une erreur ». `data` ne
-        garde que le nom et le code de l'erreur (`{ name, code }`), jamais son message : un chemin, un sujet de mail.
-        Le core le reçoit à la relance, comme `backup.failed`. Selon le point 4, son type peut changer ;
-     4. la sortie en code 1, même si 2 ou 3 échouent (disque plein, base illisible). Une seconde erreur pendant ces
-        étapes sort aussitôt.
-   - Le `README.md` dit `server.crashed` à côté de `backup.failed` (`:65`).
-   - Tests :
-     - chaque minuterie, sa fonction rendue fausse, écrit l'erreur et repasse (minuteries simulées de vitest) ;
-       `startReminderLoop` dont l'écriture lève continue (aucun test ne couvre cette boucle aujourd'hui) ;
-     - un processus enfant (`node --experimental-strip-types`, une base jetable) qui pose le filet puis lève dans une
-       minuterie sort en code 1, et sa base porte un `server.crashed` sans message ;
-     - relancé le même jour et levant encore : toujours un seul ; le lendemain (horloge injectée) : un second ;
-     - le même avec une promesse rejetée, puis avec une transaction ouverte au moment de lever.
-   - Exclu : changer `startLoop`, la synchro Gmail, l'agenda, la copie.
+   - Le filet du processus, selon « À trancher », points 1 et 4 : aucun code. Node écrit l'erreur et sa pile sur la
+     sortie d'erreur, que le lanceur garde au journal du jour (`run.mjs:92-93`), puis sort en code 1. Le développeur
+     vérifie qu'aucun écouteur `uncaughtException` ni `unhandledRejection` ne l'annule, dans `server/src` comme dans
+     les dépendances, serveur démarré (`process.listenerCount`). S'il en trouve un, il le dit avant tout code.
+   - Tests : chaque minuterie, sa fonction rendue fausse, écrit l'erreur et repasse (minuteries simulées de vitest) ;
+     `startReminderLoop` dont l'écriture lève continue (aucun test ne couvre cette boucle aujourd'hui).
+   - Exclu : changer `startLoop`, la synchro Gmail, l'agenda, la copie ; un événement de chute (point 4).
 5. - [ ] **Le tri ne perd plus de mails.** Après 4. `server/src/triage/pipeline.ts`, `server/src/triage/queue.ts`,
    leurs tests, `README.md` si le tri y est décrit.
    - Dans le `catch` de `triageNew` (`pipeline.ts:303-307`), l'erreur est classée :
@@ -284,25 +271,19 @@ dépôts partent ensemble, avec la tâche 10 ; **dans un dépôt, les tâches pa
 
 ### Lun'Avaritia (`dev-core`)
 
-8. - [ ] **Les filets d'Avaritia, et ses lots qui repartent.** *Part d'emblée* ; le module de chute après la tâche 4.
-   `server/src/main.ts`, `server/src/brain/ingest.ts`, `server/src/crash.ts`, leurs tests, `README.md`.
+8. - [ ] **Les filets d'Avaritia, et ses lots qui repartent.** *Part d'emblée.* `server/src/main.ts`,
+   `server/src/brain/ingest.ts`, leurs tests.
    - L'échéance des clés (`main.ts:62-64`) et la purge des événements (`:65`) passent par `startLoop`
      (`server/src/util.ts:12-33`), comme chez Acedia.
-   - Le filet du processus : le module de la tâche 4, mot pour mot ; titre « Avaritia s'est arrêtée sur une erreur ».
+   - Le filet du processus : comme à la tâche 4, aucun code, la vérification des écouteurs.
    - **Une passe des lots chaque heure**, par `startLoop` (qui passe aussi au démarrage, à la place de `main.ts:51`).
      `runPending` sait déjà sauter en pause et ne jamais tourner deux fois (`ingest.ts:60`) : un lot `held` repart
      dans l'heure où son fournisseur revient ou son plafond se lève. Le commentaire `shortcut:` (`:53-56`) part.
-   - **`lot.failed`**, au plus une fois par jour : quand `runLot` marque un lot en échec (`ingest.ts:98-99`), sur le
-     modèle de `backup.failedDay` (`server/src/backup.ts:79-84`). Une marque `lot.failedDay` ; importance `normal` ;
-     titre « Un lot de la nuit a échoué » ; `data` ne garde que le numéro du lot, jamais la raison, qui peut citer une
-     observation. Selon le point 4, son type peut changer.
-   - Le `README.md` dit `server.crashed` et `lot.failed` à côté de `backup.failed` (`:63`).
    - Tests :
      - les deux minuteries, leur fonction rendue fausse, écrivent l'erreur et repassent ;
-     - un lot `held`, son fournisseur revenu : la passe suivante le traite, sans envoi du core (minuteries simulées) ;
-     - deux lots en échec le même jour : un seul `lot.failed` ; un troisième le lendemain : un second ;
-     - le processus enfant de la tâche 4, chez Avaritia.
-   - Exclu : reprendre un lot `failed` ; `lot.held` ; le traitement d'un lot (« Le chantier suivant »).
+     - un lot `held`, son fournisseur revenu : la passe suivante le traite, sans envoi du core (minuteries simulées).
+   - Exclu : reprendre un lot `failed` ; `lot.held` ; `lot.failed` (point 4) ; le traitement d'un lot (« Le chantier
+     suivant »).
 
 ### lun-docs (la session)
 
@@ -317,22 +298,12 @@ dépôts partent ensemble, avec la tâche 10 ; **dans un dépôt, les tâches pa
    - **la nuit et la veille du desktop** (§ 7, `:133`, que le chantier « textes d'accord » rend à celui-ci) : en
      veille, les trois serveurs s'arrêtent tous, tri, rappels et copies compris, et le rattrapage ne rejoue que la
      nuit. Pendant le rodage, le desktop reste allumé, veille prolongée désactivée ;
-   - ce qu'un arrêt sur erreur et un lot en échec portent au Journal et au téléphone (§ 8, à côté de la copie ratée),
-     selon le point 4.
+   - où se voit un arrêt sur erreur (§ 8, à côté de la copie ratée) : celui du core, au Journal et au téléphone ; celui
+     d'un satellite, au journal du jour du lanceur, et au core s'il dure 15 min (le poste injoignable) ; un lot en
+     échec, au tableau de bord d'Avaritia.
    - Rien dans la feuille de route ni les ADR (le chantier « textes d'accord »).
-10. - [ ] **Le contrat satellite dit les événements de fonctionnement** (`critique`), si CrOliX suit le point 4 (a).
-    *Part d'emblée* : il fixe les types avant que les tâches 4 et 8 les émettent.
-    - `standards/contrat-satellite.md` : une table de types recommandés, comme celle des clés (`:119-126`) :
-      `backup.failed` (déjà émis), `server.crashed` et `lot.failed`, chacun `normal`, au plus une fois par jour, son
-      `data` sans message ni chemin.
-    - La ligne `:116` dit ce que le core fait vraiment : il porte aussi au Journal et au téléphone les événements
-      `normal`.
-    - Sans rupture : `type` reste libre et le core ne change pas. La version du contrat ne monte pas ; le `reviewer`
-      le confirme contre « Versionnement » (`:146-150`).
-    - `npm run sync` recopie le standard dans le plugin ; `npm run sync:check` le vérifie.
-    - La preuve de bout en bout, décrite dans la PR : sur le laptop, le core et Acedia lancés sur des bases jetables,
-      Acedia arrêtée par une erreur provoquée, l'événement au Journal du core après la relance.
-    - Exclu : `lot.held`, et tout type que ce palier n'émet pas.
+10. **Le contrat satellite dit les événements de fonctionnement** : n'entre pas, CrOliX ayant écarté tout signal des
+    satellites au core dans ce chantier (point 4). Il part au chantier suivant.
 
 ## Le chantier suivant, sur les débits réels
 
@@ -353,6 +324,8 @@ mesure jetable de l'ancienne version de ce plan est retirée. Chaque point garde
   par le core fait deux fois les mêmes brouillons.
 - **Les brouillons après une fusion** : « Fiche absente. » (`server/src/brain/drafts.ts:192`), le fait remplacé déjà
   barré (`:205`), la fusion qui ne réécrit pas les brouillons en attente (`:262-278`).
+- **Les signaux des satellites au core** : `server.crashed` et `lot.failed`, au plus une fois par jour, et le contrat
+  qui les écrit avec `backup.failed` (l'ancienne tâche 10, `critique`).
 - **Un lot en échec repris une fois**, et `lot.held` quand le plafond du mois retient un lot.
 - **Un modèle sans prix jamais appelé sans être compté** : ce palier ne fait que le dire dans la page.
 - **La nuit retenue par le plafond d'Avaritia** : quand il est atteint, la nuit du core ne lui envoie rien et compte
@@ -402,7 +375,8 @@ Rien de ce qui suit ne se prouve sur le laptop ; la semaine de rodage le regarde
   est rangé avec les inconnues et compte un essai. Le desktop le dira.
 - **Une panne passagère qui dure arrête le tri** à chaque passe, sans rien perdre : les mails attendent, et seule la
   ligne de la boucle le dit, chaque minute, comme aujourd'hui.
-- **Un lot en échec est dit une fois par jour** : un second, le même jour, n'est vu qu'au tableau de bord.
+- **Un satellite tombé ne se lit qu'au journal du lanceur**, et au core s'il reste injoignable 15 min ; un lot en
+  échec, qu'au tableau de bord d'Avaritia. Les signaux viennent au chantier suivant.
 - **Les copies restent sur le disque du desktop** pendant le rodage, sauf si le NAS les tire : un disque perdu
   emporte la base et ses copies. Elles ne sont pas chiffrées.
 - **Le prix d'un modèle se règle à la main** : un modèle choisi plus tard sans prix compte encore 0, jusqu'au chantier
