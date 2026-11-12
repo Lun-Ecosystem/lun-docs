@@ -113,7 +113,7 @@ function evaluatePr(action, args, command) {
   // so look in the whole command. shortcut: a -d inside a quoted body then passes; the CI review stays.
   if (draft === null) draft = /(^|\s)(--draft(=true)?|-d)(?=\s|$)/.test(command);
   if (action === 'create' && !draft) {
-    return 'a PR opens as a draft at the first push (git.md): add --draft, then gh pr ready once the criteria are proven';
+    return 'a PR opens as a draft at the first push (git.md): add --draft, then tell CrOliX the PR is ready once its criteria are proven';
   }
   return null;
 }
