@@ -31,8 +31,8 @@ Un seul fichier d'avancement, la feuille de route ; pas d'ADR pour une observati
 ## 4. On teste en local, jamais sur la prod
 
 Toute la pile démarre en local, sans dépendre du NAS ni du desktop. La prod (le desktop pendant le
-rodage, le NAS ensuite) sert à l'usage ; ce que seul le desktop prouve s'y essaie à part
-([`environnements.md`](environnements.md)). Aucune doc du type « à tester sur le NAS ».
+rodage, la machine dédiée ensuite) sert à l'usage ; ce que seul le desktop prouve s'y essaie à part
+([`environnements.md`](environnements.md)). Aucune doc du type « à tester sur la prod ».
 
 ## 5. Seul CrOliX merge
 

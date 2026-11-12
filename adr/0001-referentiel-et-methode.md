@@ -1,6 +1,6 @@
 # ADR 0001 : référentiel central, méthode de travail et agent IA
 
-Statut : acceptée
+Statut : remplacée par 0013
 Date : 2026-10-19
 
 ## Contexte

@@ -25,7 +25,7 @@
 
 - **SQLite** pour l'état de chaque service : un utilisateur, une instance. Pas de fichiers JSON comme
   stockage.
-- **Cerveau** (le satellite Lun'Avaritia) : SQLite comme source de vérité, corps des fiches en Markdown, recherche plein texte
+- **Bibliothèque** (le satellite Lun'Avaritia) : SQLite comme source de vérité, corps des fiches en Markdown, recherche plein texte
   par FTS5 ; import et export Obsidian en porte d'entrée et de sortie ([ADR 0005](../adr/0005-cerveau-sqlite.md)). Pas de
   recherche sémantique en v1.
 
@@ -48,8 +48,7 @@ prend pas en charge la 7. L'outillage de lun-docs lui-même reste sans dépendan
 
 ## Déploiement
 
-Dans le cadre de [`environnements.md`](environnements.md). Pendant le rodage, le desktop suit `main` :
-`deploy/windows/` de lun-anima l'installe et le met à jour
-([mise en service](../docs/mise-en-service-desktop.md)). Ensuite, image Docker **amd64** publiée sur
-GHCR au tag de version, récupérée par le NAS (UGREEN DXP2800, Intel N100). Les apps desktop et mobile se
-distribuent par les releases GitHub de leur dépôt.
+Dans le cadre de [`environnements.md`](environnements.md). Pendant le rodage, le desktop suit `main`
+([mise en service](../docs/mise-en-service-desktop.md)). Ensuite, image Docker **amd64** publiée sur GHCR au tag
+de version, récupérée par la machine de prod ([ADR 0012](../adr/0012-prod-machine-dediee.md)). Les apps desktop et
+mobile se distribuent par les releases GitHub de leur dépôt.
