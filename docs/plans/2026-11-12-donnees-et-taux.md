@@ -5,11 +5,16 @@
 > **Relu par le plan-challenger (« à amender », treize objections reprises, voir la fin). Palier 1 validé par
 > CrOliX le 12/11 (« je valide »)**, avec ses recommandations : la tâche 0 et le seul téléchargement de
 > `fr_FR-upmc-medium` hors dépôt ; sans prise ni fichier CC0 de sa part, la toux synthétique est choisie sur Silero
-> seul ; Common Voice n'est pas pris à cette étape. Palier 2 à valider après les mesures. Rien n'est codé.
+> seul ; Common Voice n'est pas pris à cette étape.
 >
-> **Deux paliers.** **Palier 1 : la tâche 0 seule**, jetable, qui mesure ce que la suite suppose : les voix qu'on
+> **Palier 1 fait le 12/11** : la tâche 0 a été jouée par le `testeur`, ses mesures sont écrites sous « Ce que la
+> tâche 0 a mesuré ». La toux synthétique n'a pas tenu son critère : la toux revient à CrOliX (« À trancher »).
+> **Palier 2 révisé d'après les mesures, à valider par CrOliX.** Rien n'est codé.
+>
+> **Deux paliers.** **Palier 1 : la tâche 0 seule**, jetable, qui a mesuré ce que la suite suppose : les voix qu'on
 > peut atteindre, ce qu'elles font de nos phrases, la toux, la variance de la chaîne sur dix lancements, le coût d'une
-> partie exacte. **Palier 2 : les tâches 1 à 5**, révisées avec ses mesures avant d'être validées.
+> partie exacte. **Palier 2 : les tâches 1 à 6.** La tâche 6, la toux, part dès que CrOliX l'a tranchée, et
+> aucune autre ne l'attend.
 >
 > **PR :** celle de l'axe pour ce plan (lun-docs#162) ; celle de Lun'Luxuria s'ouvre avec le palier 2. Lun'Anima
 > n'est pas touché.
@@ -42,7 +47,8 @@ Hugging Face). Le plan-challenger, le 12/11 : treize objections, chacune vérifi
 - Chaque mesure de la tâche 0 est écrite dans ce plan, avec sa valeur et ce qu'elle change au palier 2.
 - Rien n'entre dans un dépôt : les scripts et les copies de `BANC_DIR` vivent dans `banc-sons/chaine/essai-taux/`,
   retirés à la fusion du palier 2. Une voix de Piper téléchargée l'est après l'accord de CrOliX, dans le dossier de
-  Piper, hors dépôt.
+  Piper, hors dépôt. Fait le 12/11, hors dépôt, mais le modèle est resté dans `essai-taux/voix-upmc/` : la tâche 5
+  le déplace dans le dossier de Piper avant tout retrait.
 
 **Critères de fin du palier 2 :**
 
@@ -52,17 +58,20 @@ Hugging Face). Le plan-challenger, le 12/11 : treize objections, chacune vérifi
 - Chaque partie écrit une ligne dans `resultats.jsonl` dès qu'elle finit, et porte le nom `<nom>#<k>` dans
   `partie.json`. Une suite répétée écrit `releve-taux.md` (tout ce que dit « Ce qu'est un taux ») et, pour les parties
   du premier tour, `releve-chaine.md` comme aujourd'hui.
-- La course : trente parties par scénario avec Hortense, relevées. La robustesse : au moins trois voix de synthèse
-  autres que la sienne, deux parties par scénario chacune, relevées.
+- La course : trente parties par scénario avec Hortense, relevées. La robustesse : Julie, Paul, jessica et pierre,
+  deux parties par scénario chacune, relevées. Le relevé dit en tête que ses taux sont ceux de `tiny` sur le laptop.
 - Le relevé nomme la voix et le modèle de chaque son ; un son posé y est une prise (`pose:<fichier>`). Aucun son ni
   modèle de voix n'est suivi par git (la CI le vérifie pour les sons).
-- Un mot d'hésitation (« euh ») est dit par chaque voix gardée, dans `hesite-puis-demande`, ou ce plan dit pourquoi
-  non (tâche 0, point 3).
-- Les quatre scénarios de toux sont joués avec la toux que CrOliX a tranchée ; sinon le relevé dit encore « son
-  manquant », et ce plan dit pourquoi. Ce que `tiny` fait de la toux est au relevé.
+- Une parole perdue avant le faux modèle (un bruit pour l'écoute, une transcription vide ou qui choisit une autre
+  réponse que son `dit`) est la source des échecs qui la suivent, et non le maillon où ils se montrent (tâche 2).
+- `hesite-puis-demande` dit « euh » au milieu d'une demande avec chaque voix gardée ; ses attentes portent sur le
+  mécanisme, jamais sur le mot transcrit (tâche 0, point 3).
+- Les quatre scénarios de toux sont joués avec la toux que CrOliX a tranchée (tâche 6) ; sans toux, ils restent au
+  niveau exact, le relevé dit « son manquant », et ce plan dit pourquoi. Ce que `tiny` fait de la toux est au relevé.
 - lun-luxuria#72 : `couper-le-blanc` tient quand `tiny` entend « Arret. », et un test sur textes seuls montre que
-  chaque transcription vue choisit la même réponse que son `dit`. lun-luxuria#70 : ses attentes restent des mesures,
-  avec leur distribution. Aucune borne n'est élargie.
+  chaque transcription vue choisit la même réponse que son `dit`, sauf « Allez ! », un échec attendu de source
+  `transcription`. lun-luxuria#70 : ses attentes restent des mesures, avec leur distribution. Aucune borne n'est
+  élargie.
 - `npm test` ne change pas de durée de plus de cinq secondes : la chaîne n'y tourne pas.
 
 | Dépôt, branche | Issue | PR | Niveau |
@@ -87,7 +96,8 @@ Hugging Face). Le plan-challenger, le 12/11 : treize objections, chacune vérifi
 - **Une seule voix pour la personne.** `sonsDe(s, DIR, synthSapi)` (`chaine.test.ts:551`) : la synthèse est un
   paramètre (`sons.ts:137`). Hortense par `System.Speech` (`sons.ts:239-257`). La clé du cache est
   `sha256('sapi-hortense-16k\n' + texte)` dans `sons/sapi/` (`sons.ts:29`, `:96-109`). Les silences de tête et de fin
-  sont rognés à un niveau fixe de 0,01, sans marge (`sons.ts:28`, `:62-78`).
+  sont rognés à un niveau fixe de 0,01, sans marge (`sons.ts:28`, `:62-78`). Le cache garde le son brut de la
+  synthèse, rogné à chaque lecture (`sons.ts:104-108`).
 - **Un son posé passe devant tout** (`sons.ts:111-114`) : `sons/<nomDe(dit)>.wav`. Chaque suite de `banc-sons/chaine`
   a `sons/non.wav`, la prise de CrOliX du 10/11 : `non-court` joue ce « Non », quelle que soit la voix. Un son posé est
   rogné, jamais coupé à sa `duree` ; un bruit l'est (`sons.ts:141-146`). `nomDe('(toux)')` vaut `toux`
@@ -104,6 +114,14 @@ Hugging Face). Le plan-challenger, le 12/11 : treize objections, chacune vérifi
   (`judge.ts:161-179`, `:334-346`). Un défaut connu est conforme si l'attente rate de la même espèce **et** au même
   `trouve` (`judge.ts:313-318`) ; `passe` le compte alors tenu (`:52-53`). À la chaîne, un connu dont le `trouve`
   diffère fait échouer la partie (`chaine.test.ts:568`).
+- **Le juge ne voit pas une parole perdue avant le faux modèle.** `divergence()` ne lit que les appels au faux
+  modèle (`judge.ts:164-177`). Deux façons de perdre une parole n'en font aucun. L'écoute la juge bruit quand elle a
+  moins de 250 ms de voix (`minSpeechMs`, `endpoint.ts:128-134`, `settings.ts:96`) : la page écrit `bruit`
+  (`conversation.ts:50-57`), sans essai ni transcription. Ou bien la transcription revient vide, ou sans lettre :
+  le filtre la juge bruit (`filter.ts:33-36`), la page écrit `transcrite` sans texte et `verdict` `bruit`
+  (`conversation.ts:359-367`). Dans les deux cas, chaque échec qui suit nomme son propre maillon : `voix` pour
+  `non-court/pour-de-bon` ; `serveur` pour une attente non jouée faute de réponse (`ouvreur`, `judge.ts:206-207`).
+  Le relevé montre une case `entendu` vide dans les deux cas (`releve.ts:197`).
 - **Le relevé.** `releve()` compte les tenues et range les échecs par espèce et par source (`releve.ts:46-83`) ;
   `releveChaine` ajoute par scénario les phrases (`dit`, `entendu`, confiance), les délais exacts et de la chaîne, ce
   qui sonne (`releve.ts:132-269`). Une demande sans réponse y reçoit une source : `transcription` si le `dit` aurait
@@ -145,7 +163,7 @@ Hugging Face). Le plan-challenger, le 12/11 : treize objections, chacune vérifi
 
 **Déjà mesuré** (plan de la chaîne, « Ce que l'exécution a trouvé », et les relevés des suites) : une suite `tiny`
 dure environ 140 s pour neuf parties et le témoin ; les déroulés de la suite 2c durent 4,2 à 12,2 s. `tiny` sur un
-fichier d'Hortense rend le même texte cinq fois sur cinq (`chaine-laptop.md:205-208`). Ce qui varie d'une partie à
+fichier d'Hortense rend le même texte cinq fois sur cinq (`chaine-laptop.md:206-207`). Ce qui varie d'une partie à
 l'autre : « Arrête », transcrit à une confiance de 0,37 à 0,43, rendu « Arret ? » ou « Arret. » 2 fois sur 6 ; le
 silence de tête de Piper, de 0 à 190 ms, et la durée d'une même phrase, de 1506 à 1691 ms ; les mots entendus à la
 coupure, à un près ; le blanc de tour, jusqu'à 130 ms. La transcription `tiny` dans la chaîne : 353 à 371 ms.
@@ -168,7 +186,7 @@ coupure, à un près ; le blanc de tour, jusqu'à 130 ms. La transcription `tiny
   Samantha de macOS), rognent le silence avec 100 ms de marge, et rééchantillonnent en linéaire, sans filtre : un TODO
   dit que les fixtures passent avec ce rééchantillonnage et avec un sinc. Nous rognons sans marge (`sons.ts:62-78`) et
   rééchantillonnons aussi en linéaire (`replay.ts:32` : « fine to find where a voice is, not to judge a sound ») :
-  la tâche 0 mesure ce que les deux changent à `tiny`.
+  la tâche 0 a mesuré ce que les deux changent à `tiny` (point 3) : la marge, beaucoup ; le sinc, rien.
 - **Les voix de Piper** (liste et fiches lues le 12/11) : sept modèles français. Les licences sont celles de leurs
   données, d'après leur fiche :
 
@@ -188,8 +206,8 @@ coupure, à un près ; le blanc de tour, jusqu'à 130 ms. La transcription `tiny
 
 ## Palier 1 : la tâche 0
 
-0. - [ ] **Ce que la suite suppose, mesuré** (`testeur`, des scripts jetables dans `banc-sons/chaine/essai-taux/`,
-   hors git ; rien dans un dépôt). Seule.
+0. - [x] **Ce que la suite suppose, mesuré** (`testeur`, des scripts jetables dans `banc-sons/chaine/essai-taux/`,
+   hors git ; rien dans un dépôt). Seule. Faite le 12/11 : voir « Ce que la tâche 0 a mesuré ».
    1. **Julie et Paul.** `System.Speech` ne les voit pas. Les atteindre par WinRT
       (`Windows.Media.SpeechSynthesis.SpeechSynthesizer`) depuis PowerShell 5.1, un script fixe, le texte sur l'entrée
       standard : marche-t-il, quel format, quelle fréquence, quel temps par phrase. Essayé en premier.
@@ -200,7 +218,7 @@ coupure, à un près ; le blanc de tour, jusqu'à 130 ms. La transcription `tiny
    3. **Chaque voix sur nos phrases.** Hortense, Julie, Paul, jessica, pierre (et des lecteurs de MLS, s'il a fallu
       le télécharger). Pour chacune, les morceaux distincts des treize scénarios jouables à la chaîne, tels que
       `couper` les coupe (`sons.ts:42-56`), et trois mots d'hésitation (« euh », « ben », « hum »). `tiny` **une
-      fois** par morceau : cinq fois n'a rien montré sur Hortense (`chaine-laptop.md:205-208`). Pour chacun : le
+      fois** par morceau : cinq fois n'a rien montré sur Hortense (`chaine-laptop.md:206-207`). Pour chacun : le
       texte, la confiance, la part juste au sens de `nomDe(entendu) === nomDe(dit)` (`sons.ts:32`). Deux variantes,
       une fois chacune, sur toutes les voix : le WAV à sa fréquence native contre le même passé par `readWav`
       (`replay.ts:25-32`, linéaire sans filtre ; Piper sort à 22,05 kHz, Hortense à 16 kHz) ; le rognage sans marge
@@ -234,101 +252,239 @@ coupure, à un près ; le blanc de tour, jusqu'à 130 ms. La transcription `tiny
    - **Ce qu'elle rend** : une section « Ce que la tâche 0 a mesuré » dans ce plan, et pour chaque choix du palier 2
      s'il tient, change ou tombe.
 
+## Ce que la tâche 0 a mesuré
+
+Jouée le 12/11 par le `testeur`. Le poste : i7-1165G7, sur secteur (100 %), veille jamais sur secteur, au repos,
+plan « Utilisation normale ». Aucun dépôt touché ; les worktrees d'essai retirés. Les fichiers bruts, hors git, dans
+`banc-sons/chaine/essai-taux/` : `runs/` (un dossier par lancement, `var-1` à `var-10`, `verb-1`, `v-<voix>-1`,
+`toux450-*`, `toux300-*`, chacun avec son relevé, ses déroulés et ses journaux), `analyse-var.txt` (les dix
+lancements, attente par attente et délai par délai, dans leur ordre), `resume-voix.txt` (chaque voix sur nos
+phrases), `point7-sortie.txt`, `scripts/` (dont `winrt.ps1`), `toux/`, `voix-upmc/` et les copies de `BANC_DIR`.
+
+1. **Julie et Paul, par WinRT** depuis PowerShell 5.1 : marche (`scripts/winrt.ps1`, le texte sur l'entrée
+   standard). Un WAV PCM 16 bits mono à 16 000 Hz natif, que `readWav` lit (son `fmt` a 18 octets). 475 à 725 ms par
+   phrase de 37 caractères, processus compris. **Tient.**
+2. **Piper pour la personne** : `piper.exe` du poste (en C++) prend `-m` (le modèle), `-s` (le numéro du locuteur),
+   `-f` (le fichier de sortie), `-q`, et le texte sur l'entrée standard. Le champ des locuteurs du `.onnx.json` est
+   `speaker_id_map`, `{ jessica: 0, pierre: 1 }`. Sortie à 22 050 Hz. Environ 540 ms par appel (le modèle est
+   rechargé à chaque fois), 2 547 ms à froid. `fr_FR-upmc-medium` pèse 76,7 Mo, CC BY-SA 4.0 ; il a été posé dans
+   `essai-taux/voix-upmc/`, pas dans le dossier de Piper : à déplacer avant le retrait d'`essai-taux` (tâche 5).
+   MLS n'a pas été pris. **Tient** ; `piper.exe` n'est pas à côté du modèle, son chemin se donne (« Les variables »).
+3. **Chaque voix sur nos phrases**, `tiny` une fois par morceau : les treize paroles des scénarios jouables, leurs
+   quatorze morceaux, « euh », « ben », « hum », et « Tu peux me lire, euh, la liste des courses ».
+   - Paroles justes sur treize, sans marge puis avec 100 ms de marge : Hortense 7 → 10 ; Julie 9 → 11 ; Paul 8 → 10 ;
+     jessica 4 → 6 ; pierre 4 → 5. Sans marge, le début est mangé (« Tu peux me lire » rendu « Je suis pas me
+     lire. »). Un rééchantillonnage en sinc contre le linéaire de `readWav` : rien (jessica et pierre, les seules à
+     22 050 Hz, 4 sur 13 dans les deux cas). **Change** : la marge (tâche 1) ; le linéaire reste.
+   - Silero (`replay()`, réglages par défaut, sans marge) : tenue à 384 ms le plus souvent, 416 à 448 quand la
+     première trame de voix arrive à 32 ou 64 ms ; parfois 864 chez Hortense ; 800 à 1 024 chez jessica et pierre
+     sur les phrases longues.
+   - La durée réelle dépasse toujours `duree` : 1 635 contre 1 280 ms, 2 597 contre 1 600, 1 800 contre 1 600.
+   - « euh » seul : « eux », « 2 », « D'accord. », « Euh... » ou rien, selon la voix et la marge ; seul, il dure 138 à
+     164 ms chez Hortense, Julie et Paul, un bruit pour l'écoute. Dans « Tu peux me lire, euh, la liste des
+     courses » (160 ms de silence avant « euh », 400 après) : une seule phrase pour Silero chez Hortense, Julie, Paul
+     et pierre, « euh » repris comme voix ; **deux phrases chez jessica**, dont le « euh » n'est pas de la voix.
+     `tiny` y entend « eux » (Julie, Paul, Hortense avec marge), « Euh... » (pierre), rien (jessica). **Change** :
+     l'attente porte sur le mécanisme, pas sur le mot.
+4. **La toux synthétique : tombe.** Des souffles filtrés, voisés ou non : Silero au plus 0,04 à 0,27, aucune tenue.
+   Une voyelle /e/ à 210 Hz : tenue à 450 ms à un à trois décalages sur quatre, jamais aux quatre ; jamais à 300 ms.
+   450 ms font quatorze trames et la tenue en demande douze : aucune marge. Le critère n'est pas atteint après trois
+   grilles. La toux d'essai, non retenue : `toux/toux-450.wav`, `toux/toux-300.wav`, `scripts/genere-toux.mjs`.
+   `tiny` en fait « C'est ça ? », « ... », « C'est... », « C'est ça ! » ; aucun « Merci. ».
+5. **La variance de la chaîne** : dix lancements d'Hortense, `tiny`, un par un, puis un onzième bavard (`verb-1`).
+   - La suite dure 136 à 146 s, mise en route d'environ 10 s comprise. Aucune dérive nette d'un lancement à l'autre.
+   - Une partie, en ms : `faire-taire` 3 983 à 4 140 ; `delai-de-reponse` 6 189 à 6 440 ; `phrase-attente` 6 490 à
+     6 720 ; `delai-a-l-essai` 6 301 à 6 790 ; `couper-le-blanc` 5 692 à 7 391 ; `non-court` 7 261 à 7 790 ;
+     `oui-puis-reparler` 8 305 à 8 492 ; `deux-phrases` 11 466 à 12 081 ; `arrete-net` 6 131 à 13 531, en deux
+     groupes : 13 s les six fois où « Arret » a choisi la longue réponse, 6,4 s les quatre autres.
+   - **Chaque attente `tous` est tenue dix fois sur dix.** `couper-le-blanc` échoue cinq lancements sur onze par une
+     demande sans réponse (« Arret. » ou « Arret ? », lun-luxuria#72). Le onzième rate aussi `non-court` : la prise
+     « non » y est perdue par l'écoute, moins de 250 ms de voix, et le juge nomme `voix` (point 6).
+   - Délais, du plus petit au plus grand : transcription 343 à 665 ms (le plan de la chaîne lisait 353 à 371) ;
+     premier mot 403 à 427 (hors la réponse de `deux-phrases` qui attend 4 s) ; synthèse de Piper 105 à 297 ms pour
+     27 caractères, 214 à 343 pour 55 ; durée de ses phrases non coupées 50 à 107 ms par caractère, surtout 55 à
+     78 ; silence de tête 58 à 199 ms.
+   - Les attentes `exact` ratées le sont à des valeurs stables : `son-arrete` 442 à 465 (`arrete-net`, contre
+     [384, 416]) et 762 à 790 (`non-court`, contre [692, 724]) ; `blanc-de-tour` de `delai-a-l-essai` 1 162 à 1 353
+     contre [860, 892] ; `retenue` de `oui-puis-reparler` 427 à 454 contre [384, 416] ; `suspendue-a-la-tenue` de
+     `couper-le-blanc` 438 à 469.
+   - La prise « non » de CrOliX (`sons/non.wav`) n'est jouée que par `non-court` : « Non. » sept fois, « Non ! »
+     trois fois, perdue une fois sur onze.
+6. **Un passage par voix**, sans code, la toux d'essai posée : Julie 274 s, Paul 194 s, jessica 283 s, pierre 275 s,
+   cache vide compris.
+   - Parties en échec, hors toux : Julie `couper-le-blanc` (« Arret. ») et `oui-puis-reparler` ; Paul `arrete-net` ;
+     jessica `arrete-net`, `couper-le-blanc` (« Allez ! »), `non-court`, `oui-puis-reparler` ; pierre `non-court`,
+     `oui-puis-reparler`.
+   - **Le juge se trompe de source sur une parole perdue.** Le « Oui » de Julie (`runs/v-julie-1`), le « Non » et le
+     « Oui » de jessica : l'écoute écrit `bruit`, sans essai ni transcription ; les trois attentes `tous` de
+     `oui-puis-reparler`, non jouées, sont nommées `serveur`. Le « Non » et le « Oui » de pierre : la transcription
+     revient sans lettre (`verdict` `bruit`) ; `pour-de-bon` est nommée `voix`, les non jouées `serveur`. Il en va de
+     même de la prise « non » perdue de `verb-1`. **Change** : la tâche 2.
+   - Paul, `arrete-net` : « Arrête » entendu juste, trop court pour une tenue ; elle ne coupe qu'à la fin de la phrase
+     et `pour-de-bon` rate (`en_trop`, source `voix`). C'est ce qu'une voix casse, pas une course.
+   - La toux d'essai de 450 ms sur Hortense, trois passages (`runs/toux450-*`) : Silero la tient chaque fois
+     (`suspendue` à 440 à 444 ms). `chevauchement-garanti` vaut 486, 499 et 532 contre [0, 432] ;
+     `chevauchement-nul` la même valeur (connu lun-luxuria#63). `tiny` en fait « et », rien ou « C'est ça ? », une
+     fois « D'accord. ». `verdict-bruit` rate environ deux parties sur trois (source `filtre`). `toux-courte` avec la
+     toux de 300 ms (`runs/toux300-*`) : un échec sur trois, `verdict-bruit`.
+   - Dans les copies de voix, `toux-courte` jouait la toux de 450 ms au lieu de 300 : un son posé n'est pas coupé à
+     sa `duree` (`sons.ts:111-114`). **Change** : la tâche 1.
+7. **Le coût d'une partie exacte** : `scenarios.test.ts` en 1,09 à 2,11 s. Trois scénarios rejoués aux bords du
+   point 5 (`point7-sortie.txt`) : `delai-a-l-essai` et `deux-phrases` tiennent toutes leurs attentes `tous`, les
+   `exact` bougent ; `couper-le-blanc` rate `coupee` et `coupure-recue` au bord haut (107 ms par caractère), par
+   construction. Les durées réelles seules déplacent déjà les instants : `coupee` de 5 152 à 5 472 ms,
+   `essai-confirme` de 2 592 à 2 816. **Les tirages tombent** ; rejouer un échec demande ses durées réelles.
+8. **Ce qu'on a entendu**, à la chaîne (onze lancements d'Hortense, un par autre voix) et hors chaîne (point 3). Le
+   compte est à la chaîne ; « perdu » : ni texte, ni demande au faux modèle.
+   - « Arrête » : « Arrête ? » 10, « Arret. » 7, « Arret ? » 6, « Arrête. » 4, « Arrête ! » 1, « Allez ! » 2
+     (jessica, les deux fois). Hors chaîne, pierre : « Allez. ». Jamais « Arrête. » chez Hortense.
+   - « Non » : « Non. » 9, « Non ! » 3, perdu 3 (la prise une fois, jessica, pierre). Hors chaîne : « vous »
+     (jessica), « bon », « Hmm... » (pierre).
+   - « Oui » : « Oui ? » 6, « Oui? » 4, « Oui. » 1, « Louis. » 1 (Paul), perdu 3 (Julie, jessica, pierre). Hors
+     chaîne : « de suite. » (Paul), « C'est ça ? » (jessica), « ... », « Bon. », « 2 » (pierre).
+   - « J'ai des mails ? » : « J'ai dit mec. » 7, « J'ai dit mai. » 2, puis une fois chacune « J'ai des mails. »,
+     « J'ai des mains. », « J'ai des mecs. », « J'ai des milles. », « J'ai démètes. », « J'ai démilsé. ».
+   - « Raconte-moi la journée de demain » : « Recondement à la journée de demain. » le plus souvent ; aussi
+     « Reconte-moi… », « Racconte-moi… », « Raccontons à… », « Reconté moi… », « Recondo-moi… », « Raccont moi… ».
+   - « Tu peux me lire la liste des courses » : juste le plus souvent ; aussi « Tu peux me dire… », « Tu peux nous
+     lire… ». « Tu peux me rappeler le film de ce soir » : juste le plus souvent ; aussi « Tu peux nous
+     rappeler… », « Suppe me rappelée le film de ce soir. ». Les autres paroles : justes, à la ponctuation près.
+   - Le détail, texte entier et compte : les tables des paroles de `runs/*/releve-chaine.md`, et `resume-voix.txt`.
+
+**Installé**, hors dépôt : `fr_FR-upmc-medium` (point 2) ; l'environnement du service, refait en moins de 100 s
+(`uv-cache`, 315 Mo).
+
+**Non mesuré** : une toux qui tienne le critère ; un sinc d'un outil externe ; `entrePhrasesMs`, laissé à 300 ; le
+point 7 au-delà de trois scénarios ; la variance par voix, un seul passage chacune ; si le retard des tenues à la
+chaîne tient à Silero ou au trajet du son ; la marge de 100 ms dans Silero et dans une suite à la chaîne (le point 3
+la mesure sur `tiny` seul) ; `fr_FR-mls-medium` ; une seconde voix de contrôle pour #72. **Les taux sont ceux de
+`tiny` sur le laptop, pas de whisper-server.**
+
 ## Palier 2 : les choix **[avis]**
 
-À réviser avec les mesures de la tâche 0.
+Révisés avec les mesures de la tâche 0, à valider par CrOliX.
 
 ### Les voix de la personne
 
-**Hortense pour la course ; pour la robustesse, Julie, Paul, jessica et pierre, jamais sa voix.**
+**Hortense pour la course ; pour la robustesse, Julie, Paul, jessica et pierre, jamais sa voix.** Mesuré : les
+cinq voix sont atteintes (tâche 0, points 1 à 3).
 
 - **Hortense** est déjà là et en cache : la course rejoue les mêmes sons, seule la chaîne varie.
-- **Julie et Paul**, si la tâche 0 les atteint : une femme et un homme de plus, sans rien à télécharger.
-- **jessica et pierre** (`fr_FR-upmc-medium`) : un seul fichier, deux voix, une femme et un homme. **MLS** seulement
-  s'il en faut plus, deux ou trois lecteurs choisis sur les mesures du point 3, pas à l'oreille.
+- **Julie et Paul**, par WinRT (`Windows.Media.SpeechSynthesis`) : une femme et un homme de plus, sans rien à
+  télécharger, à 16 kHz natif. Le script du testeur, `essai-taux/scripts/winrt.ps1`, est la référence de ce qu'il
+  faut écrire (tâche 1).
+- **jessica et pierre** (`fr_FR-upmc-medium`), par `piper.exe` : un seul fichier, deux voix, une femme et un homme.
+  Le locuteur se choisit par `-s`, son numéro lu dans `speaker_id_map` du `.onnx.json`. Elles cassent les mots
+  courts (« Non », « Oui », « Arrête ») : c'est ce que la robustesse doit montrer.
 - **Exclues** : siwis, sa voix dans la chaîne (le cadrage veut des voix « différentes de la sienne ») ; Kokoro, dont
   la seule voix française vient, à ma connaissance, du même corpus SIWIS (non vérifié ici) ; espeak-ng, robotique,
-  et sans exécutable sur le poste ; `fr_FR-tom-medium`, une voix de plus sous AGPLv3, inutile avec upmc.
-  `fr_FR-gilles-low` (CC0) reste en réserve : sa qualité est la plus basse.
-- **Une voix que `tiny` transcrit mal** reste mesurée (sa part juste au relevé) ; ses échecs de source
-  `transcription` ne font pas échouer la suite (voir la règle d'échec).
-- **Le son posé** (à trancher) : je recommande qu'il soit ignoré quand `CHAINE_VOIX` est donné, pour que chaque voix
-  dise tout, le « Non » court compris, le plus dur pour `tiny` ; sans `CHAINE_VOIX`, sa prise joue, nommée
-  `pose:non.wav` à la ligne et au relevé. Une toux posée sert toujours : aucune voix ne dit une toux.
+  et sans exécutable sur le poste ; `fr_FR-tom-medium`, une voix de plus sous AGPLv3, inutile avec upmc. **MLS est
+  retiré** : quatre voix tiennent sans lui. `fr_FR-gilles-low` (CC0) reste en réserve : sa qualité est la plus basse.
+- **Une voix que `tiny` transcrit mal** reste mesurée : sa part juste au relevé, ses échecs par source. Ce qu'une
+  voix casse ne fait pas échouer la suite si CrOliX tranche ainsi la robustesse (« Ce qui fait échouer »).
+- **Le son posé** : ignoré quand `CHAINE_VOIX` est donné, pour que chaque voix dise tout, le « Non » court compris ;
+  sans `CHAINE_VOIX`, sa prise joue, nommée `pose:non.wav` à la ligne et au relevé. Une toux posée sert toujours,
+  aucune voix ne dit une toux ; elle est coupée à sa `duree` (tâche 1), là où `toux-courte` jouait 450 ms au lieu
+  de 300. La source de chaque son est dans `phrases[].son` et au relevé. Mesuré : tient.
+- **Le rognage, avec 100 ms de marge** de chaque côté de chaque morceau, comme AIRI : trois paroles justes de plus
+  sur treize chez Hortense, deux chez Julie, Paul et jessica, une chez pierre ; le seul levier net. Le cache garde
+  le son brut et le rognage se fait à la lecture (`sons.ts:104-108`) : la marge vaut aussi pour les sons déjà en
+  cache, sans changer la clé. Si une tâche rognait avant d'écrire le cache, la clé devrait porter la marge, sinon les
+  anciens sons resteraient. Ce que la marge coûte : un `trou` s'allonge des deux marges, jusqu'à 200 ms ; la durée
+  réelle de chaque son est au relevé.
+- **Le rééchantillonnage reste linéaire** (`readWav`) : un sinc n'a rien changé (tâche 0, point 3).
 - **Ce qui ne change pas** : le texte sur l'entrée standard, jamais dans la ligne de commande (`sons.ts:235-238`) ;
-  chaque son de synthèse en cache, dans `banc-sons`, par voix ; Piper hors du dépôt. Les voix de Windows sont sous
-  la licence de Windows, pour un usage personnel ; leurs sons ne quittent pas le poste.
+  chaque son de synthèse en cache, dans `banc-sons`, par voix ; Piper et ses modèles hors du dépôt. Les voix de
+  Windows sont sous la licence de Windows, pour un usage personnel ; leurs sons ne quittent pas le poste.
 - **Deux Piper** : sa voix passe par le paquet Python du service (`voix/service.py:80-86`), celle de la personne par
-  `piper.exe` du dossier. Un même modèle peut sonner autrement dans chacun ; la personne ne passe jamais par le
-  service.
+  `piper.exe` du poste. Un même modèle peut sonner autrement dans chacun ; la personne ne passe jamais par le
+  service. Le chemin de `piper.exe` se donne dans `CHAINE_VOIX`, il ne se déduit pas de `CHAINE_TTS`.
 
 ### Les hésitations
 
 **Écrites dans le scénario, dites par chaque voix.** Le format les porte déjà : un mot dans `dit`, un silence dans
-`trous`, à l'instant que le scénario choisit. Rien à coder. Ce qu'on ignore : comment chaque voix dit « euh »
-(tâche 0, point 3).
+`trous`, à l'instant que le scénario choisit. Rien à coder. Mesuré (tâche 0, point 3) : seul, « euh » est un bruit
+pour l'écoute chez trois voix ; au milieu d'une phrase, il est repris comme voix chez quatre voix sur cinq.
+`tiny` n'en rend jamais deux fois le même texte : « eux », « Euh... », rien.
 
-**Un scénario de plus**, `hesite-puis-demande`, si la tâche 0 montre que les voix disent « euh » comme une voix :
-« Tu peux me lire, euh, la liste des courses », un silence de 400 ms après « euh », entre la pause de l'essai
-(160 ms) et le silence de fin (700 ms). Il attend, en `tous` : un essai à l'hésitation, retiré quand la voix revient ;
-l'essai de la fin confirmé ; une seule réponse qui sonne, rien de l'essai retiré. Son apport sur `delai-a-l-essai` :
-l'hésitation est un mot, et l'essai part sur un texte qui finit par « euh », dont la vraie transcription fait ce
-qu'elle veut. Une voix qui ne dit pas « euh » comme une voix est écrite ici, avec ce que Silero et `tiny` en font.
+**Un scénario de plus, `hesite-puis-demande`**, dont l'attente porte sur le mécanisme, jamais sur le mot :
+« Tu peux me lire, euh, la liste des courses », 160 ms de silence avant « euh », 400 après, entre la pause de
+l'essai (160 ms) et le silence de fin (700 ms). Avec les deux marges du rognage, 400 ms écrits en font au plus 600 :
+encore sous la fin. Il attend, en `tous` :
+
+- **une seule demande** : la page n'écrit qu'une fin de phrase pour toute la parole, sans `bruit` ; un seul envoi
+  reste au serveur, chaque essai retiré ayant son retrait ;
+- **l'essai de la première pause retiré** quand la voix revient, sur « euh » ou après lui ;
+- **une seule réponse qui sonne**, rien de l'essai retiré.
+
+Le numéro de l'essai confirmé n'est pas une attente : il dépend du nombre de pauses que Silero voit, trois chez
+Hortense, Julie et Paul, deux chez pierre. Son apport sur `delai-a-l-essai` : l'hésitation est un mot, et la phrase
+tient malgré lui. Mesuré : jessica coupera la phrase en deux (son « euh » n'est pas de la voix), un échec de la
+robustesse écrit tel quel.
 
 Les 122 phrases de `banc-sons/pipecat-fra` ne servent pas ici : leur texte manque, et leurs hésitations visent
 l'épreuve « tenir une pause » du banc français, qui attend le modèle de fin de phrase, sur une branche non fusionnée
 (`feat/fin-de-phrase`). La longueur de leurs pauses n'a pas été mesurée. Common Voice, que le cadrage nomme pour les
-hésitations, est un écart à trancher (voir la fin).
+hésitations, est un écart tranché par CrOliX le 12/11 : pas à cette étape.
 
 ### La toux
 
-**La règle validée reste l'option principale** : la toux est enregistrée par CrOliX, ou un fichier sous licence CC0
-seulement (`chaine-laptop.md:249-251`). Sa prise, gardée dans `banc-sons` hors git, ou un fichier CC0 qu'il choisit
-(Freesound en a ; non vérifié ici). **L'autre option** : une toux synthétique, choisie sur Silero seul (tâche 0,
-point 4), écrite une fois par le script de la tâche 0 et posée comme un fichier ; aucun générateur dans le dépôt.
+**La toux synthétique n'est pas retenue** : aucune n'a tenu le critère de Silero (tâche 0, point 4). **La règle
+validée redevient la seule** : la toux est enregistrée par CrOliX, ou un fichier sous licence CC0 seulement
+(`chaine-laptop.md:249-251`). Son choix est à trancher (voir la fin) : sa prise, recommandée ; un fichier CC0
+téléchargé hors dépôt ; ou pas de toux à cette étape, les quatre scénarios restant au niveau exact.
+
+**Le palier 2 n'attend pas la toux.** La tâche 6 la pose et joue les quatre scénarios quand elle est là ; aucune
+autre tâche ne l'attend. Sans elle, le relevé dit « son manquant », comme aujourd'hui.
 
 Ce que `tiny` en fait n'est jamais un critère : le plan de la chaîne veut le trouver (« un « Merci. » inventé est un
-défaut à trouver ici », `chaine-laptop.md:279-280`). Choisir une toux que `tiny` rend vide le cacherait.
+défaut à trouver ici », `chaine-laptop.md:279-280`). Choisir une toux que `tiny` rend vide le cacherait. Sur la toux
+d'essai, il a rendu « et », rien, « C'est ça ? », une fois « D'accord. ».
 
-La toux est posée en `toux.wav` et en `bruit.wav` (le `bruits` de `toux-puis-parole.ts:25`), et coupée à sa `duree`
-(tâche 1). Aucun autre bruit (clic, porte, fond sonore) : aucun scénario n'en demande.
+Deux toux, rangées dans `banc-sons` hors de tout dépôt : `toux.wav`, une toux ordinaire d'au moins 450 ms, que
+`toux-parole`, `toux-reflexion` et `bruit.wav` (le `bruits` de `toux-puis-parole.ts:25`) reprennent ; et
+`toux-courte.wav`, d'au moins 300 ms, pour `toux-courte`, dont le `dit` devient `(toux courte)` (tâche 4). Chacune
+est coupée à sa `duree` (tâche 1). Un seul fichier CC0 sert sous les deux noms. Aucun autre bruit (clic, porte, fond
+sonore) : aucun scénario n'en demande.
 
-**Ce que chaque toux donnera à la chaîne**, d'après les tenues des cinq suites :
+**Ce que chaque toux donnera à la chaîne**, d'après les tenues des cinq suites et la toux d'essai (tâche 0,
+point 6) :
 
 | Scénario | Attentes `tous` | À la chaîne |
 |---|---|---|
 | `toux-parole` | `verdict-bruit`, `arrete`, `reprise`, `redite-dans-le-deroule`, `redite` | aucune bornée |
 | `toux-courte` | `verdict-bruit` | `tiny` doit rendre vide 300 ms de toux |
 | `toux-reflexion` | `verdict-bruit`, `relachee`, `elle-repond`, `pas-de-coupure` | aucune bornée |
-| `toux-puis-parole` | `verdict-bruit`, `reprise`, `chevauchement-garanti`, `chevauchement-nul` | voir dessous |
+| `toux-puis-parole` | `verdict-bruit`, `reprise`, `chevauchement-nul` | voir dessous |
 
 - **Les attentes sans borne** demandent que Silero tienne la toux de 450 ms et que `tiny` rende la toux vide. Leurs
   attentes `exact` (`suspendue`, `blanc`, `retenue`, `relachee-a-la-fin`, les trois de `toux-courte`) restent des
   mesures.
-- **`verdict-bruit`**, dans les quatre : si `tiny` invente un mot, elle rate. C'est le défaut que le plan de la
-  chaîne veut trouver : une issue, et un connu qui la nomme.
+- **`verdict-bruit`**, dans les quatre : si `tiny` invente un mot, elle rate. Sur la toux d'essai, deux parties sur
+  trois. C'est le défaut que le plan de la chaîne veut trouver : une issue, et un connu qui la nomme.
 - **`chevauchement-garanti`** (`[0, 432]`, « 400 + 32 », `toux-puis-parole.ts:69-76`) mesure le temps où elle parle
-  par-dessus la parole 1. À la chaîne, son son s'arrête 447 à 466 ms après le début de la parole (`sortie-arretee`,
-  cinq suites) : elle ratera presque toujours. Sa borne est le calcul à la trame (`toux-puis-parole.ts:13-15`), comme
-  celles de lun-luxuria#70 : à trancher.
-- **`chevauchement-nul`** (`[0, 0]`, connu lun-luxuria#63, `trouve: 384`) : à la chaîne `trouve` vaudra environ 450,
-  et `judge.ts:317` ne le dira jamais conforme ; le défaut connu ferait échouer la partie. La tâche 2 le reconnaît, à
-  la chaîne, par son espèce seule.
-- **Un risque** : les tenues à la chaîne arrivent 43 à 82 ms plus tard qu'au niveau exact. Si ce retard tient à
-  l'attaque de Silero plutôt qu'au trajet du son, une toux de 450 ms pourrait ne pas être tenue à la chaîne. Le point 6
-  de la tâche 0 le voit.
+  par-dessus la parole 1. Mesuré : 486, 499 et 532 ms sur trois passages, raté chaque fois. Sa borne est le calcul à
+  la trame (`toux-puis-parole.ts:13-15`), comme celles de lun-luxuria#70 : elle passe en `exact` (tâche 4), une
+  mesure à la chaîne, sa distribution au relevé. Ce n'est pas une borne élargie : la borne reste, au niveau exact.
+- **`chevauchement-nul`** (`[0, 0]`, connu lun-luxuria#63, `trouve: 384`) : à la chaîne, `trouve` vaut la même chose
+  que `chevauchement-garanti`, et `judge.ts:317` ne le dira jamais conforme ; le défaut connu ferait échouer la
+  partie. La tâche 2 le reconnaît, à la chaîne, par son espèce seule.
+- **Le risque levé en partie** : les tenues à la chaîne arrivent 43 à 82 ms plus tard qu'au niveau exact, et la
+  toux d'essai de 450 ms a pourtant été tenue trois fois sur trois (`suspendue` à 440 à 444 ms). Ce n'était pas une
+  vraie toux : la tâche 6 le revoit sur celle de CrOliX.
 
 ### Où répéter : la chaîne seule
 
 **La chaîne**, parce que c'est là que les choses varient : la transcription, Piper, Silero, le processeur. Elle a
-deux défauts : elle est lente (environ 13 s par partie, voir plus bas), et un échec ne s'y rejoue pas, le prochain
+deux défauts : elle est lente (4 à 13,5 s par partie, voir plus bas), et un échec ne s'y rejoue pas, le prochain
 tirage de `tiny` ou de Piper sera autre.
 
 **Pas de tirages au niveau exact.** Le cadrage veut ce niveau déterministe, dans la CI, en secondes (§ 4, point 3).
 Tirer les délais des briques fausses ne toucherait ni `duree` ni l'écoute, là où la chaîne varie, et casserait des
 ancres posées à la ms près : dans `couper-le-blanc`, « Arrête » tombe 1444 ms après le début d'une phrase de
 24 × 60 = 1440 ms (`couper-le-blanc.ts:7-10`, `:23-24`) ; un `msParCaractere` au-dessus de 60,2 fait rater `coupee`
-par construction. Le point 7 de la tâche 0 dit si un plan à part se justifie.
+par construction. Mesuré (tâche 0, point 7) : aux bords des délais de la chaîne, `delai-a-l-essai` et `deux-phrases`
+tiennent leurs attentes `tous`, `couper-le-blanc` rate au bord haut par construction. Aucun plan à part.
 
 ### Rejouer un échec au bit près, sans tirage
 
@@ -336,9 +492,12 @@ Une façon de faire, écrite ici, pas codée. On part de la ligne de la partie r
 déroulé :
 
 1. Copier le scénario dans `src/presence/scenarios/<nom>-rejeu.ts`, son `nom` changé, jamais commité.
-2. Y reposer ce que la partie a mesuré : `transcriptionMs` de chaque parole ; `premierMotMs` et `entrePhrasesMs` de
-   chaque réponse ; `voix.syntheseMs` ; `voix.msParCaractere`, la durée réelle de ses phrases sur leurs caractères
-   (une moyenne, un seul nombre pour toutes) ; la `duree` de chaque parole, la longueur réelle de son son.
+2. Y reposer ce que la partie a mesuré, **les délais et les durées réelles** : `transcriptionMs` de chaque parole ;
+   `premierMotMs` et `entrePhrasesMs` de chaque réponse ; `voix.syntheseMs` ; `voix.msParCaractere`, la durée réelle
+   de ses phrases sur leurs caractères (une moyenne, un seul nombre pour toutes, lue de `joue` à `arrete` dans le
+   déroulé) ; la `duree` de chaque parole, la longueur réelle de son son (`phrases[].dureeMs`). Les durées réelles
+   dépassent toujours `duree`, et elles seules déplacent déjà les instants (tâche 0, point 7) : une copie sans elles
+   ne rejoue pas la partie.
 3. `npm run scenarios` la joue au niveau exact : deux fois le même déroulé (`scenarios.test.ts:40-41`), lu avec les
    briques fausses, autant de fois qu'on veut.
 
@@ -355,13 +514,16 @@ brique. Le compte de `scenarios.test.ts:29-31` échoue tant que la copie est là
 - **La robustesse** : chaque voix gardée, deux parties par scénario. Pas de taux : une voix qui casse un mot le casse
   presque à chaque fois ; deux parties le montrent, et le séparent d'une course, que la course mesure. Les échecs par
   source disent si c'est la transcription.
-- **Avant la longue suite**, `N=3` avec Hortense (39 parties, environ 9 min) : la dérive des délais par rang, le
-  serveur après 39 parties sur le même fil `main`, le relevé lu. La course ne part que si rien ne dérive.
-- **Le temps sur le laptop** : environ 13 s par partie, mise en route comprise (estimé : (140 − 23) / 9, la suite 2c ;
-  mesuré à la tâche 0). La course : treize scénarios, 390 parties, environ 1 h 25 dans un seul processus. La
-  robustesse avec quatre voix : 104 parties, environ 23 min.
+- **Avant la longue suite**, `N=3` avec Hortense (30 parties sans la toux, environ 7 min) : la dérive des délais par
+  rang, le serveur après 30 parties sur le même fil `main`, le relevé lu. La course ne part que si rien ne dérive.
+- **Le temps sur le laptop**, mesuré (tâche 0, point 5) : la suite d'Hortense dure 136 à 146 s, environ 140 s,
+  mise en route d'environ 10 s comprise, sans dérive sur dix lancements. Une partie dure 4 à 13,5 s selon le
+  scénario. **La course** : trente fois la suite, les neuf scénarios et `hesite-puis-demande`, 300 parties,
+  **environ 70 min** dans un seul processus ; un peu moins une fois #72 corrigé (`arrete-net` passe de 13 à 6,4 s,
+  six parties sur dix). Les quatre toux l'allongent quand elles sont posées (tâche 6). **La robustesse** : un
+  passage par voix a duré 194 à 283 s, cache vide compris ; deux par voix, quatre voix, environ 30 à 40 min (estimé).
 - **Le poste** : la longue suite sur secteur, veille coupée, poste au repos, écrit ici avec le relevé ; le relevé
-  donne le nom du poste et son processeur.
+  donne le nom du poste et son processeur. La tâche 0 a tourné ainsi : i7-1165G7, sur secteur, veille jamais.
 - **Une partie à la fois** : `partie.json` est unique (`chaine.test.ts:424`), et la transcription partage le
   processeur avec Chrome : deux parties à la fois se mesureraient l'une l'autre.
 - **Le disque** : un déroulé pèse environ 6 Ko (suite 2c) ; environ 500 parties, environ 3 Mo. Chaque partie garde
@@ -387,7 +549,9 @@ brique. Le compte de `scenarios.test.ts:29-31` échoue tant que la copie est là
 - **La transcription** : par phrase et par voix, la part juste (`nomDe(entendu) === nomDe(dit)`) et chaque variante
   entendue, avec son compte.
 - **Les échecs** : par espèce et par source, comme aujourd'hui (`releve.ts:62-64`), et par voix ; une demande sans
-  réponse avec sa source (`releve.ts:162-177`).
+  réponse avec sa source (`releve.ts:162-177`) ; une parole perdue avant le faux modèle avec la sienne (tâche 2).
+- **Ce que valent ces taux** : ceux de `tiny` sur le processeur du laptop, pas de whisper-server sur la RX. Le relevé
+  le dit en tête, avec le poste.
 - **Le déroulé de chaque échec** : le relevé liste les parties ratées avec leur nom, leur voix, l'attente, l'espèce,
   la source, la valeur, le fichier et l'extrait du verdict.
 
@@ -395,9 +559,9 @@ brique. Le compte de `scenarios.test.ts:29-31` échoue tant que la copie est là
 
 **`N=1` ne change pas** : une attente `tous` ratée ou une demande inattendue fait échouer la suite.
 
-**`N>1`, la variante du plan-challenger** (à trancher, recommandée). Chaque partie est jouée, sans `expect` partie
-par partie ; une erreur hors du juge compte la partie ratée, d'espèce `joueur`, et la suite continue. À la fin, la
-suite échoue si une partie a :
+**`N>1`, la course : la variante du plan-challenger** (recommandée, mesurée). Chaque partie est jouée, sans `expect`
+partie par partie ; une erreur hors du juge compte la partie ratée, d'espèce `joueur`, et la suite continue. À la
+fin, la suite échoue si une partie d'Hortense a :
 
 - une attente `tous` sans défaut connu, ratée ou non jouée, dont la source n'est pas `transcription` ;
 - une demande sans réponse de source `scenario` ;
@@ -408,32 +572,71 @@ transcription. Elle garde la règle validée (`chaine-laptop.md:61-62` : une `to
 suite) pour ce que notre code fait, et laisse en mesure ce que `tiny` coûte. Une course trouvée devient une issue et
 un connu, jamais une borne élargie.
 
-Les autres voies : **la règle de Pipecat**, qui rend toujours 0 (ses robots reposent sur des modèles qui tirent au
-hasard ; ici une course est un défaut de mécanisme) ; **au minimum**, échouer si une `tous` tombe à 0 %.
+**Mesuré sur les onze lancements d'Hortense** (tâche 0, point 5) : chaque attente `tous` y tient, sauf une fois
+`non-court`. Les cinq échecs de `couper-le-blanc` sont des demandes sans réponse de source `transcription` : la
+règle ne les compte pas. La règle tient, **à une condition : que le juge nomme juste la source d'une parole perdue**
+avant le faux modèle. Aujourd'hui il nomme `voix` ou `serveur` (tâche 0, point 6), et la course échouerait sur un
+défaut du juge.
+
+**La source d'une parole perdue** (tâche 2). Une parole dont le `dit` choisit une réponse du faux modèle, et qui :
+
+- n'a laissé qu'un `bruit` de l'écoute sur sa phrase, sans essai : la source est **`ecoute`**. `tiny` n'a rien
+  entendu ; l'écoute a jugé le son trop court (moins de 250 ms de voix, `endpoint.ts:128-134`). C'est la prise
+  « non » de `verb-1`, le « Oui » de Julie dans `v-julie-1`, le « Non » et le « Oui » de jessica ;
+- a une transcription que le filtre juge bruit, vide, sans lettre ou une hallucination connue (`filter.ts:33-36`),
+  suivie de `sans_reponse` : la source est **`transcription`**. C'est le « Non » et le « Oui » de pierre ;
+- a atteint le faux modèle sur un texte qui choisit une autre réponse que son `dit` : la source est
+  **`transcription`**, la règle d'aujourd'hui (`judge.ts:161-179`) ;
+
+est la source de chaque échec dont la fenêtre l'atteint, non jouée comprise, quel que soit le maillon où il se
+montre. **Ce que les déroulés corrigent** : le relevé montrait ces mots « transcrits vides » ; dans `verb-1` et
+`v-julie-1`, la transcription n'a pas eu lieu, c'est l'écoute qui a perdu le mot. La nommer `transcription` serait
+faux. Avec la règle d'échec, une parole perdue par l'écoute fait donc échouer la course : à trancher (voir la fin).
+
+**La robustesse** (`N>1` ou non, une voix autre qu'Hortense) : à trancher. Ses mesures : chaque voix casse au moins
+un mot court, et jessica coupera `hesite-puis-demande` en deux. Deux voies :
+
+- **la même règle que la course** : chaque mot qu'une voix casse fait échouer la suite, tant qu'il n'a pas de
+  connu ; or un connu vaut pour un scénario, pas pour une voix ;
+- **le relevé seul** (recommandé) : les parties d'une voix autre qu'Hortense ne font échouer la suite que sur une
+  erreur du joueur ; chaque échec est au relevé, avec sa voix et sa source, et la tâche 5 ouvre une issue pour chaque
+  écart d'un mécanisme qu'elle y lit. La robustesse dit ce que chaque voix casse, pas si la suite passe.
+
+Les autres voies pour la course : **la règle de Pipecat**, qui rend toujours 0 (ses robots reposent sur des modèles
+qui tirent au hasard ; ici une course est un défaut de mécanisme) ; **au minimum**, échouer si une `tous` tombe à
+0 %.
 
 ### lun-luxuria#72 : « Arret. »
+
+**Urgent** : « Arret. » ou « Arret ? » fait échouer `couper-le-blanc` cinq lancements sur onze chez Hortense, et
+fait durer `arrete-net` 13 s au lieu de 6,4 six fois sur dix, la longue réponse choisie (tâche 0, point 5).
 
 **Le `si` de la réponse à « Arrête » devient `arret`**, dans `arrete-net.ts:27` et `couper-le-blanc.ts:28`. La page
 ne lit pas le texte pour se suspendre ; le vrai serveur ne réagit à un texte d'arrêt que pour « annule »
 (`service.ts:229-238`). Le faux modèle tient la place d'un modèle qui comprend « Arret. » comme « Arrête » ;
 Lun'Anima applique la même règle (`faux-modele.ts:110`). Ce n'est pas une borne : `si` dit ce que le faux modèle
-comprend, pas ce qu'on attend de la page.
+comprend, pas ce qu'on attend de la page. `arret` couvre « Arrête ? », « Arret. », « Arret ? », « Arrête. » et
+« Arrête ! » ; **« Allez ! »** (jessica) reste un échec de source `transcription`, sans autre `si` pour lui.
 
 **Le garde-fou : un test sur textes seuls** (tâche 4). Pour chaque scénario jouable, chaque transcription vue (tâche 0,
-point 8, et les suites) choisit par `choisir` (`scenario.ts:311-312`) la même réponse que son `dit`. Il attrape le vrai
-risque : un `si` élargi qui prend une autre parole, ou qui passe devant une autre réponse dans l'ordre de `choisir`.
-C'est ce test qui ferme #72. Comparer les déroulés exacts d'avant et d'après ne montrait rien : à ce niveau, la
-transcription rend le `dit`.
+point 8) choisit par `choisir` (`scenario.ts:311-312`) la même réponse que son `dit`, sauf celles qu'il nomme comme
+des échecs attendus (« Allez ! »). Il attrape le vrai risque : un `si` élargi qui prend une autre parole, ou qui passe
+devant une autre réponse dans l'ordre de `choisir`. C'est ce test qui ferme #72. Comparer les déroulés exacts d'avant
+et d'après ne montrait rien : à ce niveau, la transcription rend le `dit`. Les textes vus qui se lisent de près :
+« Louis. » choisit la réponse de « Oui » (`oui` y est), par chance ; « Raccontons à la journée de demain. » ne
+contient pas `non`.
 
 L'autre voie : garder `arrete` et compter l'échec, de source `transcription`. Avec la règle d'échec recommandée, il
-ne ferait pas échouer la suite, mais pèserait sur chaque taux.
+ne ferait pas échouer la suite, mais pèserait sur chaque taux et allongerait la course.
 
 ### lun-luxuria#70 : les attentes `exact` trop justes pour la chaîne
 
 **Elles restent des mesures.** Le relevé des taux donne, pour chacune, la part dans sa borne et la distribution de ce
 qu'elle trouve : « trois mots entendus, à un près », « `sortie-arretee` à −2 ms ». C'est ce que l'issue demande de
 voir. Ajouter une attente `tous` plus large serait élargir une borne sous un autre nom. L'issue se ferme avec le
-premier relevé des taux. `chevauchement-garanti` est du même genre : à trancher (voir la fin).
+premier relevé des taux. Mesuré (tâche 0, point 5) : elles ratent toujours, à des valeurs stables, `son-arrete` de
+442 à 465 contre [384, 416], `blanc-de-tour` de `delai-a-l-essai` de 1 162 à 1 353 contre [860, 892] ; une
+distribution les dit mieux qu'une borne. `chevauchement-garanti` est du même genre et passe en `exact` (tâche 4).
 
 ## Palier 2 : les contrats
 
@@ -455,24 +658,29 @@ interface Resultat {
   dureeMs?: number;                  // la durée réelle de la partie
   verdicts: (Omit<Verdict, 'couverture' | 'extrait'> & { extrait?: string[] })[];  // l'extrait : échecs seuls
   delais: { tour: number; ms: Partial<Record<DelayName, number>>; synthese: number[] }[];  // `delays()`
-  phrases?: { parole: number; dit: string; entendu?: string; confiance?: number; son: string }[];
+  phrases?: { parole: number; dit: string; entendu?: string; confiance?: number; son: string; dureeMs: number }[];
   inattendus: { texte: string; source: 'transcription' | 'scenario' }[];
   deroule?: string;                  // le nom du fichier
   raison?: string;                   // un scénario non joué
 }
 ```
 
-`phrases[].son` dit d'où vient chaque son : `pose:non.wav`, `cache:julie`, `synthese:julie`.
+`phrases[].son` dit d'où vient chaque son : `pose:non.wav`, `cache:julie`, `synthese:julie`. `phrases[].dureeMs`
+est la longueur réelle du son joué pour la parole (`SonPret.duree`, `sons.ts:80-84`), celle que « Rejouer un
+échec » reprend.
 
 ### Les variables et les fichiers
 
 | Variable | Par défaut | Rôle |
 |---|---|---|
 | `CHAINE_REPETITIONS` | `1` | parties par scénario et par voix |
-| `CHAINE_VOIX` | `hortense` | ses voix, par des virgules : `hortense`, `julie`, `paul`, `piper:<modèle>[#<locuteur>]` |
+| `CHAINE_VOIX` | `hortense` | ses voix, par virgules : `hortense`, `julie`, `paul`, `piper:<exe>\|<modèle>[#<nom>]` |
 | `CHAINE_STT`, `CHAINE_TTS`, `CHAINE_SCENARIOS`, `BANC_DIR` | inchangées | |
 
-`<modèle>` est le chemin du `.onnx` ; `piper.exe` est pris à côté de lui, jamais à côté de sa voix (`CHAINE_TTS`).
+Une voix de Piper donne ses deux chemins : `<exe>`, celui de `piper.exe`, et `<modèle>`, celui du `.onnx`, séparés
+par `|`, que Windows refuse dans un chemin ; le locuteur suit le dernier `#`, après `.onnx`. Le chemin de `piper.exe`
+ne se déduit ni du modèle, ni de sa voix (`CHAINE_TTS`) : la tâche 0 a posé le modèle hors du dossier de Piper. Par
+exemple : `CHAINE_VOIX="julie,paul,piper:C:\…\piper\piper.exe|C:\…\piper\fr_FR-upmc-medium.onnx#pierre"`.
 
 | Fichier, dans `BANC_DIR` | Écrit par | Quand |
 |---|---|---|
@@ -490,52 +698,70 @@ que Windows refuse dans un nom de dossier.
 | Scénario | Répété à la chaîne | Pourquoi |
 |---|---|---|
 | les neuf joués aujourd'hui | oui, dans la course et la robustesse | |
-| les quatre `toux-*` | oui, si une toux est posée | sinon « son manquant », comme aujourd'hui |
-| `hesite-puis-demande` (nouveau) | oui, si la tâche 0 le garde | |
+| les quatre `toux-*` | oui, si une toux est posée (tâche 6) | sinon « son manquant », au niveau exact seulement |
+| `hesite-puis-demande` (nouveau) | oui, dans la course et la robustesse | ses attentes portent sur le mécanisme |
 | `aparte-parole-longue`, `phrase-ecartee`, `echo-fort`, `delai-modele-lent` | non | `chaine.test.ts:120-130` |
 
 ## Palier 2 : les tâches
 
-**En parallèle d'emblée** : 1 et 2. **Après la tâche 0** : 4, en parallèle de 1 et 2. **Après 1 et 2** : 3. **En
-dernier** : 5. Chaque fichier n'a qu'une tâche à la fois : 1 seule dans `sons.ts` ; 2 dans `taux.ts`, `judge.ts` et
-`releve.ts`, que 3 reprend après elle ; 4 seule dans `scenarios/` et `scenarios.test.ts` ; 3 seule dans le `CLAUDE.md`
-et le `.gitignore`.
+**En parallèle d'emblée** : 1, 2 et 4 (la tâche 0 est faite). **Après 1 et 2** : 3. **En dernier** : 5. **La toux,
+6**, commence dès que CrOliX l'a tranchée et n'est attendue par aucune autre ; pour jouer ses scénarios à la chaîne,
+elle attend 1 et 4, et 3 pour les répéter. Chaque fichier n'a qu'une tâche à la fois : 1 seule dans `sons.ts` ; 2
+dans `taux.ts`, `judge.ts` et `releve.ts`, que 3 reprend après elle ; 4 seule dans `scenarios/` et
+`scenarios.test.ts` ; 3 seule dans le `CLAUDE.md` et le `.gitignore` ; 6 ne touche aucun fichier suivi.
 
 1. - [ ] **Les voix, et la source de chaque son** (`src/presence/chaine/sons.ts`, `sons.test.ts`, `dev-luxuria`).
    *Parallélisable d'emblée.*
    - `type Voix = { nom: string; synth: Synth }` ; `sonsDe(s, dir, voix, poses)` à la place de `synth`
-     (`sons.ts:137`). `poses: false` ignore les paroles posées (la règle tranchée, voir « Le son posé ») ; un `dit`
-     entre parenthèses prend toujours son fichier posé.
+     (`sons.ts:137`). `poses: false` ignore les paroles posées (« Le son posé ») ; un `dit` entre parenthèses prend
+     toujours son fichier posé.
    - Le cache par voix (`dire`, `sons.ts:96-109`) : Hortense garde la clé `sapi-hortense-16k` et `sons/sapi/`, pour
      que le cache d'aujourd'hui serve encore ; une autre voix, la clé `<nom>\n<texte>` dans `sons/<nomDe(nom sans
-     chemin)>/`.
+     chemin)>/`, jamais de « : ». Le cache garde le son brut, comme aujourd'hui (`sons.ts:105-108`).
+   - `rogner` (`sons.ts:62-78`) garde 100 ms de marge de chaque côté, dans la limite du son, comme le script du
+     testeur (`rogneMarge`). Il s'applique à la lecture, sur chaque morceau, sur un son posé et sur un bruit. La clé du
+     cache ne change pas : le cache est brut. S'il devenait rogné, sa clé devrait porter la marge.
    - `SonPret.source` (`sons.ts:16`) devient un texte : `pose:<fichier>`, `cache:<voix>`, `synthese:<voix>`.
    - Un son posé entre parenthèses est coupé à sa `duree`, comme un bruit (`sons.ts:141-146`) ; plus court qu'elle,
-     une erreur qui le nomme. Aujourd'hui `toux.wav` servirait 300 et 450 ms à sa propre longueur.
-   - `synthOneCore(nom)`, si la tâche 0 atteint Julie et Paul : comme `synthSapi` (`sons.ts:239-257`), un script fixe
-     par `-EncodedCommand`, le texte sur l'entrée standard ; une voix absente, une erreur qui la nomme.
-   - `synthPiper(modele, locuteur?)` : `piper.exe` à côté du modèle, des arguments fixes, sans shell, le texte sur
-     l'entrée standard ; le locuteur retrouvé par son nom dans `<modele>.onnx.json` (le champ que la tâche 0 a lu).
-     La fréquence et le rognage : ce que la tâche 0 a décidé (`readWav` ou la fréquence native, la marge).
-   - `voixDe(spec, tts)` lit une entrée de `CHAINE_VOIX` ; elle refuse sa voix (le même modèle et le même locuteur que
-     `CHAINE_TTS`) et une entrée inconnue.
+     une erreur qui le nomme. Aujourd'hui `toux-courte` joue la toux entière (tâche 0, point 6).
+   - `synthWinRT(nom)` pour Julie et Paul : un script fixe par `-EncodedCommand`, comme `synthSapi`
+     (`sons.ts:239-257`). Le nom de la voix vient d'une liste fixe (`Julie`, `Paul`), jamais de l'entrée ; le texte
+     sur l'entrée standard ; le WAV en base64 sur la sortie standard, lu par `readWav` (16 kHz natif, `fmt` de 18
+     octets). La référence est le script du testeur, `banc-sons/chaine/essai-taux/scripts/winrt.ps1`, hors dépôt, à
+     lire avant son retrait (tâche 5) : `AllVoices` filtré par `DisplayName`, `SynthesizeTextToStreamAsync` attendu
+     par `AsTask`, lu par un `DataReader`. Une voix absente : une erreur qui la nomme.
+   - `synthPiper(exe, modele, locuteur?)` : `piper.exe` au chemin donné, sans shell, les arguments
+     `-q -m <modele> -s <numéro> -f <fichier>`, le texte sur l'entrée standard (tâche 0, point 2). Le numéro est lu
+     dans `speaker_id_map` de `<modele>.json` ; un locuteur absent, une erreur qui le nomme. Le fichier de sortie est
+     un temporaire du dossier de la voix, lu par `readWav` (22 050 Hz rééchantillonnés en linéaire), puis effacé.
+   - `voixDe(spec, tts)` lit une entrée de `CHAINE_VOIX` (« Les variables et les fichiers ») ; elle refuse sa voix
+     (le même modèle et le même locuteur que `CHAINE_TTS`), une entrée inconnue, une voix de Piper sans `|`.
    - Tests (synthèse injectée) : le cache par voix, celui d'Hortense gardé (la même clé, le même dossier) ; aucun
-     « : » dans un dossier ; une parole posée ignorée ou jouée selon `poses` ; une toux posée coupée à sa `duree`,
-     refusée plus courte ; la source de chaque son ; la lecture et les refus de `voixDe` ; le locuteur lu dans un
-     `.onnx.json` écrit à la main.
-   - Exclu : lancer une vraie synthèse dans `npm test` ; un générateur de toux (une toux synthétique, si elle est
-     choisie, est un fichier posé).
-2. - [ ] **Une ligne par partie, et le relevé des taux** (`src/presence/taux.ts`, `taux.test.ts`, `releve.ts`,
-   `judge.ts`, `judge.test.ts`, `dev-luxuria`). *Parallélisable d'emblée.*
-   - Le type `Resultat` du contrat ; `resultat(jouee, { suite, partie, rang, voix, poste, deroule })` : la voix et le
-     rang en paramètres. `Jouee` ne change que d'un champ : `synthese` devient un texte (`releve.ts:96`).
+     « : » dans un dossier ; le cache brut, le rognage à la lecture avec sa marge, bornée au son ; une parole posée
+     ignorée ou jouée selon `poses` ; une toux posée coupée à sa `duree`, refusée plus courte ; la source de chaque
+     son ; la lecture et les refus de `voixDe` ; le numéro du locuteur lu dans un `.onnx.json` écrit à la main.
+   - Exclu : lancer une vraie synthèse dans `npm test` ; un générateur de toux ; un sinc.
+2. - [ ] **Une ligne par partie, la source d'une parole perdue, et le relevé des taux** (`src/presence/taux.ts`,
+   `taux.test.ts`, `releve.ts`, `judge.ts`, `judge.test.ts`, `dev-luxuria`). *Parallélisable d'emblée.*
+   - Le type `Resultat` du contrat, `phrases[].dureeMs` compris ; `resultat(jouee, { suite, partie, rang, voix,
+     poste, deroule })` : la voix et le rang en paramètres. `Jouee` ne change que d'un champ : `synthese` devient un
+     texte (`releve.ts:96`).
    - La source d'une demande sans réponse sort de `releveChaine` (`releve.ts:162-177`) en une fonction exportée, que
      le relevé et `resultat` appellent : une seule règle.
-   - `tenue(r)` : la seule définition de « Ce qu'est un taux ». `echoue(lignes)` : la règle d'échec tranchée, pour
-     `N>1`.
-   - `releveTaux(lignes)`, pure : en tête le nombre de parties, les voix, la transcription, sa synthèse, le poste, la
-     durée, et pour la course la phrase de la règle de trois ; puis par scénario, par attente et par voix, tout ce que
-     dit « Ce qu'est un taux ».
+   - **La source d'une parole perdue** (« Ce qui fait échouer une suite répétée »), à `lieu === 'chaine'` seulement.
+     `divergence()` (`judge.ts:161-179`) devient la première parole perdue, dans l'ordre du jeu : une parole dite
+     (pas entre parenthèses), dont le `dit` choisit une réponse (`choisir`, `scenario.ts:311-312`), et dont la
+     phrase finit par un `bruit` de l'écoute, sans essai (source `ecoute`), ou par un `verdict` `bruit` suivi de
+     `sans_reponse` (source `transcription`) ; ou dont le texte reçu choisit une autre réponse (source
+     `transcription`, la règle d'aujourd'hui). Son instant (le `bruit`, le `verdict` ou l'appel) et sa source prennent
+     la place de `transcrit` (`judge.ts:334-346`) : chaque échec dont la fenêtre l'atteint, non jouée comprise, prend
+     cette source si elle est en amont de `premier`. Au niveau exact, rien ne change.
+   - `tenue(r)` : la seule définition de « Ce qu'est un taux ». `echoue(lignes)` : la règle d'échec tranchée pour
+     `N>1`, sur les lignes d'Hortense ; pour les autres voix, ce que CrOliX tranche (recommandé : une erreur du
+     joueur seule).
+   - `releveTaux(lignes)`, pure : en tête le nombre de parties, les voix, la transcription et ce que valent ses taux
+     (`tiny` sur le laptop), sa synthèse, le poste, la durée, et pour la course la phrase de la règle de trois ; puis
+     par scénario, par attente et par voix, tout ce que dit « Ce qu'est un taux ».
    - Elle reprend `delays()`, `passe`, `nomDe` et les aides de `releve.ts` (`compte`, `parCle`, `table`), exportées,
      pas recopiées.
    - `judge.ts:313-318` : à `lieu === 'chaine'`, un défaut connu est conforme sur son espèce seule ; au niveau exact,
@@ -543,20 +769,25 @@ et le `.gitignore`.
    - Tests, sur des lignes écrites à la main : une `non_jouee` jamais tenue ; un connu qui se montre une fois sur
      trois, avec ses trois comptes ; un connu autrement raté, hors de la partie tenue ; pas de 95e centile sous vingt
      valeurs ; les échecs par espèce, par source et par voix ; la part juste et les variantes ; le fichier et
-     l'extrait d'une partie ratée ; `echoue` sur chaque cas de la règle ; un relevé entier comparé ligne à ligne.
-     Dans `judge.test.ts` : le même verdict, un autre `trouve`, conforme à la chaîne et pas au niveau exact.
-   - Exclu : lire un fichier ; le navigateur.
+     l'extrait d'une partie ratée ; `echoue` sur chaque cas de la règle, une voix autre qu'Hortense comprise ; un
+     relevé entier comparé ligne à ligne. Dans `judge.test.ts` : le même verdict, un autre `trouve`, conforme à la
+     chaîne et pas au niveau exact ; et, écrits d'abord et vus rater, les trois parties perdues de la tâche 0 en
+     petit : le « Non » de `non-court` jugé bruit par l'écoute (`pour-de-bon` de source `ecoute`, et non `voix`) ;
+     le « Oui » de `oui-puis-reparler` jugé bruit par l'écoute (les trois non jouées de source `ecoute`, et non
+     `serveur`) ; le même « Oui » rendu sans lettre (`verdict` `bruit`, source `transcription`). Une toux jugée bruit
+     ne nomme rien ; au niveau exact, les mêmes parties gardent leurs sources d'aujourd'hui.
+   - Exclu : lire un fichier ; le navigateur ; changer l'écoute ou `minSpeechMs`.
 3. - [ ] **Répéter à la chaîne** (`src/presence/chaine.test.ts`, `releve.ts`, `CLAUDE.md`, `.gitignore`,
    `dev-luxuria`). Après 1 et 2.
    - `CHAINE_REPETITIONS` et `CHAINE_VOIX`, lue par `voixDe`. L'ordre, comme Pipecat : le tour r joue chaque voix,
      puis chaque scénario, une fois. Un nom de test par partie (`<nom> #<k> <voix>`).
    - `partie.json` porte `<nom>#<k>` (`chaine.test.ts:423-424`) ; le témoin garde `<nom>-temoin`.
-   - Les sons de chaque voix par `sonsDe(s, DIR, voix, poses)`, `poses` selon la règle tranchée (recommandé : faux
-     quand `CHAINE_VOIX` est donné).
+   - Les sons de chaque voix par `sonsDe(s, DIR, voix, poses)`, `poses` faux quand `CHAINE_VOIX` est donné.
    - `synthese` de la `Jouee` : `CHAINE_TTS` sans son chemin (`piper:fr_FR-siwis-medium`), ou `fausse`
      (`chaine.test.ts:562`).
-   - Après chaque partie, une ligne dans `resultats.jsonl`, vidé au départ. Les déroulés : une partie par scénario,
-     les noms d'aujourd'hui ; sinon suffixés de `k`.
+   - Après chaque partie, une ligne dans `resultats.jsonl`, vidé au départ, avec la source et la durée réelle de
+     chaque son (`phrases[].son`, `phrases[].dureeMs`). Les déroulés : une partie par scénario, les noms
+     d'aujourd'hui ; sinon suffixés de `k`.
    - Le témoin, une fois, au premier tour. `releve-chaine.md` écrit pour les parties du premier tour, avec la source
      de chaque son dans la table des paroles (`releve.ts:189-199`).
    - Une partie par scénario : les `expect` d'aujourd'hui (`chaine.test.ts:567-568`). Sinon : aucun `expect` partie
@@ -567,68 +798,100 @@ et le `.gitignore`.
    - Tests, sans navigateur : l'ordre des parties et des voix, les noms de partie et de fichiers, une partie par
      scénario inchangée.
    - Exclu : jouer deux parties à la fois ; reprendre une suite arrêtée ; changer le fil `main`.
-4. - [ ] **Les scénarios** (`src/presence/scenarios/`, `src/presence/scenarios.test.ts`, `testeur`). Après la
-   tâche 0, *en parallèle de 1 et 2*.
-   - lun-luxuria#72 : `si: 'arret'` dans `arrete-net.ts:27` et `couper-le-blanc.ts:28`, et tout autre `si` qu'une
-     voix gardée casse à la tâche 0, par la racine du mot, listé dans ce plan.
+4. - [ ] **Les scénarios** (`src/presence/scenarios/`, `src/presence/scenarios.test.ts`, `testeur`).
+   *Parallélisable d'emblée*, en parallèle de 1 et 2.
+   - lun-luxuria#72, urgent : `si: 'arret'` dans `arrete-net.ts:27` et `couper-le-blanc.ts:28`. Aucun autre `si` :
+     les autres mots cassés (« Allez ! », « Louis. ») ne le demandent pas (« lun-luxuria#72 »).
    - Le test sur textes seuls, dans `scenarios.test.ts`, écrit d'abord et vu rater sur « Arret. » : une table des
-     transcriptions vues (le scénario, la parole, les textes : tâche 0, point 8, et les suites) ; pour chacune,
-     `choisir(reponses, entendu)` vaut `choisir(reponses, dit)`. Une phrase qui joint deux paroles se teste sur leurs
-     textes joints, comme le juge (`judge.ts:172-176`).
-   - `hesite-puis-demande.ts`, si la tâche 0 le garde : données seules, son calcul à la trame en commentaire, `tous`
-     pour ce que la chaîne doit tenir, `exact` pour les bornes à la trame. Le compte de `scenarios.test.ts:29-31`
-     passe à dix-huit.
-   - `toux-puis-parole` : `chevauchement-garanti` comme CrOliX le tranche (recommandé : `niveau: 'exact'`).
+     transcriptions vues (le scénario, la parole, les textes de la tâche 0, point 8) ; pour chacune,
+     `choisir(reponses, entendu)` vaut `choisir(reponses, dit)`, sauf « Allez ! », écrit dans la table comme un
+     échec attendu. Une phrase qui joint deux paroles se teste sur leurs textes joints, comme le juge
+     (`judge.ts:172-176`).
+   - `hesite-puis-demande.ts` (« Les hésitations ») : données seules, son calcul à la trame en commentaire ; en
+     `tous`, une seule demande, l'essai de la première pause retiré, une seule réponse qui sonne, rien sur le texte de
+     « euh » ni sur le numéro de l'essai confirmé ; `exact` pour les bornes à la trame. Le compte de
+     `scenarios.test.ts:29-31` passe à dix-huit.
+   - `toux-puis-parole` : `chevauchement-garanti` en `niveau: 'exact'`, sa borne inchangée.
+   - `toux-courte` : son `dit` devient `(toux courte)`, pour qu'il prenne `toux-courte.wav` (« La toux ») ; au
+     niveau exact, rien ne change, sa transcription fausse rend `entendu: ''`.
    - Exclu : changer une borne ; changer un mécanisme pour qu'un scénario tienne : un écart devient une issue.
-5. - [ ] **Les premières suites, et le plan coché** (`testeur`). Après tout le reste.
-   - [ ] Une partie par scénario, Hortense : les verdicts de la suite 2c, sauf #72 et la toux, comparés ici.
-   - [ ] `N=3`, Hortense : la dérive par rang, le serveur après 39 parties, le relevé lu. Arrêt si quelque chose
-     dérive.
-   - [ ] La course : `CHAINE_REPETITIONS=30`, Hortense, sur secteur, veille coupée, poste au repos, écrit ici.
-   - [ ] La robustesse : `CHAINE_VOIX=<les voix gardées>`, `CHAINE_REPETITIONS=2`.
+5. - [ ] **Les premières suites, et le plan coché** (`testeur`). Après 1 à 4.
+   - [ ] Avant tout retrait : `fr_FR-upmc-medium` déplacé d'`essai-taux/voix-upmc/` dans le dossier de Piper, hors
+     dépôt ; `winrt.ps1` lu par la tâche 1.
+   - [ ] Une partie par scénario, Hortense : les verdicts de la suite 2c, sauf #72 et la toux, comparés ici ; ce que
+     la marge du rognage change aux trous (`delai-a-l-essai`).
+   - [ ] `N=3`, Hortense, environ 7 min : la dérive par rang, le serveur après 30 parties, le relevé lu. Arrêt si
+     quelque chose dérive.
+   - [ ] La course : `CHAINE_REPETITIONS=30`, Hortense, environ 70 min, sur secteur, veille coupée, poste au repos,
+     écrit ici.
+   - [ ] La robustesse : `CHAINE_VOIX=julie,paul,piper:…#jessica,piper:…#pierre`, `CHAINE_REPETITIONS=2`.
    - [ ] Recopier ici, sous « Ce que l'exécution a trouvé » : les taux, les échecs par espèce, source et voix, les
-     distributions, la transcription par voix, les durées.
-   - [ ] Une issue par écart d'un mécanisme, et un connu qui la nomme ; jamais une borne élargie. lun-luxuria#70 et
-     #72 fermées avec le relevé, si elles tiennent.
+     distributions, la transcription par voix, les durées ; et que ces taux sont ceux de `tiny` sur le laptop.
+   - [ ] Une issue par écart d'un mécanisme, et un connu qui la nomme ; jamais une borne élargie. Si la course perd
+     un mot court par l'écoute (la prise « non », une fois sur onze à la tâche 0), une issue le dit. lun-luxuria#70
+     et #72 fermées avec le relevé, si elles tiennent.
    - [ ] Relecture séparée du diff, la PR en brouillon ; la feuille de route mise à jour.
    - [ ] Les scripts et les copies de `BANC_DIR` de la tâche 0 retirés de `banc-sons`, à la fusion.
+6. - [ ] **La toux** (`testeur`, hors dépôt). *Indépendante* : elle commence dès que CrOliX l'a tranchée (« À
+   trancher ») ; aucune autre tâche ne l'attend. Ses scénarios se jouent à la chaîne une fois 1 et 4 faites, se
+   répètent une fois 3 faite.
+   - [ ] (a) Sa prise, deux toux, une ordinaire d'au moins 450 ms et une courte d'au moins 300 ms, rangées dans
+     `banc-sons` hors de tout dépôt, comme sa prise « non ». (b) Un fichier CC0 téléchargé hors dépôt, sa licence lue
+     sur sa page et écrite ici avec son adresse, servi sous les deux noms. Puis `sons/toux.wav`,
+     `sons/toux-courte.wav` et `sons/bruit.wav` posés dans `banc-sons/chaine/`.
+   - [ ] Silero par `replay()` sur chaque toux coupée à sa `duree`, aux décalages de la tâche 0 (0, 8, 16, 24 ms) :
+     tenue ou non, écrit ici. Une mesure : c'est sa toux, elle n'est pas choisie sur Silero.
+   - [ ] Les quatre scénarios de toux joués à la chaîne, une partie chacun, puis trente avec Hortense, dans la course
+     si elle n'est pas encore partie, sinon à part (`CHAINE_SCENARIOS` réduit aux quatre toux, environ 30 min,
+     estimé). Ce que `tiny` fait de chaque toux, au relevé et ici.
+   - [ ] (c) Sans son : rien à jouer ; écrire ici que les quatre scénarios restent au niveau exact à cette étape, et
+     que le relevé dit « son manquant ».
+   - Exclu : une toux synthétique ; un générateur de toux ; un son dans un dépôt.
 
 ## Hors périmètre
 
 - Corriger ce que les taux trouvent : une issue par écart. lun-luxuria#63 (elle reprend par-dessus une phrase qui
   suit une toux) est un défaut de mécanisme ; son correctif a son propre chantier.
+- Changer l'écoute pour les mots courts (`minSpeechMs`, la tenue) : si la course perd un mot court, une issue.
 - lun-luxuria#67 (les mutations lisent des lignes JSON) : elle reste une issue `inbox`, hors de cette étape.
 - lun-luxuria#68, #69, #71 : non touchées. Le relevé des taux montrera #71 (`synthese-pendant` jamais jouée) à
   chaque partie.
-- Tirer les délais au niveau exact : un plan à part, si la tâche 0 (point 7) le justifie.
+- Tirer les délais au niveau exact : la tâche 0 (point 7) ne le justifie pas.
+- `fr_FR-mls-medium` et ses lecteurs : quatre voix tiennent sans eux.
 - Le desktop, la fenêtre Tauri, le petit mode, l'écho, whisper-server, le vrai modèle, RVC : l'étape 5.
 - Les épreuves d'hésitation au-delà de 700 ms (« tenir une pause ») : elles attendent le modèle de fin de phrase.
 - Un fond de bruit sous la parole, le débit des voix, les bruits autres que la toux.
-- Common Voice, et toute prise de personne au-delà des siennes : voir « À trancher ».
+- Common Voice, et toute prise de personne au-delà des siennes : tranché le 12/11, pas à cette étape.
 - Jouer deux parties à la fois ; reprendre une suite arrêtée (ses lignes restent) ; un fil par partie.
 - Garder le son des deux voies d'une partie ratée : son oreille n'ajoute rien sur cet axe.
 
 ## Limites
 
-- Les taux sont ceux du laptop : `tiny` sur son processeur, pas whisper-server sur la RX.
+- **Les taux sont ceux du laptop** : `tiny` sur son processeur, pas whisper-server sur la RX. La transcription y
+  prend 343 à 665 ms dans la chaîne.
 - Trente parties sans échec mettent l'échec sous 10 %, elles ne disent pas qu'il n'existe pas. Deux parties par voix
   ne donnent aucun taux : elles disent ce que la voix casse.
 - Les voix sont propres, lues, sans accent, sans pièce ni micro : la sonde pose le son dans la page. Une hésitation
   lue par une synthèse n'est pas quelqu'un qui cherche ses mots.
-- Rejouer un échec reproduit ses délais, pas son écoute ; la durée de ses phrases y est une moyenne.
-- Non mesuré, estimé : 13 s par partie à la chaîne, d'après la suite 2c, sur un poste au repos ; en charge ou sur
-  batterie, plus, et les délais bougent. La tâche 0 le mesure.
+- Rejouer un échec reproduit ses délais et ses durées, pas son écoute ; la durée de ses phrases y est une moyenne,
+  alors qu'elle va de 50 à 107 ms par caractère d'une phrase à l'autre.
+- Le temps de la course est mesuré sur un poste au repos, sur secteur ; en charge ou sur batterie, plus, et les
+  délais bougent.
 - Deux Piper : la version du `piper.exe` du poste est déduite de ses fichiers (`piper_phonemize.dll`,
   `libtashkeel_model.ort`), pas lue.
-- Non vérifié : que WinRT atteigne Julie et Paul depuis PowerShell 5.1 ; les options de `piper.exe` ; le champ des
-  locuteurs dans un `.onnx.json` à plusieurs voix ; le nombre d'hommes et de femmes parmi les lecteurs de MLS ; la
-  licence de `fr_FR-mls_1840-low` ; qu'un CC0 de Freesound convienne.
+- La source d'une parole perdue ne couvre pas un mot entendu juste mais trop court pour une tenue (Paul,
+  `arrete-net`) : le juge y nomme `voix`, parce qu'une attente `exact` en amont n'entre pas dans `premier`
+  (`judge.ts:330-333`). À la robustesse, c'est ce que la voix casse ; à la course, une issue s'il se montre.
+- La marge de 100 ms est mesurée sur `tiny` seul, pas dans Silero ni dans une suite à la chaîne : la tâche 5 le voit
+  à sa première suite.
+- Non vérifié : qu'un CC0 de Freesound convienne ; la licence de `fr_FR-mls_1840-low` (hors périmètre).
 - **Kokoro** : `voix/service.py:94` nomme la voix `ff_siwa`, là où sa voix française s'appelle, à ma connaissance,
   `ff_siwis`. Aucun fichier de voix de Kokoro sur le laptop pour le vérifier. À vérifier ; une issue sera ouverte
   une fois vérifié. Hors de ce plan.
-- Le fil `main` sur 390 parties d'un même lancement n'a jamais été joué : `N=3` le regarde d'abord.
+- Le fil `main` sur 300 parties d'un même lancement n'a jamais été joué : `N=3` le regarde d'abord. Dix lancements
+  de neuf parties n'ont montré aucune dérive.
 - Les tenues arrivent 43 à 82 ms plus tard à la chaîne qu'au niveau exact ; on ne sait pas si c'est Silero ou le
-  trajet du son.
+  trajet du son. La toux d'essai de 450 ms a pourtant été tenue trois fois sur trois.
 - Unmute et EVA ne sont pas relus : leur façon de compter les centiles et d'ajouter du bruit n'est pas comparée.
 
 ## Ce qui reste pour l'étape 5, le desktop
@@ -636,8 +899,8 @@ et le `.gitignore`.
 - La même commande et le même relevé des taux, avec le vrai modèle, whisper-server sur la RX et sa vraie voix
   (Piper ou Kokoro, puis RVC), dans la fenêtre Tauri : le petit mode (`aparte-parole-longue`, `phrase-ecartee`) et
   l'écho (`echo-fort`), par de vrais haut-parleurs, un vrai micro et l'annulation d'écho.
-- Copier le cache des voix (`sons/<voix>/`) sur le desktop : Piper y referait des sons différents. Y vérifier Julie
-  et Paul.
+- Copier le cache des voix (`sons/<voix>/`) et `fr_FR-upmc-medium` sur le desktop : Piper y referait des sons
+  différents. Y vérifier Julie et Paul.
 - `synthese` nomme sa vraie voix (Kokoro, RVC), et `poste` le desktop.
 - Ce qui s'entend vraiment, au-delà de la sortie du graphe.
 - Les budgets par étape de la veille (transcription sous 300 ms, première phrase sous 700 ms…) en seuils sur les
@@ -646,39 +909,54 @@ et le `.gitignore`.
 
 ## À trancher par CrOliX
 
-**Maintenant, pour lancer le palier 1 :**
+**Tranché le 12/11, pour le palier 1** (« je valide ») : la tâche 0 et le seul téléchargement de
+`fr_FR-upmc-medium` ; la toux synthétique choisie sur Silero seul, faute de prise ou de CC0 ; Common Voice, pas à
+cette étape. La tâche 0 est faite ; la toux synthétique n'a pas tenu son critère.
 
-- **La tâche 0**, avec ce qu'elle télécharge hors dépôt : `fr_FR-upmc-medium` dans le dossier de Piper, et
-  `fr_FR-mls-medium` seulement s'il manque des voix. Je recommande oui : `piper.exe` est déjà là, c'est un fichier, et
-  rien d'autre n'est installé.
-- **La toux** : je recommande la règle validée, une prise à lui ou un fichier CC0 qu'il choisit, d'au moins 450 ms,
-  posé dans `banc-sons` hors git. L'autre option : une toux synthétique choisie sur Silero seul (point 4), posée de
-  la même façon. Dans les deux cas, ce que `tiny` en fait est mesuré, jamais choisi.
-- **Common Voice** : le cadrage (§ 3, point 4) veut « de la parole spontanée libre (Common Voice) pour les
-  hésitations » ; ce plan ne la prend pas. La contrainte réelle est de ne rien mettre dans un dépôt public, pas de
-  ne rien garder sur le poste. Je recommande de ne pas la prendre à cette étape : ses phrases n'ont pas d'hésitation
-  datée, il faudrait les trouver et les couper à la main, et le scénario ne choisirait plus l'instant. Un plan à
-  part, après la course, s'il la veut.
+**Pour valider le palier 2** (chaque recommandation révisée avec les mesures de la tâche 0) :
 
-**Après la tâche 0, pour valider le palier 2** (chaque recommandation révisée avec ses mesures) :
-
-- **Les voix** : je recommande Hortense pour la course ; Julie, Paul, jessica et pierre pour la robustesse ; MLS
-  seulement s'il en tient moins de trois.
-- **Le son posé** : je recommande qu'il soit ignoré quand `CHAINE_VOIX` est donné (chaque voix dit « Non »), et
-  joué, nommé `pose:non.wav`, sinon. L'autre voie : un son posé est sa propre voix, toujours joué.
-- **Ce qui fait échouer une suite répétée** : je recommande la variante du plan-challenger. `N>1` échoue sur une
-  `tous` sous 100 % hors défauts connus et hors source `transcription`, une demande sans réponse de source
-  `scenario`, une erreur du joueur. Les autres voies : la règle de Pipecat (toujours 0) ; échouer à 0 % seulement.
-- **`chevauchement-garanti`** (`toux-puis-parole`) : je recommande `exact`. Sa borne est un calcul à la trame, comme
-  celles de #70 ; à la chaîne elle devient une mesure, sa distribution au relevé. L'autre voie : garder `tous`, une
-  issue et un connu ; mais rien ne dit encore que 447 à 466 ms soit un défaut de la page plutôt que le trajet du son.
-- **lun-luxuria#72** : je recommande `si: 'arret'`, avec le test sur textes seuls. Le faux modèle comprend ce qu'un
-  vrai comprendrait ; ce que `tiny` coûte se lit dans la part juste de chaque phrase.
-- **lun-luxuria#70** : je recommande de garder ces attentes en mesures, avec leur distribution, sans attente `tous`
-  plus large.
-- **Le nombre de parties** : je recommande trente par scénario pour la course, deux par voix pour la robustesse, et
-  `N=3` avant la course.
-- **`hesite-puis-demande`** : je recommande de l'écrire si les voix disent « euh » comme une voix.
+1. **Le palier 2 entier**, tâches 1 à 6, tel que révisé ici. Je recommande de le valider : chaque choix y est
+   mesuré, sauf la toux, qui n'en bloque aucun.
+2. **Les voix** : je recommande Hortense pour la course ; Julie, Paul (WinRT), jessica et pierre (`piper.exe`) pour
+   la robustesse ; MLS retiré. Les cinq sont atteintes, et jessica et pierre cassent les mots courts : c'est ce que
+   la robustesse doit montrer.
+3. **Le son posé** : je recommande qu'il soit ignoré quand `CHAINE_VOIX` est donné (chaque voix dit « Non »), et
+   joué, nommé `pose:non.wav`, sinon ; une toux posée toujours jouée, coupée à sa `duree`. L'autre voie : un son posé
+   est sa propre voix, toujours joué.
+4. **Le rognage** : je recommande 100 ms de marge de chaque côté de chaque morceau, le seul levier net (trois paroles
+   justes de plus sur treize chez Hortense). Le cache reste brut, sa clé ne change pas. L'autre voie : la marge sur
+   la tête et la fin de la parole seulement, qui ne touche pas aux trous, mais n'a pas été mesurée.
+5. **La source d'une parole perdue** : je recommande la règle de la tâche 2, `ecoute` quand l'écoute a jugé le mot
+   bruit, `transcription` quand la transcription le rend vide ou choisit une autre réponse. Puis, **une parole perdue
+   par l'écoute fait-elle échouer la course ?** Je recommande oui : c'est notre écoute qui jette un vrai « Non » de
+   sa prise, une fois sur onze ; une course qui le montre ouvre une issue et un connu, sans borne élargie. L'autre
+   voie : la compter comme une source `transcription`, une mesure qui ne fait pas échouer la course ; la course
+   passerait, au prix d'un nom faux.
+6. **Ce qui fait échouer la course** (`N>1`, Hortense) : je recommande la variante du plan-challenger, mesurée sur
+   onze lancements : `N>1` échoue sur une `tous` sous 100 % hors défauts connus et hors source `transcription`, une
+   demande sans réponse de source `scenario`, une erreur du joueur. Les autres voies : la règle de Pipecat
+   (toujours 0) ; échouer à 0 % seulement.
+7. **La robustesse** : je recommande le relevé seul. Les parties d'une voix autre qu'Hortense ne font échouer la
+   suite que sur une erreur du joueur, et la tâche 5 ouvre une issue pour chaque écart d'un mécanisme qu'elle lit au
+   relevé. L'autre voie : la même règle que la course ; chaque mot qu'une voix casse ferait échouer la suite, et un
+   connu ne vaut pas pour une voix.
+8. **`chevauchement-garanti`** (`toux-puis-parole`) : je recommande `exact`. Mesuré à 486, 499 et 532 ms contre
+   [0, 432] ; sa borne est un calcul à la trame, comme celles de #70. L'autre voie : garder `tous`, une issue et un
+   connu ; mais rien ne dit que ce soit un défaut de la page plutôt que le trajet du son.
+9. **lun-luxuria#72** : je recommande `si: 'arret'`, avec le test sur textes seuls, en urgence : « Arret » fait
+   échouer `couper-le-blanc` cinq lancements sur onze. « Allez ! » reste un échec de source `transcription`.
+10. **lun-luxuria#70** : je recommande de garder ces attentes en mesures, avec leur distribution, sans attente
+    `tous` plus large. Leurs valeurs sont stables d'un lancement à l'autre.
+11. **`hesite-puis-demande`** : je recommande de l'écrire avec des attentes sur le mécanisme (une seule demande,
+    l'essai de la première pause retiré, une seule réponse qui sonne), jamais sur le mot « euh », que `tiny` ne
+    rend jamais deux fois pareil.
+12. **La toux** : (a) **sa prise**, deux toux, une ordinaire d'au moins 450 ms et une courte d'au moins 300 ms,
+    rangées dans `banc-sons` hors de tout dépôt, comme sa prise « non » ; je la recommande, c'est la règle validée
+    et la seule toux vraie. (b) Un fichier CC0 téléchargé hors dépôt, sa licence vérifiée sur sa page. (c) Pas de
+    son : les quatre scénarios de toux restent au niveau exact à cette étape, et le relevé le dit. Le palier 2
+    avance sans attendre : la tâche 6 n'est attendue par aucune autre.
+13. **Le nombre de parties** : je recommande trente par scénario pour la course (environ 70 min), deux par voix pour
+    la robustesse, et `N=3` avant la course (environ 7 min), sur secteur, veille coupée.
 
 ## Ce que le plan-challenger a changé
 
@@ -711,8 +989,9 @@ Chaque preuve a été relue dans le code avant d'être reprise.
     sans code.
 11. **Les fichiers** : chaque fichier n'a qu'une tâche à la fois ; `releve.ts` est dans la liste de la tâche 2 ;
     `resultat()` prend la voix et le rang en paramètres.
-12. **Pour l'étape 5** : `synthese` et `poste` en texte ; `piper.exe` à côté du modèle de `CHAINE_VOIX` ; le cache
-    des voix à copier ; Julie et Paul à vérifier là-bas ; le dossier d'une voix par `nomDe` ; `ff_siwa` aux limites.
+12. **Pour l'étape 5** : `synthese` et `poste` en texte ; `piper.exe` jamais pris à côté de sa voix (révisé après la
+    tâche 0 : son chemin se donne dans `CHAINE_VOIX`) ; le cache des voix à copier ; Julie et Paul à vérifier
+    là-bas ; le dossier d'une voix par `nomDe` ; `ff_siwa` aux limites.
     Repris en partie : le relevé donne le nom du poste et son processeur ; le secteur et la veille, que le code ne
     lit pas, sont écrits dans ce plan.
 13. **Les mineurs** : un nom par partie, `<nom>#<k>` ; `releve-chaine.md` écrit pour le premier tour ; le critère
