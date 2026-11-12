@@ -61,12 +61,11 @@ parallèle, aucun fusionné : « tenir en continu » (lun-docs#164, en brouillon
 son plan fusionné par lun-docs#162), « remettre les textes d'accord » (lun-docs#165, en brouillon).
 
 **Au 08/11 au soir, après l'audit.** L'[audit](2026-11-08-audit-ecosysteme.md) a posé douze questions ; CrOliX les a
-tranchées (audit, § 7), sauf la langue parlée (B2, à l'oreille) et lun-acedia#30 (après le MVP). Appliqué le jour
-même, hors dépôt : squash seul sur les cinq dépôts, plugin `lun` à la racine du laptop. Confronté aux sources (audit,
-§ 8), le premier contact au terminal sort alors du MVP : l'installation passe par le terminal une fois, avant la
-semaine, et rien ne doit l'exiger pendant. Le 12/11, CrOliX y fait entrer le premier appareil sans terminal
-(lun-anima#72, § 3). Reste avant le MVP : les chantiers I à N (§ 3), la session sur le desktop (§ 4), puis
-la semaine de rodage (B8).
+tranchées (audit, § 7), sauf la langue parlée (B2, à l'oreille) et lun-acedia#30 (après le MVP). Appliqué le jour même,
+hors dépôt : squash seul sur les cinq dépôts, plugin `lun` à la racine du laptop. Confronté aux sources (audit, § 8), le
+premier contact au terminal sort alors du MVP : l'installation passe par le terminal une fois, avant la semaine, et rien
+ne doit l'exiger pendant. Restaient ce jour-là les chantiers I à N (§ 3), la session sur le desktop (§ 4), puis la
+semaine de rodage (B8). Le 12/11, CrOliX fait entrer au MVP le premier appareil sans terminal (lun-anima#72, § 3).
 
 **Au 08/11.** La liste A est faite côté laptop : F (lun-anima, lun-luxuria#22), G (lun-anima#69 et #71,
 lun-luxuria#24, la page [`mise-en-service-desktop.md`](../mise-en-service-desktop.md)), H sans ses relevés
@@ -85,9 +84,9 @@ Le tableau ci-dessous garde l'état du 07/11.
 | J4 Nuit, voix, contrôle | nuit, matin, notifications, voix et corps en images faits ; relevés du desktop en attente ; avatar animé après le MVP (lun-docs#62) ; **modes remplacés par le mute du bureau** (décision du 07/11) |
 | J5 Rodage | pas commencé : rien ne permet encore une semaine sans intervention (§2, A2) |
 
-Dépôts : aucune PR ouverte, tout est sur `main` ; lun-anima était resté sur une branche déjà fusionnée (#65), remis sur
-`main`. Plans du 07/11 : tous cochés sauf `voix-confiance-blocs` (pas commencé) ; `luxuria-essai-chronometre` reste en
-partie vide, son relevé est fait (lun-luxuria#9).
+Dépôts, au 07/11 : aucune PR ouverte, tout est sur `main` ; lun-anima était resté sur une branche déjà fusionnée (#65),
+remis sur `main`. Plans du 07/11 : tous cochés sauf `voix-confiance-blocs` (pas commencé) ; `luxuria-essai-chronometre`
+reste en partie vide, son relevé est fait (lun-luxuria#9).
 
 ## 2. Ce qui reste, classé
 
@@ -113,10 +112,10 @@ partie vide, son relevé est fait (lun-luxuria#9).
 | B6 | Une soirée réelle : latence par tour et coût, puis décision sur le plafond de 1 $ par jour (spec Luxuria §6.7) ; noter le silence pendant une délégation à un poste (veille C2) | desktop |
 | B7 | Notifications Windows coupées (`ToastEnabled = 0`) ; vcclient sur `0.0.0.0:18000` et règles du pare-feu | CrOliX : réglages système |
 | B8 | La semaine de rodage elle-même (J5), la porte du MVP (tranché le 12/11), sur le poste mis en service par G ; noter la lassitude des cartes du matin (veille C9). Proposition : juger l'assistante et le contrôle sur la semaine, la présence à part, par la barre de N | CrOliX |
-| B9 | Recette du mute, points 1, 3 et 5 : aucune capture en sourdine, la parole spontanée repart à son heure, en appel un P0 n'est pas dit. **Le 10/11 : points 1 et 3 constatés** (lun-anima#98 pour un message vide après la levée) ; le point 5 attend B5 | desktop |
+| B9 | Recette de la sourdine, points 1, 3 et 5 : aucune capture en sourdine, la parole spontanée repart à son heure, en appel un P0 n'est pas dit. **Le 10/11 : points 1 et 3 constatés** (lun-anima#98 pour un message vide après la levée) ; le point 5 attend B5 | desktop |
 | B10 | Google en Production sur le vrai compte, consentement refait : en Test, le jeton tombe au bout de 7 jours (audit, Q1 et § 8.2) | CrOliX, sur le desktop |
 | B11 | Le téléphone Android : la PWA du core par le HTTPS du tailnet, une notification reçue de bout en bout (reportée à la recette du 07/11) | CrOliX, desktop |
-| B12 | Redémarrer le desktop : les services repartent seuls, la veille de 5 h manquée est rattrapée (rattrapage par défaut, veille C5) | desktop |
+| B12 | Redémarrer le desktop : les services repartent seuls, la nuit manquée (5 h) est rattrapée (rattrapage par défaut, veille C5) | desktop |
 
 ### C. Petit, à glisser dans un chantier qui passe par le dépôt
 
@@ -141,15 +140,15 @@ Ajouts du 08/11, après l'audit :
   premier appareil sans terminal (lun-anima#72) en est sorti le 12/11 : il entre dans le MVP (§ 3) ;
 - « Pina », le nom de l'agent, écrit en dur dans le code d'Acedia, son README et `.env.example` ;
 - les propositions P7 à P14 de la veille : budget de parole, porte « Inner Thoughts », brouillons et validation par lot
-  à la lettre du matin, point du soir, humeur calculée, Gmail en push, veille de nuit en Batch API ;
+  à la lettre du matin, point du soir, humeur calculée, Gmail en push, la nuit en Batch API ;
 - exposer les satellites en serveurs MCP, et étudier Rowboat (audit, § 8.9).
 
 ## 3. Les chantiers, dans l'ordre
 
-Une PR par dépôt et par chantier, brouillon dès le premier push. Un plan est relu par le plan-challenger, puis CrOliX
-le valide par écrit (« validé ») ; fusionner n'est pas valider, et rien ne se code avant
-([`workflow.md`](../../standards/workflow.md), étape 2). Les specs F et G sont **à relire par CrOliX** ; leurs choix
-marqués **[choix Claude]** se changent avant le merge.
+Une PR par dépôt et par chantier, brouillon dès le premier push. Un plan est relu par le plan-challenger, puis CrOliX le
+valide par écrit (« validé ») ; fusionner n'est pas valider, et rien ne se code avant
+([`workflow.md`](../../standards/workflow.md), étape 2). Les specs F et G sont fusionnées depuis le 08/11 : un de leurs
+choix marqués **[choix Claude]** se change désormais par un nouveau chantier.
 
 ### F. Le mute du bureau
 
@@ -233,7 +232,7 @@ tests ; la restauration se constate sur le desktop (§ 4).
 
 - Chaque nuit, une copie cohérente de `acedia.db` et de `avaritia.db`, sept gardées, sur le modèle de celle du core
   (`VACUUM INTO`). **[choix Claude]** Chaque satellite copie sa propre base : le core ne lit pas les fichiers d'un
-  satellite, et en prod chacun aura son volume.
+  satellite, et sur la machine dédiée chacun aura son volume.
 - La restauration, écrite dans [`mise-en-service-desktop.md`](../mise-en-service-desktop.md) : une copie garde les
   secrets chiffrés, elle ne se restaure qu'avec la même clé.
 - La liste « rien ne force le terminal pendant la semaine », dans la même page : ce qui pourrait le redemander (un jeton
@@ -263,10 +262,11 @@ Plan : [`2026-11-09-kit-tenu.md`](2026-11-09-kit-tenu.md).
 lun-luxuria, lun-avaritia, lun-acedia, lun-anima (la barre de saisie de Natsume), et lun-docs pour le kit : une PR par
 dépôt. Niveau `standard`. *Show*.
 
-- La vérification des jetons dans la CI de Luxuria et d'Avaritia, comme dans celles du core et d'Acedia ; celle du kit
-  dans la CI de Luxuria, dont la copie est générée. Acedia et Avaritia gardent leur copie à part jusqu'à lun-docs#43.
+- La vérification des variables de design dans la CI de Luxuria et d'Avaritia, comme dans celles du core et d'Acedia ;
+  celle du kit dans la CI de Luxuria, dont la copie est générée. Acedia et Avaritia gardent leur copie à part jusqu'à
+  lun-docs#43.
 - Les recouvrements sous un élément flottant (audit, § 4.2, point 4) : la place existe déjà dans les trois apps, la
-  cause se cherche d'abord ; la règle s'écrit dans `design.md`, sans jeton nouveau.
+  cause se cherche d'abord ; la règle s'écrit dans `design.md`, sans variable de design nouvelle.
 - Les toasts d'Acedia et d'Avaritia ramenés au code du kit, annulation comprise.
 - La publication du paquet de vues d'Acedia retirée (Q11) ; le dossier reste tant que l'app l'importe.
 
@@ -293,7 +293,7 @@ I, J et K que la semaine peut rencontrer :
 
 - un passage sauté affiché « faite », une lettre du matin sans son contexte du jour, une recherche du Journal par
   « échec » (lun-anima#80, #85, #84) ;
-- la copie du core détachée de la veille, sous la forme de celles des satellites (lun-anima#86, #87) ;
+- la copie du core détachée de la nuit, sous la forme de celles des satellites (lun-anima#86, #87) ;
 - la barre d'Acedia et celle d'Avaritia, qui disent faux sur une clé, une pause ou un plafond (lun-acedia#60,
   lun-avaritia#25, #27, #28) ;
 - la carte d'Avaritia en pause, qui dit les lots arrêtés et les dépôts qui passent (lun-avaritia#26) ;
@@ -380,7 +380,7 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
      1,1 s quel que soit le prompt, et le cache du fournisseur n'y change rien
      ([relevé](2026-11-10-premier-mot.md)) ;
    - le temps du premier mot, que le core garde pour chaque appel, à lire après les tours.
-3. B4, B5, B9 : les touches globales, Discord, le mute.
+3. B4, B5, B9 : les touches globales, Discord, la sourdine.
 4. L : la fenêtre qui entre seule, le micro, le son ; les trois préréglages mesurés. Avec elle, deux points de la
    [ligne d'arrivée](../specs/2026-11-10-etat-cible-cadrage.md) de Lun'Luxuria à éprouver, déjà codés : la couper en
    cours de phrase (tout de suite, puis en fin de phrase) et vérifier ce qu'elle dit avoir été entendue ; la file du
@@ -415,7 +415,7 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
 8. N : les scènes jouées et notées ; elles servent aussi l'écoute de B2.
 9. B2 : la langue, à l'oreille ; puis l'ADR qui remplace 0011.
 10. B3 : le flux RVC, décidé après B1.
-11. B12 : redémarrer ; les services repartent, la veille manquée est rattrapée.
+11. B12 : redémarrer ; les services repartent, la nuit manquée est rattrapée.
 12. B6 : une soirée réelle.
 
 B7 reste à CrOliX (réglages de Windows et du pare-feu), avant la soirée. Puis B8, la semaine de rodage.
