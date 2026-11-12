@@ -384,7 +384,8 @@ Rien de ce qui suit ne se prouve sur le laptop ; la semaine de rodage le regarde
 - **Les copies restent sur le disque du desktop** pendant le rodage, sauf si le NAS les tire : un disque perdu
   emporte la base et ses copies. Elles ne sont pas chiffrées.
 - **Les rappels d'Acedia passent dès le démarrage**, sur le cache de l'agenda d'avant l'arrêt : un événement déplacé
-  pendant l'arrêt, dû dans le quart d'heure, peut donner un rappel faux. Aucun n'est doublé ni perdu. Le cache a déjà
+  pendant l'arrêt, dû dans le quart d'heure, peut donner un rappel faux. Aucun n'est doublé ; un rappel inscrit puis
+  raté à l'émission, sur une écriture qui échoue, est perdu, comme avant ce chantier. Le cache a déjà
   ce retard en marche, jusqu'à une minute, et sans borne quand la synchro échoue.
 - **Le prix d'un modèle se règle à la main** : un modèle choisi plus tard sans prix compte encore 0, jusqu'au chantier
   suivant.
