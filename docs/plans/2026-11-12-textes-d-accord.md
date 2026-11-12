@@ -2,9 +2,12 @@
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **Version 2**, après le plan-challenger (« à amender ») ; ce qui a changé est en fin de plan. **À valider par
-> CrOliX.** Les choix marqués **[avis]** se tranchent à la fin (« À trancher par CrOliX ») ; le texte de l'ADR 0012
-> se valide avant la tâche 2.
+> **Issues :** lun-docs#167 (chapeau), lun-luxuria#78 (IPC, `niveau:critique`), lun-docs#168 (`inbox`, actions de CI par SHA et Dependabot).
+>
+> **Version 2**, après le plan-challenger (« à amender ») ; ce qui a changé est en fin de plan. **Validé par CrOliX
+> le 12/11** (« je valide ») : chaque point de « À trancher » selon sa recommandation. Le texte de l'ADR 0012 tel que
+> proposé, sans la raison du choix ; le NAS garde les copies et les fichiers, aucune base. La règle des PR de lun-docs
+> en (b), une PR par chantier partout : lun-docs#162 fusionne dès maintenant.
 >
 > **PR :** une par dépôt touché, en brouillon dès le premier push, *Show* partout. Celle de lun-docs fusionne la
 > première : la CI des trois satellites clone `main` de lun-docs pour lancer `check-repo.mjs --public`. Lun'Anima
