@@ -2,7 +2,12 @@
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **État : rédigé le 12/11, relu par le plan-challenger (« à amender »), amendé le 12/11 ; à valider par CrOliX.**
+> **Issues :** lun-luxuria#77 (chapeau).
+>
+> **Validé par CrOliX le 12/11** (« je valide ») : les gardes à 15 s pour la transcription (confirmées par la tâche
+> 1) et 60 s jusqu'à la première phrase ; les sondages de `/voix/micro` qui s'empilent corrigés dans la tâche 2.
+>
+> **État : rédigé le 12/11, relu par le plan-challenger (« à amender »), amendé le 12/11.**
 > Le chantier « Écoute et parole » est validé dans son principe le 12/11 (« ok je valide »). Le manager l'a coupé en
 > deux, d'après le plan-challenger : ce plan-ci, sans décision produit sauf les valeurs des gardes, qui démarre à la
 > validation ; puis « le tour » (I8, lun-luxuria#63, #53, le nom), décrit à la fin et planifié après.
