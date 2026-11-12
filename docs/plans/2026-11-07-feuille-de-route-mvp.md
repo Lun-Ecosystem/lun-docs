@@ -22,6 +22,14 @@ rencontrer. Les autres restent en `inbox`.
 **Au 10/11.** P livré, en brouillon jusqu'à la fusion de lun-docs#123 (le kit et la spec) : lun-anima#92, puis les copies
 lun-luxuria#45, lun-acedia#65 et lun-avaritia#32. L (lun-luxuria#44) attend la recette du desktop.
 
+**Au 11/11.** Le banc de présence, étape 3 ([la chaîne sur le laptop](2026-11-11-chaine-laptop.md)) : faite, fusionnée
+le 12/11 (lun-luxuria#66, lun-anima#106 ; lun-docs#162 pour l'axe). Les scénarios rejoués par la page construite, la
+vraie transcription et le serveur sur un faux modèle tiennent leurs 25 attentes `tous`, trois fois ; aucun écart de
+mécanisme, six observations en `inbox` (lun-luxuria#67 à #72). Les trois scénarios ajustés sont validés par CrOliX.
+
+**Au 12/11.** Étape 4 ([les données et les taux](2026-11-12-donnees-et-taux.md)) : codée et fusionnée (lun-luxuria#76). La
+course d'Hortense rate 1 partie sur 300, par la transcription ; aucun défaut du mécanisme ; la toux attend ses prises.
+
 **Au 08/11 au soir, après l'audit.** L'[audit](2026-11-08-audit-ecosysteme.md) a posé douze questions ; CrOliX les a
 tranchées (audit, § 7), sauf la langue parlée (B2, à l'oreille) et lun-acedia#30 (après le MVP). Appliqué le jour
 même, hors dépôt : squash seul sur les cinq dépôts, plugin `lun` à la racine du laptop. Confronté aux sources (audit,
@@ -310,9 +318,10 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
    - le délai de réponse avec 0,7 s de silence de fin, sur vingt tours, comparé aux 3,4 s du 10/11 ;
    - une toux pendant qu'elle parle : elle se tait, puis redit sa phrase et continue ; compter le blanc ;
    - « arrête » ou « non » pendant une longue réponse : elle se tait pour de bon ;
-   - une phrase dite à quelqu'un d'autre pendant qu'elle parle, au-delà de quinze secondes de réponse : elle reprend ;
    - son propre son repris par le micro : elle ne doit pas se suspendre en boucle ;
    - recommencer à parler juste après une toux : noter si elle reprend par-dessus.
+   L'aparté pendant qu'elle parle est sorti de la liste : CrOliX a choisi le 11/11 qu'il la coupe (voie 2 du
+   [plan des scénarios](2026-11-11-scenarios-presence.md)), et le scénario `aparte-parole-longue` le prouve.
    Après [« la phrase d'attente »](2026-11-11-phrase-attente.md) (lun-anima#102), à entendre :
    - « j'ai des mails ? » à la voix : elle dit d'abord ce qu'elle fait, puis le résultat, sans redire la phrase ;
    - le blanc entre la phrase et le résultat, sur cinq demandes ; les durées sont dans la base
