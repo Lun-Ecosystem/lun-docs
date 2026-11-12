@@ -836,12 +836,12 @@ dans `taux.ts`, `judge.ts` et `releve.ts`, que 3 reprend après elle ; 4 seule d
    - [x] La robustesse : `CHAINE_VOIX=julie,paul,piper:…#jessica,piper:…#pierre`, `CHAINE_REPETITIONS=2`.
    - [x] Recopier ici, sous « Ce que l'exécution a trouvé » : les taux, les échecs par espèce, source et voix, les
      distributions, la transcription par voix, les durées ; et que ces taux sont ceux de `tiny` sur le laptop.
-   - [ ] Une issue par écart d'un mécanisme, et un connu qui la nomme ; jamais une borne élargie. Si la course perd
+   - [x] Une issue par écart d'un mécanisme, et un connu qui la nomme ; jamais une borne élargie. Si la course perd
      un mot court par l'écoute (la prise « non », une fois sur onze à la tâche 0), une issue le dit. lun-luxuria#70
      et #72 fermées avec le relevé, si elles tiennent. Aucun écart de mécanisme, et la course n'a perdu aucun mot
-     par l'écoute. Restent : #72 se ferme avec la PR ; #70 reste ouverte et reçoit B, C, E et F ; G est à ouvrir.
-   - [ ] Relecture séparée du diff, la PR en brouillon ; la feuille de route mise à jour. La feuille de route est à
-     jour ; la branche n'est pas poussée, la PR n'est pas ouverte.
+     par l'écoute. Fait le 12/11 : #72 se ferme avec la PR lun-luxuria#76 ; #70 reste ouverte et a reçu B, C, E et F en commentaire (https://github.com/Lun-Ecosystem/lun-luxuria/issues/70#issuecomment-6826918253) ; G est lun-luxuria#73 ; le juge sans attente sur un nombre d'événements (fenêtre fixe de 2 880 ms de `rien-de-l-essai-retire`) est lun-luxuria#74 ; le résumé de `banc` et `scenarios` tu sous un agent, lun-luxuria#75 ; H n'a pas d'issue.
+   - [x] Relecture séparée du diff, la PR en brouillon ; la feuille de route mise à jour. La feuille de route est à
+     jour ; branche poussée, PR en brouillon : lun-luxuria#76.
    - [ ] Les scripts et les copies de `BANC_DIR` de la tâche 0 retirés de `banc-sons`, à la fusion.
 6. - [ ] **La toux** (`testeur`, hors dépôt). *Indépendante* : elle commence dès que CrOliX l'a tranchée (« À
    trancher ») ; aucune autre tâche ne l'attend. Ses scénarios se jouent à la chaîne une fois 1 et 4 faites, se
