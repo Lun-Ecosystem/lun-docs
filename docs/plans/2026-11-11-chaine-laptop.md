@@ -11,11 +11,11 @@
 > **Deux paliers.** **Palier 1 : la tâche 0 seule**, une partie de bout en bout jetable, qui a mesuré ce que la suite
 > suppose. **Palier 2 : les tâches 1 à 10.** Les quatre scénarios de toux attendent une toux.
 >
-> **Palier 2 codé et éprouvé le 11/11**, en brouillon : lun-luxuria#66, lun-anima#106 (voir « Ce que l'exécution a
-> trouvé »). **À confirmer par CrOliX** : les trois scénarios ajustés par B2 (`toux-parole`, `echo-fort`,
-> `non-court`), sans borne élargie.
+> **Palier 2 codé et éprouvé le 11/11, fusionné le 12/11** : lun-luxuria#66, lun-anima#106 (voir « Ce que
+> l'exécution a trouvé »). Les trois scénarios ajustés par B2 (`toux-parole`, `echo-fort`, `non-court`), sans borne
+> élargie, sont validés par CrOliX le 12/11.
 >
-> **PR :** lun-luxuria#66, lun-anima#106, et celle-ci (lun-docs#162), en brouillon. Issues `inbox` : lun-luxuria#67
+> **PR :** lun-luxuria#66, lun-anima#106, et celle-ci (lun-docs#162). Issues `inbox` : lun-luxuria#67
 > à #72.
 
 **But :** rejouer les scénarios écrits à travers la vraie chaîne, sans personne. La page construite tourne dans un
@@ -570,14 +570,14 @@ reprend la première.
    - Tests, sur des entrées écrites à la main, sans navigateur : la fusion par numéros, la liste des scénarios non
      joués et leur raison.
    - Exclu : répéter une partie, la fenêtre Tauri.
-10. - [ ] **La première suite, et le plan coché** (`testeur`). Après tout le reste.
+10. - [x] **La première suite, et le plan coché** (`testeur`). Après tout le reste.
     - [x] Lancer les deux `npm run chaine` sur le laptop. Recopier le relevé ici, sous « Ce que l'exécution a
       trouvé » : les verdicts, les délais par maillon, les écarts au niveau exact, le témoin, la durée de la suite.
     - [x] Une issue par écart d'un mécanisme, et un `connus` qui la nomme ; jamais une borne élargie. Aucun écart de
       mécanisme : les six observations du banc sont des issues `inbox`.
     - [x] Relecture séparée de chaque diff, les deux PR en brouillon ; la feuille de route mise à jour.
-    - [ ] Les scripts de la tâche 0 retirés de `banc-sons`, avec `node_modules` et `uv-cache` de `chaine/essai/`
-      (environ 600 Mo) : à la fusion.
+    - [x] Les scripts de la tâche 0 retirés de `banc-sons`, avec `node_modules` et `uv-cache` de `chaine/essai/`
+      (environ 600 Mo) : retirés le 12/11, à la fusion.
 
 ## Ce que l'exécution a trouvé
 

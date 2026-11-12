@@ -22,11 +22,10 @@ rencontrer. Les autres restent en `inbox`.
 **Au 10/11.** P livré, en brouillon jusqu'à la fusion de lun-docs#123 (le kit et la spec) : lun-anima#92, puis les copies
 lun-luxuria#45, lun-acedia#65 et lun-avaritia#32. L (lun-luxuria#44) attend la recette du desktop.
 
-**Au 11/11.** Le banc de présence, étape 3 ([la chaîne sur le laptop](2026-11-11-chaine-laptop.md)) : faite, en
-brouillon (lun-luxuria#66, lun-anima#106, lun-docs#162). Les scénarios rejoués par la page construite, la vraie
-transcription et le serveur sur un faux modèle tiennent leurs 25 attentes `tous`, trois fois ; aucun écart de
-mécanisme, six observations en `inbox` (lun-luxuria#67 à #72). Trois scénarios ajustés attendent la confirmation de
-CrOliX.
+**Au 11/11.** Le banc de présence, étape 3 ([la chaîne sur le laptop](2026-11-11-chaine-laptop.md)) : faite, fusionnée
+le 12/11 (lun-luxuria#66, lun-anima#106 ; lun-docs#162 pour l'axe). Les scénarios rejoués par la page construite, la
+vraie transcription et le serveur sur un faux modèle tiennent leurs 25 attentes `tous`, trois fois ; aucun écart de
+mécanisme, six observations en `inbox` (lun-luxuria#67 à #72). Les trois scénarios ajustés sont validés par CrOliX.
 
 **Au 08/11 au soir, après l'audit.** L'[audit](2026-11-08-audit-ecosysteme.md) a posé douze questions ; CrOliX les a
 tranchées (audit, § 7), sauf la langue parlée (B2, à l'oreille) et lun-acedia#30 (après le MVP). Appliqué le jour
