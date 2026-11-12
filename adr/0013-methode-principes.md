@@ -29,8 +29,8 @@ La méthode vit dans les standards et se change par une PR : [`essentiel.md`](..
 
 - Quittent 0001 : le GitHub Projects ; la prod sur le NAS ; le modèle choisi par niveau de tâche, et la décision
   d'achat après mesure qui en dépendait.
-- Restent vraies celles de 0001 : aucun fichier d'avancement dans un dépôt ; chaque projet installe le plugin `lun` et
-  part du gabarit de lun-docs.
+- Restent vraies celles de 0001 : aucun fichier d'avancement dans le dépôt d'un projet, l'avancement vit dans la
+  feuille de route de lun-docs ; chaque projet installe le plugin `lun` et part du gabarit de lun-docs.
 
 ## Alternatives écartées
 
