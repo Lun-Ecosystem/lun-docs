@@ -229,12 +229,16 @@ dépôts partent ensemble ; **dans un dépôt, les tâches passent en série**, 
      - **propre au mail** : `GoogleApiError` 404 ou 400, `NotFoundError`, `BadRequestError` (une cible qui n'est pas
        une boîte). L'essai compte, et la passe continue au mail suivant ;
      - **passagère** : une erreur du réseau (`fetch` qui lève), `GoogleApiError` 429 ou 5xx (déjà relancée par le
-       client), `GoogleReauthError`, `GoogleNotConnectedError`, `ProviderError` de sorte `unavailable`, la base
-       occupée (l'erreur de `node:sqlite` dont le code dit `SQLITE_BUSY` : sa forme, à vérifier par le développeur).
-       Le mail est rendu à la file sans essai compté, et la passe s'arrête : l'erreur remonte à la boucle comme
-       aujourd'hui ;
-     - **toute autre**, une inconnue ou un 403 : comme aujourd'hui, l'essai compte et la passe s'arrête. Une erreur
-       qui ne passe jamais ne bloque ainsi pas la file pour toujours : le mail sort au troisième essai, avec sa ligne.
+       client), `GoogleReauthError`, `GoogleNotConnectedError`, une `ProviderError` sans statut HTTP ou de statut
+       408, 429 ou 5xx, la base occupée (`node:sqlite` lève `code: 'ERR_SQLITE_ERROR'` et `errcode` 5, relevé le
+       12/11 sur Node 24). Le mail est rendu à la file sans essai compté, et la passe s'arrête : l'erreur remonte à la
+       boucle comme aujourd'hui. **Corrigé à la relecture** : `toProviderError` (`server/src/llm/types.ts:90`) range
+       tout statut hors 401, 402 et 403 en `unavailable`, 400 compris ; la sorte seule aurait gardé en tête de file,
+       pour toujours, un mail auquel l'IA répond 400. Le statut est donc gardé dans `ProviderError`, et ce fichier
+       entre dans la tâche ;
+     - **toute autre**, une inconnue, un 403 ou un autre 4xx de l'IA : comme aujourd'hui, l'essai compte et la passe
+       s'arrête. Une erreur qui ne passe jamais ne bloque ainsi pas la file pour toujours : le mail sort au troisième
+       essai, avec sa ligne.
    - Un mail qui sort de la file au troisième essai, sur erreur ou sur une réponse inutilisable de l'IA (`:309`),
      laisse une ligne au journal du serveur : son id et la raison. `failedAttempt` (`queue.ts:30-33`) dit s'il l'a
      retiré ; le `log` est injectable, comme celui de `backupIfMissing`.
@@ -379,6 +383,9 @@ Rien de ce qui suit ne se prouve sur le laptop ; la semaine de rodage le regarde
   échec, qu'au tableau de bord d'Avaritia. Les signaux viennent au chantier suivant.
 - **Les copies restent sur le disque du desktop** pendant le rodage, sauf si le NAS les tire : un disque perdu
   emporte la base et ses copies. Elles ne sont pas chiffrées.
+- **Les rappels d'Acedia passent dès le démarrage**, sur le cache de l'agenda d'avant l'arrêt : un événement déplacé
+  pendant l'arrêt, dû dans le quart d'heure, peut donner un rappel faux. Aucun n'est doublé ni perdu. Le cache a déjà
+  ce retard en marche, jusqu'à une minute, et sans borne quand la synchro échoue.
 - **Le prix d'un modèle se règle à la main** : un modèle choisi plus tard sans prix compte encore 0, jusqu'au chantier
   suivant.
 
