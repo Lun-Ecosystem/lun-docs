@@ -486,9 +486,9 @@ reste :
   ligne 23 de la feuille et change son § 4 (`:313-316`), et une seule PR à la fois récrit la feuille.
 - **« Tenir en continu »** (lun-docs#164). Son plan est daté du 12/11 : la date de coupure le compte comme
   historique, et sa part du core va dans l'issue privée de lun-anima. **Le contrat satellite** (`server.crashed`,
-  `lot.failed`, `lot.held`) lui revient, puisqu'il émet ces événements : son plan (`:450`) le renvoie aux textes
-  d'accord, il doit le reprendre. La ligne `:133` de la mise en service (« La veille de nuit ») lui revient aussi. Il
-  n'écrit pas dans la feuille : la tâche 8 y met sa ligne.
+  `lot.failed`, `lot.held`) lui revient ; CrOliX ayant écarté tout signal des satellites au core dans ce palier, il le
+  reporte à son chantier suivant. Ce plan n'y touche pas. La ligne `:133` de la mise en service (« La veille de
+  nuit ») lui revient aussi. Il n'écrit pas dans la feuille : la tâche 8 y met sa ligne.
 - **« Écoute et parole »** touche `lun-luxuria/src`. La tâche 10 touche le `CLAUDE.md`, `docs/README.md`, trois textes
   de `src/presence/chaine.test.ts`, `hooks/` et `ci.yml`. Fichiers communs possibles : `chaine.test.ts`, `CLAUDE.md`.
   Le second à fusionner reprend la branche sur `main` ; aucun ne reformate ces fichiers.
