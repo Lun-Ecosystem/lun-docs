@@ -27,7 +27,7 @@ le 12/11 (lun-luxuria#66, lun-anima#106 ; lun-docs#162 pour l'axe). Les scénari
 vraie transcription et le serveur sur un faux modèle tiennent leurs 25 attentes `tous`, trois fois ; aucun écart de
 mécanisme, six observations en `inbox` (lun-luxuria#67 à #72). Les trois scénarios ajustés sont validés par CrOliX.
 
-**Au 12/11.** Étape 4 ([les données et les taux](2026-11-12-donnees-et-taux.md)) : codée, pas encore poussée. La
+**Au 12/11.** Étape 4 ([les données et les taux](2026-11-12-donnees-et-taux.md)) : codée et fusionnée (lun-luxuria#76). La
 course d'Hortense rate 1 partie sur 300, par la transcription ; aucun défaut du mécanisme ; la toux attend ses prises.
 
 **Au 08/11 au soir, après l'audit.** L'[audit](2026-11-08-audit-ecosysteme.md) a posé douze questions ; CrOliX les a

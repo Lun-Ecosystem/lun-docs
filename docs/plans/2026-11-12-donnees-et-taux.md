@@ -12,9 +12,9 @@
 > **Palier 2 révisé d'après les mesures, validé par CrOliX le 12/11** (« je valide avec tes recommandations ») :
 > les treize points de « À trancher » tels que recommandés, la toux par sa prise (a).
 >
-> **Palier 2 codé le 12/11** : les tâches 1 à 4 sur `feat/donnees-et-taux` (Lun'Luxuria), pas encore poussée ; la
-> course et la robustesse jouées (tâche 5), une partie ratée sur 300 dans la course. La tâche 6 attend les prises de
-> CrOliX. Voir « Ce que l'exécution a trouvé ».
+> **Palier 2 codé et fusionné le 12/11** : les tâches 1 à 5, lun-luxuria#76 ; la course et la robustesse jouées,
+> une partie ratée sur 300 dans la course. La tâche 6 attend les prises de CrOliX. Voir « Ce que l'exécution a
+> trouvé ».
 >
 > **Deux paliers.** **Palier 1 : la tâche 0 seule**, jetable, qui a mesuré ce que la suite suppose : les voix qu'on
 > peut atteindre, ce qu'elles font de nos phrases, la toux, la variance de la chaîne sur dix lancements, le coût d'une
@@ -842,7 +842,9 @@ dans `taux.ts`, `judge.ts` et `releve.ts`, que 3 reprend après elle ; 4 seule d
      par l'écoute. Fait le 12/11 : #72 se ferme avec la PR lun-luxuria#76 ; #70 reste ouverte et a reçu B, C, E et F en commentaire (https://github.com/Lun-Ecosystem/lun-luxuria/issues/70#issuecomment-6826918253) ; G est lun-luxuria#73 ; le juge sans attente sur un nombre d'événements (fenêtre fixe de 2 880 ms de `rien-de-l-essai-retire`) est lun-luxuria#74 ; le résumé de `banc` et `scenarios` tu sous un agent, lun-luxuria#75 ; H n'a pas d'issue.
    - [x] Relecture séparée du diff, la PR en brouillon ; la feuille de route mise à jour. La feuille de route est à
      jour ; branche poussée, PR en brouillon : lun-luxuria#76.
-   - [ ] Les scripts et les copies de `BANC_DIR` de la tâche 0 retirés de `banc-sons`, à la fusion.
+   - [x] Les scripts et les copies de `BANC_DIR` de la tâche 0 retirés de `banc-sons`, à la fusion. Fait le 12/11
+     après la fusion de lun-luxuria#76 : `essai-taux/` retiré en entier (son `uv-cache` compris) ; les relevés de
+     `banc-sons/chaine/taux/` restent, preuves de #70 et #73 à #75.
 6. - [ ] **La toux** (`testeur`, hors dépôt). *Indépendante* : elle commence dès que CrOliX l'a tranchée (« À
    trancher ») ; aucune autre tâche ne l'attend. Ses scénarios se jouent à la chaîne une fois 1 et 4 faites, se
    répètent une fois 3 faite. **Pas commencée au 12/11** : elle attend les deux prises de CrOliX, à ranger dans
