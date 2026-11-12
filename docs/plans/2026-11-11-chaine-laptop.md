@@ -506,8 +506,8 @@ reprend la première.
      coupure tiennent, c'est la sortie qui sonne encore). La commande échoue si un motif manque (la table se met à jour), si
      une mutation survit, ou si la source majoritaire n'est pas la sienne. La sortie : une ligne par mutation, puis un
      tableau Markdown à recopier dans un plan.
-   - Un job `mutations` dans `ci.yml`, à côté de `checks` ; sa durée mesurée sur la première PR et écrite ici. Une
-     ligne au `CLAUDE.md`.
+   - Un job `mutations` dans `ci.yml`, à côté de `checks` ; sur la première PR (lun-luxuria#66), 73 s, autant que `checks`.
+     Une ligne au `CLAUDE.md`.
    - Dans le même job, une étape qui échoue si `git ls-files` suit un `.wav`, `.flac`, `.mp3` ou `.ogg`.
 6. - [x] **La sonde dans la page** (`src/presence/chaine/sonde.ts`, `dev-luxuria`). *Parallélisable.*
    - Une fonction posée avant la page (`addInitScript`), construite par Vite en un seul fichier avec `ancre` de
