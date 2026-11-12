@@ -946,8 +946,8 @@ contre 30 à 40 min estimées. 80 parties, 20 par voix. La suite passe.
 dans la page ni dans le serveur. Six défauts du banc, A à G ; H tient à la transcription.
 
 - **A.** La ligne de résumé n'atteignait pas la sortie : sous un agent, Vitest 5 prend un rapporteur qui tait les
-  `console.log` d'une suite passée. Corrigé : `npm run chaine` demande le rapporteur par défaut. Aucune suite ne l'a
-  encore montré.
+  `console.log` d'une suite passée. Corrigé : `npm run chaine` demande le rapporteur par défaut. Vu sur la chaîne :
+  `faire-taire` joué deux fois sous un agent, la ligne sort.
 - **B.** `poste` de `phrase-attente`, `delai_manquant` 30 fois sur 30. Le faux modèle de la chaîne fait le poste par
   `relire_journee` ; le serveur le traite en relecture et n'écrit `postMs` qu'en délégation. Le temps du poste tombe
   dans le second mot. L'attente recopie le `postMs` du faux serveur : irréalisable à la chaîne.
