@@ -4,7 +4,7 @@
 >
 > **Issues :** lun-docs#166 (chapeau), lun-anima#107, lun-acedia#66, lun-avaritia#33.
 >
-> **PR qui livrent :** lun-anima#109 (tâches 1 et 2), lun-acedia#68 (tâches 4 à 7).
+> **PR qui livrent :** lun-anima#109 (tâches 1 et 2), lun-acedia#68 (tâches 4 à 7), lun-avaritia#35 (tâche 8).
 >
 > **Validé par CrOliX le 12/11** (« je valide ») : les points de « À trancher » 1 à 3 selon leur recommandation
 > (l'erreur écrite, au plus un événement de chute par jour, la sortie en code 1 ; le lanceur relance toutes les 15 min
@@ -278,7 +278,7 @@ dépôts partent ensemble ; **dans un dépôt, les tâches passent en série**, 
 
 ### Lun'Avaritia (`dev-core`)
 
-8. - [ ] **Les filets d'Avaritia, et ses lots qui repartent.** *Part d'emblée.* `server/src/main.ts`,
+8. - [x] **Les filets d'Avaritia, et ses lots qui repartent.** *Part d'emblée.* `server/src/main.ts`,
    `server/src/brain/ingest.ts`, leurs tests.
    - L'échéance des clés (`main.ts:62-64`) et la purge des événements (`:65`) passent par `startLoop`
      (`server/src/util.ts:12-33`), comme chez Acedia.
