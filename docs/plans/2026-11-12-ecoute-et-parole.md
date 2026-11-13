@@ -236,13 +236,39 @@ session avec `openMicrophone` simulé (`mute.test.ts:3-7`), la conversation qui 
     « réfléchit » éteint, `sans_reponse`, la réponse coupée au serveur si son numéro est venu (il cesse alors de la
     produire), et le message de la personne gardé.
 - **I7.** `stop()` garde sa valeur de retour et l'abandon des tours. Seule l'émission de `silent` devient
-  conditionnelle : si `speaking` (`speaker.ts:90-93`) était vrai avant l'arrêt, ou si un tour était suspendu ; jamais
-  sur le drapeau `cut`. `speaker.test.ts:157-161` passe encore. Ni `core.ts` ni la session ne changent.
+  conditionnelle : si une phrase d'elle est montrée depuis son dernier `silent` (`#shown`, posé au `subtitle`, retiré
+  au `silent` ; sur la branche, `speaker.ts:66-67`), ou si un tour était suspendu (`:303`) ; jamais sur le drapeau
+  `cut`. Pas `speaking` : entre deux tours, ou après des mots montrés sans voix, la page la montre encore alors que
+  `speaking` est faux (`935e32f`, `speaker.test.ts:183-205`). `speaker.test.ts:157-161` passe encore. Ni `core.ts` ni
+  la session ne changent.
 - **I9.** Un fragment dont l'envoi a échoué finit comme une phrase entière dont l'envoi a échoué (`:378-391`) : coupée
   par `#supersede`, la phrase était pour elle ; « réfléchit » éteint ; `sans_reponse` ; il ne reste pas dans
   `#unheard`.
 - **I11.** `#oneClip` rend `null` sans synthèse pour un tour de `#gone`, sans rien écrire ni signaler d'échec. Une
   synthèse déjà commencée finit.
+- **Les écarts acceptés à l'exécution**, aux relectures des tâches 4 bis et 5. Les lignes sont celles de la branche à
+  `01780fe`.
+  - **4 bis.** La tentative passe encore par `#awaits`, puis rend la place à celle d'avant (la tâche le dit). `setup`
+    reçoit une `Trace`.
+  - **La garde du serveur est un minuteur à part**, posé à l'envoi (`conversation.ts:420-422`), pas une course contre
+    `send` : son flux peut finir, ou casser, et ses phrases venir quand même, ou jamais. Elle s'éteint à la première
+    phrase (`:152`), à `done` (`:470`), au retrait (`:502`) et quand la phrase est remplacée (`:322`). La garde de
+    transcription, elle, suit le motif de `speaker.ts` (`:354-362`).
+  - **Le message à la garde** : « Sa réponse n'est pas venue : aucune phrase en 60 s » (`#late`, `:441-448`). La garde
+    dit l'échec comme un envoi raté.
+  - **`failed` posé aussi sur une phrase confirmée dont l'envoi a raté** (`#sendFailed`, `:433-439`), pas seulement sur
+    un fragment. La garde le lit : un envoi qui a levé ne redit pas son échec à 60 s (`:446-447`), et son tour, qui ne
+    retenait plus que sa voix, est coupé par `#forget` (I12).
+  - **`pourquoiPas` et `>=`** : la chaîne écarte une `transcriptionMs` ou un `premierMotMs` égal à sa garde ou au-delà
+    (`chaine.test.ts:139-140`), pas seulement au-delà.
+  - **Le commit du test, rouge au typecheck** : `101313e` passe un signal à `transcribe`, qui ne le prend qu'avec le
+    correctif ; `npm run typecheck` n'y passe pas. Sans effet après le squash.
+  - **L'essai retiré ne coupe pas sa requête de transcription.** `#dropAttempt` appelle `#answered` (`:502`), qui
+    éteint le seul minuteur `guard`, celui de la transcription compris. Ses gardes sont annulées, comme prévu, mais sa
+    requête `/voix/stt` reste ouverte jusqu'à la réponse du service, même au-delà de 20 s.
+  - **Le correctif de `#supersede`** (`060651d`, `01780fe`). Remplacer une phrase appelait `#answered` sur elle, qui
+    éteignait aussi sa garde de transcription : une phrase retenue pendant sa transcription, puis remplacée,
+    n'échouait plus jamais. `#supersede` n'éteint plus que la garde d'une phrase qui attend sa réponse (`:322`).
 
 ## Les scénarios nouveaux
 
@@ -280,8 +306,8 @@ Un scénario que `charger(s, 'chaine')` refuse est nommé à `src/presence/scena
 5** : 6, sa relecture. **En dernier** : 7, puis 8.
 
 Chaque fichier n'a qu'une tâche à la fois : 2 puis 5 dans `session.svelte.ts` ; 2 seule dans `audio.ts` ; 3 seule dans
-`speaker.ts` ; 3, 4 puis 5 dans `scenarios.test.ts` ; 4 puis 5 dans `conversation.ts`, `conversation.test.ts` et
-`chaine.test.ts` ; 4 seule dans `fakes.ts` et `scenario.ts` ; 5 seule dans `voice.ts` ; 7 seule dans
+`speaker.ts` ; 3, 4 puis 5 dans `scenarios.test.ts` et `chaine.test.ts` ; 4, 4 bis puis 5 dans `conversation.ts` et
+`conversation.test.ts` ; 4 seule dans `fakes.ts` et `scenario.ts` ; 5 seule dans `voice.ts` ; 7 seule dans
 `tools/mutations.json`. **`speaker.ts`** : seule la tâche 3 y touche ; les scénarios de 4 et 5 n'en dépendent pas, leur
 coupure passe par `cutSuspended` (`speaker.ts:261-283`), jamais par `stop()` à vide ni par une file jetée.
 
@@ -326,7 +352,7 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
    - Puis « Les choix », I9. Les motifs des mutations `b` et `c` restent trouvés une fois chacun.
    - Exclu : renvoyer un fragment refusé comme phrase entière ; réessayer un envoi.
 
-4 bis. - [ ] **La réponse en erreur d'un fragment** (`src/conversation.ts`, `dev-luxuria`). Après 4. I9 par un second
+4 bis. - [x] **La réponse en erreur d'un fragment** (`src/conversation.ts`, `dev-luxuria`). Après 4. I9 par un second
    chemin, trouvé à la relecture de la tâche 4 (13/11).
    - D'abord, dans `conversation.test.ts` : un fragment dont la réponse finit en erreur (`done`, `status: 'error'`)
      avant la fin de phrase ; « réfléchit » éteint en dernier, un seul `sans_reponse`, aucune retenue à la parole
@@ -336,7 +362,9 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
      pour libérer une réponse d'avant qu'elle remplace, puis rend la place à celle d'avant (corrigé à la relecture :
      sans ce passage, la réponse d'avant reste retenue ; un test le fige).
    - Exclu : le message « Sa réponse n'est pas venue », affiché dès le refus d'un fragment (`:394`), en `inbox`.
-5. - [ ] **Les gardes** (`src/conversation.ts`, `src/voice.ts`, `src/session.svelte.ts`, `dev-luxuria`). Après 1, 2,
+   - Commits : `aee64da` le test, `377bd2a` le correctif ; à la relecture, `2b8de62` le test de la réponse remplacée et
+     `98d89e9` les commentaires.
+5. - [x] **Les gardes** (`src/conversation.ts`, `src/voice.ts`, `src/session.svelte.ts`, `dev-luxuria`). Après 1, 2,
    4 et 4 bis. I6 et I12.
    - D'abord : `transcription-figee`, `transcription-lente`, `reponse-figee`, le compte à vingt-quatre. Dans
      `conversation.test.ts`, horloge fausse : une transcription qui ne répond jamais (« réfléchit » éteint en
@@ -354,6 +382,11 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
      après `user` et `reply`, la parole suivante a sa réponse et elle sonne. Vu rater sur `main`.
      Si la même garde couvre aussi un tour relâché après une réponse en erreur dont la fin de parole ne vient pas
      (relecture de la tâche 4 bis), elle le couvre, avec son test ; sinon, ce cas va à l'`inbox`.
+   - Commits : `101313e` les tests et les scénarios, `f2eafdf` le correctif ; à la relecture, `060651d` le test et
+     `01780fe` le correctif de `#supersede` (« Les choix », les écarts).
+   - Écrit aussi, à la relecture : une retenue morte, après la garde du serveur, rallumait « réfléchit » sans fin. Le
+     correctif coupe le lien de la phrase suivante vers la tentative sans réponse. Il couvre aussi la réponse en erreur
+     et l'envoi qui lève, ce dernier venu de `main`. Commits : `<à venir>`.
 6. - [ ] **Relecture** (`reviewer`). Après chaque tâche 2 à 5, sur son diff, contre ses critères ; puis le diff entier
    avant la PR. Un écart revient à sa tâche.
 7. - [ ] **Les mutations et les suites** (`testeur`). Après 2 à 6.
@@ -386,8 +419,52 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
 
 ## Ce que les preuves ont montré sur `main`
 
-À remplir par chaque tâche, avant son correctif : le message d'échec de chacun de ses tests et scénarios, collé tel
-quel. Un test qui passe sur `main` : la tâche s'arrête et le dit ; le constat est revu ici avant tout correctif.
+Chaque test et chaque scénario a été vu rater sur `main` (`11eb3d1`), avant son correctif, sauf où une autre base est
+dite. Les messages sont ceux de Vitest, sans la ligne qui les situe : elle date de la version du test d'alors. Les
+lignes données ici sont celles de la branche à `01780fe`.
+
+- **I1**, `src/mute.test.ts:198-233`.
+  - (B) `toggleMute`, puis `toggleMic`, pendant l'ouverture, le même message (le `stop` du micro ouvert) :
+    `expected "vi.fn()" to be called at least once`.
+  - (A) Rappelé pendant l'ouverture (`mic.open`) : `expected "vi.fn()" to be called once, but got 3 times`.
+- **Les sondages**, `src/mute.test.ts:235-250` : `expected [ [ '/voix/micro' ], …(2) ] to have a length of 1 but got 3`.
+  Contre le correctif sans son `.finally`, le drapeau jamais remis à faux, le même test rate :
+  `expected [ [ '/voix/micro' ] ] to have a length of 2 but got 1`.
+- **I2**, `src/audio.test.ts:46-68`. `addModule` qui rejette, le nœud qui lève et le contexte qui refuse, le même
+  message (le `stop` des pistes) : `expected "vi.fn()" to be called at least once`. L'URL du worklet, avant `2d61508` :
+  `expected "revokeObjectURL" to be called with arguments: [ Array(1) ]`, `Number of calls: 0`.
+- **I6**, `src/conversation.test.ts:788-844` et `:863-887`, `src/voice.test.ts:15-24`, trois scénarios.
+  - Une transcription qui ne répond jamais, puis un envoi sans première phrase, le même message :
+    `expected { type: 'thinking', on: true } to deeply equal { type: 'thinking', on: false }`.
+  - Un numéro arrivé après la garde : `expected [] to deeply equal [ 'cut 110 ""' ]`.
+  - Le signal passé à `fetch` : `expected undefined to be AbortSignal { aborted: false } // Object.is equality`.
+  - Un essai retiré : il passe sur `main`, qui n'a aucune garde à déclencher. Il rate sur une variante du correctif
+    sans `#answered` dans `#dropAttempt` : `expected [ 'withdraw 10', 'cut 110 ""' ] to deeply equal [ 'withdraw 10' ]`.
+  - Une phrase retenue pendant sa transcription, puis remplacée, sur `f2eafdf` (relecture de la tâche 5) :
+    `expected [] to have a length of 1 but got +0`.
+  - `reponse-figee` : 1 tenue, 4 ratées. `transcription-figee` : 2 tenues, 3 ratées, 1 non jouée.
+    `transcription-lente` : 1 tenue, 4 ratées, 1 non jouée ; `aucun-verdict` et `rien-ne-part` en trop à 28424.
+- **I7**, `taire-a-vide` et `src/speech/speaker.test.ts:168-181`.
+  - `stop()` deux fois, elle déjà silencieuse : `expected [ Array(5) ] to have a length of 3 but got 5`.
+  - `taire-a-vide` : 2 tenues, 3 ratées ; `rien-au-geste` en trop, `ecartee` absente, `rien-ne-part` en trop.
+- **I9**, `fragment-refuse` et `src/conversation.test.ts:297-351`.
+  - Le fragment refusé (tâche 4), puis la réponse en erreur d'un fragment (tâche 4 bis), le même message :
+    `expected { type: 'thinking', on: true } to deeply equal { type: 'thinking', on: false }`.
+  - `fragment-refuse` : 3 tenues, 3 ratées ; `sans-reponse` et `sans-reponse-a-la-fin` absentes, `rien-de-retenu` en
+    trop.
+  - Une réponse retenue, remplacée par un fragment dont la réponse rate (relecture de la tâche 4 bis), sur `6d9b665`,
+    avant le correctif, et sur la variante du plan sans `#awaits` :
+    `expected [ { par: 1, at: 1000, …(4) }, …(1) ] to have a length of 1 but got 2`.
+- **I11**, `arrete-puis-question` et `src/speech/speaker.test.ts:207-228`.
+  - Un tour jeté par `stop`, puis par `drop`, le même message :
+    `expected [ 'Un.', 'Deux.', 'Trois.', …(1) ] to deeply equal [ 'Un.', 'Suivante.' ]`.
+  - `arrete-puis-question` : 4 tenues, 2 ratées ; `aucune-synthese` en trop, `reponse-2-a-temps` hors bornes (6000
+    pour `[2000, 2032]`).
+- **I12**, `src/conversation.test.ts:846-861` : `expected [] to have a length of 1 but got +0`.
+
+Tenus après les correctifs, à `01780fe` : 712 tests réussis, 27 ignorés ; vingt-quatre scénarios, deux fois à
+l'identique, 136 tenues, 0 ratée, 1 connue, celle de `toux-puis-parole`, d'avant ce chantier. Les déroulés des
+dix-huit anciens sont ceux de `main`, octet pour octet.
 
 ## Ce que le desktop vérifiera
 
@@ -396,6 +473,9 @@ quel. Un test qui passe sur `main` : la tâche s'arrête et le dit ; le constat 
 - **whisper-server figé** : sa propre limite de 60 s dans le service, le verrou de `/stt`, et la garde de la page avec
   sa requête coupée.
 - La sourdine pendant l'invite, dans la fenêtre du desktop, si elle s'y montre autrement.
+- **I12 est borné à 60 s, pas supprimé.** Après un flux cassé sur un fragment qui a reçu son numéro, aucune réponse ne
+  sonne pendant 60 s, et « réfléchit » reste allumé, jusqu'à la garde de ce fragment. Le desktop dit ce que ces 60 s
+  donnent en usage, sur un vrai flux cassé.
 
 ## Hors périmètre
 
@@ -421,6 +501,12 @@ quel. Un test qui passe sur `main` : la tâche s'arrête et le dit ; le constat 
   `medium` sur le processeur (jusqu'à 7,7 s sur une phrase courte), pourrait la passer.
 - **La garde du serveur** s'arrête à la première phrase : une réponse qui cale ensuite n'a pas de garde. Elle ne
   rallume rien : « réfléchit » s'est éteint au premier son.
+- **Une réponse dont la première phrase dépasse 60 s est coupée**, un outil long avant tout mot par exemple : c'est
+  la conséquence du choix validé, 60 s jusqu'à la première phrase.
+- **Un sondage qui ne finit jamais fige la détection.** `#pollBusy` n'en lance pas d'autre tant que le précédent n'a
+  pas répondu (`session.svelte.ts:424-428` sur la branche), et `appsOnMicrophone` n'a ni délai ni signal
+  (`voice.ts:38-42`). Un service figé : la détection reste sur son dernier état. La suite : un signal, comme pour
+  `transcribe`.
 - **Un serveur figé avant même le numéro de sa réponse** : la garde n'a rien à couper, et la requête d'envoi reste
   ouverte, `send` n'ayant pas de signal (`core.ts:93-105`). Dans un onglet, elle tient une connexion. Si la tâche 8
   le voit, un signal pour `send`, comme pour `transcribe`, est la suite.
