@@ -331,8 +331,10 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
    - D'abord, dans `conversation.test.ts` : un fragment dont la réponse finit en erreur (`done`, `status: 'error'`)
      avant la fin de phrase ; « réfléchit » éteint en dernier, un seul `sans_reponse`, aucune retenue à la parole
      suivante. Vu rater sur `main`.
-   - Puis le correctif : `#onTurn` (`:412-420`) écrit déjà `sans_reponse` ; `#commit` ne remet plus la tentative dans
-     `#unheard` et ne rallume pas « réfléchit », sans écrire `sans_reponse` une seconde fois.
+   - Puis le correctif : `#onTurn` (`:412-420`) écrit déjà `sans_reponse` ; `#commit` ne rallume pas « réfléchit »,
+     sans écrire `sans_reponse` une seconde fois. La tentative passe encore par `#unheard`, que `#supersede` lit
+     pour libérer une réponse d'avant qu'elle remplace, puis rend la place à celle d'avant (corrigé à la relecture :
+     sans ce passage, la réponse d'avant reste retenue ; un test le fige).
    - Exclu : le message « Sa réponse n'est pas venue », affiché dès le refus d'un fragment (`:394`), en `inbox`.
 5. - [ ] **Les gardes** (`src/conversation.ts`, `src/voice.ts`, `src/session.svelte.ts`, `dev-luxuria`). Après 1, 2,
    4 et 4 bis. I6 et I12.
