@@ -49,7 +49,8 @@ déjà décidé.
    - une règle vers une boîte retirée est sautée (point 3) ;
    - un calendrier en erreur n'arrête plus les autres ni les tâches ;
    - une action groupée qui échoue à mi-chemin laisse au journal des gestes, annulables, les mails déjà touchés.
-5. Avaritia : un lot retenu repart dans l'heure, sans attendre l'envoi suivant. Un test.
+5. Avaritia : un lot retenu repart dans l'heure, sans attendre l'envoi suivant ; un lot retenu après un tri payé,
+   sa rédaction en échec, repart au plus une fois par jour (CrOliX, le 13/11). Deux tests.
 6. Si la tâche 3 est prise : un client du flux en direct qui ne lit plus ne fait plus grossir le core. Un test.
 7. La page de mise en service dit le nouveau lanceur, le prix de chaque modèle utilisé, où vont les copies pendant le
    rodage, et ce que devient la nuit quand le desktop dort. Les barrières des trois dépôts sont vertes.
@@ -285,9 +286,14 @@ dépôts partent ensemble ; **dans un dépôt, les tâches passent en série**, 
    - **Une passe des lots chaque heure**, par `startLoop` (qui passe aussi au démarrage, à la place de `main.ts:51`).
      `runPending` sait déjà sauter en pause et ne jamais tourner deux fois (`ingest.ts:60`) : un lot `held` repart
      dans l'heure où son fournisseur revient ou son plafond se lève. Le commentaire `shortcut:` (`:53-56`) part.
+   - **Sauf un lot retenu après un tri payé**, sa rédaction en échec (la raison `provider-*` avec le coût du tri,
+     `server/src/brain/process.ts:387`) : il repart au plus une fois par jour, pour ne pas repayer son tri chaque
+     heure (CrOliX, le 13/11). Le développeur prend le plus petit moyen que le code offre déjà et le dit.
    - Tests :
      - les deux minuteries, leur fonction rendue fausse, écrivent l'erreur et repassent ;
-     - un lot `held`, son fournisseur revenu : la passe suivante le traite, sans envoi du core (minuteries simulées).
+     - un lot `held`, son fournisseur revenu : la passe suivante le traite, sans envoi du core (minuteries simulées) ;
+     - un lot retenu après un tri payé : la passe de l'heure suivante ne le reprend pas, celle d'un jour plus tard le
+       reprend.
    - Exclu : reprendre un lot `failed` ; `lot.held` ; `lot.failed` (point 4) ; le traitement d'un lot (« Le chantier
      suivant »).
 
