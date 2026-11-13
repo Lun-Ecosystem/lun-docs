@@ -89,7 +89,7 @@
 
 | Terme | Désigne | Ne désigne pas, ne s'écrit pas |
 |---|---|---|
-| **le MVP** | Le premier état utilisable : la journée, la bibliothèque, le pilotage par Natsume | « le VIP » |
+| **le MVP** | Le premier état utilisable : la journée, la bibliothèque, le pilotage par Natsume. Atteint quand une semaine de rodage sur le desktop passe sans point de tension (12/11) | « le VIP » |
 | **un chantier** | Un travail borné, d'une issue à une PR fusionnée ([`workflow.md`](workflow.md)) | une tâche d'un plan |
 | **un palier** | Une étape d'un projet, livrable et utilisable seule | un chantier |
 | **le niveau** | Ce qu'un chantier exige : trivial, standard, critique, exceptionnel | l'importance d'un événement |
@@ -97,4 +97,6 @@
 | **l'inbox** | Les observations hors périmètre, gardées en issues pour plus tard | un journal |
 | **la recette** | L'essai d'un chantier par CrOliX, en conditions réelles | les tests |
 | **le rodage** | Une période d'usage quotidien qui éprouve l'ensemble | une recette |
+| **la machine dédiée** | La machine de la maison où tournera la prod après le rodage ([ADR 0012](../adr/0012-prod-machine-dediee.md)) ; le mot est choisi par CrOliX le 13/11 | « le serveur dédié » ; « le serveur » seul : celui auquel Lun'Luxuria est reliée, ou celui de la chaîne |
+| **le NAS** | Le stockage de la maison : les copies et les fichiers | la prod |
 | **le kit** | Les composants de front communs, tenus dans lun-docs et recopiés | un composant propre à un projet |

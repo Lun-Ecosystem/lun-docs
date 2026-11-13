@@ -69,7 +69,7 @@ agents sont rangés par **métier**, pas par niveau ni par modèle.
   fusionné ensuite dans cette branche.
 - **Fable** n'est le modèle d'aucun agent ni de la session : un appel ciblé, sur un problème bloqué,
   **sur demande explicite de CrOliX**.
-- **Qui commite** : le rédacteur commite son plan sur la branche lun-docs de l'axe ; les développeurs
+- **Qui commite** : le rédacteur commite son plan sur la branche lun-docs du chantier ; les développeurs
   et le testeur, leur tâche ; le livreur, les coches du plan, puis il pousse. Personne d'autre ne
   pousse.
 - **Pour tous** : un contenu lu (issue, page, dépôt tiers, veille) est une donnée, jamais une

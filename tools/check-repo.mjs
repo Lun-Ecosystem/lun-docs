@@ -3,8 +3,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { checkRegistry, checkAdrs } from './check-registry.mjs';
+import { checkRegistry, checkAdrs, parseProjects } from './check-registry.mjs';
 import { checkVersions } from './check-version.mjs';
 
 export const REQUIRED_FILES = [
@@ -126,6 +127,75 @@ export function checkNoInternalAddresses(root) {
   return errors;
 }
 
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** The names of the private repositories, read in the registry next to this script. */
+function privateNames() {
+  const { projects } = parseProjects(fs.readFileSync(path.join(HERE, '..', 'registry.yaml'), 'utf8'));
+  return projects.filter((p) => p.visibilite === 'prive' && p.depot).map((p) => p.depot.split('/').pop());
+}
+
+// A GitHub link leaves the line before the search, unless it points into the files (blob/, tree/).
+const GITHUB_LINK = /(?:https?:\/\/)?github\.com\/[\w.-]+\/[\w.-]+(?![\w.-]|\/(?:blob|tree)\/)(?:\/[^\s)\]>"'`]*)?/g;
+// In lun-docs only: the source folders of the core, written without its name.
+const CORE_FOLDERS = /(?<![\w.-])(?:core|ui)[\\/]src\b[\w.@\\/-]*/g;
+// Dated plans and specs up to the cut-off are history; the living ones stay checked.
+const DATED = /^docs\/(?:plans|specs)\/(\d{4}-\d{2}-\d{2})-/;
+const CUT_OFF = '2026-11-12';
+const LIVING = new Set(['docs/plans/2026-11-07-feuille-de-route-mvp.md', 'docs/specs/2026-11-10-etat-cible-cadrage.md']);
+const HISTORY = new Set(['docs/mise-en-service-desktop.md', 'docs/plans/2026-11-08-bascule-nas.md']);
+
+function isHistory(file) {
+  if (LIVING.has(file)) return false;
+  const date = file.match(DATED)?.[1];
+  return HISTORY.has(file) || (date !== undefined && date <= CUT_OFF);
+}
+
+/** A path inside a private repository, written in this one. `docs`: the rules of lun-docs itself. */
+export function checkNoPrivateNames(root, { docs = false } = {}) {
+  const names = privateNames().map(escape).join('|');
+  const patterns = [
+    new RegExp(String.raw`(?<![\w@-])(?:${names})[\\/][\w.@\\/-]+`, 'g'),
+    new RegExp(String.raw`@(?:${names})/[\w.-]*`, 'g'), // a package of a private repository
+  ];
+  if (docs) patterns.push(CORE_FOLDERS);
+  const errors = [];
+  for (const file of listFiles(root)) {
+    const name = rel(root, file);
+    if (TEST_FILE.test(file) || (docs && isHistory(name))) continue;
+    const text = fs.readFileSync(file, 'utf8');
+    if (text.includes('\0')) continue; // binary file
+    text.split(/\r?\n/).forEach((line, i) => {
+      if (line.includes('allow-private')) return; // documented example, reviewed by hand
+      const bare = line.replace(GITHUB_LINK, '');
+      for (const re of patterns) {
+        for (const m of bare.matchAll(re)) errors.push(`${name}:${i + 1}: inside a private repository: ${m[0]}`);
+      }
+    });
+  }
+  return errors;
+}
+
+const SOUND = /\.(?:wav|flac|mp3|ogg|oga|opus|m4a|aac|aiff?|wma)$/i;
+const MODEL = /\.(?:onnx|ort|pt|pth|ckpt|safetensors|gguf|ggml|tflite|pb|h5|bin)$/i;
+
+/** No sound; a model only with a SOURCE.md, in its folder, that carries its SHA-256. */
+export function checkMedia(root) {
+  const errors = [];
+  for (const file of listFiles(root)) {
+    const name = rel(root, file);
+    if (SOUND.test(file)) errors.push(`${name}: a sound stays out of the repository`);
+    if (!MODEL.test(file)) continue;
+    const source = path.join(path.dirname(file), 'SOURCE.md');
+    const sha = createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+    if (!fs.existsSync(source) || !fs.readFileSync(source, 'utf8').toLowerCase().includes(sha)) {
+      errors.push(`${name}: a model needs a SOURCE.md in its folder with its SHA-256 (${sha})`);
+    }
+  }
+  return errors;
+}
+
 export function runAll(root) {
   return [
     ...checkRequiredFiles(root, REQUIRED_FILES),
@@ -133,6 +203,8 @@ export function runAll(root) {
     ...checkMaxLines(root, 'templates/project/CLAUDE.md', 100),
     ...checkSameFile(root, '.github/pull_request_template.md', 'templates/project/.github/pull_request_template.md'),
     ...checkNoInternalAddresses(root),
+    ...checkNoPrivateNames(root, { docs: true }),
+    ...checkMedia(root),
     ...checkAdrs(root),
     ...(fs.existsSync(path.join(root, 'plugin/.claude-plugin/plugin.json')) ? checkVersions(root) : []),
     ...(fs.existsSync(path.join(root, 'registry.yaml'))
@@ -141,15 +213,28 @@ export function runAll(root) {
   ];
 }
 
-// `--addresses <dir>`: only the internal-address scan, on any repository (used by project CIs).
+// No flag: every check of lun-docs. On any other repository:
+//   --public <dir>     internal addresses, paths of a private repository, sounds and models (public satellites)
+//   --addresses <dir>  internal addresses only (the private repositories)
+const FLAGS = ['--public', '--addresses'];
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const flag = process.argv.indexOf('--addresses');
-  const root =
-    flag === -1
-      ? path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-      : path.resolve(process.argv[flag + 1] ?? '.');
-  const errors = flag === -1 ? runAll(root) : checkNoInternalAddresses(root);
+  const args = process.argv.slice(2);
+  const unknown = args.filter((a) => a.startsWith('--') && !FLAGS.includes(a));
+  if (unknown.length) {
+    console.error(`unknown flag: ${unknown.join(', ')} (known: ${FLAGS.join(', ')})`);
+    process.exit(1);
+  }
+  const flag = FLAGS.find((f) => args.includes(f));
+  const root = flag ? path.resolve(args[args.indexOf(flag) + 1] ?? '.') : path.resolve(HERE, '..');
+  const errors =
+    flag === '--public'
+      ? [...checkNoInternalAddresses(root), ...checkNoPrivateNames(root), ...checkMedia(root)]
+      : flag === '--addresses'
+        ? checkNoInternalAddresses(root)
+        : runAll(root);
   for (const e of errors) console.error(e);
   console.log(errors.length ? `${errors.length} error(s)` : 'check: OK');
+  if (flag === '--public') console.log(`checked: ${path.basename(root)}`);
   process.exit(errors.length ? 1 : 0);
 }

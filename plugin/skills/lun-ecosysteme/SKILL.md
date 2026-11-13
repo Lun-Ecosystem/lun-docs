@@ -17,8 +17,9 @@ et peuvent être câblés au core.**
 
 - Un satellite fonctionne seul. Le core le consomme par un contrat explicite ; il ne réimplémente pas
   sa logique.
-- **Une fonction a un seul propriétaire.** Avant d'ajouter une fonction, cherche qui la possède déjà
-  dans le registre (`registry.yaml` de lun-docs, champ `contrats`). Si un autre projet la possède, on
+- **Une fonction a un seul propriétaire.** Avant d'ajouter une fonction, cherche qui la possède déjà :
+  le rôle et la description de chaque projet dans le registre (`registry.yaml` de lun-docs), puis
+  « Possède » et « Ne possède pas » dans le `CLAUDE.md` du projet. Si un autre projet la possède, on
   passe par son contrat. Une boîte mail, un agent ou une logique de tri en double est un défaut, pas
   une option.
 - Une surface (panel, mobile) **affiche et pilote** ; elle ne porte pas de logique métier propre.

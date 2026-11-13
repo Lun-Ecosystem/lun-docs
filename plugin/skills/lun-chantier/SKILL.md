@@ -17,7 +17,7 @@ Ce skill s'appuie sur superpowers ; il ne le remplace pas.
 3. Le périmètre est **figé** à partir d'ici.
 4. Cadrage et plan : `superpowers:brainstorming` si le besoin n'est pas clair, puis
    `superpowers:writing-plans` : l'agent `redacteur-plan` écrit un plan court dans
-   `lun-docs/docs/plans/`, poussé sur la PR lun-docs de l'axe (une seule par axe). Fais attaquer le
+   `lun-docs/docs/plans/`, poussé sur la PR lun-docs du chantier (une par chantier, comme partout). Fais attaquer le
    plan par l'agent `plan-challenger`, intègre ou réfute ses objections par écrit, puis CrOliX valide
    par écrit (« validé »), sans fusionner. **Pas de code avant.**
 

@@ -1,6 +1,6 @@
 # L'architecture actuelle
 
-> Ce qui tourne aujourd'hui, au 08/11/2026. Cette page fait foi là où la
+> Ce qui tourne aujourd'hui, au 12/11/2026. Cette page fait foi là où la
 > [spec écosystème](specs/2026-10-19-ecosysteme-design.md) a vieilli. Tout chantier qui change un dépôt, un poste, un
 > port ou une liaison la met à jour dans sa PR. Les règles sont dans
 > [`environnements.md`](../standards/environnements.md) et [`contrat-satellite.md`](../standards/contrat-satellite.md) ;
@@ -13,13 +13,15 @@ Le [registre](../registry.yaml) fait foi pour la liste, le rôle et l'état.
 | Dépôt | Rôle | Ce qu'il porte |
 |---|---|---|
 | `lun-docs` | référentiel | les normes, la méthode, le registre, le plugin `lun`, les specs et les plans |
-| `lun-anima` | core | Natsume : sa mémoire, la conversation, les cartes, les routines de la nuit et du matin, son app |
+| `lun-anima` | core | Natsume : ses souvenirs, la conversation, les cartes, les routines de la nuit et du matin, son app |
 | `lun-acedia` | satellite | la journée : mail, agenda et tâches Google, triés à la source, avec son agent et son front |
-| `lun-avaritia` | satellite | le savoir : fiches reliées, faits sourcés, import et export Obsidian, avec son front |
+| `lun-avaritia` | satellite | la bibliothèque : fiches reliées, faits sourcés, import et export Obsidian, avec son front |
 | `lun-luxuria` | satellite | le corps de Natsume : sa scène, sa voix, ce qu'il écoute ; une fenêtre Tauri sur le desktop |
 | `website` | vitrine | le site, qui lit le registre à son build ; son hébergement n'est pas tranché (lun-docs#21) |
 
-`lun-sandbox`, l'essai à blanc de la méthode, est archivé.
+`lun-sandbox`, l'essai à blanc de la méthode, est archivé. Ce que chaque projet doit devenir : ses lignes d'arrivée,
+dans le [cadrage de l'état cible](specs/2026-11-10-etat-cible-cadrage.md), § 4 ; le rôle de chacun dans le corps de
+Natsume : l'anatomie du [dictionnaire](../standards/dictionnaire.md).
 
 ## Les postes
 
@@ -30,7 +32,9 @@ Le [registre](../registry.yaml) fait foi pour la liste, le rôle et l'état.
   bases de recette, jamais sur celles du rodage.
 - **Le téléphone** : l'app du core, installée depuis le navigateur et jointe en HTTPS par le réseau privé, pour
   les push ; à prouver de bout en bout (B11).
-- **Le NAS** : après le rodage. Rien n'y tourne encore.
+- **La machine dédiée** : la prod après le rodage ([ADR 0012](../adr/0012-prod-machine-dediee.md)), pas encore
+  achetée.
+- **Le NAS** : le stockage de la maison, pour les copies et les fichiers (ADR 0012). Rien n'y tourne.
 
 ## Les adresses
 
@@ -47,8 +51,8 @@ Une origine par app, la même partout.
 
 ## Les liaisons
 
-- **Le core et un satellite** : le core se relie au satellite par sa page d'autorisation (`npm run connect -- <url>`,
-  depuis lun-anima) et garde son jeton, chiffré par la clé du core. Il lit, demande d'agir et écoute le flux
+- **Le core et un satellite** : le core se relie au satellite par sa page d'autorisation et garde son jeton,
+  chiffré par la clé du core. Il lit, demande d'agir et écoute le flux
   d'événements du satellite ; il n'en retient que l'urgent et le contrôle.
 - **Le core et Luxuria** : Luxuria se relie au core par un code d'appairage et écoute ce qu'il doit dire. Relié, il ne
   décide de rien.
