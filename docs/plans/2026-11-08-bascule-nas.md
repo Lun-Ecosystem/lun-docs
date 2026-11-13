@@ -1,5 +1,9 @@
 # Basculer l'écosystème du desktop vers le NAS, après le rodage
 
+> **Remplacé en partie par l'[ADR 0012](../../adr/0012-prod-machine-dediee.md)** (12/11) : la prod ira sur une machine
+> dédiée, le NAS garde les copies et les fichiers. Ce plan se refait quand la machine s'achète ; le § 2, point 2 (les
+> bases et leurs clés), et le § 3 restent la base de sa prochaine version.
+
 > Préparé le 08/11, à exécuter **après la semaine de rodage sur le desktop** (décision de CrOliX le 08/11, feuille de
 > route § 1). Rien ici ne se lance avant. Les choix marqués **[choix Claude]** se changent avant la bascule.
 

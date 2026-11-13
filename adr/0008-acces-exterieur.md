@@ -1,6 +1,6 @@
 # ADR 0008 : l'accès depuis l'extérieur, déchiffré sur le NAS seulement
 
-Statut : acceptée
+Statut : remplacée par 0012
 Date : 2026-10-30
 
 ## Contexte

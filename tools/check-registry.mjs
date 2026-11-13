@@ -1,5 +1,5 @@
 // Checks for registry.yaml and adr/. Minimal parser on purpose: registry.yaml is a flat
-// `projets:` list of objects with scalar values, nothing more (no dependency needed).
+// `projets:` list of objects with scalar values, nothing more (no dependency needed); anything else is an error.
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -10,29 +10,58 @@ const ENUMS = {
   etat: ['actif', 'en-dev', 'en-pause', 'archive'],
 };
 
-function parseProjects(yamlText) {
+/** The `projets:` list, and an error at its line for anything the flat format does not allow. */
+export function parseProjects(yamlText) {
   const projects = [];
+  const errors = [];
   let current = null;
-  for (const raw of yamlText.split(/\r?\n/)) {
+  let inList = false;
+  let itemIndent = null;
+  yamlText.split(/\r?\n/).forEach((raw, i) => {
+    const at = `registry.yaml:${i + 1}:`;
     const line = raw.replace(/\s+#.*$/, '');
-    if (!line.trim() || line.trim().startsWith('#')) continue;
-    const item = line.match(/^\s*-\s+(\w+):\s*(.*)$/);
+    if (!line.trim() || line.trim().startsWith('#')) return;
+    if (/^\S/.test(line)) {
+      inList = /^projets:/.test(line);
+      return;
+    }
+    if (!inList) return;
+    const item = line.match(/^(\s*)-\s+(\w+):\s*(.*)$/);
     const field = line.match(/^\s{2,}(\w+):\s*(.*)$/);
+    const [key, value] = item ? [item[2], item[3]] : field ? [field[1], field[2]] : [];
     if (item) {
-      current = { [item[1]]: unquote(item[2]) };
+      itemIndent ??= item[1].length;
+      if (item[1].length > itemIndent) {
+        errors.push(`${at} nested list, the registry only takes scalar values`);
+        return;
+      }
+      current = { [key]: unquote(value) };
       projects.push(current);
     } else if (field && current) {
-      current[field[1]] = unquote(field[2]);
+      current[key] = unquote(value);
+    } else {
+      errors.push(`${at} unreadable line`);
+      return;
     }
-  }
-  return projects;
+    if (!unquote(value)) errors.push(`${at} ${key} has no value`);
+  });
+  return { projects, errors };
 }
 
 const unquote = (v) => v.trim().replace(/^(['"])(.*)\1$/, '$2');
 
+/** One error per value of `keyOf` shared by several projects. */
+function duplicates(projects, keyOf, message) {
+  return [...Map.groupBy(projects.filter(keyOf), keyOf)]
+    .filter(([, group]) => group.length > 1)
+    .map(([key, group]) => `registry: ${message(key, group.map((p) => p.id ?? '(no id)').join(', '))}`);
+}
+
 export function checkRegistry(yamlText) {
-  const errors = [];
-  const projects = parseProjects(yamlText);
+  const { projects, errors } = parseProjects(yamlText);
+  errors.push(...duplicates(projects, (p) => p.id, (id) => `duplicate id ${id}`));
+  // GitHub names are case-insensitive.
+  errors.push(...duplicates(projects, (p) => p.depot?.toLowerCase(), (depot, ids) => `${ids}: same depot ${depot}`));
   for (const p of projects) {
     const name = p.id ?? '(no id)';
     for (const key of REQUIRED) if (!p[key]) errors.push(`registry: ${name}: missing ${key}`);

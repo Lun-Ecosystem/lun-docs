@@ -12,7 +12,8 @@
 #   depot       owner/nom sur GitHub
 #   visibilite  public | prive
 #   etat        actif | en-dev | en-pause | archive
-# Champs optionnels : description, stack, contrats (ce que le projet expose au core).
+# Champs optionnels : description, stack.
+# Une liste plate de valeurs simples : une liste imbriquée ou un champ vide est une erreur.
 #
 # Vérifié par : npm run check
 # Un projet s'ajoute ici à sa création ; les id reprennent ceux du website, qui lit ce fichier au build.

@@ -14,9 +14,9 @@ Les règles sont dans `references/git.md` et `references/qualite.md`.
 
 ## Pull request
 
-**Une seule PR par chantier**, jamais une par tâche. Si le chantier a déjà sa PR, pousse sur sa
-branche : la PR se met à jour. **Dans lun-docs, une seule PR par axe** : plans et coches y voyagent
-ensemble ; `gh pr list --state open` avant d'en ouvrir une. Avant tout push, `gh pr view --json state` :
+**Une seule PR par chantier**, jamais une par tâche, dans lun-docs comme ailleurs : le plan et ses coches
+voyagent dans la PR lun-docs du chantier. Si le chantier a déjà sa PR, pousse sur sa branche : la PR se
+met à jour ; `gh pr list --state open` avant d'en ouvrir une. Avant tout push, `gh pr view --json state` :
 une PR fusionnée ne reçoit plus rien, la suite va dans une nouvelle.
 
 1. Barrières locales vertes (format, lint, typage, tests) : lance-les et lis la sortie.
@@ -26,9 +26,9 @@ une PR fusionnée ne reçoit plus rien, la suite va dans une nouvelle.
    commit de `main` ; le corps en français.
 4. `gh pr checks --watch` : la CI doit être verte.
 5. Critères de fin prouvés : gabarit complété (critères cochés, **preuves** : sortie des tests,
-   capture, commande de démo). *Show* : `gh pr ready`, puis dis à CrOliX que la PR est prête, avec son
-   lien. *Ask* (ce que seul le desktop prouve) : elle reste en brouillon ; dis à CrOliX quoi essayer,
-   elle passe « prête » après sa recette (`references/git.md`).
+   capture, commande de démo). *Show* : dis à CrOliX que la PR est prête, avec son lien ; c'est lui
+   qui la passe prête et la fusionne. *Ask* (ce que seul le desktop prouve) : elle reste en brouillon ;
+   dis à CrOliX quoi essayer, il la passe « prête » après sa recette (`references/git.md`).
 
 ## Après le merge
 

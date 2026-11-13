@@ -1,5 +1,5 @@
 /*
- * The page base of the gallery: the core's (lun-anima/ui/src/lib/base.css), without what is its own. The kit renders
+ * The page base of the gallery: the base of the core, without what is its own. The kit renders
  * on it as it does in the core: no global box-sizing (Luxuria sets border-box everywhere, the core does not).
  */
 html,

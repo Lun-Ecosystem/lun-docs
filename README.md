@@ -27,12 +27,14 @@ aucun code applicatif.
 | Les mots de l'écosystème | [`standards/dictionnaire.md`](standards/dictionnaire.md) |
 | Structure d'un projet | [`standards/structure-projet.md`](standards/structure-projet.md) |
 | Qualité, sécurité, stack, design | [`standards/`](standards/) |
-| Jetons de design de référence (copiés dans chaque dépôt) | [`design/tokens.css`](design/tokens.css) |
+| Variables de design de référence (copiées dans chaque dépôt) | [`design/tokens.css`](design/tokens.css) |
 | Le kit de composants communs, et sa galerie locale (dans `design/` : `npm ci`, puis `npm run galerie`) | [`design/kit/`](design/kit/), [`design/galerie/`](design/galerie/) |
 | Décisions d'écosystème | [`adr/`](adr/) |
 | Les projets, leur rôle, leur dépôt | [`registry.yaml`](registry.yaml) |
 | Squelette d'un nouveau projet | [`templates/project/`](templates/project/) |
 | Skills communautaires retenus et écartés | [`community-skills.md`](community-skills.md) |
+| Ce qui tourne aujourd'hui | [`docs/architecture-actuelle.md`](docs/architecture-actuelle.md) |
+| L'état cible et les lignes d'arrivée de chaque projet | le [cadrage de l'état cible](docs/specs/2026-11-10-etat-cible-cadrage.md) |
 | L'avancement | la [feuille de route du MVP](docs/plans/2026-11-07-feuille-de-route-mvp.md) |
 
 En cas de conflit entre lun-docs et un projet, lun-docs fait foi, ou on le change par une PR.

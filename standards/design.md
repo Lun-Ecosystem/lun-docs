@@ -7,7 +7,7 @@
 
 ## Couleurs
 
-| Token | Valeur | Usage |
+| Variable | Valeur | Usage |
 |---|---|---|
 | `--encre` | `#0D0B09` | Fond principal (thème sombre par défaut) |
 | `--encre-2` | `#1A1612` | Surfaces, cartes, panneaux |
@@ -15,9 +15,9 @@
 | `--papier` | `#E8E2D6` | Fonds clairs, texte secondaire sur sombre |
 | `--lune` | `#C8C0B0` | Texte atténué, bordures discrètes |
 | `--lavis` | `#8A9BAE` | Accent froid, informations, états neutres |
-| `--rouge` | `#7A1818` | Accent principal (Natsume, Lun'Anima), alertes |
+| `--rouge` | `#7A1818` | Le rouge du website, gardé au socle. Le kit ne l'emploie pas : le geste destructeur a `--danger-plein` (même valeur), Lun'Anima son accent `--anima` |
 
-Les noms des tokens sont repris tels quels dans chaque surface, quel que soit le framework.
+Les noms des variables sont repris tels quels dans chaque surface, quel que soit le framework.
 
 ## Règle B : socle commun, couleur du monde en accent
 
@@ -27,11 +27,12 @@ Lun’). Le monde d’un projet ne change que l’**accent** : `--accent`, `--ac
 
 - L’attribut `data-monde="acedia"` ou `data-monde="anima"` se pose sur la **racine de chaque vue**, pas
   sur la page. Une vue d’Acedia reprise dans le panel d’Anima garde ainsi son accent bleu.
-- Le **rouge d’Anima n’est jamais utilisé en texte** : `--accent-texte` y reprend `--texte`. Le rouge
-  sert de fond (bouton, pastille) ou de bordure.
-- Un composant n’écrit **aucune couleur en dur** : il lit les jetons.
+- L’**accent d’Anima est `--anima`** (grenat prune), distinct du rouge destructeur (`--danger-plein`) ; son texte
+  est `--anima-texte`, que `--accent-texte` reprend. `--anima` et ses variantes vivent sur `:root` pour Lun'Anima
+  seulement : la copie d’un satellite n’en garde rien.
+- Un composant n’écrit **aucune couleur en dur** : il lit les variables de design.
 
-## Jetons de référence
+## Variables de design de référence
 
 La seule source est `design/tokens.css` (dans lun-docs) : le socle et le bloc d’accent de
 chaque monde. Chaque dépôt garde une copie générée, avec l’en-tête « ne pas modifier ici »
@@ -47,7 +48,7 @@ exemple), plus comme fond d’application : le fond des interfaces est celui du 
 
 | Projet | Fond | Accent |
 |---|---|---|
-| Lun'Anima | `#120A0A` | `#7A1818` |
+| Lun'Anima | `#120A0A` | `#6B2D4F` |
 | Lun'Acedia | `#070C14` | `#3A6080` |
 | Lun'Avaritia | `#100C03` | `#745716` |
 | Lun'Invidia | `#080410` | `#5A1880` |
@@ -103,7 +104,8 @@ Chaque écran ne s’assemble qu’avec ces briques, jamais avec une version ref
 marquée « à verser au kit » n’existe encore que dans la copie d’Acedia : elle rejoint `design/kit/`
 avant d’être reprise ailleurs.
 
-- **Jetons** : couleurs, échelle typographique, rayons, ombres, espacements, hauteurs, mouvement.
+- **Variables de design** (`design/tokens.css`) : couleurs, tons, rayons, ombres, polices, marques, cadre de focus.
+  L’échelle typographique, les espacements, les hauteurs et le mouvement n’y sont pas encore.
 - **Boutons** : six niveaux (principal, doux, secondaire, fantôme, danger, `danger-plein` pour la
   confirmation d’un geste destructeur), trois tailles, variante icône seule ; une seule action
   principale par zone.
@@ -131,9 +133,9 @@ avant d’être reprise ailleurs.
 |---|---|
 | Comportements (menu, liste déroulante, bulle, dialogue, info-bulle, onglets, palette, date, curseur, bascule, case) | **Bits UI** (sans style, Svelte 5) : les menus passent par un calque au-dessus de la page, aucun n’est coupé par un conteneur |
 | Icônes | **`@lucide/svelte`** |
-| Grille d’agenda | **FullCalendar 7**, habillé par les jetons |
+| Grille d’agenda | **FullCalendar 7**, habillé par les variables de design |
 | Graphe de fiches | **Sigma.js 3 + graphology** (WebGL), ADR 0006 |
-| Style | **Jetons CSS** ; ni Tailwind ni bibliothèque de composants stylés |
+| Style | **Variables CSS** ; ni Tailwind ni bibliothèque de composants stylés |
 
 Aucune police ni ressource ne vient d’un CDN. Pas d’alerte native (`alert`, `confirm`, `prompt`).
 

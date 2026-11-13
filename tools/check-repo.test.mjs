@@ -5,7 +5,15 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { checkRequiredFiles, checkMaxLines, checkNoInternalAddresses, checkSameFile } from './check-repo.mjs';
+import { createHash } from 'node:crypto';
+import {
+  checkRequiredFiles,
+  checkMaxLines,
+  checkNoInternalAddresses,
+  checkSameFile,
+  checkNoPrivateNames,
+  checkMedia,
+} from './check-repo.mjs';
 
 function fixture(files) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'lun-docs-'));
@@ -150,4 +158,106 @@ test('checkNoInternalAddresses leaves example names, localhost and look-alikes',
 test('checkNoInternalAddresses skips test and spec files of any language', () => {
   const root = fixture({ 'a.test.ts': '192.168.1.20', 'b.spec.js': '10.0.0.5', 'c.test.mjs': 'nas.lan' });
   assert.deepEqual(checkNoInternalAddresses(root), []);
+});
+
+// The private names come from the registry next to the script: lun-anima and website.
+test('checkNoPrivateNames flags a path written with a private repo name, with its line', () => {
+  const root = fixture({ 'a.md': 'see lun-anima/x/y.ts\nor ..\\lun-anima\\x\\y.ps1\n' });
+  const errors = checkNoPrivateNames(root);
+  assert.ok(errors.some((e) => e.startsWith('a.md:1:')), errors.join('\n'));
+  assert.ok(errors.some((e) => e.startsWith('a.md:2:')), errors.join('\n'));
+});
+
+test('checkNoPrivateNames flags a package of the core', () => {
+  const root = fixture({ 'package.json': '{ "dependencies": { "@lun-anima/kit": "1.0.0" } }\n' });
+  assert.equal(checkNoPrivateNames(root).length, 1);
+});
+
+test('checkNoPrivateNames lets the name alone and issue or PR links pass', () => {
+  const root = fixture({
+    'a.md':
+      "Lun'Anima, lun-anima, `Lun-Ecosystem/lun-anima`, lun-anima#72\n" +
+      'https://github.com/Lun-Ecosystem/lun-anima/issues/72 and https://github.com/Lun-Ecosystem/lun-anima/pull/9\n',
+  });
+  assert.deepEqual(checkNoPrivateNames(root), []);
+});
+
+test('checkNoPrivateNames flags a blob or tree link to a file of the core', () => {
+  const root = fixture({
+    'a.md':
+      'https://github.com/Lun-Ecosystem/lun-anima/blob/main/x/y.ts\n' +
+      'https://github.com/Lun-Ecosystem/lun-anima/tree/main/x\n',
+  });
+  assert.equal(checkNoPrivateNames(root).length, 2);
+});
+
+test('checkNoPrivateNames skips lines marked allow-private, and test files', () => {
+  const root = fixture({
+    'a.md': 'example: lun-anima/x/y.ts <!-- allow-private -->\n',
+    'b.test.ts': "const p = 'lun-anima/x/y.ts';\n",
+  });
+  assert.deepEqual(checkNoPrivateNames(root), []);
+});
+
+test('checkNoPrivateNames flags the folders of the core written alone in lun-docs only', () => {
+  const root = fixture({ 'a.md': 'one: ui/src/a.ts, two: core/src/a.ts\n' });
+  assert.equal(checkNoPrivateNames(root, { docs: true }).length, 2);
+  assert.deepEqual(checkNoPrivateNames(root), []);
+});
+
+test('checkNoPrivateNames leaves the dated plans up to 12/11 and checks the living ones', () => {
+  const root = fixture({
+    'docs/plans/2026-11-12-old.md': 'core/src/x.ts\n',
+    'docs/specs/2026-10-19-old.md': 'lun-anima/x/y.ts\n',
+    'docs/mise-en-service-desktop.md': 'lun-anima/x/y\n',
+    'docs/plans/2026-11-13-new.md': 'core/src/x.ts\n',
+    'docs/plans/2026-11-07-feuille-de-route-mvp.md': 'core/src/x.ts\n',
+    'docs/specs/2026-11-10-etat-cible-cadrage.md': 'core/src/x.ts\n',
+  });
+  const files = checkNoPrivateNames(root, { docs: true }).map((e) => e.split(':')[0]);
+  assert.deepEqual(files.sort(), [
+    'docs/plans/2026-11-07-feuille-de-route-mvp.md',
+    'docs/plans/2026-11-13-new.md',
+    'docs/specs/2026-11-10-etat-cible-cadrage.md',
+  ]);
+});
+
+const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+
+test('checkMedia flags a sound', () => {
+  const root = fixture({ 'docs/take.wav': 'RIFF\u0000', 'b/c.FLAC': 'x' });
+  assert.equal(checkMedia(root).length, 2);
+});
+
+test('checkMedia wants a SOURCE.md carrying the SHA-256 of a model', () => {
+  const model = Buffer.from([1, 2, 3, 0, 4]);
+  const root = fixture({ 'm/vad.onnx': model });
+  assert.equal(checkMedia(root).length, 1, 'no SOURCE.md');
+  fs.writeFileSync(path.join(root, 'm/SOURCE.md'), `SHA-256 : \`${sha256(model).toUpperCase()}\`\n`);
+  assert.deepEqual(checkMedia(root), []);
+  fs.writeFileSync(path.join(root, 'm/vad.onnx'), Buffer.from([1, 2, 3, 0, 5]));
+  assert.equal(checkMedia(root).length, 1, 'one byte changed');
+});
+
+test('--public scans another repo, fails on a core path and names the folder it checked', () => {
+  const root = gitRepo({ 'README.md': 'see lun-anima/x/y.ts\n' });
+  const { code, out } = runCli(['--public', root]);
+  assert.equal(code, 1);
+  assert.match(out, /README\.md:1/);
+  assert.ok(out.includes(`checked: ${path.basename(root)}\n`), out);
+  const clean = gitRepo({ 'README.md': '# Clean\n' });
+  const ok = runCli(['--public', clean]);
+  assert.equal(ok.code, 0, ok.out);
+  assert.ok(ok.out.trimEnd().endsWith(`checked: ${path.basename(clean)}`), ok.out);
+});
+
+test('an unknown flag fails and is named', () => {
+  const { code, out } = runCli(['--adresses', '.']);
+  assert.equal(code, 1);
+  assert.match(out, /unknown flag: --adresses/);
+});
+
+test('--addresses still passes on a repo with a core path', () => {
+  const root = gitRepo({ 'README.md': 'see lun-anima/x/y.ts\n' });
+  assert.equal(runCli(['--addresses', root]).code, 0);
 });

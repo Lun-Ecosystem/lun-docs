@@ -40,14 +40,12 @@
   ([Ship/Show/Ask](https://martinfowler.com/articles/ship-show-ask.html), audit du 08/11, Q7).
   *Show* : ce qui se prouve sur le laptop (doc, code couvert par ses tests) passe « prête » dès ses
   critères prouvés. *Ask* : ce que seul le desktop prouve (voix, fenêtre Tauri, services) reste en
-  brouillon jusqu'à la recette de CrOliX. Le plan du chantier dit lequel.
+  brouillon jusqu'à la recette de CrOliX. Le plan du chantier dit lequel. Dans les deux cas, c'est CrOliX
+  qui la passe « prête » : l'agent lui dit qu'elle l'est, avec son lien.
 - Les corrections de revue arrivent dans la même PR, jamais dans une nouvelle.
-- **Dans lun-docs, une PR par axe**, pas par plan ni par coche : le cadrage, les plans et leurs coches
-  voyagent dans la même PR en brouillon, fusionnée quand le palier de l'axe est fini. Avant d'en
-  ouvrir une, regarder si l'axe en a déjà une (`gh pr list --state open`) et y pousser. Un plan s'y
-  valide par le « validé » écrit de CrOliX, pas par la fusion.
-- Des chantiers voisins d'un même axe s'**agrègent en local** quand ils se suivent de près : poussés
-  ensemble sur une même branche, une PR par dépôt, plutôt qu'une PR chacun à quelques heures d'écart.
+- **Dans lun-docs aussi, une PR par chantier** : son plan, ses textes et ses coches y voyagent ensemble.
+  Avant d'en ouvrir une, regarder si le chantier en a déjà une (`gh pr list --state open`) et y pousser.
+  Un plan s'y valide par le « validé » écrit de CrOliX, pas par la fusion.
 - Le gabarit est obligatoire : issue liée, critères de fin cochés, **preuves** (sortie des tests,
   capture, commande de démo), niveau de la tâche.
 - La CI doit être verte.
@@ -70,6 +68,10 @@ et le hook `pre-push` restent derrière. Les règles `deny` du gabarit (`.claude
 qu'un filet par préfixe : elles ne voient ni `feat:main` ni une option glissée avant le dépôt, la garde
 reste la barrière. L'agent agit avec l'identité GitHub de CrOliX : GitHub seul ne peut pas faire la
 différence, d'où cette double barrière.
+
+Le hook `pre-push` du gabarit vit aussi dans les dépôts publics : il arrête l'erreur avant le réseau. Le premier
+push de `main` d'un dépôt neuf, avant de poser son ruleset, revient à CrOliX, avec `--no-verify` : le hook de garde
+le refuse à l'agent.
 
 ## Release
 

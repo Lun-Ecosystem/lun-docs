@@ -23,7 +23,7 @@
 | **P0 · Interrompre** | `urgent` | vibration et son, notification en haut de l'écran | dit malgré la sourdine si « Dit à voix haute : P0 » est activé (le défaut), sinon en silence dans le fil et sur le téléphone ; jamais dit en appel ; la nuit (23 h à 7 h, réglable), sans son |
 | **P1 · Prévenir** | `normal` | notification silencieuse dans le tiroir et pastille | la sourdine ne la touche pas : le téléphone la reçoit |
 | **P2 · Signaler** | `low` | pastille ou compteur dans l'app, pas de notification système | — |
-| **P3 · Résumer** | `info` | seulement dans le point du matin ou du soir | — |
+| **P3 · Résumer** | `info` | seulement dans la lettre du matin ou le point du soir | — |
 | **P4 · Journal** | `log` | rien, visible dans l'historique | — |
 
 Un client qui ne connaît pas `low` ou `log` les traite comme `info` : rien n'interrompt par erreur.
@@ -37,11 +37,11 @@ Un client qui ne connaît pas `low` ou `log` les traite comme `info` : rien n'in
 | Un service qui s'arrête faute d'accès | autorisation Google à renouveler, crédit épuisé, clé refusée | P1 |
 | Une échéance d'accès proche | clé qui expire : J-3 en P1, J-14 en P2 | P1 / P2 |
 | Une routine qui échoue, un poste injoignable, un plafond atteint | `routine.failed`, `post.unreachable`, `cap.reached` | P1 |
-| Le point du matin, posté | `morning.posted` | P1 |
+| La lettre du matin, postée | `morning.posted` | P1 |
 | Une décision attendue sur une demande de CrOliX | carte à valider issue d'une délégation | P1 |
 | Un avis de l'IA, sans règle | mail jugé urgent par le tri | P1, jamais P0 |
-| Ce qui est dû dans la journée | tâche à échéance aujourd'hui | P2, en tête du point du matin |
-| Ce qui attend un geste, sans heure | tri à valider, question du cerveau, proposition de la nuit | P2 |
+| Ce qui est dû dans la journée | tâche à échéance aujourd'hui | P2, en tête de la lettre du matin |
+| Ce qui attend un geste, sans heure | tri à valider, question de la bibliothèque, proposition de la nuit | P2 |
 | Ce qui s'est fait seul | mail rangé par une règle, fiche créée, veille tech | P3 |
 | Un état technique | boîte ou agenda mis à jour, clé rétablie, prix inconnu | P4 |
 
@@ -54,4 +54,4 @@ Un nouveau type d'événement se classe par sa **nature** dans ce tableau, jamai
 - **Pas de chevauchement** : une seule file dans le core ; deux notifications ou deux prises de parole
   ne se recouvrent jamais.
 - **Une seule fois** : un événement déjà notifié ne l'est pas de nouveau après un redémarrage.
-- **Le point du matin** reprend les P3 de la nuit et rappelle les P2 encore en attente.
+- **La lettre du matin** reprend les P3 de la nuit et rappelle les P2 encore en attente.
