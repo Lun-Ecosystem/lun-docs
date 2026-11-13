@@ -4,7 +4,8 @@
 >
 > **Issues :** lun-docs#166 (chapeau), lun-anima#107, lun-acedia#66, lun-avaritia#33.
 >
-> **PR qui livrent :** lun-anima#109 (tâches 1 et 2), lun-acedia#68 (tâches 4 à 7), lun-avaritia#35 (tâche 8).
+> **PR qui livrent :** lun-anima#109 (tâches 1 et 2), lun-acedia#68 (tâches 4 à 7), lun-avaritia#35 (tâche 8),
+> lun-docs#164 (tâche 9).
 >
 > **Validé par CrOliX le 12/11** (« je valide ») : les points de « À trancher » 1 à 3 selon leur recommandation
 > (l'erreur écrite, au plus un événement de chute par jour, la sortie en code 1 ; le lanceur relance toutes les 15 min
@@ -299,21 +300,24 @@ dépôts partent ensemble ; **dans un dépôt, les tâches passent en série**, 
 
 ### lun-docs (la session)
 
-9. - [ ] **La page de mise en service à jour** (`trivial`). En dernier, au fil des fusions.
+9. - [x] **La page de mise en service à jour** (`trivial`). En dernier, au fil des fusions.
    `docs/mise-en-service-desktop.md` :
-   - le lanceur qui ne lâche plus (§ 9 et la ligne du tableau, `:262`), une fois la tâche 2 fusionnée ;
+   - le lanceur qui ne lâche plus (§ 9 et la ligne du tableau du § 11), une fois la tâche 2 fusionnée ;
    - **un prix pour tout modèle utilisé** chez Acedia et chez Avaritia, à l'endroit où la page parle des clés des
      fournisseurs : Mistral Small et Medium n'en ont pas. Soit un autre modèle, soit son prix dans le `.env` du
      service, `LLM_PRICES={"mistral/mistral-small-latest":[entrée, sortie]}`, en dollars par million de jetons ;
    - **les copies pendant le rodage** (§ 8) : aucune ne quitte le desktop. Si CrOliX en veut une ailleurs, le NAS tire
      lui-même les dossiers `backups/`, sans code : un réglage du NAS, qui dit lui-même ses échecs ;
-   - **la nuit et la veille du desktop** (§ 7, `:133`, que le chantier « textes d'accord » rend à celui-ci) : en
+   - **la nuit et la mise en veille du desktop** (§ 7, que le chantier « textes d'accord » rend à celui-ci) : en
      veille, les trois serveurs s'arrêtent tous, tri, rappels et copies compris, et le rattrapage ne rejoue que la
      nuit. Pendant le rodage, le desktop reste allumé, veille prolongée désactivée ;
    - où se voit un arrêt sur erreur (§ 8, à côté de la copie ratée) : celui du core, au Journal et au téléphone ; celui
      d'un satellite, au journal du jour du lanceur, et au core s'il dure 15 min (le poste injoignable) ; un lot en
      échec, au tableau de bord d'Avaritia.
    - Rien dans la feuille de route ni les ADR (le chantier « textes d'accord »).
+   - Écrit aussi, à la relecture : les deux comportements voulus au tableau du § 11 (un 4xx de l'IA chez Acedia,
+     le jour d'attente d'Avaritia), le renvoi au prix depuis le § 2, et pour les copies tirées par le NAS, le partage
+     Windows et les seuls fichiers finis (`<nom>-AAAA-MM-JJ.db`).
 10. **Le contrat satellite dit les événements de fonctionnement** : n'entre pas, CrOliX ayant écarté tout signal des
     satellites au core dans ce chantier (point 4). Il part au chantier suivant.
 
