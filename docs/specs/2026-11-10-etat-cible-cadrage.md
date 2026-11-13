@@ -6,7 +6,7 @@
 > **[avis Claude]** restent des propositions. Rien ici n'ajoute de satellite.
 >
 > **Tranché par CrOliX le 12/11** : la semaine de rodage est la porte du MVP (§ 3, § 6 point 1, § 8 point 3) ; le
-> premier appareil sans terminal entre dans le MVP (§ 4.2, § 6 point 6) ; la prod tournera sur un serveur dédié, le
+> premier appareil sans terminal entre dans le MVP (§ 4.2, § 6 point 6) ; la prod tournera sur la machine dédiée, le
 > NAS au stockage (§ 6 point 5, ADR 0012).
 
 ## 1. Ce que CrOliX a redit, le 10/11
@@ -79,7 +79,7 @@ Chaque ligne d'arrivée dit quand le projet est **abouti** : après elle, il ne 
 - **Existe** : l'identité, l'humeur, le tempérament, les souvenirs de la relation, la conversation, la délégation aux
   postes, la nuit, la lettre du matin, les cartes, les coûts, la pause, l'app.
 - **Mis de côté** : les rôles (assistante, experte, streameuse) ; l'humeur calculée par les événements ; la porte des
-  pensées, le budget de parole ; le point du soir ; la validation par lot ; la bascule vers le serveur dédié. Le
+  pensées, le budget de parole ; le point du soir ; la validation par lot ; la bascule vers la machine dédiée. Le
   premier appareil sans terminal n'y est plus : il entre dans le MVP (lun-anima#72, tranché le 12/11).
 - **Ligne d'arrivée, validée par CrOliX le 10/11** :
   1. sa personnalité passe la barre : les scènes de référence, notées par CrOliX ;
@@ -146,7 +146,7 @@ graphique à venir. La 8 est l'horizon : elle justifie de bien faire les sept au
 | 2 | **Les observations en attente** : dix-huit issues `inbox`, à trier en une fois (faire, plus tard, jamais) | les cinq dépôts |
 | 3 | **Les mots** : l'anatomie du § 2 dans `vision.md`, les standards et les README | § 2 |
 | 4 | **La vision** : l'incarnation d'abord, l'assistance comme tâche ; le stream n'est plus « hors périmètre » mais à l'horizon | § 1 |
-| 5 | **L'architecture** : un serveur dédié, le NAS au stockage, la porte d'entrée ; écrit dans l'ADR 0012, qui remplace l'ADR 0008 | CrOliX, le 10/11 ; ADR 0012 |
+| 5 | **L'architecture** : une machine dédiée, le NAS au stockage, la porte d'entrée ; écrit dans l'ADR 0012, qui remplace l'ADR 0008 | CrOliX, le 10/11 ; ADR 0012 |
 | 6 | **Le premier contact sans terminal** : le premier appareil, Google depuis l'interface, la liaison d'un poste. Le premier appareil entre dans le MVP (tranché le 12/11) | lun-anima#72, #90, lun-acedia#55, #30 |
 | 7 | **La bibliothèque cherchée par le sens** | § 4.3 |
 | 8 | **Les mots et les composants partagés** : le [dictionnaire](../../standards/dictionnaire.md), puis la galerie du kit en trois paliers (le kit tel qu'il est ; les cartes et la permission ; la convergence des kits) | CrOliX, le 10/11 ; [plan](../plans/2026-11-10-galerie-kit.md) |

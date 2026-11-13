@@ -97,6 +97,6 @@
 | **l'inbox** | Les observations hors périmètre, gardées en issues pour plus tard | un journal |
 | **la recette** | L'essai d'un chantier par CrOliX, en conditions réelles | les tests |
 | **le rodage** | Une période d'usage quotidien qui éprouve l'ensemble | une recette |
-| **le serveur dédié** | La machine de la maison où tournera la prod après le rodage ([ADR 0012](../adr/0012-prod-machine-dediee.md)) | « le serveur » seul : celui auquel Lun'Luxuria est reliée, ou celui de la chaîne |
+| **la machine dédiée** | La machine de la maison où tournera la prod après le rodage ([ADR 0012](../adr/0012-prod-machine-dediee.md)) ; le mot est choisi par CrOliX le 13/11 | « le serveur dédié » ; « le serveur » seul : celui auquel Lun'Luxuria est reliée, ou celui de la chaîne |
 | **le NAS** | Le stockage de la maison : les copies et les fichiers | la prod |
 | **le kit** | Les composants de front communs, tenus dans lun-docs et recopiés | un composant propre à un projet |
