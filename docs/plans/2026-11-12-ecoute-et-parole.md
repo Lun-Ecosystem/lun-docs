@@ -7,6 +7,10 @@
 > **Validé par CrOliX le 12/11** (« je valide ») : les gardes à 15 s pour la transcription (confirmées par la tâche
 > 1) et 60 s jusqu'à la première phrase ; les sondages de `/voix/micro` qui s'empilent corrigés dans la tâche 2.
 >
+> **Amendé le 13/11.** La garde de transcription passe à 20 s, par la règle de la tâche 1. Deux défauts trouvés à la
+> relecture de la tâche 4, déjà sur `main`, entrent dans ce chantier (CrOliX, le 13/11) : I9 par une réponse en erreur
+> (tâche 4 bis) et I12, la file de sa voix bloquée par un fragment raté qui a reçu son numéro (tâche 5).
+>
 > **État : rédigé le 12/11, relu par le plan-challenger (« à amender »), amendé le 12/11.**
 > Le chantier « Écoute et parole » est validé dans son principe le 12/11 (« ok je valide »). Le manager l'a coupé en
 > deux, d'après le plan-challenger : ce plan-ci, sans décision produit sauf les valeurs des gardes, qui démarre à la
@@ -29,6 +33,8 @@ rien d'un tour jeté, et un arrêt à vide ne rouvre pas l'écoute de la pièce.
 - **I7** : un serveur injoignable garde la pièce « adressée » et remplit le déroulé.
 - **I9** : « réfléchit » reste allumé après un fragment que le serveur a refusé.
 - **I11** : sa voix synthétise encore les phrases d'un tour jeté, et la réponse suivante les attend.
+- **I12** (13/11) : un fragment dont l'envoi lève après son numéro laisse un tour retenu qui ne finit jamais ; plus
+  aucune réponse ne sonne ensuite.
 
 **Source :** l'audit en lecture de Lun'Luxuria du 12/11 sur `main` (`11eb3d1`), rendu en message, ses constats lus
 dans le code et jamais rejoués ; sa synthèse, § 2 « Écoute et parole ». Le plan-challenger, le 12/11, « à amender », et
@@ -151,6 +157,7 @@ le plan [des données et des taux](2026-11-12-donnees-et-taux.md).
 | I7, `link(false)` répété | gardé, corrigé à sa racine | c'est `stop()` à vide qui écrit et rouvre la fenêtre |
 | I9, « réfléchit » après un fragment raté | gardé, corrigé | seul `#unheard` garde la tentative morte |
 | I11, la file pour un tour jeté | gardé, en partie | sauter la synthèse, oui ; couper `/tts` ne libère rien |
+| I12, la file bloquée par un fragment raté | gardé (13/11) | vu à la sonde du relecteur : la réponse suivante ne sonne pas |
 | I8, lun-luxuria#63, M1 (#53), M2, M3 | au chantier suivant | ils demandent des choix sur le tour (voir la fin) |
 
 Écartés, avec leur raison :
@@ -220,7 +227,7 @@ session avec `openMicrophone` simulé (`mute.test.ts:3-7`), la conversation qui 
     une transcription arrivée après elle ne rappelle pas `#noAnswer` et n'envoie rien ; un `reply` arrivé après elle
     est oublié (`#forget`, `conversation.ts:303-307`).
   - **Un essai retiré** (`#dropAttempt`, `:432-439`) annule ses gardes.
-  - **La transcription** : 15 s, à confirmer par la mesure de la tâche 1 (une phrase de 30 s sur `faster:small`). À la
+  - **La transcription** : 20 s, d'après la mesure de la tâche 1 (une phrase de 30 s sur `faster:small`). À la
     garde, le chemin d'un échec de transcription (`:329-339`). Elle coupe aussi la requête : un signal passé à la
     dépendance `stt` et à `transcribe` (`voice.ts:14-15`), comme `local.ts:205`. La connexion du navigateur est rendue ;
     le service, lui, finit son calcul sous son verrou.
@@ -281,14 +288,18 @@ coupure passe par `cutSuspended` (`speaker.ts:261-283`), jamais par `stop()` à 
 Chaque tâche de code suit le même ordre : son test ou son scénario d'abord, vu rater sur `main`, le message d'échec
 collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, puis tout `npm test`.
 
-1. - [ ] **La mesure de la garde** (`testeur`, sur le laptop, hors dépôt). *Parallélisable.*
+1. - [x] **La mesure de la garde** (`testeur`, sur le laptop, hors dépôt). *Parallélisable.*
    - Le service seul (`uv run voix/service.py --stt faster:small --tts aucun`), au repos, sur secteur. Un son de 30 s de
      parole française : des prises de `banc-sons` mises bout à bout, ou une lecture d'Hortense. Cinq appels à `/stt`,
      leur durée ; puis le même sur `faster:tiny`.
    - Écrit ici, avec la valeur que la tâche 5 prend : 15 s si le plus long reste sous la moitié, sinon le double du plus
      long arrondi aux 5 s au-dessus, et CrOliX le sait avant la tâche 5.
    - Exclu : `medium` sur le processeur ; whisper-server (le desktop).
-2. - [ ] **Le micro** (`src/session.svelte.ts`, `src/audio.ts`, `dev-luxuria`). *Parallélisable.* I1, I2.
+   - **Mesuré le 13/11**, sur secteur, sans test ni build en cours ; un son de 32,7 s, huit prises de `banc-sons` mises
+     bout à bout. `faster:small` : 5,29, 4,51, 4,48, 5,56 et 6,71 s (chauffe 4,48). `faster:tiny` : 1,37 à 1,45 s.
+     Un premier passage, coupé avant d'être écrit, donnait 7,14 à 8,05 s sur `small`, sans cause trouvée. Le plus
+     long des deux, 8,05 s, dépasse la moitié de 15 s : la garde vaut **20 s** (le double, arrondi aux 5 s).
+2. - [x] **Le micro** (`src/session.svelte.ts`, `src/audio.ts`, `dev-luxuria`). *Parallélisable.* I1, I2.
    - D'abord, dans `mute.test.ts` : `mic.open` rend une promesse résolue à la main. (B) `toggleMute()` avant la
      résolution, puis la résolution : le `stop` du micro ouvert est appelé, `capturing` est faux ; de même avec
      `toggleMic()`. (A) Détection coupée, deux appels avant la résolution (`toggleMic` deux fois, ou `saveSettings`) :
@@ -298,14 +309,14 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
      appelé, l'erreur relevée.
    - Puis « Les choix », I1 et I2.
    - Exclu : changer `openMicrophone` au-delà du nettoyage ; la détection d'occupation ; WebView2.
-3. - [ ] **Sa voix** (`src/speech/speaker.ts`, `dev-luxuria`). *Parallélisable.* I7, I11.
+3. - [x] **Sa voix** (`src/speech/speaker.ts`, `dev-luxuria`). *Parallélisable.* I7, I11.
    - D'abord : `taire-a-vide` et `arrete-puis-question`, le compte de `scenarios.test.ts:29-31` à vingt ; dans
      `speaker.test.ts`, `stop()` sans rien en cours n'émet rien et n'écrit pas `silence`, et un tour jeté avec des
      phrases en file n'en synthétise aucune.
    - Puis « Les choix », I7 et I11. `speaker.test.ts:157-161` passe encore. Les motifs des mutations `f1` et `f2`
      (`tools/mutations.json`, `speaker.ts:239`, `:304`) restent trouvés une fois chacun.
    - Exclu : `core.ts`, la session ; un `AbortController` sur `/tts` ; élaguer `#gone`.
-4. - [ ] **Le fragment refusé** (`src/conversation.ts`, `dev-luxuria`). Après 3. I9.
+4. - [x] **Le fragment refusé** (`src/conversation.ts`, `dev-luxuria`). Après 3. I9.
    - D'abord : `Reponse.refus?: string` (`src/presence/scenario.ts:158-173`), que `FauxServeur.send` lève après
      `envoi_recu`, avant tout événement (`fakes.ts:167-171`), comme `CoreClient.send` sur une réponse refusée
      (`core.ts:58-62`) ; `pourquoiPas` écarte un scénario qui a un `refus`. `fragment-refuse`, le compte à vingt et un.
@@ -314,8 +325,17 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
      coupure, aucune retenue ensuite.
    - Puis « Les choix », I9. Les motifs des mutations `b` et `c` restent trouvés une fois chacun.
    - Exclu : renvoyer un fragment refusé comme phrase entière ; réessayer un envoi.
-5. - [ ] **Les gardes** (`src/conversation.ts`, `src/voice.ts`, `src/session.svelte.ts`, `dev-luxuria`). Après 1, 2
-   et 4. I6.
+
+4 bis. - [ ] **La réponse en erreur d'un fragment** (`src/conversation.ts`, `dev-luxuria`). Après 4. I9 par un second
+   chemin, trouvé à la relecture de la tâche 4 (13/11).
+   - D'abord, dans `conversation.test.ts` : un fragment dont la réponse finit en erreur (`done`, `status: 'error'`)
+     avant la fin de phrase ; « réfléchit » éteint en dernier, un seul `sans_reponse`, aucune retenue à la parole
+     suivante. Vu rater sur `main`.
+   - Puis le correctif : `#onTurn` (`:412-420`) écrit déjà `sans_reponse` ; `#commit` ne remet plus la tentative dans
+     `#unheard` et ne rallume pas « réfléchit », sans écrire `sans_reponse` une seconde fois.
+   - Exclu : le message « Sa réponse n'est pas venue », affiché dès le refus d'un fragment (`:394`), en `inbox`.
+5. - [ ] **Les gardes** (`src/conversation.ts`, `src/voice.ts`, `src/session.svelte.ts`, `dev-luxuria`). Après 1, 2,
+   4 et 4 bis. I6 et I12.
    - D'abord : `transcription-figee`, `transcription-lente`, `reponse-figee`, le compte à vingt-quatre. Dans
      `conversation.test.ts`, horloge fausse : une transcription qui ne répond jamais (« réfléchit » éteint en
      dernier, un `failed`, le signal de `stt` coupé) ; un envoi sans première phrase (« réfléchit » éteint, la
@@ -326,6 +346,10 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
      (`session.svelte.ts:247`) ; `pourquoiPas` écarte une `transcriptionMs` ou un `premierMotMs` au-delà de leur
      garde. Les motifs de `b` et `c` restent trouvés une fois chacun.
    - Exclu : `core.ts` ; le service ; les sondages de `/voix/micro`, sauf décision (« Les choix qui restent »).
+   - **I12** (13/11), dans la même tâche : une tentative dont l'envoi a levé après son numéro ne retient pas la file
+     de sa voix plus longtemps que la garde de la réponse ; passée la garde sans phrase, son tour finit
+     (`speaker.ts:180`) et la réponse suivante sonne. Test dans `conversation.test.ts`, horloge fausse : le flux coupé
+     après `user` et `reply`, la parole suivante a sa réponse et elle sonne. Vu rater sur `main`.
 6. - [ ] **Relecture** (`reviewer`). Après chaque tâche 2 à 5, sur son diff, contre ses critères ; puis le diff entier
    avant la PR. Un écart revient à sa tâche.
 7. - [ ] **Les mutations et les suites** (`testeur`). Après 2 à 6.
