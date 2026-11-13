@@ -239,7 +239,7 @@ session avec `openMicrophone` simulé (`mute.test.ts:3-7`), la conversation qui 
   conditionnelle : si une phrase d'elle est montrée depuis son dernier `silent` (`#shown`, posé au `subtitle`, retiré
   au `silent` ; sur la branche, `speaker.ts:66-67`), ou si un tour était suspendu (`:303`) ; jamais sur le drapeau
   `cut`. Pas `speaking` : entre deux tours, ou après des mots montrés sans voix, la page la montre encore alors que
-  `speaking` est faux (`935e32f`, `speaker.test.ts:183-205`). `speaker.test.ts:157-161` passe encore. Ni `core.ts` ni
+  `speaking` est faux (`25c8af3`, `speaker.test.ts:183-205`). `speaker.test.ts:157-161` passe encore. Ni `core.ts` ni
   la session ne changent.
 - **I9.** Un fragment dont l'envoi a échoué finit comme une phrase entière dont l'envoi a échoué (`:378-391`) : coupée
   par `#supersede`, la phrase était pour elle ; « réfléchit » éteint ; `sans_reponse` ; il ne reste pas dans
@@ -247,7 +247,7 @@ session avec `openMicrophone` simulé (`mute.test.ts:3-7`), la conversation qui 
 - **I11.** `#oneClip` rend `null` sans synthèse pour un tour de `#gone`, sans rien écrire ni signaler d'échec. Une
   synthèse déjà commencée finit.
 - **Les écarts acceptés à l'exécution**, aux relectures des tâches 4 bis et 5. Les lignes sont celles de la branche à
-  `01780fe`.
+  `7ac8d50`.
   - **4 bis.** La tentative passe encore par `#awaits`, puis rend la place à celle d'avant (la tâche le dit). `setup`
     reçoit une `Trace`.
   - **La garde du serveur est un minuteur à part**, posé à l'envoi (`conversation.ts:420-422`), pas une course contre
@@ -261,12 +261,12 @@ session avec `openMicrophone` simulé (`mute.test.ts:3-7`), la conversation qui 
     retenait plus que sa voix, est coupé par `#forget` (I12).
   - **`pourquoiPas` et `>=`** : la chaîne écarte une `transcriptionMs` ou un `premierMotMs` égal à sa garde ou au-delà
     (`chaine.test.ts:139-140`), pas seulement au-delà.
-  - **Le commit du test, rouge au typecheck** : `101313e` passe un signal à `transcribe`, qui ne le prend qu'avec le
+  - **Le commit du test, rouge au typecheck** : `963a5fb` passe un signal à `transcribe`, qui ne le prend qu'avec le
     correctif ; `npm run typecheck` n'y passe pas. Sans effet après le squash.
   - **L'essai retiré ne coupe pas sa requête de transcription.** `#dropAttempt` appelle `#answered` (`:502`), qui
     éteint le seul minuteur `guard`, celui de la transcription compris. Ses gardes sont annulées, comme prévu, mais sa
     requête `/voix/stt` reste ouverte jusqu'à la réponse du service, même au-delà de 20 s.
-  - **Le correctif de `#supersede`** (`060651d`, `01780fe`). Remplacer une phrase appelait `#answered` sur elle, qui
+  - **Le correctif de `#supersede`** (`7435dc5`, `7ac8d50`). Remplacer une phrase appelait `#answered` sur elle, qui
     éteignait aussi sa garde de transcription : une phrase retenue pendant sa transcription, puis remplacée,
     n'échouait plus jamais. `#supersede` n'éteint plus que la garde d'une phrase qui attend sa réponse (`:322`).
 
@@ -362,8 +362,8 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
      pour libérer une réponse d'avant qu'elle remplace, puis rend la place à celle d'avant (corrigé à la relecture :
      sans ce passage, la réponse d'avant reste retenue ; un test le fige).
    - Exclu : le message « Sa réponse n'est pas venue », affiché dès le refus d'un fragment (`:394`), en `inbox`.
-   - Commits : `aee64da` le test, `377bd2a` le correctif ; à la relecture, `2b8de62` le test de la réponse remplacée et
-     `98d89e9` les commentaires.
+   - Commits : `28dec5a` le test, `56d8a97` le correctif ; à la relecture, `cfdd8e0` le test de la réponse remplacée et
+     `1819731` les commentaires.
 5. - [x] **Les gardes** (`src/conversation.ts`, `src/voice.ts`, `src/session.svelte.ts`, `dev-luxuria`). Après 1, 2,
    4 et 4 bis. I6 et I12.
    - D'abord : `transcription-figee`, `transcription-lente`, `reponse-figee`, le compte à vingt-quatre. Dans
@@ -382,11 +382,13 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
      après `user` et `reply`, la parole suivante a sa réponse et elle sonne. Vu rater sur `main`.
      Si la même garde couvre aussi un tour relâché après une réponse en erreur dont la fin de parole ne vient pas
      (relecture de la tâche 4 bis), elle le couvre, avec son test ; sinon, ce cas va à l'`inbox`.
-   - Commits : `101313e` les tests et les scénarios, `f2eafdf` le correctif ; à la relecture, `060651d` le test et
-     `01780fe` le correctif de `#supersede` (« Les choix », les écarts).
-   - Écrit aussi, à la relecture : une retenue morte, après la garde du serveur, rallumait « réfléchit » sans fin. Le
-     correctif coupe le lien de la phrase suivante vers la tentative sans réponse. Il couvre aussi la réponse en erreur
-     et l'envoi qui lève, ce dernier venu de `main`. Commits : `<à venir>`.
+   - Commits : `963a5fb` les tests et les scénarios, `f689883` le correctif ; à la relecture, `7435dc5` le test et
+     `7ac8d50` le correctif de `#supersede` (« Les choix », les écarts).
+   - Écrit aussi, à la relecture : une retenue morte, après la garde du serveur, rallumait « réfléchit » sans fin. Une
+     tentative sans réponse, remplacée ou entendue ne sortait de la file des réponses non entendues qu'à ses deux
+     premiers rangs. Le correctif l'en sort à n'importe quel rang ; il couvre aussi la réponse en erreur et l'envoi qui
+     lève, ce dernier venu de `main`. Commits : `1a17fcb` et `4866d56` les tests, `055a340` et `e684267` les
+     correctifs.
 6. - [ ] **Relecture** (`reviewer`). Après chaque tâche 2 à 5, sur son diff, contre ses critères ; puis le diff entier
    avant la PR. Un écart revient à sa tâche.
 7. - [ ] **Les mutations et les suites** (`testeur`). Après 2 à 6.
@@ -421,7 +423,7 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
 
 Chaque test et chaque scénario a été vu rater sur `main` (`11eb3d1`), avant son correctif, sauf où une autre base est
 dite. Les messages sont ceux de Vitest, sans la ligne qui les situe : elle date de la version du test d'alors. Les
-lignes données ici sont celles de la branche à `01780fe`.
+lignes données ici sont celles de la branche à `7ac8d50`.
 
 - **I1**, `src/mute.test.ts:198-233`.
   - (B) `toggleMute`, puis `toggleMic`, pendant l'ouverture, le même message (le `stop` du micro ouvert) :
@@ -431,7 +433,7 @@ lignes données ici sont celles de la branche à `01780fe`.
   Contre le correctif sans son `.finally`, le drapeau jamais remis à faux, le même test rate :
   `expected [ [ '/voix/micro' ] ] to have a length of 2 but got 1`.
 - **I2**, `src/audio.test.ts:46-68`. `addModule` qui rejette, le nœud qui lève et le contexte qui refuse, le même
-  message (le `stop` des pistes) : `expected "vi.fn()" to be called at least once`. L'URL du worklet, avant `2d61508` :
+  message (le `stop` des pistes) : `expected "vi.fn()" to be called at least once`. L'URL du worklet, avant `8900d04` :
   `expected "revokeObjectURL" to be called with arguments: [ Array(1) ]`, `Number of calls: 0`.
 - **I6**, `src/conversation.test.ts:788-844` et `:863-887`, `src/voice.test.ts:15-24`, trois scénarios.
   - Une transcription qui ne répond jamais, puis un envoi sans première phrase, le même message :
@@ -440,7 +442,7 @@ lignes données ici sont celles de la branche à `01780fe`.
   - Le signal passé à `fetch` : `expected undefined to be AbortSignal { aborted: false } // Object.is equality`.
   - Un essai retiré : il passe sur `main`, qui n'a aucune garde à déclencher. Il rate sur une variante du correctif
     sans `#answered` dans `#dropAttempt` : `expected [ 'withdraw 10', 'cut 110 ""' ] to deeply equal [ 'withdraw 10' ]`.
-  - Une phrase retenue pendant sa transcription, puis remplacée, sur `f2eafdf` (relecture de la tâche 5) :
+  - Une phrase retenue pendant sa transcription, puis remplacée, sur `f689883` (relecture de la tâche 5) :
     `expected [] to have a length of 1 but got +0`.
   - `reponse-figee` : 1 tenue, 4 ratées. `transcription-figee` : 2 tenues, 3 ratées, 1 non jouée.
     `transcription-lente` : 1 tenue, 4 ratées, 1 non jouée ; `aucun-verdict` et `rien-ne-part` en trop à 28424.
@@ -452,7 +454,7 @@ lignes données ici sont celles de la branche à `01780fe`.
     `expected { type: 'thinking', on: true } to deeply equal { type: 'thinking', on: false }`.
   - `fragment-refuse` : 3 tenues, 3 ratées ; `sans-reponse` et `sans-reponse-a-la-fin` absentes, `rien-de-retenu` en
     trop.
-  - Une réponse retenue, remplacée par un fragment dont la réponse rate (relecture de la tâche 4 bis), sur `6d9b665`,
+  - Une réponse retenue, remplacée par un fragment dont la réponse rate (relecture de la tâche 4 bis), sur `161510a`,
     avant le correctif, et sur la variante du plan sans `#awaits` :
     `expected [ { par: 1, at: 1000, …(4) }, …(1) ] to have a length of 1 but got 2`.
 - **I11**, `arrete-puis-question` et `src/speech/speaker.test.ts:207-228`.
@@ -462,7 +464,7 @@ lignes données ici sont celles de la branche à `01780fe`.
     pour `[2000, 2032]`).
 - **I12**, `src/conversation.test.ts:846-861` : `expected [] to have a length of 1 but got +0`.
 
-Tenus après les correctifs, à `01780fe` : 712 tests réussis, 27 ignorés ; vingt-quatre scénarios, deux fois à
+Tenus après les correctifs, à `7ac8d50` : 712 tests réussis, 27 ignorés ; vingt-quatre scénarios, deux fois à
 l'identique, 136 tenues, 0 ratée, 1 connue, celle de `toux-puis-parole`, d'avant ce chantier. Les déroulés des
 dix-huit anciens sont ceux de `main`, octet pour octet.
 
