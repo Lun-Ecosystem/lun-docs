@@ -352,6 +352,8 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
      de sa voix plus longtemps que la garde de la réponse ; passée la garde sans phrase, son tour finit
      (`speaker.ts:180`) et la réponse suivante sonne. Test dans `conversation.test.ts`, horloge fausse : le flux coupé
      après `user` et `reply`, la parole suivante a sa réponse et elle sonne. Vu rater sur `main`.
+     Si la même garde couvre aussi un tour relâché après une réponse en erreur dont la fin de parole ne vient pas
+     (relecture de la tâche 4 bis), elle le couvre, avec son test ; sinon, ce cas va à l'`inbox`.
 6. - [ ] **Relecture** (`reviewer`). Après chaque tâche 2 à 5, sur son diff, contre ses critères ; puis le diff entier
    avant la PR. Un écart revient à sa tâche.
 7. - [ ] **Les mutations et les suites** (`testeur`). Après 2 à 6.
