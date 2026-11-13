@@ -133,12 +133,14 @@ tailscale serve status                       # les trois adresses https://<machi
 
 La nuit tourne à 5 h. Pendant le rodage, le desktop reste allumé : mise en veille sur « Jamais » dans l'alimentation de
 Windows, veille prolongée désactivée. En mise en veille, les trois serveurs s'arrêtent tous, le tri, les rappels et les
-copies compris. Au réveil, chacun reprend, mais le rattrapage ne rejoue que la nuit (et la lettre du matin) : une nuit
-manquée est jouée une fois, dans la minute qui suit le réveil ou le démarrage suivant (sauf `ROUTINES_CATCHUP=0` dans
-le `.env` du core). Un rappel d'Acedia dû pendant la mise en veille ne part plus, passé un quart d'heure.
+copies compris. Au réveil, chacun reprend où il en était : le tri reprend sa file, les copies se rattrapent dans
+l'heure, les lots d'Avaritia repartent, et une nuit manquée, comme la lettre du matin, est jouée une fois dans la minute
+qui suit. Seuls se perdent les rappels d'Acedia dus depuis plus d'un quart d'heure. Après un démarrage, la nuit manquée
+est jouée de même, sauf `ROUTINES_CATCHUP=0` dans le `.env` du core, qui saute les créneaux déjà dus, au démarrage
+seulement.
 
 Les copies ne dépendent pas de la nuit : le core, Acedia et Avaritia copient chacun leur base, sans heure fixe, dès
-qu'ils écoutent, puis chaque heure si la copie du jour manque. Un poste éteint la nuit se rattrape donc à son
+qu'ils écoutent, puis chaque heure si la copie du jour manque. Le desktop éteint la nuit se rattrape donc à son
 démarrage, ou dans l'heure qui suit son réveil, et une pause n'arrête pas la copie.
 
 ## 8. Vérifier
@@ -152,11 +154,14 @@ démarrage, ou dans l'heure qui suit son réveil, et une pause n'arrête pas la 
   la base ratée »). Une copie ratée arrive aussi au Journal de l'app, au nom de son poste, une fois par jour au plus,
   et au téléphone : celle d'un satellite, s'il est relié au core.
 - Pendant le rodage, aucune copie ne quitte le desktop : un disque perdu emporte la base et ses copies, qui ne sont pas
-  chiffrées. Pour en garder une ailleurs, le NAS tire lui-même les dossiers `backups\` : un réglage du NAS, sans code,
-  qui dit lui-même ses échecs.
+  chiffrées. Pour en garder une ailleurs, le NAS tire lui-même les dossiers `backups\`, par un partage Windows de
+  chacun : un réglage du NAS, sans code, qui dit lui-même ses échecs. Il ne prend que les fichiers
+  `<nom>-AAAA-MM-JJ.db` : chaque copie s'écrit d'abord dans un `.<nom>-copie.tmp` du même dossier, qu'il emporterait à
+  moitié écrit.
 - Un serveur arrêté sur une erreur laisse l'erreur et sa pile à son journal du jour, juste avant la ligne du lanceur.
-  Celui du core le dit aussi au Journal et au téléphone (« Le core s'est arrêté sur une erreur »), une fois par jour au
-  plus. Celui d'un satellite ne se lit qu'à son journal du jour, et au core s'il reste injoignable 15 min (« … ne
+  Celui du core le dit aussi au Journal, et au téléphone une fois le core relancé (« Le core s'est arrêté sur une
+  erreur »), une fois par jour au plus : un core qui tombe à chaque démarrage n'envoie rien au téléphone. Celui d'un
+  satellite ne se lit qu'à son journal du jour, et au core s'il reste injoignable 15 min (« … ne
   répond plus depuis plus de 15 minutes », au Journal et au téléphone). Un lot d'Avaritia en échec se voit à
   l'activité récente de son tableau de bord (« Lot en échec »), et nulle part ailleurs.
 - La Constellation : le core, Acedia et Avaritia joignables, Luxuria présente.
@@ -165,11 +170,11 @@ démarrage, ou dans l'heure qui suit son réveil, et une pause n'arrête pas la 
 ## 9. Arrêter, mettre à jour, retirer
 
 - **Arrêter un serveur** : `Stop-ScheduledTask 'Lun core'` (puis `Start-ScheduledTask` pour le relancer). La tâche
-  arrêtée, rien ne relance le serveur.
+  arrêtée, rien ne relance le serveur jusqu'au prochain démarrage de Windows, où la tâche repart d'elle-même.
 - **Le lanceur ne lâche pas** un serveur tombé en erreur, le core comme Acedia et Avaritia : il le relance trois fois à
   60 s d'écart, puis une fois toutes les 15 min, sans fin. Un serveur qui a tourné plus de 10 min avant de tomber
   retrouve ses trois relances rapides. Chaque chute et chaque relance, avec son délai, ont leur ligne au journal du
-  jour (§ 8). Dans le Planificateur, la tâche reste « en cours » tant que le lanceur tourne, même pendant qu'il
+  jour (§ 8). Dans le Planificateur, la tâche reste « En cours d'exécution » tant que le lanceur tourne, même pendant qu'il
   attend : le journal du jour et la Constellation disent si le serveur répond.
 - **Mettre à jour** : `.\mettre-a-jour.ps1 -Service D:\lun-service` (`-WhatIf` d'abord). Il refuse une copie hors de
   `main` ou modifiée à la main ; sinon, dépôt par dépôt : arrêt, `git pull --ff-only`, `npm ci`, build, relance.
@@ -267,6 +272,7 @@ Les jetons des appareils sont hachés, pas chiffrés : ils ne dépendent d'aucun
 - Les notifications de Windows, si elles sont coupées (`ToastEnabled = 0` dans le registre de l'utilisateur).
 - Le pare-feu du service de conversion de voix, s'il écoute au-delà de la boucle locale.
 - Le `tailscale serve` de chaque appli (§ 6), qui survit aux redémarrages une fois posé avec `--bg`.
+- Le partage Windows des dossiers `backups\`, si le NAS tire les copies (§ 8).
 
 ## 11. Rien ne force le terminal pendant la semaine
 
@@ -283,7 +289,7 @@ qui pourrait le redemander a sa réponse sans terminal, en place ou à mettre av
 | Un navigateur qui perd son jeton | Un autre appareil relié lui donne un code ; sans lui, seul `npm run pair-code` en donne un | à mettre : garder le téléphone relié à chaque app |
 | La clé d'un fournisseur qui arrive à échéance | Son échéance, déclarée dans l'écran, prévient à J-14 puis J-3 ; la clé se remplace depuis le même écran | à mettre : déclarer l'échéance de chaque clé, aucune base neuve n'en a |
 | Un modèle sans prix chez Acedia ou Avaritia (Mistral Small et Medium n'en ont pas) | Son coût est compté 0 : les dépenses le taisent, et aucun plafond ne le retient. Choisir un modèle qui a un prix, ou mettre le sien dans le `.env` du service, `LLM_PRICES={"mistral/mistral-small-latest":[entrée, sortie]}`, en dollars par million de jetons, puis relancer sa tâche | à mettre : un prix pour chaque modèle utilisé, avant le rodage |
-| Chez Acedia, un refus de l'IA qui vaut pour tous les mails, un mauvais réglage du modèle par exemple (une erreur 4xx autre qu'une clé refusée, un crédit épuisé, 408 ou 429) | Voulu : chaque passe du tri s'arrête au premier mail, et toutes les trois passes un mail sort de la file, à trier à la main, avec sa ligne au journal du jour. Corriger le réglage dans Réglages ; les mails déjà sortis restent à trier à la main | en place |
+| Chez Acedia, un refus de l'IA qui vaut pour tous les mails, un mauvais réglage du modèle par exemple (une erreur 4xx autre qu'une clé refusée, un crédit épuisé, 408 ou 429) | Voulu : chaque passe du tri s'arrête au premier mail qui demande l'IA (les règles passent avant elle), et toutes les trois passes un mail sort de la file, à trier à la main, avec sa ligne au journal du jour. Corriger le réglage dans Réglages ; les mails déjà sortis restent à trier à la main | en place |
 | Chez Avaritia, un lot retenu après un tri déjà payé, sa rédaction en échec | Voulu, pour ne pas repayer le tri chaque heure : il ne repart qu'au bout d'un jour, vers +25 h, même si la clé a été corrigée entre-temps. Aucune relance d'un lot à la main n'existe. Les autres lots retenus repartent dans l'heure où leur fournisseur revient ou leur plafond se lève | en place |
 | Un correctif à passer en cours de semaine | `mettre-a-jour.ps1`, dans un PowerShell administrateur (§ 9) | terminal, pour un correctif voulu seulement |
 | Un correctif de Luxuria | Quitter Luxuria, reconstruire, recopier l'exe au même endroit (§ 5, étape 1) : `mettre-a-jour.ps1` ne le fait pas | terminal, pour un correctif voulu seulement |
