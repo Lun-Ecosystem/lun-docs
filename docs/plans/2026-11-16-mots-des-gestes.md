@@ -3,7 +3,7 @@
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
 > **Issues :** une issue chapeau à ouvrir dans lun-luxuria (voir la fin) ; lun-luxuria#6. Lun'Anima : 4 tâches,
-> lun-anima#110 (issue privée, à ouvrir).
+> lun-anima#110 (issue privée).
 >
 > **État : rédigé le 16/11, amendé le même jour après le plan-challenger, à valider par CrOliX.** Le challenger a
 > vérifié la relecture du 10/11 dans le relevé et dans le code. L'amendement sépare le banc de ce chantier, mesure le
@@ -58,7 +58,7 @@ mesure, la règle. Le banc de présence (#67 à #75) est un autre chantier (« H
 | Dépôt, branche | Issue | PR | Niveau |
 |---|---|---|---|
 | `lun-luxuria`, `feat/mots-des-gestes` | chapeau à ouvrir ; #6 | à ouvrir | `standard` |
-| `lun-anima` | Lun'Anima : 4 tâches, lun-anima#110 | à ouvrir | `critique` |
+| `lun-anima` | Lun'Anima : 4 tâches, lun-anima#110 | ouverte | `critique` |
 | `lun-docs`, `docs/banc-et-gestes` | la chapeau de lun-luxuria | à ouvrir | `trivial` |
 
 `standard` pour Lun'Luxuria : un outil de mesure sur le modèle de `npm run banc`, aucun code de la page. `critique`
