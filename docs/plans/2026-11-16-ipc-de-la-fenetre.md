@@ -496,7 +496,9 @@ chantier :
      fenêtre. Si la tâche 15 voit un autre ordre ou un autre bouton d'Entrée, le `CLAUDE.md` le dit.
    - Confirmés : gardés dans `arguments.json`, à côté de `programmes.json`. Une clé absente : jamais confirmés ; une
      liste vide : confirmée vide. Un autre exe choisi pour ce nom fait tomber sa confirmation ; le même exe rechoisi la
-     garde (décidé pendant la tâche, côté prudent).
+     garde (décidé pendant la tâche, côté prudent). `checked_args` refuse un caractère de contrôle ou de format bidi
+     ou invisible dans un argument : la boîte doit montrer exactement ce qui part, un argument par ligne (vu pendant
+     la tâche ; vaut aussi pour le service voix).
    - `program_start` ne prend plus `args` : il lance l'exe gardé avec les arguments confirmés ; jamais confirmés :
      « Confirme d'abord ses arguments. », et rien ne part. « Déjà lancé avec ces arguments » (`:132`) compare aux
      confirmés.
