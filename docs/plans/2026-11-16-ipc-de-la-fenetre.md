@@ -674,10 +674,12 @@ chantier :
     - Barrières : `npm run format:check` ; la surface publique.
     - Exclu : l'interface du serveur compatible (lun-luxuria#79, le troisième point).
 
-14. - [ ] **Ce qui est renvoyé** (la session). Critère 4. Dès la validation : pour chaque choix que CrOliX renvoie au
+14. - [x] **Ce qui est renvoyé** (la session). Critère 4. Dès la validation : pour chaque choix que CrOliX renvoie au
     lieu de le faire, une issue lun-luxuria, `niveau:critique`, qui reprend son option telle qu'écrite ici, ses tâches
     et leurs pièges. Son lien entre dans le `CLAUDE.md` (tâche 13) et dans la PR. Rien de renvoyé : la case se coche
     avec cette mention.
+
+    Fait le 16/11 : rien de renvoyé, CrOliX a validé les cinq choix tels que recommandés.
 
 15. - [ ] **La preuve dans l'exe** (CrOliX). Critère 6. En dernier.
     - L'exe : `npm run tauri build -- --no-bundle`, lancé depuis l'Explorateur. Lancé par un agent, ses données iraient
