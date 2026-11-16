@@ -1,40 +1,39 @@
 # Mettre le desktop en service
 
-La liste à suivre le jour où le core, Acedia et Avaritia passent sur le desktop pour de bon : lancés au démarrage de
-Windows sans fenêtre, joints par le téléphone en HTTPS, chaque base copiée une fois par jour. Spec :
-[`specs/2026-11-07-poste-autonome-design.md`](specs/2026-11-07-poste-autonome-design.md). Les scripts sont dans
-`lun-anima/deploy/windows/` (leur `LISEZMOI.md` dit ce que fait chacun).
+Ce que CrOliX voit et fait, dans l'ordre, le jour où le core, Acedia et Avaritia passent sur le desktop pour de bon :
+lancés au démarrage de Windows sans fenêtre, joints par le téléphone en HTTPS, chaque base copiée une fois par jour.
+Spec : [`specs/2026-11-07-poste-autonome-design.md`](specs/2026-11-07-poste-autonome-design.md).
+
+**Le détail du déploiement est dans le dépôt du core, [lun-anima](https://github.com/Lun-Ecosystem/lun-anima)
+(privé)**, page « Mettre le desktop en service » : l'installation et ses scripts, les commandes, les chemins, sa base
+et sa restauration. Cette page n'en garde que ce qui se voit.
 
 Tout ce qui touche au système (tâches planifiées, pare-feu, Tailscale, registre) se fait à la main, dans l'ordre
-ci-dessous. Aucune adresse du tailnet ni aucun nom de machine n'entre dans un dépôt : ils restent dans les `.env` et dans
-l'app.
+ci-dessous. Aucune adresse du tailnet ni aucun nom de machine n'entre dans un dépôt : ils restent dans les `.env` et
+dans l'app.
 
 ## 1. Avant
 
-- Node 24, `uv` et Git dans le `PATH` (`node -v`, `uv --version`, `git --version`).
+- Node 24, `uv` et Git installés sur le desktop.
 - Tailscale installé et connecté sur le desktop et sur le téléphone, HTTPS activé pour le tailnet.
-- Les trois dépôts de travail à jour sur `main` (l'installation clone depuis leur `origin`).
+- Les dépôts de travail à jour sur `main`.
 - Les serveurs de développement du desktop arrêtés : les ports 8788 (core), 8787 (Acedia) et 8789 (Avaritia) doivent
   être libres. L'installation refuse un port déjà écouté et n'arrête rien elle-même.
-- Un dossier de service choisi, hors des dépôts de travail, par exemple `D:\lun-service`.
+- Un dossier de service choisi, hors des dépôts de travail : le core, Acedia et Avaritia y tournent depuis leurs
+  propres clones, jamais depuis le dossier de travail.
 
 ## 2. Installer
 
-Dans un PowerShell **administrateur**, depuis `lun-anima\deploy\windows` d'une copie de travail :
+L'installation se lance dans un PowerShell **administrateur** et dit d'abord ce qu'elle ferait, sans rien faire. Elle
+crée une tâche planifiée par serveur, `Lun core`, `Lun Acedia` et `Lun Avaritia` : lancées au démarrage de Windows,
+sans fenêtre, sans mot de passe gardé. Son mode d'emploi est dans le dépôt du core.
 
-```powershell
-.\installer.ps1 -Service D:\lun-service -Travail "<dossier des dépôts>" -WhatIf
-```
-
-Le mode `-WhatIf` clone et construit pour de faux, et dit ce qu'il ferait : les clones, les `npm ci`, les builds et les
-trois tâches (au démarrage, compte courant en S4U, sans limite de durée). Tant que les dépôts ne sont pas clonés, il
-saute leurs `.env`.
-
-1. Lancer une fois sans `-WhatIf` : il clone les trois dépôts, puis refuse faute de `.env`.
-2. Poser un `.env` dans chacun des trois dépôts du service, depuis leur `.env.example`. Le `DB_PATH` reste dans le
-   dossier de service (le défaut `data/...` convient) ; un `DB_PATH` qui en sort est refusé. Chez Acedia et Avaritia,
-   un modèle sans prix y reçoit le sien (§ 11, « Un modèle sans prix »).
-3. Choisir les bases (§ 3), puis relancer : les builds, puis les tâches `Lun core`, `Lun Acedia`, `Lun Avaritia`, lancées
+1. La lancer pour de bon une première fois : elle clone les trois dépôts dans le dossier de service, puis s'arrête
+   faute de `.env`.
+2. Poser un `.env` dans chacun des trois dépôts du service, depuis leur `.env.example`. Chaque base reste dans le
+   dossier de service : une base ailleurs est refusée. Chez Acedia et Avaritia, un modèle sans prix y reçoit le sien
+   (§ 11, « Un modèle sans prix »).
+3. Choisir les bases (§ 3), puis relancer l'installation : elle construit, crée les trois tâches et les lance
    aussitôt.
 
 ## 3. Les bases qui entrent en service
@@ -42,43 +41,40 @@ saute leurs `.env`.
 **Question ouverte, à trancher ce jour-là.** L'installation n'apporte aucune base.
 
 - **Trois bases neuves** (le défaut) : le service démarre vide dans son dossier.
-  - `anima.db` vide : la mémoire de la relation, le tempérament et le fil repartent de zéro ;
-  - `acedia.db` vide : Acedia se resynchronise depuis Google, mais ses règles de tri et ses cartes repartent de zéro ;
-  - `avaritia.db` vide : le wiki repart de zéro.
+  - celle du core : les souvenirs de Natsume, son tempérament et le fil repartent de zéro ;
+  - `acedia.db` : Acedia se resynchronise depuis Google, mais ses règles de tri et ses cartes repartent de zéro ;
+  - `avaritia.db` : la bibliothèque repart de zéro.
 - **Des bases existantes copiées** (celles du laptop ou du desktop), avant le premier démarrage, serveurs arrêtés :
-  - prendre une copie cohérente : soit une copie du jour, en un seul fichier (`backups/anima-AAAA-MM-JJ.db`,
-    `acedia-…`, `avaritia-…`, à côté de chaque base), soit la base de son serveur arrêté, avec ses fichiers `-wal` et
-    `-shm` s'il y en a ;
-  - la copier au chemin du `DB_PATH` du service, ses fichiers `-wal` et `-shm` à côté, sous le même nom ;
-  - une `anima.db` copiée exige le **même `ANIMA_SECRET_KEY`** dans le `.env` du service que là d'où elle vient, sinon
-    les jetons des satellites et la clé du modèle ne se déchiffrent plus ; la clé qui va avec chaque base est au § 9,
-    « Restaurer une copie ».
+  - prendre une copie cohérente : soit une copie du jour, en un seul fichier (`backups/acedia-AAAA-MM-JJ.db`,
+    `avaritia-…`, à côté de chaque base), soit la base de son serveur arrêté, avec ses fichiers `-wal` et `-shm` s'il
+    y en a ;
+  - la copier au chemin de la base du service, ses fichiers `-wal` et `-shm` à côté, sous le même nom ;
+  - une base copiée exige la **même clé** dans le `.env` du service que là d'où elle vient, sinon ses secrets ne se
+    déchiffrent plus : la clé qui va avec chaque base est au § 9, « Restaurer une copie ». Celle du core : dans son
+    dépôt.
 
-## 4. Relier les satellites
+## 4. Relier Acedia et Avaritia
 
-Depuis `D:\lun-service\lun-anima`, une fois les trois serveurs lancés :
+Une fois les trois serveurs lancés, dans l'app du core (`http://127.0.0.1:8788`) : Ctrl K, « Relier un poste ». Son
+adresse locale, `http://localhost:8787` pour Acedia ou `http://127.0.0.1:8789` pour Avaritia, puis le code que donne le
+satellite, dans Réglages › Appareils et applications › Relier un appareil, valable 10 minutes. Avec une base neuve,
+aucun appareil n'est encore appairé au satellite : `npm run pair-code`, dans son dossier de service, donne le code de
+son premier navigateur. Le recours en terminal du core est dans son dépôt.
 
-```powershell
-npm run connect -- http://localhost:8787
-npm run connect -- http://127.0.0.1:8789
-```
-
-Chaque commande ouvre la page d'autorisation du satellite dans le navigateur. Avec une base Acedia neuve, refaire
-ensuite la connexion Google dans Acedia (`http://localhost:8787`) : son adresse de retour reste valable, c'est le même
-port.
+Avec une base Acedia neuve, refaire ensuite la connexion Google dans Acedia (`http://localhost:8787`) : son adresse de
+retour reste valable, c'est le même port.
 
 ## 5. Appairer Luxuria
 
 1. **Construire et poser l'exe.** Dans `lun-luxuria` à jour sur `main` : `npm ci`, puis
    `npm run tauri build -- --no-bundle`. Copier `src-tauri\target\release\lun-luxuria.exe` dans un dossier qui ne
-   bouge pas, par exemple `D:\lun-service\luxuria\`, et le lancer **depuis là**. « Démarrer avec Windows » retient le
-   chemin de l'exe qui l'active : depuis `target\release`, une reconstruction ou un nettoyage du dépôt le casserait. Les
-   réglages et l'appairage ne dépendent pas de cet emplacement. Mettre à jour : quitter Luxuria, reconstruire, recopier
-   l'exe au même endroit.
+   bouge pas, par exemple un dossier `luxuria` du dossier de service, et le lancer **depuis là**. « Démarrer avec
+   Windows » retient le chemin de l'exe qui l'active : depuis `target\release`, une reconstruction ou un nettoyage du
+   dépôt le casserait. Les réglages et l'appairage ne dépendent pas de cet emplacement. Mettre à jour : quitter
+   Luxuria, reconstruire, recopier l'exe au même endroit.
 2. **Appairer, par l'écran.** Dans l'app du core, Atelier > Appareils > « Ajouter un appareil » : un code à six
    chiffres, valable quelques minutes. Dans Luxuria : « Relié à un serveur », puis le code. L'adresse par défaut,
-   `http://127.0.0.1:8788`, est celle du core sur ce poste. Recours en terminal, depuis `D:\lun-service\lun-anima` :
-   `npm run pair-code`.
+   `http://127.0.0.1:8788`, est celle du core sur ce poste.
 3. **Sa voix**, dans Réglages > Voix, par des champs nommés (aucune ligne d'arguments à écrire) :
    - « Lancer le service voix avec l'appli », et le dossier qui contient `service.py` ;
    - Transcription : « Locale » (un modèle chargé dans le service) ou « whisper-server » et son adresse ;
@@ -113,8 +109,8 @@ port.
 ## 6. Le téléphone
 
 Sur le desktop, `tailscale serve` publie chaque appli en HTTPS sur le tailnet, et nulle part ailleurs. Les serveurs
-restent sur `127.0.0.1`. Le desktop n'a qu'un nom dans le tailnet : chaque appli prend son port HTTPS. Tailscale
-n'accepte que 443, 8443 et 10000.
+restent sur la boucle locale. Le desktop n'a qu'un nom dans le tailnet : chaque appli prend son port HTTPS, parmi les
+trois que Tailscale accepte : Acedia sur 443, le core sur 8443, Avaritia sur 10000.
 
 ```powershell
 tailscale serve status                       # Acedia garde l'adresse qu'elle a depuis le J1 (443)
@@ -129,66 +125,61 @@ tailscale serve status                       # les trois adresses https://<machi
 - Une origine qui change plus tard (autre port, autre nom) oblige le téléphone à se **réabonner aux notifications** :
   les rouvrir dans l'app installée.
 
-## 7. La nuit
+## 7. La nuit, la mise en veille et les copies
 
 La nuit tourne à 5 h. Pendant le rodage, le desktop reste allumé : mise en veille sur « Jamais » dans l'alimentation de
 Windows, veille prolongée désactivée. En mise en veille, les trois serveurs s'arrêtent tous, le tri, les rappels et les
 copies compris. Au réveil, chacun reprend où il en était : le tri reprend sa file, les copies se rattrapent dans
 l'heure, les lots d'Avaritia repartent, et une nuit manquée, comme la lettre du matin, est jouée une fois dans la minute
 qui suit. Seuls se perdent les rappels d'Acedia dus depuis plus d'un quart d'heure. Après un démarrage, la nuit manquée
-est jouée de même, sauf `ROUTINES_CATCHUP=0` dans le `.env` du core, qui saute les créneaux déjà dus, au démarrage
-seulement.
+est jouée de même ; le réglage qui saute plutôt les créneaux déjà dus est dans le dépôt du core.
 
 Les copies ne dépendent pas de la nuit : le core, Acedia et Avaritia copient chacun leur base, sans heure fixe, dès
 qu'ils écoutent, puis chaque heure si la copie du jour manque. Le desktop éteint la nuit se rattrape donc à son
 démarrage, ou dans l'heure qui suit son réveil, et une pause n'arrête pas la copie.
 
-## 8. Vérifier
+## 8. Vérifier, et voir qu'un service est tombé
 
-- Les trois tâches : `Get-ScheduledTask 'Lun *' | Get-ScheduledTaskInfo` (dernier résultat `267009` : en cours, même
-  quand le lanceur attend de relancer un serveur tombé, § 9).
-- Les journaux du jour : `data\logs\<nom>-AAAA-MM-JJ.log` dans chaque dépôt du service. Un serveur qui s'arrête dit
-  pourquoi dans ses premières lignes.
-- Les copies : `backups\anima-AAAA-MM-JJ.db`, `backups\acedia-AAAA-MM-JJ.db` et `backups\avaritia-AAAA-MM-JJ.db`,
-  chacune à côté de sa base, sept au plus. Chaque serveur le dit dans son journal du jour (« Base copiée », « Copie de
-  la base ratée »). Une copie ratée arrive aussi au Journal de l'app, au nom de son poste, une fois par jour au plus,
-  et au téléphone : celle d'un satellite, s'il est relié au core.
+- Les trois tâches, dans le Planificateur de tâches de Windows : chacune reste « En cours d'exécution » tant que son
+  serveur est suivi, même pendant l'attente d'une relance (§ 9). Elle ne dit donc pas si le serveur répond : le
+  journal du jour et la Constellation le disent.
+- Le journal du jour de chaque serveur, dans le dossier de service (où le trouver : dépôt du core). Un serveur qui
+  s'arrête dit pourquoi dans ses premières lignes.
+- Les copies : `backups\acedia-AAAA-MM-JJ.db` et `backups\avaritia-AAAA-MM-JJ.db`, chacune à côté de sa base, sept au
+  plus, et celles du core de même à côté de la sienne. Chaque serveur le dit dans son journal du jour (« Base
+  copiée », « Copie de la base ratée »). Une copie ratée arrive aussi au Journal de l'app, au nom de son poste, une
+  fois par jour au plus, et au téléphone : celle d'un satellite, s'il est relié au core.
 - Pendant le rodage, aucune copie ne quitte le desktop : un disque perdu emporte la base et ses copies, qui ne sont pas
   chiffrées. Pour en garder une ailleurs, le NAS tire lui-même les dossiers `backups\`, par un partage Windows de
   chacun : un réglage du NAS, sans code, qui dit lui-même ses échecs. Il ne prend que les fichiers
   `<nom>-AAAA-MM-JJ.db` : chaque copie s'écrit d'abord dans un `.<nom>-copie.tmp` du même dossier, qu'il emporterait à
   moitié écrit.
-- Un serveur arrêté sur une erreur laisse l'erreur et sa pile à son journal du jour, juste avant la ligne du lanceur.
-  Celui du core le dit aussi au Journal, et au téléphone une fois le core relancé (« Le core s'est arrêté sur une
-  erreur »), une fois par jour au plus : un core qui tombe à chaque démarrage n'envoie rien au téléphone. Celui d'un
-  satellite ne se lit qu'à son journal du jour, et au core s'il reste injoignable 15 min (« … ne
-  répond plus depuis plus de 15 minutes », au Journal et au téléphone). Un lot d'Avaritia en échec se voit à
-  l'activité récente de son tableau de bord (« Lot en échec »), et nulle part ailleurs.
+- Un serveur arrêté sur une erreur laisse l'erreur et sa pile à son journal du jour. Celui du core le dit aussi au
+  Journal, et au téléphone une fois le core relancé (« Le core s'est arrêté sur une erreur »), une fois par jour au
+  plus : un core qui tombe à chaque démarrage n'envoie rien au téléphone. Celui d'un satellite ne se lit qu'à son
+  journal du jour, et au core s'il reste injoignable 15 min (« … ne répond plus depuis plus de 15 minutes », au Journal
+  et au téléphone). Un lot d'Avaritia en échec se voit à l'activité récente de son tableau de bord (« Lot en échec »),
+  et nulle part ailleurs.
 - La Constellation : le core, Acedia et Avaritia joignables, Luxuria présente.
 - Un redémarrage de Windows, sans rien taper : tout revient, sans fenêtre de console.
 
 ## 9. Arrêter, mettre à jour, retirer
 
-- **Arrêter un serveur** : `Stop-ScheduledTask 'Lun core'` (puis `Start-ScheduledTask` pour le relancer). La tâche
-  arrêtée, rien ne relance le serveur jusqu'au prochain démarrage de Windows, où la tâche repart d'elle-même.
-- **Le lanceur ne lâche pas** un serveur tombé en erreur, le core comme Acedia et Avaritia : il le relance trois fois à
-  60 s d'écart, puis une fois toutes les 15 min, sans fin. Un serveur qui a tourné plus de 10 min avant de tomber
-  retrouve ses trois relances rapides. Chaque chute et chaque relance, avec son délai, ont leur ligne au journal du
-  jour (§ 8). Dans le Planificateur, la tâche reste « En cours d'exécution » tant que le lanceur tourne, même pendant qu'il
-  attend : le journal du jour et la Constellation disent si le serveur répond.
-- **Mettre à jour** : `.\mettre-a-jour.ps1 -Service D:\lun-service` (`-WhatIf` d'abord). Il refuse une copie hors de
-  `main` ou modifiée à la main ; sinon, dépôt par dépôt : arrêt, `git pull --ff-only`, `npm ci`, build, relance.
-  L'arrêt prend la tâche avec son lanceur, même pendant une attente : la tâche repart sur le serveur mis à jour.
-- **Retirer** : `.\retirer.ps1 -Service D:\lun-service`. Les tâches et les serveurs partent, le dossier et les bases
-  restent.
+- **Arrêter un serveur** : arrêter sa tâche dans le Planificateur de tâches, la relancer de même. La tâche arrêtée,
+  rien ne relance le serveur jusqu'au prochain démarrage de Windows, où la tâche repart d'elle-même.
+- **Un serveur tombé en erreur est relancé de lui-même**, le core comme Acedia et Avaritia, sans fin : chaque chute et
+  chaque relance, avec son délai, ont leur ligne au journal du jour (§ 8). Le rythme des relances est dans le dépôt
+  du core.
+- **Mettre à jour** et **retirer** : dans un PowerShell administrateur, comme le dit le dépôt du core. La mise à jour
+  refuse une copie hors de `main` ou modifiée à la main, puis passe dépôt par dépôt et relance chaque serveur. Le
+  retrait enlève les tâches et arrête les serveurs ; le dossier et les bases restent.
 
 ### Restaurer une copie
 
 Une copie remet une base au jour où elle a été faite : tout ce qui a été écrit depuis en est absent, y compris les
-appareils reliés, les liaisons et les abonnements aux notifications pris entre-temps. Pour une base, dans un PowerShell
-administrateur. Les commandes sont celles d'Acedia ; pour le core ou Avaritia, remplacer `lun-acedia`, `acedia`,
-`'Lun Acedia'` et 8787 par `lun-anima`, `anima`, `'Lun core'` et 8788, ou par `lun-avaritia`, `avaritia`,
-`'Lun Avaritia'` et 8789.
+appareils appairés et les liaisons pris entre-temps. Ce qui suit vaut pour Acedia et Avaritia, dans un PowerShell
+administrateur ; restaurer la base du core : dans son dépôt. Les commandes sont celles d'Acedia ; pour Avaritia,
+remplacer `lun-acedia`, `acedia`, `'Lun Acedia'` et 8787 par `lun-avaritia`, `avaritia`, `'Lun Avaritia'` et 8789.
 
 1. Arrêter son serveur, puis vérifier que son port n'écoute plus :
 
@@ -204,7 +195,7 @@ administrateur. Les commandes sont celles d'Acedia ; pour le core ou Avaritia, r
    dire.
 
    ```powershell
-   cd D:\lun-service\lun-acedia\data
+   cd "<dossier de service>\lun-acedia\data"
    $cote = "avant-restauration-$(Get-Date -Format 'yyyy-MM-dd-HHmm')"
    New-Item -ItemType Directory $cote
    Get-ChildItem acedia.db* | Move-Item -Destination $cote
@@ -219,26 +210,23 @@ administrateur. Les commandes sont celles d'Acedia ; pour le core ou Avaritia, r
    Start-ScheduledTask 'Lun Acedia'
    ```
 
-4. Pour Acedia ou Avaritia, le relier de nouveau au core, même s'il paraît relié. La base restaurée reprend la
-   numérotation de ses événements au jour de la copie, alors que le core ne demande que ceux qui suivent le dernier
-   reçu : sans une nouvelle liaison, qui remet ce compte à zéro, urgences, alertes et entrées du Journal n'arrivent
-   plus, sans aucune erreur. Les cartes, relues toutes les deux minutes, arrivent encore : elles ne prouvent pas la
-   liaison. Dans le core, Ctrl K, « Relier un poste » (l'Atelier ne propose pas « Relier » à un poste qui paraît
-   relié, lun-anima#90) : son adresse locale, `http://localhost:8787` pour Acedia ou `http://127.0.0.1:8789` pour
-   Avaritia, puis le code que donne le satellite, dans Réglages › Appareils et applications › Relier un appareil, ou
-   par `npm run pair-code` dans son dossier de service si plus aucun appareil n'y est relié. La commande du § 4,
-   `npm run connect`, fait la même chose depuis le terminal.
-5. Vérifier : pour un satellite, un événement qu'il émet après la liaison arrive au Journal du core, comme le prochain
-   courrier trié par Acedia ; l'entrée « … relié. », que le core écrit lui-même, ne le prouve pas. Pour le core, ses
-   postes restent joignables à la Constellation. Ce qui a été relié après la copie se relie de nouveau : un appareil
-   (Atelier › Appareils pour le core, Réglages › Appareils et applications pour un satellite), un poste (comme à
-   l'étape 4). Le téléphone rouvre ses notifications s'il s'y était abonné depuis.
+4. Le relier de nouveau au core, même s'il paraît relié. La base restaurée reprend la numérotation de ses événements au
+   jour de la copie, alors que le core ne demande que ceux qui suivent le dernier reçu : sans une nouvelle liaison, qui
+   remet ce compte à zéro, urgences, alertes et entrées du Journal n'arrivent plus, sans aucune erreur. Les cartes,
+   relues toutes les deux minutes, arrivent encore : elles ne prouvent pas la liaison. Dans le core, Ctrl K, « Relier
+   un poste » (l'Atelier ne propose pas « Relier » à un poste qui paraît relié, lun-anima#90) : son adresse locale,
+   `http://localhost:8787` pour Acedia ou `http://127.0.0.1:8789` pour Avaritia, puis le code que donne le satellite,
+   dans Réglages › Appareils et applications › Relier un appareil, ou par `npm run pair-code` dans son dossier de
+   service si plus aucun appareil n'y est appairé.
+5. Vérifier : un événement que le satellite émet après la liaison arrive au Journal du core, comme le prochain courrier
+   trié par Acedia ; l'entrée « … relié. », que le core écrit lui-même, ne le prouve pas. Ce qui a été appairé après
+   la copie s'appaire de nouveau, dans Réglages › Appareils et applications du satellite.
 
 Revenir en arrière : arrêter le serveur comme à l'étape 1, puis mettre de côté la base restaurée dans un second
 dossier daté :
 
 ```powershell
-cd D:\lun-service\lun-acedia\data
+cd "<dossier de service>\lun-acedia\data"
 $restauree = "restauree-$(Get-Date -Format 'yyyy-MM-dd-HHmm')"
 New-Item -ItemType Directory $restauree
 Get-ChildItem acedia.db* | Move-Item -Destination $restauree
@@ -259,11 +247,12 @@ Une copie s'ouvre sans clé : seuls ses secrets demandent la clé de sa base d'o
 clé hors du dossier de service, par exemple dans un gestionnaire de mots de passe : le `.env` qui la porte est à côté
 des copies.
 
-| Base | Clé | Ce qu'elle protège | Avec une autre clé |
-|---|---|---|---|
-| `anima.db` | `ANIMA_SECRET_KEY` | la clé du modèle, les jetons des satellites, la clé des notifications | à éviter : la clé du modèle se ressaisit et les postes se relient de nouveau, mais les notifications ne partent plus, et aucun écran ne les refait. Garder la même clé. |
-| `acedia.db` | `ACEDIA_SECRET_KEY` | les jetons Google, les clés d'IA saisies dans Réglages | à éviter : les clés d'IA se ressaisissent, mais l'écran du compte Google reste sur « Vérification… », sans proposer de connecter (lun-acedia#62). Garder la même clé. |
-| `avaritia.db` | `AVARITIA_SECRET_KEY` | les clés d'IA saisies dans Réglages | ressaisir les clés |
+- **`acedia.db`**, clé `ACEDIA_SECRET_KEY` : elle protège les jetons Google et les clés d'IA saisies dans Réglages.
+  Avec une autre clé, à éviter : les clés d'IA se ressaisissent, mais l'écran du compte Google reste sur
+  « Vérification… », sans proposer de connecter (lun-acedia#62). Garder la même clé.
+- **`avaritia.db`**, clé `AVARITIA_SECRET_KEY` : elle protège les clés d'IA saisies dans Réglages. Avec une autre clé,
+  ressaisir les clés.
+- **La base du core** : sa clé et ce qu'elle protège sont dans son dépôt. Garder la même clé.
 
 Les jetons des appareils sont hachés, pas chiffrés : ils ne dépendent d'aucune clé.
 
@@ -279,17 +268,34 @@ Les jetons des appareils sont hachés, pas chiffrés : ils ne dépendent d'aucun
 Le terminal sert à l'installation, à la restauration et aux correctifs voulus. Pendant la semaine de rodage, chaque cas
 qui pourrait le redemander a sa réponse sans terminal, en place ou à mettre avant :
 
-| Cas | Réponse | État |
-|---|---|---|
-| Le jeton Google en « Test », qui tombe au bout de 7 jours | Google en Production, consentement refait sur le vrai compte | à mettre : B10, sur le desktop |
-| Un redémarrage ou une mise à jour de Windows | Les trois tâches planifiées relancent les serveurs au démarrage, sans fenêtre | en place (§ 2), à constater : B12 |
-| Un serveur qui retombe après ses trois relances | Le lanceur le relance toutes les 15 min, sans fin (§ 9) : le journal du jour dit pourquoi il tombe, et le core prévient d'un satellite injoignable 15 min (§ 8) | en place |
-| Un nouveau téléphone | Le relier depuis un appareil déjà relié : Atelier › Appareils pour le core, Réglages › Appareils et applications pour un satellite | en place |
-| Un code d'appairage expiré | Un nouveau code depuis l'écran du poste, qui affiche le temps restant | en place |
-| Un navigateur qui perd son jeton | Un autre appareil relié lui donne un code ; sans lui, seul `npm run pair-code` en donne un | à mettre : garder le téléphone relié à chaque app |
-| La clé d'un fournisseur qui arrive à échéance | Son échéance, déclarée dans l'écran, prévient à J-14 puis J-3 ; la clé se remplace depuis le même écran | à mettre : déclarer l'échéance de chaque clé, aucune base neuve n'en a |
-| Un modèle sans prix chez Acedia ou Avaritia (Mistral Small et Medium n'en ont pas) | Son coût est compté 0 : les dépenses le taisent, et aucun plafond ne le retient. Choisir un modèle qui a un prix, ou mettre le sien dans le `.env` du service, `LLM_PRICES={"mistral/mistral-small-latest":[entrée, sortie]}`, en dollars par million de jetons, puis relancer sa tâche | à mettre : un prix pour chaque modèle utilisé, avant le rodage |
-| Chez Acedia, un refus de l'IA qui vaut pour tous les mails, un mauvais réglage du modèle par exemple (une erreur 4xx autre qu'une clé refusée, un crédit épuisé, 408 ou 429) | Voulu : chaque passe du tri s'arrête au premier mail qui demande l'IA (les règles passent avant elle), et toutes les trois passes un mail sort de la file, à trier à la main, avec sa ligne au journal du jour. Corriger le réglage dans Réglages ; les mails déjà sortis restent à trier à la main | en place |
-| Chez Avaritia, un lot retenu après un tri déjà payé, sa rédaction en échec | Voulu, pour ne pas repayer le tri chaque heure : il ne repart qu'au bout d'un jour, vers +25 h, même si la clé a été corrigée entre-temps. Aucune relance d'un lot à la main n'existe. Les autres lots retenus repartent dans l'heure où leur fournisseur revient ou leur plafond se lève | en place |
-| Un correctif à passer en cours de semaine | `mettre-a-jour.ps1`, dans un PowerShell administrateur (§ 9) | terminal, pour un correctif voulu seulement |
-| Un correctif de Luxuria | Quitter Luxuria, reconstruire, recopier l'exe au même endroit (§ 5, étape 1) : `mettre-a-jour.ps1` ne le fait pas | terminal, pour un correctif voulu seulement |
+- **Le jeton Google en « Test », qui tombe au bout de 7 jours** : Google en Production, consentement refait sur le vrai
+  compte. *À mettre : B10, sur le desktop.*
+- **Un redémarrage ou une mise à jour de Windows** : les trois tâches planifiées relancent les serveurs au démarrage,
+  sans fenêtre. *En place (§ 2), à constater : B12.*
+- **Un serveur qui retombe** : il est relancé sans fin (§ 9) ; le journal du jour dit pourquoi il tombe, et le core
+  prévient d'un satellite injoignable 15 min (§ 8). *En place.*
+- **Un nouveau téléphone** : l'appairer depuis un appareil déjà appairé, Atelier › Appareils pour le core, Réglages ›
+  Appareils et applications pour un satellite. *En place.*
+- **Un code d'appairage expiré** : un nouveau code depuis l'écran du poste, qui affiche le temps restant. *En place.*
+- **Un navigateur qui perd son jeton** : un autre appareil appairé lui donne un code ; sans lui, seul le terminal en
+  donne un (`npm run pair-code` dans le dossier d'un satellite ; pour le core, son dépôt). *À mettre : garder le
+  téléphone appairé à chaque app.*
+- **La clé d'un fournisseur qui arrive à échéance** : son échéance, déclarée dans l'écran, prévient à J-14 puis J-3 ;
+  la clé se remplace depuis le même écran. *À mettre : déclarer l'échéance de chaque clé, aucune base neuve n'en a.*
+- **Un modèle sans prix chez Acedia ou Avaritia** (Mistral Small et Medium n'en ont pas) : son coût est compté 0, les
+  dépenses le taisent et aucun plafond ne le retient. Choisir un modèle qui a un prix, ou mettre le sien dans le `.env`
+  du service, `LLM_PRICES={"mistral/mistral-small-latest":[entrée, sortie]}`, en dollars par million de jetons, puis
+  relancer sa tâche. *À mettre : un prix pour chaque modèle utilisé, avant le rodage.*
+- **Chez Acedia, un refus de l'IA qui vaut pour tous les mails**, un mauvais réglage du modèle par exemple (une erreur
+  4xx autre qu'une clé refusée, un crédit épuisé, 408 ou 429) : voulu. Chaque passe du tri s'arrête au premier mail qui
+  demande l'IA (les règles passent avant elle), et toutes les trois passes un mail sort de la file, à trier à la main,
+  avec sa ligne au journal du jour. Corriger le réglage dans Réglages ; les mails déjà sortis restent à trier à la
+  main. *En place.*
+- **Chez Avaritia, un lot retenu après un tri déjà payé, sa rédaction en échec** : voulu, pour ne pas repayer le tri
+  chaque heure. Il ne repart qu'au bout d'un jour, vers +25 h, même si la clé a été corrigée entre-temps. Aucune
+  relance d'un lot à la main n'existe. Les autres lots retenus repartent dans l'heure où leur fournisseur revient ou
+  leur plafond se lève. *En place.*
+- **Un correctif à passer en cours de semaine** : la mise à jour du service, dans un PowerShell administrateur (§ 9).
+  *Terminal, pour un correctif voulu seulement.*
+- **Un correctif de Luxuria** : quitter Luxuria, reconstruire, recopier l'exe au même endroit (§ 5, étape 1) ; la mise
+  à jour du service ne le fait pas. *Terminal, pour un correctif voulu seulement.*
