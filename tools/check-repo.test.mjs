@@ -216,6 +216,7 @@ test('checkNoPrivateNames leaves the dated plans up to 12/11 and checks the livi
   });
   const files = checkNoPrivateNames(root, { docs: true }).map((e) => e.split(':')[0]);
   assert.deepEqual(files.sort(), [
+    'docs/mise-en-service-desktop.md', // a public page since 16/11, no longer history
     'docs/plans/2026-11-07-feuille-de-route-mvp.md',
     'docs/plans/2026-11-13-new.md',
     'docs/specs/2026-11-10-etat-cible-cadrage.md',

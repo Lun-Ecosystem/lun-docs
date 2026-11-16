@@ -233,8 +233,9 @@ tests ; la restauration se constate sur le desktop (§ 4).
 - Chaque nuit, une copie cohérente de `acedia.db` et de `avaritia.db`, sept gardées, sur le modèle de celle du core
   (`VACUUM INTO`). **[choix Claude]** Chaque satellite copie sa propre base : le core ne lit pas les fichiers d'un
   satellite, et sur la machine dédiée chacun aura son volume.
-- La restauration, écrite dans [`mise-en-service-desktop.md`](../mise-en-service-desktop.md) : une copie garde les
-  secrets chiffrés, elle ne se restaure qu'avec la même clé.
+- La restauration, écrite dans [`mise-en-service-desktop.md`](../mise-en-service-desktop.md) pour Acedia et
+  Avaritia, et dans le dépôt du core (privé) pour la sienne : une copie garde les secrets chiffrés, elle ne se
+  restaure qu'avec la même clé.
 - La liste « rien ne force le terminal pendant la semaine », dans la même page : ce qui pourrait le redemander (un jeton
   Google en Test, un redémarrage, une mise à jour de Windows, un nouveau téléphone, un code d'appairage expiré) et, pour
   chacun, la réponse en place ou à mettre.

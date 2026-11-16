@@ -90,7 +90,8 @@ un dépôt.
 
 `docs/mise-en-service-desktop.md` : ce qu'il faut avant (Node, `uv`, Tailscale, les `.env`), l'ordre (installer,
 appairer Luxuria construite sur le core en service, régler les adresses), comment voir que tout tourne, comment tout
-arrêter et tout retirer, ce qui reste à faire à la main. C'est la liste que CrOliX suit le jour J.
+arrêter et tout retirer, ce qui reste à faire à la main. C'est la liste que CrOliX suit le jour J. Depuis le 16/11,
+lun-docs n'en garde que ce qu'il voit et fait ; le détail du déploiement du core est dans son dépôt (privé).
 
 ## 4. Les buts, les non-buts, les anti-buts
 
