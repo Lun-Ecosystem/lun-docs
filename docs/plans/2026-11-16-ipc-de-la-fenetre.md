@@ -606,7 +606,8 @@ chantier :
    - Repris des relectures de la tâche 8 : la ligne « Dossier du service » suit `DossierCorps.svelte`, un refus à côté
      du chemin, jamais à sa place, un chemin long coupé (`overflow-wrap`, `ServiceVoix.svelte:137` déborde
      aujourd'hui), une garde « en cours » contre le double clic ; « un ancien dossier attend » passe par
-     `formerWaiting` (`dossiers.ts`).
+     `formerWaiting` (`dossiers.ts`). De la relecture de la tâche 3 : `fromArgs` (`settings.ts:164`) borne le gain
+     repris de 0 à 10, comme l'écran, sans quoi Rust refuse le lancement.
    - Barrières : la page ; la surface publique.
    - Exclu : les programmes (tâches 10 et 11) ; la doc (tâche 13).
 
@@ -687,7 +688,8 @@ chantier :
         et Entrée refuse » ;
       - les sorties qui restent : la page lance encore le service dans le dossier choisi et les programmes confirmés ;
         le fichier de voix, un `.onnx` du poste ; la fenêtre joint les hôtes confirmés ; la portée de `default.json`
-        admet tout hôte, derrière l'enveloppe.
+        admet tout hôte, derrière l'enveloppe. Un lecteur réseau, ou un lien vers un partage, sous une lettre de
+        lecteur, passe encore pour le fichier de voix (relecture de la tâche 3).
     - 100 lignes au plus ([`structure-projet.md`](../../standards/structure-projet.md)).
     - `docs/README.md:61-80` : les dossiers choisis dans la boîte, gardés dans `dossiers.json`, et l'avis aux dossiers
       enregistrés ; les arguments du service et leurs règles ; les arguments des programmes confirmés,
