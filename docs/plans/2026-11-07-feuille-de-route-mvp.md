@@ -325,20 +325,22 @@ les mots des gestes ; le premier contact sans terminal ; la session sur le deskt
 
 ### Tenir en continu
 
-Plan : sur lun-docs#164, en brouillon ; issue lun-docs#166. lun-anima, lun-acedia, lun-avaritia : le core, Acedia et
-Avaritia tiennent des jours sans s'arrêter. Sa part du core va dans une issue de lun-anima.
+Fait : lun-anima#109, lun-acedia#68, lun-avaritia#35 et le plan, lun-docs#164, fusionnés ; lun-docs#166 est fermée.
+Le core, Acedia et Avaritia tiennent des jours sans s'arrêter. Les suites attendent en `inbox` : lun-docs#171,
+lun-acedia#67, lun-avaritia#34 et une issue de lun-anima.
 
 ### Écoute et parole
 
 Plan : [`2026-11-12-ecoute-et-parole.md`](2026-11-12-ecoute-et-parole.md), validé le 12/11 ; issue lun-luxuria#77.
-lun-luxuria seul. Rien ne reste ouvert ni n'attend sans fin : le micro coupé par la sourdine l'est vraiment, une
-transcription ou une réponse qui ne vient pas a sa garde. « Le tour » se planifie après.
+lun-luxuria seul. Le code est livré en brouillon (lun-luxuria#82), le plan coché dans lun-docs#172 ; reste la tâche 8,
+la preuve à la main avec CrOliX. Les suites : lun-luxuria#81. « Le tour » se planifie après.
 
 ### Remettre les textes d'accord
 
-Plan : [`2026-11-12-textes-d-accord.md`](2026-11-12-textes-d-accord.md), validé le 12/11 ; issue lun-docs#167, PR
-lun-docs#165. lun-docs, lun-luxuria, lun-acedia, lun-avaritia. La doc, les règles et la surface publique dites comme le
-code et les décisions du 12/11 ; cette feuille en fait partie.
+Plan : [`2026-11-12-textes-d-accord.md`](2026-11-12-textes-d-accord.md), validé le 12/11 ; issue lun-docs#167. Fait :
+lun-docs#165 et les trois satellites (lun-luxuria#80, lun-acedia#70, lun-avaritia#37), fusionnés ; la doc, les règles et
+la surface publique disent le code et les décisions du 12/11. Les suites : lun-docs#168, #169, #170, lun-luxuria#79,
+lun-acedia#69, lun-avaritia#36.
 
 ### L'IPC de Lun'Luxuria
 

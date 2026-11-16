@@ -10,7 +10,9 @@
 > en (b), une PR par chantier partout : lun-docs#162 fusionne dès maintenant. Le 13/11, CrOliX choisit le mot « la
 > machine dédiée » : le dictionnaire et le cadrage le prennent ; « le serveur dédié », plus bas, est le mot d'avant.
 >
-> **PR :** lun-docs#165 (brouillon) ; une par dépôt touché, en brouillon dès le premier push, *Show* partout. Celle de lun-docs fusionne la
+> **PR :** lun-docs#165 (fusionnée le 13/11, tâches 1 à 9) ; lun-luxuria#80, lun-acedia#70 et lun-avaritia#37
+> (fusionnées le 16/11, tâches 10 à 13) ; la clôture dans la PR qui ferme lun-docs#167. Une par dépôt touché, en
+> brouillon dès le premier push, *Show* partout. Celle de lun-docs fusionne la
 > première : la CI des trois satellites clone `main` de lun-docs pour lancer `check-repo.mjs --public`. Lun'Anima
 > n'est pas touché.
 
@@ -437,7 +439,7 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
 
 ### Les satellites (session principale ou `dev-front`, branche `chore/surface-publique` dans chacun)
 
-10. - [ ] **Lun'Luxuria** (`CLAUDE.md`, `docs/README.md:22-23`, `src/presence/chaine.test.ts:41`, `:547`, `:577`,
+10. - [x] **Lun'Luxuria** (`CLAUDE.md`, `docs/README.md:22-23`, `src/presence/chaine.test.ts:41`, `:547`, `:577`,
     `hooks/pre-push:2`, `.github/workflows/ci.yml`). *Parallélisable d'emblée*, sauf le pas de CI.
     - `CLAUDE.md:31-36` récrit pour dire ce que fait le code. La défense en profondeur : aucun sink HTML, la CSP, la
       lecture du corps bornée au dossier, à ses noms et à ses tailles, les programmes choisis dans la boîte du système
@@ -455,17 +457,21 @@ Un fichier n'a qu'une tâche à la fois. Dans lun-docs : 1 dans le cadrage, le d
       (`:47-51`) sort, couvert par `--public`.
     - Preuve : `npm run format:check`, `lint`, `typecheck`, `test` ; `--public` en local ; la CI verte, avec la ligne
       qui nomme le dossier contrôlé. Exclu : `src-tauri/` et tout code (l'issue `critique`).
-11. - [ ] **Lun'Acedia.** *Parallélisable d'emblée*, sauf le pas de CI. `hooks/pre-push:2` (tâche 6) ; la commande
+    - Livrée par lun-luxuria#80, fusionnée le 16/11 ; suites : lun-luxuria#79.
+11. - [x] **Lun'Acedia.** *Parallélisable d'emblée*, sauf le pas de CI. `hooks/pre-push:2` (tâche 6) ; la commande
     locale dans `CLAUDE.md` ; après la fusion de lun-docs, `--public .` à la place de `--addresses .`
     (`ci.yml:26-29`). Preuve : `--public` en local, puis la CI verte avec la ligne du dossier contrôlé.
-12. - [ ] **Lun'Avaritia.** *Parallélisable d'emblée*, sauf le pas de CI.
+    Livrée par lun-acedia#70, fusionnée le 16/11 ; suites : lun-acedia#69.
+12. - [x] **Lun'Avaritia.** *Parallélisable d'emblée*, sauf le pas de CI.
     - `docs/prouver-avaritia.md:64-65` : « Dans le core, relier le satellite avec son adresse et ce code », sans la
       commande. `CLAUDE.md:9` : « satellite « bibliothèque » » ; `README.md:79` : « satellite, la bibliothèque » ;
       `CLAUDE.md:13` : « les souvenirs de Natsume » au lieu de « la mémoire affective et personnelle » (lun-docs#130).
     - `hooks/pre-push:2`, la commande locale et le pas `--public`, comme la tâche 11.
     - Exclu : le code (`brain` reste) ; le libellé d'icône « Cerveau » (« Constats écartés »).
-13. - [ ] **Les PR des satellites** (`livreur`). Après 10 à 12 et la fusion de lun-docs : relecture du diff par le
-    `reviewer` dans chaque dépôt, les PR renvoient à la chapeau, *Show*.
+    - Livrée par lun-avaritia#37, fusionnée le 16/11 ; suites : lun-avaritia#36.
+13. - [x] **Les PR des satellites** (`livreur`). Après 10 à 12 et la fusion de lun-docs : relecture du diff par le
+    `reviewer` dans chaque dépôt, les PR renvoient à la chapeau, *Show*. Les trois PR ci-dessus, fusionnées le
+    16/11, CI verte, après celle de lun-docs.
 
 ## Les preuves
 
@@ -563,6 +569,20 @@ lun-docs, l'issue `inbox` des actions par SHA et de Dependabot.
 7. **Le hook `pre-push` des dépôts publics** (lun-docs#41). Je recommande de le garder, avec un commentaire juste.
    L'autre voie : le retirer des dépôts publics, que le ruleset protège déjà.
 8. **Le dossier de service sur `D:`** : je le laisse tel quel, chemin du desktop. À confirmer quand CrOliX y est.
+
+## Ce que l'exécution a trouvé
+
+- **Les satellites sont arrivés après lun-docs.** lun-docs#165 a fusionné le 13/11, les trois PR des satellites le
+  16/11 : leur CI clone `main` de lun-docs, donc `--public .` y tourne pour de bon, et la ligne `checked:` de chaque
+  dépôt se lit dans le journal de sa CI. Les trois sont vertes.
+- **`--public` couvre les sons.** Il refuse tout son, suivi ou non : le pas des sons sort de la CI des trois
+  satellites, avec `--addresses`.
+- **Deux fichiers hors de la liste de la tâche 10**, pris par la règle des textes publics : un texte de
+  `docs/essai-2026-11-07.md` et une variable de `src/presence/chaine/sons.ts`, que le core nommait ; ils disent
+  maintenant ce que lit vraiment `chaine.test.ts`.
+- **Un test de lun-avaritia a expiré** (5 s) pendant un lancement des trois dépôts en parallèle ; seul, il passe.
+- **Hors de ce plan, ouvert en `inbox`** : lun-luxuria#79, lun-acedia#69, lun-avaritia#36, lun-docs#169 et #170 ;
+  les actions de CI par SHA et Dependabot, lun-docs#168. L'IPC de Lun'Luxuria reste à part (lun-luxuria#78).
 
 ## Ce que le plan-challenger a changé
 
