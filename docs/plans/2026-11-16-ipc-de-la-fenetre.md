@@ -607,7 +607,8 @@ chantier :
      du chemin, jamais à sa place, un chemin long coupé (`overflow-wrap`, `ServiceVoix.svelte:137` déborde
      aujourd'hui), une garde « en cours » contre le double clic ; « un ancien dossier attend » passe par
      `formerWaiting` (`dossiers.ts`). De la relecture de la tâche 3 : `fromArgs` (`settings.ts:164`) borne le gain
-     repris de 0 à 10, comme l'écran, sans quoi Rust refuse le lancement.
+     repris de 0 à 10, comme l'écran, sans quoi Rust refuse le lancement. Après un « Oublier » réussi, le focus va à
+     « Choisir… », sur la ligne du service comme sur celle du corps.
    - Barrières : la page ; la surface publique.
    - Exclu : les programmes (tâches 10 et 11) ; la doc (tâche 13).
 
