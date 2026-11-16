@@ -426,7 +426,8 @@ chantier :
    - Le contrat, que la page suit (tâches 8 et 9) :
      - `folder_pick(name)` : `corps` ou `voix`, rien d'autre. Rend le chemin gardé, `null` si la personne annule, une
        erreur si le dossier est refusé ou si une boîte est déjà ouverte ;
-     - `folder_paths()` : `{ corps?: string, voix?: string }` ; `folder_forget(name)` ;
+     - `folder_paths()` : `{ corps?: string, voix?: string }`, un dossier absent omis, jamais `null`
+       (`skip_serializing_if`) ; `folder_forget(name)` ;
      - `body_config()` et `body_image(name)` ; `voice_start(args)` et `voice_restart(args)` ;
      - `voice_running()` : `{ folder, args }`, ou `null`.
    - **Une boîte à la fois** (`one_box.rs`) : un `AtomicBool` de l'appli, pris par un garde qui le rend à sa fin, même
