@@ -255,9 +255,14 @@ lun-luxuria#82 ne bloque rien ici : les fichiers du banc des gestes sont les mê
 `CLAUDE.md` est touché par les deux : sa ligne s'écrit après la fusion de #82, ou se fusionne à la main. Après #82, une
 transcription de plus de 20 s échoue : sur le processeur, elle s'écrit comme telle, jamais comme un faux rejet.
 
-1. - [ ] **Les prises** (CrOliX, puis `testeur`, hors dépôt). *Parallélisable.*
-   - **État du 16/11 :** le kit d'enregistrement est prêt hors dépôt ; les prises de CrOliX sont à faire (la liste entière,
-     mots privés compris : 200 prises).
+1. - [x] **Les prises** (CrOliX, puis `testeur`, hors dépôt). *Parallélisable.*
+   - **Fait le 16/11 :** 200 prises de CrOliX, au micro du laptop, par le kit d'enregistrement hors dépôt, nommées
+     `<id>-<n>.wav` par la page, mono 16 kHz 16 bits. Toutes présentes, aucune en trop ; durée de 768 ms à 2,8 s
+     (médiane 1,28 s), aucune vide ni trop faible ; un seul échantillon à pleine échelle, dans une toux courte. Par
+     famille : les six mots publics, 55 prises (accepter 15, refuser 10, envoyer 5, annuler 20, aucun 5) ; les témoins
+     publics, 35 (aucun) ; la liste privée, 100 (accepter 40, refuser 20, envoyer 15, aucun 25) ; les non-paroles, 10
+     (deux toux longues, deux courtes, deux raclements, deux « mmh », un souffle, le clavier ; chaque toux au-delà des
+     450 ms demandés). Les 21 prises du 10/11 restent à part.
    - CrOliX enregistre (« Les prises de CrOliX »), au micro choisi (« Les choix qui restent », point 3).
    - Le `testeur` les nomme `<id>-<n>.wav` dans `BANC_DIR/gestes/prises/`, compte chaque famille, et écrit ici les
      comptes : par famille, jamais un mot de la liste privée.
