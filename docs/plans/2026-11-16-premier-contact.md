@@ -6,6 +6,8 @@
 >
 > **Livraison, part d'Acedia (tâches 4 et 5) :** [lun-acedia#73](https://github.com/Lun-Ecosystem/lun-acedia/pull/73), en brouillon.
 >
+> **Livraison, part d'Avaritia (tâches 6 et 7) :** [lun-avaritia#40](https://github.com/Lun-Ecosystem/lun-avaritia/pull/40), en brouillon.
+>
 > **Validé par CrOliX le 16/11, avec ses recommandations** (« À trancher ») : (a) le code montré, déjà saisi ; le
 > niveau `critique` pour les trois dépôts de code ; la recette du desktop selon (b) si le rodage repart sur des bases
 > neuves, sinon (a), avec ses précautions.
@@ -308,12 +310,12 @@ la 7 seule. Dans un dépôt, la route et l'écran ne partagent aucun fichier.
 
 ### Lun'Avaritia
 
-6. - [ ] **La route du premier code** (`dev-core`). Après 4 relue. Le diff de la tâche 4 appliqué tel quel, premier
+6. - [x] **La route du premier code** ([lun-avaritia#40](https://github.com/Lun-Ecosystem/lun-avaritia/pull/40)) (`dev-core`). Après 4 relue. Le diff de la tâche 4 appliqué tel quel, premier
    commit compris : `server/src/contract/auth.ts`, la route, `server/src/app.ts` (avant le front, `:141` ; hors de
    `/api`, `:101` ; `onError`, `:143`), `server/src/main.ts` (`localOrigin` à l'adresse locale d'Avaritia, quand il
    écoute sur la boucle locale, `:60`), leurs tests. L'adresse locale d'Avaritia est une adresse IP : le test du
    `Host` refuse le nom au lieu de l'adresse. Exclu : ce qu'exclut la 4.
-7. - [ ] **L'écran « Relier ce navigateur » montre le premier code** (`dev-front`). Après 5 relue. Le diff de la
+7. - [x] **L'écran « Relier ce navigateur » montre le premier code** ([lun-avaritia#40](https://github.com/Lun-Ecosystem/lun-avaritia/pull/40)) (`dev-front`). Après 5 relue. Le diff de la
    tâche 5 appliqué au nom de Lun'Avaritia : `app/src/Pair.svelte`, `app/src/session.ts`, `app/src/Pair.test.ts` (ses
    tests `:36` et `:116` passent), `README.md`. L'heure se forme comme dans `app/src/reglages/Appareils.svelte:131`.
    La route n'est pas relayée par Vite en développement : c'est voulu (hors périmètre). Exclu : ce qu'exclut la 5.
