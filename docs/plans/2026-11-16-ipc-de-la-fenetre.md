@@ -603,6 +603,10 @@ chantier :
      `fromArgs` reporte `formerFolder` ; les tests d'aujourd'hui (`voix.test.ts:31`, `:150`, `reglages.test.ts:163-217`)
      changent de forme, pas de sens.
    - Échec attendu sur `main` : `voice_start` reçoit `dir` (`voix.test.ts:150`).
+   - Repris des relectures de la tâche 8 : la ligne « Dossier du service » suit `DossierCorps.svelte`, un refus à côté
+     du chemin, jamais à sa place, un chemin long coupé (`overflow-wrap`, `ServiceVoix.svelte:137` déborde
+     aujourd'hui), une garde « en cours » contre le double clic ; « un ancien dossier attend » passe par
+     `formerWaiting` (`dossiers.ts`).
    - Barrières : la page ; la surface publique.
    - Exclu : les programmes (tâches 10 et 11) ; la doc (tâche 13).
 
@@ -636,6 +640,9 @@ chantier :
       démarrage ne lance pas un programme non confirmé et n'appelle pas `program_args` ; un brouillon égal aux
       confirmés n'offre pas « Confirmer… » ; « Oublier » relit `session.programArgs`.
     - Échec attendu sur `main` : `voix.test.ts:281-290` attend `args`.
+    - Repris des relectures des tâches 8 et 12 : une garde « en cours » sur « Choisir… » d'un programme
+      (`pickProgram`), « Confirmer… » et « Oublier », contre le double clic ; le focus va au bouton qui remplace celui
+      qu'on a cliqué.
     - Barrières : la page ; la surface publique.
     - Exclu : le côté Rust (tâche 6) ; la doc (tâche 13).
 
