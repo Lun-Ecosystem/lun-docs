@@ -29,8 +29,9 @@ Luxuria `127.0.0.1:5180`.
 
 ## Prod du rodage : le desktop
 
-- Il suit `main`, avec le vrai compte Google ; sa mise en service et ses mises à jour sont dans
-  [`mise-en-service-desktop.md`](../docs/mise-en-service-desktop.md).
+- Il suit `main`, avec le vrai compte Google ; sa mise en service, vue de CrOliX, est dans
+  [`mise-en-service-desktop.md`](../docs/mise-en-service-desktop.md), le détail du déploiement et des mises à jour
+  dans le dépôt du core (privé).
 - Une PR *Ask* ([`git.md`](git.md)) s'y essaie sur une base de recette, jamais sur celles du rodage ;
   sa PR dit comment (service arrêté ou non, port, origine).
 
