@@ -423,20 +423,20 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
        30 sur 30 le 12/11), et `main` aussi, dans le même montage (1 sur 10). Le « non » posé à la main de la course du
        12/11 manquait au banc, et la synthèse le disait plus court. Remis, la branche rend `pas-de-tenue` et
        `son-arrete` à 5 sur 5, `sortie-arretee` à 3 sur 5 (24 sur 30 le 12/11).
-8. - [ ] **La preuve à la main sur le laptop** (`testeur` ; CrOliX pour la fenêtre, lancée depuis l'Explorateur).
+8. - [x] **La preuve à la main sur le laptop** (`testeur` ; CrOliX pour la fenêtre, lancée depuis l'Explorateur).
    Après 7. Ce qui est vu est écrit ici ; un écart, une issue.
-   - [ ] **La sourdine pendant l'invite d'autorisation.** Dans Chrome (`npm run dev`), l'autorisation du micro retirée
+   - [x] **La sourdine pendant l'invite d'autorisation.** Dans Chrome (`npm run dev`), l'autorisation du micro retirée
      pour la page : « Entrer », la sourdine pendant que l'invite est ouverte, puis « Autoriser ». Attendu : l'icône de
      micro de l'onglet s'éteint, la scène dit la sourdine. Puis la fenêtre : si WebView2 montre une invite, le même
      geste ; sinon, l'écrire.
-   - [ ] **Suspendus en pleine phrase**, chacun à son tour, par le Moniteur de ressources (« Suspendre le
+   - [x] **Suspendus en pleine phrase**, chacun à son tour, par le Moniteur de ressources (« Suspendre le
      processus »), pendant qu'il lui parle : le service de voix (`faster`), puis whisper-server s'il tourne sur le
      laptop (sinon au desktop), puis le serveur. Attendu : le message et la reprise à la garde de transcription ;
      « réfléchit » éteint à celle du serveur ; le processus repris, rien de tardif ne sonne.
-   - [ ] **L'épuisement des connexions.** Le service de voix suspendu une minute, la détection d'occupation en
+   - [x] **L'épuisement des connexions.** Le service de voix suspendu une minute, la détection d'occupation en
      service. Dans les outils de développement de Chrome (Réseau), les requêtes en attente ; une phrase écrite
      pendant ce temps part-elle ? Puis dans la fenêtre. Ce que le code prédit : « Trouvé en relisant », plus haut.
-   - [ ] Plus aucun `connus` ni `it.fails` de ce chantier ; ce plan coché, « Ce que l'exécution a trouvé » écrit. La
+   - [x] Plus aucun `connus` ni `it.fails` de ce chantier ; ce plan coché, « Ce que l'exécution a trouvé » écrit. La
      feuille de route n'est pas touchée : le chantier « textes d'accord » la reprend.
    - [ ] À la fusion : le worktree retiré.
 
@@ -488,6 +488,45 @@ lignes données ici sont celles de la branche à `7ac8d50`.
 Tenus après les correctifs, à `7ac8d50` : 712 tests réussis, 27 ignorés ; vingt-quatre scénarios, deux fois à
 l'identique, 136 tenues, 0 ratée, 1 connue, celle de `toux-puis-parole`, d'avant ce chantier. Les déroulés des
 dix-huit anciens sont ceux de `main`, octet pour octet.
+
+## Ce que l'exécution a trouvé
+
+- **R1**, à la relecture du diff entier (tâche 6) : la retenue restait morte après la garde de 60 s, et « réfléchit »
+  allumé sans fin. Réparé dans le chantier, à tout rang (`4866d56`, `e684267`), relu deux fois.
+- **I9 et I12** sont entrés dans le chantier le 13/11, par le choix de CrOliX (tâches 4 bis et 5).
+- **Le « non » posé manquait au banc** (tâche 7) : `non-court` ratait dans la chaîne sans que la branche y soit pour
+  rien. Remis dans `banc-sons/chaine/sons/`.
+- **Les suites**, à trier : lun-luxuria#81 (Q7, Q8 et R2, les retraits et les connexions, l'outillage), complétée par
+  la preuve à la main.
+
+### La preuve à la main (tâche 8), le 16/11
+
+Sur le laptop, à `10b4966` : `faster:small`, Piper (`fr_FR-siwis-medium`), le serveur de la chaîne de Lun'Anima avec
+une seule réponse, pour toute phrase. Les gestes de CrOliX, dans un onglet Invité de Chrome (`npm run dev`), puis
+dans la fenêtre construite depuis la branche, lancée depuis l'Explorateur.
+
+- **La sourdine pendant l'invite.** Dans l'onglet : sourdine mise pendant l'invite, puis « Autoriser » ; ni point
+  rouge sur l'onglet, ni icône de micro dans la barre d'adresse, la scène dit « En sourdine ». Sortie de la sourdine :
+  le point rouge vient. Dans la fenêtre : tenu.
+- **Suspendus en pleine phrase.**
+  - Le service de voix suspendu : « Ta phrase n'a pas pu être transcrite : aucun texte en 20 s », à l'heure ; repris,
+    rien de tardif, et la phrase suivante est entendue et envoyée. Le même service arrêté, et non suspendu : le
+    mandataire de Vite rend 502 aussitôt, « transcription refusée (502) ».
+  - Le serveur suspendu pendant « réfléchit » : « Sa réponse n'est pas venue : aucune phrase en 60 s », à l'heure ;
+    repris, rien de tardif. **Écart** : le retrait que la garde envoie revient en erreur à la reprise (404), et
+    « Coupure non transmise : … » remplace le message de la garde.
+  - whisper-server ne tourne pas sur le laptop : au desktop (« Ce que le desktop vérifiera »).
+- **Les connexions.** Le service de voix suspendu une minute, la détection d'occupation en service. Dans l'onglet :
+  une seule requête `micro` en attente à la fois ; une phrase écrite pendant ce temps part, sa réponse s'écrit aussitôt
+  dans le fil ; seule la voix attend, et à la reprise « Sa voix n'a pas pu dire une phrase : synthèse trop longue »,
+  sans phrase tardive. Dans la fenêtre : de même.
+- **Vu en passant**, à trier :
+  - un message d'erreur reste à l'écran une fois le service revenu ; rien ne dit qu'il l'est ;
+  - un service de voix figé ne se dit nulle part tant qu'aucune synthèse ne l'attend ;
+  - dans la fenêtre, l'erreur du réseau arrive brute, en anglais (« error sending request for url … »), où l'onglet
+    dit la sienne en français ;
+  - la fenêtre garde les réglages d'un essai ancien (un modèle, un serveur à d'autres ports) : voulu, mais l'erreur ne
+    dit pas l'adresse en cause autrement que par l'URL brute.
 
 ## Ce que le desktop vérifiera
 
