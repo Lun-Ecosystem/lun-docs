@@ -8,6 +8,8 @@
 >
 > **Livraison, part d'Avaritia (tâches 6 et 7) :** [lun-avaritia#40](https://github.com/Lun-Ecosystem/lun-avaritia/pull/40), en brouillon.
 >
+> **Livraison, part du core (tâches 1 à 3) :** [lun-anima#113](https://github.com/Lun-Ecosystem/lun-anima/pull/113), en brouillon.
+>
 > **Validé par CrOliX le 16/11, avec ses recommandations** (« À trancher ») : (a) le code montré, déjà saisi ; le
 > niveau `critique` pour les trois dépôts de code ; la recette du desktop selon (b) si le rodage repart sur des bases
 > neuves, sinon (a), avec ses précautions.
@@ -218,7 +220,7 @@ la 7 seule. Dans un dépôt, la route et l'écran ne partagent aucun fichier.
 
 ### Lun'Anima
 
-1. - [ ] **Lun'Anima : 3 tâches, lun-anima#72 (privée).** Leur détail, fichiers compris, est dans l'issue. Elles
+1. - [x] **Lun'Anima : 3 tâches, lun-anima#72 (privée)** ([lun-anima#113](https://github.com/Lun-Ecosystem/lun-anima/pull/113)). Leur détail, fichiers compris, est dans l'issue. Elles
    portent, pour le core, les critères 1 à 5, et suivent les règles de ce plan.
 
 ### Lun'Acedia
