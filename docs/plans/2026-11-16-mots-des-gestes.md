@@ -3,7 +3,7 @@
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
 > **Issues :** une issue chapeau à ouvrir dans lun-luxuria (voir la fin) ; lun-luxuria#6. Lun'Anima : 4 tâches,
-> lun-anima#N (issue privée, à ouvrir).
+> lun-anima#110 (issue privée, à ouvrir).
 >
 > **État : rédigé le 16/11, amendé le même jour après le plan-challenger, à valider par CrOliX.** Le challenger a
 > vérifié la relecture du 10/11 dans le relevé et dans le code. L'amendement sépare le banc de ce chantier, mesure le
@@ -51,14 +51,14 @@ mesure, la règle. Le banc de présence (#67 à #75) est un autre chantier (« H
   dizaine de non-paroles.
 - La mesure qui décide est jouée sur le desktop, à l'étape 2 du § 4, par la même commande. Son résumé est ici, avec
   celui de la mesure provisoire du laptop, si CrOliX l'a choisie.
-- Lun'Anima : ses 4 tâches dans lun-anima#N. Ses comptes des six mots publics sont ici.
+- Lun'Anima : ses 4 tâches dans lun-anima#110. Ses comptes des six mots publics sont ici.
 - CrOliX a tranché la règle par écrit. L'ADR qu'il a choisi et la ligne B1 disent la règle, et les trois conditions qui
   lèvent le verrou. lun-luxuria#6 se ferme avec le relevé.
 
 | Dépôt, branche | Issue | PR | Niveau |
 |---|---|---|---|
 | `lun-luxuria`, `feat/mots-des-gestes` | chapeau à ouvrir ; #6 | à ouvrir | `standard` |
-| `lun-anima` | Lun'Anima : 4 tâches, lun-anima#N | à ouvrir | `critique` |
+| `lun-anima` | Lun'Anima : 4 tâches, lun-anima#110 | à ouvrir | `critique` |
 | `lun-docs`, `docs/banc-et-gestes` | la chapeau de lun-luxuria | à ouvrir | `trivial` |
 
 `standard` pour Lun'Luxuria : un outil de mesure sur le modèle de `npm run banc`, aucun code de la page. `critique`
@@ -138,7 +138,7 @@ n'est aucun des six mots du relevé. Ce sont trois faux rejets d'« envoie ». C
   (ADR 0011, `:38`).
 - **La mesure qui décide** : sur le desktop, whisper.cpp `medium` en Vulkan, la brique en service, par la même
   commande, à l'étape 2 du § 4.
-- **Ce que le serveur en fait** : Lun'Anima, lun-anima#N. Ses comptes reviennent ici.
+- **Ce que le serveur en fait** : Lun'Anima, lun-anima#110. Ses comptes reviennent ici.
 - **Ce qui ne se prouve pas** : voir « Limites ».
 
 ## Les choix **[avis]**
@@ -173,7 +173,7 @@ n'est aucun des six mots du relevé. Ce sont trois faux rejets d'« envoie ». C
 ### Les prises de CrOliX
 
 - **Avant la mesure**, CrOliX enregistre cinq prises par mot de la liste entière, les six mots publics et ceux que
-  lun-anima#N ajoute à la liste, lue hors dépôt.
+  lun-anima#110 ajoute à la liste, lue hors dépôt.
 - **Une dizaine de non-paroles** : des toux, dont une courte, un raclement, « mmh », un souffle, le clavier. Ses deux
   toux de la tâche 6 [des données et des taux](2026-11-12-donnees-et-taux.md), au moins 450 ms et au moins 300 ms, en
   font partie : elles servent aussi le banc de présence.
@@ -212,7 +212,7 @@ n'est aucun des six mots du relevé. Ce sont trois faux rejets d'« envoie ». C
    jugent pas les faux rejets.
 3. **Un mot sans prises ne tranche pas à la voix.**
 4. **Par sens** : les comptes se font par sens (accepter, refuser, envoyer, annuler), et la règle peut différer d'un
-   sens à l'autre. Ce que coûte une erreur dans chaque sens est dit dans lun-anima#N.
+   sens à l'autre. Ce que coûte une erreur dans chaque sens est dit dans lun-anima#110.
 5. **Seule la mesure du desktop décide.** La provisoire prépare le choix.
 
 **Les règles possibles, jouées sur les mêmes données** :
@@ -233,7 +233,7 @@ envoie (défi C4). Si aucun mot ne tient le point 1 : (d).
 Le verrou de l'ADR 0011 est une consigne : aucune vraie carte à la voix (B1). Le choix de la règle par CrOliX ne le
 lève pas. Il se lève quand trois conditions sont réunies :
 
-1. le core applique la règle (lun-anima#N) ;
+1. le core applique la règle (lun-anima#110) ;
 2. l'écho est vérifié sur le desktop : un mot qu'elle dit, repris par le micro, n'est pas pris pour le sien ;
 3. la fenêtre d'« annule » à la voix est vérifiée sur le desktop (ADR 0011, « Restent à mesurer »).
 
@@ -241,9 +241,9 @@ L'ADR de la règle et la ligne B1 le disent. Chaque condition remplie s'y note, 
 
 ## Les tâches
 
-**Dès la validation, en parallèle** : 1, 2 (si CrOliX l'a choisie), 3, et la première tâche de lun-anima#N. **Après
-3** : 4. **Après 1, 2, 4 et la première tâche de lun-anima#N** : 5. **À l'étape 2 du § 4** : 6. **Après 6 et les
-comptes de lun-anima#N** : 8. **Après 8** : 9.
+**Dès la validation, en parallèle** : 1, 2 (si CrOliX l'a choisie), 3, et la première tâche de lun-anima#110. **Après
+3** : 4. **Après 1, 2, 4 et la première tâche de lun-anima#110** : 5. **À l'étape 2 du § 4** : 6. **Après 6 et les
+comptes de lun-anima#110** : 8. **Après 8** : 9.
 
 lun-luxuria#82 ne bloque rien ici : les fichiers du banc des gestes sont les mêmes sur `main` et sur sa branche. Seul
 `CLAUDE.md` est touché par les deux : sa ligne s'écrit après la fusion de #82, ou se fusionne à la main. Après #82, une
@@ -279,14 +279,14 @@ transcription de plus de 20 s échoue : sur le processeur, elle s'écrit comme t
 4. - [ ] **Relecture** (`reviewer`). Après 3, sur son diff, contre ses critères et ses exclusions. Un écart revient à 3.
 5. - [ ] **La mesure provisoire** (`testeur`, laptop).
    - `npm run gestes` avec les cinq voix, sur la brique de la tâche 2, ou sur `faster:tiny` si elle n'est pas choisie.
-   - Ici : la durée, le nombre de sons par famille, puis les comptes de lun-anima#N pour les six mots publics.
+   - Ici : la durée, le nombre de sons par famille, puis les comptes de lun-anima#110 pour les six mots publics.
    - Exclu : écrire ici un mot de la liste privée ; trancher sur ces chiffres.
 6. - [ ] **La mesure qui décide** (`testeur`, desktop, étape 2 du § 4).
    - L'étalonnage d'abord, puis la même commande sur la brique en service.
-   - Ici : la durée, l'étalonnage, puis les comptes de lun-anima#N pour les six mots publics, et pour chaque critère de
+   - Ici : la durée, l'étalonnage, puis les comptes de lun-anima#110 pour les six mots publics, et pour chaque critère de
      « Comment la règle se tranche », tenu ou non.
-7. - [ ] **Lun'Anima : 4 tâches, lun-anima#N** (`dev-core`, `testeur`).
-8. - [ ] **La règle** (CrOliX, puis la session principale). Après 6 et les comptes de lun-anima#N.
+7. - [ ] **Lun'Anima : 4 tâches, lun-anima#110** (`dev-core`, `testeur`).
+8. - [ ] **La règle** (CrOliX, puis la session principale). Après 6 et les comptes de lun-anima#110.
    - Le relevé et les comptes présentés, avec les quatre règles jouées sur les mêmes données ; CrOliX tranche par
      écrit.
    - L'ADR qu'il a choisi (« Les choix qui restent », point 5) ; la ligne B1 : la règle et les trois conditions ;
@@ -301,7 +301,7 @@ transcription de plus de 20 s échoue : sur le processeur, elle s'écrit comme t
 
 ## Ce que la mesure a donné
 
-À remplir par les tâches 1, 2, 5 et 6 : les prises, l'étalonnage, les deux relevés, les comptes de lun-anima#N.
+À remplir par les tâches 1, 2, 5 et 6 : les prises, l'étalonnage, les deux relevés, les comptes de lun-anima#110.
 
 ## Ce que le desktop vérifiera
 
@@ -316,7 +316,7 @@ transcription de plus de 20 s échoue : sur le processeur, elle s'écrit comme t
   quatre scénarios de toux (`toux-courte`, `toux-parole`, `toux-puis-parole`, `toux-reflexion`). Il aura son plan. Ce
   chantier n'en attend rien : #68 se remplace ici par `voix/test_service.py` joué en local (tâche 2), et le banc des
   gestes vérifie lui-même ses prises.
-- **lun-anima#97** : son propre chantier, après celui-ci ; ce qui en touche ce chantier est dans lun-anima#N.
+- **lun-anima#97** : son propre chantier, après celui-ci ; ce qui en touche ce chantier est dans lun-anima#110.
 - Changer le calcul de la confiance, une seconde transcription pour les gestes, un modèle de mots-clés : si aucune
   règle ne tient, une issue.
 - La langue (B2) : la mesure est en français ; si la langue transcrite change, elle se rejoue.
@@ -329,7 +329,7 @@ transcription de plus de 20 s échoue : sur le processeur, elle s'écrit comme t
   - un « ok » ou un « d'accord » dit en passant, pendant qu'une carte est en cours ;
   - l'écho d'un « D'accord. » dit par elle et repris par le micro ;
   - sa propre voix qui porte une phrase de geste.
-  Le banc donne un son à la fois, hors conversation. Ces trois cas se jugent sur le desktop et dans lun-anima#N.
+  Le banc donne un son à la fois, hors conversation. Ces trois cas se jugent sur le desktop et dans lun-anima#110.
 - **Les voix de synthèse sont propres** : elles disent ce que la transcription confond, pas comment CrOliX parle.
 - **Ses prises viennent d'un micro** : celui du choix 3. L'autre micro, et la pièce, restent à entendre.
 - **Le processeur n'est pas la carte** : l'étalonnage tient sur 18 prises, une par cas. Le fichier exact du modèle
