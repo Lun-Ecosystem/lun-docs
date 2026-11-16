@@ -389,19 +389,40 @@ collé sous « Ce que les preuves ont montré sur `main` », puis le correctif, 
      premiers rangs. Le correctif l'en sort à n'importe quel rang ; il couvre aussi la réponse en erreur et l'envoi qui
      lève, ce dernier venu de `main`. Commits : `1a17fcb` et `4866d56` les tests, `055a340` et `e684267` les
      correctifs.
-6. - [ ] **Relecture** (`reviewer`). Après chaque tâche 2 à 5, sur son diff, contre ses critères ; puis le diff entier
+6. - [x] **Relecture** (`reviewer`). Après chaque tâche 2 à 5, sur son diff, contre ses critères ; puis le diff entier
    avant la PR. Un écart revient à sa tâche.
-7. - [ ] **Les mutations et les suites** (`testeur`). Après 2 à 6.
-   - [ ] Une mutation par correctif que le banc atteint, dans `tools/mutations.json` : la garde de transcription
+   - Le diff entier approuvé le 13/11, sans bloquant ; sa remarque sur la file des réponses non entendues est revenue
+     à la tâche 5 (« Écrit aussi, à la relecture »), relue deux fois puis approuvée.
+7. - [x] **Les mutations et les suites** (`testeur`). Après 2 à 6.
+   - [x] Une mutation par correctif que le banc atteint, dans `tools/mutations.json` : la garde de transcription
      retirée (`transcription-figee`) ; la garde qui accepte une réponse tardive (`transcription-lente`) ; la garde du
      serveur retirée (`reponse-figee`) ; le fragment refusé laissé en vie (`fragment-refuse`) ; `stop()` qui émet
      toujours (`taire-a-vide`) ; la synthèse d'un tour jeté (`arrete-puis-question`). Le maillon de chacune est celui
      que son premier passage nomme, écrit ici. Aucune n'en double une autre, ancienne comprise (même motif, ou mêmes
      échecs) ; un motif ancien trouvé deux fois : la table suit, sans affaiblir la mutation.
-   - [ ] La durée de `npm test` sur `main` puis sur la branche, trois fois chacune, contre le budget de 5 s ; `lint`,
+     - Fait le 13/11 (`10b4966`), les six tuées, chacune par son maillon : `transcription-figee` par la transcription
+       (9 échecs) ; `transcription-lente` par le filtre (2) ; `reponse-figee` par la retenue (4) ; `fragment-refuse`
+       par la retenue (3) ; `taire-a-vide` par le filtre (3) ; `arrete-puis-question` par la voix (2). Aucun motif
+       ancien n'est trouvé deux fois. Deux ensembles d'échecs sont compris dans d'autres sans leur être égaux : ceux de
+       `taire-a-vide` dans ceux de `d2` (la phrase écartée qui passe), ceux de `transcription-lente` dans ceux de
+       `transcription-figee`. La règle parle des mêmes échecs : ce ne sont pas des doublons.
+   - [x] La durée de `npm test` sur `main` puis sur la branche, trois fois chacune, contre le budget de 5 s ; `lint`,
      `typecheck`, `format:check` ; `npm run scenarios`, le relevé lu ; `npm run mutations`.
-   - [ ] `npm run chaine`, une partie par scénario avec Hortense : comparée à la course du 12/11
+     - `main` 684 réussis, la branche 722. Médianes de la série demandée : 31,2 s contre 35,7 s (+4,5 s), le premier
+       passage de `main`, à froid (56,9 s), écarté par la médiane ; d'une seconde série alternée : 36,3 s contre
+       34,2 s (−2,1 s). Le budget tient, mais le bruit du laptop (±5 s) est de l'ordre du budget : la différence n'est
+       pas établie. `lint`, `typecheck`, `format:check` propres ; 24 scénarios, 136 tenues, 1 connue (#63) ;
+       `npm run mutations`, 14 tuées sur 14.
+   - [x] `npm run chaine`, une partie par scénario avec Hortense : comparée à la course du 12/11
      (`banc-sons/chaine/taux/`) ; chaque écart nouveau écrit ici.
+     - Le 13/11 : onze scénarios jouables dans la chaîne, 35 attentes tenues, aucune ratée. Les treize autres ne s'y
+       jouent pas (le petit mode, des sons de toux absents du banc, des pannes que les vraies briques ne font pas sur
+       commande). Des six nouveaux, seul `arrete-puis-question` y passe, ses attentes tenues ; sa mesure
+       `reponse-2-a-temps` (2262 ms, hors de [2000, 2032]) n'a pas d'équivalent le 12/11.
+     - Un écart, venu du banc et non de la branche : `non-court` faisait une tenue sur le « non » (0 sur 10, contre
+       30 sur 30 le 12/11), et `main` aussi, dans le même montage (1 sur 10). Le « non » posé à la main de la course du
+       12/11 manquait au banc, et la synthèse le disait plus court. Remis, la branche rend `pas-de-tenue` et
+       `son-arrete` à 5 sur 5, `sortie-arretee` à 3 sur 5 (24 sur 30 le 12/11).
 8. - [ ] **La preuve à la main sur le laptop** (`testeur` ; CrOliX pour la fenêtre, lancée depuis l'Explorateur).
    Après 7. Ce qui est vu est écrit ici ; un écart, une issue.
    - [ ] **La sourdine pendant l'invite d'autorisation.** Dans Chrome (`npm run dev`), l'autorisation du micro retirée
