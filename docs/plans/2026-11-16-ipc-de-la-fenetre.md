@@ -401,7 +401,7 @@ chantier :
      - `--rvc` : par `loopback::addr` ;
      - `--tts` : `aucun`, ou `piper:<fichier>` : un chemin absolu qui commence par une lettre de lecteur, sans `\\` ni
        `//` en tête, un fichier `.onnx` qui existe. `kokoro:` est refusé (sortie 8) ;
-     - `--rvc-gain` : un nombre fini ; `--lang` : deux ou trois lettres minuscules ;
+     - `--rvc-gain` : un nombre de 0 à 10, la borne de l'écran ; `--lang` : deux ou trois lettres minuscules ;
      - chaque occurrence se vérifie : argparse garde la dernière.
    - Chaque refus nomme le champ, comme l'écran le nomme, et l'argument : « Transcription : adresse refusée : …
      (127.0.0.1, localhost ou [::1] seulement). », « RVC : adresse refusée : … », « Voix : fichier refusé : … (un
