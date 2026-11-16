@@ -4,11 +4,11 @@
 >
 > **Issues :** lun-anima#72 (privée, la source) ; le chapeau lun-docs#177 ; lun-acedia#72 ; lun-avaritia#39.
 >
-> **Livraison, part d'Acedia (tâches 4 et 5) :** [lun-acedia#73](https://github.com/Lun-Ecosystem/lun-acedia/pull/73), en brouillon.
+> **Livraison, part d'Acedia (tâches 4 et 5) :** [lun-acedia#73](https://github.com/Lun-Ecosystem/lun-acedia/pull/73), fusionnée.
 >
-> **Livraison, part d'Avaritia (tâches 6 et 7) :** [lun-avaritia#40](https://github.com/Lun-Ecosystem/lun-avaritia/pull/40), en brouillon.
+> **Livraison, part d'Avaritia (tâches 6 et 7) :** [lun-avaritia#40](https://github.com/Lun-Ecosystem/lun-avaritia/pull/40), fusionnée.
 >
-> **Livraison, part du core (tâches 1 à 3) :** [lun-anima#113](https://github.com/Lun-Ecosystem/lun-anima/pull/113), en brouillon.
+> **Livraison, part du core (tâches 1 à 3) :** [lun-anima#113](https://github.com/Lun-Ecosystem/lun-anima/pull/113), fusionnée.
 >
 > **Validé par CrOliX le 16/11, avec ses recommandations** (« À trancher ») : (a) le code montré, déjà saisi ; le
 > niveau `critique` pour les trois dépôts de code ; la recette du desktop selon (b) si le rodage repart sur des bases
@@ -324,7 +324,7 @@ la 7 seule. Dans un dépôt, la route et l'écran ne partagent aucun fichier.
 
 ### lun-docs (la session)
 
-8. - [ ] **La page de mise en service et la feuille de route** (`trivial`). En dernier, au fil des fusions.
+8. - [x] **La page de mise en service et la feuille de route** (`trivial`). En dernier, au fil des fusions.
    - [`mise-en-service-desktop.md`](../mise-en-service-desktop.md), § 2 : l'installation finit sur les trois pages à
      ouvrir sur la machine. Un nouveau passage « Le premier appareil », avant le § 4 : le chemin du § « Ce que CrOliX
      voit » ci-dessus, « Nouveau code » pour un code refusé.

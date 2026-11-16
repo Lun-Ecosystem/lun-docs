@@ -358,9 +358,12 @@ Aucune vraie carte avant.
 
 ### Le premier contact sans terminal
 
-lun-anima#72, pas encore de plan : le premier appareil d'une installation en service se relie par un code, sans
-terminal. Entré dans le MVP le 12/11. Le reste du point 6 de l'état cible (Google depuis l'interface, la liaison d'un
-poste) vient après le MVP.
+Plan : [`2026-11-16-premier-contact.md`](2026-11-16-premier-contact.md), validé le 16/11 ; issue lun-docs#177. Fait :
+lun-anima#113, lun-acedia#73, lun-avaritia#40, fusionnés : sur une installation neuve, la page de chaque app, ouverte
+sur la machine qui l'héberge, montre le code de son premier appareil, déjà saisi ; la
+[page de mise en service](../mise-en-service-desktop.md) le dit. Ce qui reste se vérifie sur le desktop (§ 4). Les
+suites : lun-docs#178, lun-acedia#74, lun-avaritia#41, lun-anima#112. Le reste du point 6 de l'état cible (Google
+depuis l'interface, la liaison d'un poste) vient après le MVP.
 
 ### La session sur le desktop, puis le rodage et la bascule
 
@@ -420,6 +423,14 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
 10. B3 : le flux RVC, décidé après B1.
 11. B12 : redémarrer ; les services repartent, la nuit manquée est rattrapée.
 12. B6 : une soirée réelle.
+
+La mise en service elle-même, sur des bases neuves, est la recette du
+[premier contact](2026-11-16-premier-contact.md) (« Ce que le desktop vérifiera ») :
+
+- l'installation et les écrans seuls, sans terminal, jusqu'aux deux postes reliés ;
+- avant le premier appareil, une requête forgée par le tailnet vers l'app du core puis vers Acedia, `Host` et `Origin`
+  réglés sur l'adresse locale de l'app : on attend le 404 ; un 200 se tranche avant le rodage ;
+- le téléphone, dans un onglet privé, par le tailnet, avant le premier appareil : aucune page n'y montre de code.
 
 B7 reste à CrOliX (réglages de Windows et du pare-feu), avant la soirée. Puis B8, la semaine de rodage.
 
