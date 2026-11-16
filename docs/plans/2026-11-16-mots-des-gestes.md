@@ -2,10 +2,15 @@
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **Issues :** une issue chapeau à ouvrir dans lun-luxuria (voir la fin) ; lun-luxuria#6. Lun'Anima : 4 tâches,
+> **Issues :** le chapeau lun-luxuria#83 ; lun-luxuria#6. Lun'Anima : 4 tâches,
 > lun-anima#110 (issue privée).
 >
-> **État : rédigé le 16/11, amendé le même jour après le plan-challenger, à valider par CrOliX.** Le challenger a
+> **État : validé par CrOliX le 16/11, avec ses recommandations** (« Les choix qui restent à CrOliX pour démarrer ») :
+> le banc de présence séparé ; ses prises au micro du laptop, maintenant ; la mesure provisoire sur whisper.cpp v1.9.5
+> et `medium`, au processeur ; l'ADR 0014 remplacera l'ADR 0011 en entier ; à l'étape 4 du § 4, des cartes d'essai
+> seulement. Chapeau : lun-luxuria#83.
+>
+> Rédigé le 16/11, amendé le même jour après le plan-challenger. Le challenger a
 > vérifié la relecture du 10/11 dans le relevé et dans le code. L'amendement sépare le banc de ce chantier, mesure le
 > son que la page envoie, juge les faux rejets sur les prises de CrOliX, dit quand le verrou se lève et rend la mesure
 > du laptop provisoire.
@@ -57,9 +62,9 @@ mesure, la règle. Le banc de présence (#67 à #75) est un autre chantier (« H
 
 | Dépôt, branche | Issue | PR | Niveau |
 |---|---|---|---|
-| `lun-luxuria`, `feat/mots-des-gestes` | chapeau à ouvrir ; #6 | à ouvrir | `standard` |
+| `lun-luxuria`, `feat/mots-des-gestes` | lun-luxuria#83, chapeau ; #6 | à ouvrir | `standard` |
 | `lun-anima` | Lun'Anima : 4 tâches, lun-anima#110 | ouverte | `critique` |
-| `lun-docs`, `docs/banc-et-gestes` | la chapeau de lun-luxuria | à ouvrir | `trivial` |
+| `lun-docs`, `docs/banc-et-gestes` | lun-luxuria#83, le chapeau | à ouvrir | `trivial` |
 
 `standard` pour Lun'Luxuria : un outil de mesure sur le modèle de `npm run banc`, aucun code de la page. `critique`
 reste sur l'issue du core, qui applique la règle. *Show* : ce qui est de Lun'Luxuria se prouve sur le laptop.
@@ -370,7 +375,7 @@ Posés au moment où ils serviront, avec le relevé :
 - **La règle** : (a) à (d) de « Comment la règle se tranche », avec l'avis révisé d'après les chiffres.
 - **De nouvelles prises**, si un mot tient à une prise près : une série de plus pour ce mot.
 
-## L'issue chapeau à ouvrir dans lun-luxuria
+## L'issue chapeau de lun-luxuria
 
-Avant la tâche 3 : « Les mots des gestes », étiquette `niveau:standard`, le lien vers ce plan, lun-luxuria#6, et la PR
-qui la ferme.
+Ouverte le 16/11, avant la tâche 3 : lun-luxuria#83, « Les mots des gestes », étiquette `niveau:standard`, le
+lien vers ce plan, lun-luxuria#6, et la PR qui la ferme.
