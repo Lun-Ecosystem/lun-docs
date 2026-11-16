@@ -690,7 +690,9 @@ chantier :
       - les sorties qui restent : la page lance encore le service dans le dossier choisi et les programmes confirmés ;
         le fichier de voix, un `.onnx` du poste ; la fenêtre joint les hôtes confirmés ; la portée de `default.json`
         admet tout hôte, derrière l'enveloppe. Un lecteur réseau, ou un lien vers un partage, sous une lettre de
-        lecteur, passe encore pour le fichier de voix (relecture de la tâche 3).
+        lecteur, passe encore pour le fichier de voix (relecture de la tâche 3). Une origine confirmée est un nom : son
+        DNS peut pointer vers le réseau local (relecture de la tâche 7). À chaque mise à jour de tauri, vérifier que le
+        trait `Plugin` a toujours dix méthodes, toutes transmises par `NetGuard`.
     - 100 lignes au plus ([`structure-projet.md`](../../standards/structure-projet.md)).
     - `docs/README.md:61-80` : les dossiers choisis dans la boîte, gardés dans `dossiers.json`, et l'avis aux dossiers
       enregistrés ; les arguments du service et leurs règles ; les arguments des programmes confirmés,
