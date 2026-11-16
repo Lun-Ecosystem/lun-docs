@@ -2,10 +2,13 @@
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **Issues :** lun-anima#72 (privée, la source) ; le chapeau dans lun-docs, une issue dans lun-acedia et une dans
-> lun-avaritia, à ouvrir.
+> **Issues :** lun-anima#72 (privée, la source) ; le chapeau lun-docs#177 ; lun-acedia#72 ; lun-avaritia#39.
 >
-> **À valider par CrOliX**, avec les points de « À trancher ». Écrit le 16/11 depuis lun-anima#72, la
+> **Validé par CrOliX le 16/11, avec ses recommandations** (« À trancher ») : (a) le code montré, déjà saisi ; le
+> niveau `critique` pour les trois dépôts de code ; la recette du desktop selon (b) si le rodage repart sur des bases
+> neuves, sinon (a), avec ses précautions.
+>
+> Écrit le 16/11 depuis lun-anima#72, la
 > [feuille de route](2026-11-07-feuille-de-route-mvp.md) (§ 3, « Le premier contact sans terminal ») et
 > l'[état cible](../specs/2026-11-10-etat-cible-cadrage.md) (§ 6, point 6). Code relu sur `main` : lun-anima `cf1dde5`,
 > lun-acedia `52742d1`, lun-avaritia `64f9646`, lun-docs `b61b600`. Relu le même jour par le plan-challenger : ses
@@ -39,9 +42,9 @@ sécurité ; le cinquième, les barrières et la doc.
 | Dépôt, branche | Issue | Niveau |
 |---|---|---|
 | `lun-anima`, `feat/premier-contact` | lun-anima#72, privée : la part du core s'y ajoute | `critique` (« Le niveau ») |
-| `lun-acedia`, `feat/premier-contact` | à ouvrir | `critique` |
-| `lun-avaritia`, `feat/premier-contact` | à ouvrir | `critique` |
-| `lun-docs`, `docs/premier-contact` | l'issue chapeau, à ouvrir | `trivial` |
+| `lun-acedia`, `feat/premier-contact` | lun-acedia#72 | `critique` |
+| `lun-avaritia`, `feat/premier-contact` | lun-avaritia#39 | `critique` |
+| `lun-docs`, `docs/premier-contact` | lun-docs#177, le chapeau | `trivial` |
 
 **Le niveau.** Une route sans jeton qui donne un code d'appairage touche l'accès : c'est la sécurité, `critique`
 d'après [`workflow.md`](../../standards/workflow.md) (ligne 39), qui demande « les cas limites testés, une preuve bout
