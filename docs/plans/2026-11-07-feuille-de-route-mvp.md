@@ -351,9 +351,9 @@ sorties se ferment.
 ### Le banc et les mots des gestes
 
 lun-luxuria, pas encore de plan. Le banc d'abord : ses observations en `inbox` (lun-luxuria#67 à #71, #73 à #75 ; #72
-est fermée). Puis les mots des gestes : la confiance fixe à 0,9 laisse un « Oui » valider une carte (lun-luxuria#6). Un
-chantier court les mesure au banc avec cinq voix, puis la règle se tranche, et le verrou de l'ADR 0011 avec elle (B1).
-Aucune vraie carte avant.
+est fermée). Puis les mots des gestes : la confiance est réelle depuis lun-luxuria#10, mais à la barre de 0,7 le relevé
+du 10/11 perd « oui », « annule » et « envoie » (lun-luxuria#6). Un chantier court les mesure au banc avec cinq voix,
+puis la règle se tranche, et le verrou de l'ADR 0011 avec elle (B1). Aucune vraie carte avant.
 
 ### Le premier contact sans terminal
 
