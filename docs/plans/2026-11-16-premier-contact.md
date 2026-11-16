@@ -4,6 +4,8 @@
 >
 > **Issues :** lun-anima#72 (privée, la source) ; le chapeau lun-docs#177 ; lun-acedia#72 ; lun-avaritia#39.
 >
+> **Livraison, part d'Acedia (tâches 4 et 5) :** [lun-acedia#73](https://github.com/Lun-Ecosystem/lun-acedia/pull/73), en brouillon.
+>
 > **Validé par CrOliX le 16/11, avec ses recommandations** (« À trancher ») : (a) le code montré, déjà saisi ; le
 > niveau `critique` pour les trois dépôts de code ; la recette du desktop selon (b) si le rodage repart sur des bases
 > neuves, sinon (a), avec ses précautions.
@@ -219,7 +221,7 @@ la 7 seule. Dans un dépôt, la route et l'écran ne partagent aucun fichier.
 
 ### Lun'Acedia
 
-4. - [ ] **La route du premier code** (`dev-core`). *Part d'emblée.* `server/src/contract/auth.ts`, un module de route
+4. - [x] **La route du premier code** ([lun-acedia#73](https://github.com/Lun-Ecosystem/lun-acedia/pull/73)) (`dev-core`). *Part d'emblée.* `server/src/contract/auth.ts`, un module de route
    à côté de `server/src/contract/routes.ts`, `server/src/app.ts`, `server/src/main.ts`, leurs tests.
    - **Le premier commit remet le verrou au contrat** : l'appel de `bootstrapPairing` dans `recordPairingFailure`
      (`auth.ts:90`) part ; le commentaire (`:69-74`) dit ce que fait le verrou, annuler et écrire sa ligne ; le test
@@ -261,7 +263,7 @@ la 7 seule. Dans un dépôt, la route et l'écran ne partagent aucun fichier.
        passent tels quels.
    - Exclu : le contrat `/lun/v1` ; le verrou lui-même (5 échecs, global) ; la lecture des corps de `/lun/v1/pair`
      (« Les suites ») ; la commande `pair-code` ; l'écran.
-5. - [ ] **L'écran « Relier ce navigateur » montre le premier code** (`dev-front`). *Part d'emblée.*
+5. - [x] **L'écran « Relier ce navigateur » montre le premier code** ([lun-acedia#73](https://github.com/Lun-Ecosystem/lun-acedia/pull/73)) (`dev-front`). *Part d'emblée.*
    `app/src/Pair.svelte`, `app/src/session.ts`, `app/src/Pair.test.ts`, `README.md`,
    `docs/installer-sur-le-telephone.md`.
    - `firstCode(baseUrl)` dans `session.ts`, à côté de `pair` : `POST {baseUrl}/first-code`, rend `{ code, expiresAt }`
