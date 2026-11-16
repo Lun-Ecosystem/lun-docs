@@ -501,8 +501,9 @@ chantier :
    parallèle de la 5 et de la 6.*
    - Fichiers : `src-tauri/src/net_guard.rs`, nouveau ; `src-tauri/src/lib.rs` (`:22`, et les commandes `:31-44`) ;
      les tests de `src-tauri/src/net_scope.rs`.
-   - Le contrat, que la page suit (tâche 12) : `net_hosts()`, les origines confirmées ; `net_host_confirm(url)`, qui
-     rend `true` ou `false` ; `net_host_forget(origin)`. Un `fetch` refusé rend son message.
+   - Le contrat, que la page suit (tâche 12) : `net_hosts()`, les origines confirmées, un tableau JSON de chaînes
+     écrites par `ascii_serialization()` ; `net_host_confirm(url)`, qui rend `true` ou `false` ;
+     `net_host_forget(origin)`. Un refus arrive à la page comme une chaîne : un `fetch` refusé rend son message.
    - `NetGuard` garde le plugin, `Box<dyn Plugin<R>>` fait de `tauri_plugin_http::init()`, et lui passe les dix
      méthodes du trait : `name`, `initialize`, `initialization_script`, `initialization_script_2`, `window_created`,
      `webview_created`, `on_navigation`, `on_page_load`, `on_event`, `extend_api`. `name()` rend `http` : l'ACL
@@ -516,8 +517,9 @@ chantier :
      `invoke.resolver.reject(<message>)`, `extend_api` rend `true`, rien n'est créé.
    - Pourquoi `tauri::Url` et pas la règle de la tâche 3 : ici, le plugin et reqwest relisent l'adresse avec le même
      analyseur ; la règle écrite à la main sert là où un autre, httpx, la relit.
-   - Les messages : « Proxy refusé. », « Redirections refusées. », « Adresse non confirmée : <origine>. Confirme-la
-     dans les réglages. »
+   - Les messages : « Proxy refusé. », « Redirections refusées. », « Adresse non confirmée pour la fenêtre :
+     <origine>. » Le message ne dit pas où confirmer : Rust ne sait pas sur quel écran il s'affiche, et l'avis de la
+     page, à côté du bouton, le dit (relecture de la tâche 12).
    - `hotes.json`, au dossier de configuration : relu à chaque `fetch`, comme `programmes.json` (`programs.rs:253`) ;
      écrit sur le modèle de `save_path` (`:78-90`) ; illisible, il vaut aucun hôte.
    - `net_host_confirm(url)` : une origine de la boucle locale, ou déjà confirmée, rend `true` sans boîte. Sinon le
@@ -643,6 +645,10 @@ chantier :
       pour la fenêtre. », et « Oublier ». Si la page et Rust divergent, Rust refuse et le message le dit.
     - Jamais `net_host_confirm` au moment d'une requête : une requête refusée montre le message de Rust là où l'erreur
       s'affiche aujourd'hui.
+    - Ajouté à la relecture : la liste des origines confirmées, chacune avec son « Oublier », dans le thème « Fenêtre »
+      des réglages. Sans elle, une adresse confirmée puis remplacée dans le champ resterait confirmée sans qu'on puisse
+      l'oublier. Une adresse du modèle non confirmée ouvre le bloc « Réglages avancés » : il ne cache jamais ce qui
+      bloque.
     - Tests : `maxRedirections: 0` sur les deux chemins du serveur ; la voix inchangée ; « Confirmer… » appelle
       `net_host_confirm` avec l'adresse ; une adresse de la boucle locale n'offre rien ; aucun chemin de requête
       n'appelle `net_host_confirm` ; dans un onglet, rien ne s'affiche.
