@@ -34,7 +34,8 @@ sans fenêtre, sans mot de passe gardé. Son mode d'emploi est dans le dépôt d
    dossier de service : une base ailleurs est refusée. Chez Acedia et Avaritia, un modèle sans prix y reçoit le sien
    (§ 11, « Un modèle sans prix »).
 3. Choisir les bases (§ 3), puis relancer l'installation : elle construit, crée les trois tâches et les lance
-   aussitôt.
+   aussitôt. Elle finit sur les trois pages à ouvrir sur cette machine, dans l'ordre : l'app du core, Acedia,
+   Avaritia (« Le premier appareil », avant le § 4).
 
 ## 3. Les bases qui entrent en service
 
@@ -53,16 +54,38 @@ sans fenêtre, sans mot de passe gardé. Son mode d'emploi est dans le dépôt d
     déchiffrent plus : la clé qui va avec chaque base est au § 9, « Restaurer une copie ». Celle du core : dans son
     dépôt.
 
+## Le premier appareil
+
+Sur une installation neuve, le premier appareil de chaque app s'appaire par sa page, sans terminal. Sur le desktop,
+les trois serveurs lancés, dans une fenêtre privée : un onglet habituel sur ces adresses garde le jeton d'une autre
+base, que l'app oublie au premier refus. Garder cette fenêtre ouverte jusqu'au bout du § 6 : fermée, elle perd ses
+jetons, et une page dont un appareil est déjà appairé ne montre plus de code.
+
+1. L'app du core (`http://127.0.0.1:8788`) : la page « Ce navigateur n'est pas encore reconnu » montre le code du
+   premier appareil, déjà saisi, et l'heure où il expire. « Entrer » : la mise en route suit, la clé du modèle et les
+   plafonds par leurs écrans.
+2. Acedia (`http://localhost:8787`), puis Avaritia (`http://127.0.0.1:8789`) : leur page « Relier ce navigateur »
+   montre de même le code de leur premier appareil, déjà saisi. « Relier ».
+3. Un code refusé, expiré (10 min) ou annulé par 5 codes faux en 10 min : « Nouveau code », sur la même page, en remet
+   un dans le champ.
+
+La page ne montre un code que sur cette machine, à cette adresse exacte (ni par le tailnet, ni, pour le core, à
+`localhost`), et tant qu'aucun appareil n'est appairé. Ensuite, un appareil appairé en donne un (§ 11, « Un navigateur
+qui perd son jeton »).
+
 ## 4. Relier Acedia et Avaritia
 
-Une fois les trois serveurs lancés, dans l'app du core (`http://127.0.0.1:8788`) : Ctrl K, « Relier un poste ». Son
-adresse locale, `http://localhost:8787` pour Acedia ou `http://127.0.0.1:8789` pour Avaritia, puis le code que donne le
-satellite, dans Réglages › Appareils et applications › Relier un appareil, valable 10 minutes. Avec une base neuve,
-aucun appareil n'est encore appairé au satellite : `npm run pair-code`, dans son dossier de service, donne le code de
-son premier navigateur. Le recours en terminal du core est dans son dépôt.
+Une fois le premier appareil de chaque app appairé, pour Acedia puis pour Avaritia :
 
-Avec une base Acedia neuve, refaire ensuite la connexion Google dans Acedia (`http://localhost:8787`) : son adresse de
-retour reste valable, c'est le même port.
+1. Dans le satellite, Réglages › Appareils et applications › « Relier un appareil » : un code à six chiffres, valable
+   10 minutes, dont il affiche le temps restant.
+2. Dans l'app du core, Atelier › Postes, sur la carte du satellite (« Pas encore relié. ») : « Relier ». Saisir
+   l'« Adresse du poste », `http://localhost:8787` pour Acedia, `http://127.0.0.1:8789` pour Avaritia, puis le code
+   affiché par le satellite, et « Relier ».
+3. Avec une base Acedia neuve, refaire ensuite la connexion Google dans Acedia (`http://localhost:8787`) : son adresse
+   de retour reste valable, c'est le même port.
+
+Le recours en terminal du core est dans son dépôt.
 
 ## 5. Appairer Luxuria
 
