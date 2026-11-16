@@ -293,12 +293,13 @@ transcription de plus de 20 s échoue : sur le processeur, elle s'écrit comme t
    - Fait : lun-luxuria#84. Deux relectures : la première « à reprendre », la seconde approuvée sans bloquant. Écarts et
      reste à faire au rebase sur lun-luxuria#82 : dans la PR.
 4. - [x] **Relecture** (`reviewer`). Après 3, sur son diff, contre ses critères et ses exclusions. Un écart revient à 3.
-5. - [ ] **La mesure provisoire** (`testeur`, laptop).
+5. - [x] **La mesure provisoire** (`testeur`, laptop). *Non jouée.*
    - `npm run gestes` avec les cinq voix, sur la brique de la tâche 2, ou sur `faster:tiny` si elle n'est pas choisie.
    - Ici : la durée, le nombre de sons par famille, puis les comptes de lun-anima#110 pour les six mots publics.
    - Exclu : écrire ici un mot de la liste privée ; trancher sur ces chiffres.
-   - **Suspendue le 16/11**, en attente de la décision de CrOliX : abandon proposé, car l'étalonnage ne passe pas et une
-     transcription `medium` prend environ 53 s au processeur.
+   - **Non jouée, décidé par CrOliX le 16/11** : l'étalonnage ne passe pas (la mesure ne dirait rien) et une
+     transcription `medium` prend environ 53 s au processeur, près de 5 h pour les quelque 335 sons. La mesure qui
+     décide (tâche 6) est la seule ; la brique de la tâche 2 reste hors dépôt, sans usage.
 6. - [ ] **La mesure qui décide** (`testeur`, desktop, étape 2 du § 4).
    - L'étalonnage d'abord, puis la même commande sur la brique en service.
    - Ici : la durée, l'étalonnage, puis les comptes de lun-anima#110 pour les six mots publics, et pour chaque critère de
