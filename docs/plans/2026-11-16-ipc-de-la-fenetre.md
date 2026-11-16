@@ -4,10 +4,9 @@
 >
 > **Issues :** lun-luxuria#78 (`niveau:critique`) ; trois points de lun-luxuria#79, rattachés au tri du 16/11.
 >
-> **État : contesté le 16/11, amendé, à valider par CrOliX.** Cinq choix restent à trancher, les deux premiers ensemble
-> (« Les choix ouverts »). Les tâches suivent les recommandations marquées **[choix Claude]**, et chaque choix dit ce
-> qui change si CrOliX en prend une autre. La dernière section dit ce que la contestation a changé, objection par
-> objection.
+> **État : contesté le 16/11, amendé, validé par CrOliX le 16/11** (« validé »), avec les recommandations marquées
+> **[choix Claude]** pour les cinq choix (« Les choix ouverts »), les deux premiers ensemble. La dernière section dit ce
+> que la contestation a changé, objection par objection.
 >
 > Écrit le 16/11 depuis lun-luxuria#78. Code relu sur `main` de lun-luxuria (`30e02c4`), par le graphe d'abord. Sources
 > tierces lues dans le cache de Cargo, sans rien en lancer : tauri 2.12.5, tauri-plugin-http 2.8.3,
