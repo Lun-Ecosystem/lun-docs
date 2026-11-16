@@ -36,12 +36,12 @@ qui doit citer la défense « aucune permission `dialog:` ».
 - Barrières de la page et de Rust vertes. La preuve dans l'exe, lancé depuis l'Explorateur, par CrOliX : une boîte
   du système ne se clique pas par un agent.
 
-| Dépôt, branche | Issue | Niveau |
-|---|---|---|
+| Dépôt, branche                          | Issue                                           | Niveau     |
+| --------------------------------------- | ----------------------------------------------- | ---------- |
 | `lun-luxuria`, `feat/ipc-de-la-fenetre` | lun-luxuria#78 ; trois points de lun-luxuria#79 | `critique` |
-| `lun-docs`, `docs/ipc-de-la-fenetre` | lun-luxuria#78, pour ce plan | `trivial` |
+| `lun-docs`, `docs/ipc-de-la-fenetre`    | lun-luxuria#78, pour ce plan                    | `trivial`  |
 
-*Ask* ([`git.md`](../../standards/git.md), lignes 40 à 42) : la fenêtre Tauri ne se prouve que dans l'exe, par CrOliX.
+_Ask_ ([`git.md`](../../standards/git.md), lignes 40 à 42) : la fenêtre Tauri ne se prouve que dans l'exe, par CrOliX.
 La PR de Lun'Luxuria reste en brouillon jusque-là.
 
 **Hors périmètre**, celui de l'issue : la CSP ; le contenu de `service.py` au-delà de ses arguments ; Lun'Anima. En
@@ -150,6 +150,7 @@ Autres faits lus, utiles aux choix :
    Le parseur est créé sans `allow_abbrev` (`:317`) : argparse accepte alors une abréviation, `--orig` vaut `--origin`.
    Une liste de refus ne suffit pas. `--origin` et `--port` ne servent qu'aux bancs, lancés par Node, hors de Rust
    (`src/presence/chaine.test.ts:574`, `src/listen/gestes.test.ts:414`).
+
 9. **Les arguments des programmes** : libres, un par ligne (`ServiceVoix.svelte:157-167`), bornés comme ceux du service
    (`programs.rs:124`), passés à `program_start(name, args, addr)` (`:243-257`). L'exe est celui de la personne ; ses
    options sont libres.
@@ -219,9 +220,9 @@ portée : le filtre de l'enveloppe est plus étroit qu'elle.
 **[choix Claude] pour 1 et 2** : 2 (d) avec 1 (c), dans ce chantier (tâches 7 et 12). (d) ferme le bloc pour deux
 tâches, sans toucher au flux du corps ; (c) garde le relié hors du poste.
 
-*Si CrOliX prend 1 (b) ou 1 (a)* : la tâche 7 sans les hôtes, la 12 réduite à `maxRedirections` ; en (a), l'enveloppe
-ne regarde pas l'hôte. *Si CrOliX prend 2 (a)* : les tâches 7 et 12 tombent, et le `CLAUDE.md` dit le réseau ouvert.
-*S'il renvoie 2 (d) à plus tard* : la tâche 14 en fait une issue, avec les tâches 7 et 12 telles qu'écrites.
+_Si CrOliX prend 1 (b) ou 1 (a)_ : la tâche 7 sans les hôtes, la 12 réduite à `maxRedirections` ; en (a), l'enveloppe
+ne regarde pas l'hôte. _Si CrOliX prend 2 (a)_ : les tâches 7 et 12 tombent, et le `CLAUDE.md` dit le réseau ouvert.
+_S'il renvoie 2 (d) à plus tard_ : la tâche 14 en fait une issue, avec les tâches 7 et 12 telles qu'écrites.
 
 ### 3. Le chemin de piper
 
@@ -238,7 +239,7 @@ adresse hors de la boucle locale, que le critère 3 refuse.
 - **(c) Laissé tel quel.** Ne tient pas le critère 3.
 
 **[choix Claude]** : (b). Le dossier du service fait tourner du code, d'où la boîte de dialogue ; le fichier de voix est
-une donnée, la borne suffit. *Si CrOliX prend (a)* : une tâche Rust et une tâche page de plus, après la 4 et la 9.
+une donnée, la borne suffit. _Si CrOliX prend (a)_ : une tâche Rust et une tâche page de plus, après la 4 et la 9.
 
 kokoro n'est pas un choix : la fenêtre le refuse, il ne se charge pas sous `uv run` (sortie 8).
 
@@ -257,7 +258,7 @@ ni celles de RVC.
   chemin réseau ; fragile pour le reste, les options d'un tiers changent sans nous.
 
 **[choix Claude]** : (b), la suite de `program_pick` : ce que l'appli lance, exe et arguments, la personne l'a choisi.
-*Si CrOliX prend (a)* : les tâches 6 et 11 tombent ; la sonde (5 et 10) reste. *(c)* : la tâche 6 refuse un argument
+_Si CrOliX prend (a)_ : les tâches 6 et 11 tombent ; la sonde (5 et 10) reste. _(c)_ : la tâche 6 refuse un argument
 qui commence par `\\` ou `//`, sans boîte, et la 11 tombe.
 
 ### 5. La sonde de `program_state` et `program_start`
@@ -269,7 +270,7 @@ qui commence par `\\` ou `//`, sans boîte, et la 11 tombe.
   `[::1]` se dit absent.
 - **(c) Rust tire l'adresse des arguments confirmés.** Coût : lire les options de chaque programme. Fragile.
 
-**[choix Claude]** : (a). Une règle, une fonction, pour le service et la sonde. *Si CrOliX prend (b)* : la tâche 5
+**[choix Claude]** : (a). Une règle, une fonction, pour le service et la sonde. _Si CrOliX prend (b)_ : la tâche 5
 prend un port, la 10 le tire du champ.
 
 ## Les tâches
@@ -308,10 +309,10 @@ chantier :
 
 - **La 2** quand on veut après la 1 : `tauri.conf.json` et `Cargo.toml` seulement.
 - **Piste Rust**, dans l'ordre : 3, 4, 5, 6. Elles partagent `voice.rs`, `programs.rs` et `lib.rs`. **La 7** après la
-  4, dont elle prend la garde des boîtes, *en parallèle de la 5 et de la 6* ; dans `lib.rs`, chacune ajoute ses lignes,
+  4, dont elle prend la garde des boîtes, _en parallèle de la 5 et de la 6_ ; dans `lib.rs`, chacune ajoute ses lignes,
   la dernière fusionnée se rebase.
-- **Piste page**, après la 1, *en parallèle de la piste Rust*, dans l'ordre : 8, 9, 10, 11. Elles partagent `voix.ts`,
-  `ServiceVoix.svelte`, `session.svelte.ts`, `settings.ts` et leurs tests. **La 12** *en parallèle d'elles* : `net.ts`,
+- **Piste page**, après la 1, _en parallèle de la piste Rust_, dans l'ordre : 8, 9, 10, 11. Elles partagent `voix.ts`,
+  `ServiceVoix.svelte`, `session.svelte.ts`, `settings.ts` et leurs tests. **La 12** _en parallèle d'elles_ : `net.ts`,
   `Reglages.svelte`, `Arrivee.svelte`. Les contrats des commandes sont écrits ici : la page se code contre eux, l'appel
   à Rust simulé.
 - **La 13** après les deux pistes ; **la 14** dès la validation ; **la 15** en dernier.
@@ -326,7 +327,7 @@ chantier :
      donne, construite sur `tauri::generate_context!()` pour les manifestes d'ACL et la configuration, `plugins`
      compris, comme la doc de tauri le montre. Pas sur `mock_context` : son ACL est vide.
    - Ses dossiers dans un dossier temporaire : `ctx.config_mut().app.app_directories_override =
-     Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `src/path/desktop.rs:374-378` ;
+Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `src/path/desktop.rs:374-378` ;
      tauri-utils `src/config.rs:3232-3242`). Sans cela, le plugin crée et réécrit le `.cookies` du vrai dossier de
      cache du poste (« Les cookies », plus haut).
    - Les appels passent par l'IPC, comme la page : `get_ipc_response`, avec l'adresse `http://tauri.localhost`
@@ -342,6 +343,7 @@ chantier :
 
      Une fenêtre par écriture : une entrée illisible fait tomber sa capacité entière, pas les autres. La fenêtre `main`
      garde `default.json`.
+
    - Admis par `essai` : `http://127.0.0.1/`, `http://127.0.0.1:8080/v1`, `http://localhost/`,
      `http://localhost:11434/x`, et les mêmes en https. Par l'écriture de `[::1]` qui se lit : `http://[::1]/`,
      `http://[::1]:8788/`, et en https.
@@ -358,18 +360,18 @@ chantier :
    - Barrières : Rust ; la surface publique.
    - Exclu : changer `default.json`, `tauri.conf.json` ou les fonctions du plugin (tâche 2).
 
-    Fait le 16/11 (lun-luxuria#87, `386a47f`, `8d0b468`, `b7bc151`, `c42f6a5`) : l'appli de test sur `generate_context!()`, dossiers
-    en temporaire ; `[::1]` brut est illisible, échappé il est lu. `build.rs` et `app.manifest` s'ajoutent à la liste :
-    sans eux le binaire de test sort en `STATUS_ENTRYPOINT_NOT_FOUND` (muda veut Common Controls v6).
+   Fait le 16/11 (lun-luxuria#87, `386a47f`, `8d0b468`, `b7bc151`, `c42f6a5`) : l'appli de test sur `generate_context!()`, dossiers
+   en temporaire ; `[::1]` brut est illisible, échappé il est lu. `build.rs` et `app.manifest` s'ajoutent à la liste :
+   sans eux le binaire de test sort en `STATUS_ENTRYPOINT_NOT_FOUND` (muda veut Common Controls v6).
 
-2. - [x] **Le plugin : les redirections dans la portée, sans cookies** (`testeur`, puis `dev-luxuria`). *Après la 1,
-   en parallèle du reste.*
+2. - [x] **Le plugin : les redirections dans la portée, sans cookies** (`testeur`, puis `dev-luxuria`). _Après la 1,
+         en parallèle du reste._
    - `src-tauri/tauri.conf.json` : `"plugins": { "http": { "scopeRedirects": true } }`. Une clé mal écrite empêche le
      démarrage : le plugin la refuse (`deny_unknown_fields`, plugin `src/config.rs:9`), tauri le dit à l'initialisation
      (`src/plugin.rs:801-806`), et `lib.rs:45-46` s'arrête. L'appli de test lit la même configuration : `cargo test`
      le voit.
    - `src-tauri/Cargo.toml:24` : `tauri-plugin-http = { version = "2.8.3", default-features = false, features =
-     ["rustls-tls", "http2", "charset", "system-proxy"] }`, les fonctions par défaut moins `cookies`. L'appli n'en
+["rustls-tls", "http2", "charset", "system-proxy"] }`, les fonctions par défaut moins `cookies`. L'appli n'en
      envoie aucun (« Les cookies », plus haut).
    - Tests : la redirection de la tâche 1 passe au vert ; après la construction de l'appli de test, aucun `.cookies`
      dans son dossier de cache. Échec attendu sur `main` : le plugin le crée (plugin `src/lib.rs:106-114`).
@@ -378,13 +380,13 @@ chantier :
    - Barrières : Rust ; la surface publique.
    - Exclu : `default.json`.
 
-    Fait le 16/11 (lun-luxuria#87, `cc7ca32`, tests dans `b7bc151`) : `scopeRedirects`, `tauri-plugin-http` sans `cookies`,
-    `Cargo.lock` perd 5 paquets.
+   Fait le 16/11 (lun-luxuria#87, `cc7ca32`, tests dans `b7bc151`) : `scopeRedirects`, `tauri-plugin-http` sans `cookies`,
+   `Cargo.lock` perd 5 paquets.
 
 ### Piste Rust
 
 3. - [ ] **La boucle locale, et les arguments du service** (`testeur`, puis `dev-luxuria`). Critère 3 ; choix 3 (b) ;
-   lun-luxuria#79, l'exemple de chemin.
+         lun-luxuria#79, l'exemple de chemin.
    - Fichiers : `src-tauri/src/loopback.rs`, nouveau ; `src-tauri/src/voice.rs` ; `src-tauri/src/lib.rs`.
    - `loopback::addr(url)` : `http://` ou `https://`, puis `127.0.0.1`, `localhost` ou `[::1]`, puis un `:port`
      facultatif (1 à 65535), puis un `/` au plus. Schéma et hôte sans égard à la casse. Rien d'autre : ni nom
@@ -429,7 +431,7 @@ chantier :
    - Exclu : `service.py` ; la page ; les programmes (tâche 5).
 
 4. - [ ] **Les dossiers choisis par la personne, et une boîte à la fois : Rust** (`testeur`, puis `dev-luxuria`).
-   Critère 2. Après la 3.
+         Critère 2. Après la 3.
    - Fichiers : `src-tauri/src/folders.rs` et `src-tauri/src/one_box.rs`, nouveaux ; `src-tauri/src/body.rs` ;
      `src-tauri/src/voice.rs` ; `src-tauri/src/programs.rs` ; `src-tauri/src/lib.rs`.
    - Le contrat, que la page suit (tâches 8 et 9) :
@@ -488,8 +490,9 @@ chantier :
    - `program_args`, sans boîte : refusé si aucun exe n'est choisi pour ce nom (« Choisis d'abord son programme. ») ;
      `true` si les arguments sont ceux déjà confirmés ; refusé si une boîte est ouverte (le garde de la tâche 4).
    - Sinon `checked_args` (`voice.rs:35-46`), puis une boîte de message du système, modale
-     (`MessageDialogBuilder::parent`, dialog `src/lib.rs:305`), titrée « Les arguments de <programme> », les
-     arguments un par ligne. Trois boutons, `YesNoCancelCustom("Annuler", "Confirmer", "Fermer")` (dialog
+     (`MessageDialogBuilder::parent`, dialog `src/lib.rs:305`), titrée « Les arguments de <programme> » : l'exe en
+     tête, puis chaque argument sur sa ligne, numéroté et entre « » sans espace ajoutée, ou « Aucun argument. ». Trois
+     boutons, `YesNoCancelCustom("Annuler", "Confirmer", "Fermer")` (dialog
      `src/models.rs:66`) : le premier, celui d'Entrée, refuse ; Échap rend le troisième, qui refuse. Lue par
      `blocking_show_with_result` (`:382`), confirmée sur `Custom("Confirmer")` seulement ; jamais `blocking_show`, vrai
      sur le premier bouton. `#[tauri::command(async)]`, comme `program_pick` : la boîte ne tourne pas sur le fil de la
@@ -497,8 +500,9 @@ chantier :
    - Confirmés : gardés dans `arguments.json`, à côté de `programmes.json`. Une clé absente : jamais confirmés ; une
      liste vide : confirmée vide. Un autre exe choisi pour ce nom fait tomber sa confirmation ; le même exe rechoisi la
      garde (décidé pendant la tâche, côté prudent). `checked_args` refuse un caractère de contrôle ou de format bidi
-     ou invisible dans un argument : la boîte doit montrer exactement ce qui part, un argument par ligne (vu pendant
-     la tâche ; vaut aussi pour le service voix).
+     ou invisible dans un argument, et un fichier de configuration se lit puis s'écrit sous un seul verrou : la boîte
+     doit montrer exactement ce qui part (vu pendant la tâche ; vaut aussi pour le service voix, dont le refus nomme le
+     champ).
    - `program_start` ne prend plus `args` : il lance l'exe gardé avec les arguments confirmés ; jamais confirmés :
      « Confirme d'abord ses arguments. », et rien ne part. « Déjà lancé avec ces arguments » (`:132`) compare aux
      confirmés.
@@ -510,8 +514,8 @@ chantier :
    - Barrières : Rust ; la surface publique.
    - Exclu : la page (tâche 11) ; borner les arguments eux-mêmes (choix 4 (c)).
 
-7. - [ ] **Le filtre du réseau : Rust** (`testeur`, puis `dev-luxuria`). Choix 1 (c) et 2 (d). *Après la 4, en
-   parallèle de la 5 et de la 6.*
+7. - [ ] **Le filtre du réseau : Rust** (`testeur`, puis `dev-luxuria`). Choix 1 (c) et 2 (d). _Après la 4, en
+         parallèle de la 5 et de la 6._
    - Fichiers : `src-tauri/src/net_guard.rs`, nouveau ; `src-tauri/src/lib.rs` (`:22`, et les commandes `:31-44`) ;
      les tests de `src-tauri/src/net_scope.rs`.
    - Le contrat, que la page suit (tâche 12) : `net_hosts()`, les origines confirmées, un tableau JSON de chaînes
@@ -554,8 +558,8 @@ chantier :
 
 ### Piste page
 
-8. - [ ] **Le dossier du corps : la page, et son avis** (`testeur`, puis `dev-luxuria`). Critère 2. *Après la 1, en
-   parallèle de la piste Rust* : le contrat est celui de la tâche 4.
+8. - [ ] **Le dossier du corps : la page, et son avis** (`testeur`, puis `dev-luxuria`). Critère 2. _Après la 1, en
+         parallèle de la piste Rust_ : le contrat est celui de la tâche 4.
    - Fichiers : `src/desktop/dossiers.ts`, nouveau ; `src/desktop/corps.svelte.ts` ; `src/desktop/DossierCorps.svelte` ;
      `src/session.svelte.ts` ; `src/settings.ts` ; `src/App.svelte` s'il le faut. Leurs tests :
      `src/desktop/corps.test.ts`, `src/desktop/corps.svelte.test.ts`, `src/desktop/keys.svelte.test.ts`,
@@ -584,7 +588,7 @@ chantier :
    - Exclu : le côté Rust (tâche 4) ; le service et la scène (tâche 9) ; la doc (tâche 13).
 
 9. - [ ] **Le dossier du service : la page, et l'avis sur la scène** (`testeur`, puis `dev-luxuria`). Critère 2. Après
-   la 8.
+         la 8.
    - Fichiers : `src/desktop/voix.ts` ; `src/desktop/ServiceVoix.svelte` ; `src/Scene.svelte` ;
      `src/session.svelte.ts` ; `src/settings.ts`. Leurs tests : `src/desktop/voix.test.ts`,
      `src/desktop/reglages.test.ts`, `src/Scene.test.ts`, `src/settings.test.ts`.
@@ -651,8 +655,8 @@ chantier :
     - Barrières : la page ; la surface publique.
     - Exclu : le côté Rust (tâche 6) ; la doc (tâche 13).
 
-12. - [ ] **Le réseau : la page** (`testeur`, puis `dev-luxuria`). Choix 1 (c) et 2 (d). *Après la 1, en parallèle des
-    tâches 8 à 11* : le contrat est celui de la tâche 7.
+12. - [ ] **Le réseau : la page** (`testeur`, puis `dev-luxuria`). Choix 1 (c) et 2 (d). _Après la 1, en parallèle des
+          tâches 8 à 11_ : le contrat est celui de la tâche 7.
     - Fichiers : `src/desktop/net.ts` ; `src/desktop/hotes.ts`, nouveau ; `src/Reglages.svelte` ; `src/Arrivee.svelte` ;
       `src/session.svelte.ts`. Leurs tests : `src/desktop/net.test.ts`, `src/desktop/reglages.test.ts`,
       `src/Arrivee.test.ts`.
@@ -681,7 +685,7 @@ chantier :
 ### La fin
 
 13. - [ ] **Le `CLAUDE.md` et la doc** (`dev-luxuria`). Critère 5 ; lun-luxuria#79, deux points. Après les deux
-    pistes.
+          pistes.
     - `CLAUDE.md:32-42` dit ce que fait le code :
       - Rust lit le corps et lance le service dans les dossiers que la personne a choisis dans la boîte de dialogue du
         système ; il borne les arguments du service ; c'est lui qui sonde l'adresse d'un programme, sur la boucle
@@ -706,9 +710,9 @@ chantier :
     - Exclu : l'interface du serveur compatible (lun-luxuria#79, le troisième point).
 
 14. - [x] **Ce qui est renvoyé** (la session). Critère 4. Dès la validation : pour chaque choix que CrOliX renvoie au
-    lieu de le faire, une issue lun-luxuria, `niveau:critique`, qui reprend son option telle qu'écrite ici, ses tâches
-    et leurs pièges. Son lien entre dans le `CLAUDE.md` (tâche 13) et dans la PR. Rien de renvoyé : la case se coche
-    avec cette mention.
+          lieu de le faire, une issue lun-luxuria, `niveau:critique`, qui reprend son option telle qu'écrite ici, ses tâches
+          et leurs pièges. Son lien entre dans le `CLAUDE.md` (tâche 13) et dans la PR. Rien de renvoyé : la case se coche
+          avec cette mention.
 
     Fait le 16/11 : rien de renvoyé, CrOliX a validé les cinq choix tels que recommandés.
 
@@ -811,8 +815,7 @@ tenait. Chaque objection a été relue dans les sources avant d'être reprise.
    **Réponse : retenue.** Un refus de `program_state` arrête le suivi (tâche 10) ; « Oublier » relit les arguments
    (tâche 11) ; `program_args` sans exe, avec des arguments égaux ou une boîte ouverte, n'ouvre rien (tâche 6) ;
    `voice_running` rend le dossier (tâches 4 et 9) ; `checked_dir` garde le chemin sans `\\?\` (tâche 4). La page des
-   dossiers est coupée en deux (tâches 8 et 9). La sonde (tâches 5 et 10) est séparée de la confirmation (tâches 6 et
-   11) : si CrOliX ne prend pas 4 (b), deux tâches tombent, le plan reste.
+   dossiers est coupée en deux (tâches 8 et 9). La sonde (tâches 5 et 10) est séparée de la confirmation (tâches 6 et 11) : si CrOliX ne prend pas 4 (b), deux tâches tombent, le plan reste.
 7. **Objection : des points mineurs.** Le repli sur une copie de `parse_url_pattern` est inutile ; l'appli de test
    n'embarque pas deux fois la page ; `[::1]` brut est sans doute illisible ; la clé mal écrite et le `Matcher` sont
    vérifiables.
