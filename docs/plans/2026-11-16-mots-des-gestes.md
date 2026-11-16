@@ -16,7 +16,8 @@
 > du laptop provisoire.
 >
 > **PR :** lun-docs, branche `docs/banc-et-gestes`, pour ce plan, puis l'ADR de la règle et la ligne B1 de la feuille
-> de route. Celle de Lun'Luxuria s'ouvre avec la tâche 3 ; elle n'attend pas lun-luxuria#82 (« Les tâches »).
+> de route. Celle de Lun'Luxuria, lun-luxuria#84 (brouillon), porte les tâches 3 et 4 ; elle n'attend pas lun-luxuria#82
+> (« Les tâches »), mais se rebase dessus.
 
 **But :** que la voix ne tranche une vraie carte que sur une règle mesurée. Mesurer ce que la page envoie au serveur,
 texte et confiance, quand CrOliX dit un mot de geste, et quand arrive un son qui n'en est pas un : ses prises, cinq
@@ -62,7 +63,7 @@ mesure, la règle. Le banc de présence (#67 à #75) est un autre chantier (« H
 
 | Dépôt, branche | Issue | PR | Niveau |
 |---|---|---|---|
-| `lun-luxuria`, `feat/mots-des-gestes` | lun-luxuria#83, chapeau ; #6 | à ouvrir | `standard` |
+| `lun-luxuria`, `feat/mots-des-gestes` | lun-luxuria#83, chapeau ; #6 | lun-luxuria#84, brouillon | `standard` |
 | `lun-anima` | Lun'Anima : 4 tâches, lun-anima#110 | ouverte | `critique` |
 | `lun-docs`, `docs/banc-et-gestes` | lun-luxuria#83, le chapeau | à ouvrir | `trivial` |
 
@@ -255,17 +256,20 @@ lun-luxuria#82 ne bloque rien ici : les fichiers du banc des gestes sont les mê
 transcription de plus de 20 s échoue : sur le processeur, elle s'écrit comme telle, jamais comme un faux rejet.
 
 1. - [ ] **Les prises** (CrOliX, puis `testeur`, hors dépôt). *Parallélisable.*
+   - **État du 16/11 :** le kit d'enregistrement est prêt hors dépôt ; les prises de CrOliX sont à faire (la liste entière,
+     mots privés compris : 200 prises).
    - CrOliX enregistre (« Les prises de CrOliX »), au micro choisi (« Les choix qui restent », point 3).
    - Le `testeur` les nomme `<id>-<n>.wav` dans `BANC_DIR/gestes/prises/`, compte chaque famille, et écrit ici les
      comptes : par famille, jamais un mot de la liste privée.
    - Exclu : la prise d'une autre personne ; un son dans un dépôt.
-2. - [ ] **La brique du laptop et son étalonnage** (`testeur`, hors dépôt). *Parallélisable*, si CrOliX l'a choisie.
+2. - [x] **La brique du laptop et son étalonnage** (`testeur`, hors dépôt). *Parallélisable*, si CrOliX l'a choisie.
    - `voix/test_service.py` par sa commande (`:4`), une fois ; le résultat ici.
    - whisper.cpp v1.9.5 pour le processeur et le modèle `medium`, téléchargés hors de tout dépôt ; le lien et la somme
      de chaque fichier ici. whisper-server lancé à la main.
    - L'étalonnage (« La mesure ») ; les 18 prises comparées, une par une, et le verdict ici.
    - Exclu : la version Vulkan ; `small` ; changer le service de voix.
-3. - [ ] **Le banc des gestes** (`dev-luxuria`). *Parallélisable.* `src/listen/gestes.ts` et `gestes.test.ts`,
+   - Fait le 16/11 : voir « Ce que la mesure a donné ».
+3. - [x] **Le banc des gestes** (`dev-luxuria`). *Parallélisable.* `src/listen/gestes.ts` et `gestes.test.ts`,
    nouveaux ; `src/listen/replay.ts` (le bruit à graine, sorti de `banc.test.ts`) ; `src/listen/banc.test.ts` (il
    l'importe) ; `src/presence/chaine/sons.ts` (`dire` exporté) ; `package.json` ; `docs/README.md` ; `CLAUDE.md` (voir
    plus haut).
@@ -281,11 +285,15 @@ transcription de plus de 20 s échoue : sur le processeur, elle s'écrit comme t
    - Preuve : `npm run gestes` avec `GESTES_STT=faster:tiny`, trois lignes de liste et une voix ; la ligne collée ici.
    - Exclu : la page ; le serveur ; une liste de mots dans le dépôt ; un son dans le dépôt ; tout classement ; un
      réglage de Luxuria ; le calcul de la confiance.
-4. - [ ] **Relecture** (`reviewer`). Après 3, sur son diff, contre ses critères et ses exclusions. Un écart revient à 3.
+   - Fait : lun-luxuria#84. Deux relectures : la première « à reprendre », la seconde approuvée sans bloquant. Écarts et
+     reste à faire au rebase sur lun-luxuria#82 : dans la PR.
+4. - [x] **Relecture** (`reviewer`). Après 3, sur son diff, contre ses critères et ses exclusions. Un écart revient à 3.
 5. - [ ] **La mesure provisoire** (`testeur`, laptop).
    - `npm run gestes` avec les cinq voix, sur la brique de la tâche 2, ou sur `faster:tiny` si elle n'est pas choisie.
    - Ici : la durée, le nombre de sons par famille, puis les comptes de lun-anima#110 pour les six mots publics.
    - Exclu : écrire ici un mot de la liste privée ; trancher sur ces chiffres.
+   - **Suspendue le 16/11**, en attente de la décision de CrOliX : abandon proposé, car l'étalonnage ne passe pas et une
+     transcription `medium` prend environ 53 s au processeur.
 6. - [ ] **La mesure qui décide** (`testeur`, desktop, étape 2 du § 4).
    - L'étalonnage d'abord, puis la même commande sur la brique en service.
    - Ici : la durée, l'étalonnage, puis les comptes de lun-anima#110 pour les six mots publics, et pour chaque critère de
@@ -302,11 +310,85 @@ transcription de plus de 20 s échoue : sur le processeur, elle s'écrit comme t
 
 ## Ce que les preuves ont montré sur `main`
 
-À remplir par la tâche 3, avant son code : le message d'échec de chacun de ses tests, collé tel quel.
+Tâche 3, lun-luxuria#84, sur `main` (`c800776`). Les messages d'échec, collés tels quels.
+
+**Premier passage.** Sans `gestes.ts` : `Error: Cannot find module './gestes.ts' imported from …/src/listen/gestes.test.ts`.
+Avec un `gestes.ts` vide (signatures seules) :
+
+1. Liste lue, ligne refusée : `AssertionError: expected [] to deeply equal [ …(2) ]`
+2. Prise manquante nommée, rien de joué : `AssertionError: promise resolved "+0" instead of rejecting`
+3. Bruit et trois niveaux identiques : `AssertionError: expected [] to deeply equal [ -6, +0, 6 ]`
+4. Mot seul, son de la pause : `AssertionError: expected [] to deeply equal [ 'start', 'held', 'pause', 'end' ]`
+5. Texte écarté par `isNoise` : `Error: ENOENT: no such file or directory, open '…\gestes.jsonl'`
+6. Texte et confiance tels quels : `Error: ENOENT: no such file or directory, open '…\gestes.jsonl'`
+
+**Reprise après la première relecture.** Échecs vus avant le code :
+
+- JSON illisible : `expected [Function illisible] to throw error matching /mots\.json/ but got 'Unexpected token \'m\', "[{"id": motp…'` (`motprive` est un mot inventé du test)
+- clé inconnue : `expected [Function] to throw error not matching /motprive/`
+- sa voix : `expected [Function] to throw error matching /sa voix/ but got '(0 , __vite_ssr_import_7__.voixDuBanc…'`
+- échecs : `promise resolved "5" instead of rejecting` ; ligne de fin : `expected 15 to be 14`
+- plafond de la trace : `expected [ … ] to have a length of 25 but got 20`
+- `.WAV` : `expected [ [ 'nul', 'code' ], …(4) ] to deep equally contain [ 'TOUX', 'temoin' ]`
+- `npm run banc` et `gestes/` : `expected [ 'a.wav', …(3) ] to deeply equal [ 'a.wav', 'sous/b.wav' ]`
+- tests sur du code existant, vus rater en retirant le code : withdraw `expected [] to deeply equal [ { texte: 'Un.', confiance: 0.8 } ]` ; attente `expected [] to match object [ { texte: 'Oui.', …(1) } ]` ; bruit `expected [ false, false, false ] to deeply equal [ true, true, true ]` ; prise illisible `expected [Function] to throw error matching /oui-1\.wav/ but got 'not a WAV file'`
+
+**Barrières** sur la pointe de la branche : `npm test` 46 fichiers, 700 passés, 22 sautés ; lint, typecheck 0/0, format et `check-repo --public` verts.
+
+**Preuve** (`faster:tiny`, voix Hortense, trois lignes oui/non/silence, une prise chacune) : 14 sons, 0 échec, 16 tests passés, 32,8 s.
+
+```
+{"id":"oui","source":"prise:1","attendu":"accepter","condition":"propre","ecoute":["start","held","pause","end"],"transcriptions":[{"texte":"oui","confiance":0.2740992527115383,"duree":2155,"son":1312,"verdict":"pour_elle"}],"envoye":[{"texte":"oui","confiance":0.2740992527115383}],"repris":[],"brique":"faster:tiny","date":"2026-11-16T14:34:34.456Z"}
+{"fin":true,"sons":14,"echecs":0,"brique":"faster:tiny","duree":28096}
+```
 
 ## Ce que la mesure a donné
 
-À remplir par les tâches 1, 2, 5 et 6 : les prises, l'étalonnage, les deux relevés, les comptes de lun-anima#110.
+À remplir par les tâches 1, 5 et 6 : les prises, les deux relevés, les comptes de lun-anima#110. La tâche 2 est faite.
+
+### Tâche 2 : la brique du laptop et son étalonnage (16/11)
+
+- `voix/test_service.py` (`uv run --with numpy --with httpx --with soundfile python voix/test_service.py`) : `ok`.
+- Fichiers, téléchargés hors dépôt :
+
+| Fichier | Lien | SHA-256 |
+|---|---|---|
+| `whisper-bin-x64.zip` | https://github.com/ggml-org/whisper.cpp/releases/download/b5454/whisper-bin-x64.zip | `6ba69e3482d7826214f90a6a9c84ca07782aec1e1d0c6a7c30c994fd5d816ccb` |
+| `ggml-medium.bin` | https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin | `6c14d5adee5f86394037b4e4e8b59f1673b6cee10e3cf0b11bbdbee79c156208` |
+
+- La release `v1.9.5` de whisper.cpp n'a aucun binaire. Ceux de la release `b5454` viennent du même commit que le tag
+  `v1.9.5` (« whisper : bump version to 1.9.5 ») : c'est bien le build 1.9.5. Processeur : i7-1165G7, 4 threads.
+- Étalonnage : `make_stt('whisper-server:http://127.0.0.1:8178', 'fr')` sur le fichier entier des 18 prises, un seul
+  passage retenu, continu.
+
+| Prise | Attendu | Rendu | Confiance rendue | Confiance du 10/11 | Écart |
+|---|---|---|---|---|---|
+| oui-propre | Oui. | Oui. | 0,598 | 0,602 | -0,004 |
+| oui-marmonne | Oui. | Oui. | 0,777 | 0,776 | +0,001 |
+| oui-bruit | Oui. | Oui. | 1,000 | 0,628 | **+0,372** |
+| non-propre | NON ! | NON ! | 0,931 | 0,906 | +0,025 |
+| non-marmonne | Non. | Non. | 0,859 | 0,875 | -0,016 |
+| non-bruit | Non. | Non. | 0,997 | 0,997 | 0,000 |
+| ok-propre | Ok. | Ok. | 0,969 | 0,972 | -0,003 |
+| ok-marmonne | Ok. | Ok. | 0,997 | 0,997 | 0,000 |
+| ok-bruit | Ok. | Ok. | 0,996 | 0,996 | 0,000 |
+| envoie-propre | Au revoir. | Au revoir. | 0,820 | 0,831 | -0,011 |
+| envoie-marmonne | Au revoir. | Au revoir. | 0,902 | 0,901 | +0,001 |
+| envoie-bruit | Au revoir. | Au revoir. | 0,802 | 0,820 | -0,018 |
+| valide-propre | Valide. | Valide. | 0,712 | 0,710 | +0,002 |
+| valide-marmonne | Valide. | Valide. | 0,834 | 0,835 | -0,001 |
+| valide-bruit | Valideux. | Valideux. | 0,594 | 0,613 | -0,019 |
+| annule-propre | annule. | annule. | 0,559 | 0,544 | +0,015 |
+| annule-marmonne | annule. | annule. | 0,922 | 0,893 | +0,029 |
+| annule-bruit | Annule. | Annule. | 0,640 | 0,696 | **-0,056** |
+
+- **Verdict : le critère n'est pas rempli.** Les mêmes mots sur les 18, mais deux écarts de confiance au-delà de 0,05
+  (« oui » dans le bruit à +0,372, « annule » dans le bruit à -0,056) : la mesure provisoire ne dit rien.
+- Durée : environ 53 s par transcription `medium` au processeur (moyenne 52,7 s, de 36 s à 80 s). À ce rythme, 335 sons
+  font environ 4 h 55, bien plus que l'« heure » estimée plus haut.
+- Écart de protocole : `service.py` fixe un délai de 60 s ; une prise l'a dépassé. Le délai a été porté à 300 s dans le
+  script d'étalonnage, hors dépôt ; le service n'est pas modifié. Tel quel, `/stt` au processeur avec `medium`
+  dépasserait son délai.
 
 ## Ce que le desktop vérifiera
 
