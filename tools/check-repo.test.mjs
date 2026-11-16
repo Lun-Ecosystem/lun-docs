@@ -209,6 +209,7 @@ test('checkNoPrivateNames leaves the dated plans up to 12/11 and checks the livi
   const root = fixture({
     'docs/plans/2026-11-12-old.md': 'core/src/x.ts\n',
     'docs/specs/2026-10-19-old.md': 'lun-anima/x/y.ts\n',
+    'docs/plans/2026-11-08-bascule-nas.md': 'lun-anima/x/y\n', // history by its date alone
     'docs/mise-en-service-desktop.md': 'lun-anima/x/y\n',
     'docs/plans/2026-11-13-new.md': 'core/src/x.ts\n',
     'docs/plans/2026-11-07-feuille-de-route-mvp.md': 'core/src/x.ts\n',

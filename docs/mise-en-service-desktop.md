@@ -4,8 +4,9 @@ Ce que CrOliX voit et fait, dans l'ordre, le jour où le core, Acedia et Avariti
 lancés au démarrage de Windows sans fenêtre, joints par le téléphone en HTTPS, chaque base copiée une fois par jour.
 Spec : [`specs/2026-11-07-poste-autonome-design.md`](specs/2026-11-07-poste-autonome-design.md).
 
-**Le détail du déploiement est dans le dépôt du core (privé)** : l'installation et ses scripts, les commandes, les
-chemins et les ports du core, sa base et sa restauration. Cette page n'en garde que ce qui se voit.
+**Le détail du déploiement est dans le dépôt du core, [lun-anima](https://github.com/Lun-Ecosystem/lun-anima)
+(privé)**, page « Mettre le desktop en service » : l'installation et ses scripts, les commandes, les chemins, sa base
+et sa restauration. Cette page n'en garde que ce qui se voit.
 
 Tout ce qui touche au système (tâches planifiées, pare-feu, Tailscale, registre) se fait à la main, dans l'ordre
 ci-dessous. Aucune adresse du tailnet ni aucun nom de machine n'entre dans un dépôt : ils restent dans les `.env` et
@@ -16,21 +17,24 @@ dans l'app.
 - Node 24, `uv` et Git installés sur le desktop.
 - Tailscale installé et connecté sur le desktop et sur le téléphone, HTTPS activé pour le tailnet.
 - Les dépôts de travail à jour sur `main`.
-- Les serveurs de développement du desktop arrêtés : l'installation refuse un port déjà tenu et n'arrête rien elle-même.
+- Les serveurs de développement du desktop arrêtés : les ports 8788 (core), 8787 (Acedia) et 8789 (Avaritia) doivent
+  être libres. L'installation refuse un port déjà écouté et n'arrête rien elle-même.
 - Un dossier de service choisi, hors des dépôts de travail : le core, Acedia et Avaritia y tournent depuis leurs
   propres clones, jamais depuis le dossier de travail.
 
 ## 2. Installer
 
 L'installation se lance dans un PowerShell **administrateur** et dit d'abord ce qu'elle ferait, sans rien faire. Elle
-clone les trois dépôts dans le dossier de service, les construit, puis crée une tâche planifiée par serveur, `Lun core`,
-`Lun Acedia` et `Lun Avaritia` : lancées au démarrage de Windows, sans fenêtre, sans mot de passe gardé. Son mode
-d'emploi est dans le dépôt du core.
+crée une tâche planifiée par serveur, `Lun core`, `Lun Acedia` et `Lun Avaritia` : lancées au démarrage de Windows,
+sans fenêtre, sans mot de passe gardé. Son mode d'emploi est dans le dépôt du core.
 
-1. Poser un `.env` dans chacun des trois dépôts du service, depuis leur `.env.example`. Chaque base reste dans le
+1. La lancer pour de bon une première fois : elle clone les trois dépôts dans le dossier de service, puis s'arrête
+   faute de `.env`.
+2. Poser un `.env` dans chacun des trois dépôts du service, depuis leur `.env.example`. Chaque base reste dans le
    dossier de service : une base ailleurs est refusée. Chez Acedia et Avaritia, un modèle sans prix y reçoit le sien
    (§ 11, « Un modèle sans prix »).
-2. Choisir les bases (§ 3), puis finir l'installation : les trois tâches partent aussitôt.
+3. Choisir les bases (§ 3), puis relancer l'installation : elle construit, crée les trois tâches et les lance
+   aussitôt.
 
 ## 3. Les bases qui entrent en service
 
@@ -51,11 +55,11 @@ d'emploi est dans le dépôt du core.
 
 ## 4. Relier Acedia et Avaritia
 
-Une fois les trois serveurs lancés, dans l'app du core : Ctrl K, « Relier un poste ». Son adresse locale,
-`http://localhost:8787` pour Acedia ou `http://127.0.0.1:8789` pour Avaritia, puis le code que donne le satellite, dans
-Réglages › Appareils et applications › Relier un appareil, valable 10 minutes. Avec une base neuve, aucun appareil n'est
-encore appairé au satellite : `npm run pair-code`, dans son dossier de service, donne le code de son premier
-navigateur. Le recours en terminal du core est dans son dépôt.
+Une fois les trois serveurs lancés, dans l'app du core (`http://127.0.0.1:8788`) : Ctrl K, « Relier un poste ». Son
+adresse locale, `http://localhost:8787` pour Acedia ou `http://127.0.0.1:8789` pour Avaritia, puis le code que donne le
+satellite, dans Réglages › Appareils et applications › Relier un appareil, valable 10 minutes. Avec une base neuve,
+aucun appareil n'est encore appairé au satellite : `npm run pair-code`, dans son dossier de service, donne le code de
+son premier navigateur. Le recours en terminal du core est dans son dépôt.
 
 Avec une base Acedia neuve, refaire ensuite la connexion Google dans Acedia (`http://localhost:8787`) : son adresse de
 retour reste valable, c'est le même port.
@@ -69,8 +73,8 @@ retour reste valable, c'est le même port.
    dépôt le casserait. Les réglages et l'appairage ne dépendent pas de cet emplacement. Mettre à jour : quitter
    Luxuria, reconstruire, recopier l'exe au même endroit.
 2. **Appairer, par l'écran.** Dans l'app du core, Atelier > Appareils > « Ajouter un appareil » : un code à six
-   chiffres, valable quelques minutes. Dans Luxuria : « Relié à un serveur », puis le code. L'adresse proposée par
-   défaut est celle du core sur ce poste.
+   chiffres, valable quelques minutes. Dans Luxuria : « Relié à un serveur », puis le code. L'adresse par défaut,
+   `http://127.0.0.1:8788`, est celle du core sur ce poste.
 3. **Sa voix**, dans Réglages > Voix, par des champs nommés (aucune ligne d'arguments à écrire) :
    - « Lancer le service voix avec l'appli », et le dossier qui contient `service.py` ;
    - Transcription : « Locale » (un modèle chargé dans le service) ou « whisper-server » et son adresse ;
@@ -106,13 +110,13 @@ retour reste valable, c'est le même port.
 
 Sur le desktop, `tailscale serve` publie chaque appli en HTTPS sur le tailnet, et nulle part ailleurs. Les serveurs
 restent sur la boucle locale. Le desktop n'a qu'un nom dans le tailnet : chaque appli prend son port HTTPS, parmi les
-trois que Tailscale accepte (443, 8443 et 10000). Acedia garde l'adresse qu'elle a depuis le J1 (443), Avaritia prend
-10000, pour les liens « Voir la fiche », et le core le dernier, comme le dit son dépôt :
+trois que Tailscale accepte : Acedia sur 443, le core sur 8443, Avaritia sur 10000.
 
 ```powershell
-tailscale serve status                       # Acedia, déjà publiée
-tailscale serve --bg --https=10000 8789      # Avaritia
-tailscale serve status                       # les adresses https://<machine>.<tailnet>.ts.net[:port]
+tailscale serve status                       # Acedia garde l'adresse qu'elle a depuis le J1 (443)
+tailscale serve --bg --https=8443 8788       # le core
+tailscale serve --bg --https=10000 8789      # Avaritia, pour les liens « Voir la fiche »
+tailscale serve status                       # les trois adresses https://<machine>.<tailnet>.ts.net[:port]
 ```
 
 - Dans l'app du core, Atelier > Postes : régler l'**adresse de sa page** d'Acedia et d'Avaritia sur leur adresse

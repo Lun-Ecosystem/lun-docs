@@ -144,12 +144,11 @@ const CORE_FOLDERS = /(?<![\w.-])(?:core|ui)[\\/]src\b[\w.@\\/-]*/g;
 const DATED = /^docs\/(?:plans|specs)\/(\d{4}-\d{2}-\d{2})-/;
 const CUT_OFF = '2026-11-12';
 const LIVING = new Set(['docs/plans/2026-11-07-feuille-de-route-mvp.md', 'docs/specs/2026-11-10-etat-cible-cadrage.md']);
-const HISTORY = new Set(['docs/plans/2026-11-08-bascule-nas.md']);
 
 function isHistory(file) {
   if (LIVING.has(file)) return false;
   const date = file.match(DATED)?.[1];
-  return HISTORY.has(file) || (date !== undefined && date <= CUT_OFF);
+  return date !== undefined && date <= CUT_OFF;
 }
 
 /** A path inside a private repository, written in this one. `docs`: the rules of lun-docs itself. */
