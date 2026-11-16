@@ -4,6 +4,8 @@
 >
 > **Issues :** lun-luxuria#78 (`niveau:critique`) ; trois points de lun-luxuria#79, rattachés au tri du 16/11.
 >
+> **PR livrant :** Lun-Ecosystem/lun-luxuria#87 (brouillon ; tâches 1 et 2 faites, les autres à venir).
+>
 > **État : contesté le 16/11, amendé, validé par CrOliX le 16/11** (« validé »), avec les recommandations marquées
 > **[choix Claude]** pour les cinq choix (« Les choix ouverts »), les deux premiers ensemble. La dernière section dit ce
 > que la contestation a changé, objection par objection.
@@ -316,7 +318,7 @@ chantier :
 
 ### Le mécanisme
 
-1. - [ ] **Le test du mécanisme, avant tout changement** (`testeur`). Critère 1.
+1. - [x] **Le test du mécanisme, avant tout changement** (`testeur`). Critère 1.
    - Fichiers : `src-tauri/Cargo.toml` (en dev-dependencies, `tauri` avec la fonction `test`) ;
      `src-tauri/src/net_scope.rs`, nouveau, sous `#[cfg(test)]` ; `src-tauri/src/lib.rs`
      (`#[cfg(test)] mod net_scope;`).
@@ -356,7 +358,11 @@ chantier :
    - Barrières : Rust ; la surface publique.
    - Exclu : changer `default.json`, `tauri.conf.json` ou les fonctions du plugin (tâche 2).
 
-2. - [ ] **Le plugin : les redirections dans la portée, sans cookies** (`testeur`, puis `dev-luxuria`). *Après la 1,
+    Fait le 16/11 (lun-luxuria#87, `386a47f`, `8d0b468`, `b7bc151`, `c42f6a5`) : l'appli de test sur `generate_context!()`, dossiers
+    en temporaire ; `[::1]` brut est illisible, échappé il est lu. `build.rs` et `app.manifest` s'ajoutent à la liste :
+    sans eux le binaire de test sort en `STATUS_ENTRYPOINT_NOT_FOUND` (muda veut Common Controls v6).
+
+2. - [x] **Le plugin : les redirections dans la portée, sans cookies** (`testeur`, puis `dev-luxuria`). *Après la 1,
    en parallèle du reste.*
    - `src-tauri/tauri.conf.json` : `"plugins": { "http": { "scopeRedirects": true } }`. Une clé mal écrite empêche le
      démarrage : le plugin la refuse (`deny_unknown_fields`, plugin `src/config.rs:9`), tauri le dit à l'initialisation
@@ -371,6 +377,9 @@ chantier :
      la page ne demande plus aucune redirection.
    - Barrières : Rust ; la surface publique.
    - Exclu : `default.json`.
+
+    Fait le 16/11 (lun-luxuria#87, `cc7ca32`, tests dans `b7bc151`) : `scopeRedirects`, `tauri-plugin-http` sans `cookies`,
+    `Cargo.lock` perd 5 paquets.
 
 ### Piste Rust
 
