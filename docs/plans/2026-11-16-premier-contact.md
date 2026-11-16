@@ -86,8 +86,10 @@ proposés : ils se valident avec le plan.
 4. **Relier Acedia.** Atelier › Postes propose « Relier » à Lun'Acedia, avec son adresse locale ; le formulaire demande
    « Dans Lun'Acedia, ouvre Réglages › Appareils et applications › Relier un appareil ». CrOliX ouvre Acedia :
    - sa page « Relier ce navigateur » montre de même le code de son premier appareil, déjà saisi, avec son heure
-     d'expiration, et prévient : « Ce code est pour ce navigateur. Pour relier Lun'Anima : entrer, puis Réglages ›
-     Appareils et applications › Relier un appareil. » « Relier », et Acedia s'ouvre ;
+     d'expiration, et prévient : « Ce code est pour ce navigateur. Pour relier une application : entrer, puis
+     Réglages › Appareils et applications › Relier un appareil. » « Relier », et Acedia s'ouvre. Le front d'un
+     satellite ne nomme pas le core (`app/src/noAnima.test.ts`) : il l'appelle « une application », comme ses
+     Réglages (relevé à la tâche 5, le 16/11) ;
    - dans ses Réglages, « Relier un appareil » donne un code, comme aujourd'hui ;
    - ce code, collé dans le formulaire du core : « Lun'Acedia est relié. », et la Constellation.
 5. **Relier Avaritia** : le même chemin.
@@ -270,7 +272,7 @@ la 7 seule. Dans un dépôt, la route et l'écran ne partagent aucun fichier.
        l'héberge, l'affiche. » ;
      - sous le champ, en texte fixe : « Code du premier appareil. Il expire à 14:32. », l'heure formée comme dans
        `views/src/lib/settings/Devices.svelte:113` ;
-     - puis : « Ce code est pour ce navigateur. Pour relier Lun'Anima : entrer, puis Réglages › Appareils et
+     - puis : « Ce code est pour ce navigateur. Pour relier une application : entrer, puis Réglages › Appareils et
        applications › Relier un appareil. » Le formulaire du core demande le code « affiché par » le poste : sans
        cette phrase, le premier code y serait collé, et ce navigateur n'aurait plus de code à lui ;
      - « Relier » l'envoie par le chemin d'aujourd'hui. Le champ ne part pas seul : `CodeInput` n'envoie au sixième
