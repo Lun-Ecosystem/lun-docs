@@ -351,10 +351,15 @@ sorties se ferment.
 
 ### Le banc et les mots des gestes
 
-lun-luxuria, pas encore de plan. Le banc d'abord : ses observations en `inbox` (lun-luxuria#67 à #71, #73 à #75 ; #72
-est fermée). Puis les mots des gestes : la confiance fixe à 0,9 laisse un « Oui » valider une carte (lun-luxuria#6). Un
-chantier court les mesure au banc avec cinq voix, puis la règle se tranche, et le verrou de l'ADR 0011 avec elle (B1).
-Aucune vraie carte avant.
+Deux chantiers en parallèle depuis le 16/11 (tranché par CrOliX).
+
+- **Les mots des gestes** : [plan](2026-11-16-mots-des-gestes.md), chapeau lun-luxuria#83. La confiance est réelle
+  depuis lun-luxuria#10, mais à la barre de 0,7 le relevé du 10/11 perd « oui », « annule » et « envoie »
+  (lun-luxuria#6). Le banc des gestes mesure ce que la page envoie, sur les prises de CrOliX, cinq voix et des
+  non-paroles ; puis la règle se tranche (B1). Le verrou de l'ADR 0011 se lève ensuite, à trois conditions. Aucune
+  vraie carte avant.
+- **Le banc de présence** : `standard`, pas encore de plan. Ses observations en `inbox` (lun-luxuria#67 à #71, #73 à
+  #75 ; #72 est fermée), le point de lun-luxuria#81 et les quatre scénarios de toux.
 
 ### Le premier contact sans terminal
 
@@ -390,7 +395,8 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
 4. L : la fenêtre qui entre seule, le micro, le son ; les trois préréglages mesurés. Avec elle, deux points de la
    [ligne d'arrivée](../specs/2026-11-10-etat-cible-cadrage.md) de Lun'Luxuria à éprouver, déjà codés : la couper en
    cours de phrase (tout de suite, puis en fin de phrase) et vérifier ce qu'elle dit avoir été entendue ; la file du
-   core avec la carte du kit sur de vraies cartes, et la bande restée au-dessus de la feuille (lun-docs#143).
+   core avec la carte du kit sur des cartes d'essai tant que le verrou de l'ADR 0011 tient (tranché le 16/11), et la
+   bande restée au-dessus de la feuille (lun-docs#143).
    Après le chantier [« le tour de parole »](2026-11-10-tour-de-parole.md) (lun-luxuria#51, lun-anima#99), à
    réentendre :
    - deux phrases à trois secondes d'écart pendant qu'elle réfléchit : une seule réponse, qui a lu les deux ;
