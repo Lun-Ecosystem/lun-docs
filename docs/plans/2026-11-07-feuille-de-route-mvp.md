@@ -143,6 +143,10 @@ Ajouts du 08/11, après l'audit :
   à la lettre du matin, point du soir, humeur calculée, Gmail en push, la nuit en Batch API ;
 - exposer les satellites en serveurs MCP, et étudier Rowboat (audit, § 8.9).
 
+Ajouts du 16/11, par [le tri](#le-tri-du-1611) : relier de nouveau un poste déjà relié (lun-anima#90) ; les files de
+cartes bornées côté serveur (lun-docs#144) ; l'absence qui voit la manette (lun-luxuria#43) ; un lot d'Avaritia qui
+attend son jour sans le dire (lun-avaritia#34, point 2).
+
 ## 3. Les chantiers, dans l'ordre
 
 Une PR par dépôt et par chantier, brouillon dès le premier push. Un plan est relu par le plan-challenger, puis CrOliX le
@@ -323,31 +327,33 @@ lun-acedia et lun-avaritia, qui gardent leur kit jusqu'à #43) : une PR par dép
 Tranché par CrOliX le 12/11 ([état cible](../specs/2026-11-10-etat-cible-cadrage.md), § 6) : la semaine de rodage est
 la porte du MVP, et la révision de l'état cible vient après elle. D'abord trois chantiers en parallèle ; puis le banc et
 les mots des gestes ; le premier contact sans terminal ; la session sur le desktop ; le rodage, puis la bascule.
+Complété le 16/11 par [le tri du 16/11](#le-tri-du-1611) : l'IPC, « le tour » et le banc de présence, sur le laptop,
+en attendant le desktop.
 
 ### Tenir en continu
 
 Fait : lun-anima#109, lun-acedia#68, lun-avaritia#35 et le plan, lun-docs#164, fusionnés ; lun-docs#166 est fermée.
-Le core, Acedia et Avaritia tiennent des jours sans s'arrêter. Les suites attendent en `inbox` : lun-docs#171,
-lun-acedia#67, lun-avaritia#34 et une issue de lun-anima.
+Le core, Acedia et Avaritia tiennent des jours sans s'arrêter. Les suites (lun-docs#171, lun-acedia#67,
+lun-avaritia#34, lun-anima#108) sont rangées par [le tri du 16/11](#le-tri-du-1611).
 
 ### Écoute et parole
 
 Plan : [`2026-11-12-ecoute-et-parole.md`](2026-11-12-ecoute-et-parole.md), validé le 12/11 ; issue lun-luxuria#77.
-lun-luxuria seul. Le code est livré en brouillon (lun-luxuria#82), le plan coché dans lun-docs#172 ; reste la tâche 8,
-la preuve à la main avec CrOliX. Les suites : lun-luxuria#81. « Le tour » se planifie après.
+lun-luxuria seul. Fait : lun-luxuria#82 et le plan coché, lun-docs#172, fusionnés ; la preuve à la main (tâche 8) est
+jouée avec CrOliX le 16/11. Les suites, lun-luxuria#81, sont rangées par [le tri du 16/11](#le-tri-du-1611).
 
 ### Remettre les textes d'accord
 
 Plan : [`2026-11-12-textes-d-accord.md`](2026-11-12-textes-d-accord.md), validé le 12/11 ; issue lun-docs#167. Fait :
 lun-docs#165 et les trois satellites (lun-luxuria#80, lun-acedia#70, lun-avaritia#37), fusionnés ; la doc, les règles et
-la surface publique disent le code et les décisions du 12/11. Les suites : lun-docs#168, #169, #170, lun-luxuria#79,
-lun-acedia#69, lun-avaritia#36.
+la surface publique disent le code et les décisions du 12/11. Les suites (lun-docs#168, #169, #170, lun-luxuria#79,
+lun-acedia#69, lun-avaritia#36) sont rangées par [le tri du 16/11](#le-tri-du-1611).
 
 ### L'IPC de Lun'Luxuria
 
 Issue lun-luxuria#78, niveau `critique`, pas encore de plan. Ce que la page de la fenêtre peut encore faire faire à
-Rust. Un chantier à part : l'ordre du 12/11 ne le place pas. Il récrit le `CLAUDE.md` de Lun'Luxuria quand ses
-sorties se ferment.
+Rust. Le prochain chantier, par l'ordre du 16/11 ([le tri du 16/11](#le-tri-du-1611)). Il récrit le `CLAUDE.md` de
+Lun'Luxuria quand ses sorties se ferment.
 
 ### Le banc et les mots des gestes
 
@@ -357,9 +363,11 @@ Deux chantiers en parallèle depuis le 16/11 (tranché par CrOliX).
   depuis lun-luxuria#10, mais à la barre de 0,7 le relevé du 10/11 perd « oui », « annule » et « envoie »
   (lun-luxuria#6). Le banc des gestes mesure ce que la page envoie, sur les prises de CrOliX, cinq voix et des
   non-paroles ; puis la règle se tranche (B1). Le verrou de l'ADR 0011 se lève ensuite, à trois conditions. Aucune
-  vraie carte avant.
-- **Le banc de présence** : `standard`, pas encore de plan. Ses observations en `inbox` (lun-luxuria#67 à #71, #73 à
-  #75 ; #72 est fermée), le point de lun-luxuria#81 et les quatre scénarios de toux.
+  vraie carte avant. Fait : le banc (lun-luxuria#84, et sa garde de 20 s, lun-luxuria#86) et le plan (lun-docs#175),
+  fusionnés ; la mesure qui décide se joue sur le desktop (§ 4).
+- **Le banc de présence** : `standard`, pas encore de plan ; après « le tour », par l'ordre du 16/11. Ses observations
+  (lun-luxuria#60, #67 à #70, #73 à #75, #85 ; #71 est fermée dans #70, #72 est fermée), l'outillage de
+  lun-luxuria#81 et les quatre scénarios de toux.
 
 ### Le premier contact sans terminal
 
@@ -367,8 +375,51 @@ Plan : [`2026-11-16-premier-contact.md`](2026-11-16-premier-contact.md), validé
 lun-anima#113, lun-acedia#73, lun-avaritia#40, fusionnés : sur une installation neuve, la page de chaque app, ouverte
 sur la machine qui l'héberge, montre le code de son premier appareil, déjà saisi ; la
 [page de mise en service](../mise-en-service-desktop.md) le dit. Ce qui reste se vérifie sur le desktop (§ 4). Les
-suites : lun-docs#178, lun-acedia#74, lun-avaritia#41, lun-anima#112. Le reste du point 6 de l'état cible (Google
-depuis l'interface, la liaison d'un poste) vient après le MVP.
+suites (lun-docs#178, lun-acedia#74, lun-avaritia#41, lun-anima#112) sont rangées par
+[le tri du 16/11](#le-tri-du-1611). Le reste du point 6 de l'état cible (Google depuis l'interface, la liaison d'un
+poste) vient après le MVP.
+
+### Le tri du 16/11
+
+L'ordre, tranché par CrOliX le 16/11 : le tri de l'inbox, puis l'IPC de Lun'Luxuria, puis « le tour », puis le banc de
+présence. Le tri range les 53 issues de l'inbox ainsi.
+
+- **L'IPC** (lun-luxuria#78) : de lun-luxuria#79, le chemin d'exemple de `voice.rs` et les deux retouches de
+  `CLAUDE.md` (la sonde, la défense « aucune permission `dialog:` »).
+- **Le tour**, à planifier : ne pas reprendre par-dessus (lun-luxuria#63, I8) ; le fragment envoyé avant l'annonce du
+  retour (lun-luxuria#53) ; deux réponses qui se chevauchent (lun-luxuria#48, dont la latence se mesure au § 4) ; le
+  point `#letGo` de lun-luxuria#81. lun-anima#97 se réentend d'abord au § 4.
+- **Le banc de présence** : ses observations, plus haut, et l'interface du serveur compatible de la chaîne, à écrire
+  dans le `docs/README.md` de Lun'Luxuria (lun-luxuria#79).
+- **Au desktop** (§ 4) : lun-luxuria#39 (avec N) ; lun-luxuria#50 (B5) ; le 403 Google et le démarrage rapide de
+  lun-docs#171 (B12) ; l'application non validée de lun-acedia#55 (B10).
+- **Après le MVP** (§ 2 D) : lun-acedia#33, #34, #38 et #55 ; lun-anima#90 ; le deuxième point de lun-avaritia#34 ;
+  lun-docs#21, #25, #41, #43 et #144 ; lun-luxuria#43, la manette.
+- **À la révision de l'ADR 0008** : la case de lun-docs#169 sur la ligne fausse de l'ADR 0007.
+- **Jetés** : lun-luxuria#71, fermée comme doublon de #70 ; le troisième point de lun-avaritia#34 (la décision du
+  13/11). lun-sandbox est archivé : ses issues restent, et le tri ne le lit plus.
+- **À trancher par CrOliX** : les points 2 à 4 de lun-acedia#67, quand « les tests instables » passent par Acedia.
+
+Le tri ouvre aussi des chantiers, dans le tableau ci-dessous. Les points 1 et 3 des filets du core et le jeton Google
+illisible passent avant le rodage (B8) ; les erreurs qui restent à l'écran vont avec « le tour », qui touche la même
+file ; l'adresse des commits (lun-docs#170) passe tôt. Les deux chantiers `critique` n'ont pas encore leur place dans
+l'ordre : CrOliX la leur donne.
+
+| Niveau | Chantier | Issues | Fini quand |
+|---|---|---|---|
+| `critique` | Le core relié par l'écran d'un satellite | lun-docs#178, point 1 | le core reçoit un jeton d'application, pas un jeton d'appareil, ou `standards/contrat-satellite.md` dit ce qui se fait |
+| `critique` | Ses sens dans son contexte | lun-anima#114, point 1 | un cadrage écrit avant tout code, avec celui de « Natsume, être présent » |
+| `standard` | Les erreurs qui restent à l'écran | lun-luxuria#81 : Q7, Q8 et R2, `attempt.dropped`, la phrase remplacée, le message de la garde de 60 s, les cinq cases du 16/11, la garde désarmée, le sondage tardif, `#micChanges` | une erreur ne bloque plus la file, ne donne qu'un message, et s'efface quand le service revient |
+| `standard` | Une réponse coupée | lun-anima#101, et le point 2 de #114 | les cas des deux issues réglés |
+| `standard` | Les filets du core, suites | lun-anima#108 | les six points faits ou écartés ; les points 1 et 3 avant B8 |
+| `standard` | Un jeton Google illisible | lun-acedia#62 | il compte comme « Non connecté » et l'écran propose de connecter de nouveau ; avant la restauration essayée (§ 4) |
+| `standard` | L'appairage, suites | lun-acedia#74, lun-avaritia#41, lun-anima#112, lun-docs#178 point 2 | chaque point fait ; la route des satellites refuse un corps qui n'est pas du JSON ; leur module d'appairage se recopie comme le kit |
+| `standard` | La carte du kit, ses gestes et son accessibilité | lun-docs#143 | une ancre `data-` stable, le focus gardé, la permission annoncée ; au branchement de la permission |
+| `standard` | La CI épinglée | lun-docs#168 | les actions épinglées par SHA, Dependabot réglé par CrOliX |
+| `trivial` | Les textes et les standards | lun-docs#130, #169 (sauf l'ADR), #170, #171 (les textes) ; lun-acedia#69, lun-avaritia#36, lun-anima#79 | chaque case faite, lun-docs#170 d'abord ; `vision.md` dit la bibliothèque et le MVP (lun-docs#130) |
+| `trivial` | Le kit, retouches | lun-docs#124, #134, #135 | une erreur garde ses 5 s, `box-sizing` commun, le format fixé, les copies resynchronisées |
+| `trivial` | Le libellé « Relier un appareil » | lun-acedia#71, lun-avaritia#38 | le libellé choisi par CrOliX, repris dans les deux apps et les pages de mise en service |
+| `trivial` | Les tests instables | lun-acedia#67 et lun-avaritia#34, le premier point de chacune | stables sur 50 passages |
 
 ### La session sur le desktop, puis le rodage et la bascule
 
@@ -422,12 +473,15 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
    - le blanc entre la phrase et le résultat, sur cinq demandes ; le core garde la durée de chaque délégation ;
    - la couper pendant ce blanc, sur une demande qui prépare une carte : la carte reste et elle ne la redemande pas.
 5. K : la liste « rien ne force le terminal » parcourue, une restauration essayée.
-6. B10 : Google en Production, consentement refait sur le vrai compte.
+6. B10 : Google en Production, consentement refait sur le vrai compte ; l'avertissement « application non validée »
+   à la connexion d'Acedia (lun-acedia#55).
 7. B11 : le téléphone Android, une notification reçue.
-8. N : les scènes jouées et notées ; elles servent aussi l'écoute de B2.
+8. N : les scènes jouées et notées ; elles servent aussi l'écoute de B2. La personnalité « limitée » de la recette du
+   08/11 s'y réentend (lun-luxuria#39).
 9. B2 : la langue, à l'oreille ; puis l'ADR qui remplace 0011.
 10. B3 : le flux RVC, décidé après B1.
-11. B12 : redémarrer ; les services repartent, la nuit manquée est rattrapée.
+11. B12 : redémarrer ; les services repartent, la nuit manquée est rattrapée ; le 403 Google et le démarrage rapide de
+    Windows (lun-docs#171).
 12. B6 : une soirée réelle.
 
 La mise en service elle-même, sur des bases neuves, est la recette du
@@ -442,7 +496,7 @@ B7 reste à CrOliX (réglages de Windows et du pare-feu), avant la soirée. Puis
 
 ## 5. Calendrier
 
-Pas de dates : l'ordre du 12/11 (§ 3) fait foi. Restent deux repères.
+Pas de dates : l'ordre du 12/11, complété le 16/11 (§ 3), fait foi. Restent deux repères.
 
 | Quand | Quoi |
 |---|---|

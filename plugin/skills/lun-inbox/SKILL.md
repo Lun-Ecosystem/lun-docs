@@ -8,8 +8,9 @@ description: Use for the weekly triage of inbox issues across all Lun' repositor
 Le tri a lieu **une fois par semaine**, à heure fixe (`references/workflow.md`). Il ne se fait pas
 au fil de l'eau et n'ouvre aucun chantier de lui-même.
 
-1. Liste les issues ouvertes :
-   `gh search issues --owner Lun-Ecosystem --label inbox --state open --json repository,number,title,createdAt,url`
+1. Liste les issues ouvertes, hors des dépôts archivés (en lecture seule, leurs issues ne se ferment plus) ; sans
+   `--limit`, la recherche s'arrête à 30 :
+   `gh search issues --owner Lun-Ecosystem --label inbox --state open --archived=false --limit 200 --json repository,number,title,createdAt,url`
 2. Pour chacune, lis-la (`gh issue view <n> -R <owner/repo>`) et propose **une** décision :
    - **Jeter** : plus d'actualité, doublon, ou contraire à la vision.
    - **Chantier futur** : avec un niveau proposé (`niveau:*`) et une phrase de critère de fin.
