@@ -495,7 +495,8 @@ chantier :
      sur le premier bouton. `#[tauri::command(async)]`, comme `program_pick` : la boîte ne tourne pas sur le fil de la
      fenêtre. Si la tâche 15 voit un autre ordre ou un autre bouton d'Entrée, le `CLAUDE.md` le dit.
    - Confirmés : gardés dans `arguments.json`, à côté de `programmes.json`. Une clé absente : jamais confirmés ; une
-     liste vide : confirmée vide.
+     liste vide : confirmée vide. Un autre exe choisi pour ce nom fait tomber sa confirmation ; le même exe rechoisi la
+     garde (décidé pendant la tâche, côté prudent).
    - `program_start` ne prend plus `args` : il lance l'exe gardé avec les arguments confirmés ; jamais confirmés :
      « Confirme d'abord ses arguments. », et rien ne part. « Déjà lancé avec ces arguments » (`:132`) compare aux
      confirmés.
