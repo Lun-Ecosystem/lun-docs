@@ -561,9 +561,12 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
     - Fichiers : `src-tauri/capabilities/default.json` ; un test sur l'appli de test, au modèle de `net_guard.rs`.
     - `core:default` donne à la page `core:image:allow-from-path` (Tauri lit tout PNG ou ICO qu'elle nomme, sans
       borne, chemins UNC compris) et `core:tray:allow-new` (une icône de la barre depuis un chemin), dont elle ne se
-      sert pas. Il part. À sa place, ce dont la page se sert : `core:event:default` (`listen`, `tray.svelte.ts`, et
-      `onMoved`, `onCloseRequested`, `window.svelte.ts`) et les `core:window:allow-*` de chaque méthode appelée, en plus
-      de ceux déjà nommés. Rien d'autre sans un appel de la page qui le demande (`@tauri-apps/api`, relu par grep).
+      sert pas, ni de `core:menu:default` et `core:path:default`, ouverts aussi (vu par les tests). Il part. À sa
+      place, ce dont la page se sert : `core:event:allow-listen` seul (`listen`, `tray.svelte.ts`, et `onMoved`,
+      `onCloseRequested`, `window.svelte.ts` ; elle n'appelle ni `unlisten` ni `emit`) ; ses `core:window:allow-*`
+      sont déjà nommés. Rien d'autre sans un appel de la page qui le demande (`@tauri-apps/api`, relu par grep).
+      `core:window:allow-internal-toggle-maximize` part avec : un double-clic sur la zone de glissement n'agrandit plus
+      la fenêtre ; la page a son plein écran.
     - Tests, sur l'appli de test avec `default.json` lu tel quel :
       - refusés : `plugin:image|from_path`, `plugin:tray|new`, `plugin:menu|new`, `plugin:path|resolve_directory`,
         `plugin:webview|create_webview_window` ;
@@ -750,7 +753,8 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
       modèle en ligne par exemple : refusée tant qu'elle n'est pas confirmée ; « Confirmer… », Entrée refuse ;
       « Confirmer », puis une réponse ; « Oublier », puis un refus à la requête suivante.
     - Sans `core:default` (tâche 16) : la fenêtre se déplace, passe en plein écran et en revient, l'icône de la barre
-      suit l'état, fermer la fenêtre la range et la position revient au lancement suivant.
+      suit l'état, fermer la fenêtre la range et la position revient au lancement suivant ; un double-clic sur la
+      scène n'agrandit plus la fenêtre.
     - CrOliX dit ce qu'il a vu dans la PR ; elle passe « prête » ensuite.
 
 À la fusion : les trois points de lun-luxuria#79 cochés ; le graphe de lun-luxuria mis à jour ; les worktrees retirés.
