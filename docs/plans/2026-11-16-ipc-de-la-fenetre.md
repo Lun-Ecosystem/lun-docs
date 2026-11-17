@@ -4,7 +4,7 @@
 >
 > **Issues :** lun-luxuria#78 (`niveau:critique`) ; trois points de lun-luxuria#79, rattachés au tri du 16/11.
 >
-> **PR livrant :** Lun-Ecosystem/lun-luxuria#87 (brouillon ; tâches 1 à 12 et 16 faites, restent la 13 et la 15).
+> **PR livrant :** Lun-Ecosystem/lun-luxuria#87 (brouillon ; tâches 1 à 14 et 16 faites, reste la 15).
 >
 > **État : contesté le 16/11, amendé, validé par CrOliX le 16/11** (« validé »), avec les recommandations marquées
 > **[choix Claude]** pour les cinq choix (« Les choix ouverts »), les deux premiers ensemble. La dernière section dit ce
@@ -705,7 +705,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
 
 ### La fin
 
-13. - [ ] **Le `CLAUDE.md` et la doc** (`dev-luxuria`). Critère 5 ; lun-luxuria#79, deux points. Après les deux
+13. - [x] **Le `CLAUDE.md` et la doc** (`dev-luxuria`). Critère 5 ; lun-luxuria#79, deux points. Après les deux
           pistes.
     - `CLAUDE.md:32-42` dit ce que fait le code :
       - Rust lit le corps et lance le service dans les dossiers que la personne a choisis dans la boîte de dialogue du
@@ -729,6 +729,8 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
     - La doc arrive dans la PR du code, dont le squash fait un seul commit.
     - Barrières : `npm run format:check` ; la surface publique.
     - Exclu : l'interface du serveur compatible (lun-luxuria#79, le troisième point).
+
+    Fait le 17/11 (lun-luxuria#87, `5af9bbd`) : `CLAUDE.md` à 98 lignes, `docs/README.md` et `README.md`.
 
 14. - [x] **Ce qui est renvoyé** (la session). Critère 4. Dès la validation : pour chaque choix que CrOliX renvoie au
           lieu de le faire, une issue lun-luxuria, `niveau:critique`, qui reprend son option telle qu'écrite ici, ses tâches
