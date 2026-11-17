@@ -472,6 +472,12 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
    - « j'ai des mails ? » à la voix : elle dit d'abord ce qu'elle fait, puis le résultat, sans redire la phrase ;
    - le blanc entre la phrase et le résultat, sur cinq demandes ; le core garde la durée de chaque délégation ;
    - la couper pendant ce blanc, sur une demande qui prépare une carte : la carte reste et elle ne la redemande pas.
+   Après [« l'IPC de la fenêtre »](2026-11-16-ipc-de-la-fenetre.md) (lun-luxuria#87, preuve faite sur le laptop le
+   17/11, ce qui demande le desktop est ici), à voir :
+   - un vrai lancement de whisper-server et de RVC, avec leurs arguments confirmés ;
+   - le corps avec ses images, et « Oublier » qui rend le souffle ;
+   - le service voix lancé avec une voix Piper : `--origin` refusé, une adresse hors de la boucle locale refusée ;
+   - une adresse https hors du poste, confirmée puis oubliée.
 5. K : la liste « rien ne force le terminal » parcourue, une restauration essayée.
 6. B10 : Google en Production, consentement refait sur le vrai compte ; l'avertissement « application non validée »
    à la connexion d'Acedia (lun-acedia#55).
