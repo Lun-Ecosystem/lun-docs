@@ -556,6 +556,22 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
    - Barrières : Rust ; la surface publique.
    - Exclu : la page (tâche 12) ; `default.json` ; le flux du corps, qui reste celui du plugin.
 
+16. - [ ] **Les permissions du cœur, nommées** (`testeur`, puis `dev-luxuria`). Ajoutée le 17/11, choix A de CrOliX.
+    Après la 7.
+    - Fichiers : `src-tauri/capabilities/default.json` ; un test sur l'appli de test, au modèle de `net_guard.rs`.
+    - `core:default` donne à la page `core:image:allow-from-path` (Tauri lit tout PNG ou ICO qu'elle nomme, sans
+      borne, chemins UNC compris) et `core:tray:allow-new` (une icône de la barre depuis un chemin), dont elle ne se
+      sert pas. Il part. À sa place, ce dont la page se sert : `core:event:default` (`listen`, `tray.svelte.ts`, et
+      `onMoved`, `onCloseRequested`, `window.svelte.ts`) et les `core:window:allow-*` de chaque méthode appelée, en plus
+      de ceux déjà nommés. Rien d'autre sans un appel de la page qui le demande (`@tauri-apps/api`, relu par grep).
+    - Tests, sur l'appli de test avec `default.json` lu tel quel :
+      - refusés : `plugin:image|from_path`, `plugin:tray|new`, `plugin:menu|new`, `plugin:path|resolve_directory`,
+        `plugin:webview|create_webview_window` ;
+      - admis : `plugin:event|listen` et chaque commande de fenêtre que la page appelle.
+    - Échec attendu sur `main` : `from_path` et `tray|new` sont admis.
+    - Barrières : Rust ; la page ; la surface publique.
+    - Exclu : les permissions des plugins (`http`, `global-shortcut`, `autostart`), déjà nommées ou bornées par la 7.
+
 ### Piste page
 
 8. - [ ] **Le dossier du corps : la page, et son avis** (`testeur`, puis `dev-luxuria`). Critère 2. _Après la 1, en
@@ -733,6 +749,8 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
     - Le réseau : le serveur et le modèle de ce poste répondent comme avant. Une adresse https hors du poste, celle d'un
       modèle en ligne par exemple : refusée tant qu'elle n'est pas confirmée ; « Confirmer… », Entrée refuse ;
       « Confirmer », puis une réponse ; « Oublier », puis un refus à la requête suivante.
+    - Sans `core:default` (tâche 16) : la fenêtre se déplace, passe en plein écran et en revient, l'icône de la barre
+      suit l'état, fermer la fenêtre la range et la position revient au lancement suivant.
     - CrOliX dit ce qu'il a vu dans la PR ; elle passe « prête » ensuite.
 
 À la fusion : les trois points de lun-luxuria#79 cochés ; le graphe de lun-luxuria mis à jour ; les worktrees retirés.
