@@ -762,7 +762,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
     - CrOliX dit ce qu'il a vu dans la PR ; elle passe « prête » ensuite.
 
     Fait le 17/11 sur le laptop, par CrOliX, avec l'exe au commit `5af9bbd` (lun-luxuria#87). Vu : l'ancien chemin du
-    corps et « Copier » ; un dossier sans `corps.json` refusé, l'écran le dit ; le dossier du service sans `\?\` ; la
+    corps et « Copier » ; un dossier sans `corps.json` refusé, l'écran le dit ; le dossier du service sans `\\?\` ; la
     boîte des arguments (Entrée refuse, Échap refuse, « Confirmer » garde ; essayée avec un exécutable quelconque,
     l'ordre des boutons n'a pas été rapporté) ; aucune boîte au redémarrage ; une requête vers la boucle locale passe le
     filtre ; la fenêtre se déplace, passe en plein écran, se ferme, sa position revient. Deux écarts trouvés et
