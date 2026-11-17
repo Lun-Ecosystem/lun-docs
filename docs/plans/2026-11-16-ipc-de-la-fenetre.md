@@ -661,7 +661,9 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
     - `launchProgram` appelle `program_start` avec `{ name, url }` seul.
     - Au démarrage (`startPrograms`, `voix.ts:338-344`), un programme aux arguments jamais confirmés ne part pas, et
       aucune boîte ne s'ouvre seule (le piège de la boîte en plein tour). L'écran dit : « Ses arguments sont à
-      confirmer, dans les réglages avancés de la voix. »
+      confirmer, dans les réglages avancés de la voix. » La scène le dit aussi, comme les dossiers à rechoisir, tant
+      qu'un programme lancé avec l'appli attend ses arguments (ajouté le 17/11 par CrOliX : tout poste mis à jour le
+      rencontre).
     - Les arguments enregistrés aujourd'hui dans la page deviennent le premier brouillon : rien à migrer, une
       confirmation à faire.
     - Tests : `program_start` ne reçoit jamais `args` ; « Confirmer… » appelle `program_args` avec le brouillon ; le
