@@ -4,7 +4,7 @@
 >
 > **Issues :** lun-luxuria#78 (`niveau:critique`) ; trois points de lun-luxuria#79, rattachés au tri du 16/11.
 >
-> **PR livrant :** Lun-Ecosystem/lun-luxuria#87 (brouillon ; tâches 1 à 14 et 16 faites, reste la 15).
+> **PR livrant :** Lun-Ecosystem/lun-luxuria#87 (brouillon ; les 15 tâches faites, prête à passer « prête » par CrOliX).
 >
 > **État : contesté le 16/11, amendé, validé par CrOliX le 16/11** (« validé »), avec les recommandations marquées
 > **[choix Claude]** pour les cinq choix (« Les choix ouverts »), les deux premiers ensemble. La dernière section dit ce
@@ -739,7 +739,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
 
     Fait le 16/11 : rien de renvoyé, CrOliX a validé les cinq choix tels que recommandés.
 
-15. - [ ] **La preuve dans l'exe** (CrOliX). Critère 6. En dernier.
+15. - [x] **La preuve dans l'exe** (CrOliX). Critère 6. En dernier.
     - L'exe : `npm run tauri build -- --no-bundle`, lancé depuis l'Explorateur. Lancé par un agent, ses données iraient
       ailleurs. Le laptop suffit si `uv` et un dossier du service y sont ; sinon le desktop, à la session du § 4 de la
       [feuille de route](2026-11-07-feuille-de-route-mvp.md).
@@ -760,6 +760,20 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
       suit l'état, fermer la fenêtre la range et la position revient au lancement suivant ; un double-clic sur la
       scène n'agrandit plus la fenêtre.
     - CrOliX dit ce qu'il a vu dans la PR ; elle passe « prête » ensuite.
+
+    Fait le 17/11 sur le laptop, par CrOliX, avec l'exe au commit `5af9bbd` (lun-luxuria#87). Vu : l'ancien chemin du
+    corps et « Copier » ; un dossier sans `corps.json` refusé, l'écran le dit ; le dossier du service sans `\?\` ; la
+    boîte des arguments (Entrée refuse, Échap refuse, « Confirmer » garde ; essayée avec un exécutable quelconque,
+    l'ordre des boutons n'a pas été rapporté) ; aucune boîte au redémarrage ; une requête vers la boucle locale passe le
+    filtre ; la fenêtre se déplace, passe en plein écran, se ferme, sa position revient. Deux écarts trouvés et
+    corrigés (quatre commits, relus) : « Oublier » ne faisait pas partir l'avis sur l'ancien dossier (revu dans l'exe
+    reconstruit : l'avis ne revient pas) ; la ligne du dossier du service était introuvable, bloc avancé replié
+    (corrigé, non revu dans son état « lancement allumé, dossier choisi » : couvert par les tests et la relecture).
+    Choix A de CrOliX : la PR passe prête après cette preuve ; ce qui demande le desktop (un vrai whisper-server et RVC
+    avec arguments confirmés ; le corps avec ses images et « Oublier » qui rend le souffle ; le service voix lancé avec
+    une voix Piper, `--origin` et une adresse hors boucle refusés ; une adresse https hors du poste confirmée puis
+    oubliée) rejoint la session du desktop de la [feuille de route](2026-11-07-feuille-de-route-mvp.md) (§ 4) ; un
+    écart vu là-bas fera une PR de suite.
 
 À la fusion : les trois points de lun-luxuria#79 cochés ; le graphe de lun-luxuria mis à jour ; les worktrees retirés.
 
