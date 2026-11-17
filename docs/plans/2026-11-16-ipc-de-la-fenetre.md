@@ -4,7 +4,7 @@
 >
 > **Issues :** lun-luxuria#78 (`niveau:critique`) ; trois points de lun-luxuria#79, rattachés au tri du 16/11.
 >
-> **PR livrant :** Lun-Ecosystem/lun-luxuria#87 (brouillon ; tâches 1 et 2 faites, les autres à venir).
+> **PR livrant :** Lun-Ecosystem/lun-luxuria#87 (brouillon ; tâches 1 à 12 et 16 faites, restent la 13 et la 15).
 >
 > **État : contesté le 16/11, amendé, validé par CrOliX le 16/11** (« validé »), avec les recommandations marquées
 > **[choix Claude]** pour les cinq choix (« Les choix ouverts »), les deux premiers ensemble. La dernière section dit ce
@@ -385,7 +385,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
 
 ### Piste Rust
 
-3. - [ ] **La boucle locale, et les arguments du service** (`testeur`, puis `dev-luxuria`). Critère 3 ; choix 3 (b) ;
+3. - [x] **La boucle locale, et les arguments du service** (`testeur`, puis `dev-luxuria`). Critère 3 ; choix 3 (b) ;
          lun-luxuria#79, l'exemple de chemin.
    - Fichiers : `src-tauri/src/loopback.rs`, nouveau ; `src-tauri/src/voice.rs` ; `src-tauri/src/lib.rs`.
    - `loopback::addr(url)` : `http://` ou `https://`, puis `127.0.0.1`, `localhost` ou `[::1]`, puis un `:port`
@@ -430,7 +430,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
    - Barrières : Rust ; la surface publique.
    - Exclu : `service.py` ; la page ; les programmes (tâche 5).
 
-4. - [ ] **Les dossiers choisis par la personne, et une boîte à la fois : Rust** (`testeur`, puis `dev-luxuria`).
+4. - [x] **Les dossiers choisis par la personne, et une boîte à la fois : Rust** (`testeur`, puis `dev-luxuria`).
          Critère 2. Après la 3.
    - Fichiers : `src-tauri/src/folders.rs` et `src-tauri/src/one_box.rs`, nouveaux ; `src-tauri/src/body.rs` ;
      `src-tauri/src/voice.rs` ; `src-tauri/src/programs.rs` ; `src-tauri/src/lib.rs`.
@@ -470,7 +470,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
    - Exclu : la page (tâches 8 et 9) ; reprendre les dossiers enregistrés par la page, qui ne suivent pas (le piège de
      l'issue).
 
-5. - [ ] **La sonde bornée : Rust** (`testeur`, puis `dev-luxuria`). Choix 5 (a), quel que soit le choix 4. Après la 4.
+5. - [x] **La sonde bornée : Rust** (`testeur`, puis `dev-luxuria`). Choix 5 (a), quel que soit le choix 4. Après la 4.
    - Fichiers : `src-tauri/src/programs.rs`, `src-tauri/src/lib.rs`.
    - Le contrat, que la page suit (tâche 10) : `program_state(name, url)` et `program_start(name, args, url)`.
    - `program_state` et `program_start` (`programs.rs:242-266`) prennent l'adresse du champ et la passent par
@@ -483,7 +483,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
    - Barrières : Rust ; la surface publique.
    - Exclu : la page (tâche 10) ; les arguments (tâche 6).
 
-6. - [ ] **Les arguments confirmés : Rust** (`testeur`, puis `dev-luxuria`). Choix 4 (b). Après la 5.
+6. - [x] **Les arguments confirmés : Rust** (`testeur`, puis `dev-luxuria`). Choix 4 (b). Après la 5.
    - Fichiers : `src-tauri/src/programs.rs`, `src-tauri/src/lib.rs`.
    - Le contrat, que la page suit (tâche 11) : `program_args(name, args)`, qui rend `true` (confirmés) ou `false`
      (refusés à la boîte) ; `program_arguments()`, les arguments confirmés par nom ; `program_start(name, url)`.
@@ -514,7 +514,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
    - Barrières : Rust ; la surface publique.
    - Exclu : la page (tâche 11) ; borner les arguments eux-mêmes (choix 4 (c)).
 
-7. - [ ] **Le filtre du réseau : Rust** (`testeur`, puis `dev-luxuria`). Choix 1 (c) et 2 (d). _Après la 4, en
+7. - [x] **Le filtre du réseau : Rust** (`testeur`, puis `dev-luxuria`). Choix 1 (c) et 2 (d). _Après la 4, en
          parallèle de la 5 et de la 6._
    - Fichiers : `src-tauri/src/net_guard.rs`, nouveau ; `src-tauri/src/lib.rs` (`:22`, et les commandes `:31-44`) ;
      les tests de `src-tauri/src/net_scope.rs`.
@@ -556,7 +556,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
    - Barrières : Rust ; la surface publique.
    - Exclu : la page (tâche 12) ; `default.json` ; le flux du corps, qui reste celui du plugin.
 
-16. - [ ] **Les permissions du cœur, nommées** (`testeur`, puis `dev-luxuria`). Ajoutée le 17/11, choix A de CrOliX.
+16. - [x] **Les permissions du cœur, nommées** (`testeur`, puis `dev-luxuria`). Ajoutée le 17/11, choix A de CrOliX.
     Après la 7.
     - Fichiers : `src-tauri/capabilities/default.json` ; un test sur l'appli de test, au modèle de `net_guard.rs`.
     - `core:default` donne à la page `core:image:allow-from-path` (Tauri lit tout PNG ou ICO qu'elle nomme, sans
@@ -577,7 +577,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
 
 ### Piste page
 
-8. - [ ] **Le dossier du corps : la page, et son avis** (`testeur`, puis `dev-luxuria`). Critère 2. _Après la 1, en
+8. - [x] **Le dossier du corps : la page, et son avis** (`testeur`, puis `dev-luxuria`). Critère 2. _Après la 1, en
          parallèle de la piste Rust_ : le contrat est celui de la tâche 4.
    - Fichiers : `src/desktop/dossiers.ts`, nouveau ; `src/desktop/corps.svelte.ts` ; `src/desktop/DossierCorps.svelte` ;
      `src/session.svelte.ts` ; `src/settings.ts` ; `src/App.svelte` s'il le faut. Leurs tests :
@@ -606,7 +606,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
    - Barrières : la page ; la surface publique.
    - Exclu : le côté Rust (tâche 4) ; le service et la scène (tâche 9) ; la doc (tâche 13).
 
-9. - [ ] **Le dossier du service : la page, et l'avis sur la scène** (`testeur`, puis `dev-luxuria`). Critère 2. Après
+9. - [x] **Le dossier du service : la page, et l'avis sur la scène** (`testeur`, puis `dev-luxuria`). Critère 2. Après
          la 8.
    - Fichiers : `src/desktop/voix.ts` ; `src/desktop/ServiceVoix.svelte` ; `src/Scene.svelte` ;
      `src/session.svelte.ts` ; `src/settings.ts`. Leurs tests : `src/desktop/voix.test.ts`,
@@ -638,7 +638,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
    - Barrières : la page ; la surface publique.
    - Exclu : les programmes (tâches 10 et 11) ; la doc (tâche 13).
 
-10. - [ ] **La sonde : la page** (`testeur`, puis `dev-luxuria`). Choix 5 (a), quel que soit le choix 4. Après la 9.
+10. - [x] **La sonde : la page** (`testeur`, puis `dev-luxuria`). Choix 5 (a), quel que soit le choix 4. Après la 9.
     - Fichiers : `src/desktop/voix.ts`, `src/desktop/voix.test.ts`.
     - `addrOf` (`voix.ts:251-259`) part. `launchProgram` (`:319`) et `followPrograms` (`:372`) passent `url`, l'adresse
       du champ. Une adresse vide ou refusée : le message de Rust.
@@ -650,7 +650,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
     - Barrières : la page ; la surface publique.
     - Exclu : les arguments (tâche 11) ; le côté Rust (tâche 5).
 
-11. - [ ] **Les arguments confirmés : la page** (`testeur`, puis `dev-luxuria`). Choix 4 (b). Après la 10.
+11. - [x] **Les arguments confirmés : la page** (`testeur`, puis `dev-luxuria`). Choix 4 (b). Après la 10.
     - Fichiers : `src/desktop/voix.ts`, `src/desktop/ServiceVoix.svelte`, `src/session.svelte.ts`,
       `src/desktop/voix.test.ts`, `src/desktop/reglages.test.ts`.
     - `readProgramPaths` (`:269-272`) lit aussi `program_arguments`, dans `session.programArgs` ; `forgetProgram`
@@ -674,7 +674,7 @@ Some(AppDirectoriesOverride::Root(<temp>))`, comme les tests de tauri (tauri `sr
     - Barrières : la page ; la surface publique.
     - Exclu : le côté Rust (tâche 6) ; la doc (tâche 13).
 
-12. - [ ] **Le réseau : la page** (`testeur`, puis `dev-luxuria`). Choix 1 (c) et 2 (d). _Après la 1, en parallèle des
+12. - [x] **Le réseau : la page** (`testeur`, puis `dev-luxuria`). Choix 1 (c) et 2 (d). _Après la 1, en parallèle des
           tâches 8 à 11_ : le contrat est celui de la tâche 7.
     - Fichiers : `src/desktop/net.ts` ; `src/desktop/hotes.ts`, nouveau ; `src/Reglages.svelte` ; `src/Arrivee.svelte` ;
       `src/session.svelte.ts`. Leurs tests : `src/desktop/net.test.ts`, `src/desktop/reglages.test.ts`,
