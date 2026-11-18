@@ -365,7 +365,7 @@ Deux chantiers en parallèle depuis le 16/11 (tranché par CrOliX).
   non-paroles ; puis la règle se tranche (B1). Le verrou de l'ADR 0011 se lève ensuite, à trois conditions. Aucune
   vraie carte avant. Fait : le banc (lun-luxuria#84, et sa garde de 20 s, lun-luxuria#86) et le plan (lun-docs#175),
   fusionnés ; la mesure qui décide se joue sur le desktop (§ 4).
-- **Le banc de présence** : `standard`, pas encore de plan ; après « le tour », par l'ordre du 16/11. Ses observations
+- **Le banc de présence** : `standard`, pas encore de plan ; le suivant dans l'ordre du 16/11, « le tour » étant fait. Ses observations
   (lun-luxuria#60, #67 à #70, #73 à #75, #85 ; #71 est fermée dans #70, #72 est fermée), l'outillage de
   lun-luxuria#81 et les quatre scénarios de toux.
 
@@ -386,9 +386,11 @@ présence. Le tri range les 53 issues de l'inbox ainsi.
 
 - **L'IPC** (lun-luxuria#78) : de lun-luxuria#79, le chemin d'exemple de `voice.rs` et les deux retouches de
   `CLAUDE.md` (la sonde, la défense « aucune permission `dialog:` »).
-- **Le tour**, à planifier : ne pas reprendre par-dessus (lun-luxuria#63, I8) ; le fragment envoyé avant l'annonce du
-  retour (lun-luxuria#53) ; deux réponses qui se chevauchent (lun-luxuria#48, dont la latence se mesure au § 4) ; le
-  point `#letGo` de lun-luxuria#81. lun-anima#97 se réentend d'abord au § 4.
+- **Le tour**, fait le 18/11 ([plan](2026-11-17-le-tour.md), lun-docs#182 ; code lun-luxuria#96, brouillon ; chapeau
+  lun-luxuria#95) : ne pas reprendre par-dessus (lun-luxuria#63, I8) ; le fragment envoyé avant l'annonce du retour
+  (lun-luxuria#53) ; les erreurs qui restent à l'écran ; le point `#letGo` de lun-luxuria#81. Reste ouvert : deux
+  réponses qui se chevauchent (lun-luxuria#48, dont la latence se mesure au § 4) ; lun-anima#97 se réentend d'abord
+  au § 4. Deux gestes dans la fenêtre sont au § 4 (décision de CrOliX du 18/11).
 - **Le banc de présence** : ses observations, plus haut, et l'interface du serveur compatible de la chaîne, à écrire
   dans le `docs/README.md` de Lun'Luxuria (lun-luxuria#79).
 - **Au desktop** (§ 4) : lun-luxuria#39 (avec N) ; lun-luxuria#50 (B5) ; le 403 Google et le démarrage rapide de
@@ -458,6 +460,17 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
    - dire « oui » sur une carte, puis reparler avant d'entendre « tu as 5 secondes » : rien n'est tranché ;
    - l'heure : si elle répond encore « je n'ai pas retrouvé l'heure », compter les appels au modèle de cette
      réponse dans les coûts que garde le core (deux : elle a relu avant de répondre) et le noter dans lun-anima#97.
+   Après [« le tour »](2026-11-17-le-tour.md) (lun-luxuria#96, lun-docs#182 ; preuve dans un onglet, la chaîne et la
+   relecture faites sur le laptop le 18/11, ce qui demande la fenêtre ou un poste est ici), à voir. CrOliX a gardé ces
+   gestes de côté le 18/11, pour ne pas bloquer la suite :
+   - une toux, puis reparler : noter le blanc avant que sa voix reprenne, et dire si les 300 ms de
+     `bargeIn.resumeMs` conviennent (pour noter, pas pour juger) ;
+   - l'absence réglée à une minute, puis une phrase avec le nom : la réponse arrive, sans retard gênant (l'envoi
+     attend l'annonce du retour, 3 s au plus) ;
+   - des sons de toux à poser au banc (`bruit.wav`, `toux.wav`, `toux-courte.wav`) pour jouer à la chaîne les six
+     scénarios de toux, dont `toux-verdict-tardif`, `toux-puis-parole-tard` et `reponse-vide-puis-toux` ;
+   - la garde de 60 s sur une phrase parlée (non jouée dans l'onglet : pas de voix) ;
+   - un service de voix suspendu (processus gelé) : « Le service voix ne répond plus. », effacé à la reprise.
    Après les chantiers de l'écoute (lun-luxuria#54, #56) et de
    [« la coupure qui se reprend »](2026-11-11-coupure-reprise.md) (lun-luxuria#58), à réentendre. D'abord choisir de
    nouveau la pièce « normale » dans les réglages : une installation déjà réglée garde 0,5 s de silence de fin.
