@@ -365,7 +365,8 @@ Deux chantiers en parallèle depuis le 16/11 (tranché par CrOliX).
   non-paroles ; puis la règle se tranche (B1). Le verrou de l'ADR 0011 se lève ensuite, à trois conditions. Aucune
   vraie carte avant. Fait : le banc (lun-luxuria#84, et sa garde de 20 s, lun-luxuria#86) et le plan (lun-docs#175),
   fusionnés ; la mesure qui décide se joue sur le desktop (§ 4).
-- **Le banc de présence** : `standard`, pas encore de plan ; le suivant dans l'ordre du 16/11, « le tour » étant fait. Ses observations
+- **Le banc de présence** : `standard`, [plan](2026-11-18-banc-de-presence.md), chapeau lun-luxuria#104 ; le suivant
+  dans l'ordre du 16/11, « le tour » étant fait. Ses observations
   (lun-luxuria#60, #67 à #70, #73 à #75, #85 ; #71 est fermée dans #70, #72 est fermée), l'outillage de
   lun-luxuria#81 et les quatre scénarios de toux.
 
@@ -386,13 +387,14 @@ présence. Le tri range les 53 issues de l'inbox ainsi.
 
 - **L'IPC** (lun-luxuria#78) : de lun-luxuria#79, le chemin d'exemple de `voice.rs` et les deux retouches de
   `CLAUDE.md` (la sonde, la défense « aucune permission `dialog:` »).
-- **Le tour**, fait le 18/11 ([plan](2026-11-17-le-tour.md), lun-docs#182 ; code lun-luxuria#96, brouillon ; chapeau
+- **Le tour**, fait le 18/11 ([plan](2026-11-17-le-tour.md), lun-docs#182 ; code lun-luxuria#96, fusionné ; chapeau
   lun-luxuria#95) : ne pas reprendre par-dessus (lun-luxuria#63, I8) ; le fragment envoyé avant l'annonce du retour
   (lun-luxuria#53) ; les erreurs qui restent à l'écran ; le point `#letGo` de lun-luxuria#81. Reste ouvert : deux
   réponses qui se chevauchent (lun-luxuria#48, dont la latence se mesure au § 4) ; lun-anima#97 se réentend d'abord
   au § 4. Deux gestes dans la fenêtre sont au § 4 (décision de CrOliX du 18/11).
-- **Le banc de présence** : ses observations, plus haut, et l'interface du serveur compatible de la chaîne, à écrire
-  dans le `docs/README.md` de Lun'Luxuria (lun-luxuria#79).
+- **Le banc de présence** ([plan](2026-11-18-banc-de-presence.md), chapeau lun-luxuria#104) : ses observations, plus
+  haut, et l'interface du serveur compatible de la chaîne, à écrire dans le `docs/README.md` de Lun'Luxuria
+  (lun-luxuria#79).
 - **Au desktop** (§ 4) : lun-luxuria#39 (avec N) ; lun-luxuria#50 (B5) ; le 403 Google et le démarrage rapide de
   lun-docs#171 (B12) ; l'application non validée de lun-acedia#55 (B10).
 - **Après le MVP** (§ 2 D) : lun-acedia#33, #34, #38 et #55 ; lun-anima#90 ; le deuxième point de lun-avaritia#34 ;
