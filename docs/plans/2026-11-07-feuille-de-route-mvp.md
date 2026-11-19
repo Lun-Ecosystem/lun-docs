@@ -7,6 +7,11 @@
 
 ## 1. Où on en est
 
+**Au 19/11.** « Le tour » est fusionné (lun-luxuria#96, lun-docs#182). CrOliX demande un
+[recadrage](../specs/2026-11-19-recadrage-vip.md) : la version VIP tient ce que chaque outil promet, et six décisions
+la bornent (son § 7). L'ordre qui en sort est au § 3, « Le recadrage du 19/11 » ; il remplace, pour la suite, l'ordre
+du 16/11. `vision.md` est réécrite avec lui.
+
 **Au 09/11.** I et J sont faits : lun-docs#108 et Lun-Ecosystem/.github#3, lun-anima#81, lun-acedia#59,
 lun-avaritia#24 ; le Project est fermé. K : la procédure (lun-docs#111, reprise par lun-docs#112) et les copies
 d'Acedia et d'Avaritia (lun-acedia#61, lun-avaritia#29) ; reste la restauration, à essayer au § 4. N : le
@@ -365,9 +370,9 @@ Deux chantiers en parallèle depuis le 16/11 (tranché par CrOliX).
   non-paroles ; puis la règle se tranche (B1). Le verrou de l'ADR 0011 se lève ensuite, à trois conditions. Aucune
   vraie carte avant. Fait : le banc (lun-luxuria#84, et sa garde de 20 s, lun-luxuria#86) et le plan (lun-docs#175),
   fusionnés ; la mesure qui décide se joue sur le desktop (§ 4).
-- **Le banc de présence** : `standard`, pas encore de plan ; le suivant dans l'ordre du 16/11, « le tour » étant fait. Ses observations
-  (lun-luxuria#60, #67 à #70, #73 à #75, #85 ; #71 est fermée dans #70, #72 est fermée), l'outillage de
-  lun-luxuria#81 et les quatre scénarios de toux.
+- **Le banc de présence** : `standard`, chapeau lun-luxuria#104. Son plan de treize tâches (lun-docs#183) est
+  **réduit** par le recadrage du 19/11 : voir plus bas. Ses observations (lun-luxuria#60, #67 à #70, #73 à #75, #85,
+  #101), l'outillage de lun-luxuria#81 et les scénarios de toux.
 
 ### Le premier contact sans terminal
 
@@ -386,7 +391,7 @@ présence. Le tri range les 53 issues de l'inbox ainsi.
 
 - **L'IPC** (lun-luxuria#78) : de lun-luxuria#79, le chemin d'exemple de `voice.rs` et les deux retouches de
   `CLAUDE.md` (la sonde, la défense « aucune permission `dialog:` »).
-- **Le tour**, fait le 18/11 ([plan](2026-11-17-le-tour.md), lun-docs#182 ; code lun-luxuria#96, brouillon ; chapeau
+- **Le tour**, fait et fusionné le 18/11 ([plan](2026-11-17-le-tour.md), lun-docs#182 ; code lun-luxuria#96 ; chapeau
   lun-luxuria#95) : ne pas reprendre par-dessus (lun-luxuria#63, I8) ; le fragment envoyé avant l'annonce du retour
   (lun-luxuria#53) ; les erreurs qui restent à l'écran ; le point `#letGo` de lun-luxuria#81. Reste ouvert : deux
   réponses qui se chevauchent (lun-luxuria#48, dont la latence se mesure au § 4) ; lun-anima#97 se réentend d'abord
@@ -422,6 +427,29 @@ l'ordre : CrOliX la leur donne.
 | `trivial` | Le kit, retouches | lun-docs#124, #134, #135 | une erreur garde ses 5 s, `box-sizing` commun, le format fixé, les copies resynchronisées |
 | `trivial` | Le libellé « Relier un appareil » | lun-acedia#71, lun-avaritia#38 | le libellé choisi par CrOliX, repris dans les deux apps et les pages de mise en service |
 | `trivial` | Les tests instables | lun-acedia#67 et lun-avaritia#34, le premier point de chacune | stables sur 50 passages |
+
+### Le recadrage du 19/11
+
+Tranché par CrOliX le 19/11 ([recadrage](../specs/2026-11-19-recadrage-vip.md), § 7). Une promesse est tenue et
+prouvée, ou retirée du texte et inscrite « après le VIP ». L'ordre, jusqu'à la porte :
+
+1. **Les textes d'accord avec la borne** : `vision.md` (faite avec le recadrage), puis le site, les README et les
+   issues qui ne disent plus le code (lun-luxuria#6). Sur le laptop.
+2. **Trois petites promesses**, en parallèle, sur le laptop : Acedia repère les événements qui se chevauchent et
+   propose d'en déplacer un ; « Pina » sort des textes visibles ; l'export de la bibliothèque se télécharge.
+3. **Le banc réduit** (lun-luxuria#104, lun-docs#183 à récrire) : le délai par étape lu à la chaîne et comparé au
+   budget de la veille, les sons de toux posés, les résumés visibles, les tests du service de voix en CI. Le reste
+   des treize tâches passe après le VIP, comme tout nouveau chantier sur les cas limites du tour de parole
+   (lun-luxuria#97 à #100, #102, #48, #63).
+4. **La session du desktop, resserrée** (§ 4), sur la carte actuelle, dès que le laptop est prêt : ce qui conditionne
+   la semaine, soit B10, B11, B12, une restauration (K), la mesure des gestes puis leur règle (B1), la langue (B2).
+   Les gestes à réentendre du § 4 se notent pendant la semaine.
+5. **La semaine de rodage** (B8), puis sa marge. Cible de délai du VIP : 2,5 s en médiane du dernier mot au premier
+   son (ADR 0011) ; au-dessus, un seul chantier, sur l'étape la plus lente.
+6. **En toute fin de VIP** : l'installation, ce qui peut encore quitter le terminal et à quel palier.
+
+Après le VIP, dans cet ordre : la recherche par le sens d'Avaritia (hybride, sans carte graphique), puis ce que
+`vision.md` range sous « Après le VIP ». Le kit reste tel quel d'ici là.
 
 ### La session sur le desktop, puis le rodage et la bascule
 
@@ -519,5 +547,5 @@ Pas de dates : l'ordre du 12/11, complété le 16/11 (§ 3), fait foi. Restent d
 
 | Quand | Quoi |
 |---|---|
-| Black Week, fin novembre | la RTX si une carte passe à 750 au plus (ADR 0011) : la latence se remesure, sans rien bloquer |
+| quand les prix le permettent | la RTX (5070 ou 5070 Ti, visée pour début 2027, selon les prix) : la latence se remesure, sans rien bloquer ; le VIP ne l'attend pas |
 | avant le 31/12 | une marge pour rejouer la semaine de rodage (B8) si un point de tension la casse |
