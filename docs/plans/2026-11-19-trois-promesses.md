@@ -7,7 +7,8 @@
 > ouverte dans lun-acedia ni dans lun-avaritia sur ces trois points (cherché le 19/11).
 >
 > **État : rédigé le 19/11, contesté le 19/11 (« à amender »), amendé le 19/11 ; quatre choix tranchés par CrOliX
-> le 19/11 (« Tranché par CrOliX »).** Restent les points de « À trancher » ; aucune tâche de code ne part avant.
+> le 19/11 (« Tranché par CrOliX »).** **Validé par CrOliX le 19/11** (« Validé, rien en pause ») : les avis de
+> « À trancher » sont retenus, sauf la pause, où il tranche l'inverse (point (a)). Le code peut partir.
 >
 > Code relu sur `main` : lun-acedia `40f529b`, lun-avaritia `9602d13`, lun-docs `167e8a4`. Le graphe d'abord (ceux
 > d'Acedia et d'Avaritia datent du 16/11, un commit de retard), puis chaque ligne citée relue dans le code.
@@ -258,8 +259,13 @@ Ce que les quatre choix n'ont pas décidé. Chaque point a mon avis ; la tâche 
 ### (a) L'horizon et le moment du passage
 
 **[avis] À chaque passage de la synchro de l'agenda (60 s), à la fin de `syncAgenda`, même si un agenda a échoué,
-sur les sept jours qui viennent.** Elle lit le cache, sans appel à Google, sans boucle nouvelle. En pause, elle
-continue : proposer une carte n'agit sur rien (`CLAUDE.md` d'Acedia, « ce qui n'agit sur rien continue »).
+sur les sept jours qui viennent.** Elle lit le cache, sans appel à Google, sans boucle nouvelle.
+
+**Tranché par CrOliX le 19/11 : en pause, la détection ne crée aucune carte ; elle reprend à la levée.** L'avis
+d'origine la laissait continuer (« ce qui n'agit sur rien continue », `CLAUDE.md` d'Acedia). Sa raison : la pause
+est la promesse de contrôle, et une carte qui arrive seule, avec sa notification, la contredit, comme le tri qui
+« ne range rien seul ». La tâche 2 lit donc la pause avant de proposer, garde le retrait des cartes dont le conflit
+est réglé (il n'ajoute rien), a un test pour les deux, et met la ligne de `CLAUDE.md` sur la pause d'accord.
 
 ### (b) Deux séries qui se chevauchent
 
