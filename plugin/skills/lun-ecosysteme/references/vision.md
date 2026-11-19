@@ -6,49 +6,68 @@
 
 ## Ce que c'est
 
-Natsume est une entité unique : une personnalité et une mémoire, présentes sur plusieurs surfaces.
-Elle se situe à la frontière entre Jarvis (Iron Man) et Neuro-sama (Vedal) : une assistante qui suit
-CrOliX au quotidien, dans le travail comme dans le jeu, et qui garde le fil d'une surface à l'autre.
+Incarner Natsume, un personnage né de nombreuses heures de jeu vidéo, dans le monde réel : une présence
+rendue possible par l'IA, dont la tâche est d'assister CrOliX au quotidien. Elle est une entité unique,
+une personnalité et des souvenirs, présente sur plusieurs surfaces, à la frontière entre Jarvis
+(Iron Man) et Neuro-sama (Vedal). Elle le suit dans le travail comme dans le jeu, et garde le fil d'une
+surface à l'autre.
 
 **L'horizon** : Natsume fait 90 % du travail sans action manuelle, avec des garde-fous de validation
 réglables. Les 10 % restants sont les cas limites, retrouver une information quand le fil est perdu,
 régler, observer et mesurer. Elle reste une assistante, quel que soit son ton, et ne redevient jamais
 l'agent par défaut d'un fournisseur de modèle.
 
-## Les cinq surfaces
+## Ce que le VIP tient
 
-Les cinq sont indispensables au VIP.
+Une promesse écrite ici est tenue et prouvée par l'usage, ou elle n'y est pas : ce qui n'est pas encore
+tenu est plus bas, « Après le VIP » ([recadrage du 19/11](docs/specs/2026-11-19-recadrage-vip.md)).
 
-**1. Assistante de travail.** Elle lit les mails, prépare des réponses et pré-trie ce qui peut l'être :
-corbeille, indésirables, archive, rangement dans des boîtes selon l'expéditeur et l'urgence. Elle suit
-l'agenda, repère les événements qui se chevauchent et propose de les déplacer. Elle gère les tâches et
-la veille tech, et traite les notifications GitHub directement à la source (l'envoi de mails par
-GitHub est désactivé).
+**1. La journée (Lun'Acedia).** Elle lit les mails, prépare des réponses sans jamais les envoyer, et
+pré-trie ce qui peut l'être : corbeille, indésirables, archive, rangement dans des boîtes selon
+l'expéditeur. Elle suit l'agenda, repère les événements qui se chevauchent et propose de les déplacer.
+Elle gère les tâches.
 
-**2. Second cerveau.** Une mémoire vectorielle organisée comme des fiches Obsidian, dans l'esprit de
-myBrain. Elle range et enregistre tout ce qui entoure CrOliX comme information, et c'est cette mémoire
-qui nourrit sa personnalité.
+**2. La bibliothèque (Lun'Avaritia).** Des fiches liées, à la façon d'Obsidian et dans l'esprit de
+myBrain, faites de faits sourcés et datés. Rien n'y entre sans validation ; ce qu'elle apprend en
+conversation y arrive chaque nuit. Natsume y cherche par les mots.
 
-**3. Compagnon desktop et jeu.** Elle voit l'écran, réagit à voix haute (TTS) et est présente par un
-avatar dans VTube Studio. Sa personnalité évolue selon la mémoire et les interactions, et un système
-d'humeur colore ses réponses.
+**3. Le corps (Lun'Luxuria).** Sur le desktop, on lui parle et elle répond à voix haute, avec sa voix ;
+on peut la couper, et elle sait où elle en était. Elle a une scène et un petit mode pour le jeu, se tait
+en sourdine et remarque l'absence.
 
-**4. Mobile.** Une application dans l'esprit des applications Claude ou Gemini, avec les fonctions
-mail, agenda et le reste, pour suivre CrOliX en déplacement.
+**4. Le téléphone.** L'application du core, pour lui écrire, trancher ses cartes et recevoir ses
+notifications en déplacement.
 
-**5. Contrôle total.** Un panel desktop complet : couper les services, voir le coût des appels, régler
-les variables en direct, contrôler les autorisations et les accès Google (Gmail, Agenda, Drive,
-Tasks…). Ce contrôle est obligatoire : pas de surcoût inutile, pas de perte de contrôle.
+**5. Le contrôle.** Tout mettre en pause, voir le coût des appels du core et de chaque poste, tenir des
+plafonds, régler en direct le modèle, sa parole et ses postes, relier et délier un appareil. Ce contrôle
+est obligatoire : pas de surcoût inutile, pas de perte de contrôle.
+
+Les cinq sont indispensables au VIP. Par-dessus : une personnalité qui évolue avec ses souvenirs, et
+aucune écriture d'un poste sans une carte validée par CrOliX.
 
 ## Le critère du VIP
 
 > **Utilisable de bout en bout sur une semaine sans point de tension.**
 
-Échéance : 31 décembre 2026.
+Échéance : 31 décembre 2026. Après lui : de la maintenance, des ajouts et le retravail du design.
 
-## Hors VIP
+## Après le VIP
 
-- Le streaming.
+Dans l'ordre où ils se cadrent, le premier d'abord :
+
+- **La recherche par le sens** dans la bibliothèque : le plein texte, plus des vecteurs, sans carte
+  graphique ; Avaritia reste déployable sur un serveur.
+- **Le corps** : voir l'écran ; un visage qui vit (l'avatar animé) ; une humeur qui change et se voit
+  dans sa voix et son corps ; s'accorder à ce que fait CrOliX ; l'accompagner en jeu ; agir sur le poste
+  par des cartes ; être vue et entendue par d'autres (le stream).
+- **La journée** : le rangement selon l'urgence ; la veille tech ; les notifications GitHub traitées à
+  la source.
+- **Le contrôle** : les accès Google (Gmail, Agenda, Drive, Tasks) vus et réglés depuis le core ; une
+  installation sans terminal ni fichier, regardée dès la fin du VIP.
+- **Le front** : le kit commun partout, et le design retravaillé.
+
+## Hors périmètre
+
 - L'apprentissage par imitation.
 - Le pipeline de développement multi-agents.
 
