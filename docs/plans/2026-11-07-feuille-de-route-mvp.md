@@ -437,10 +437,13 @@ prouvée, ou retirée du texte et inscrite « après le VIP ». L'ordre, jusqu'�
    issues qui ne disent plus le code (lun-luxuria#6). Sur le laptop.
 2. **Trois petites promesses**, en parallèle, sur le laptop : Acedia repère les événements qui se chevauchent et
    propose d'en déplacer un ; « Pina » sort des textes visibles ; l'export de la bibliothèque se télécharge.
-3. **Le banc réduit** (lun-luxuria#104, lun-docs#183 à récrire) : le délai par étape lu à la chaîne et comparé au
+3. **Le banc réduit**, fait le 19/11 ([plan](2026-11-18-banc-de-presence.md), lun-docs#183 ; code lun-luxuria#105 ;
+   chapeau lun-luxuria#104, qui reste ouvert pour ce qui est reporté) : le délai par étape lu à la chaîne et comparé au
    budget de la veille, les sons de toux posés, les résumés visibles, les tests du service de voix en CI. Le reste
    des treize tâches passe après le VIP, comme tout nouveau chantier sur les cas limites du tour de parole
-   (lun-luxuria#97 à #100, #102, #48, #63).
+   (lun-luxuria#97 à #100, #102, #48, #63). La course du 19/11 sur le laptop ne change aucun verdict des 14 scénarios
+   du 18/11 ; seule la toux courte a une prise qui convient (lun-luxuria#101). Le délai par étape se lit désormais en
+   fin de relevé : la fin de tour y pèse 700 ms, le silence fixe ; la mesure qui compte est celle du desktop.
 4. **La session du desktop, resserrée** (§ 4), sur la carte actuelle, dès que le laptop est prêt : ce qui conditionne
    la semaine, soit B10, B11, B12, une restauration (K), la mesure des gestes puis leur règle (B1), la langue (B2).
    Les gestes à réentendre du § 4 se notent pendant la semaine.
