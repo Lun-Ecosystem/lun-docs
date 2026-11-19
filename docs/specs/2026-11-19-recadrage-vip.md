@@ -4,8 +4,9 @@
 > « reprendre le contexte du projet au complet et re-borner », pour une version VIP « fonctionnelle vis-à-vis des
 > promesses des outils » ; après elle, de la maintenance, des ajouts et le retravail du design. Ce document relit les
 > promesses écrites contre le code (§ 3), la voix contre la veille (§ 4), et propose des bornes et un ordre (§ 6).
-> Les choix marqués **[avis Claude]** sont des propositions. **Rien n'est décidé ici : le § 7 liste ce que CrOliX
-> tranche.**
+> Les choix marqués **[avis Claude]** étaient des propositions.
+>
+> **Tranché par CrOliX le 19/11** : les six décisions sont au § 7, et le § 6 est mis d'accord avec elles.
 
 ## 1. La borne
 
@@ -17,8 +18,8 @@ marge pour la rejouer.
 Ce que CrOliX ajoute le 19/11 : la version VIP tient **ce que les outils promettent**. Un chantier qui ne se
 rattache ni à une promesse ni à la semaine passe après elle.
 
-**[avis Claude]** Une règle pour lire le reste : une promesse écrite est soit **tenue et prouvée**, soit **retirée
-du texte** et inscrite « après le VIP ». Il n'y a pas de troisième état.
+Une règle pour lire le reste, validée par CrOliX le 19/11 : une promesse écrite est soit **tenue et prouvée**, soit
+**retirée du texte** et inscrite « après le VIP ». Il n'y a pas de troisième état.
 
 ## 2. Ce qui a été lu, et comment
 
@@ -119,7 +120,9 @@ fonde sur Pipecat, AIRI et LiveKit. Sa taille l'est : le dossier de la présence
 Luxuria qu'il prouve, et le plan suivant ([lun-docs#183](https://github.com/Lun-Ecosystem/lun-docs/pull/183)) lui
 ajoute treize tâches.
 
-Le nouveau desktop (une RTX 5070 ou 5070 Ti, début 2027) sépare les écarts :
+Le nouveau desktop (une RTX 5070 ou 5070 Ti, début 2027, selon les prix) sépare les écarts. Il ne concerne que
+Luxuria, le poste : le core, Acedia et Avaritia visent un serveur, et aucune carte graphique n'est une condition
+pour eux.
 
 | Écart | Attend la RTX | Se traite sans elle |
 |---|---|---|
@@ -144,7 +147,7 @@ la conversation, et qu'une mesure par étape existe le jour du changement.
 4. **`vision.md` attend sa réécriture depuis le 10/11** (état cible, § 8, point 4). Tant qu'elle promet l'écran,
    l'avatar et la mémoire vectorielle « indispensables au VIP », la version VIP est par définition inatteignable.
 
-## 6. Ce que je propose
+## 6. Les bornes, après les décisions du 19/11
 
 ### 6.1 Dans le VIP
 
@@ -152,41 +155,62 @@ Ce qui est écrit, plus ce qui suit, et la semaine :
 
 - **Les textes d'accord avec la borne** : `vision.md` réécrite (l'incarnation d'abord, ce que le VIP tient, ce qui
   vient après), le site, les README, les issues closes ou mises à jour.
-- **De petites promesses à tenir plutôt qu'à retirer [avis Claude]** : les événements qui se chevauchent (l'action
-  de déplacement existe déjà, il manque la détection et la carte) ; « Pina » sorti des textes visibles ; l'export de
+- **Trois petites promesses, tenues** : les événements qui se chevauchent (Acedia les repère et propose par une
+  carte d'en déplacer un ; l'action de déplacement existe déjà) ; « Pina » sorti des textes visibles ; l'export de
   la bibliothèque qui se télécharge.
-- **La voix, au minimum** : la règle des mots des gestes, qui lève le verrou des cartes ; la langue (B2) ; un budget
-  par étape lu à la chaîne. Rien d'autre sur les cas limites avant la semaine.
+- **La voix, au minimum** : la règle des mots des gestes, qui lève le verrou des cartes ; la langue (B2) ; un délai
+  par étape lu à la chaîne et comparé au budget de la veille. Cible du VIP sur le desktop actuel : **2,5 s en
+  médiane** du dernier mot au premier son (ADR 0011) ; si la mesure la dépasse, un seul chantier, sur l'étape la plus
+  lente. Rien d'autre sur les cas limites avant la semaine.
 - **La session du desktop, resserrée** : ce qui conditionne la semaine (Google en production, le téléphone, le
   redémarrage, une restauration, la mesure des gestes, la langue). Les gestes à réentendre se notent pendant la
   semaine au lieu de la précéder.
 
 ### 6.2 Après le VIP
 
-Retirés de ce que le VIP promet, et inscrits comme la suite : voir l'écran ; l'avatar animé ; l'humeur qui se voit ;
-la compagne de jeu ; agir sur le poste ; le stream ; la veille tech ; les notifications GitHub ; la recherche par le
-sens (avec la RTX, des vecteurs calculés sur place) ; Google branché depuis l'interface ; un installateur ; les
-accès Google vus depuis le core ; le kit commun partout et le retravail du design.
+Retirés de ce que le VIP promet, et inscrits comme la suite :
+
+- **Le premier chantier : la recherche par le sens**, hybride, sur le modèle de myBrain, la référence de CrOliX : le
+  plein texte reste, des vecteurs calculés par l'API d'un fournisseur à l'écriture s'y ajoutent, et sans clé ou en
+  panne la recherche redevient du plein texte. Aucune carte graphique. Pendant la semaine, les questions restées
+  sans fiche se notent : elles serviront à le mesurer.
+- Le corps : voir l'écran ; l'avatar animé ; l'humeur qui se voit ; la compagne de jeu ; agir sur le poste ; le
+  stream.
+- La journée : la veille tech ; les notifications GitHub.
+- Le contrôle : les accès Google vus depuis le core.
+- Le front : le kit reste tel quel ; le kit commun partout et le retravail du design viennent après.
+
+**L'installation reste telle quelle pour l'instant.** Le premier appareil, la liaison des postes et la clé du modèle
+se font déjà par les écrans (chantier du 16/11). Ce qui passe encore par le terminal ou un fichier (la clé secrète de
+chaque application, Google depuis l'écran, un script d'installation, l'installateur de Luxuria) se regarde **en toute
+fin de VIP** : ce qui peut se mettre en place, et à quel palier.
 
 ### 6.3 Ce qui s'arrête
 
-- Le plan du banc de présence tel qu'il est (lun-docs#183) : réduit à ce qui rend le délai par étape lisible et les
-  toux jouables.
+- Le plan du banc de présence tel qu'il est (lun-docs#183) : réduit à quatre ou cinq tâches, le délai par étape lu
+  à la chaîne, les sons de toux posés, les résumés visibles, les tests du service de voix en CI. Le reste passe après
+  le VIP.
 - Tout nouveau chantier sur les cas limites du tour de parole : ses issues restent ouvertes, pour après la semaine.
 
 ### 6.4 L'ordre
 
 1. Les textes d'accord avec la borne. Sur le laptop.
-2. Les petites promesses du § 6.1, et le banc réduit. Sur le laptop, en parallèle.
-3. La session du desktop, resserrée : au plus tard mi-décembre.
-4. La semaine de rodage, puis sa marge.
+2. Les trois petites promesses, et le banc réduit. Sur le laptop, en parallèle.
+3. La session du desktop, resserrée, sur la carte actuelle : dès que le laptop est prêt.
+4. La semaine de rodage, puis sa marge, avant le 31 décembre.
+5. En toute fin de VIP : l'installation.
 
-## 7. Ce que CrOliX tranche
+## 7. Ce que CrOliX a tranché, le 19/11
 
-1. La règle du § 1 : une promesse est tenue et prouvée, ou retirée du texte.
-2. La liste du § 6.2 : ce qui sort du VIP, une ligne à la fois si besoin.
-3. Les trois petites promesses du § 6.1 : les tenir, ou les retirer aussi.
-4. Le plan du banc (lun-docs#183) : réduit, ou gardé.
-5. La session du desktop resserrée, et sa date.
-6. La cible de délai du VIP : les 2,5 s de l'ADR 0011, les 1,5 s de la veille restant l'horizon avec la RTX
-   **[avis Claude]**.
+1. **La règle** : une promesse est tenue et prouvée, ou retirée du texte et inscrite « après le VIP ».
+2. **Ce qui sort du VIP** : tout le § 6.2. La recherche par le sens est le premier chantier d'après, sans carte
+   graphique : Avaritia se déploie sur un serveur et reste libre. Le kit reste tel quel. L'installation, qu'il range
+   dans le MVP, reste telle quelle pour l'instant et se regarde en toute fin de VIP.
+3. **Les trois petites promesses** entrent dans le VIP : les chevauchements d'agenda, « Pina » hors des textes
+   visibles, l'export téléchargeable.
+4. **Le plan du banc** (lun-docs#183) : réduit.
+5. **La session du desktop** : resserrée. Elle ne dépend pas de la RTX, dont l'achat suit les prix (« hors de
+   question de claquer 1 k dans le GPU ») ; CrOliX peut être sur le desktop quand il veut, la date se fixe quand le
+   laptop est prêt.
+6. **La cible de délai du VIP** : 2,5 s en médiane sur le desktop actuel ; les 1,5 s de la veille restent l'horizon
+   avec la RTX.
