@@ -4,14 +4,16 @@
 > « réduit à quatre ou cinq tâches, le délai par étape lu à la chaîne, les sons de toux posés, les résumés visibles,
 > les tests du service de voix en CI. Le reste passe après le VIP. »
 >
+> **PR qui livre :** Lun-Ecosystem/lun-luxuria#105 (brouillon). Tâches 1 à 5 faites le 19/11, détail dans chaque tâche.
+>
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
 > **Issues :** lun-luxuria#104 (chapeau, `niveau:standard`) ; ce plan reprend #68, #75, #85 et la part de #101 sur
 > les sons de toux. Le reste des issues du chapeau va dans « Reporté après le VIP ».
 >
-> **État : rédigé le 18/11, contesté et amendé le 18/11, réduit le 19/11 ; à valider par CrOliX.** PR du plan :
-> lun-docs#183.
+> **État : rédigé le 18/11, contesté et amendé le 18/11, réduit le 19/11, validé par CrOliX le 19/11 ; tâches 1 à 5
+> faites le 19/11.** PR du plan : lun-docs#183.
 >
 > Code relu sur `main` de lun-luxuria (`1d07678`), par le graphe d'abord ; chaque ligne citée y a été relue. Le banc
 > de sons (`banc-sons`, hors dépôt) lu par noms de dossiers et de fichiers seulement.
@@ -198,7 +200,10 @@ Une seule PR.
 
 ### Tâche 1. Les sorties du banc (#85, #75)
 
-- [ ] **Fichiers** : `src/listen/banc.test.ts` (`:182-188`, test `:194-205`), `package.json` (`:21`, `:23`), le
+- [x] **Faite, relue, approuvée.** `npm run banc` saute `gestes/`, `chaine/` et `scenarios/` au premier niveau, et son
+  résumé s'affiche sous un agent ; un test fixe que seul le premier niveau est sauté. Sur les 163 fichiers du banc :
+  le niveau 159 justes, le modèle 159 justes.
+- **Fichiers** : `src/listen/banc.test.ts` (`:182-188`, test `:194-205`), `package.json` (`:21`, `:23`), le
   `CLAUDE.md` de Lun'Luxuria (« L'écoute se rejoue », et la phrase « Son `--reporter=default` est voulu »).
 - **Ce qui change** : au premier niveau, `chaine` et `scenarios` sont sautés comme `gestes` ; le commentaire `:182`
   dit pourquoi (les sons et les sorties d'autres bancs). `--reporter=default` au bout des scripts `banc` et
@@ -212,7 +217,9 @@ Une seule PR.
 
 ### Tâche 2. `voix/test_service.py` en CI (#68)
 
-- [ ] **Fichiers** : `.github/workflows/ci.yml` (un job neuf, `voix`, sur `ubuntu-latest`).
+- [x] **Faite, relue, approuvée.** Le job `voix` est vert sous Ubuntu sur lun-luxuria#105 (24 s) ; la même commande
+  passe sous Windows.
+- **Fichiers** : `.github/workflows/ci.yml` (un job neuf, `voix`, sur `ubuntu-latest`).
 - **Ce qui change** : le job installe `uv` par l'action officielle d'Astral, à une version fixée, puis lance
   `uv run --python 3.12 --with numpy --with httpx --with soundfile python voix/test_service.py`.
 - **Preuve** : en local, la même commande affiche `ok`, sous Windows. Sous Linux, la seule preuve est le job vert sur
@@ -221,7 +228,10 @@ Une seule PR.
 
 ### Tâche 3. Le délai par étape, à côté du budget (le cœur du plan)
 
-- [ ] **Fichiers** : `src/presence/taux.ts` (une fonction neuve, `releveBudget`, à côté de `releveTaux`),
+- [x] **Faite, relue.** Le relecteur a demandé de ne pas publier un commit intermédiaire qui portait un nom
+  d'instance dans un test : la tâche est entrée dans la branche en un seul commit. Limite connue : les tours avec et
+  sans envoi à l'essai sont comptés ensemble, et le résultat écrit ne garde pas cette distinction.
+- **Fichiers** : `src/presence/taux.ts` (une fonction neuve, `releveBudget`, à côté de `releveTaux`),
   `src/presence/taux.test.ts`, `src/presence/chaine.test.ts` (`afterAll`, `:595-604`).
 - **Ce qui change** :
   - `releveBudget(lignes)` rend une section « Budget » en Markdown, depuis les lignes de `resultats.jsonl` seules.
@@ -245,7 +255,12 @@ Une seule PR.
 
 Sous PowerShell, une commande par ligne, depuis `banc-sons`, après l'accord de CrOliX sur (b).
 
-- [ ] **D'abord ce que la détection fait des prises**, sur un dossier temporaire :
+- [x] **Faite en partie, par décision de CrOliX le 19/11.** Quatre prises réelles passées au banc : les deux courtes
+  conviennent (coupées à 300 ms, aucune voix tenue) ; aucune longue ne convient pour `toux.wav` ni `bruit.wav` (dans
+  les 450 premières ms jouées, la détection n'y voit que 0 à 96 ms de voix d'affilée, là où la voix tenue en demande
+  environ 400). Seul `toux-courte.wav` est posé dans le dossier de référence. Détail dans
+  Lun-Ecosystem/lun-luxuria#101.
+- [x] **D'abord ce que la détection fait des prises**, sur un dossier temporaire :
 
   ```powershell
   New-Item -ItemType Directory -Force essai-toux
@@ -257,7 +272,7 @@ Sous PowerShell, une commande par ligne, depuis `banc-sons`, après l'accord de 
   Puis, depuis lun-luxuria, `BANC_DIR` réglé sur ce dossier, `npm run banc`. `toux` et `bruit` doivent faire une
   tenue (au moins 384 ms de voix continue), `toux-courte` non, comme leurs scénarios le supposent. Une prise qui ne
   tient pas : l'autre prise du même mot. Le dossier temporaire est retiré ensuite.
-- [ ] **Le dossier de référence**, depuis celui du 18/11, puis les trois sons retenus :
+- [x] **Le dossier de référence** (`toux-courte.wav` seul, voir plus haut), depuis celui du 18/11, puis les trois sons retenus :
 
   ```powershell
   New-Item -ItemType Directory -Force chaine\banc-de-presence\chaine
@@ -272,7 +287,7 @@ Sous PowerShell, une commande par ligne, depuis `banc-sons`, après l'accord de 
 
 ### Tâche 5. La course de la chaîne, et la fin (testeur, après les tâches 1 à 4)
 
-- [ ] **La partie complète** : le serveur de la chaîne lancé sur `banc-sons/chaine/banc-de-presence/chaine`, puis,
+- [x] **La partie complète** : le serveur de la chaîne lancé sur `banc-sons/chaine/banc-de-presence/chaine`, puis,
   depuis le worktree de la PR, une commande par ligne :
 
   ```powershell
@@ -286,6 +301,30 @@ Sous PowerShell, une commande par ligne, depuis `banc-sons`, après l'accord de 
 - **Lue** selon « La règle de la chaîne » ; les sept scénarios de toux joués, ou leur raison.
 - **Rend**, ici : la table « Budget » de `releve-chaine.md`, recopiée telle quelle, avec la date et le poste ; chaque
   attente neuve qui rate, avec son issue.
+
+  **Course du 19/11**, sur le laptop : un seul tirage, voix de synthèse, une partie par scénario. 15 scénarios joués
+  (les 14 du 18/11 et `toux-courte`), 15 non joués dont 6 « son manquant » (les toux longues et le bruit). Attentes :
+  51 tenues, 0 ratée, 1 non jouée. Les 14 scénarios du 18/11 ne changent aucun verdict `tous`.
+  `toux-courte / verdict-bruit` sort `non_jouee` (source `ecoute`) : écrit dans lun-luxuria#101, ne bloque pas, par
+  « La règle de la chaîne ». Au niveau exact, deux lignes bougent d'une milliseconde autour d'une borne
+  (`faire-taire / sortie-arretee` passe à tenue ; `non-court / sortie-arretee` passe hors bornes, 725 pour
+  [692, 724]) : un seul tirage, à surveiller.
+
+  **Table « Budget »** (valeurs en millisecondes) :
+
+  | Étape | Délai | Voix | Médiane | 95e centile | Valeurs | Budget | Cible du VIP |
+  |---|---|---|---|---|---|---|---|
+  | Détection de voix |  |  | non mesurée |  | 0 | < 30 ms |  |
+  | Fin de tour | attente_fin | hortense | 701 | 711 | 24 | < 100 ms |  |
+  | Transcription | transcription | hortense | 326 | 709 | 24 | < 300 ms |  |
+  | Première phrase du modèle | premiere_phrase | hortense | 425 | 733 | 23 | < 700 ms |  |
+  | Synthèse | synthese 1 | hortense | 86 | 2020 | 23 | < 400 ms |  |
+  | Sa voix (RVC) |  |  | non mesurée |  | 0 | < 100 ms |  |
+  | Bout en bout | blanc_de_tour | hortense | 1007 | 3299 | 21 | 1,5 s | 2,5 s |
+
+  C'est le laptop, avec un faux modèle dont le premier mot est fixé par le scénario et sans conversion de voix : ces
+  chiffres ne valent que comparés à une autre course du même poste, et ne disent rien de la cible du VIP, qui se
+  mesure sur le desktop. Le 95e centile de la synthèse (2 020 ms pour 86 de médiane) n'est pas expliqué.
 - [ ] La relecture du diff entier (reviewer), contre ce plan et ses critères.
 - [ ] Les issues : #68, #75, #85 fermées avec leur preuve ; #101 reçoit le relevé des toux ; #104 suit « Reporté après
   le VIP ».
@@ -313,6 +352,9 @@ Sous PowerShell, une commande par ligne, depuis `banc-sons`, après l'accord de 
 - Les mesures de ce plan se prennent sur le laptop : aucune ne vaut pour la latence du desktop.
 
 ## Reporté après le VIP
+
+Non fait par ce chantier : l'export du déroulé depuis la fenêtre (lun-luxuria#60), à la session du desktop ; et tout ce
+que liste cette section.
 
 Retiré par le recadrage (§ 6.3). Chaque point garde son issue ; il revient tel que le plan du 18/11 l'avait écrit
 (`2eeb203`, sur cette branche).
