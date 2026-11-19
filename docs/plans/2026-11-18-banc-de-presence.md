@@ -312,20 +312,25 @@ Sous PowerShell, une commande par ligne, depuis `banc-sons`, après l'accord de 
 
   **Table « Budget »** (valeurs en millisecondes) :
 
-  | Étape | Délai | Voix | Médiane | 95e centile | Valeurs | Budget | Cible du VIP |
+  | Étape | Délai | Voix | Médiane (ms) | 95e centile (ms) | Valeurs | Budget | Cible du VIP |
   |---|---|---|---|---|---|---|---|
   | Détection de voix |  |  | non mesurée |  | 0 | < 30 ms |  |
-  | Fin de tour | attente_fin | hortense | 701 | 711 | 24 | < 100 ms |  |
+  | Fin de tour | attente_fin | hortense | 701 | 711 | 24 | < 100 ms (repli 700 ms) |  |
   | Transcription | transcription | hortense | 326 | 709 | 24 | < 300 ms |  |
   | Première phrase du modèle | premiere_phrase | hortense | 425 | 733 | 23 | < 700 ms |  |
-  | Synthèse | synthese 1 | hortense | 86 | 2020 | 23 | < 400 ms |  |
+  | Synthèse | synthese 1 | hortense | 69 |  | 17 | < 400 ms |  |
   | Sa voix (RVC) |  |  | non mesurée |  | 0 | < 100 ms |  |
-  | Bout en bout | blanc_de_tour | hortense | 1007 | 3299 | 21 | 1,5 s | 2,5 s |
+  | Bout en bout | blanc_de_tour | hortense | 996 |  | 16 | 1,5 s | 2,5 s |
 
-  C'est le laptop, avec un faux modèle dont le premier mot est fixé par le scénario et sans conversion de voix : ces
-  chiffres ne valent que comparés à une autre course du même poste, et ne disent rien de la cible du VIP, qui se
-  mesure sur le desktop. Le 95e centile de la synthèse (2 020 ms pour 86 de médiane) n'est pas expliqué.
-- [ ] La relecture du diff entier (reviewer), contre ce plan et ses critères.
+  Cette table n'a pas été rejouée : elle est recalculée, par la fonction corrigée, sur les résultats de la même course du 19/11. La relecture d'ensemble de lun-luxuria#105 a trouvé que la première version comptait comme des mesures des pauses fixées par les scénarios : quatre scénarios jouent une synthèse factice, et leurs pauses entraient dans « Synthèse » et « Bout en bout ». Ces lignes sont écartées de ces deux étapes seulement (trois parties à synthèse factice écartées ici). C'était aussi l'explication du 95e centile de la synthèse (2 020 ms pour 86 de médiane dans la première version).
+
+  Deux lectures, parce que la table seule trompe :
+
+  1. Les 701 ms de fin de tour sont le silence fixe, c'est-à-dire le repli que la référence prévoit, et non un retard sur les 100 ms.
+  2. Les 425 ms de « Première phrase du modèle » sont pour l'essentiel le délai que les scénarios imposent au faux modèle (400 ms par défaut) : ni cette ligne ni le bout en bout ne disent rien du vrai modèle.
+
+  C'est le laptop, sans conversion de voix, un seul tirage, et la table compte toutes les parties de la suite : ces chiffres ne valent que comparés à une autre course du même poste, et ne disent rien de la cible du VIP, qui se mesure sur le desktop.
+- [x] **La relecture du diff entier** (reviewer), contre ce plan et ses critères, faite le 19/11 : elle a trouvé que la table « Budget » comptait comme des mesures des pauses de scénario (voir plus haut) ; corrigé dans lun-luxuria#105 (`920a757`), test à l'appui.
 - [ ] Les issues : #68, #75, #85 fermées avec leur preuve ; #101 reçoit le relevé des toux ; #104 suit « Reporté après
   le VIP ».
 
