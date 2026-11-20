@@ -6,8 +6,8 @@
 > **Issue :** Lun-Ecosystem/lun-anima#118 (`niveau:standard`, privé), recadrée par CrOliX le 20/11 au soir.
 >
 > **État : rédigé le 20/11 ; contesté le 20/11 (« à amender », trois bloquants) ; amendé le 20/11 ; codé, relu et
-> mesuré le 20/11.** La forme complète est retenue. Le choix du modèle du rodage reste à reposer à CrOliX ; la PR du
-> core est à venir. L'état tâche par tâche et critère par critère est à « L'état au 20/11 ».
+> mesuré le 20/11.** La forme complète est retenue. CrOliX a choisi le modèle du rodage le 20/11 : Haiku 5.5, raisonnement
+> coupé. La PR du core est en brouillon. L'état tâche par tâche et critère par critère est à « L'état au 20/11 ».
 >
 > Code relu sur `main` de Lun'Anima (`eb7ae40`, le chantier des deux fournisseurs fusionné) ; le graphe d'abord,
 > puis chaque point dans le code, et chaque objection de la contestation vérifiée dans le code avant d'être écrite.
@@ -256,7 +256,7 @@ s'arrête à 2,28 $ cumulés et revient à CrOliX.
    neuf et les scènes (sans historique ni outils) sont prouvés identiques à sec (tâche 5). **Rien ne se dégrade** : le
    premier mot en fin de fil pas plus de 0,1 s au-dessus d'avant en médiane ; la cascade pas en dessous d'avant.
    **Coût attendu** : 0,40 $ (cascade 0,32 $, premier mot 0,08 $).
-7. - [ ] **Le choix du modèle reposé à CrOliX, la doc et la livraison** (le manager, puis le livreur). Les chiffres des
+7. - [x] **Le choix du modèle reposé à CrOliX, la doc et la livraison** (le manager, puis le livreur). Les chiffres des
    tâches 1 et 6, le défaut du fil neuf rappelé, la recommandation, le choix de CrOliX écrit ici. Le fournisseur en
    service ne change qu'après ce choix, par l'écran. PR en brouillon, ce plan coché.
 
@@ -435,7 +435,10 @@ dans ces fils, pas que le filet fonctionne ; sa preuve est celle des tests.
 
 ## L'état au 20/11
 
-Les tâches 1 à 6 sont faites ; la 7 reste : le choix du modèle à reposer à CrOliX, la PR du core à livrer.
+Les sept tâches sont faites. **Le choix de CrOliX, le 20/11, sur les chiffres des tâches 1 et 6 : Haiku 5.5,
+raisonnement coupé pour la voix, pour la semaine de rodage** ; le modèle OpenAI reste à un clic. Il change le
+fournisseur lui-même, par l'écran, une fois ce chantier fusionné et livré. Autre décision du même jour : le plafond
+de signes du fil passe de 16 000 à 24 000, pour que le fil garde ses 40 messages (voir « Les suites »).
 
 | Critère | État | Preuve |
 |---|---|---|
@@ -443,17 +446,17 @@ Les tâches 1 à 6 sont faites ; la 7 reste : le choix du modèle à reposer à 
 | 2. Une conversation d'avant, et rien de visible ne change | tenu | tests sur une base d'avant ; mêmes textes rangés avant et après, sur un fournisseur scripté et dans les fils de la mesure finale |
 | 3. Mesuré dans des fils longs, avant et après | tenu | tâches 1 et 6 ; Haiku de 28 à 62 délégations sur 65, aucune invention ; OpenAI 62 et 62, appels non voulus de 16 à 1 |
 | 4. Les autres mesures ne bougent pas en mal | tenu | premier mot en fin de fil mesuré (+20 ms en médiane chez Haiku) ; phrase d'attente en fil neuf et scènes prouvées identiques à sec ; coût d'un tour dit. La mémoire du fil rétrécit chez Haiku : « Les suites » |
-| 5. Le choix du modèle reposé à CrOliX | non | tâche 7, ouverte |
+| 5. Le choix du modèle reposé à CrOliX | tenu | Haiku 5.5, raisonnement coupé, choisi le 20/11 |
 
 **Le budget.** 1,70 $ dépensés pour ce chantier sur 2,28 $ ; **7,42 $ en tout sur les 10 $** accordés pour les
 mesures des deux chantiers.
 
 ## Les suites
 
-- **La mémoire du fil qui rétrécit**, à trancher par CrOliX : Haiku garde 28 messages au lieu de 40 en fin de fil.
-  Les options, en comportement : relever le plafond de signes du fil rejoué ; couper plus court le résultat des tours
-  anciens, en gardant l'appel entier ; laisser tel quel.
-- **La commande de purge des secrets** ne parcourt pas encore la donnée nouvelle.
+- **La mémoire du fil qui rétrécit** : Haiku gardait 28 messages au lieu de 40 en fin de fil. Tranché par CrOliX le
+  20/11 : le plafond de signes du fil rejoué est relevé (de 16 000 à 24 000). Non remesuré : à fil plein, de l'ordre
+  de 2 000 jetons d'entrée de plus par tour ; l'effet sur le délai est à regarder au rodage.
+- **La commande de purge des secrets** ne parcourt pas encore la donnée nouvelle (Lun-Ecosystem/lun-anima#122).
 - **Non mesuré** : au-delà de 24 tours ; les cartes lues et tranchées en vrai ; les sujets ; le rituel et la parole
   d'elle-même ; la qualité de ce qui est dit après une délégation (le poste factice rendait des résultats sans rapport
   avec la demande).
