@@ -481,7 +481,9 @@ terme, sans date. L'ordre, jusqu'à la porte :
    le redémarrage et la nuit rattrapée (B12), une restauration (K), le premier appareil par les écrans, et les trois
    vérifications d'après les trois promesses (une carte de conflit validée sur le vrai compte, un agenda secondaire
    qui donne une carte qui signale, l'export téléchargé). **Avant elle, à placer par CrOliX** : lun-acedia#76 (trois
-   onglets ouverts, plus rien ne répond).
+   onglets ouverts, plus rien ne répond). **En parallèle** : les deux fournisseurs de modèle pour le core
+   ([plan](2026-11-20-core-deux-fournisseurs.md), Lun-Ecosystem/lun-anima#116), fusionné et livré avant la semaine de
+   rodage.
 2. **La session du desktop, pour la voix seule** (§ 4) : Luxuria reliée au core du NAS ; la mesure des gestes puis
    leur règle (B1) ; la langue (B2) ; le délai mesuré contre les 2,5 s ; l'exe, le corps, le service voix. Les gestes
    à réentendre se notent pendant la semaine.

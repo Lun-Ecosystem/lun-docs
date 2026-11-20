@@ -5,12 +5,13 @@
 >
 > **Issue :** le chapeau Lun-Ecosystem/lun-anima#116 (`niveau:standard`, privé), décidé par CrOliX le 20/11.
 >
-> **État : rédigé le 20/11 ; contesté le 20/11 (« à amender ») ; amendé le 20/11.** À valider par CrOliX. Rien ne
-> part avant sa validation, et aucun appel payant avant son accord sur le budget (« À trancher », point (d)).
+> **État : rédigé le 20/11 ; contesté le 20/11 (« à amender ») ; amendé le 20/11 ; les sept points tranchés par
+> CrOliX le 20/11, un à un** (« Décisions de CrOliX, le 20/11 »). Son accord sur le budget vaut pour toutes les mesures
+> du plan, sans redemander à chacune.
 >
 > Code relu sur `main` de Lun'Anima (`7cfd192`), de Lun'Acedia et de Lun'Avaritia ; le graphe d'abord, puis chaque
 > point du relevé et de la contestation relu dans le code. Lun'Anima est privé : ce plan dit les critères, les tâches
-> en comportement, les mesures, les risques et les points à trancher. Les fichiers, les lignes, la branche et tout ce
+> en comportement, les mesures, les risques et les décisions. Les fichiers, les lignes, la branche et tout ce
 > qui décrit l'intérieur du core sont dans le chapeau privé ([`securite.md`](../../standards/securite.md), « Dépôts
 > publics »).
 
@@ -41,8 +42,8 @@ jamais après.
    vérifiée, avec son échéance et son alerte ; les textes nomment le bon fournisseur (une clé refusée, un crédit
    épuisé, un service injoignable). Tâches 2 et 6.
 4. **Les coûts restent justes** : le prix du modèle choisi est connu, les jetons lus et écrits en cache sont comptés
-   à leur prix (sa lecture exacte se tranche au point (c)), les plafonds par jour et par mois tiennent, l'écran des
-   dépenses dit le fournisseur. Tâches 3 et 6.
+   à leur prix quand le fournisseur en donne un, et rien d'autre ne change (décision (c)) ; les plafonds par jour et
+   par mois tiennent ; l'écran des dépenses dit le fournisseur. Tâches 3 et 6.
 5. **Revenir à OpenAI ne demande aucun code**, et rien de ce qui marche aujourd'hui avec lui ne change : la suite de
    tests actuelle passe telle quelle, **diff des fichiers de test nul**. Tâches 2 à 6.
 6. **Les quatre mesures se rejouent sur l'un ou l'autre** : le premier mot, la phrase d'attente, les scènes de la
@@ -50,7 +51,8 @@ jamais après.
    le modèle : pas de mise en forme, des réponses courtes, la phrase d'attente, le français ; un compteur d'écarts de
    forme ajouté aux scènes le mesure. Si un écart apparaît, les consignes se corrigent et la mesure se rejoue. Les
    chiffres sur Anthropic sont écrits ici, à côté de ceux d'OpenAI. Tâches 5 et 8.
-7. **Le choix du modèle** est posé à CrOliX sur ces chiffres (point (a)). Tâche 9.
+7. **Le choix du modèle** est posé à CrOliX sur ces chiffres, dans l'ordre de la décision (a) ; il lui revient.
+   Tâche 9.
 8. **Aucun fournisseur en dur hors de ses modules** (ajouté par CrOliX le 20/11) : ni dans les textes vus de
    l'utilisateur, ni dans le rangement de la clé, ni dans les prix, ni au démarrage, ni dans les outils de mesure. La
    liste des fournisseurs vit à un seul endroit, tout le reste la lit ; ajouter un fournisseur plus tard ne demande
@@ -160,7 +162,7 @@ dans le chapeau.
 **L'ordre.** 1 d'abord. Puis **2 et 4 en parallèle** (aucun fichier commun ; la 2 ne touche pas à l'interface des
 fournisseurs, que touche la 4). Puis 3. Puis **5 et 6 en parallèle** (aucun fichier commun). Puis 7, puis 8 et 9.
 
-1. - [ ] **La mesure réelle, avant tout code** (`dev-core`, hors dépôt ; après l'accord de CrOliX). Un script
+1. - [ ] **La mesure réelle, avant tout code** (`dev-core`, hors dépôt ; dans le budget de la décision (d)). Un script
    jetable, hors du dépôt, sur le SDK officiel, la clé dans une variable propre au script, jamais affichée ni écrite.
    Sur Claude Haiku 5.5, Claude Sonnet 5.5, et le modèle d'OpenAI en service pour comparer le même jour :
    - un appel en flux, puis vingt pour le **premier mot et la fin de la première phrase**, prompt de la taille d'un
@@ -188,15 +190,18 @@ fournisseurs, que touche la 4). Puis 3. Puis **5 et 6 en parallèle** (aucun fic
    de la tâche 7 s'écrit ici, rouge** (`testeur`), et passe au vert au fil des tâches 2, 3, 5 et 6. Tests nouveaux :
    une base d'aujourd'hui s'ouvre, sert OpenAI, garde sa clé, son modèle et ses coûts ; deux clés, chacune avec son
    échéance et son alerte ; un refus et un crédit épuisé nomment leur fournisseur ; changer la paire pendant une nuit
-   ne mélange jamais l'un et l'autre. **Exclu** : les prix (3), l'écran (6), tout retour automatique (point (e)).
+   ne mélange jamais l'un et l'autre. **Exclu** : les prix (3), l'écran (6), tout retour automatique (décision (e)).
 3. - [ ] **Les prix et les réglages des modèles** (`dev-core` ; après 2 et 4). La table de chaque fournisseur dans la
    liste ; pour chaque modèle, ses prix, ceux du cache s'il y en a, son raisonnement pour la voix et pour la nuit. Les
-   prix d'Anthropic sont lus sur sa page de prix le jour même, et la date écrite à côté. Le cache est compté comme le
-   tranche le point (c). La surcharge par l'instance porte l'entrée entière. Le jeu de noms de modèles qui coupe le
-   raisonnement chez OpenAI part dans sa table. Tests nouveaux : un appel d'Anthropic avec lecture et écriture du
-   cache compte chaque part à son prix ; les plafonds tiennent sur un mélange des deux ; la nuit d'OpenAI garde son
-   raisonnement par défaut ; un modèle surchargé par l'instance prend tous ses réglages. **Exclu** : poser des
-   marqueurs de cache ; ajouter un modèle depuis l'écran (point (g)).
+   prix d'Anthropic sont lus sur sa page de prix le jour même, et la date écrite à côté. Le cache est compté à son
+   prix quand le fournisseur en donne un ; sans prix de cache, comme aujourd'hui, et OpenAI n'en a pas (décision (c)).
+   Un modèle nouveau s'ajoute par une mise à jour du core, ou par un réglage de l'instance qui déclare son entrée
+   entière : prix, cache, raisonnement pour la voix et pour la nuit (décisions (b) et (g)). Le jeu de noms de modèles
+   qui coupe le raisonnement chez OpenAI part dans sa table. Tests nouveaux : un appel d'Anthropic avec lecture et
+   écriture du cache compte chaque part à son prix ; un appel d'OpenAI avec jetons relus coûte ce qu'il coûte
+   aujourd'hui ; les plafonds tiennent sur un mélange des deux ; la nuit d'OpenAI garde son raisonnement par défaut ;
+   un modèle déclaré par l'instance prend tous ses réglages. **Exclu** : poser des marqueurs de cache ; tout réglage
+   des modèles à l'écran.
 4. - [ ] **Le module d'Anthropic, son faux, et le service par lui** (`testeur` pour le faux et les tests, `dev-core`
    pour le module ; en parallèle de 2). Derrière l'interface existante : le flux (texte, outils en texte JSON, bilan
    de jetons, réponse coupée, annulation), la réponse structurée par format de sortie, les mots-clés de schéma non
@@ -221,16 +226,16 @@ fournisseurs, que touche la 4). Puis 3. Puis **5 et 6 en parallèle** (aucun fic
    Tests nouveaux : un et deux fournisseurs, une clé refusée, une paire refusée. **Exclu** : une liste de modèles.
 7. - [ ] **Le garde au vert** (`testeur` ; après 5 et 6). Écrit à la tâche 2, il échoue sur `main` et passe sur la
    branche ; sa liste de fichiers permis est courte et chaque entrée dit pourquoi.
-8. - [ ] **Les mesures sur les vrais modèles, et une nuit réelle** (`testeur`, depuis le laptop ; après l'accord de
-   CrOliX sur le budget). Les quatre mesures sur Claude Haiku 5.5, Claude Sonnet 5.5 et OpenAI, le même jour, à réseau
+8. - [ ] **Les mesures sur les vrais modèles, et une nuit réelle** (`testeur`, depuis le laptop ; dans le budget de
+   la décision (d)). Les quatre mesures sur Claude Haiku 5.5, Claude Sonnet 5.5 et OpenAI, le même jour, à réseau
    égal. Le premier mot y est celui de l'outil : pas de nouvelle série à part de celle de la tâche 1. Puis une nuit et
    une lettre du matin jouées contre Anthropic sur une base de test amorcée. **Coût attendu**, aux prix lus le 20/11 à
    vérifier : de l'ordre de 0,30 dollar pour Haiku, de 3 pour Sonnet, de 0,30 pour OpenAI, la nuit comprise.
 9. - [ ] **Le choix posé à CrOliX, la doc et la livraison** (le manager, puis le livreur). Les chiffres de la tâche 8,
-   le coût d'une journée par modèle, la recommandation, la décision de CrOliX écrite ici. Le README du core et son
-   exemple d'environnement disent les deux fournisseurs ; la page de
-   [mise en service du desktop](../mise-en-service-desktop.md) dit le prix du modèle retenu. Le fournisseur en service
-   ne change qu'après la décision, par l'écran. PR en brouillon, ce plan coché.
+   le coût d'une journée par modèle, la recommandation, le choix de CrOliX écrit ici. Le README du core et son
+   exemple d'environnement disent les deux fournisseurs et le prix du modèle retenu ; la page de mise en service du
+   NAS, qui viendra avec son chantier ([ADR 0014](../../adr/0014-mvp-sur-le-nas.md)), le reprendra. Le fournisseur en
+   service ne change qu'après le choix, par l'écran. PR en brouillon, ce plan coché.
 
 ## La mesure réelle (tâche 1)
 
@@ -262,61 +267,59 @@ La nuit est bornée par le rapport des prix de sortie. Trois inconnues s'y ajout
 raisonnement, facturé en sortie ; le rapport des jetons comptés par les deux fournisseurs pour un même texte ; et une
 base plus représentative, celle du rodage, sur laquelle la même requête se rejoue à la tâche 9.
 
-## À trancher par CrOliX
+## Décisions de CrOliX, le 20/11
 
-**(a) Les modèles à mesurer et l'ordre du jugement.** Recommandation : **Claude Haiku 5.5 et Claude Sonnet 5.5**,
-pas Opus. On juge dans cet ordre : le premier mot et la fin de la première phrase (au plus OpenAI du même jour plus
-0,2 s) ; le taux de phrase d'attente ; le respect des règles de la voix et le français ; les scènes ; le coût d'une
-journée. Le moins cher qui tient les quatre premiers l'emporte.
+Tranchées une à une, le 20/11.
 
-**(b) Le raisonnement et l'effort.** Fixés par modèle dans la table, ou réglables dans l'écran. Recommandation :
-**dans la table, des données, une valeur pour la voix et une pour la nuit**, surchargeables par l'instance ; pas de
-réglage dans l'écran pour l'instant. La valeur de la voix se fixe sur la mesure du premier mot.
+**(a) Les modèles à mesurer et l'ordre du jugement.** **Claude Haiku 5.5 et Claude Sonnet 5.5, contre OpenAI le même
+jour**, sans Opus. On juge dans cet ordre : le premier mot et la fin de la première phrase (au plus OpenAI du même
+jour plus 0,2 s) ; le taux de phrase d'attente ; le respect des règles de la voix et le français ; les scènes ; le
+coût d'une journée. **Le choix final revient à CrOliX, sur les chiffres** (tâche 9).
 
-**(c) Le cache.** Aujourd'hui, les jetons relus du cache d'OpenAI sont comptés au prix plein ; sans marqueurs,
-Anthropic n'en rendra aucun. Deux lectures du critère 4 :
+**(b) Le raisonnement et l'effort.** **Une donnée par modèle, une valeur pour la voix et une pour la nuit,
+surchargeable par l'instance ; rien à l'écran.** La valeur de la voix se fixe sur la mesure du premier mot (tâche 1).
 
-- (i) compter le cache à son prix chez les deux : une attente de test change, et le coût affiché d'OpenAI baisse ;
-- (ii) « le cache est compté à son prix quand le fournisseur en donne un ; rien d'autre ne change ».
+**(c) Le cache.** **Compté à son prix quand le fournisseur en donne un ; rien d'autre ne change.** OpenAI reste
+compté comme aujourd'hui : ses jetons relus au prix plein. Sans marqueurs, Anthropic n'en rendra aucun ; s'il en
+rend, chaque part est comptée à son prix. Le critère 5 tient au sens strict.
 
-Recommandation : **(ii)**. Le critère 5 tient au sens strict, le surcompte d'OpenAI reste du côté prudent, et le
-compte d'Anthropic est juste dès qu'un jeton de cache apparaît. Compter le cache d'OpenAI à son prix est une ligne de
-sa table, à prendre quand on voudra.
+**(d) Le budget.** **10 dollars au plus pour tout le chantier**, la tâche 1 sous 2 ; le testeur s'arrête à 8 et
+revient à CrOliX. **Cet accord vaut pour les mesures du plan**, sans redemander à chacune. La clé de développement reste
+hors dépôt et ne s'affiche jamais.
 
-**(d) Le budget en argent des mesures.** Recommandation : **10 dollars au plus pour les tâches 1 et 8 ensemble**, la
-tâche 1 sous 2. Le testeur s'arrête à 8 et revient à CrOliX.
+**(e) Le crédit épuisé.** **Rien d'automatique.** Le core prévient : crédit épuisé, crédit revenu, le fournisseur
+nommé ; CrOliX choisit, par un geste dans l'écran.
 
-**(e) Le crédit mensuel épuisé.** Rien, ou un retour automatique à l'autre fournisseur. Recommandation : **rien
-d'automatique** : l'erreur et le nouvel événement de crédit le disent et nomment le fournisseur ; revenir à l'autre est
-un geste dans l'écran. Un retour automatique dépenserait en silence sur une autre clé, à un autre prix.
-
-**(f) La règle « rien en dur », à écrire une fois.** Elle n'est écrite nulle part comme règle générale. On trouve :
-[`vision.md`](../../vision.md), le contrôle (« régler en direct le modèle, sa parole et ses postes ») ;
-[`dictionnaire.md`](../../standards/dictionnaire.md), l'agent du poste « neutre et réglable », jamais un nom en dur ;
-[`design.md`](../../standards/design.md), aucune couleur en dur. Recommandation : une courte section de
-[`qualite.md`](../../standards/qualite.md), hors de ce chantier, sur sa décision :
+**(f) La règle « rien en dur ».** **Oui, ce texte exact, dans ce chantier**, dans
+[`qualite.md`](../../standards/qualite.md), « Rien en dur » ; le reviewer la vérifie. Elle n'était écrite nulle part
+comme règle générale ; on trouvait [`vision.md`](../../vision.md), le contrôle (« régler en direct le modèle, sa parole
+et ses postes ») ; [`dictionnaire.md`](../../standards/dictionnaire.md), l'agent du poste « neutre et réglable » ;
+[`design.md`](../../standards/design.md), aucune couleur en dur.
 
 > **Rien en dur.** Ce qu'une instance peut vouloir changer est une donnée lue à l'exécution, jamais une valeur écrite
 > dans le code : fournisseur, modèle, clé, prix, réglages d'un modèle, nom d'un agent, couleur. Le code en garde au
 > plus un défaut, à un seul endroit. Chaque règle qui peut l'être a son garde, un test qui parcourt les sources.
 
-**(g) Ajouter un modèle depuis l'écran.** Sans toucher au fichier d'environnement ni redémarrer, ou la surcharge par
-l'environnement au MVP. Recommandation : **la surcharge par l'environnement au MVP.** Le modèle retenu sera dans la
-table livrée ; un modèle nouveau est rare et arrive comme une mise à jour, qui sur le NAS passe de toute façon par
-une nouvelle image. Un écran des modèles (prix, cache, raisonnement) se justifiera après le rodage, si le besoin
-revient.
+**(g) Un nouveau modèle.** **Par une mise à jour du core, ou par un réglage de l'instance qui déclare l'entrée
+entière** (prix, cache, raisonnement pour la voix et pour la nuit) ; **rien à l'écran au MVP**.
 
 ## Sur le laptop, et ce qui attend le NAS
 
+Selon l'[ADR 0014](../../adr/0014-mvp-sur-le-nas.md) et l'ordre du 20/11 de la
+[feuille de route](2026-11-07-feuille-de-route-mvp.md) (§ 3, « Le recadrage du 20/11 ») :
+
 - **Sur le laptop** : tout le code et ses tests, l'écran dans Chrome, les mesures contre les vraies API, la nuit
   réelle sur une base de test. Le premier mot y vaut la part du modèle et du réseau, comme le 10/11.
-- **Sur le NAS** : le délai de bout en bout contre les 2,5 s du VIP, une fois le modèle choisi ; la clé d'Anthropic
-  rangée par l'écran à la mise en service. Rien de ce chantier n'attend le NAS pour être fini.
+- **Sur le NAS** : le core livré en image, la clé d'Anthropic rangée par l'écran à la mise en service.
+- **À la session du desktop, pour la voix** (Luxuria reliée au core du NAS) : le délai de bout en bout contre les
+  2,5 s du VIP, une fois le modèle choisi.
+
+Rien de ce chantier n'attend le NAS ni le desktop pour être fini.
 
 ## Risques
 
 - **Toucher la clé et les coûts juste avant la mise en service du NAS.** Une erreur ferait taire Natsume ou fausserait
-  les plafonds. Parades : OpenAI reste en service jusqu'à la décision ; la tâche 2 se prouve sur une base
+  les plafonds. Parades : OpenAI reste en service jusqu'au choix du modèle ; la tâche 2 se prouve sur une base
   d'aujourd'hui et sur une copie d'une base réelle ; diff nul des tests ; la PR fusionnée et livrée en image avant le
   rodage, jamais pendant la mise en route du NAS, jamais après.
 - **Un faux au format d'Anthropic qui se trompe** prouverait un module faux. Parade : la tâche 1 avant, ses flux réels
@@ -338,8 +341,8 @@ revient.
 
 Celui du chapeau : les satellites ; le cache du prompt au-delà de ce qu'il faut pour compter juste ; un troisième
 fournisseur ; un modèle local. Et, de ce plan : Claude Opus ; une liste de modèles dans l'écran ; un écran pour ajouter
-un modèle (point (g)) ; un modèle par usage ; le retour automatique d'un fournisseur à l'autre ; le repli d'Anthropic
-vers un autre modèle sur un refus ; l'écriture de la règle « rien en dur » dans un standard sans la décision de CrOliX.
+un modèle ou régler le raisonnement (décisions (b) et (g)) ; un modèle par usage ; le retour automatique d'un
+fournisseur à l'autre ; le repli d'Anthropic vers un autre modèle sur un refus.
 
 ## Objections non appliquées
 
