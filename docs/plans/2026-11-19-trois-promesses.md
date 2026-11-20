@@ -1,5 +1,10 @@
 # Trois promesses tenues : les chevauchements d'agenda, l'agent sans nom en dur, l'export qui se télécharge. Plan
 
+> **PR qui livrent :** Lun-Ecosystem/lun-avaritia#42, fusionnée le 20/11 (tâches 5 à 8) ;
+> Lun-Ecosystem/lun-acedia#75, en brouillon, CI verte (`checks`, `image`) (tâches 1 à 4). Le plan :
+> Lun-Ecosystem/lun-docs#186. Tâches 1 à 8 faites ; la tâche 9, faite pour sa part lun-docs. Les écarts au plan
+> sont dans « Écarts au plan ».
+>
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
@@ -71,11 +76,19 @@ Quatre choix de produit, posés un à un.
    (`vision.md` promet de les repérer, et les événements de la démo sont pour moitié du soir,
    `server/src/demo/demo.ts:250-252`). Sans créneau : la carte signale, sans proposition.
 4. **Contre la lassitude, quatre garde-fous ensemble.**
-   - Une paire traitée, refusée ou ignorée (carte expirée) ne revient jamais.
+   - Une paire traitée ou refusée ne revient jamais ; ignorée (carte expirée), voir le choix 7.
    - Deux séries récurrentes qui se chevauchent font une seule carte : la série est la clé, pas l'occurrence.
    - Trois cartes de conflit au plus par jour, les plus proches d'abord.
    - L'événement envoyé au core reste hors de son Journal (importance `log`) : la carte suffit.
    - La carte disparaît d'elle-même si le conflit est réglé à la main.
+
+Décidés par CrOliX après la validation du plan, en cours de code (aussi dans le chapeau #185) :
+
+5. **En pause, la détection ne crée aucune carte** ; elle reprend à la levée (point (a)).
+6. **La carte ne propose de déplacer qu'un événement de l'agenda principal** ; ailleurs, elle signale. Raison
+   trouvée par la relecture : l'organisateur « soi » de Google désigne l'agenda où l'événement apparaît, pas le
+   compte ; dans un agenda partagé, un événement d'une autre personne passait pour être à CrOliX seul.
+7. **Une carte ignorée revient une fois, la veille du conflit, s'il existe toujours.** Refusée ou traitée, jamais.
 
 ## Ce que le code fait aujourd'hui
 
@@ -240,15 +253,15 @@ Les choix 2 et 3 demandent une carte qui signale sans proposer. **Elle tient ave
   (`agent.ts:88`). Le titre de l'événement n'est pas dans l'entrée : le `PATCH` ne touche qu'aux heures.
   « Modifier » propose Début et Fin, les seuls champs à clé.
 - **La carte qui signale** : action `agenda.list`, une lecture du cache (`catalog.ts:151-157`), entrée
-  `{ from, to, conflit }` sur la plage du conflit, effet `read`. « Valider » acquitte : la lecture s'exécute, ne
+  `{ from, to, conflit }` sur la plage du conflit, effet `read`. « Vu » acquitte : la lecture s'exécute, ne
   change rien, ne laisse pas d'inverse, donc pas d'« Annuler ». Aucun champ à clé : pas de « Modifier », donc aucune
   heure à saisir pour un événement qui n'est pas à CrOliX seul. « Refuser » vaut aussi acquittement.
 - **Les deux** ont un `callId` qui commence par `chevauchement:`, que `describe` reconnaît : « Déplacer un événement
   qui en chevauche un autre » avec l'événement, l'autre, Début, Fin ; ou « Deux événements se chevauchent » avec
   les deux, leurs heures, et la raison (« aucun des deux n'est à toi seul », « aucun créneau libre ce jour-là, de
   8 h à 22 h »). Fait : « Événement déplacé », « Conflit vu ».
-- **Le prix** : le bouton dit « Valider » et non « Vu » ; un libellé à lui demande une prop dans `ActionCard`,
-  hors de ce chantier (le kit, lun-docs#43). Le core voit la carte qui signale comme une écriture (`effect` dit
+- **Le prix** : le plan gardait « Valider » sur la carte qui signale ; le code dit « Vu » (« Écarts au plan »).
+  Le core voit la carte qui signale comme une écriture (`effect` dit
   `write`, `contract/routes.ts:47`) ; ce que le core en fait n'est pas vérifié ici. Après « Modifier », la carte
   qui propose perd `conflit` (le schéma le retire, `agent.ts:146-149`) et montre l'identifiant au lieu des noms.
 
@@ -343,7 +356,8 @@ Elle rend le message d'échec de `npm test` sur ses fichiers.
 
 ### Tâche 1. Les tests de la détection (testeur, Acedia)
 
-- [ ] **Fichiers** : `server/src/agenda/overlaps.test.ts` (neuf), `server/src/agenda/calendar.test.ts`,
+- [x] **Faite** (lun-acedia#75), avec la tâche 2 : voir sa coche.
+- **Fichiers** : `server/src/agenda/overlaps.test.ts` (neuf), `server/src/agenda/calendar.test.ts`,
   `server/src/pina/agent.test.ts`, `server/src/pina/store.test.ts`, `server/src/pina/wording.test.ts`,
   `server/src/demo/demo.test.ts`, `server/src/testing/fake-agenda.ts` (le type `FakeEvent` gagne `transparency`,
   `organizer`, `attendees`, `recurringEventId`, tels que Google les rend).
@@ -368,7 +382,8 @@ Elle rend le message d'échec de `npm test` sur ses fichiers.
   - la carte disparaît : la paire ne se chevauche plus au passage suivant, la carte en attente n'existe plus ; une
     carte en cours d'exécution n'est pas touchée ;
   - le mode « Faire tout de suite » réglé : la carte reste `pending`, rien n'est appelé chez Google ;
-  - un événement `agenda.overlap`, importance `log`, par carte créée, aucun au passage suivant ;
+  - un événement `agenda.overlap`, importance `log`, par passage qui crée ou retire une carte (« Écarts au
+    plan ») ;
   - acceptée par `decideCard`, la carte qui propose est `done` et le faux agenda a reçu le `PATCH` des seules
     heures ; la carte qui signale, acceptée, est `done` sans aucun appel au faux agenda ni inverse ; refusées,
     `refused`, aucun appel. Dans tous les cas, le faux fournisseur du harnais n'est pas appelé (`agent.test.ts`) ;
@@ -380,7 +395,21 @@ Elle rend le message d'échec de `npm test` sur ses fichiers.
 
 ### Tâche 2. La détection, et « Pina » hors du journal (dev-core, Acedia, après 1)
 
-- [ ] **Fichiers** : `server/src/agenda/overlaps.ts` (neuf), `server/src/agenda/calendar.ts` (`GoogleEvent`,
+- [x] **Faite, relue, reprise** (lun-acedia#75). Quatre relectures du diff : le serveur, les écrans, le diff
+  entier, puis les reprises ; les trois premières ont rendu « à reprendre », et chaque point a été repris.
+  Barrières sur la branche : 907 tests, typage, lint, format, build, contrôle public. Ce que les relectures et la
+  preuve ont trouvé et fait corriger :
+  - un événement d'une autre personne pouvait être déplacé (l'organisateur « soi » de Google désigne l'agenda où
+    l'événement apparaît, pas le compte) : d'où le choix 6, l'agenda principal ;
+  - une carte créée par le modèle pouvait porter une clé hors schéma et se présenter comme une carte de conflit :
+    l'entrée rangée est maintenant celle validée par le schéma, pour toutes les actions ;
+  - une carte retirée par le serveur restait à l'écran : le serveur émet un `agenda.overlap` au retrait, et un 404
+    sur une carte fait relire le fil (« Cette carte n'existe plus ») ;
+  - l'écran de l'agenda déjà ouvert gardait l'ancienne heure après une écriture : toute écriture d'un événement
+    depuis Acedia émet maintenant `agenda.changed` (c'était vrai avant le chantier, pour toute carte de l'agent
+    touchant l'agenda et pour « Annuler ») ;
+  - une paire de séries pouvait revenir : une carte dont le conflit a commencé expire au lieu d'être supprimée.
+- **Fichiers** : `server/src/agenda/overlaps.ts` (neuf), `server/src/agenda/calendar.ts` (`GoogleEvent`,
   `upsertEvent`), `server/src/db.ts` (une migration), `server/src/agenda/unified.ts` (`syncAgenda`),
   `server/src/pina/store.ts` (`purge`, une suppression des cartes en attente), `server/src/pina/agent.ts`
   (`resume`, la suppression gardée par `running`, `:124`), `server/src/pina/wording.ts` (`:182-187`, un cas pour
@@ -420,17 +449,19 @@ Elle rend le message d'échec de `npm test` sur ses fichiers.
     serveur, pour que la carte parte quand le conflit est réglé à la main.
   - **Le journal** : les textes du point (f).
 - **Preuve** : les tests de la tâche 1 ; les barrières.
-- **Exclu** : un message dans le fil du modèle ; toute boucle neuve dans le serveur ; un libellé « Vu » ; le
-  contrat ; `sendUpdates` (aucun invité, choix 2).
+- **Exclu** : un message dans le fil du modèle ; toute boucle neuve dans le serveur ; le contrat ;
+  `sendUpdates` (aucun invité, choix 2).
 
 ### Tâche 3. Le panneau de l'agent : la carte se voit, le nom se lit (testeur puis dev-front, Acedia)
 
-- [ ] **Fichiers** : `views/src/lib/pina/PinaPanel.svelte`, `views/src/lib/pina/PinaPanel.test.ts`,
+- [x] **Faite, relue** (lun-acedia#75). Écart : le panneau ouvrait une troisième connexion d'événements par
+  onglet ; il n'en ouvre plus, le composant racine lui fait relire son fil (« Écarts au plan »).
+- **Fichiers** : `views/src/lib/pina/PinaPanel.svelte`, `views/src/lib/pina/PinaPanel.test.ts`,
   `views/src/lib/pina/Thread.svelte` (`:72`), `views/src/lib/pina/pina.svelte.ts` (`:44`),
   `views/src/lib/pina/pina.test.ts` (neuf), `views/src/testing/fake-client.ts` (`:227`, `:238`), les tests de
   `views/src` qui attendent le nom du faux client, `app/src/noAnima.test.ts`.
 - **Ce qui change** :
-  - le panneau s'abonne à `client.subscribe` et relit le fil (`pina.load()`) sur `agenda.overlap` : le compteur du
+  - le panneau relit le fil (`pina.load()`) sur `agenda.overlap` : le compteur du
     lanceur suit, panneau fermé ou ouvert ;
   - « Tout valider » ne compte pas les cartes de la détection (`callId` qui commence par `chevauchement:`) ;
   - `pina.svelte.ts:44` : « `${agentIdentity.name}` ne répond pas » ;
@@ -448,10 +479,11 @@ Elle rend le message d'échec de `npm test` sur ses fichiers.
 
 ### Tâche 4. La doc d'Acedia, et la preuve sur la démo (testeur, puis la session)
 
-- [ ] **La doc** (point (g)) : `README.md:99`, `docs/pina.md`, `docs/prouver-pina.md`, `.env.example:29`.
+- [x] **La doc** (point (g)), dans lun-acedia#75 : `README.md:99`, `docs/pina.md`, `docs/prouver-pina.md`,
+  `.env.example:29`.
   `docs/pina.md`, « Ce qu'elle fait », gagne les conflits de l'agenda : ce qui compte, les deux cartes, ce qui les
   fait partir ou ne jamais revenir, le plafond ; `docs/prouver-pina.md` gagne l'étape de la preuve ci-dessous.
-- [ ] **La preuve, sur le laptop, sur la démo**, dans Chrome : `npm run build`, puis `npm run demo`, le jeton
+- [x] **La preuve, sur le laptop, sur la démo**, dans Chrome : `npm run build`, puis `npm run demo`, le jeton
   affiché collé dans la page.
   1. le compteur du lanceur montre les cartes de la démo ; celle qui propose dit « Déplacer un événement qui en
      chevauche un autre », vers le premier créneau libre après le conflit ; celle qui signale dit pourquoi, sans
@@ -463,13 +495,32 @@ Elle rend le message d'échec de `npm test` sur ses fichiers.
   5. plusieurs conflits ajoutés dans l'agenda de la démo : trois cartes au plus ce jour-là ;
   6. aucun « Pina » à l'écran ; le journal du serveur selon le point (f).
   Captures dans la PR.
-- **Au desktop**, pendant sa session : le même conflit sur un agenda Google réel (le compte de test), pour voir le
+
+  **Faite le 19/11**, sur le commit `b10ef0e` (les commits suivants sont de la doc et une retouche de la relecture
+  du fil) : la démo, faux agenda ; Chrome installé sans interface, piloté par le protocole de débogage, vrais clics
+  souris.
+  - « Vu » et « Refuser » sur la carte qui signale ; « Valider », « Modifier », « Refuser » sur celle qui propose ;
+  - « Valider » déplace l'événement, et l'écran de l'agenda déjà ouvert le montre en 29 ms ; « Annuler » le remet en
+    55 ms ;
+  - un conflit réglé à la main retire la carte du panneau au passage suivant (53 s et 52 s ; la boucle passe toutes
+    les 60 s) ; flux d'événements coupé, un clic sur une carte retirée affiche « Cette carte n'existe plus » ;
+  - deux événements créés à la main dans l'agenda principal donnent une carte qui propose ;
+  - sept conflits donnent trois cartes, les plus proches ; un événement posé sur le créneau proposé fait recalculer
+    la carte, sans doublon ; une carte refusée ne revient pas après deux passages ;
+  - en pause, aucune carte ; elle arrive 30 s après la levée ;
+  - un nom réglé apparaît sur le lanceur, le titre du panneau et le champ de saisie ; aucun « Pina » sur aucun
+    écran ; aucune erreur de l'application dans la console.
+
+  **Non prouvé** : rien n'a tourné contre le vrai Google ; le rappel de la veille (choix 7) et la carte qui signale
+  faute de créneau ne sont couverts que par les tests.
+- [ ] **Au desktop**, pendant sa session : le même conflit sur un agenda Google réel (le compte de test), pour voir le
   `PATCH` arriver chez Google et la synchro relire les quatre informations neuves. C'est la seule étape qui l'attend.
 - **Exclu** : la feuille de route (tâche 9).
 
 ### Tâche 5. Les tests de l'export (testeur, Avaritia)
 
-- [ ] **Fichiers** : `server/src/brain/export.test.ts`, `server/src/brain/fiches.test.ts` (`:93-101`),
+- [x] **Faite** (lun-avaritia#42, fusionnée le 20/11), avec les tâches 6 à 8.
+- **Fichiers** : `server/src/brain/export.test.ts`, `server/src/brain/fiches.test.ts` (`:93-101`),
   `app/src/api.test.ts`, `app/src/screens/Reglages.test.ts` (`:55`, `:257`).
 - **Ce que les tests fixent**, selon (d) et (e) :
   - `exportMarkdown(db)` rend les fichiers en mémoire, `{ name, text }`, sans écrire nulle part ; les deux tests
@@ -481,14 +532,16 @@ Elle rend le message d'échec de `npm test` sur ses fichiers.
     `content-disposition: attachment; filename="avaritia-export-2026-11-02.zip"` à l'heure du harnais ; aucun
     fichier écrit ; sans fiche, une archive vide valide ;
   - le client : une méthode `download` rend un `Blob` et le nom de la réponse ; un 401 appelle `onUnauthorized` ;
-  - l'écran : « Exporter » appelle `download`, crée un lien `download` au bon nom, puis dit « N fiches
-    téléchargées ».
+  - l'écran : « Exporter » appelle `download`, crée un lien `download` au bon nom, puis dit « N fiches dans
+    l'archive » (« Écarts au plan »).
 - **Rend** : le message d'échec de `npm test` sur ces fichiers, collé ici.
 - **Exclu** : la compression ; l'import ; les liens Obsidian (« Hors périmètre »).
 
 ### Tâche 6. L'archive, côté serveur (dev-core, Avaritia, après 5)
 
-- [ ] **Fichiers** : `server/src/brain/export.ts`, `server/src/brain/zip.ts` (neuf), `server/src/brain/routes.ts`
+- [x] **Faite, relue** (lun-avaritia#42). Deux relectures, par tâche puis le diff entier : approuvé. Écart : deux
+  index ajoutés par une migration, exigés par la mesure de la tâche 8.
+- **Fichiers** : `server/src/brain/export.ts`, `server/src/brain/zip.ts` (neuf), `server/src/brain/routes.ts`
   (`:175-180`), `server/src/app.ts:56`, `server/src/main.ts:42`, `server/src/demo/main.ts:133`,
   `server/src/testing/harness.ts:17`.
 - **Ce qui change** :
@@ -505,18 +558,22 @@ Elle rend le message d'échec de `npm test` sur ses fichiers.
 
 ### Tâche 7. Le téléchargement, côté écran (dev-front, Avaritia, après 5)
 
-- [ ] **Fichiers** : `app/src/api.ts`, `app/src/reglages/Donnees.svelte`.
+- [x] **Faite, relue** (lun-avaritia#42). Preuve dans Chrome sur la démo à quatre fiches : « Exporter » télécharge
+  `avaritia-export-2026-11-19.zip`, l'écran dit « 4 fiches dans l'archive », l'archive s'extrait par l'outil de
+  Windows et par Python aux mêmes quatre fichiers, rien n'est écrit sur le serveur.
+- **Fichiers** : `app/src/api.ts`, `app/src/reglages/Donnees.svelte`.
 - **Ce qui change** : `Api` gagne `download(method, path)`, qui passe le jeton comme `call`, garde la même lecture
   des erreurs (JSON `error`, 401) et rend `{ blob, name }`, le nom lu dans `content-disposition`. `Donnees.svelte`
   crée l'URL du `Blob`, un lien `download`, le clique, libère l'URL ; le texte de la ligne dit « Une archive, un
-  fichier par fiche » puis « N fiches téléchargées », le nombre lu dans l'en-tête `x-avaritia-fiches`.
+  fichier par fiche » puis « N fiches dans l'archive », le nombre lu dans l'en-tête `x-avaritia-fiches`
+  (« Écarts au plan »).
 - **Preuve** : dans Chrome, la démo lancée, l'archive arrive dans les téléchargements et s'ouvre dans
   l'Explorateur de Windows.
 - **Exclu** : le dessin de la carte « Données » (le kit, lun-docs#43).
 
 ### Tâche 8. La mesure à 20 000 fiches, et la doc d'Avaritia (testeur, après 6 et 7)
 
-- [ ] **La mesure**, sur le laptop, sous PowerShell, une commande par ligne :
+- [x] **La mesure**, sur le laptop, sous PowerShell, une commande par ligne :
 
   ```powershell
   $env:DEMO_FICHES = '20000'
@@ -526,18 +583,23 @@ Elle rend le message d'échec de `npm test` sur ses fichiers.
 
   Puis, dans Chrome, Réglages › Import et export › Exporter. **Rend** : la durée de la demande à l'archive reçue
   (onglet Réseau), qui est le temps où le serveur ne répond à rien d'autre ; la taille de l'archive ; le nombre
-  d'entrées lu par l'Explorateur. **Seuil : 5 s sur le laptop.** Au-delà, une issue, sans correction ici.
-- [ ] **La doc** : `docs/prouver-avaritia.md:11` (la démo n'écrit plus rien sur le disque), `:23` (la route rend
+  d'entrées lu par l'Explorateur. **Seuil : 5 s sur le laptop.**
+
+  **Faite**, par la vraie route, sur le laptop, sur la démo (données fictives, très peu de faits), trois tirages par
+  taille. Avant les index : 2 000 fiches en 1,4 à 1,5 s, 20 000 fiches en 93 à 120 s, le serveur ne répondant à rien
+  pendant ce temps. Le seuil dépassé, deux index ont été ajoutés (« Écarts au plan ») ; après : 0,11 à 0,12 s et
+  1,9 à 2,2 s. **Non prouvé** : l'export n'a été vu que dans Chrome et sur des données fictives.
+- [x] **La doc** : `docs/prouver-avaritia.md:11` (la démo n'écrit plus rien sur le disque), `:23` (la route rend
   une archive), `:76` (la limite tombe ; celle de l'archive la remplace). `README.md:27` reste juste.
 - **Exclu** : ouvrir l'archive dans Obsidian pour éprouver les liens (déjà cassés, « Hors périmètre »).
 
 ### Tâche 9. Les textes à la fermeture (la session, lun-docs, après les deux PR de code fusionnées)
 
-- [ ] `vision.md` ne change pas (critère 4).
-- [ ] La feuille de route du MVP dit les trois promesses tenues, avec leurs PR ; le recadrage, § 3.1 et § 3.2, n'est
-  pas récrit (c'est un relevé daté).
-- [ ] Le dépôt du site : la page d'Acedia gagne les conflits de l'agenda dans ses fonctions ; celle d'Avaritia dit
-  déjà « un fichier par fiche ». Une PR à part, dans ce dépôt.
+- [x] `vision.md` ne change pas (critère 4).
+- [x] La feuille de route du MVP dit les trois promesses faites, avec leurs PR (lun-docs#186) ; le recadrage,
+  § 3.1 et § 3.2, n'est pas récrit (c'est un relevé daté).
+- [ ] **Pas fait ici** : la page est dans le dépôt du site, pas dans lun-docs. La page d'Acedia gagne les conflits
+  de l'agenda dans ses fonctions ; celle d'Avaritia dit déjà « un fichier par fiche ». Une PR à part, dans ce dépôt.
 - **Exclu** : tout ce que la tâche ne nomme pas.
 
 ## Ce qui se prouve sur le laptop, ce qui attend le desktop
@@ -572,7 +634,6 @@ d'Acedia. Et pour ce plan :
 
 - un créneau sur un autre jour, plusieurs créneaux au choix, une plage horaire réglable ;
 - déplacer toute une série ; prévenir des invités ;
-- un libellé « Vu » sur la carte qui signale ;
 - **les liens Obsidian de l'export**, déjà cassés (le slug des fichiers contre le titre des liens, `export.ts:10-21`,
   `:72`, `:77`) : une issue à part, ouverte par la session ;
 - la compression de l'archive, le ZIP64, l'export d'une partie de la bibliothèque ;
@@ -581,11 +642,44 @@ d'Acedia. Et pour ce plan :
 
 ## Limites
 
-- Non vérifié : ce que le core fait d'une carte qui signale ou d'un événement `agenda.overlap` ; la durée de
-  l'export à 20 000 fiches ; que `zlib.crc32` est là sur la version de Node du desktop (les moteurs l'exigent) ; la
-  forme exacte que Google donne à `organizer` dans un agenda secondaire (la synchro du desktop le montrera).
+- Non vérifié : ce que le core fait d'une carte qui signale ou d'un événement `agenda.overlap` ; que `zlib.crc32`
+  est là sur la version de Node du desktop (les moteurs l'exigent).
+- Non prouvé à la fin du chantier : rien n'a tourné contre le vrai Google (l'écriture réelle, et la forme de
+  l'organisateur dans un agenda secondaire, sont une étape de la session du desktop) ; le rappel de la veille et la
+  carte qui signale faute de créneau ne sont couverts que par les tests ; l'export n'a été vu que dans Chrome et sur
+  des données fictives.
 - Le relevé du 19/11 rangeait les textes de `parity.ts` comme « envoyés par le contrat » : ils ne quittent pas le
   serveur. Il plaçait la route d'export dans `server/src/routes.ts` : elle est dans `server/src/brain/routes.ts`.
+
+## Écarts au plan
+
+Ce que le code fait autrement que le plan l'écrivait ; les passages du plan qui disaient l'inverse y renvoient.
+
+- **Le bouton de la carte qui signale dit « Vu »**, et non « Valider ». Le plan le rangeait hors chantier en
+  croyant le composant de carte dans le kit ; il est propre à l'agent d'Acedia, et le testeur a jugé « Valider »
+  trompeur à l'écran.
+- **Un `agenda.overlap` part aussi au retrait d'une carte** : au plus un par passage, aucun si une carte est créée
+  dans le même passage. Le plan disait « un par carte créée, aucun au passage suivant ».
+- **Le panneau n'ouvre pas sa propre connexion d'événements** : le composant racine lui fait relire son fil. Le
+  plan l'abonnait lui-même, ce qui ouvrait une troisième connexion par onglet.
+- **`agenda.changed` est émis après chaque écriture d'un événement depuis Acedia** : hors du plan, corrigé parce
+  que la preuve à l'écran l'a montré.
+- **Deux raisons de plus sur la carte qui signale** : deux séries, et un événement déjà visé par une carte qui
+  propose.
+- **Quand les deux événements sont à CrOliX seul**, celui qui commence le plus tard se déplace, l'autre s'il n'a
+  pas de créneau.
+- **Le choix 6** (l'agenda principal) remplace le seul critère de l'organisateur ; **le choix 7** (une carte
+  ignorée revient une fois, la veille) remplace « ignorée, jamais » ; **le choix 5** arrête la détection en pause.
+- **Les textes de l'export** : « N fiches dans l'archive » et non « téléchargées » (l'utilisateur peut annuler
+  l'enregistrement), « Archive prête » quand le compte manque.
+- **Avaritia : deux index ajoutés par une migration** (`facts(fiche_id)`, `links(to_id)`), hors du plan, exigés par
+  la mesure de la tâche 8.
+
+**Trouvé en route, ouvert en issues** : Lun-Ecosystem/lun-acedia#76 (avec trois onglets d'Acedia ouverts sur la
+même adresse, plus rien ne répond : deux connexions d'événements par onglet, six au plus par adresse dans le
+navigateur ; antérieur au chantier, constaté dans Chrome, à placer par CrOliX avant la semaine de rodage) ;
+Lun-Ecosystem/lun-acedia#77 (suites des chevauchements et du nom de l'agent) ; Lun-Ecosystem/lun-avaritia#43
+(suites de l'export, dont les liens Obsidian).
 
 ## Contestation du 19/11
 

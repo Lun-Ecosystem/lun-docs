@@ -7,6 +7,10 @@
 
 ## 1. Où on en est
 
+**Au 20/11.** Les trois petites promesses sont faites ([plan](2026-11-19-trois-promesses.md), lun-docs#186) :
+l'export d'Avaritia se télécharge (lun-avaritia#42, fusionnée) ; les conflits d'agenda et l'agent sans nom en dur
+sont en PR (lun-acedia#75, brouillon, CI verte). Ce qui reste demande le vrai Google, au § 4.
+
 **Au 19/11.** « Le tour » est fusionné (lun-luxuria#96, lun-docs#182). CrOliX demande un
 [recadrage](../specs/2026-11-19-recadrage-vip.md) : la version VIP tient ce que chaque outil promet, et six décisions
 la bornent (son § 7). L'ordre qui en sort est au § 3, « Le recadrage du 19/11 » ; il remplace, pour la suite, l'ordre
@@ -435,8 +439,11 @@ prouvée, ou retirée du texte et inscrite « après le VIP ». L'ordre, jusqu'�
 
 1. **Les textes d'accord avec la borne** : `vision.md` (faite avec le recadrage), puis le site, les README et les
    issues qui ne disent plus le code (lun-luxuria#6). Sur le laptop.
-2. **Trois petites promesses**, en parallèle, sur le laptop : Acedia repère les événements qui se chevauchent et
-   propose d'en déplacer un ; « Pina » sort des textes visibles ; l'export de la bibliothèque se télécharge.
+2. **Trois petites promesses**, faites le 20/11 ([plan](2026-11-19-trois-promesses.md), lun-docs#186) : Acedia
+   repère les vrais conflits de l'agenda et propose d'en déplacer un, ou les signale ; « Pina » sort des textes
+   visibles (lun-acedia#75, en PR) ; l'export de la bibliothèque se télécharge (lun-avaritia#42, fusionnée). Les
+   suites : lun-acedia#77, lun-avaritia#43. **À placer par CrOliX avant le rodage** : lun-acedia#76 (trois onglets
+   d'Acedia ouverts sur la même adresse, plus rien ne répond).
 3. **Le banc réduit**, fait le 19/11 ([plan](2026-11-18-banc-de-presence.md), lun-docs#183 ; code lun-luxuria#105 ;
    chapeau lun-luxuria#104, qui reste ouvert pour ce qui est reporté) : le délai par étape lu à la chaîne et comparé au
    budget de la veille, les sons de toux posés, les résumés visibles, les tests du service de voix en CI. Le reste
@@ -522,6 +529,10 @@ Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en
    - le corps avec ses images, et « Oublier » qui rend le souffle ;
    - le service voix lancé avec une voix Piper : `--origin` refusé, une adresse hors de la boucle locale refusée ;
    - une adresse https hors du poste, confirmée puis oubliée.
+   Après [« les trois promesses »](2026-11-19-trois-promesses.md) (lun-acedia#75, lun-avaritia#42), à voir :
+   - valider une carte de conflit sur le vrai compte, et voir l'événement déplacé chez Google ;
+   - un événement d'un agenda secondaire ou partagé donne bien une carte qui signale ;
+   - l'export d'Avaritia téléchargé depuis le desktop.
 5. K : la liste « rien ne force le terminal » parcourue, une restauration essayée.
 6. B10 : Google en Production, consentement refait sur le vrai compte ; l'avertissement « application non validée »
    à la connexion d'Acedia (lun-acedia#55).
