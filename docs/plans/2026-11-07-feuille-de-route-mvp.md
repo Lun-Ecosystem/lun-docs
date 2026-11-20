@@ -7,6 +7,12 @@
 
 ## 1. Où on en est
 
+**Au 20/11, le soir.** CrOliX corrige l'hôte du MVP ([ADR 0014](../../adr/0014-mvp-sur-le-nas.md)) : le core, Acedia et
+Avaritia tournent sur le NAS, en continu ; Lun'Luxuria est une application du desktop. L'ADR 0012 (12/11) avait pris
+son « à terme, un serveur dédié » pour une décision présente, et tout ce qui suit dans ce document entre le 12 et le
+20/11 s'y était aligné : la « prod du rodage » sur le desktop, la bascule vers la machine dédiée. L'ordre à jour est au
+§ 3, « Le recadrage du 20/11 ».
+
 **Au 20/11.** Les trois petites promesses sont faites ([plan](2026-11-19-trois-promesses.md), lun-docs#186) :
 l'export d'Avaritia se télécharge (lun-avaritia#42, fusionnée) ; les conflits d'agenda et l'agent sans nom en dur
 sont en PR (lun-acedia#75, brouillon, CI verte). Ce qui reste demande le vrai Google, au § 4.
@@ -81,8 +87,8 @@ lun-luxuria#24, la page [`mise-en-service-desktop.md`](../mise-en-service-deskto
 (lun-luxuria#10), A4. La première mise en service du desktop a fait remonter huit écarts de Luxuria (lun-luxuria#25 à
 #32), corrigés en un chantier : lun-luxuria#33 et lun-docs#98 (voix réglée par l'écran, réglages par thèmes, quitter,
 icône lisible). Décision de CrOliX le 08/11 : **le rodage se fait sur le desktop**, le NAS passe après (§ D) ; son
-chantier peut se préparer en parallèle. Depuis le 12/11, la bascule va vers la machine dédiée, le NAS au stockage
-(ADR 0012).
+chantier peut se préparer en parallèle. Du 12 au 20/11, ce document a dit la bascule vers la machine dédiée (ADR
+0012) ; depuis le 20/11, le MVP tourne sur le NAS et s'y rode directement (ADR 0014).
 
 Le tableau ci-dessous garde l'état du 07/11.
 
@@ -136,9 +142,9 @@ reste en partie vide, son relevé est fait (lun-luxuria#9).
 
 ### D. Après le MVP
 
-Les rôles de Natsume façon assistants de Mia (spec du mute, §2) ; l'avatar animé (lun-docs#62) ; la bascule vers la
-machine dédiée ([ADR 0012](../../adr/0012-prod-machine-dediee.md) ; le [plan de bascule](2026-11-08-bascule-nas.md),
-écrit pour le NAS, se refait quand la machine s'achète) et l'accès sans client ; les mises à jour automatiques de
+Les rôles de Natsume façon assistants de Mia (spec du mute, §2) ; l'avatar animé (lun-docs#62) ; une machine
+dédiée, à terme ([ADR 0014](../../adr/0014-mvp-sur-le-nas.md) : la mise en service du NAS, elle, est avant le MVP, § 3) et
+l'accès sans client ; les mises à jour automatiques de
 Luxuria ; la trajectoire de Luxuria (§11) ; le confort d'Acedia (#33, #34, #38) ; la forme des dépôts (lun-docs#41)
 et la migration complète vers le kit commun (lun-docs#43) ; le site (#21, #25) ; la sandbox. La sauvegarde d'Avaritia
 passe au MVP (K).
@@ -437,8 +443,10 @@ l'ordre : CrOliX la leur donne.
 Tranché par CrOliX le 19/11 ([recadrage](../specs/2026-11-19-recadrage-vip.md), § 7). Une promesse est tenue et
 prouvée, ou retirée du texte et inscrite « après le VIP ». L'ordre, jusqu'à la porte :
 
-1. **Les textes d'accord avec la borne** : `vision.md` (faite avec le recadrage), puis le site, les README et les
-   issues qui ne disent plus le code (lun-luxuria#6). Sur le laptop.
+1. **Les textes d'accord avec la borne**, faits le 20/11 : `vision.md` (avec le recadrage) ; la règle des modèles
+   d'Acedia (lun-acedia#78, qui ferme lun-acedia#69 ; son commentaire de Dockerfile, passé à tort à « la machine
+   dédiée », est à remettre au NAS, comme les pages du site) ; le README du core (lun-anima#115) ; les quatre pages
+   du site, en brouillon dans son dépôt ; lun-luxuria#6 mise au point, ouverte jusqu'à la règle des gestes.
 2. **Trois petites promesses**, faites le 20/11 ([plan](2026-11-19-trois-promesses.md), lun-docs#186) : Acedia
    repère les vrais conflits de l'agenda et propose d'en déplacer un, ou les signale ; « Pina » sort des textes
    visibles (lun-acedia#75, en PR) ; l'export de la bibliothèque se télécharge (lun-avaritia#42, fusionnée). Les
@@ -451,20 +459,42 @@ prouvée, ou retirée du texte et inscrite « après le VIP ». L'ordre, jusqu'�
    (lun-luxuria#97 à #100, #102, #48, #63). La course du 19/11 sur le laptop ne change aucun verdict des 14 scénarios
    du 18/11 ; seule la toux courte a une prise qui convient (lun-luxuria#101). Le délai par étape se lit désormais en
    fin de relevé : la fin de tour y pèse 700 ms, le silence fixe ; la mesure qui compte est celle du desktop.
-4. **La session du desktop, resserrée** (§ 4), sur la carte actuelle, dès que le laptop est prêt : ce qui conditionne
-   la semaine, soit B10, B11, B12, une restauration (K), la mesure des gestes puis leur règle (B1), la langue (B2).
-   Les gestes à réentendre du § 4 se notent pendant la semaine.
-5. **La semaine de rodage** (B8), puis sa marge. Cible de délai du VIP : 2,5 s en médiane du dernier mot au premier
-   son (ADR 0011) ; au-dessus, un seul chantier, sur l'étape la plus lente.
+4. **La session du desktop, resserrée** : remplacée par les points 1 et 2 du recadrage du 20/11, ci-dessous.
+5. **La semaine de rodage** (B8) : sur le NAS, point 3 du recadrage du 20/11. Cible de délai du VIP : 2,5 s en
+   médiane du dernier mot au premier son (ADR 0011) ; au-dessus, un seul chantier, sur l'étape la plus lente.
 6. **En toute fin de VIP** : l'installation, ce qui peut encore quitter le terminal et à quel palier.
 
 Après le VIP, dans cet ordre : la recherche par le sens d'Avaritia (hybride, sans carte graphique), puis ce que
 `vision.md` range sous « Après le VIP ». Le kit reste tel quel d'ici là.
 
+### Le recadrage du 20/11 : le MVP sur le NAS
+
+Tranché par CrOliX le 20/11 ([ADR 0014](../../adr/0014-mvp-sur-le-nas.md)) : le core, Acedia et Avaritia tournent en
+continu sur le NAS ; Lun'Luxuria est une application du desktop ; la semaine de rodage se joue sur le NAS,
+directement ; il démarre sur des bases neuves, avec le vrai compte Google ; une machine dédiée est une évolution à
+terme, sans date. L'ordre, jusqu'à la porte :
+
+1. **La mise en service du NAS** : un chantier, pas encore de plan. Sa base est le
+   [plan du 08/11](2026-11-08-bascule-nas.md) et ce qui existe dans le dépôt du core (un conteneur par app, un nom
+   par app dans le réseau privé). S'y vérifie tout ce qui conditionne la semaine et que ce document rangeait au
+   desktop : Google en production sur le vrai compte (B10), le téléphone et une notification de bout en bout (B11),
+   le redémarrage et la nuit rattrapée (B12), une restauration (K), le premier appareil par les écrans, et les trois
+   vérifications d'après les trois promesses (une carte de conflit validée sur le vrai compte, un agenda secondaire
+   qui donne une carte qui signale, l'export téléchargé). **Avant elle, à placer par CrOliX** : lun-acedia#76 (trois
+   onglets ouverts, plus rien ne répond).
+2. **La session du desktop, pour la voix seule** (§ 4) : Luxuria reliée au core du NAS ; la mesure des gestes puis
+   leur règle (B1) ; la langue (B2) ; le délai mesuré contre les 2,5 s ; l'exe, le corps, le service voix. Les gestes
+   à réentendre se notent pendant la semaine.
+3. **La semaine de rodage** (B8), sur le NAS, puis sa marge : la porte du MVP.
+4. **En toute fin de VIP** : l'installation, ce qui peut encore quitter le terminal et à quel palier.
+
+Le § 4 ci-dessous garde sa liste telle qu'elle a été écrite, au fil des chantiers, pour une session sur le desktop :
+ce qui y touche l'hôte (B10, B11, B12, K, la mise en service sur des bases neuves) se lit maintenant pour le NAS.
+
 ### La session sur le desktop, puis le rodage et la bascule
 
-La session du § 4, quand CrOliX y est ; B2, la langue, s'y tranche à l'oreille. Puis B8, la semaine de rodage sans
-tension sur le desktop : la porte du MVP. Puis la bascule vers la machine dédiée (ADR 0012), le NAS au stockage.
+Remplacé par le recadrage du 20/11, ci-dessus. Ce paragraphe disait, du 12 au 20/11 : la session du § 4, puis la
+semaine de rodage sur le desktop, puis la bascule vers la machine dédiée (ADR 0012).
 
 ## 4. La session sur le desktop
 
@@ -557,7 +587,7 @@ B7 reste à CrOliX (réglages de Windows et du pare-feu), avant la soirée. Puis
 
 ## 5. Calendrier
 
-Pas de dates : l'ordre du 12/11, complété le 16/11 (§ 3), fait foi. Restent deux repères.
+Pas de dates : l'ordre du recadrage du 20/11 (§ 3) fait foi. Restent deux repères.
 
 | Quand | Quoi |
 |---|---|

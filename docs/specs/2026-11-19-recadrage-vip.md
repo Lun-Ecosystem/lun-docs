@@ -7,6 +7,11 @@
 > Les choix marqués **[avis Claude]** étaient des propositions.
 >
 > **Tranché par CrOliX le 19/11** : les six décisions sont au § 7, et le § 6 est mis d'accord avec elles.
+>
+> **Corrigé par CrOliX le 20/11** ([ADR 0014](../../adr/0014-mvp-sur-le-nas.md)) : ce recadrage reprenait « la
+> semaine de rodage sur le desktop » sans voir que le desktop ne reste pas allumé. Le MVP tourne sur le NAS, sauf
+> Lun'Luxuria ; la semaine s'y joue, après sa mise en service. « La session du desktop » (§ 6.1, § 6.4, § 7 point 5)
+> ne garde que la voix ; l'ordre à jour est dans la feuille de route, « Le recadrage du 20/11 ».
 
 ## 1. La borne
 
@@ -91,8 +96,9 @@ Une règle pour lire le reste, validée par CrOliX le 19/11 : une promesse écri
   client Google créé à la main (lun-acedia#55) ; pour Luxuria, `uv`, une voix, whisper-server et RVC installés à part,
   sans installateur ni mise à jour. Le premier appareil, lui, se relie sans terminal depuis le 16/11. La décision du
   08/11 tient : le terminal une fois, avant la semaine, et rien ne l'exige pendant.
-- **Les textes ne disent pas le code.** `vision.md` promet des choses jamais commencées (§ 3) ; le site annonce un
-  avatar qui n'existe pas et tait la scène, la sourdine et l'absence, qui existent ; lun-luxuria#6 reste ouverte
+- **Les textes ne disent pas le code.** `vision.md` promet des choses jamais commencées (§ 3) ; le site range sous
+  « à venir » des points déjà faits, tait la sourdine et l'absence, qui existent, et annonce encore le NAS
+  (corrigé le 20/11 : cette ligne disait d'abord, à tort, qu'il annonçait un avatar et taisait la scène) ; lun-luxuria#6 reste ouverte
   alors que la confiance n'est plus fixe.
 - **Rien n'a servi une semaine.** Ce que les README promettent est en grande partie écrit et testé ; aucune de ces
   promesses n'a été éprouvée par l'usage.
@@ -196,8 +202,8 @@ fin de VIP** : ce qui peut se mettre en place, et à quel palier.
 
 1. Les textes d'accord avec la borne. Sur le laptop.
 2. Les trois petites promesses, et le banc réduit. Sur le laptop, en parallèle.
-3. La session du desktop, resserrée, sur la carte actuelle : dès que le laptop est prêt.
-4. La semaine de rodage, puis sa marge, avant le 31 décembre.
+3. La mise en service du NAS, puis la session du desktop pour la voix seule (corrigé le 20/11, ADR 0014).
+4. La semaine de rodage, sur le NAS, puis sa marge, avant le 31 décembre.
 5. En toute fin de VIP : l'installation.
 
 ## 7. Ce que CrOliX a tranché, le 19/11

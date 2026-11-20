@@ -27,9 +27,10 @@ Gabarit : [`_template.md`](_template.md).
 | [0005](0005-cerveau-sqlite.md) | Le cerveau d'Avaritia vit dans SQLite | acceptée |
 | [0006](0006-graphe-sigma.md) | Le graphe d'Avaritia : Sigma.js et graphology | acceptée |
 | [0007](0007-stack-mobile-pwa.md) | Stack de l'écosystème, le mobile en PWA | acceptée |
-| [0008](0008-acces-exterieur.md) | L'accès depuis l'extérieur, déchiffré sur le NAS seulement | remplacée par 0012 |
+| [0008](0008-acces-exterieur.md) | L'accès depuis l'extérieur, déchiffré sur le NAS seulement | remplacée par 0014 |
 | [0009](0009-lun-luxuria-corps.md) | Lun'Luxuria, le corps de Natsume | acceptée, publique depuis 0010 |
 | [0010](0010-lun-luxuria-publique.md) | Lun'Luxuria, un satellite public qui fonctionne seul | acceptée |
 | [0011](0011-chaine-vocale-mvp.md) | La chaîne vocale du MVP, après l'essai du 07/11 | acceptée |
-| [0012](0012-prod-machine-dediee.md) | La prod sur une machine dédiée, le NAS pour les copies | acceptée |
+| [0012](0012-prod-machine-dediee.md) | La prod sur une machine dédiée, le NAS pour les copies | remplacée par 0014 |
 | [0013](0013-methode-principes.md) | La méthode, ses principes durables | acceptée |
+| [0014](0014-mvp-sur-le-nas.md) | Le MVP tourne sur le NAS, Lun'Luxuria sur le desktop | acceptée |
