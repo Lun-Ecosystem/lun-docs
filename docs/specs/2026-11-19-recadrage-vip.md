@@ -91,8 +91,9 @@ Une règle pour lire le reste, validée par CrOliX le 19/11 : une promesse écri
   client Google créé à la main (lun-acedia#55) ; pour Luxuria, `uv`, une voix, whisper-server et RVC installés à part,
   sans installateur ni mise à jour. Le premier appareil, lui, se relie sans terminal depuis le 16/11. La décision du
   08/11 tient : le terminal une fois, avant la semaine, et rien ne l'exige pendant.
-- **Les textes ne disent pas le code.** `vision.md` promet des choses jamais commencées (§ 3) ; le site annonce un
-  avatar qui n'existe pas et tait la scène, la sourdine et l'absence, qui existent ; lun-luxuria#6 reste ouverte
+- **Les textes ne disent pas le code.** `vision.md` promet des choses jamais commencées (§ 3) ; le site range sous
+  « à venir » des points déjà faits, tait la sourdine et l'absence, qui existent, et annonce encore le NAS
+  (corrigé le 20/11 : cette ligne disait d'abord, à tort, qu'il annonçait un avatar et taisait la scène) ; lun-luxuria#6 reste ouverte
   alors que la confiance n'est plus fixe.
 - **Rien n'a servi une semaine.** Ce que les README promettent est en grande partie écrit et testé ; aucune de ces
   promesses n'a été éprouvée par l'usage.

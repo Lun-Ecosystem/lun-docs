@@ -437,8 +437,9 @@ l'ordre : CrOliX la leur donne.
 Tranché par CrOliX le 19/11 ([recadrage](../specs/2026-11-19-recadrage-vip.md), § 7). Une promesse est tenue et
 prouvée, ou retirée du texte et inscrite « après le VIP ». L'ordre, jusqu'à la porte :
 
-1. **Les textes d'accord avec la borne** : `vision.md` (faite avec le recadrage), puis le site, les README et les
-   issues qui ne disent plus le code (lun-luxuria#6). Sur le laptop.
+1. **Les textes d'accord avec la borne**, faits le 20/11 : `vision.md` (avec le recadrage) ; le Dockerfile et la règle
+   des modèles d'Acedia (lun-acedia#78, qui ferme lun-acedia#69) ; le README du core (lun-anima#115) ; les quatre pages
+   du site, en brouillon dans son dépôt ; lun-luxuria#6 mise au point, ouverte jusqu'à la règle des gestes.
 2. **Trois petites promesses**, faites le 20/11 ([plan](2026-11-19-trois-promesses.md), lun-docs#186) : Acedia
    repère les vrais conflits de l'agenda et propose d'en déplacer un, ou les signale ; « Pina » sort des textes
    visibles (lun-acedia#75, en PR) ; l'export de la bibliothèque se télécharge (lun-avaritia#42, fusionnée). Les
