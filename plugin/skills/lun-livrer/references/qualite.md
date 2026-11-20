@@ -22,6 +22,13 @@ Les outils exacts dépendent de la stack ([`stack.md`](stack.md)) et sont fixés
 - Un test qui passe avant l'implémentation est un test suspect.
 - Les tests ne dépendent ni du NAS ni du vrai compte Google.
 
+## Rien en dur
+
+**Rien en dur.** Ce qu'une instance peut vouloir changer est une donnée lue à l'exécution, jamais une
+valeur écrite dans le code : fournisseur, modèle, clé, prix, réglages d'un modèle, nom d'un agent,
+couleur. Le code en garde au plus un défaut, à un seul endroit. Chaque règle qui peut l'être a son
+garde, un test qui parcourt les sources.
+
 ## Preuve d'usage
 
 Les tests ne suffisent pas pour clore un chantier : CrOliX vérifie les critères de fin **en local, de
