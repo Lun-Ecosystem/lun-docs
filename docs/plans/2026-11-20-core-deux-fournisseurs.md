@@ -162,11 +162,11 @@ dans le chapeau.
 **L'ordre.** 1 d'abord. Puis **2 et 4 en parallèle** (aucun fichier commun ; la 2 ne touche pas à l'interface des
 fournisseurs, que touche la 4). Puis 3. Puis **5 et 6 en parallèle** (aucun fichier commun). Puis 7, puis 8 et 9.
 
-1. - [ ] **La mesure réelle, avant tout code** (`dev-core`, hors dépôt ; dans le budget de la décision (d)). Un script
+1. - [x] **La mesure réelle, avant tout code** (`dev-core`, hors dépôt ; dans le budget de la décision (d)). Un script
    jetable, hors du dépôt, sur le SDK officiel, la clé dans une variable propre au script, jamais affichée ni écrite.
    Sur Claude Haiku 5.5, Claude Sonnet 5.5, et le modèle d'OpenAI en service pour comparer le même jour :
    - un appel en flux, puis vingt pour le **premier mot et la fin de la première phrase**, prompt de la taille d'un
-     vrai tour (environ 3 000 jetons), au raisonnement le plus bas que le modèle accepte pour la voix ;
+     vrai tour (environ 3 000 jetons chez OpenAI, 4 000 chez Anthropic avec les outils), au raisonnement le plus bas que le modèle accepte pour la voix ;
    - les formes réelles du fil : il commence par l'assistant, deux tours du même rôle, un texte vide ;
    - les vrais outils de la conversation : confier à un poste, relire sa journée, lire une carte, trancher une carte
      (une permission : l'appel doit sortir intact) ;
@@ -177,7 +177,7 @@ fournisseurs, que touche la 4). Puis 3. Puis **5 et 6 en parallèle** (aucun fic
    - une clé fausse ; les noms exacts des réglages de raisonnement et d'effort acceptés ; le décompte des jetons
      d'entrée, lus et écrits en cache ; le rapport des jetons comptés entre les deux fournisseurs sur le même prompt.
 
-   Il enregistre un flux de chaque sorte pour le faux de la tâche 4. **Coût attendu : moins de 2 dollars.**
+   Il enregistre un flux de chaque sorte pour le faux de la tâche 4. **Coût attendu : moins de 2 dollars ; dépensé : 1,45 $.**
    **Seuil d'arrêt** : si, pour chaque modèle de Claude, la médiane du premier mot ou celle de la fin de la première
    phrase dépasse celle d'OpenAI du même jour de plus de 0,2 s, le plan revient à CrOliX. Un schéma refusé n'arrête
    pas le plan : la tâche 4 le traite. Résultat écrit ici, « La mesure réelle ».
@@ -239,7 +239,62 @@ fournisseurs, que touche la 4). Puis 3. Puis **5 et 6 en parallèle** (aucun fic
 
 ## La mesure réelle (tâche 1)
 
-À remplir.
+Le 20/11/2026, depuis le laptop, contre les API réelles, par un script jetable hors dépôt (SDK officiels, clé et adresse passées explicitement, aucune relance). Prompt inventé de 2 957 jetons comptés par Anthropic hors outils, 4 022 avec les quatre outils de la conversation. Vingt appels par modèle et par réglage, modèles en alternance, 2,5 s entre deux appels, aucune limite de débit rencontrée. La fin de la première phrase est coupée comme la voix la coupe.
+
+**Délais, série de référence (vingt questions de conversation sans outil), en ms.**
+
+| Modèle et réglage | Premier mot, médiane | Premier mot, 90e centile | Fin de la 1re phrase, médiane | Fin de la 1re phrase, 90e centile |
+|---|---|---|---|---|
+| OpenAI, modèle en service, raisonnement coupé | 768 | 873 | 866 | 1 127 |
+| Claude Haiku 5.5, raisonnement coupé, effort bas | 581 | 671 | 762 | 961 |
+| Claude Haiku 5.5, raisonnement adaptatif, effort bas | 563 | 681 | 737 | 802 |
+| Claude Sonnet 5.5, raisonnement au plus bas, effort bas | 1 366 | 1 829 | 1 502 | 2 218 |
+| Claude Sonnet 5.5, raisonnement adaptatif, effort bas | 950 | 1 615 | 1 330 | 1 870 |
+
+Minimum et maximum du premier mot : OpenAI 634 et 948 ; Haiku 490 et 791 (coupé), 497 et 870 (adaptatif) ; Sonnet 1 062 et 2 217 (au plus bas), 695 et 2 402 (adaptatif).
+
+**Écart des médianes à OpenAI du même jour** (premier mot, fin de la première phrase) : Haiku −187 et −104 ms (coupé), −205 et −129 ms (adaptatif) ; Sonnet +598 et +636 ms (au plus bas), +182 et +464 ms (adaptatif).
+
+**Le seuil.** La règle du plan : si, pour chaque modèle de Claude, la médiane du premier mot ou de la fin de la première phrase dépasse celle d'OpenAI de plus de 0,2 s, le plan revient à CrOliX. Fait brut : Haiku est sous OpenAI sur les deux mesures ; Sonnet est au-dessus d'OpenAI de plus de 0,2 s sur la fin de la première phrase, dans les deux réglages, et sur le premier mot dans l'un d'eux. Les modèles sont comparés à la fin du chantier ; le choix revient à CrOliX.
+
+Une première série, avec des questions qui font parfois appeler un outil, donne les mêmes ordres de grandeur (premier mot : OpenAI 819, Haiku 579 à 604, Sonnet 1 104 à 1 484). Dans cette série, OpenAI appelle un outil sur dix des vingt questions, souvent sans dire un mot. OpenAI relit son cache automatique (environ 2 000 des 2 200 jetons) ; Anthropic, sans marqueur, ne relit rien, et ses délais avec marqueurs n'ont pas été mesurés. Seul l'effort bas a été mesuré.
+
+**Acquis, sur un appel réel.**
+
+- **Formes du fil.** Un fil qui commence par l'assistant est accepté. Deux tours du même rôle à la suite sont acceptés et fusionnés. Un tour de l'assistant vide est ignoré. Un tour de l'utilisateur vide seul ou entre deux autres tours est refusé (400), comme un texte fait d'espaces. Un tour système au milieu est accepté seulement après un tour de l'utilisateur ; après un tour de l'assistant, il est refusé. Un fil qui finit par l'assistant est refusé (pas de préremplissage). Le système initial se passe à part.
+- **Les quatre outils** (confier à un poste, relire sa journée, lire une carte, trancher une carte) sont appelés avec des arguments en JSON valide et conformes au schéma : 31 appels sur 31, relus par les lecteurs d'arguments du core. Les arguments arrivent en 28 à 55 morceaux de texte JSON, l'objet n'étant complet qu'à la fin du bloc ; la raison d'arrêt est celle de l'appel d'outil. Aucun appel parallèle. Haiku, raisonnement coupé, n'a pas relu la journée quand il aurait fallu (0 sur 2). Sonnet dit parfois une phrase avant un outil qui n'est pas une délégation (4 appels sur 6), ce que la règle de la voix interdit.
+- **Réponse structurée.** Les six schémas du core sont acceptés tels quels et leurs réponses passent la validation du core, sauf un : le mot-clé de taille maximale d'un tableau est refusé (400, `For 'array' type, property 'maxItems' is not supported`), comme les bornes d'un nombre et une taille minimale de tableau au-delà de 1. Les longueurs minimale et maximale d'une chaîne sont acceptées, malgré la documentation qui les dit non prises en charge ; si l'API les impose ou non n'est pas tranché.
+- **Raisonnement.** Haiku 5.5 : le raisonnement se coupe, jusqu'à l'effort « élevé » (au-dessus, refusé) ; le mode « entre les outils » est refusé. Sonnet 5.5 : le raisonnement ne se coupe pas (400) ; le plus bas est le mode « entre les outils », jusqu'à l'effort « élevé ». Un budget de jetons de raisonnement est refusé sur les deux, comme toute température, même nulle. Un appel d'outil forcé est refusé sur Sonnet. **Le réglage par défaut vide les réponses courtes** : Sonnet à 60 jetons et Haiku à effort élevé rendent un seul bloc de raisonnement vide, sans texte ; à 1 500 jetons, le contexte du matin est vide chez Haiku et tronqué chez Sonnet. Les réglages bas tiennent toutes les limites du core (60 à 8 000 jetons). La plus serrée : 1 500 jetons pour le contexte du matin, 1 252 utilisés par Haiku en raisonnement adaptatif.
+- **Annulation.** Le flux brut s'arrête sans erreur et sans bilan de jetons ; avec l'assistant de flux du SDK, l'annulation lève une erreur d'annulation et garde le texte partiel et l'entrée seulement. La documentation lue ne dit rien de ce qui est facturé après une annulation.
+- **Clé fausse** : 401, type `authentication_error`, message `invalid x-api-key`, identique en flux et hors flux. Un modèle inconnu : 404 `not_found_error`.
+- **Crédit épuisé**, non provoqué. D'après la documentation : 402 `billing_error` ; une limite de dépense fixée par l'organisation, 400 ; le plafond mensuel du palier, 429 sans délai de reprise, qui ne se réessaie pas. Le texte du message de solde n'y est pas.
+- **Cache** : seulement avec un marqueur (rien de lu ni d'écrit sans lui, sur deux appels identiques). Avec un marqueur : 2 970 jetons écrits au premier appel, relus au second. **Le décompte d'entrée d'Anthropic exclut le cache lu et écrit**, qui s'ajoutent ; celui d'OpenAI les inclut.
+- **Champs d'usage.** Hors flux : entrée, sortie, cache lu, cache écrit (et sa durée), jetons de raisonnement. En flux : le début de message donne l'entrée et le cache, la fin donne le cumul.
+- **Un même texte compte 1,7 à 1,8 fois plus de jetons chez Anthropic que chez OpenAI** (2 957 contre 1 785 sans outils, 4 022 contre 2 223 avec). Les réponses sont aussi plus longues (59 à 84 jetons de sortie en médiane, contre 28).
+
+**Prix lus le 20/11/2026** ([page de prix d'Anthropic](https://platform.claude.com/docs/en/about-claude/pricing)), en dollars par million de jetons :
+
+| Modèle | Entrée | Sortie | Écriture du cache (5 min) | Lecture du cache |
+|---|---|---|---|---|
+| Claude Haiku 5.5, prompt de 100 000 jetons au plus | 0,10 | 0,50 | 0,125 | 0,01 |
+| Claude Haiku 5.5, prompt plus long | 0,50 | 2,50 | 0,625 | 0,05 |
+| Claude Sonnet 5.5 | 2 | 10 | 2,50 | 0,10 |
+
+**Ce qui contredit le plan, et ce que ça change.**
+
+- **Le prompt de 3 000 jetons** : avec les quatre outils, il en compte environ 4 000 chez Anthropic. Les tableaux de coût se recalculent à 4 000 jetons d'entrée.
+- **Le coût d'une journée** : à prix égal par million, Haiku coûte plus qu'OpenAI, du fait du décompte (0,00043 $ la réponse contre 0,00024 $ mesurés). Le tableau de la tâche 8 se refait avec les jetons rendus.
+- **« Le raisonnement ne se coupe pas sur tous les modèles »** : exact, et plus fin : la valeur à envoyer n'est pas un seul réglage mais un couple (mode, effort) propre à chaque modèle, et « rien envoyer » est exclu. Tâche 3 : l'entrée d'un modèle porte ce couple pour la voix et pour la nuit.
+- **Une température** est refusée en entier, alors que la documentation parlait d'une seule valeur permise ; un appel d'outil forcé est refusé sur Sonnet.
+- **Les mots-clés de schéma** : un seul est refusé pour les six schémas du core ; les longueurs de chaîne ne le sont pas. Tâche 4 : retirer au moins la taille maximale d'un tableau ; la validation du core reste le juge.
+- **Le décompte** : tâche 4, le bilan d'entrée additionne entrée, cache lu et cache écrit ; tâche 3, chaque part se compte à son prix.
+- **Le crédit** : tâche 2, le crédit épuisé se reconnaît à un statut 402, à une limite de dépense (400) ou au plafond du palier (429 non réessayé) ; le message de solde est à confirmer sur un vrai refus.
+- **Le fil** : tâche 4, les tours vides se retirent avant l'envoi, aucun fil ne finit par l'assistant, et un système au milieu suit un tour de l'utilisateur.
+- **L'annulation** : tâche 4, les jetons d'un flux annulé s'estiment, comme pour OpenAI.
+
+**Non mesuré.** Crédit épuisé, limite de débit, surcharge, erreurs 500 et 504 ; un refus du modèle ; la facturation d'un flux annulé ; les délais d'Anthropic avec marqueurs de cache et aux efforts moyen et élevé ; le second appel d'une délégation et le rituel d'arrivée de bout en bout ; la part du réseau (un poste, un jour) ; la qualité du français, la mise en forme et les scènes (tâche 8).
+
+**Coût** : 1,45 $ sur les 10 $ du chantier (Haiku 0,08 $, Sonnet 1,36 $, OpenAI 0,01 $), compté d'après les jetons rendus, non vérifié sur la console. Les flux enregistrés pour le faux de la tâche 4 sont gardés hors dépôt.
 
 ## Les mesures (tâche 8)
 
@@ -353,8 +408,8 @@ fournisseur à l'autre ; le repli d'Anthropic vers un autre modèle sur un refus
 
 ## Limites
 
-- **Les prix et les noms de réglage d'Anthropic** de ce plan viennent d'une table de référence du 03/11, non relue sur
-  la page d'Anthropic : les tâches 1 et 3 les relisent.
+- **Les prix et les noms de réglage d'Anthropic** ont été relus sur la page d'Anthropic le 20/11 (tâche 1) ; la
+  tâche 3 écrit la date à côté de la table.
 - **Le coût d'une journée** vient d'une base mince ; il se rejoue sur une base du rodage.
 - **Le premier mot mesuré du laptop** n'est que la part du modèle et du réseau ; la cible de 2,5 s se juge de bout en
   bout.
