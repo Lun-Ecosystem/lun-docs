@@ -14,7 +14,8 @@ Vérifie, dans cet ordre :
 3. **Preuve** : les tests couvrent le comportement ; ils ont été lancés.
 4. **Standards** : commits conventionnels, doc mise à jour dans le même commit, aucun secret ni
    adresse interne, rien de l'intérieur d'un dépôt privé dans un dépôt public (chemin, table, commande,
-   variable), design conforme si une interface est touchée.
+   variable), design conforme si une interface est touchée, rien en dur de ce qu'une instance peut
+   vouloir changer (`qualite.md`, « Rien en dur »).
 
 Verdict : `OK`, `OK avec remarques` ou `À corriger`. Puis les constats, du plus grave au moins grave,
 chacun avec `chemin:ligne`, le problème et sa conséquence concrète. Sépare les points **bloquants**
