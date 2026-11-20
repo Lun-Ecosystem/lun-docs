@@ -487,6 +487,9 @@ terme, sans date. L'ordre, jusqu'à la porte :
    Haiku 5.5, raisonnement coupé pour la voix. **Reste avant le rodage** : les consignes de la voix corrigées sur ses
    deux défauts mesurés puis remesurées (lun-anima#118), la PR fusionnée et livrée en image, la clé d'Anthropic rangée
    par l'écran du NAS.
+   **Puis, avant le rodage** : l'historique rejoué au modèle garde les appels d'outil
+   ([plan](2026-11-20-historique-outils.md), Lun-Ecosystem/lun-anima#118), à la place des consignes corrigées ; le
+   modèle du rodage se redécide sur sa mesure, OpenAI en service d'ici là.
 2. **La session du desktop, pour la voix seule** (§ 4) : Luxuria reliée au core du NAS ; la mesure des gestes puis
    leur règle (B1) ; la langue (B2) ; le délai mesuré contre les 2,5 s ; l'exe, le corps, le service voix. Les gestes
    à réentendre se notent pendant la semaine.
