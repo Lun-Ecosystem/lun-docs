@@ -48,7 +48,6 @@ prend pas en charge la 7. L'outillage de lun-docs lui-même reste sans dépendan
 
 ## Déploiement
 
-Dans le cadre de [`environnements.md`](environnements.md). Pendant le rodage, le desktop suit `main`
-([mise en service](../docs/mise-en-service-desktop.md)). Ensuite, image Docker **amd64** publiée sur GHCR au tag
-de version, récupérée par la machine de prod ([ADR 0012](../adr/0012-prod-machine-dediee.md)). Les apps desktop et
+Dans le cadre de [`environnements.md`](environnements.md) : image Docker **amd64** publiée sur GHCR au tag de
+version, récupérée par le NAS ([ADR 0014](../adr/0014-mvp-sur-le-nas.md)). Les apps desktop et
 mobile se distribuent par les releases GitHub de leur dépôt.

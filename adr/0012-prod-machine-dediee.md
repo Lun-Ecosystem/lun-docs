@@ -1,6 +1,6 @@
 # ADR 0012 : la prod sur une machine dédiée, le NAS pour les copies
 
-Statut : acceptée
+Statut : remplacée par 0014
 Date : 2026-11-12
 
 ## Contexte

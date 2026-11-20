@@ -98,6 +98,6 @@
 | **l'inbox** | Les observations hors périmètre, gardées en issues pour plus tard | un journal |
 | **la recette** | L'essai d'un chantier par CrOliX, en conditions réelles | les tests |
 | **le rodage** | Une période d'usage quotidien qui éprouve l'ensemble | une recette |
-| **la machine dédiée** | La machine de la maison où tournera la prod après le rodage ([ADR 0012](../adr/0012-prod-machine-dediee.md)) ; le mot est choisi par CrOliX le 13/11 | « le serveur dédié » ; « le serveur » seul : celui auquel Lun'Luxuria est reliée, ou celui de la chaîne |
-| **le NAS** | Le stockage de la maison : les copies et les fichiers | la prod |
+| **la machine dédiée** | Une évolution possible, à terme : une machine de la maison qui reprendrait la prod le jour où le NAS ne suffit plus ([ADR 0014](../adr/0014-mvp-sur-le-nas.md)) ; le mot est choisi par CrOliX le 13/11 | « le serveur dédié » ; « le serveur » seul : celui auquel Lun'Luxuria est reliée, ou celui de la chaîne |
+| **le NAS** | La machine de la maison où tournent en continu le core, Acedia et Avaritia, avec leurs bases et leurs copies : la prod ([ADR 0014](../adr/0014-mvp-sur-le-nas.md)) | « le serveur » seul |
 | **le kit** | Les composants de front communs, tenus dans lun-docs et recopiés | un composant propre à un projet |

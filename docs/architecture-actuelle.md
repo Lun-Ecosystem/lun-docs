@@ -1,6 +1,6 @@
 # L'architecture actuelle
 
-> Ce qui tourne aujourd'hui, au 12/11/2026. Cette page fait foi là où la
+> Ce qui tourne aujourd'hui, au 20/11/2026. Cette page fait foi là où la
 > [spec écosystème](specs/2026-10-19-ecosysteme-design.md) a vieilli. Tout chantier qui change un dépôt, un poste, un
 > port ou une liaison la met à jour dans sa PR. Les règles sont dans
 > [`environnements.md`](../standards/environnements.md) et [`contrat-satellite.md`](../standards/contrat-satellite.md) ;
@@ -26,15 +26,16 @@ Natsume : l'anatomie du [dictionnaire](../standards/dictionnaire.md).
 ## Les postes
 
 - **Le laptop** : le local. On y code et on y teste, avec le compte Google de test ; rien n'y sert à l'usage.
-- **Le desktop** : la prod du rodage. Le core, Acedia et Avaritia y tournent en tâches lancées au démarrage de
-  Windows ([mise en service](mise-en-service-desktop.md)) ; Luxuria et son service voix s'y ouvrent le soir. Le
-  vrai compte Google y entre avec l'app Google passée en Production (B10). Les recettes *Ask* s'y jouent sur des
-  bases de recette, jamais sur celles du rodage.
+- **Le NAS** : la prod ([ADR 0014](../adr/0014-mvp-sur-le-nas.md)). Le core, Acedia et Avaritia doivent y tourner
+  en continu, chacun dans son conteneur, avec sa base et ses copies ; le vrai compte Google n'entre que là.
+  **Au 20/11, sa mise en service n'est pas faite** : c'est le prochain chantier.
+- **Le desktop** : Luxuria et son service voix, reliés au core ; le banc de la voix et de la fenêtre. Les trois
+  serveurs y ont tourné en recette du 07 au 10/11, en tâches lancées au démarrage de Windows
+  ([mise en service](mise-en-service-desktop.md)), sur des bases de test : ce n'est pas leur place en usage, il ne
+  reste pas allumé.
 - **Le téléphone** : l'app du core, installée depuis le navigateur et jointe en HTTPS par le réseau privé, pour
   les push ; à prouver de bout en bout (B11).
-- **La machine dédiée** : la prod après le rodage ([ADR 0012](../adr/0012-prod-machine-dediee.md)), pas encore
-  achetée.
-- **Le NAS** : le stockage de la maison, pour les copies et les fichiers (ADR 0012). Rien n'y tourne.
+- **Une machine dédiée** : une évolution possible, à terme, sans date (ADR 0014).
 
 ## Les adresses
 

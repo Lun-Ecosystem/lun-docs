@@ -1,5 +1,9 @@
 # Mettre le desktop en service
 
+> **Depuis le 20/11, ce n'est plus la mise en service de l'écosystème** ([ADR 0014](../adr/0014-mvp-sur-le-nas.md)) :
+> le core, Acedia et Avaritia tournent sur le NAS, dont la page viendra avec son chantier. Cette page reste le mode
+> d'emploi d'une recette en local sur le desktop, et celui de Lun'Luxuria (§ 5), qui y vit.
+
 Ce que CrOliX voit et fait, dans l'ordre, le jour où le core, Acedia et Avaritia passent sur le desktop pour de bon :
 lancés au démarrage de Windows sans fenêtre, joints par le téléphone en HTTPS, chaque base copiée une fois par jour.
 Spec : [`specs/2026-11-07-poste-autonome-design.md`](specs/2026-11-07-poste-autonome-design.md).

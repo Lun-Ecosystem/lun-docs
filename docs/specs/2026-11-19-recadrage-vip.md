@@ -7,6 +7,11 @@
 > Les choix marqués **[avis Claude]** étaient des propositions.
 >
 > **Tranché par CrOliX le 19/11** : les six décisions sont au § 7, et le § 6 est mis d'accord avec elles.
+>
+> **Corrigé par CrOliX le 20/11** ([ADR 0014](../../adr/0014-mvp-sur-le-nas.md)) : ce recadrage reprenait « la
+> semaine de rodage sur le desktop » sans voir que le desktop ne reste pas allumé. Le MVP tourne sur le NAS, sauf
+> Lun'Luxuria ; la semaine s'y joue, après sa mise en service. « La session du desktop » (§ 6.1, § 6.4, § 7 point 5)
+> ne garde que la voix ; l'ordre à jour est dans la feuille de route, « Le recadrage du 20/11 ».
 
 ## 1. La borne
 
@@ -197,8 +202,8 @@ fin de VIP** : ce qui peut se mettre en place, et à quel palier.
 
 1. Les textes d'accord avec la borne. Sur le laptop.
 2. Les trois petites promesses, et le banc réduit. Sur le laptop, en parallèle.
-3. La session du desktop, resserrée, sur la carte actuelle : dès que le laptop est prêt.
-4. La semaine de rodage, puis sa marge, avant le 31 décembre.
+3. La mise en service du NAS, puis la session du desktop pour la voix seule (corrigé le 20/11, ADR 0014).
+4. La semaine de rodage, sur le NAS, puis sa marge, avant le 31 décembre.
 5. En toute fin de VIP : l'installation.
 
 ## 7. Ce que CrOliX a tranché, le 19/11

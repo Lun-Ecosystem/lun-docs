@@ -1,8 +1,10 @@
 # Basculer l'écosystème du desktop vers le NAS, après le rodage
 
-> **Remplacé en partie par l'[ADR 0012](../../adr/0012-prod-machine-dediee.md)** (12/11) : la prod ira sur une machine
-> dédiée, le NAS garde les copies et les fichiers. Ce plan se refait quand la machine s'achète ; le § 2, point 2 (les
-> bases et leurs clés), et le § 3 restent la base de sa prochaine version.
+> **Redevenu la base de la mise en service, le 20/11** ([ADR 0014](../../adr/0014-mvp-sur-le-nas.md)) : le MVP tourne
+> sur le NAS, et la semaine de rodage s'y joue directement. Ce plan-ci supposait un rodage sur le desktop avant la
+> bascule : son § 2, point 2 (reprendre les bases du rodage) ne vaut plus, le NAS démarre sur des bases neuves avec le
+> vrai compte Google. Le plan de la mise en service s'écrit à part, contesté puis validé, avant toute installation.
+> Entre le 12 et le 20/11, l'ADR 0012 l'avait dit remplacé : c'était une erreur.
 
 > Préparé le 08/11, à exécuter **après la semaine de rodage sur le desktop** (décision de CrOliX le 08/11, feuille de
 > route § 1). Rien ici ne se lance avant. Les choix marqués **[choix Claude]** se changent avant la bascule.
