@@ -483,7 +483,10 @@ terme, sans date. L'ordre, jusqu'à la porte :
    qui donne une carte qui signale, l'export téléchargé). **Avant elle, à placer par CrOliX** : lun-acedia#76 (trois
    onglets ouverts, plus rien ne répond). **En parallèle** : les deux fournisseurs de modèle pour le core
    ([plan](2026-11-20-core-deux-fournisseurs.md), Lun-Ecosystem/lun-anima#116), fusionné et livré avant la semaine de
-   rodage.
+   rodage. **Le 20/11** : codé et mesuré, la PR du core en brouillon ; modèle du rodage choisi par CrOliX, Claude
+   Haiku 5.5, raisonnement coupé pour la voix. **Reste avant le rodage** : les consignes de la voix corrigées sur ses
+   deux défauts mesurés puis remesurées (lun-anima#118), la PR fusionnée et livrée en image, la clé d'Anthropic rangée
+   par l'écran du NAS.
 2. **La session du desktop, pour la voix seule** (§ 4) : Luxuria reliée au core du NAS ; la mesure des gestes puis
    leur règle (B1) ; la langue (B2) ; le délai mesuré contre les 2,5 s ; l'exe, le corps, le service voix. Les gestes
    à réentendre se notent pendant la semaine.
