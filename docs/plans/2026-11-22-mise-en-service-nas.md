@@ -5,8 +5,13 @@
 >
 > **Issue :** Lun-Ecosystem/lun-docs#190 (`niveau:critique`).
 >
-> **État : rédigé le 22/11 ; contesté le même jour (« à amender », quatre bloquants) ; amendé le 22/11.** À valider
-> par CrOliX avant toute installation. C'est la prod, avec les vraies données de CrOliX.
+> **État au 22/11.** Rédigé, contesté (« à amender », quatre bloquants), amendé, puis **validé par CrOliX le 22/11**
+> avec ses sept recommandations (« Décisions de CrOliX, le 22/11 »). La tâche 3 est **faite, en brouillon, non
+> répétée** : la PR de la pile, dans le dépôt du core. Les correctifs des satellites sont en brouillon :
+> Lun-Ecosystem/lun-acedia#81, Lun-Ecosystem/lun-avaritia#44 (une variable vide vaut absente), et
+> Lun-Ecosystem/lun-acedia#80 (lun-acedia#76, une connexion d'événements par onglet). **Le verrou : le moteur Docker
+> du laptop est arrêté**, la répétition (tâche 5) l'attend. Aucune commande n'a été jouée sur le NAS ; l'accès SSH
+> n'est pas encore préparé. C'est la prod, avec les vraies données de CrOliX.
 >
 > Code relu sur `main` : Lun'Anima `365c7e6`, Lun'Acedia `bf724e3`, Lun'Avaritia `9c53768` ; le graphe d'abord, puis
 > les fichiers. Lun'Anima est privé : ce plan dit les gestes, les critères, les risques et les décisions, en
@@ -79,11 +84,39 @@ la prod ; le vrai compte Google seulement sur la prod. L'ADR 0014 : tout se prou
 ### Le déploiement du core (privé), en comportement
 
 Le dépôt du core porte la pile des trois serveurs (ADR 0008) : un conteneur par app, à côté d'un conteneur du réseau
-privé qui lui donne son nom et son HTTPS ; l'app n'écoute que dans ce conteneur, rien n'est publié sur le NAS. Un
-geste déploie une version, attend que l'app réponde, et remet seul la version d'avant si elle ne répond pas ; un autre
-revient à la version d'avant. Chaque base vit dans un volume Docker nommé, ses copies à côté d'elle, dans le même
-volume. La pile ne règle ni le fuseau des conteneurs, ni la taille de leurs journaux. Le détail est dans la part
-privée.
+privé qui lui donne son nom et son HTTPS ; l'app n'écoute que dans ce conteneur, rien n'est publié sur le NAS. Depuis
+la PR de la pile (tâche 3, en brouillon, non répétée) :
+
+- **Les bases** vivent dans trois volumes **créés une fois, avant le premier démarrage**, hors de la pile : l'arrêt de
+  la pile avec effacement ne peut plus les effacer. La pile a un nom fixe : déplacer son dossier ne change aucun
+  volume.
+- **Le dossier des copies** est obligatoire : un sous-dossier par app, **créé d'avance par CrOliX**, inscriptible par
+  l'utilisateur des images. S'il manque, l'app ne démarre pas ; s'il n'a pas les bons droits, elle démarre mais
+  chaque copie échoue, et le dit.
+- **Les fichiers d'environnement des apps** ne portent plus l'adresse d'écoute, le port ni le chemin de la base : ces
+  lignes sont retirées, les valeurs par défaut sont les bonnes sous Docker.
+- **Le fuseau** est fixé à Paris pour chaque app ; **les journaux** de chaque conteneur sont bornés ; l'image du réseau
+  privé est épinglée ; **les noms des nœuds** sont réglables, ceux de la prod par défaut.
+- **Chaque app attend que son nœud soit prêt** avant de démarrer, et redémarre avec lui quand Compose le redémarre.
+- **La clé d'inscription** est vidée puis révoquée après l'inscription des trois nœuds : le démarrage suivant recrée
+  les trois nœuds et redémarre les apps, **sans réinscription** (l'état de chaque nœud vit dans son volume). À
+  vérifier dans la console : les trois mêmes nœuds, aucun nouveau, aucun nom suffixé.
+- **Le geste de mise à jour** prend un verrou ; tire l'image seulement si elle manque ; **arrête l'app et copie sa
+  base entière** (avec ses fichiers annexes) dans le dossier des copies, sous un nom provisoire renommé une fois fini ;
+  démarre la nouvelle version ; attend sa santé ; **n'écrit la nouvelle version qu'une fois l'app saine**. À tout
+  échec, une interruption comprise, il relance la version en service, dit l'étape, et **dit que la base n'est pas
+  remise** et où est la copie d'avant. **Le retour arrière** ne demande plus le registre : l'image d'avant est déjà
+  là. Ni l'un ni l'autre ne remet la base.
+- **Revenir avec la base** : l'app arrêtée tout du long, la base courante mise de côté, la copie d'avant la mise à jour
+  remise, **puis** le retour à la version. La copie à prendre : la plus récente faite avant de quitter la version vers
+  laquelle on revient.
+- **Une restauration essayée à part** a son propre fichier de pile : sans réseau, un volume jetable, les copies en
+  lecture seule, un nom de projet à lui ; son effacement n'atteint jamais les vraies bases.
+- **Ses limites, écrites dans sa page** : une app reste saine pour Docker quand son nœud est tombé ; un nœud relancé
+  seul par Docker (un redémarrage du moteur ou du NAS) peut laisser son app sur un réseau disparu, injoignable mais
+  saine ; la parade est de redémarrer l'app par Compose. Si le core tombe, personne n'est prévenu.
+
+Les noms exacts sont dans la part privée.
 
 ### Les versions
 
@@ -97,6 +130,11 @@ privée.
   en base, une migration, l'historique qui garde les appels d'outil ; dans Acedia, les chevauchements d'agenda et
   l'agent sans nom en dur ; dans Avaritia, l'export téléchargé. Avaritia a deux migrations depuis `v0.1.0`, toutes deux
   des ajouts (une colonne, deux index : `server/src/db.ts`).
+- **Les correctifs des satellites**, en brouillon, entrent dans leur `0.2.0` : une variable d'environnement posée mais
+  vide vaut absente (le chemin de la base, le port ; dans Acedia aussi l'intervalle de synchronisation, borné, et
+  l'adresse de retour Google) ; la sonde de santé lit le port comme le serveur (lun-acedia#81, lun-avaritia#44).
+  lun-acedia#76 : une connexion d'événements par onglet, cinq onglets au plus en HTTP/1.1, prouvé dans Chrome
+  (lun-acedia#80) ; derrière le HTTPS du réseau privé, à vérifier sur le NAS (tâche 9).
 
 ### Ce que chaque app sait déjà faire pour tenir en continu
 
@@ -140,7 +178,8 @@ Une image tourne en temps universel tant qu'on ne lui donne pas de fuseau, et la
 
 ### Ce que la page d'installation dit encore, et le code ne fait plus ou pas
 
-Relu le 22/11, confirmé par la contestation, sans rien jouer. Les lignes du core sont dans la part privée.
+Relu le 22/11, confirmé par la contestation, sans rien jouer. Les lignes du core sont dans la part privée. **Les dix
+écarts sont corrigés par la PR de la pile et les correctifs des satellites (tâche 3), en brouillon, non répétés.**
 
 1. **Le chemin de la base laissé vide fait tomber les trois serveurs.** La page dit de le laisser vide. Une ligne vide
    dans un fichier d'environnement de Compose donne une chaîne vide, pas une variable absente : Acedia
@@ -224,10 +263,19 @@ et CrOliX tranche.
 - **Tout réglage du système du NAS** : comptes, partages, SSH, réseau, mises à jour, sauvegardes : ce sont les gestes de
   CrOliX, dans UGOS.
 
-**Les sorties qui peuvent porter un secret ou un code**, et comment la liste les évite : le journal d'un conteneur
-(le code du premier appareil) : filtré ; l'inspection d'un conteneur (son environnement) : seulement avec un format qui
-ne lit que l'état de santé ou l'empreinte ; la configuration résolue de la pile (toutes les valeurs) : seulement la
-liste des services ; un fichier d'environnement : jamais lu, seulement la longueur d'une ligne attendue.
+**Les gestes qui affichent un secret ou un code, et leur forme sûre** (la table de la page de la pile, en
+comportement ; les commandes exactes sont dans la part privée) :
+
+| Le geste interdit | Ce qu'il affiche | La forme sûre, seule dans la liste fermée |
+|---|---|---|
+| La configuration résolue de la pile | les fichiers d'environnement, la clé d'inscription | la liste des services |
+| L'inspection d'un conteneur | son environnement, donc ses clés | l'état de santé ou l'empreinte, par un format |
+| L'environnement d'un conteneur | ses clés | aucune : il ne se lit pas |
+| Le journal d'un conteneur | le code du premier appareil | un filtre fixe sur les lignes attendues |
+| Un fichier d'environnement, l'accès au registre | les clés, le jeton | la longueur d'une ligne attendue |
+
+Pendant l'inscription d'un nœud, la clé d'inscription paraît aussi dans la liste des processus du NAS : la session ne
+la lit pas ; la clé est courte et révoquée juste après.
 
 **Ce que la clé n'empêche pas.** La clé de pilotage ne sert qu'à la session. CrOliX saisit ses secrets par son propre
 chemin : l'éditeur de fichiers d'UGOS s'il atteint le dossier du déploiement, ou une session SSH à lui (tâche 7).
@@ -241,9 +289,11 @@ limite au réseau local est celle d'UGOS.
   l'état des lieux). Droits `600` pour les fichiers, au compte de pilotage.
 - **Les bases** : dans leurs volumes nommés, tels que codés.
 - **Les copies des bases** : le dossier des copies de chaque app est monté sur un dossier du stockage protégé du NAS
-  (par la PR de la tâche 3), et **seul ce dossier** est sauvegardé hors du NAS. Ces copies sont cohérentes par
-  construction. La sauvegarde ne prend que les fichiers `<nom>-AAAA-MM-JJ.db` (leçon du desktop, § 8 : une copie
-  s'écrit d'abord dans un fichier temporaire du même dossier).
+  (par la PR de la tâche 3), et **seul ce dossier** est sauvegardé hors du NAS. Il porte les copies du jour, celles
+  d'avant une mise à jour et les bases mises de côté. La sauvegarde le prend **en entier, sauf les noms cachés** (qui
+  commencent par un point) : tout ce qui s'écrit en cours porte un tel nom. Rien ne retire les dossiers mis de côté :
+  CrOliX les retire à la main, une fois l'app vue saine quelques jours, en gardant au moins la dernière copie d'avant
+  mise à jour.
 - **Les clés maîtresses** ont leur copie dans le gestionnaire de mots de passe de CrOliX, et nulle part ailleurs hors
   du NAS. Une copie de base volée sans sa clé ne rend ni les jetons Google, ni les clés des fournisseurs. **Une clé
   maîtresse perdue rend illisible ce qu'elle chiffre** : chez Acedia, les jetons Google et les clés d'IA (l'écran du
@@ -255,7 +305,7 @@ limite au réseau local est celle d'UGOS.
 
 Dans l'ordre. Lui seul : cela touche ses comptes et ses accès. La session ne fait rien avant.
 
-- [ ] **P1. Le compte de pilotage**, dans UGOS : un compte dédié qui n'est pas le sien, standard (point 1), son
+- [ ] **P1. Le compte de pilotage**, dans UGOS : un compte dédié qui n'est pas le sien, standard (décision 1), son
   dossier personnel activé. *Bon quand* : le compte existe et n'est pas dans le groupe des administrateurs.
 - [ ] **P2. Le dossier du déploiement**, dans UGOS : hors partage, hors sauvegarde, hors instantanés si possible ;
   écriture pour le compte de pilotage seul. *Bon quand* : il ne paraît dans aucun partage réseau ni aucune tâche de
@@ -307,9 +357,12 @@ Les commandes sont dans la liste fermée de la part privée, par numéro de tâc
 Ce qu'elle regarde, et ce qu'on attend :
 
 - **Le système** : la version d'UGOS et du noyau ; l'architecture (`x86_64`, les images sont `amd64`) ; les outils
-  présents dont la liste fermée a besoin (`grep`, `awk`, `sha256sum`, `sed` et sa variante).
-- **Docker** : la version du moteur et de Compose v2 ; si le compte de pilotage parle au moteur sans `sudo` ; où Docker
-  range ses données et si ce dossier est sur le stockage protégé (le groupe de disques, sa redondance).
+  du shell dont la liste fermée et le geste de déploiement ont besoin (la part privée les nomme).
+- **Docker** : la version du moteur ; **Compose 2.17 au moins**, la version qui sait redémarrer une app avec son nœud
+  (« introduce `restart` for depends_on »,
+  [notes de version de Compose 2.17.0](https://github.com/docker/compose/releases/tag/v2.17.0)) ; si le compte de
+  pilotage parle au moteur sans `sudo` ; où Docker range ses données et si ce dossier est sur le stockage protégé
+  (le groupe de disques, sa redondance).
 - **La place et la mémoire** : l'espace libre ; la mémoire totale et libre.
 - **Ce qui tourne déjà** : les conteneurs, les projets Compose, les ports écoutés par l'hôte.
 - **`/dev/net/tun`** présent : les nœuds du réseau privé tournent en mode noyau.
@@ -322,20 +375,20 @@ Ce qu'elle regarde, et ce qu'on attend :
   conteneurs d'un projet Compose, leur journal, et sait les relancer ; si SSH est accepté pour un compte standard.
 - **La box**, par CrOliX : rien n'est redirigé vers le NAS ; UPnP du NAS coupé.
 
-**Seuil d'arrêt**, qui renvoie le plan à CrOliX : pas de Compose v2 ; une architecture autre que `x86_64` ; pas de
-`/dev/net/tun` ; moins de 2 Go de mémoire libre ou 10 Go d'espace libre ; des données Docker hors du stockage protégé ;
-un port ouvert sur la box ; SSH refusé au compte standard (point 1) ; aucun endroit hors sauvegarde pour le dossier du
-déploiement ; un outil de la liste fermée absent (la liste se réécrit sans lui).
+**Seuil d'arrêt**, qui renvoie le plan à CrOliX : Compose plus ancien que 2.17 ; une architecture autre que
+`x86_64` ; pas de `/dev/net/tun` ; moins de 2 Go de mémoire libre ou 10 Go d'espace libre ; des données Docker hors du
+stockage protégé ; un port ouvert sur la box ; SSH refusé au compte standard (décision 1) ; aucun endroit hors
+sauvegarde pour le dossier du déploiement ; un outil de la liste fermée absent (la liste se réécrit sans lui).
 
 **Preuve** : le relevé brut dans l'issue privée ; un résumé sans valeur de l'instance dans la PR de lun-docs.
 **Exclu** : installer, régler. **Point d'arrêt A.**
 
 ### Tâche 2. Les versions publiées (un agent prépare, CrOliX publie)
 
-- [ ] **Dans l'ordre** : Avaritia, puis le core, puis Acedia, qui attend lun-acedia#76 (chantier à part, en cours).
-  Avaritia et le core partent en parallèle de la tâche 1.
+- [ ] **Dans l'ordre** : Avaritia, après lun-avaritia#44 ; puis le core ; puis Acedia, après lun-acedia#80
+  (lun-acedia#76) et lun-acedia#81. Avaritia et le core partent en parallèle de la tâche 1.
 - [ ] **Depuis quel commit** : la tête de `main` le jour de la PR de version. Le SHA est écrit dans la PR.
-- [ ] **Les numéros** : `0.2.0` pour les trois (point 8).
+- [ ] **Les numéros** : `0.2.0` pour les trois (décision 6).
 
 Pour chaque dépôt :
 
@@ -349,23 +402,18 @@ Pour chaque dépôt :
 `0.2.1` ; jamais un tag déplacé. Une faute trouvée par la répétition donne une `0.2.1`, et la répétition se rejoue.
 **Exclu** : un correctif de code dans la PR de version.
 
-### Tâche 3. La pile et sa page, relues contre le code (un agent, Lun'Anima et les deux satellites)
+### Tâche 3. La pile et sa page, relues contre le code (un agent) : faite, en brouillon, non répétée
 
-- [ ] **Lun'Anima**, une PR relue, la part privée en donne le détail : la page d'installation corrigée des écarts 1 à
-  10 ; **le fuseau `Europe/Paris` pour chaque app** ; une borne à la taille des journaux de chaque conteneur ; le
-  dossier des copies de chaque app monté sur un dossier du NAS donné en configuration ; l'image du réseau privé
-  épinglée ; les noms des nœuds réglables, ceux de la prod par défaut (pour la répétition) ; la copie avant une mise à
-  jour, décrite ; le chemin du premier appareil, tel que le point 3 le tranche.
-- [ ] **Lun'Acedia et Lun'Avaritia** : `LLM_PRICES` dans le `.env.example`, commentée, sans valeur. Le lien de
-  restauration de leur README passe à la tâche 17.
-- **Preuve** : la PR relue, CI verte ; la configuration de la pile acceptée par Compose sur le laptop ; le reste dans la
-  répétition.
-- **Exclu** : changer un comportement du code applicatif. Si un écart demande du code (une valeur vide qui devrait
-  valoir l'absence), c'est un correctif à part, `standard`, avant la version de son dépôt.
+- [x] **Lun'Anima** : la PR de la pile, dans le dépôt du core, en brouillon jusqu'à la répétition. Elle corrige la page
+  des écarts 1 à 10 et porte les gestes décrits plus haut (« Le déploiement du core, en comportement »). **Rien n'a
+  tourné.**
+- [x] **Lun'Acedia et Lun'Avaritia** : une variable vide vaut absente, la sonde lit le port comme le serveur
+  (lun-acedia#81, lun-avaritia#44, en brouillon). `LLM_PRICES` dans leur `.env.example` : dans ces PR ou à la tâche 17.
+- **Ce qui reste** : la répétition (tâche 5) ; la PR de la pile sort du brouillon après elle.
 
 ### Tâche 4. L'adresse de retour de Google, essayée dans la console (CrOliX, avant l'arrêt B)
 
-- [ ] Dans la console Google, un projet propre à la prod (point 4), son écran de consentement en « Production », les
+- [ ] Dans la console Google, un projet propre à la prod (décision 4), son écran de consentement en « Production », les
   API Gmail, Agenda et Tasks activées, les cinq droits du code déclarés.
 - [ ] Un client OAuth « Application Web » dont l'adresse de retour autorisée est celle d'Acedia dans le réseau privé,
   suivie de `/oauth/callback`. Le nom est connu d'avance : le nom du nœud et celui du réseau. Aucun secret n'est copié
@@ -377,41 +425,51 @@ Pour chaque dépôt :
 
 ### Tâche 5. La répétition complète sur le laptop (la session ; CrOliX pour la clé et les codes)
 
-La pile entière, avec les images **tirées du registre**, sur le moteur Docker du laptop. Un relevé écrit, lu à
-l'arrêt B.
+La pile entière, avec les images **tirées du registre**, sur le moteur Docker du laptop, **démarré par CrOliX** : c'est
+le verrou d'aujourd'hui. Un relevé écrit, lu à l'arrêt B. La clé d'inscription est créée par CrOliX, **éphémère et
+étiquetée** ; les nœuds prennent des noms d'essai, distincts de ceux de la prod. Ce qu'elle joue, du plus risqué au
+moins risqué :
 
-- [ ] **La clé d'inscription** : créée par CrOliX dans la console, **éphémère et étiquetée** ; des noms de nœuds
-  distincts de ceux de la prod (préfixés d'`essai-`).
-- [ ] **Le premier démarrage** : les six conteneurs, les trois apps répondent à leur contrôle de santé ; chaque app
-  répond en HTTPS sur son nom d'essai depuis le navigateur du laptop ; la ligne « Base copiée : » donne un chemin dans
-  le volume ; l'empreinte de chaque image notée.
-- [ ] **Le fuseau** : l'heure lue dans chaque conteneur est celle de Paris ; une copie datée du jour de Paris. L'heure
-  d'une carte sur un vrai événement se vérifie sur le NAS (tâche 13) : la répétition tourne sans Google.
-- [ ] **Le premier appareil** : CrOliX lit le code dans l'écran du moteur Docker du laptop (le journal du conteneur),
-  comme il le fera sur le NAS ; la session ne le lit pas. Puis un second appareil par un code de l'écran.
-- [ ] **La liaison** : Acedia et Avaritia reliées au core par l'écran, par leurs adresses d'essai ; un événement du
-  satellite arrive au Journal du core.
-- [ ] **La copie et la restauration**, comme à la tâche 11 : repère, copie, restauration à part et à la place,
-  déchiffrement vrai.
-- [ ] **La copie avant mise à jour, la mise à jour et le retour arrière**, comme à la tâche 12.
-- [ ] **Un nœud du réseau privé redémarré seul** : son app répond-elle encore au contrôle de santé, et par le réseau ?
-  Le relevé le dit, et la parade s'écrit.
-- [ ] **La mémoire** de chaque conteneur, relevée.
+- [ ] **La première installation** sur des volumes neufs, les copies montées : le propriétaire des sous-dossiers ; la
+  base créée dans son volume ; la ligne du journal qui dit où la copie est écrite, avec un chemin dans le dossier des
+  copies.
+- [ ] **Le geste de déploiement contre le vrai Docker** : une mise à jour, et sa copie d'avant lisible ; un retour
+  automatique sur une version malsaine ; un retour arrière sans registre ; une version qui n'existe pas ; une
+  interruption au milieu ; les droits du fichier d'environnement gardés.
+- [ ] **La restauration à la place, puis l'essai à part** (tâche 11) : les volumes des bases vérifiés intacts avant et
+  après l'essai à part.
+- [ ] **Le réseau privé** : les nœuds sains et chaque app qui les attend ; la clé vidée, puis le démarrage suivant
+  sans réinscription ni nom suffixé ; la sonde de santé injoignable depuis un autre nœud ; le HTTPS des trois apps ; le
+  core qui joint les satellites.
+- [ ] **Un nœud relancé seul** : son app devient-elle injoignable en restant saine ; la parade (redémarrer l'app par
+  Compose) la remet-elle ; et le relancement de l'app seule depuis un écran suffit-il.
+- [ ] **Le fuseau, lu par Node** dans chaque conteneur (pas par la commande de date du système : l'image peut ne pas
+  avoir les données de fuseau) ; une copie datée du jour de Paris.
+- [ ] **Le premier appareil et la liaison** : CrOliX lit le code dans l'écran du moteur Docker du laptop ; la session
+  ne le lit pas. Acedia et Avaritia reliées au core par l'écran ; un événement du satellite arrive au Journal du core.
+- [ ] **Les empreintes** des images, notées ; **la mémoire** de chaque conteneur, relevée.
 - [ ] **La fin** : la pile arrêtée, les volumes d'essai retirés (sur le laptop, rien de réel), **les nœuds d'essai
-  retirés de la console**, la clé éphémère expirée. *Vérifié* : la console ne montre plus aucun nœud `essai-`.
-- **Exclu** : Google (la répétition tourne sans lui) ; une clé de fournisseur réelle, sauf une clé de développement
-  pour un seul tour.
+  retirés de la console** par CrOliX, la clé éphémère expirée. *Vérifié* : la console ne montre plus aucun nœud d'essai.
 
-### Tâche 6. Préparer le NAS, sans secret (la session, par SSH) ; **arrêt B avant**
+**Ce que la répétition ne prouvera pas**, et qui se joue sur le NAS : son système et sa version de Docker et de
+Compose ; son écran Docker (journal, relance) ; ses droits, ses partages, sa sauvegarde hors du NAS et ses
+instantanés ; un redémarrage du NAS et l'ordre dans lequel son moteur relance les conteneurs ; ses mises à jour
+automatiques ; sa mémoire ; Google sur le vrai compte ; la limite des onglets derrière le HTTPS du réseau privé.
 
-- [ ] La pile copiée depuis `main` au commit de la PR de la tâche 3 dans le dossier du déploiement ; l'empreinte des
+**Exclu** : Google ; une clé de fournisseur réelle, sauf une clé de développement pour un seul tour.
+
+### Tâche 6. Préparer le NAS, sans secret (la session, par SSH ; CrOliX pour les dossiers) ; **arrêt B avant**
+
+- [ ] La pile copiée depuis `main` au commit de la PR de la pile dans le dossier du déploiement ; l'empreinte des
   fichiers comparée à celle du dépôt.
-- [ ] Les fichiers d'environnement créés depuis leur modèle, **sans aucun secret** : les versions, le chemin des bases
-  tel que la tâche 3 le fixe, le dossier des copies, l'adresse de retour Google d'Acedia. Droits `600`.
-- [ ] Le dossier des copies de chaque app, sur le stockage protégé : préparé par **CrOliX** dans UGOS (il doit être à
-  l'utilisateur de l'image, ce que la session ne peut pas régler sans élévation).
-- **Vérifier** : les droits ; la liste des services de la pile, sans les valeurs.
-- **Revenir en arrière** : le dossier du déploiement vidé, par CrOliX ; rien d'autre n'a bougé.
+- [ ] Les fichiers d'environnement créés depuis leur modèle, **sans aucun secret** : les versions, le dossier des
+  copies, l'adresse de retour Google d'Acedia ; **les lignes de l'adresse d'écoute, du port et du chemin de la base
+  retirées** des fichiers des apps. Droits `600`, le dossier en `700`.
+- [ ] **Le dossier des copies et ses trois sous-dossiers**, sur le stockage protégé : créés par **CrOliX**, à
+  l'utilisateur des images (la session ne peut pas le régler sans élévation).
+- [ ] **Les trois volumes des bases**, créés une fois, vides.
+- **Vérifier** : les droits ; la liste des services de la pile, sans les valeurs ; les trois volumes présents.
+- **Revenir en arrière** : le dossier du déploiement vidé, par CrOliX ; les volumes vides retirés par lui (arrêt E).
 - **Exclu** : démarrer un conteneur, se connecter au registre.
 
 ### Tâche 7. Les secrets (CrOliX)
@@ -441,13 +499,15 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
 
 - [ ] CrOliX se connecte au registre ; la session tire les trois images à leur version, puis se déconnecte ; elle
   compare l'empreinte de chaque image à celle de la répétition ; puis tout démarre.
-- **On attend** : les trois apps répondent à leur contrôle de santé ; trois nœuds en ligne, étiquetés, à leur nom de
-  prod (pas un nom suffixé) ; depuis le laptop, chaque app en HTTPS avec un certificat valide ; « Base copiée : » au
-  journal filtré, avec un chemin dans le dossier des copies.
-- **Vérifier** : la mémoire de chaque conteneur, contre la tâche 1 et la répétition ; l'heure de Paris dans chaque
-  conteneur.
-- **Après** : la clé d'inscription vidée par CrOliX et révoquée dans la console.
-- **Revenir en arrière** : la pile arrêtée **sans effacer les volumes**.
+- **On attend** : chaque nœud sain, puis chaque app saine ; trois nœuds en ligne, étiquetés, à leur nom de prod (pas
+  un nom suffixé) ; depuis le laptop, chaque app en HTTPS avec un certificat valide ; « Base copiée : » au journal
+  filtré, avec un chemin dans le dossier des copies, et le fichier visible dans le sous-dossier de l'app.
+- [ ] **La clé d'inscription** vidée par CrOliX puis révoquée dans la console ; le démarrage suivant recrée les nœuds
+  et redémarre les apps. **On attend** : les six conteneurs sains de nouveau ; dans la console, les trois mêmes
+  nœuds, aucun nouveau.
+- **Vérifier** : la mémoire de chaque conteneur, contre la tâche 1 et la répétition ; l'heure de Paris lue par Node
+  dans chaque conteneur.
+- **Revenir en arrière** : la pile arrêtée, **sans effacement** ; les volumes des bases ne peuvent pas partir avec elle.
 
 ### Tâche 9. Les premiers appareils et la liaison (CrOliX)
 
@@ -459,6 +519,8 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
 - [ ] Le téléphone, par un code donné par l'appareil appairé (Atelier › Appareils, Réglages › Appareils et
   applications) : sans terminal.
 - [ ] **Relier Acedia et Avaritia au core, par l'écran**, et l'adresse de leur page dans Atelier › Postes.
+- [ ] **Six onglets d'Acedia** ouverts sur son adresse HTTPS, dans le navigateur du laptop : tout répond, et changer
+  d'écran affiche (lun-acedia#76, vérifié dans Chrome en HTTP/1.1 seulement).
 - **Vérifier** : la Constellation montre les deux satellites joignables ; un événement émis par un satellite après la
   liaison arrive au Journal du core.
 - **Revenir en arrière** : révoquer un appareil ou une liaison par l'écran.
@@ -488,8 +550,9 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
   (un fichier d'essai qui lit l'environnement comme elle, guillemets compris). On attend : elle répond à son contrôle
   de santé ; le contrôle d'intégrité de SQLite répond `ok` ; l'entrée repère est dans la base restaurée. Puis le
   conteneur et le volume jetables sont retirés (arrêt E).
-- [ ] **Une restauration à la place, sur Acedia et Avaritia sans vraies données**, avant l'arrêt C : la base mise de
-  côté (arrêt E), la copie remise, l'app redémarrée ; la clé d'IA saisie avant la copie **se vérifie** dans Réglages
+- [ ] **Une restauration à la place, sur Acedia et Avaritia sans vraies données**, avant l'arrêt C : l'app arrêtée ;
+  la base mise de côté dans le dossier des copies (arrêt E), jamais effacée ; la copie remise ; l'app redémarrée,
+  saine, et sa ligne « Base copiée » ; la clé d'IA saisie avant la copie **se vérifie** dans Réglages
   (le déchiffrement est vrai, avec la même clé maîtresse) ; le satellite relié de nouveau au core, un événement vu au
   Journal ; puis le retour à la base mise de côté.
 - **Revenir en arrière** : la base mise de côté remise à sa place ; rien ne s'efface avant que la restauration soit
@@ -499,15 +562,18 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
 ### Tâche 12. Une mise à jour, puis un retour arrière (la session ; arrêt E)
 
 Avaritia a deux migrations depuis `v0.1.0`, deux ajouts. Le geste dit donc qu'un retour arrière tolère une migration
-qui ajoute, rien de plus : **la vraie parade reste la copie d'avant la mise à jour**. Joué dans la répétition, puis
-une fois sur le NAS, sur Avaritia, avant toute vraie donnée.
+qui ajoute, rien de plus : **la vraie parade reste la copie d'avant la mise à jour**, que le geste fait désormais
+lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, avant toute vraie donnée.
 
-- [ ] **La copie d'avant** : Avaritia arrêtée ; sa base copiée entière, avec ses fichiers `-wal` et `-shm` s'il y en a,
-  dans un dossier daté du dossier des copies, par l'image de l'app ; puis relancée.
-- [ ] Le geste de déploiement passe Avaritia à `0.1.0`, puis le retour arrière la remet à `0.2.0`.
+- [ ] Le geste de déploiement passe Avaritia à `0.1.0` (CrOliX connecté au registre, puis déconnecté).
+- [ ] **La copie d'avant, vérifiée** : elle existe dans le dossier des copies, entière (la base et ses fichiers
+  annexes), sous son nom définitif ; la version écrite n'a changé qu'une fois l'app saine.
+- [ ] **Le retour arrière** remet `0.2.0`, sans le registre. Il dit que la base n'est pas remise.
+- [ ] **Revenir avec la base**, dans l'ordre (arrêt E) : l'app arrêtée ; la base courante mise de côté ; la copie
+  d'avant remise ; **puis** le retour à la version. Joué dans la répétition ; sur le NAS seulement si le retour arrière
+  simple laisse une base que `0.2.0` ne lit pas.
 - **On attend** : ou `0.1.0` répond, puis le retour arrière remet `0.2.0` ; ou `0.1.0` ne répond pas et le geste remet
-  seul `0.2.0`. Dans les deux cas la liaison tient et l'entrée repère est là.
-- **Revenir en arrière** : la copie d'avant remise (arrêt E).
+  seul `0.2.0`, en le disant. Dans les deux cas la liaison tient et l'entrée repère est là.
 
 ### Tâche 13. Google en production (CrOliX) ; **arrêt C avant**
 
@@ -515,8 +581,8 @@ une fois sur le NAS, sur Avaritia, avant toute vraie donnée.
 - [ ] **Le vrai compte**, connecté par CrOliX dans Acedia, Réglages › Compte Google. L'avertissement « Google n'a pas
   validé cette application » s'affiche (lun-acedia#55) : il le passe, c'est son propre client. La validation par
   Google : hors du MVP.
-- [ ] **Les gardes du premier jour**, tenues jusqu'à une date que CrOliX choisit (point 9) : le seuil reste à 100 ;
-  aucune règle avant qu'il en crée une ; la première synchronisation ne trie pas l'historique.
+- [ ] **Les gardes du premier jour**, tenues jusqu'à la fin de la semaine de rodage (décision 7) : le seuil reste à
+  100 ; aucune règle avant qu'il en crée une ; la première synchronisation ne trie pas l'historique.
 - **Vérifier** : Acedia dit Google connecté ; aucun mail ancien n'entre en file ; un mail arrivé après la connexion
   donne une proposition qui attend ; **l'heure d'un vrai événement** est juste dans l'agenda et sur une carte.
 - **Revenir en arrière** : déconnecter dans Acedia ; retirer l'accès de l'app dans le compte Google ; vider les deux
@@ -570,24 +636,21 @@ une fois sur le NAS, sur Avaritia, avant toute vraie donnée.
 - [ ] Le jeton de lecture des images : dans le gestionnaire seulement, aucune connexion au registre restée ouverte.
 - **Vérifier** : depuis le laptop, la connexion SSH échoue ; la console du réseau privé ne montre que les nœuds voulus.
 
-## À trancher par CrOliX
+## Décisions de CrOliX, le 22/11
 
-1. **Le compte de pilotage.** Un compte standard d'UGOS dans le groupe `docker`, si UGOS accepte SSH pour lui. S'il le
-   refuse : un administrateur dédié, distinct du sien, ou renoncer au pilotage par SSH et jouer les gestes lui-même.
-   Dans tous les cas le compte vaut root par Docker. **Recommandé : le compte standard ; sinon, revenir à lui avant
-   de créer un administrateur.**
-2. **Une garde technique en plus de la règle écrite** : un contrôle côté laptop (un crochet de la session) qui refuse
-   vers le NAS les commandes des interdits. **Recommandé : oui**, dans un chantier à part du plugin, avant l'arrêt B ;
-   la règle écrite reste la première garde.
-3. **Le premier appareil sans terminal sur le NAS** : l'écran Docker d'UGOS s'il montre le journal ; sinon l'écart
-   reste ouvert et CrOliX lit le code par sa propre session. **Recommandé : constater à la tâche 1, et ne rien coder
-   avant le MVP.**
-4. **Google en production** : un projet et un client propres à la prod, en « Production » non validé, l'avertissement
-   passé une fois. **Recommandé : oui** : le secret du laptop ne donne rien sur le vrai compte.
-5. **Qui publie** : `git.md` le dit, CrOliX ; le hook bloque l'agent. **Recommandé : il publie lui-même.**
-6. **Les numéros** : `0.2.0` pour les trois. **Recommandé : oui.**
-7. **La date jusqu'à laquelle tiennent les gardes d'Acedia** (seuil à 100, aucune règle d'office, pas de tri de
-   l'historique). **Recommandé : la fin de la semaine de rodage**, puis un premier seuil choisi sur ce qu'il aura vu.
+Les sept recommandations, validées avec le plan :
+
+1. **Le compte de pilotage** : un compte standard d'UGOS dans le groupe `docker`. S'il est refusé en SSH, retour vers
+   CrOliX avant d'en créer un autre. Il vaut root par Docker : la limite est la clé, le temps, la liste fermée.
+2. **Une garde technique** sur les commandes de la session vers le NAS, en plus de la règle écrite : dans un chantier à
+   part, **avant la première écriture sur le NAS** (avant la tâche 6).
+3. **Le premier appareil** : constater ce que montre l'écran Docker du NAS ; sinon l'écart reste ouvert et écrit.
+   Rien n'est codé avant le MVP.
+4. **Google** : un projet et un client propres à la prod, en « Production » non validé.
+5. **Les versions** : CrOliX les publie lui-même.
+6. **Les numéros** : `0.2.0` pour les trois serveurs.
+7. **Les gardes du premier jour d'Acedia** (seuil à 100, aucune règle d'office, pas de tri de l'historique) tiennent
+   jusqu'à la **fin de la semaine de rodage**.
 
 **Options écartées**, avec leur raison :
 
@@ -599,6 +662,8 @@ une fois sur le NAS, sur Avaritia, avant toute vraie donnée.
   droits que la session n'a pas, une preuve sur le laptop qui n'en était pas une. Seul le dossier des copies est monté.
 - **Attendre la première vraie mise à jour pour essayer le retour arrière** : le geste doit être connu avant d'en avoir
   besoin.
+- **Une copie de la base à la main avant une mise à jour** : le geste de déploiement la fait lui-même ; la tâche 12 la
+  vérifie.
 
 ## Risques
 
@@ -643,8 +708,8 @@ issue s'ouvre). Tout correctif de code applicatif.
 
 ## Limites
 
-- **Non joué, lu seulement** : l'écart 1 ; le fuseau dans l'image ; la limite de six connexions derrière le HTTPS
-  (lun-acedia#76 le note) ; le comportement d'une app quand son nœud redémarre. La répétition les joue.
+- **Rien n'a tourné** : ni la PR de la pile, ni les correctifs des satellites hors de leurs tests ; le moteur Docker
+  du laptop est arrêté. La répétition les joue.
 - **Non confirmé dans la documentation d'UGREEN** : SSH pour un compte standard ; le groupe `docker` ; l'écran Docker
   d'UGOS (journal, relance, projets Compose) ; la notification d'un conteneur arrêté ; les mises à jour automatiques ;
   un dossier hors sauvegarde, instantanés et corbeille. Tout cela se lit à la tâche 1.
