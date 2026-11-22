@@ -40,44 +40,61 @@ Le vrai compte Google n'entre que là. Les copies de chaque base y restent, à c
 
 ## Jouer une commande sur la prod
 
-Une session d'agent ne joue sur la prod, par SSH, qu'une **liste fermée** de commandes écrite d'avance.
-Lui sont interdits : ce qui efface, ce qui peut afficher un secret ou un code d'appairage, l'élévation de
-privilège, une session interactive, tout réglage du système, toute copie de fichier vers la prod ou depuis
-elle. Devant une commande imprévue ou un refus, elle s'arrête : CrOliX tranche, et joue lui-même ce qui
-sort de la liste.
+Une session d'agent ne joue sur la prod qu'une **liste fermée** de commandes écrite d'avance. Lui sont
+interdits : ce qui efface, ce qui peut afficher un secret ou un code d'appairage, l'élévation de privilège,
+tout réglage du système. Devant un imprévu elle s'arrête et CrOliX tranche. Une garde technique fait tenir
+cette règle : un lanceur et le hook de garde du plugin. **Une ceinture de plus, pas une preuve de sûreté** :
+la vraie borne est côté hôte (une clé qui n'autorise qu'une commande), hors de cette garde.
 
-Le hook de garde du plugin fait tenir cette règle (`plugin/hooks/prod-ssh.mjs`), avant chaque commande
-Bash ou PowerShell. **Une ceinture de plus, pas une preuve de sûreté.**
+**Le lanceur**, `plugin/hooks/prod-run.mjs`, est le seul chemin vers la prod :
 
-- **L'activer** : deux variables d'environnement, posées sur le poste avant d'ouvrir la session.
-  `LUN_PROD_SSH_HOSTS` : les hôtes de prod, séparés par une virgule ou une espace, **sous tous leurs noms**
-  (nom court, nom complet, adresse). `LUN_PROD_SSH_ALLOW_FILE` : le chemin de la liste, un fichier hors de
-  tout dépôt ; son exemple est `plugin/hooks/prod-ssh-allow.example`.
-- **Sans `LUN_PROD_SSH_HOSTS`, la garde est inactive et silencieuse** : rien ne dit qu'elle manque. Des
-  hôtes déclarés sans liste lisible : tout SSH vers la prod est refusé.
-- **Une ligne de la liste** est une commande écrite comme dans un shell : des mots littéraux, des
-  guillemets pour grouper un mot, `|` pour un tube, et quatre jokers d'un seul mot : `<app>`, `<version>`
-  (`1.2.3`), `<int>` (1 à 6 chiffres), `<path>` (un chemin absolu, sans `..`). Une commande ne passe que si
-  elle correspond **en entier** à une ligne ; chaque morceau d'une chaîne (`;`, `&&`, `||`) à la sienne.
-- **Une seconde barrière, dans le code**, refuse même ce qu'une ligne couvrirait : `sudo`, un shell ou un
-  interpréteur, ce qui efface ou écrase, un `docker run`, un `exec` interactif ou d'environnement, une
-  inspection sans format ou dont le format sort autre chose que des champs nommés, la configuration
-  résolue d'une pile, un journal qui n'est pas borné et filtré, un fichier d'environnement, une clé, un
-  transfert de port.
-- **Ce qu'elle ne sait pas lire est refusé** quand la cible est la prod : une variable, une substitution,
-  un échappement, un joker de fichier, une redirection, une cible SSH non résolue (`ssh $HOTE`), une option
-  SSH hors de la courte liste admise, un tube ou un fichier qui alimente la commande. Sont refusés aussi,
-  dès que les hôtes sont déclarés : tout contexte du moteur de conteneurs (`docker context`, `--context`,
-  `DOCKER_CONTEXT`), **même local**, car la garde ne sait pas le résoudre ; et une ligne qui nomme un hôte
-  de prod avec un heredoc, un accent grave ou un guillemet échappé, même dans un message de commit.
-- Le refus nomme le premier mot de la commande, jamais ses arguments, et renvoie ici.
+- `node <plugin>/hooks/prod-run.mjs --list` montre les lignes de la liste, chacune sous son numéro (celui de
+  sa ligne dans le fichier) ; `<numéro> [arguments]` en joue une ; `--dry <numéro> [arguments]` montre la
+  commande sans la jouer ; `--check` dit si la garde est configurée (`hosts: n`, `lines: n`).
+- À chaque appel il relit et contrôle **toute** la liste : une ligne mal écrite, ou refusée par la barrière
+  écrite dans son code, l'arrête, nommée par son numéro. Il valide chaque argument contre le joker de la
+  ligne, compose la commande depuis la ligne et lance `ssh` lui-même : sans shell, par un chemin absolu
+  (celui du système, ou `LUN_PROD_SSH_BIN`), avec des options fixes (ni terminal, ni saisie, ni agent, ni
+  port transféré, un délai de connexion), vers le premier hôte déclaré. L'hôte n'est jamais sur la ligne de
+  la session ni dans ce qu'il affiche.
+- **Une ligne de la liste** : des mots simples, des guillemets simples pour grouper un mot, `|` vers `grep`
+  ou `wc -c`, et quatre jokers seuls dans leur mot : `<app>`, `<version>` (`1.2.3`), `<int>` (1 à 6
+  chiffres), `<path>` (un chemin absolu sans `..`, derrière `stat` seulement). Ni `;`, ni `&&`, ni
+  redirection, ni variable. La barrière refuse `sudo`, un shell, ce qui efface ou écrase, un `docker run`,
+  une inspection sans format de champs nommés, un journal ni borné ni filtré, un fichier d'environnement ou
+  une clé, un réglage du système. Exemple : `plugin/hooks/prod-ssh-allow.example`.
 
-**Ce qu'elle ne voit pas** : une commande lancée par un autre outil que Bash ou PowerShell ; un script
-déjà présent sur l'hôte (elle ne voit que son appel) et ce que fait une commande autorisée une fois lancée ;
-un hôte de prod non déclaré, ou un alias de la configuration SSH qui y mène sous un autre nom ; un alias de
-shell, une fonction ou une variable définis dans une session précédente ; un programme ou un script local
-qui ouvre SSH sans nommer l'hôte, un dépôt git dont le distant est sur la prod ; une ligne maquillée exprès
-pour tromper son découpage ; ce que CrOliX tape dans son propre terminal.
+**Le hook**, quand des hôtes de prod sont déclarés, refuse : une ligne de commande (Bash, PowerShell) qui
+contient le nom d'un hôte de prod, où qu'il soit ; un texte écrit par un outil d'écriture qui le contient ;
+un client SSH sans cible lisible (une variable, une substitution, une expression) ; une commande encodée ;
+un contexte du moteur de conteneurs ; une ligne qui nomme un réglage de la garde, sa liste ou un chemin
+protégé ; une écriture dans la liste, le dossier des crochets ou un chemin protégé. Ses refus sont fixes par
+catégorie, sans un mot de la commande.
+
+**L'activer** : des variables d'environnement, posées sur le poste **avant** d'ouvrir la session.
+
+- `LUN_PROD_SSH_HOSTS` : les hôtes de prod sous **tous leurs noms** (nom court, nom complet, adresse),
+  séparés par une virgule ou une espace ; le premier est celui que le lanceur appelle. Un nom de moins de
+  4 caractères ou trop commun (`localhost`, `docker`…) est une configuration invalide : le hook **refuse
+  alors tout**, en disant quoi corriger. C'est voulu : s'ouvrir en silence désactiverait la garde.
+- `LUN_PROD_SSH_ALLOW_FILE` : le chemin de la liste, hors de tout dépôt, sous un nom qui ne sert qu'à elle.
+- `LUN_PROD_SSH_PROTECT` (facultatif) : d'autres chemins à protéger, séparés comme un `PATH` : le fichier de
+  réglages qui déclare le hook, la configuration SSH du poste (les options fixes n'y annulent pas un relais).
+
+**Vérifier qu'elle est active** : `--check`, puis ouvrir la séance par un refus attendu : la session tente
+`echo` suivi du nom de l'hôte, et doit recevoir le refus de `lun guard`. **Sans `LUN_PROD_SSH_HOSTS`, la
+garde est inactive et silencieuse** : rien ne dit qu'elle manque.
+
+**Son prix**, sur le poste où elle est active : toute ligne ou tout fichier écrit qui cite un hôte de prod
+est refusé, même un message de commit ; un client SSH avec une variable, une parenthèse ou une accolade sur
+sa ligne, même vers un autre hôte ; tout contexte du moteur de conteneurs, même local ; `powershell -e…` ;
+toute écriture dans le dossier des crochets, donc le travail sur le plugin lui-même.
+
+**Ce qu'elle ne voit pas** : un nom d'hôte construit sans que le nom entier paraisse ; un alias, une
+fonction ou un script défini avant ; un programme qui lit l'hôte dans sa propre configuration (un alias de
+la configuration SSH, un distant git) ; un autre outil que ceux que le hook couvre ; un script déjà présent
+sur l'hôte, et ce que fait une commande autorisée une fois lancée ; un hôte non déclaré ; un fichier de la
+garde écrit par un programme lancé, ou nommé par un chemin relatif ou un joker.
 
 ## Le desktop
 

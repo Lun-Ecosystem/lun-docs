@@ -2,12 +2,12 @@
 // main or master, force-pushing - and a PR opened out of the norm: not a draft, or a title the CI
 // refuses. Exit code 2 blocks the tool call and shows the reason to the agent.
 // Fails open on anything it cannot parse: the GitHub ruleset and the pre-push hook stay behind it.
-// One exception, closed on what it cannot read: a command toward a production host over SSH (prod-ssh.mjs),
-// active only when the instance declares its hosts.
+// One exception, closed: the prod guard (prod-ssh.mjs), active only when the instance declares its prod
+// hosts. It refuses a line that names one and a write to its own files; an error then is a refusal.
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { loadProdConfig, prodReason } from './prod-ssh.mjs';
+import { REFUSALS, commandReason, loadProdConfig, writeReason } from './prod-ssh.mjs';
 
 const SEPARATORS = new Set([';', '|', '&', '\n', '\r', '(', ')', '{', '}', '<', '>']);
 
@@ -169,11 +169,11 @@ function evaluateSegment(tokens, state, context) {
 
 /**
  * @param {string} command
- * @param {{ cwd?: string, branchOf?: (dir: string) => string | null, prod?: { hosts: string[], patterns: string[] } }} context
+ * @param {{ cwd?: string, branchOf?: (dir: string) => string | null, prod?: { hosts: string[], protectedPaths: string[] } }} context
  */
 export function evaluateCommand(command, context = {}) {
-  // First, and closed on what it cannot read: the prod SSH guard, off without the hosts of the instance.
-  const prod = prodReason(command, context.prod);
+  // First: the prod guard, off without the hosts of the instance.
+  const prod = commandReason(command, context.prod);
   if (prod) return { block: true, reason: prod };
   const state = { cwd: context.cwd ?? process.cwd(), command };
   for (const tokens of segments(command)) {
@@ -181,6 +181,12 @@ export function evaluateCommand(command, context = {}) {
     if (reason) return { block: true, reason };
   }
   return { block: false };
+}
+
+/** A write tool (Write, Edit, NotebookEdit): no file of the prod guard, no text that names a prod host. */
+export function evaluateWrite(filePath, context = {}, written = []) {
+  const reason = writeReason(filePath, context.cwd, context.prod, written);
+  return reason ? { block: true, reason } : { block: false };
 }
 
 function currentBranch(dir) {
@@ -195,21 +201,33 @@ function currentBranch(dir) {
 }
 
 async function main() {
-  let input = '';
-  for await (const chunk of process.stdin) input += chunk;
-  let payload;
-  try {
-    payload = JSON.parse(input);
-  } catch {
-    process.exit(0); // not our input: never block on a parse error
-  }
-  const command = payload?.tool_input?.command ?? '';
-  const { block, reason } = evaluateCommand(command, { cwd: payload?.cwd, branchOf: currentBranch, prod: loadProdConfig() });
-  if (block) {
+  const refuse = (reason) => {
     process.stderr.write(`lun guard: ${reason}.\n`);
     process.exit(2);
+  };
+  let prod = { hosts: [] };
+  try {
+    prod = loadProdConfig();
+  } catch (e) {
+    refuse(e.message); // a bad prod configuration refuses everything: opening would switch the guard off
   }
-  process.exit(0);
+  try {
+    let input = '';
+    for await (const chunk of process.stdin) input += chunk;
+    const payload = JSON.parse(input);
+    const context = { cwd: payload?.cwd, branchOf: currentBranch, prod };
+    // Write and Edit carry file_path, NotebookEdit notebook_path; the text they write is read too.
+    const tool = payload?.tool_input ?? {};
+    const file = tool.file_path ?? tool.notebook_path;
+    const written = [tool.content, tool.new_string, tool.new_source, ...(Array.isArray(tool.edits) ? tool.edits.map((e) => e?.new_string) : [])];
+    const verdicts = [file === undefined ? { block: false } : evaluateWrite(file, context, written), evaluateCommand(tool.command ?? '', context)];
+    const refused = verdicts.find((v) => v.block);
+    if (refused) refuse(refused.reason);
+  } catch {
+    // Any other exit code than 2 lets the tool call through: with prod hosts declared, an error is a refusal.
+    if (prod.hosts.length) refuse(REFUSALS.internal);
+  }
+  process.exit(0); // not our input, or nothing to refuse: never block the ordinary work on an error
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

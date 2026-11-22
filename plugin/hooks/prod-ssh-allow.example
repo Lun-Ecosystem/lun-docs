@@ -1,14 +1,15 @@
-# Closed list of the remote commands a session may play on a production host over SSH.
+# Closed list of the remote commands a session may play on a production host.
 # Generic example: the real list lives outside the repository, in the file named by LUN_PROD_SSH_ALLOW_FILE.
+# The launcher plays a line by its number in this file: node prod-run.mjs <number> [arguments...] (see --list).
 #
-# One pattern per line; blank lines and lines starting with # are ignored.
-# A pattern is a command written as in a shell (quotes group a word; an unquoted | is a pipe).
-# Every word is literal, except these placeholders, each standing for exactly one word:
+# One command per line; blank lines and lines starting with # are ignored.
+# A line is made of plain words, single quotes to group a word, and | toward grep, wc -c or wc -l.
+# No ; && || & redirection, variable, substitution or double quote: such a line stops the launcher.
+# Jokers, each standing alone for exactly one word, filled by the arguments in their order:
 #   <app>      a name: [a-z0-9][a-z0-9_-]{0,39}
 #   <version>  a version: 1.2.3
 #   <int>      a number: 1 to 6 digits
-#   <path>     an absolute path made of [A-Za-z0-9._/-], without ".."
-# A remote command passes only if all of it matches one line (a pipeline matches a line with its pipes).
+#   <path>     an absolute path made of [A-Za-z0-9._/-], without "..", behind stat only
 
 # Services, containers, volumes: read.
 docker compose -f /srv/app/compose.yaml config --services
