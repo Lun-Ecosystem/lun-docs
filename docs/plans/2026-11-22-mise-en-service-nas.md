@@ -5,14 +5,15 @@
 >
 > **Issue :** Lun-Ecosystem/lun-docs#190 (`niveau:critique`).
 >
-> **État : rédigé le 22/11, à contester puis à valider par CrOliX avant toute installation.** Rien ne s'installe tant
-> qu'il n'est pas validé. C'est la prod, avec les vraies données de CrOliX.
+> **État : rédigé le 22/11 ; contesté le même jour (« à amender », quatre bloquants) ; amendé le 22/11.** À valider
+> par CrOliX avant toute installation. C'est la prod, avec les vraies données de CrOliX.
 >
 > Code relu sur `main` : Lun'Anima `365c7e6`, Lun'Acedia `bf724e3`, Lun'Avaritia `9c53768` ; le graphe d'abord, puis
-> les fichiers. Lun'Anima est privé : ce plan dit les gestes, les critères, les risques et les décisions. Ses fichiers
-> de déploiement, ses commandes, ses variables et ses lignes sont dans la part privée du chantier, postée à part
-> ([`securite.md`](../../standards/securite.md), « Dépôts publics »). Aucun nom du réseau privé, aucune adresse,
-> aucun compte n'entre ici : ils s'écrivent « le nom du NAS », « l'adresse d'Acedia dans le réseau privé ».
+> les fichiers. Lun'Anima est privé : ce plan dit les gestes, les critères, les risques et les décisions, en
+> comportement. Ses fichiers, ses commandes, ses variables, son déploiement et ses lignes sont dans la part privée du
+> chantier, postée dans une issue privée ([`securite.md`](../../standards/securite.md), « Dépôts publics »). Aucun nom
+> du réseau privé, aucune adresse, aucun compte n'entre ici : ils s'écrivent « le nom du NAS », « l'adresse d'Acedia
+> dans le réseau privé ». Le relevé brut de l'état des lieux va dans l'issue privée ; ce plan n'en garde qu'un résumé.
 
 **But :** le core, Lun'Acedia et Lun'Avaritia tournent en continu sur le NAS, chacun dans son conteneur avec sa base
 neuve, joints en HTTPS par le réseau privé, avec le vrai compte Google. Tout ce qui conditionne la semaine de rodage
@@ -25,119 +26,132 @@ l'[ADR 0008](../../adr/0008-acces-exterieur.md) pour l'accès ;
 recadrage du 20/11 » ; le [recadrage du VIP](../specs/2026-11-19-recadrage-vip.md) (une semaine d'usage sans point de
 tension) ; le [plan du 08/11](2026-11-08-bascule-nas.md), la base ; la [mise en service du
 desktop](../mise-en-service-desktop.md), la recette du 07 au 10/11 ; le plan
-[tenir en continu](2026-11-12-tenir-en-continu.md) ;
-le chapeau Lun-Ecosystem/lun-docs#185. Deux décisions de CrOliX du 22/11 : les commandes sur le NAS se jouent depuis
-le laptop, par SSH, avec un compte limité ; Lun-Ecosystem/lun-acedia#76 est corrigé avant.
+[tenir en continu](2026-11-12-tenir-en-continu.md) ; le chapeau Lun-Ecosystem/lun-docs#185. Deux décisions de CrOliX
+du 22/11 : les commandes sur le NAS se jouent depuis le laptop, par SSH, avec un compte limité ;
+Lun-Ecosystem/lun-acedia#76 est corrigé avant.
 
-**Critères de fin**, ceux de l'issue, chacun avec sa tâche :
+**Critères de fin**, ceux de l'issue, chacun avec ses tâches :
 
 1. **Un état des lieux du NAS est écrit** avant toute installation : Docker et Compose, le réseau privé, la place,
    l'accès SSH par un compte limité à ce qu'il faut, rien d'ouvert sur la box. Tâche 1.
 2. **Une version de chaque serveur est publiée** depuis `main`, et la page d'installation est relue contre le code
    d'aujourd'hui. Tâches 2 et 3.
 3. **Les trois serveurs tournent sur le NAS**, chacun dans son conteneur avec sa base, joignables par le réseau privé
-   en HTTPS ; les satellites sont reliés au core ; les secrets ne sont dans aucun dépôt. Tâches 4 à 7.
+   en HTTPS ; les satellites sont reliés au core ; les secrets ne sont dans aucun dépôt. Tâches 5 à 9.
 4. **Ce qui conditionne la semaine est vérifié sur le NAS** : Google en production ; le téléphone ; le premier
    appareil relié sans terminal ; un redémarrage et une nuit rattrapée ; une copie de chaque base et une restauration
-   essayée ; une mise à jour et un retour arrière ; le fournisseur de modèle réglé par l'écran. Tâches 7 à 13.
+   essayée ; une mise à jour et un retour arrière ; le fournisseur de modèle réglé par l'écran. Tâches 4, 5 et 9 à 15.
 5. **Les vérifications en attente de #185** sont faites : les chevauchements d'agenda sur de vrais événements,
-   l'export téléchargé depuis le téléphone, l'agent sans nom en dur. Tâche 14.
+   l'export téléchargé depuis le téléphone, l'agent sans nom en dur. Tâche 16.
 6. **La page de mise en service est à jour** et dit comment refaire chaque geste ; ce qui a surpris est écrit.
-   Tâche 15. L'accès ouvert pour le chantier est refermé ou justifié : tâche 16.
+   Tâche 17. L'accès ouvert pour le chantier est refermé ou justifié : tâche 18.
 
 | Dépôt | Branche | Issue | Niveau |
 |---|---|---|---|
 | `lun-docs` : le plan, la page du NAS | `docs/mise-en-service-nas` | Lun-Ecosystem/lun-docs#190 | `critique` |
-| `lun-anima` : la PR de version, la page d'installation relue | à créer | une issue privée, à ouvrir | `critique` |
+| `lun-anima` : la PR de version, la pile et sa page relues | à créer | une issue privée, à ouvrir | `critique` |
 | `lun-acedia` : la PR de version, le `.env.example`, le lien de restauration | à créer | à ouvrir | `standard` |
 | `lun-avaritia` : la PR de version, le `.env.example`, le lien de restauration | à créer | à ouvrir | `standard` |
 
-**Le niveau.** `critique` : la prod, les vraies données, les vrais secrets, un accès au NAS. Le code ne change presque
-pas : la mise en service vérifie des gestes d'exploitation sur des versions déjà prouvées en local. Ce qui touche le
-code (la page d'installation du core, les deux `.env.example`) passe par une PR relue, avant l'installation.
+**Le niveau.** `critique` : la prod, les vraies données, les vrais secrets, un accès au NAS. Le code applicatif ne
+change pas. La pile change par une PR relue (tâche 3), puis tourne en entier sur le laptop (tâche 5) avant d'entrer
+sur le NAS.
 
 ## Ce que l'interdit demande, et comment ce plan le tient
 
 `environnements.md`, « Interdit » : pas de « tests à faire une fois sur la prod » ; pas de version non fusionnée sur
-la prod ; le vrai compte Google seulement sur la prod.
+la prod ; le vrai compte Google seulement sur la prod. L'ADR 0014 : tout se prouve d'abord en local.
 
-- **Aucun code non prouvé n'entre sur le NAS.** Chaque image est publiée depuis `main`, CI verte, et démarrée d'abord
-  sur le laptop sur une base neuve (tâche 2). Le NAS ne reçoit que des images publiées par CrOliX.
-- **La mise en service vérifie des gestes, pas du code** : démarrer, relier, redémarrer, copier, restaurer, mettre à
-  jour, revenir en arrière. Chacun de ces comportements est déjà couvert par les tests de son dépôt ; ce qui se
-  vérifie ici, c'est qu'il tient sur cette machine, avec ce Docker et ce réseau.
-- **Un écart trouvé sur le NAS ne se corrige pas sur le NAS.** Il s'écrit, le geste s'arrête, le correctif passe par
-  un chantier sur le laptop, une PR, une version. Le NAS ne porte jamais un fichier modifié à la main hors de sa
-  configuration.
-- **Le vrai compte Google n'entre que sur le NAS**, à la tâche 9, après le point d'arrêt C. Le laptop garde le compte
-  de test ; le client OAuth de la prod est distinct de celui du laptop (« À trancher », point 4).
+- **La pile entière tourne d'abord sur le laptop** (tâche 5) : les nœuds du réseau privé à côté de chaque app, le
+  HTTPS, le premier appareil, la liaison, la copie et la restauration, la mise à jour et le retour arrière, le fuseau,
+  le chemin des bases. Le NAS ne rejoue ensuite que ce qui dépend de lui : son système, sa mémoire, un redémarrage, la
+  sauvegarde hors du NAS.
+- **L'image prouvée est l'image publiée.** La répétition tire les images du registre après leur release, pas un build
+  du laptop. Le premier démarrage sur le NAS compare leur empreinte à celle de la répétition.
+- **Aucun code non fusionné n'entre sur le NAS.** Le NAS ne reçoit que des images publiées par l'organisation et la
+  pile copiée depuis `main`.
+- **Un écart trouvé sur le NAS ne se corrige pas sur le NAS.** Il s'écrit, le geste s'arrête, CrOliX tranche ; un
+  correctif passe par un chantier sur le laptop, une PR, une version.
+- **Le vrai compte Google n'entre que sur le NAS**, à la tâche 13, après l'arrêt C. La répétition tourne sans Google.
 
 ## Ce que le code fait aujourd'hui
 
-### Le déploiement du core (privé)
+### Le déploiement du core (privé), en comportement
 
-Le dépôt du core porte le déploiement des trois serveurs (ADR 0008) : un conteneur par app, chacun à côté de son
-conteneur Tailscale qui lui donne son nom dans le réseau privé et son HTTPS, l'app écoutant sur la boucle locale de
-ce conteneur. Rien n'est publié sur le NAS lui-même. Un script déploie une version, attend le contrôle de santé, et
-remet la version d'avant si la nouvelle ne répond pas en deux minutes ; il sait aussi revenir à la version d'avant en
-une commande. Les bases vivent dans un volume Docker par app ; l'état de chaque nœud du réseau privé dans le sien.
-Le détail, fichiers et lignes, est dans la part privée.
+Le dépôt du core porte la pile des trois serveurs (ADR 0008) : un conteneur par app, à côté d'un conteneur du réseau
+privé qui lui donne son nom et son HTTPS ; l'app n'écoute que dans ce conteneur, rien n'est publié sur le NAS. Un
+geste déploie une version, attend que l'app réponde, et remet seul la version d'avant si elle ne répond pas ; un autre
+revient à la version d'avant. Chaque base vit dans un volume Docker nommé, ses copies à côté d'elle, dans le même
+volume. La pile ne règle ni le fuseau des conteneurs, ni la taille de leurs journaux. Le détail est dans la part
+privée.
 
-### Les images et les versions
+### Les versions
 
-- Les trois serveurs sont en `v0.1.0`, publiées le 06/11. Leur version vit dans `core/package.json` (le core) ou
-  `server/package.json` (les satellites), toujours à `0.1.0`.
-- Le workflow « Release image » de chaque dépôt (`.github/workflows/release.yml`) se déclenche sur une release
-  publiée, vérifie que le tag vaut `v<version>`, construit l'image `linux/amd64` et la pousse sur GHCR sous la version
-  et `latest`. Il ne vérifie pas que le tag est posé sur `main` : c'est à CrOliX de choisir `main` en publiant.
-- La CI de chaque dépôt construit déjà l'image à chaque PR (`docker build`, `ci.yml`). Sur `main`, les trois CI sont
-  vertes aux commits relus.
-- Chaque image a son contrôle de santé : la page d'accueil répond (`Dockerfile`, `HEALTHCHECK`, toutes les 30 s après
-  20 s). Chacune tourne sous l'utilisateur `node`, sa base dans `/app/data`.
+- Les trois serveurs sont en `v0.1.0`, publiées le 06/11. Chaque dépôt publie son image `linux/amd64` sur GHCR quand
+  CrOliX publie une release dont le tag vaut la version ; la CI de chaque PR construit déjà l'image. Rien ne vérifie
+  que le tag est posé sur `main` : c'est à CrOliX de choisir `main` en publiant. Sur `main`, les trois CI sont vertes.
 - `git.md`, « Release » : la PR `chore(release): <projet> x.y.z` est fusionnée par CrOliX, le tag posé par CrOliX
-  seul ; l'agent prépare la PR de version, ne pose jamais de tag et ne crée jamais de release (le hook de garde bloque
+  seul ; l'agent prépare la PR, ne pose jamais de tag et ne crée jamais de release (le hook de garde bloque
   `gh release create`).
-- Depuis le 06/11, presque tout novembre est sur `main` : dans le core, deux fournisseurs de modèle au choix dans
-  l'écran, une clé par fournisseur chiffrée en base, de nouvelles variables, une migration de base, l'historique qui
-  garde les appels d'outil (59 commits depuis `v0.1.0`) ; dans Acedia, les chevauchements d'agenda et l'agent sans nom
-  en dur ; dans Avaritia, l'export téléchargé.
+- Depuis le 06/11 : dans le core, deux fournisseurs de modèle au choix dans l'écran, une clé par fournisseur chiffrée
+  en base, une migration, l'historique qui garde les appels d'outil ; dans Acedia, les chevauchements d'agenda et
+  l'agent sans nom en dur ; dans Avaritia, l'export téléchargé. Avaritia a deux migrations depuis `v0.1.0`, toutes deux
+  des ajouts (une colonne, deux index : `server/src/db.ts`).
 
 ### Ce que chaque app sait déjà faire pour tenir en continu
 
-- **La copie de la base** : chaque serveur copie la sienne dans `backups/`, à côté d'elle, donc dans son volume, dès
-  qu'il écoute puis chaque heure si celle du jour manque ; sept au plus. Une copie ratée va au journal, et au Journal
-  du core pour un satellite relié (README d'Acedia et d'Avaritia, « Données »). Aucune commande ne fait une copie à la
-  demande.
-- **Le contrôle de santé** : celui de l'image, lu par le script de déploiement.
-- **La nuit manquée** : jouée une fois dans la minute qui suit le démarrage, comme la lettre du matin, sauf réglage
-  contraire pour une base jetable (mise en service du desktop, § 7). La nuit et le matin tournent à l'heure de Paris
-  quel que soit le fuseau du conteneur (vérifié le 08/11, plan de bascule, § 1).
-- **Les notifications** : seul le core envoie des Web Push. Ses clés VAPID sont créées par lui au premier besoin et
-  rangées dans sa base, chiffrées par sa clé secrète : aucune clé de notification à créer à la main. Côté téléphone :
-  la PWA installée depuis l'adresse HTTPS du core, les notifications autorisées. Une origine qui change oblige à se
-  réabonner.
+- **La copie de la base** : chaque serveur copie la sienne dans `backups/`, à côté d'elle, dès qu'il écoute puis chaque
+  heure si celle du jour manque ; sept au plus. Chaque copie écrite laisse au journal « Base copiée : » suivi de son
+  **chemin réel** (Acedia et Avaritia `server/src/backup.ts:73`, le core de même) : c'est la preuve bon marché qu'une
+  base est bien dans son volume. Aucune commande ne fait une copie à la demande.
+- **La nuit manquée** : jouée une fois dans la minute qui suit le démarrage, comme la lettre du matin (mise en service
+  du desktop, § 7). La nuit et le matin du core tournent à l'heure de Paris quel que soit le fuseau du conteneur
+  (plan de bascule, § 1). **Cela ne vaut que pour eux** (fuseau, ci-dessous).
+- **Les notifications** : seul le core envoie des Web Push, avec des clés qu'il crée et garde lui-même : aucune clé de
+  notification à créer à la main. Côté téléphone : la PWA installée depuis l'adresse HTTPS du core, les notifications
+  autorisées. Une origine qui change oblige à se réabonner. **Si le core tombe, personne n'est prévenu** : c'est lui qui
+  prévient.
 - **Le premier appareil** : sur une base neuve, la page de chaque app montre le code du premier appareil, déjà saisi,
-  **seulement sur la machine qui l'héberge, à son adresse locale, sans en-tête de relais** (lun-anima#113,
-  lun-acedia#73, lun-avaritia#40). Derrière `tailscale serve`, chaque requête porte un en-tête de relais : sur le NAS,
-  **aucune page ne montre ce code**, et le NAS n'a pas d'écran. Le code part aussi au journal de chaque serveur au
-  démarrage (`bootstrapPairing`, Acedia `server/src/contract/auth.ts`). Le plan du premier contact le disait déjà
-  (§ « La machine dédiée ») : « sans écran, ou derrière un relais, aucune page n'y donne de code ». Le chemin sans
-  terminal sur le NAS est donc à choisir (« À trancher », point 3).
+  seulement sur la machine qui l'héberge, à son adresse locale, sans en-tête de relais (lun-anima#113, lun-acedia#73,
+  lun-avaritia#40). Derrière le relais HTTPS du réseau privé, **aucune page ne montre ce code**, et le NAS n'a pas
+  d'écran. Le code part au journal de chaque serveur au démarrage. Il expire en dix minutes ; un redémarrage de l'app
+  en donne un neuf tant qu'aucun appareil n'est appairé.
+- **Les gardes d'Acedia au premier jour**, lues dans le code : l'IA ne range rien seule tant que le seuil reste à 100,
+  sa valeur par défaut (`server/src/triage/pipeline.ts:57-58,274-280`) ; une base neuve n'a aucune règle (aucune n'est
+  créée au démarrage, seulement par l'écran, `server/src/triage/rules.ts:85-92`) ; la première synchronisation lit les
+  500 derniers mails sans les mettre en file de tri : seuls ceux arrivés après la connexion sont triés
+  (`server/src/gmail/sync.ts:18,97-140`, la condition à la ligne 118).
+
+### Le fuseau horaire, faux dans les conteneurs aujourd'hui
+
+Une image tourne en temps universel tant qu'on ne lui donne pas de fuseau, et la pile n'en donne aucun.
+
+- **Acedia** écrit l'heure des cartes avec l'heure locale du serveur (`server/src/pina/wording.ts:51-63`,
+  `getHours()` et `toLocaleTimeString` sans fuseau) et place minuit d'un jour sans heure en heure locale
+  (`server/src/agenda/time.ts:1-9`). En temps universel, chaque « à 10 h » serait faux d'une à deux heures selon la
+  saison, et les événements sur la journée décalés. Les chevauchements, eux, écartent les journées entières et
+  calculent leur créneau à l'heure de Paris (`server/src/agenda/overlaps.ts:44-55`) : l'heure de leur carte reste
+  pourtant écrite par le texte commun, donc fausse.
+- **Les trois apps** datent leurs copies du jour local du conteneur (`ymd`, `server/src/backup.ts:11-12` des
+  satellites, de même dans le core) : en temps universel, la copie de 0 h 30 porte la date de la veille.
+- **La parade** : le fuseau réglé pour chaque app dans la pile, par la PR de la tâche 3 ; Node lit le fuseau par ses
+  propres données horaires, à prouver dans la répétition (tâche 5), puis sur le NAS par l'heure d'un événement réel
+  (tâche 13).
 
 ### Ce que la page d'installation dit encore, et le code ne fait plus ou pas
 
-Relu le 22/11, sans rien jouer. Les lignes du core sont dans la part privée.
+Relu le 22/11, confirmé par la contestation, sans rien jouer. Les lignes du core sont dans la part privée.
 
-1. **Le chemin de la base laissé vide fait tomber les trois serveurs.** La page dit de laisser vides l'adresse
-   d'écoute et le chemin de la base. Une ligne vide dans un fichier d'environnement de Compose donne une chaîne vide,
-   pas une variable absente. Pour le chemin de la base, Acedia (`server/src/main.ts:41`) et Avaritia
-   (`server/src/main.ts:22`) font `resolve(root, process.env.DB_PATH ?? …)` : une chaîne vide passe le `??` et la base
-   devient le dossier de l'app. Le core fait de même. Lu dans le code, pas joué : à prouver sur le laptop à la tâche 2.
-   L'adresse d'écoute vide, elle, retombe bien sur la boucle locale (`HOST?.trim() ||`).
-2. **Le premier appareil** n'a de code qu'au journal sous Docker (ci-dessus) : la page le dit, mais l'écran ne le
-   donne pas, et « sans terminal » demande un chemin.
-3. **Relier un satellite par la commande sans code** ouvre un navigateur : impossible dans un conteneur. Le chemin
-   qui marche est l'écran (Atelier › Postes, code donné par le satellite), règle de la maison.
+1. **Le chemin de la base laissé vide fait tomber les trois serveurs.** La page dit de le laisser vide. Une ligne vide
+   dans un fichier d'environnement de Compose donne une chaîne vide, pas une variable absente : Acedia
+   (`server/src/main.ts:41`) et Avaritia (`server/src/main.ts:22`) font `resolve(root, process.env.DB_PATH ?? …)`, la
+   chaîne vide passe le `??`, la base devient le dossier de l'app ; le core fait de même. **Pire, un chemin faux mais
+   non vide** crée la base hors du volume, sans erreur, puisque le dossier de l'app appartient à l'utilisateur du
+   conteneur : elle disparaîtrait à la recréation du conteneur. La preuve : la ligne « Base copiée : » au journal,
+   dont le chemin doit être dans le volume (tâches 5 et 8).
+2. **Le premier appareil** n'a de code qu'au journal sous Docker : la page ne dit pas comment l'obtenir sans terminal.
+3. **Relier un satellite par la commande sans code** ouvre un navigateur : impossible dans un conteneur. Le chemin qui
+   marche est l'écran (Atelier › Postes, le code donné par le satellite), règle de la maison.
 4. **Les deux fournisseurs** : la page ne dit ni la clé d'Anthropic, ni que la clé et le modèle se règlent par
    l'écran, chiffrés en base.
 5. **La clé du réseau privé** : la page demande une clé réutilisable et préapprouvée, sans étiquette. Un nœud sans
@@ -145,413 +159,497 @@ Relu le 22/11, sans rien jouer. Les lignes du core sont dans la part privée.
    apps deviendraient injoignables un jour, sans erreur de leur côté.
 6. **Les copies et la restauration** : la page ne dit ni où sont les copies sur le NAS, ni comment en restaurer une ;
    les README d'Acedia et d'Avaritia renvoient à la page du desktop.
-7. **Avant une mise à jour**, rien ne copie la base. Une migration ne se défait pas : le core joue ses migrations en
-   avant et n'en refuse aucune plus récente. Un retour arrière remet une image plus ancienne sur une base déjà migrée.
+7. **Avant une mise à jour**, rien ne copie la base, et un retour arrière remet une image plus ancienne sur une base
+   déjà migrée : une migration ne se défait pas.
 8. **Les `.env.example` d'Acedia et d'Avaritia** ne disent pas `LLM_PRICES`, que les deux lisent
    (`server/src/llm/models.ts:98-101`) et que la page du desktop (§ 11) demande pour un modèle sans prix.
-9. **L'image de Tailscale** suit `stable`, sans version : une mise à jour du NAS peut changer de version sans le dire.
+9. **L'image du réseau privé** n'est pas épinglée : une mise à jour peut changer de version sans le dire.
+10. **Le fuseau et les journaux** : ni l'un ni l'autre n'est réglé (ci-dessus) ; les journaux des conteneurs
+    grossissent sans borne.
+
+### Les droits que demande Acedia à Google
+
+Fixés dans le code (`server/src/google/oauth.ts:17-23`) : Gmail en modification, en envoi et en réglages de base ;
+l'Agenda entier ; Tasks. Ce n'est pas « au plus juste » au sens de `securite.md` (l'Agenda entier, par exemple, quand
+Acedia lit et déplace des événements). **Écart connu**, à ouvrir en issue dans lun-acedia, pas à corriger ici.
 
 ## L'accès au NAS depuis le laptop
 
 Décision de CrOliX du 22/11 : la session qui pilote joue les commandes depuis le laptop, par SSH, avec un compte
-limité. Constaté sur le laptop : aucun accès SSH au NAS n'est configuré ; le client du réseau privé n'est pas installé
-en ligne de commande ; le client Docker est installé, pas son moteur.
+limité. Constaté sur le laptop : aucun accès SSH au NAS n'est configuré ; le client du réseau privé n'est pas en ligne
+de commande ; le client Docker est installé, son moteur n'est pas démarré ; deux clients SSH, celui de Windows
+(OpenSSH 9.5, dont le service d'agent est désactivé) et celui de Git Bash (OpenSSH 10.2).
 
 **Ce que dit la documentation d'UGREEN**
 ([se connecter en SSH](https://ai.ugreen.com/blogs/how-to/connect-nas-ssh-root-access), lue le 22/11) :
-SSH s'active dans UGOS, Panneau de configuration › Terminal ; un port, un niveau de sécurité, un accès
-limité au réseau local au choix, une **désactivation automatique** à régler ; la connexion se fait **avec un compte
-administrateur d'UGOS**, puis `sudo -i` pour root ; une clé Ed25519 se dépose dans `~/.ssh/authorized_keys`, après
-avoir activé le dossier personnel du compte. Elle ne dit pas si un compte standard peut se connecter en SSH, ni comment
-UGOS range le groupe `docker`. **À vérifier dans l'état des lieux.**
+SSH s'active dans UGOS, Panneau de configuration › Terminal ; un port, un niveau de sécurité, un accès limité au réseau
+local au choix, une **désactivation automatique** à régler ; la connexion se fait **avec un compte administrateur**
+d'UGOS, puis `sudo -i` pour root ; une clé Ed25519 se dépose dans `~/.ssh/authorized_keys`, après avoir activé le
+dossier personnel du compte. Elle ne dit pas si un compte standard peut se connecter en SSH, ni comment UGOS range le
+groupe `docker`. **À vérifier dans l'état des lieux.**
 
-**Ce qu'un « compte limité à Docker » veut dire.** La documentation de Docker le dit : appartenir au groupe `docker`
-vaut les droits de root sur la machine. Un compte qui pilote Docker n'est donc pas limité en pouvoir. Il l'est par :
-ce qu'il n'est pas (pas le compte d'administration de CrOliX, pas `sudo`) ; une clé à lui seul, déposée par CrOliX,
-avec des options qui coupent le reste (`no-port-forwarding`, `no-agent-forwarding`, `no-X11-forwarding`, et une
-origine restreinte si UGOS l'accepte) ; le temps (SSH ouvert pour une séance, désactivé ensuite) ; et une fin écrite
-(tâche 16). Si UGOS refuse SSH à un compte standard, le compte est un administrateur **dédié**, distinct de celui de
-CrOliX, avec la même clé et les mêmes limites (« À trancher », point 1).
+**Ce qu'un compte limité à Docker veut dire.** Appartenir au groupe `docker` vaut les droits de root (documentation de
+Docker). Un compte qui pilote Docker n'est donc pas limité en pouvoir. Il l'est par : ce qu'il n'est pas (pas le
+compte de CrOliX, pas `sudo`) ; une clé à lui seul ; le temps ; une liste fermée de commandes ; des interdits écrits ;
+une fin écrite (tâche 18).
 
-**Comment le laptop joint le NAS.** Chez lui : le réseau local. Ailleurs : le réseau privé, qui demande que le NAS
-lui-même y ait un nœud (les trois nœuds du déploiement sont ceux des apps, pas celui du NAS), et le client sur le
-laptop. Une règle du réseau privé limite le port SSH du NAS au seul laptop (« À trancher », point 2).
+**Où.** Sur le réseau local, quand CrOliX est chez lui. Le réglage d'UGOS qui limite SSH au réseau local est mis.
+Aucun nœud du réseau privé pour le NAS lui-même (option écartée, « À trancher »).
+
+**La durée.** Le service d'agent SSH de Windows garde les clés chargées d'un redémarrage à l'autre (rangées dans le
+registre de l'utilisateur) et n'accepte pas de durée de vie (`ssh-add -t` y échoue :
+[Win32-OpenSSH#1487](https://github.com/PowerShell/Win32-OpenSSH/issues/1487),
+[#1510](https://github.com/PowerShell/Win32-OpenSSH/issues/1510)) : il reste désactivé. La séance passe par l'agent de
+Git Bash, un processus qui ne garde rien sur le disque, lancé par CrOliX sur un emplacement fixe. **CrOliX** y charge
+la clé en tapant sa phrase de passe, dans son propre terminal, avec une durée de vie de la séance (`ssh-add -t`,
+**à vérifier** sur ce client : essai en P5). Jamais la session, jamais par la conversation. À la fin de chaque séance :
+la clé retirée (`ssh-add -D`), l'agent arrêté, et vérifié (`ssh-add -l` ne répond plus) ; SSH désactivé dans UGOS ou
+laissé à sa désactivation automatique.
+
+**Les commandes.** Une **liste fermée**, écrite d'avance dans la part privée, tâche par tâche, sans aucun outil que
+l'état des lieux n'a pas trouvé sur le NAS. Devant une commande imprévue, ou un échec au milieu d'une tâche : arrêt,
+et CrOliX tranche.
+
+**Les interdits de la session**, noir sur blanc :
+
+- **Tout ce qui efface** : un volume, un conteneur avec ses volumes, un nettoyage global de Docker, une suppression ou
+  un déplacement dans un dossier de données ou de copies, l'arrêt de la pile avec effacement.
+- **Tout ce qui peut afficher un secret** : une inspection de conteneur ou d'image sans format choisi ; l'environnement
+  d'un conteneur ; l'affichage d'un fichier d'environnement, de la configuration d'accès au registre ou des clés SSH ;
+  la configuration résolue de la pile sans filtre.
+- **Tout ce qui peut afficher un code d'appairage** : le journal brut d'un conteneur. La session ne lit un journal qu'à
+  travers un filtre fixe de la liste fermée, qui ne garde que les lignes attendues (« Base copiée », la nuit, le
+  matin, une erreur) ; elle ne lit jamais le code du premier appareil.
+- **L'élévation de privilège** : `sudo`, `su`, un conteneur lancé en root ou en mode privilégié.
+- **Tout réglage du système du NAS** : comptes, partages, SSH, réseau, mises à jour, sauvegardes : ce sont les gestes de
+  CrOliX, dans UGOS.
+
+**Les sorties qui peuvent porter un secret ou un code**, et comment la liste les évite : le journal d'un conteneur
+(le code du premier appareil) : filtré ; l'inspection d'un conteneur (son environnement) : seulement avec un format qui
+ne lit que l'état de santé ou l'empreinte ; la configuration résolue de la pile (toutes les valeurs) : seulement la
+liste des services ; un fichier d'environnement : jamais lu, seulement la longueur d'une ligne attendue.
+
+**Ce que la clé n'empêche pas.** La clé de pilotage ne sert qu'à la session. CrOliX saisit ses secrets par son propre
+chemin : l'éditeur de fichiers d'UGOS s'il atteint le dossier du déploiement, ou une session SSH à lui (tâche 7).
+Une restriction de la clé par adresse casserait au premier changement d'adresse du laptop : elle n'est pas mise ; la
+limite au réseau local est celle d'UGOS.
+
+## Où vivent les secrets, les bases et leurs copies
+
+- **Le dossier du déploiement**, avec les fichiers d'environnement (les clés maîtresses, les identifiants Google) :
+  hors de tout partage réseau, de toute sauvegarde, des instantanés et de la corbeille, si UGOS le permet (à lire à
+  l'état des lieux). Droits `600` pour les fichiers, au compte de pilotage.
+- **Les bases** : dans leurs volumes nommés, tels que codés.
+- **Les copies des bases** : le dossier des copies de chaque app est monté sur un dossier du stockage protégé du NAS
+  (par la PR de la tâche 3), et **seul ce dossier** est sauvegardé hors du NAS. Ces copies sont cohérentes par
+  construction. La sauvegarde ne prend que les fichiers `<nom>-AAAA-MM-JJ.db` (leçon du desktop, § 8 : une copie
+  s'écrit d'abord dans un fichier temporaire du même dossier).
+- **Les clés maîtresses** ont leur copie dans le gestionnaire de mots de passe de CrOliX, et nulle part ailleurs hors
+  du NAS. Une copie de base volée sans sa clé ne rend ni les jetons Google, ni les clés des fournisseurs. **Une clé
+  maîtresse perdue rend illisible ce qu'elle chiffre** : chez Acedia, les jetons Google et les clés d'IA (l'écran du
+  compte Google reste alors sur « Vérification… », lun-acedia#62) ; chez Avaritia, les clés d'IA ; dans le core, les
+  liaisons aux satellites, les clés des fournisseurs et les abonnements du téléphone. Tout se refait par les écrans ;
+  les données elles-mêmes restent lisibles.
 
 ## Ce que CrOliX prépare avant la tâche 1
 
-Lui seul, parce que cela touche ses comptes et ses accès ; la session ne fait rien avant.
+Dans l'ordre. Lui seul : cela touche ses comptes et ses accès. La session ne fait rien avant.
 
-- [ ] **P1. Le client du réseau privé sur le laptop**, connecté à son réseau : `tailscale status` y répond.
-- [ ] **P2. Le compte de pilotage sur le NAS**, dans UGOS : un compte dédié, qui n'est pas le sien ; standard si UGOS
-  accepte SSH pour lui, administrateur dédié sinon (à essayer, point 1) ; son dossier personnel activé ; un dossier
-  partagé du chantier, sur le stockage protégé, où ce compte a l'écriture et où vivront le déploiement et ses
-  fichiers d'environnement.
-- [ ] **P3. SSH activé** dans UGOS pour la séance : port, niveau élevé, désactivation automatique réglée.
-- [ ] **P4. La clé SSH dédiée** : créée sur le laptop par lui (Ed25519, avec phrase de passe, chargée dans l'agent SSH
-  de Windows pour la séance), la partie publique déposée par lui dans `authorized_keys` du compte de pilotage, avec
-  les options de restriction. La partie privée ne quitte pas le laptop.
-- [ ] **P5. Le nœud du NAS dans le réseau privé**, si l'accès hors de chez lui est retenu (point 2), et sa règle qui
-  ne laisse passer que le laptop sur le port SSH.
-- [ ] **P6. Les valeurs de l'instance**, dans la part privée, à remplir par lui : le nom du NAS et du compte de
-  pilotage, le dossier partagé, le port SSH. Elles ne vont dans aucun dépôt.
+- [ ] **P1. Le compte de pilotage**, dans UGOS : un compte dédié qui n'est pas le sien, standard (point 1), son
+  dossier personnel activé. *Bon quand* : le compte existe et n'est pas dans le groupe des administrateurs.
+- [ ] **P2. Le dossier du déploiement**, dans UGOS : hors partage, hors sauvegarde, hors instantanés si possible ;
+  écriture pour le compte de pilotage seul. *Bon quand* : il ne paraît dans aucun partage réseau ni aucune tâche de
+  sauvegarde.
+- [ ] **P3. SSH activé** dans UGOS : port choisi, niveau élevé, limité au réseau local, désactivation automatique.
+  *Bon quand* : l'écran d'UGOS le montre.
+- [ ] **P4. La clé SSH dédiée**, sur le laptop, dans son terminal : Ed25519, avec une phrase de passe ; la partie
+  publique déposée par lui dans `authorized_keys` du compte de pilotage, avec les options de la part privée. *Bon
+  quand* : la partie privée n'existe que sur le laptop.
+- [ ] **P5. L'agent de la séance** : il lance l'agent de Git Bash sur l'emplacement de la part privée, charge la clé
+  avec une durée de vie, puis essaie une connexion. *Bon quand* : `ssh-add -l` montre la clé avec sa durée, et une
+  connexion au NAS ouvre le compte de pilotage sans mot de passe. Si la durée de vie est refusée, il le dit.
+- [ ] **P6. Le moteur Docker du laptop**, démarré, pour la répétition. *Bon quand* : `docker info` répond.
+- [ ] **P7. Le client du réseau privé sur le laptop**, connecté, pour joindre les apps en HTTPS. *Bon quand* :
+  `tailscale status` répond.
+- [ ] **P8. Les valeurs de l'instance**, dans la part privée : le nom du NAS, le compte de pilotage, le dossier du
+  déploiement, le port SSH. Elles ne vont dans aucun dépôt.
 
 ## Les tâches
 
 **Qui fait quoi.** CrOliX : ce qui touche ses comptes, ses secrets et les gestes irréversibles (publier une version,
-entrer un secret, le vrai compte Google, redémarrer le NAS, effacer). La session qui pilote, par SSH depuis le laptop :
-le reste des gestes sur le NAS, en lecture d'abord. Les agents : le code et la doc, sur le laptop, par PR.
+entrer un secret, le vrai compte Google, régler UGOS, redémarrer le NAS, effacer ou mettre de côté une base). La
+session qui pilote : les gestes de la liste fermée, par SSH depuis le laptop, et la répétition sur le laptop. Les
+agents : le code et la doc, sur le laptop, par PR.
 
-**L'ordre.** 1, 2 et 3 partent ensemble. 4 attend 1, 2 et 3 et l'arrêt A. 5 à 8 se suivent après l'arrêt B. 9 attend
-l'arrêt C. 10, 11, 12 et 14 peuvent s'entrelacer après 9 ; 12 se joue avant toute vraie donnée dans Avaritia. 13
-demande une nuit. 15 se tient tout du long et se ferme à la fin ; 16 en dernier.
+**L'ordre.** 1, 2, 3 et 4 partent ensemble (2 et 3 se croisent : la PR de la pile n'attend pas les versions). 5 attend
+2 et 3 fusionnées et publiées. **Arrêt B**, puis 6 à 12 se suivent. **Arrêt C**, puis 13 à 16. 17 se tient tout du long.
+18 en dernier, après l'**arrêt D**.
 
 **Les points d'arrêt**, où CrOliX valide avant de continuer :
 
-- **A**, après l'état des lieux (tâche 1) : il lit le relevé et dit « on installe » ou renvoie le plan.
-- **B**, avant la première installation (avant la tâche 5) : les versions sont publiées, la page d'installation est
-  corrigée, les fichiers sont prêts sans secrets ; il relit ce que la tâche 6 va lancer.
-- **C**, avant d'entrer le vrai compte Google (avant la tâche 9) : les trois serveurs tournent, les appareils et la
-  liaison sont faits, une copie et une restauration ont été essayées sur Acedia vide.
-- **D**, avant de refermer l'accès (tâche 16) : il dit ce qui reste ouvert et pourquoi.
+- **A**, après l'état des lieux (tâche 1) : il lit le relevé et dit « on continue » ou renvoie le plan.
+- **B**, avant la première écriture sur le NAS (avant la tâche 6) : les versions sont publiées, la pile corrigée, la
+  répétition faite et son relevé lu, l'adresse de retour acceptée par Google (tâche 4), la liste fermée relue.
+- **C**, avant d'entrer le vrai compte Google (avant la tâche 13) : les trois serveurs tournent, les appareils et la
+  liaison sont faits, la règle de copie hors du NAS est posée et vue, une restauration a été essayée, la mise à jour
+  et le retour arrière joués.
+- **D**, avant de refermer l'accès (tâche 18) : il dit ce qui reste ouvert et pourquoi.
+- **E**, chaque fois qu'une base est effacée, remplacée ou mise de côté, même dans une tâche de la session : la
+  session s'arrête, CrOliX dit « vas-y ».
 
 **Pour chaque geste sur le NAS** : la commande, ce qu'on attend, comment on le vérifie, comment on revient en arrière.
-Les commandes exactes sont dans la part privée, par numéro de tâche. Chaque sortie lue est collée dans le relevé du
-chantier, **sans** secret : aucune commande ne lit ni n'affiche un fichier d'environnement. Une sortie qui
-surprend arrête la tâche.
+Les commandes sont dans la liste fermée de la part privée, par numéro de tâche. Une sortie qui surprend arrête la tâche.
 
-### Tâche 1. L'état des lieux, en lecture seule (la session, par SSH)
+### Tâche 1. L'état des lieux, en lecture seule (la session, par SSH ; CrOliX pour UGOS et la box)
 
-- [ ] Rien ne s'écrit sur le NAS ; aucune commande `sudo`, sauf si CrOliX la joue lui-même.
+- [ ] Rien ne s'écrit sur le NAS. Seules les commandes de lecture de la liste fermée.
 
 Ce qu'elle regarde, et ce qu'on attend :
 
-- **Le système** : la version d'UGOS et du noyau ; l'architecture (`x86_64`, les images sont `amd64`).
-- **Docker** : la version du moteur et de Compose v2 (`docker compose version`) ; si le compte de pilotage parle au
-  moteur sans `sudo` ; où Docker range ses données (`docker info`, la racine de ses données) et si ce dossier est sur
-  le stockage protégé du NAS (le groupe de disques, son niveau de redondance).
-- **La place et la mémoire** : l'espace libre du volume qui portera les données ; la mémoire totale et libre. Repère :
-  trois serveurs Node et trois nœuds du réseau privé, de l'ordre d'un gigaoctet à eux tous (à mesurer à la tâche 6).
-- **Ce qui tourne déjà** : les conteneurs, les projets Compose, les ports écoutés par l'hôte. Le déploiement n'en
-  publie aucun, mais un nœud du réseau privé déjà présent sur l'hôte change le point 2.
+- **Le système** : la version d'UGOS et du noyau ; l'architecture (`x86_64`, les images sont `amd64`) ; les outils
+  présents dont la liste fermée a besoin (`grep`, `awk`, `sha256sum`, `sed` et sa variante).
+- **Docker** : la version du moteur et de Compose v2 ; si le compte de pilotage parle au moteur sans `sudo` ; où Docker
+  range ses données et si ce dossier est sur le stockage protégé (le groupe de disques, sa redondance).
+- **La place et la mémoire** : l'espace libre ; la mémoire totale et libre.
+- **Ce qui tourne déjà** : les conteneurs, les projets Compose, les ports écoutés par l'hôte.
 - **`/dev/net/tun`** présent : les nœuds du réseau privé tournent en mode noyau.
-- **L'heure** : synchronisée, et le fuseau de l'hôte.
-- **Le réseau privé** : depuis le laptop, `tailscale status` ; HTTPS et noms courts activés pour le réseau (console,
-  par CrOliX) ; si l'hôte a déjà un nœud.
-- **Les volumes** : où vivront les bases (« À trancher », point 5) et si ce dossier est couvert par les instantanés
-  ou la sauvegarde du NAS.
-- **Les copies du NAS lui-même** : ce qu'UGOS sauvegarde déjà, où, à quelle fréquence ; instantanés du système de
-  fichiers disponibles ou non.
-- **La box** : rien n'est redirigé vers le NAS, UPnP du NAS coupé (relu par CrOliX dans l'écran de sa box et d'UGOS).
-- **L'accès** : le compte de pilotage, ses groupes, s'il a `sudo` ; SSH limité ou non au réseau local ; la
-  désactivation automatique en place.
-- **L'écran Docker d'UGOS** : s'il montre les conteneurs lancés par Compose et leur journal (point 3).
+- **L'heure** : synchronisée ; le fuseau de l'hôte.
+- **Le réseau privé** : HTTPS et noms courts activés (console, par CrOliX) ; les noms `anima`, `acedia`, `avaritia`
+  libres (aucun nœud existant ne les porte, sinon la prod prendrait un nom suffixé).
+- **UGOS, par CrOliX dans ses écrans** : où mettre le dossier du déploiement hors sauvegarde, instantanés et corbeille ;
+  les instantanés et la sauvegarde disponibles ; si UGOS notifie l'arrêt d'un conteneur ; si ses mises à jour
+  automatiques (du système, de son app Docker) redémarrent le moteur, et quand ; si son écran Docker montre les
+  conteneurs d'un projet Compose, leur journal, et sait les relancer ; si SSH est accepté pour un compte standard.
+- **La box**, par CrOliX : rien n'est redirigé vers le NAS ; UPnP du NAS coupé.
 
 **Seuil d'arrêt**, qui renvoie le plan à CrOliX : pas de Compose v2 ; une architecture autre que `x86_64` ; pas de
-`/dev/net/tun` ; moins de 2 Go de mémoire libre ou 10 Go d'espace libre ; des données Docker hors du stockage protégé
-sans moyen de les y mettre ; un port ou un service déjà ouvert sur la box ; un compte de pilotage qui a l'administration
-sans que le point 1 l'ait accepté.
+`/dev/net/tun` ; moins de 2 Go de mémoire libre ou 10 Go d'espace libre ; des données Docker hors du stockage protégé ;
+un port ouvert sur la box ; SSH refusé au compte standard (point 1) ; aucun endroit hors sauvegarde pour le dossier du
+déploiement ; un outil de la liste fermée absent (la liste se réécrit sans lui).
 
-**Preuve** : le relevé écrit dans la PR de lun-docs, valeurs de l'instance retirées (elles vont dans la part privée).
-**Exclu** : installer quoi que ce soit, changer un réglage d'UGOS. **Point d'arrêt A.**
+**Preuve** : le relevé brut dans l'issue privée ; un résumé sans valeur de l'instance dans la PR de lun-docs.
+**Exclu** : installer, régler. **Point d'arrêt A.**
 
 ### Tâche 2. Les versions publiées (un agent prépare, CrOliX publie)
 
-- [ ] **Dans l'ordre** : Avaritia, puis le core, puis Acedia, qui attend lun-acedia#76 (« trois onglets d'Acedia ouverts
-  sur la même adresse, plus rien ne répond », chantier à part, en cours). Avaritia et le core peuvent partir en
-  parallèle de la tâche 1.
-- [ ] **Depuis quel commit** : la tête de `main` le jour de la PR de version, après la tâche 3 si elle touche le
-  dépôt. Le SHA est écrit dans la PR de version.
-- [ ] **Les numéros** : `0.2.0` pour les trois (des fonctions nouvelles, aucun contrat cassé), sauf avis de CrOliX.
+- [ ] **Dans l'ordre** : Avaritia, puis le core, puis Acedia, qui attend lun-acedia#76 (chantier à part, en cours).
+  Avaritia et le core partent en parallèle de la tâche 1.
+- [ ] **Depuis quel commit** : la tête de `main` le jour de la PR de version. Le SHA est écrit dans la PR.
+- [ ] **Les numéros** : `0.2.0` pour les trois (point 8).
 
 Pour chaque dépôt :
 
-1. **Avant** : CI verte sur le commit ; l'image construite **sur le laptop** depuis ce commit (le moteur Docker du
-   laptop est à démarrer par CrOliX) et démarrée sur un volume neuf, sans réseau sortant ni secret réel : elle passe
-   `healthy`, le code du premier appareil est au journal, la page répond. Pour Acedia, la même chose en ouvrant trois
-   onglets derrière un relais HTTPS local si l'agent sait le monter, sinon la preuve de lun-acedia#76 fait foi. Le
-   chemin de la base laissé vide est essayé ici (écart 1) : la preuve dit s'il tombe.
+1. **Avant** : CI verte sur le commit, dont la construction de l'image.
 2. **La PR de version** : `chore(release): <projet> 0.2.0`, préparée par l'agent `livreur`, qui monte la version et
    liste les chantiers regroupés. Fusionnée par CrOliX.
-3. **La release** : publiée par CrOliX, tag `v0.2.0` sur `main`, notes générées par GitHub. Le workflow pousse l'image.
-4. **Après** : le workflow vert ; l'image présente sur GHCR sous `0.2.0` ; son empreinte notée.
+3. **La release** : publiée par CrOliX, tag `v0.2.0` **sur `main`**, notes générées par GitHub.
+4. **Après** : le workflow vert ; l'image sur GHCR sous `0.2.0`. La preuve de l'image elle-même est la répétition.
 
-**Qui publie** : `git.md` le dit déjà, CrOliX (« À trancher », point 6). **Retour arrière** : une release ratée se
-retire par CrOliX (la release et l'image), la version se republie en `0.2.1` ; jamais un tag déplacé.
+**Retour arrière** : une release ratée se retire par CrOliX (la release et l'image), la version se republie en
+`0.2.1` ; jamais un tag déplacé. Une faute trouvée par la répétition donne une `0.2.1`, et la répétition se rejoue.
 **Exclu** : un correctif de code dans la PR de version.
 
-### Tâche 3. La page d'installation relue contre le code (un agent, Lun'Anima et les deux satellites)
+### Tâche 3. La pile et sa page, relues contre le code (un agent, Lun'Anima et les deux satellites)
 
-- [ ] **Lun'Anima** : la page d'installation du core corrigée des écarts 1 à 7 et 9, et le choix des points 3 et 5
-  appliqué. Le détail est dans la part privée, à porter dans l'issue privée. Preuve : la PR relue, CI verte, et pour
-  ce qui touche le fichier de Compose, `docker compose config` sur le laptop sans erreur.
-- [ ] **Lun'Acedia et Lun'Avaritia** : `LLM_PRICES` dans le `.env.example`, commentée, sans valeur ; le lien de
-  restauration de leur README pointé vers la page du NAS (tâche 15) quand elle existe. Ces deux points peuvent entrer
-  dans la PR de version de chacun.
-- **Exclu** : changer un comportement du code. Si l'écart 1 se confirme et que la doc ne suffit pas (une valeur vide
-  qui devrait valoir l'absence), c'est un correctif à part, `standard`, dans chaque dépôt, avant sa version.
+- [ ] **Lun'Anima**, une PR relue, la part privée en donne le détail : la page d'installation corrigée des écarts 1 à
+  10 ; **le fuseau `Europe/Paris` pour chaque app** ; une borne à la taille des journaux de chaque conteneur ; le
+  dossier des copies de chaque app monté sur un dossier du NAS donné en configuration ; l'image du réseau privé
+  épinglée ; les noms des nœuds réglables, ceux de la prod par défaut (pour la répétition) ; la copie avant une mise à
+  jour, décrite ; le chemin du premier appareil, tel que le point 3 le tranche.
+- [ ] **Lun'Acedia et Lun'Avaritia** : `LLM_PRICES` dans le `.env.example`, commentée, sans valeur. Le lien de
+  restauration de leur README passe à la tâche 17.
+- **Preuve** : la PR relue, CI verte ; la configuration de la pile acceptée par Compose sur le laptop ; le reste dans la
+  répétition.
+- **Exclu** : changer un comportement du code applicatif. Si un écart demande du code (une valeur vide qui devrait
+  valoir l'absence), c'est un correctif à part, `standard`, avant la version de son dépôt.
 
-### Tâche 4. Préparer le NAS, sans secret (la session, par SSH)
+### Tâche 4. L'adresse de retour de Google, essayée dans la console (CrOliX, avant l'arrêt B)
 
-- [ ] Le dossier de déploiement du core copié depuis `main` au commit de sa version, dans le dossier partagé du
-  chantier ; l'empreinte des fichiers comparée à celle du dépôt.
-- [ ] Les fichiers d'environnement créés depuis leur modèle, **sans aucun secret** : les versions, l'adresse d'écoute
-  et le chemin de la base tels que corrigés à la tâche 3, l'adresse de retour Google d'Acedia (`GOOGLE_REDIRECT_URI`,
-  sur son nom dans le réseau privé). Droits `600`, au compte de pilotage.
-- [ ] Les dossiers des données, si le point 5 retient des dossiers du NAS : créés, au propriétaire `node` de l'image
-  (uid 1000), droits `700`.
-- **Vérifier** : la liste des fichiers et leurs droits ; `docker compose config` sur le NAS, sortie relue sans les
-  valeurs (seules les clés des variables).
-- **Revenir en arrière** : effacer le dossier du chantier ; rien d'autre n'a bougé.
-- **Exclu** : démarrer un conteneur, se connecter à GHCR. **Point d'arrêt B.**
+- [ ] Dans la console Google, un projet propre à la prod (point 4), son écran de consentement en « Production », les
+  API Gmail, Agenda et Tasks activées, les cinq droits du code déclarés.
+- [ ] Un client OAuth « Application Web » dont l'adresse de retour autorisée est celle d'Acedia dans le réseau privé,
+  suivie de `/oauth/callback`. Le nom est connu d'avance : le nom du nœud et celui du réseau. Aucun secret n'est copié
+  ailleurs : l'identifiant et le secret restent dans la console jusqu'à la tâche 13.
+- **On attend** : la console enregistre l'adresse (règles de Google : HTTPS, pas d'adresse IP, un domaine de la liste
+  des suffixes publics, [règles](https://developers.google.com/identity/protocols/oauth2/web-server)).
+- **Arrêt** si la console refuse l'adresse, ou si l'écran de consentement bloque l'app pour ses droits (Gmail en
+  modification est un droit restreint) : le plan revient à CrOliX.
 
-### Tâche 5. Les secrets (CrOliX)
+### Tâche 5. La répétition complète sur le laptop (la session ; CrOliX pour la clé et les codes)
 
-Chaque secret est saisi par CrOliX, sur le NAS, dans un éditeur ouvert par lui sur le fichier (par sa propre session
-SSH ou l'éditeur de fichiers d'UGOS), ou par l'écran de l'app. **Jamais** dans la conversation, dans un dépôt, dans une
-ligne de commande (l'historique du shell), ni dans un journal. Une copie de chaque clé de chiffrement va dans son
-gestionnaire de mots de passe : sans elle, une copie de base ne rend plus ses secrets.
+La pile entière, avec les images **tirées du registre**, sur le moteur Docker du laptop. Un relevé écrit, lu à
+l'arrêt B.
 
-- **La clé d'authentification du réseau privé.** Créée dans la console Tailscale, préapprouvée, **avec une
-  étiquette**, pour une durée courte. Saisie par CrOliX dans le fichier d'environnement du déploiement ; **vidée** et
-  révoquée une fois les trois nœuds en ligne : l'état de chaque nœud reste dans son volume.
-- **Le jeton de lecture des images.** Un jeton GitHub classique limité à `read:packages`. Saisi par CrOliX à la
-  connexion Docker du compte de pilotage, par l'entrée standard. Vit dans la configuration Docker de ce compte, en
-  clair, droits `600`. Échéance de 90 jours, rappel noté, remplacé avant.
-- **La clé de chiffrement de chaque app.** Tirée sur le NAS par CrOliX (32 octets en base64), saisie dans le fichier
-  d'environnement de l'app, une copie hors du NAS. Sans échéance : elle ne change pas tant que sa base vit.
-- **L'identifiant et le secret OAuth de Google.** Le client de la prod, créé dans la console Google (tâche 9), saisis
-  par CrOliX dans le fichier d'Acedia. Révoqués en cas de fuite.
-- **La clé du fournisseur de modèle du core.** Créée chez le fournisseur, saisie par CrOliX **par l'écran** du core,
-  avec son échéance (alerte à J-14 et J-3). Vit dans la base du core, chiffrée.
-- **Les clés d'IA d'Acedia et d'Avaritia.** De même, **par l'écran** Réglages de chaque app, chiffrées dans sa base.
-- **Les clés de notification.** Le core les crée lui-même, chiffrées dans sa base : personne ne les saisit.
+- [ ] **La clé d'inscription** : créée par CrOliX dans la console, **éphémère et étiquetée** ; des noms de nœuds
+  distincts de ceux de la prod (préfixés d'`essai-`).
+- [ ] **Le premier démarrage** : les six conteneurs, les trois apps répondent à leur contrôle de santé ; chaque app
+  répond en HTTPS sur son nom d'essai depuis le navigateur du laptop ; la ligne « Base copiée : » donne un chemin dans
+  le volume ; l'empreinte de chaque image notée.
+- [ ] **Le fuseau** : l'heure lue dans chaque conteneur est celle de Paris ; une copie datée du jour de Paris. L'heure
+  d'une carte sur un vrai événement se vérifie sur le NAS (tâche 13) : la répétition tourne sans Google.
+- [ ] **Le premier appareil** : CrOliX lit le code dans l'écran du moteur Docker du laptop (le journal du conteneur),
+  comme il le fera sur le NAS ; la session ne le lit pas. Puis un second appareil par un code de l'écran.
+- [ ] **La liaison** : Acedia et Avaritia reliées au core par l'écran, par leurs adresses d'essai ; un événement du
+  satellite arrive au Journal du core.
+- [ ] **La copie et la restauration**, comme à la tâche 11 : repère, copie, restauration à part et à la place,
+  déchiffrement vrai.
+- [ ] **La copie avant mise à jour, la mise à jour et le retour arrière**, comme à la tâche 12.
+- [ ] **Un nœud du réseau privé redémarré seul** : son app répond-elle encore au contrôle de santé, et par le réseau ?
+  Le relevé le dit, et la parade s'écrit.
+- [ ] **La mémoire** de chaque conteneur, relevée.
+- [ ] **La fin** : la pile arrêtée, les volumes d'essai retirés (sur le laptop, rien de réel), **les nœuds d'essai
+  retirés de la console**, la clé éphémère expirée. *Vérifié* : la console ne montre plus aucun nœud `essai-`.
+- **Exclu** : Google (la répétition tourne sans lui) ; une clé de fournisseur réelle, sauf une clé de développement
+  pour un seul tour.
 
-- **Vérifier** (la session) : chaque fichier a ses droits `600` et la ligne de chaque secret attendu est non vide,
-  sans afficher la valeur (un test sur la longueur).
-- **Revenir en arrière** : un secret mal saisi se ressaisit ; un secret qui a pu fuir se révoque et se remplace
-  (`securite.md`).
-- **Exclu** : les secrets de Google avant l'arrêt C ; une clé de fournisseur dans un fichier quand l'écran la prend.
+### Tâche 6. Préparer le NAS, sans secret (la session, par SSH) ; **arrêt B avant**
 
-### Tâche 6. Le premier démarrage (la session, par SSH)
+- [ ] La pile copiée depuis `main` au commit de la PR de la tâche 3 dans le dossier du déploiement ; l'empreinte des
+  fichiers comparée à celle du dépôt.
+- [ ] Les fichiers d'environnement créés depuis leur modèle, **sans aucun secret** : les versions, le chemin des bases
+  tel que la tâche 3 le fixe, le dossier des copies, l'adresse de retour Google d'Acedia. Droits `600`.
+- [ ] Le dossier des copies de chaque app, sur le stockage protégé : préparé par **CrOliX** dans UGOS (il doit être à
+  l'utilisateur de l'image, ce que la session ne peut pas régler sans élévation).
+- **Vérifier** : les droits ; la liste des services de la pile, sans les valeurs.
+- **Revenir en arrière** : le dossier du déploiement vidé, par CrOliX ; rien d'autre n'a bougé.
+- **Exclu** : démarrer un conteneur, se connecter au registre.
 
-- [ ] Tirer les trois images à leur version, puis tout démarrer.
-- **On attend** : les trois apps `healthy` en moins d'une minute ; trois nœuds en ligne dans la console du réseau
-  privé, étiquetés ; depuis le laptop, chaque app répond en HTTPS sur son nom, avec un certificat valide ; Acedia dit
-  au journal « Google non configuré » (normal avant la tâche 9).
-- **Vérifier** : l'état des conteneurs ; la mémoire prise par chacun (relevée, comparée au repère de la tâche 1) ; les
-  trois premières lignes de chaque journal, sans les codes d'appairage dans le relevé public.
-- **Après** : la clé d'authentification vidée du fichier et révoquée dans la console (tâche 5).
-- **Revenir en arrière** : tout arrêter **sans effacer les volumes** ; l'option qui les efface n'est jamais jouée sur
-  le NAS. Les nœuds se retirent de la console si on abandonne.
-- **Exclu** : relier quoi que ce soit, ouvrir un port.
+### Tâche 7. Les secrets (CrOliX)
 
-### Tâche 7. Les premiers appareils et la liaison (CrOliX, la session en appui)
+Chaque secret est saisi par CrOliX : sur le NAS, par l'éditeur de fichiers d'UGOS ou une session SSH à lui ; ou par
+l'écran de l'app. **Jamais** dans la conversation, dans un dépôt, dans une ligne de commande (l'historique du shell),
+ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire de mots de passe.
 
-- [ ] **Le premier appareil de chaque app**, par le chemin retenu au point 3. Recommandé : CrOliX lit le code dans
-  l'écran Docker d'UGOS (le journal du conteneur), s'il le montre (tâche 1) ; sinon la session le lit au journal et
-  le lui dit. Le navigateur du laptop d'abord, dans l'ordre : le core, Acedia, Avaritia, chacun à son nom HTTPS.
-  Puis le téléphone, par un code donné par l'appareil appairé (Atelier › Appareils, Réglages › Appareils et
+- **La clé d'inscription du réseau privé.** Créée dans la console, préapprouvée, **étiquetée**, de courte durée.
+  Saisie dans le fichier du déploiement ; vidée et révoquée dès les trois nœuds en ligne (tâche 8). L'état de chaque
+  nœud reste dans son volume.
+- **Le jeton de lecture des images.** Un jeton GitHub classique limité à `read:packages`, rangé dans son gestionnaire
+  de mots de passe. Saisi par lui à la connexion au registre, par l'entrée standard, **juste avant un tirage** ; la
+  session tire, puis se **déconnecte** du registre : le jeton ne reste pas en clair sur le NAS entre deux tirages.
+  Échéance de 90 jours, rappel noté.
+- **La clé maîtresse de chaque app.** Tirée sur le NAS par lui (32 octets en base64), écrite dans le fichier de l'app
+  par une commande dont la ligne ne porte pas la valeur, copiée dans son gestionnaire. Sans échéance.
+- **L'identifiant et le secret OAuth de Google.** Le client de la tâche 4, saisis dans le fichier d'Acedia à la tâche
+  13 seulement.
+- **La clé du fournisseur de modèle du core** et **les clés d'IA d'Acedia et d'Avaritia** : par leurs écrans, avec
+  leur échéance (tâche 10), chiffrées en base.
+- **Les clés de notification** : le core les crée lui-même.
+- **Vérifier** (la session) : droits `600` ; chaque ligne attendue non vide, par sa seule longueur.
+- **Revenir en arrière** : un secret mal saisi se ressaisit ; un secret qui a pu fuir se révoque et se remplace.
+
+### Tâche 8. Le premier démarrage (la session, par SSH)
+
+- [ ] CrOliX se connecte au registre ; la session tire les trois images à leur version, puis se déconnecte ; elle
+  compare l'empreinte de chaque image à celle de la répétition ; puis tout démarre.
+- **On attend** : les trois apps répondent à leur contrôle de santé ; trois nœuds en ligne, étiquetés, à leur nom de
+  prod (pas un nom suffixé) ; depuis le laptop, chaque app en HTTPS avec un certificat valide ; « Base copiée : » au
+  journal filtré, avec un chemin dans le dossier des copies.
+- **Vérifier** : la mémoire de chaque conteneur, contre la tâche 1 et la répétition ; l'heure de Paris dans chaque
+  conteneur.
+- **Après** : la clé d'inscription vidée par CrOliX et révoquée dans la console.
+- **Revenir en arrière** : la pile arrêtée **sans effacer les volumes**.
+
+### Tâche 9. Les premiers appareils et la liaison (CrOliX)
+
+- [ ] **Le premier appareil de chaque app** : CrOliX lit le code dans l'écran Docker d'UGOS, s'il montre le journal
+  (tâche 1). Le navigateur du laptop d'abord : le core, Acedia, Avaritia, chacun à son nom HTTPS. Un code expiré (dix
+  minutes) : un redémarrage de l'app, depuis l'écran d'UGOS, en donne un neuf. **Si aucun écran ne montre le code, le
+  critère « sans terminal » n'est pas tenu sur le NAS** : c'est un écart ouvert, écrit dans la page et dans l'issue ;
+  CrOliX lit alors le code par sa propre session SSH. La session ne le lit jamais.
+- [ ] Le téléphone, par un code donné par l'appareil appairé (Atelier › Appareils, Réglages › Appareils et
   applications) : sans terminal.
-- [ ] **Relier Acedia et Avaritia au core, par l'écran** : dans le satellite, « Relier un appareil » ; dans le core,
-  Atelier › Postes, « Relier », l'adresse HTTPS du satellite dans le réseau privé, puis le code.
-- [ ] **L'adresse de la page** d'Acedia et d'Avaritia dans Atelier › Postes, la même adresse HTTPS.
-- **Vérifier** : la Constellation montre les deux satellites joignables ; un événement émis par un satellite **après**
-  la liaison arrive au Journal du core (l'entrée « … relié. » que le core écrit lui-même ne le prouve pas).
-- **Revenir en arrière** : révoquer un appareil ou une liaison par l'écran ; une base neuve se refait en effaçant son
-  volume, geste de CrOliX, seulement avant l'arrêt C.
+- [ ] **Relier Acedia et Avaritia au core, par l'écran**, et l'adresse de leur page dans Atelier › Postes.
+- **Vérifier** : la Constellation montre les deux satellites joignables ; un événement émis par un satellite après la
+  liaison arrive au Journal du core.
+- **Revenir en arrière** : révoquer un appareil ou une liaison par l'écran.
 - **Exclu** : appairer Luxuria (la session du desktop).
 
-### Tâche 8. Le fournisseur de modèle, par l'écran (CrOliX)
+### Tâche 10. Le fournisseur de modèle, par l'écran (CrOliX)
 
-- [ ] **Avant la clé**, une phrase au core : l'écran dit qu'aucune clé n'est enregistrée pour le fournisseur, et le
-  téléphone ne reçoit rien de faux. C'est la vérification de « l'alerte quand une clé manque ». De même dans Acedia et
-  Avaritia avant leur clé d'IA : leur écran le dit.
+- [ ] **Avant la clé**, une phrase au core : l'écran dit qu'aucune clé n'est enregistrée pour le fournisseur. De même
+  dans Acedia et Avaritia avant leur clé d'IA. C'est « l'alerte quand une clé manque ».
 - [ ] **La clé d'Anthropic**, saisie dans l'écran du core, avec son échéance ; le fournisseur Anthropic et le modèle
-  Claude Haiku 5.5 choisis dans l'écran (raisonnement coupé, déjà le réglage de la table du core) ; les plafonds du
-  jour et de la nuit relus.
-- [ ] **Un premier tour de conversation** depuis le navigateur du laptop : une réponse en flux ; puis un outil (« relis
-  ma journée ») ; l'écran des dépenses dit le fournisseur et un coût non nul.
-- [ ] Les clés d'IA d'Acedia et d'Avaritia, par leurs Réglages, avec un modèle qui a un prix (ou son prix déclaré).
-- **Vérifier** : un redéploiement du core (tâche 12, ou un simple redémarrage du conteneur) garde la clé et le choix.
-- **Revenir en arrière** : retirer la clé dans l'écran, la révoquer chez le fournisseur.
-- **Exclu** : mesurer le délai de la voix (la session du desktop).
+  Claude Haiku 5.5 choisis dans l'écran (raisonnement coupé : le réglage par défaut du core pour ce modèle) ; les
+  plafonds du jour et de la nuit relus.
+- [ ] **Un premier tour de conversation** : une réponse en flux, puis un outil (« relis ma journée ») ; l'écran des
+  dépenses dit le fournisseur et un coût non nul.
+- [ ] Les clés d'IA d'Acedia et d'Avaritia, par leurs Réglages, avec un modèle qui a un prix.
+- **Vérifier** : la mise à jour de la tâche 12, ou un redémarrage, garde la clé et le choix.
+- **Revenir en arrière** : la clé retirée de l'écran et révoquée chez le fournisseur.
 
-### Tâche 9. Google en production (CrOliX) ; **point d'arrêt C avant**
+### Tâche 11. Copies, sauvegarde hors du NAS, restauration essayée (la session ; CrOliX valide ; arrêt E)
 
-- [ ] **Dans la console Google**, par CrOliX : le projet OAuth en « Production » (en « Test », le jeton tombe au bout de
-  sept jours) ; un client OAuth « Application Web » propre à la prod (point 4), dont l'adresse de retour autorisée est
-  celle d'Acedia dans le réseau privé, suivie de `/oauth/callback`. Les règles de Google : HTTPS, pas d'adresse IP, un
-  domaine de premier niveau de la liste des suffixes publics
-  ([règles des adresses de retour](https://developers.google.com/identity/protocols/oauth2/web-server)) ; le domaine du
-  réseau privé y est, mais **si la console refuse cette adresse, on s'arrête** et le plan revient à CrOliX.
-- [ ] L'identifiant et le secret dans le fichier d'Acedia (tâche 5), puis Acedia redémarrée (la session).
-- [ ] **Le vrai compte**, connecté par CrOliX dans Acedia, Réglages › Compte Google. L'avertissement « Google n'a pas
-  validé cette application » s'affiche (lun-acedia#55) : il le passe, c'est son propre client, pour son seul compte.
-  La validation par Google des champs sensibles de Gmail est hors du MVP (point 4).
-- **Vérifier** : Acedia dit Google connecté ; le premier tri passe sur de vrais mails sans erreur au journal ; une
-  carte attend dans « À valider » sans rien envoyer.
-- **Revenir en arrière** : déconnecter dans Acedia ; retirer l'accès de l'app dans le compte Google de CrOliX ; vider
-  les deux valeurs du fichier.
-- **Exclu** : le compte de test sur le NAS ; brancher Google par l'écran (après le MVP).
-
-### Tâche 10. Le téléphone (CrOliX)
-
-- [ ] Le client du réseau privé sur le téléphone ; la PWA du core installée depuis son adresse HTTPS ; les
-  notifications autorisées. Celles d'Acedia et d'Avaritia de même, s'il les veut sur l'écran d'accueil.
-- [ ] **Une notification de bout en bout** : un événement qui en mérite une (une urgence d'Acedia, ou le geste de
-  test s'il existe dans l'écran) arrive sur le téléphone verrouillé, et son toucher ouvre le bon écran.
-- **Vérifier** : la capture du téléphone, l'heure du Journal du core.
-- **Revenir en arrière** : se désabonner dans l'app ; révoquer l'appareil.
-
-### Tâche 11. Une copie de chaque base, et une restauration essayée (la session ; CrOliX valide)
-
-- [ ] **Les copies** : la copie du jour de chaque base est dans son dossier de copies, le journal de chaque serveur dit
-  « Base copiée ».
-- [ ] **Une restauration essayée pour de vrai, sur une base à part** : pour chaque app, la dernière copie copiée (pas
-  déplacée) dans un volume jetable, puis l'image de la même version démarrée sur elle **sans aucun réseau** et avec la
-  même clé de chiffrement : sans réseau, elle ne peut ni joindre Google, ni trier, ni envoyer. On attend : elle passe
-  `healthy`, son journal ne dit aucune erreur de déchiffrement, le contrôle d'intégrité de SQLite répond `ok`, et le
-  compte des lignes des tables principales est celui de la base vivante au moment de la copie. Puis le conteneur et
-  le volume jetables sont retirés.
-- [ ] **Une restauration à la place, sur Acedia vide**, avant l'arrêt C : la base mise de côté avec ses fichiers `-wal`
-  et `-shm`, la copie remise, le satellite relié de nouveau au core, un événement vu au Journal ; puis le retour à la
-  base mise de côté. C'est le geste de la page du desktop (§ 9), refait pour le NAS.
-- [ ] **Une copie hors du NAS** : la règle retenue au point 5 posée par CrOliX dans UGOS, et sa première exécution vue.
-- **Revenir en arrière** : la base mise de côté se remet à sa place ; rien ne s'efface avant que la restauration soit
+- [ ] **Les copies** : celle du jour de chaque base, dans son dossier de copies, avec sa ligne au journal filtré.
+- [ ] **La copie hors du NAS** : la règle posée par CrOliX dans UGOS, sur les seuls dossiers des copies et les seuls
+  fichiers `<nom>-AAAA-MM-JJ.db`, vers un autre support ; sa première exécution vue. Avant l'arrêt C.
+- [ ] **Une restauration à part** : pour chaque app, **une entrée repère** créée par l'écran avant la copie (une règle
+  nommée dans Acedia, une fiche dans Avaritia, une phrase dans le core) ; la copie faite ; la copie recopiée dans un
+  volume jetable **avec l'image de l'app elle-même** ; l'app démarrée sur ce volume **sans aucun réseau**, par la pile
+  (un fichier d'essai qui lit l'environnement comme elle, guillemets compris). On attend : elle répond à son contrôle
+  de santé ; le contrôle d'intégrité de SQLite répond `ok` ; l'entrée repère est dans la base restaurée. Puis le
+  conteneur et le volume jetables sont retirés (arrêt E).
+- [ ] **Une restauration à la place, sur Acedia et Avaritia sans vraies données**, avant l'arrêt C : la base mise de
+  côté (arrêt E), la copie remise, l'app redémarrée ; la clé d'IA saisie avant la copie **se vérifie** dans Réglages
+  (le déchiffrement est vrai, avec la même clé maîtresse) ; le satellite relié de nouveau au core, un événement vu au
+  Journal ; puis le retour à la base mise de côté.
+- **Revenir en arrière** : la base mise de côté remise à sa place ; rien ne s'efface avant que la restauration soit
   vérifiée.
-- **Exclu** : restaurer la base vivante d'Acedia une fois le vrai compte entré.
+- **Exclu** : restaurer à la place une base qui porte de vraies données.
 
-### Tâche 12. Une mise à jour, puis un retour arrière (la session)
+### Tâche 12. Une mise à jour, puis un retour arrière (la session ; arrêt E)
 
-- [ ] Sur **Avaritia, avant toute vraie donnée** (point 7) : une copie de sa base mise de côté ; le script de
-  déploiement passe Avaritia à `0.1.0`, puis revient à la version en service par le retour arrière.
-- **On attend** : l'un ou l'autre de deux résultats, chacun une preuve. Ou `0.1.0` passe `healthy` sur la base
-  migrée, et le retour arrière remet `0.2.0`, `healthy`. Ou `0.1.0` ne passe pas, et le script remet de lui-même
-  `0.2.0` : le retour automatique est prouvé, et l'on sait qu'un retour arrière sur une base migrée demande la copie
-  d'avant. Dans les deux cas : la liaison au core tient, la base est entière.
-- **Vérifier** : les deux fichiers de versions du déploiement ; l'état du conteneur ; la Constellation.
-- **Revenir en arrière** : la copie mise de côté, remise comme à la tâche 11.
-- **Exclu** : jouer ce geste sur le core ou sur Acedia une fois leurs vraies données entrées.
+Avaritia a deux migrations depuis `v0.1.0`, deux ajouts. Le geste dit donc qu'un retour arrière tolère une migration
+qui ajoute, rien de plus : **la vraie parade reste la copie d'avant la mise à jour**. Joué dans la répétition, puis
+une fois sur le NAS, sur Avaritia, avant toute vraie donnée.
 
-### Tâche 13. Un redémarrage du NAS, et une nuit rattrapée (CrOliX éteint, la session vérifie)
+- [ ] **La copie d'avant** : Avaritia arrêtée ; sa base copiée entière, avec ses fichiers `-wal` et `-shm` s'il y en a,
+  dans un dossier daté du dossier des copies, par l'image de l'app ; puis relancée.
+- [ ] Le geste de déploiement passe Avaritia à `0.1.0`, puis le retour arrière la remet à `0.2.0`.
+- **On attend** : ou `0.1.0` répond, puis le retour arrière remet `0.2.0` ; ou `0.1.0` ne répond pas et le geste remet
+  seul `0.2.0`. Dans les deux cas la liaison tient et l'entrée repère est là.
+- **Revenir en arrière** : la copie d'avant remise (arrêt E).
 
-- [ ] Un soir, CrOliX éteint le NAS par UGOS et le rallume le lendemain **après 5 h**. La nuit de 5 h a donc été
-  manquée.
-- **On attend** : sans rien taper, les six conteneurs repartent, chaque nœud du réseau privé avant son app ; les trois
-  apps `healthy` ; la nuit manquée jouée dans la minute qui suit, puis la lettre du matin ; les copies du jour faites ;
+### Tâche 13. Google en production (CrOliX) ; **arrêt C avant**
+
+- [ ] L'identifiant et le secret du client de la tâche 4 dans le fichier d'Acedia ; Acedia redémarrée.
+- [ ] **Le vrai compte**, connecté par CrOliX dans Acedia, Réglages › Compte Google. L'avertissement « Google n'a pas
+  validé cette application » s'affiche (lun-acedia#55) : il le passe, c'est son propre client. La validation par
+  Google : hors du MVP.
+- [ ] **Les gardes du premier jour**, tenues jusqu'à une date que CrOliX choisit (point 9) : le seuil reste à 100 ;
+  aucune règle avant qu'il en crée une ; la première synchronisation ne trie pas l'historique.
+- **Vérifier** : Acedia dit Google connecté ; aucun mail ancien n'entre en file ; un mail arrivé après la connexion
+  donne une proposition qui attend ; **l'heure d'un vrai événement** est juste dans l'agenda et sur une carte.
+- **Revenir en arrière** : déconnecter dans Acedia ; retirer l'accès de l'app dans le compte Google ; vider les deux
+  valeurs.
+
+### Tâche 14. Le téléphone (CrOliX)
+
+- [ ] Le client du réseau privé ; la PWA du core installée depuis son adresse HTTPS ; les notifications autorisées.
+  Acedia et Avaritia de même s'il les veut.
+- [ ] **Une notification de bout en bout** : un événement qui en mérite une arrive sur le téléphone verrouillé, et son
+  toucher ouvre le bon écran.
+- **Revenir en arrière** : se désabonner ; révoquer l'appareil.
+
+### Tâche 15. Un redémarrage du NAS, une nuit rattrapée, et la surveillance (CrOliX ; la session vérifie)
+
+- [ ] Un soir, CrOliX éteint le NAS par UGOS et le rallume le lendemain après 5 h.
+- **On attend** : sans rien taper, les six conteneurs repartent, chaque nœud avant son app ; les trois apps répondent ;
+  la nuit manquée jouée dans la minute, puis la lettre du matin ; les copies du jour faites, datées du jour de Paris ;
   le téléphone joint les trois apps.
-- **Vérifier** : l'heure de démarrage de chaque conteneur ; le journal du core (la nuit, le matin) ; la Constellation.
-  Un nœud du réseau privé reparti après son app laisse l'app sans réseau : à voir ici, et sa parade écrite s'il arrive
-  (risques).
-- **Revenir en arrière** : rien à défaire ; un conteneur resté arrêté se relance, et l'écart s'écrit.
+- **La surveillance** : si UGOS notifie l'arrêt d'un conteneur (tâche 1), CrOliX l'active ; sinon, **un coup d'œil
+  quotidien** à la Constellation et à l'écran Docker d'UGOS, accepté par lui et écrit dans la page. La parade sans SSH :
+  relancer le conteneur depuis l'écran d'UGOS. Les mises à jour automatiques d'UGOS qui redémarrent le moteur : une
+  fenêtre choisie par lui, hors de 5 h.
+- **Revenir en arrière** : rien à défaire ; un conteneur resté arrêté se relance depuis l'écran, et l'écart s'écrit.
 
-### Tâche 14. Les trois vérifications de #185 (CrOliX, sur le téléphone et le vrai compte)
+### Tâche 16. Les trois vérifications de #185 (CrOliX, sur le téléphone et le vrai compte)
 
-- [ ] **Les chevauchements** : deux vrais événements qui se chevauchent dans son agenda principal, dont il est le seul
-  organisateur ; la carte propose d'en déplacer un ; acceptée, l'événement bouge dans Google. Un conflit sur un agenda
-  secondaire donne une carte qui signale sans proposer.
-- [ ] **L'export** : l'export de la bibliothèque d'Avaritia téléchargé depuis le téléphone, et ouvert.
-- [ ] **L'agent sans nom en dur** : aucun texte d'Acedia, ni sur le téléphone ni au Journal du core, ne porte « Pina » ;
-  il lit le nom réglé, « Agent » par défaut.
-- **Vérifier** : les captures ; #185 cochée et fermée si sa page du site est faite.
+- [ ] **Les chevauchements** : deux vrais événements de son agenda principal qui se chevauchent, dont il est le seul
+  organisateur ; la carte propose d'en déplacer un ; acceptée, l'événement bouge dans Google, à la bonne heure. Un
+  conflit sur un agenda secondaire donne une carte qui signale.
+- [ ] **L'export** de la bibliothèque d'Avaritia, téléchargé depuis le téléphone et ouvert.
+- [ ] **L'agent sans nom en dur** : aucun texte d'Acedia, sur le téléphone ni au Journal du core, ne porte « Pina ».
 
-### Tâche 15. La page de mise en service du NAS (un agent, tout du long)
+### Tâche 17. La page de mise en service du NAS (un agent, tout du long)
 
-- [ ] **lun-docs, `docs/mise-en-service-nas.md`**, publique : ce que CrOliX voit et fait, geste par geste, comme la page
-  du desktop, sans commande, chemin ni variable du core (renvoi à la page privée). Elle remplace celle du desktop pour
-  l'usage ; l'en-tête de `mise-en-service-desktop.md` y renvoie, le reste de cette page ne change pas. Elle dit
-  comment refaire chaque geste : appairer, relier, restaurer, mettre à jour, revenir en arrière, redémarrer.
-- [ ] **« Ce qui a surpris »**, une section de la page, tenue pendant les tâches 1 à 14.
-- [ ] **La page d'installation du core** : ce que l'installation réelle a appris, dans la PR privée.
-- [ ] **Les README d'Acedia et d'Avaritia** : leur lien de restauration vers la nouvelle page.
-- [ ] La feuille de route : l'état du chantier au § 1 et dans « Le recadrage du 20/11 ».
+- [ ] **`docs/mise-en-service-nas.md`**, publique : ce que CrOliX voit et fait, geste par geste, sans commande, chemin
+  ni variable du core (renvoi à la page privée). Elle remplace celle du desktop pour l'usage ; l'en-tête de
+  `mise-en-service-desktop.md` y renvoie. Elle dit comment refaire chaque geste, le coup d'œil quotidien, et l'écart du
+  premier appareil s'il reste ouvert.
+- [ ] **« Ce qui a surpris »**, tenue pendant les tâches 1 à 16.
+- [ ] La page d'installation du core, ce que l'installation a appris, dans une PR privée ; les README d'Acedia et
+  d'Avaritia, leur lien de restauration vers la nouvelle page ; l'issue des droits Google d'Acedia ouverte.
+- [ ] La feuille de route : l'état du chantier.
 - **Vérifier** : `npm run check`, `npm test`, `npm run sync:check` ; la page relue par le `reviewer`.
 
-### Tâche 16. Refermer l'accès (CrOliX, après le point d'arrêt D)
+### Tâche 18. Refermer l'accès (CrOliX, après l'arrêt D)
 
-- [ ] SSH désactivé dans UGOS ; la clé du chantier retirée de `authorized_keys` ; le compte de pilotage désactivé ou
-  gardé **avec sa raison écrite** (les mises à jour de la semaine passent par lui) et une date de revue.
-- [ ] Le nœud du NAS dans le réseau privé et sa règle : retirés, ou gardés avec leur raison.
-- [ ] Le jeton de lecture des images : gardé (les mises à jour en ont besoin), son échéance notée.
-- **Vérifier** : depuis le laptop, la connexion SSH échoue ; la console du réseau privé montre les seuls nœuds voulus.
+- [ ] SSH désactivé dans UGOS ; la clé retirée de `authorized_keys` ; le compte de pilotage désactivé, ou gardé avec sa
+  raison écrite (les mises à jour de la semaine) et une date de revue.
+- [ ] L'agent de la séance arrêté ; la clé privée gardée ou détruite, selon ce choix.
+- [ ] Le jeton de lecture des images : dans le gestionnaire seulement, aucune connexion au registre restée ouverte.
+- **Vérifier** : depuis le laptop, la connexion SSH échoue ; la console du réseau privé ne montre que les nœuds voulus.
 
 ## À trancher par CrOliX
 
-1. **Le compte de pilotage.** (a) Un compte standard d'UGOS dans le groupe `docker`, si UGOS accepte SSH pour lui ;
-   (b) un administrateur dédié, distinct du sien, si UGOS le refuse. Dans les deux cas le compte vaut root par Docker :
-   la limite est la clé, le temps et la fin écrite. **Recommandé : (a), essayé à la tâche 1 ; (b) sinon.**
-2. **L'accès hors de chez lui.** (a) Le réseau local seulement : les séances se jouent chez lui ; (b) un nœud pour le
-   NAS lui-même dans le réseau privé, et une règle qui ne laisse que le laptop sur le port SSH. **Recommandé : (b)**,
-   puisqu'il est hors de chez lui la plupart du temps ; retiré ou justifié à la tâche 16. Comment poser ce nœud
-   (une app d'UGOS, s'il y en a une, ou un conteneur sur le réseau de l'hôte) : à voir à la tâche 1.
-3. **Le premier appareil sans terminal sur le NAS.** Aucune page ne donne le code derrière le relais. (a) Le code lu
-   dans l'écran Docker d'UGOS, qui montre le journal du conteneur : sans terminal, sans code nouveau ; (b) la session
-   le lit au journal et le dit : un terminal, mais pas celui de CrOliX ; (c) un chantier de code qui donne le code
-   autrement : avant le MVP, contraire à l'ordre du VIP. **Recommandé : (a) si la tâche 1 le confirme, (b) sinon**,
-   et la page de mise en service le dit tel quel.
-4. **Google en production.** (a) Un client OAuth propre à la prod, dans un projet propre à la prod, en « Production »
-   non validé, l'avertissement passé une fois ; (b) le même projet que le compte de test, avec une seconde adresse de
-   retour. La validation des champs sensibles par Google : après le MVP. **Recommandé : (a)** : le secret du laptop ne
-   donne rien sur le vrai compte.
-5. **Où vivent les bases et leurs copies.** (a) Les volumes Docker, tels que codés : leurs copies restent dans la
-   racine des données de Docker, sur le même disque ; (b) un dossier du dossier partagé du chantier, monté dans chaque
-   conteneur : les instantanés et la sauvegarde d'UGOS le couvrent, et la restauration se fait par fichiers.
-   **Recommandé : (b)**, un changement du fichier de Compose, prouvé sur le laptop à la tâche 3, avant toute
-   base. Dans les deux cas, une copie hors du NAS par la sauvegarde d'UGOS, vers un autre support, à choisir par lui.
-6. **Qui publie.** `git.md` le dit : CrOliX fusionne la PR de version et pose le tag ; le hook bloque l'agent. La
-   question est seulement s'il veut déléguer : il faudrait changer la règle. **Recommandé : il publie lui-même**, trois
-   releases, quelques minutes.
-7. **Le geste de mise à jour et de retour arrière.** (a) Avaritia passée à `0.1.0` puis revenue, avant toute vraie
-   donnée (tâche 12) ; (b) attendre la première vraie mise à jour, pendant la semaine. **Recommandé : (a)** : le
-   geste est prouvé avant qu'on en ait besoin, et l'on apprend ce que vaut un retour arrière sur une base migrée.
-8. **Les numéros de version.** `0.2.0` pour les trois. **Recommandé : oui.**
+1. **Le compte de pilotage.** Un compte standard d'UGOS dans le groupe `docker`, si UGOS accepte SSH pour lui. S'il le
+   refuse : un administrateur dédié, distinct du sien, ou renoncer au pilotage par SSH et jouer les gestes lui-même.
+   Dans tous les cas le compte vaut root par Docker. **Recommandé : le compte standard ; sinon, revenir à lui avant
+   de créer un administrateur.**
+2. **Une garde technique en plus de la règle écrite** : un contrôle côté laptop (un crochet de la session) qui refuse
+   vers le NAS les commandes des interdits. **Recommandé : oui**, dans un chantier à part du plugin, avant l'arrêt B ;
+   la règle écrite reste la première garde.
+3. **Le premier appareil sans terminal sur le NAS** : l'écran Docker d'UGOS s'il montre le journal ; sinon l'écart
+   reste ouvert et CrOliX lit le code par sa propre session. **Recommandé : constater à la tâche 1, et ne rien coder
+   avant le MVP.**
+4. **Google en production** : un projet et un client propres à la prod, en « Production » non validé, l'avertissement
+   passé une fois. **Recommandé : oui** : le secret du laptop ne donne rien sur le vrai compte.
+5. **Qui publie** : `git.md` le dit, CrOliX ; le hook bloque l'agent. **Recommandé : il publie lui-même.**
+6. **Les numéros** : `0.2.0` pour les trois. **Recommandé : oui.**
+7. **La date jusqu'à laquelle tiennent les gardes d'Acedia** (seuil à 100, aucune règle d'office, pas de tri de
+   l'historique). **Recommandé : la fin de la semaine de rodage**, puis un premier seuil choisi sur ce qu'il aura vu.
+
+**Options écartées**, avec leur raison :
+
+- **Un nœud du réseau privé pour le NAS lui-même**, pour les séances hors de chez lui : un changement du système du
+  NAS, un accès durable, et une première règle d'accès dans le réseau privé peut couper le téléphone et le lien du
+  core vers les satellites. Les séances se font sur le réseau local.
+- **La session qui lit le code du premier appareil au journal** : le code ouvre l'app ; elle ne le lit jamais.
+- **Les bases dans un dossier du NAS plutôt que dans les volumes** : un changement de conception du déploiement, des
+  droits que la session n'a pas, une preuve sur le laptop qui n'en était pas une. Seul le dossier des copies est monté.
+- **Attendre la première vraie mise à jour pour essayer le retour arrière** : le geste doit être connu avant d'en avoir
+  besoin.
 
 ## Risques
 
-- **Perdre une base.** Un volume effacé par erreur, un disque perdu. Parade : l'option de Compose qui efface les
-  volumes n'est jamais jouée ; les bases dans le stockage protégé (point 5) ; une copie hors du NAS ; une copie mise
-  de côté avant chaque mise à jour ; les clés de chiffrement dans son gestionnaire de mots de passe ; une restauration
-  essayée avant l'arrêt C.
-- **Un secret qui fuit.** Parade : saisis par CrOliX seul, hors conversation et hors ligne de commande ; aucune
-  commande n'affiche un fichier d'environnement ; droits `600` ; la clé du réseau privé vidée et révoquée après usage ;
-  `npm run check` sur chaque PR publique ; un secret qui a pu fuir se révoque et se remplace.
-- **Un NAS qui redémarre mal.** Les conteneurs ne repartent pas, ou un nœud repart après son app, qui perd son réseau.
-  Parade : la tâche 13 le constate avant la semaine ; sa parade s'écrit (relancer l'app après son nœud) ; le core
-  prévient d'un satellite injoignable 15 min, au Journal et au téléphone.
-- **Un accès SSH laissé ouvert.** Parade : désactivation automatique d'UGOS ; une clé à part, retirée à la tâche 16 ;
-  le port limité au laptop ; rien d'ouvert sur la box, relu à la tâche 1.
-- **Une release ratée.** Image absente, ou qui ne démarre pas. Parade : l'image démarrée sur le laptop avant ; le script
-  refuse une image introuvable et revient seul si la santé ne vient pas ; une release ratée se retire et se republie
-  en version suivante.
-- **Le NAS trop juste en mémoire.** Parade : le seuil de la tâche 1 ; la mémoire de chaque conteneur relevée à la
-  tâche 6 ; au-delà, une limite de mémoire par conteneur dans le fichier de Compose, par PR.
-- **Les nœuds du réseau privé qui expirent.** Parade : la clé d'authentification étiquetée (écart 5) ; la console dit
-  la date d'expiration de chaque nœud, relue à la tâche 6.
-- **Un retour arrière sur une base migrée.** Parade : la tâche 12 le mesure ; la copie d'avant la mise à jour.
+- **Perdre une base.** Parade : aucun geste qui efface dans la liste de la session ; l'arrêt E ; les copies sur le
+  stockage protégé et hors du NAS ; une copie d'avant chaque mise à jour ; les clés maîtresses dans le gestionnaire ;
+  une restauration essayée avant les vraies données.
+- **Une base hors de son volume, sans erreur** (écart 1). Parade : le chemin réel lu dans « Base copiée : » à la
+  répétition et au premier démarrage.
+- **Un secret qui fuit.** Parade : saisi par CrOliX seul ; les interdits d'affichage ; droits `600` ; le dossier du
+  déploiement hors de toute sauvegarde ; le jeton du registre déconnecté après chaque tirage ; la clé d'inscription
+  révoquée après usage ; `npm run check` sur chaque PR publique ; un secret qui a pu fuir se révoque et se remplace.
+- **Un NAS qui redémarre mal**, ou un nœud qui repart après son app, qui garde un contrôle de santé vert sans réseau.
+  Parade : la répétition et la tâche 15 le constatent ; le coup d'œil quotidien ; la relance depuis l'écran d'UGOS.
+- **Le core tombé, personne prévenu.** Parade : la notification d'UGOS si elle existe, sinon le coup d'œil quotidien.
+- **Un accès SSH laissé ouvert.** Parade : limité au réseau local ; la désactivation automatique d'UGOS ; la clé
+  retirée de l'agent à chaque fin de séance, et vérifiée ; l'agent de Windows, qui garde les clés, désactivé ; la
+  tâche 18.
+- **Une release ratée.** Parade : la répétition sur l'image publiée ; une image introuvable ne change rien ; une
+  version qui ne répond pas est remplacée seule par la précédente ; une release ratée se republie en version suivante.
+- **Le NAS trop juste en mémoire.** Parade : le seuil de la tâche 1 ; la mémoire relevée à la répétition et au premier
+  démarrage ; au-delà, une limite par conteneur, par PR.
+- **Les nœuds du réseau privé qui expirent, ou un nom suffixé.** Parade : la clé étiquetée ; les nœuds d'essai retirés
+  avant le premier démarrage sur le NAS ; les noms vérifiés à la tâche 8.
+- **Les noms des apps publics.** Le HTTPS du réseau privé passe par des certificats publics : leurs noms, et celui du
+  réseau, sont écrits dans les journaux publics de certificats (documentation de Tailscale, à relire). L'ADR 0008 ne
+  le dit pas. Rien n'y est lisible du contenu ; CrOliX le sait avant la tâche 8.
+- **Les journaux qui remplissent le disque.** Parade : la borne de la tâche 3.
 
 ## Hors périmètre
 
 L'accès sans réseau privé (un domaine, un relais : la cible de l'ADR 0008). Une machine dédiée. Lun'Luxuria et la
 voix : la session du desktop, juste après. L'installation pour quelqu'un d'autre : en fin de VIP. Brancher Google par
-l'écran (lun-acedia#55, après le MVP). La validation de l'app par Google. Tout correctif de code qui n'est pas un écart
-bloquant de la page d'installation.
+l'écran (lun-acedia#55, après le MVP). La validation de l'app par Google. Réduire les droits Google d'Acedia (une
+issue s'ouvre). Tout correctif de code applicatif.
 
 ## Ensuite
 
-- **La session du desktop, pour la voix** : Luxuria reliée au core du NAS par un code d'appairage, son adresse réglée
-  dans l'écran ; la mesure des gestes, la langue, le délai contre les 2,5 s (feuille de route, « Le recadrage du
-  20/11 », point 2).
-- **La semaine de rodage**, sur le NAS : la porte du MVP. Les mises à jour qu'elle demande passent par une release et
-  le script de déploiement, jamais par un fichier changé sur le NAS.
+- **La session du desktop, pour la voix** : Luxuria reliée au core du NAS, la mesure des gestes, la langue, le délai
+  contre les 2,5 s (feuille de route, « Le recadrage du 20/11 », point 2).
+- **La semaine de rodage**, sur le NAS : la porte du MVP. Ses mises à jour passent par une release, la copie d'avant
+  et le geste de déploiement, jamais par un fichier changé sur le NAS.
 
 ## Limites
 
-- **Non joué, lu seulement** : l'écart 1 (le chemin de base vide), la limite de six connexions derrière le HTTPS du
-  réseau privé (lun-acedia#76 le note), l'ordre de redémarrage des nœuds et des apps sous le moteur Docker d'UGOS.
-- **Non confirmé dans la documentation d'UGREEN** : SSH pour un compte standard ; le groupe `docker` sous UGOS ; le
-  journal d'un conteneur lancé par Compose dans l'écran Docker d'UGOS ; une app Tailscale pour l'hôte ; les
-  instantanés du DXP2800. Tout cela se lit à la tâche 1.
-- **Non confirmé chez les tiers** : l'expiration par défaut des nœuds non étiquetés chez Tailscale ; l'acceptation par
-  la console Google de l'adresse du réseau privé comme adresse de retour d'une app en « Production ».
-- La visibilité des images d'Acedia et d'Avaritia sur GHCR n'a pas pu être lue (jeton sans `read:packages`) ; la page
-  d'installation dit seule celle du core privée.
+- **Non joué, lu seulement** : l'écart 1 ; le fuseau dans l'image ; la limite de six connexions derrière le HTTPS
+  (lun-acedia#76 le note) ; le comportement d'une app quand son nœud redémarre. La répétition les joue.
+- **Non confirmé dans la documentation d'UGREEN** : SSH pour un compte standard ; le groupe `docker` ; l'écran Docker
+  d'UGOS (journal, relance, projets Compose) ; la notification d'un conteneur arrêté ; les mises à jour automatiques ;
+  un dossier hors sauvegarde, instantanés et corbeille. Tout cela se lit à la tâche 1.
+- **Non confirmé sur le laptop** : la durée de vie des clés dans l'agent de Git Bash (P5) ; les nœuds du réseau privé
+  en mode noyau sous le moteur Docker du laptop (tâche 5).
+- **Non confirmé chez les tiers** : l'expiration des nœuds sans étiquette chez Tailscale ; l'acceptation par la console
+  Google de l'adresse du réseau privé (tâche 4).
+- La visibilité des images d'Acedia et d'Avaritia sur GHCR n'a pas pu être lue (jeton sans `read:packages`).
