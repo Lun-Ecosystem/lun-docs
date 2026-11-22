@@ -474,7 +474,9 @@ continu sur le NAS ; Lun'Luxuria est une application du desktop ; la semaine de 
 directement ; il démarre sur des bases neuves, avec le vrai compte Google ; une machine dédiée est une évolution à
 terme, sans date. L'ordre, jusqu'à la porte :
 
-1. **La mise en service du NAS** : un chantier, pas encore de plan. Sa base est le
+1. **La mise en service du NAS** : chantier `critique`, Lun-Ecosystem/lun-docs#190 ; son
+   [plan](2026-11-22-mise-en-service-nas.md), rédigé le 22/11, est à contester puis à valider avant toute installation.
+   Sa base est le
    [plan du 08/11](2026-11-08-bascule-nas.md) et ce qui existe dans le dépôt du core (un conteneur par app, un nom
    par app dans le réseau privé). S'y vérifie tout ce qui conditionne la semaine et que ce document rangeait au
    desktop : Google en production sur le vrai compte (B10), le téléphone et une notification de bout en bout (B11),
