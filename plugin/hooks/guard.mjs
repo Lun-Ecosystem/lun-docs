@@ -2,9 +2,12 @@
 // main or master, force-pushing - and a PR opened out of the norm: not a draft, or a title the CI
 // refuses. Exit code 2 blocks the tool call and shows the reason to the agent.
 // Fails open on anything it cannot parse: the GitHub ruleset and the pre-push hook stay behind it.
+// One exception, closed on what it cannot read: a command toward a production host over SSH (prod-ssh.mjs),
+// active only when the instance declares its hosts.
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { loadProdConfig, prodReason } from './prod-ssh.mjs';
 
 const SEPARATORS = new Set([';', '|', '&', '\n', '\r', '(', ')', '{', '}', '<', '>']);
 
@@ -166,9 +169,12 @@ function evaluateSegment(tokens, state, context) {
 
 /**
  * @param {string} command
- * @param {{ cwd?: string, branchOf?: (dir: string) => string | null }} context
+ * @param {{ cwd?: string, branchOf?: (dir: string) => string | null, prod?: { hosts: string[], patterns: string[] } }} context
  */
 export function evaluateCommand(command, context = {}) {
+  // First, and closed on what it cannot read: the prod SSH guard, off without the hosts of the instance.
+  const prod = prodReason(command, context.prod);
+  if (prod) return { block: true, reason: prod };
   const state = { cwd: context.cwd ?? process.cwd(), command };
   for (const tokens of segments(command)) {
     const reason = evaluateSegment(tokens, state, context);
@@ -198,7 +204,7 @@ async function main() {
     process.exit(0); // not our input: never block on a parse error
   }
   const command = payload?.tool_input?.command ?? '';
-  const { block, reason } = evaluateCommand(command, { cwd: payload?.cwd, branchOf: currentBranch });
+  const { block, reason } = evaluateCommand(command, { cwd: payload?.cwd, branchOf: currentBranch, prod: loadProdConfig() });
   if (block) {
     process.stderr.write(`lun guard: ${reason}.\n`);
     process.exit(2);
