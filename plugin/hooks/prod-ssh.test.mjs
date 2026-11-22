@@ -116,7 +116,8 @@ const local = [
 ];
 for (const c of local) test(`local or non-prod passes: ${c}`, () => allowed(c));
 test('without declared hosts the guard does what it did before', () => {
-  for (const p of [undefined, { hosts: [], protectedPaths: [] }]) {
+  // null, not undefined: undefined would fall back on the default of `on`, the guard switched on.
+  for (const p of [null, { hosts: [], protectedPaths: [] }]) {
     allowed('ssh nas-prod docker volume rm x', p);
     allowed('ssh $HOST id', p);
     allowed('echo nas-prod', p);
@@ -640,4 +641,89 @@ test('prod-run.mjs as a script: refuses without configuration, lists and checks 
   const bad = script(['999'], { LUN_PROD_SSH_HOSTS: 'nas-prod', LUN_PROD_SSH_ALLOW_FILE: examplePath });
   assert.notEqual(bad.status, 0);
   assert.match(bad.stderr, /line/i);
+});
+
+// ---------------------------------------------------------------------------------------------------
+// 6. Found while attacking the second design.
+// ---------------------------------------------------------------------------------------------------
+for (const c of ['ssh box-{a,b} id', "ssh ('box-'+'a') id", 'cmd /c ssh %BOX% id', 's\\sh $H id', '"s"sh $H id']) {
+  test(`unreadable ssh target refused (a name built on the line): ${c}`, () => blocked(c));
+}
+for (const c of ['LUN_PROD_SSH_ALLOW_FILE=/tmp/mine node /plugin/hooks/prod-run.mjs 2', '$env:LUN_PROD_SSH_HOSTS = "other-box"',
+  'LUN_PROD_SSH_BIN=/tmp/ssh node /plugin/hooks/prod-run.mjs 2', 'env -u lun_prod_ssh_hosts bash']) {
+  test(`a line that names a setting of the guard is refused: ${c}`, () => blocked(c));
+}
+test('the list named by its name alone (a relative path) is refused, when the hook knows the list', () => {
+  const p = { ...prod, allowFile: '/inst/prod-allow.txt' };
+  blocked('cd /inst && echo x >> prod-allow.txt', p);
+  blocked('cat ./PROD-ALLOW.TXT', p);
+  allowed('cat other.txt', p);
+});
+test('a write tool does not write a text that names a prod host', () => {
+  assert.equal(evaluateWrite('/repo/run.sh', writeCtx, ['#!/bin/sh\nssh nas-prod id\n']).block, true);
+  assert.equal(evaluateWrite('/repo/run.sh', writeCtx, [undefined, 'ssh NAS-PR"O"D id']).block, true);
+  assert.equal(evaluateWrite('/repo/run.sh', writeCtx, ['echo hello', undefined]).block, false);
+  assert.equal(evaluateWrite('/repo/run.sh', { cwd: '/repo' }, ['ssh nas-prod id']).block, false);
+  const elsewhere = path.join(os.tmpdir(), 'run.sh');
+  for (const [tool, input] of [['Write', { file_path: elsewhere, content: 'ssh nas-prod id' }],
+    ['Edit', { file_path: elsewhere, old_string: 'a', new_string: 'ssh nas-prod id' }],
+    ['NotebookEdit', { notebook_path: elsewhere, new_source: '!ssh nas-prod id' }]]) {
+    assert.equal(runHook({ tool_name: tool, tool_input: input }, hookEnv).status, 2, tool);
+    assert.equal(runHook({ tool_name: tool, tool_input: input }, {}).status, 0, `${tool} without hosts`);
+  }
+});
+test('an internal error is a refusal when hosts are declared, and never blocks without them', () => {
+  const broken = { toString() { throw new Error('boom'); } };
+  assert.equal(evaluateCommand(broken, { cwd: '/repo', prod }).block, true);
+  assert.equal(evaluateWrite(broken, writeCtx).block, true);
+  const raw = (input, extraEnv) => spawnSync('node', [guardPath], {
+    input, env: { ...process.env, LUN_PROD_SSH_HOSTS: '', LUN_PROD_SSH_ALLOW_FILE: '', LUN_PROD_SSH_PROTECT: '', ...extraEnv }, encoding: 'utf8',
+  });
+  // Claude Code lets a tool call through on any exit code but 2: the hook must exit 2 itself.
+  for (const input of ['not json', '', JSON.stringify({ tool_name: 'Bash', tool_input: { command: { a: 1 } } })]) {
+    const r = raw(input, hookEnv);
+    assert.equal(r.status, 2, JSON.stringify(input));
+    assert.match(r.stderr, /lun guard.*stop/i);
+    assert.equal(raw(input, {}).status, 0, `${JSON.stringify(input)} without hosts`);
+  }
+});
+test('ssh is started by an absolute path, whatever the search path, with what silences the SSH configuration', () => {
+  const first = launch(['3', 'api']).calls[0];
+  assert.ok(path.isAbsolute(first.file), first.file);
+  assert.equal(launch(['3', 'api'], { environment: { ...env, PATH: '/tmp/evil', Path: '/tmp/evil' } }).calls[0].file, first.file);
+  for (const bin of ['ssh', 'bin/ssh', '/tmp/evil/not-ssh', '/tmp/evil/ssh.sh']) {
+    const r = launch(['3', 'api'], { environment: { ...env, LUN_PROD_SSH_BIN: bin } });
+    noSpawn(r);
+    assert.match(r.err, /not configured/i);
+  }
+  const joined = first.args.join(' ');
+  for (const option of ['-n', '-o RemoteCommand=none', '-o PermitLocalCommand=no', '-o RequestTTY=no']) assert.ok(joined.includes(option), option);
+});
+test('the barrier holds on the words as they run: a joker standing where a subcommand does', () => {
+  const list = `${LIST}\ndocker volume <app> data-x\n`;
+  const line = String(list.split('\n').indexOf('docker volume <app> data-x') + 1);
+  for (const word of ['rm', 'prune']) {
+    const r = launch([line, word], { list });
+    noSpawn(r);
+    assert.notEqual(r.status, 0);
+    assert.match(r.err, /barrier/i);
+  }
+  assert.equal(launch([line, 'create'], { list }).calls.length, 1);
+});
+test('the list is read once: what runs is what was checked', () => {
+  let reads = 0;
+  let remote;
+  const r = runProd(['2'], {
+    env,
+    readFile: () => (reads++ === 0 ? LIST : LIST.replace('docker ps', 'rm -rf /')),
+    spawn: (file, args) => { remote = args.at(-1); return { status: 0 }; },
+  });
+  assert.equal(r.status, 0);
+  assert.equal(reads, 1);
+  assert.equal(remote, "docker ps --format '{{.Names}}'");
+});
+test('the launcher never throws: a spawn that fails is a failure, nothing more', () => {
+  const r = runProd(['2'], { env, readFile: () => LIST, spawn: () => { throw new Error('boom'); } });
+  assert.notEqual(r.status, 0);
+  assert.match(r.err, /prod-run/);
 });
