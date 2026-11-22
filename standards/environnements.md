@@ -38,6 +38,47 @@ configuration, jamais dans un dépôt.
 
 Le vrai compte Google n'entre que là. Les copies de chaque base y restent, à côté d'elle.
 
+## Jouer une commande sur la prod
+
+Une session d'agent ne joue sur la prod, par SSH, qu'une **liste fermée** de commandes écrite d'avance.
+Lui sont interdits : ce qui efface, ce qui peut afficher un secret ou un code d'appairage, l'élévation de
+privilège, une session interactive, tout réglage du système, toute copie de fichier vers la prod ou depuis
+elle. Devant une commande imprévue ou un refus, elle s'arrête : CrOliX tranche, et joue lui-même ce qui
+sort de la liste.
+
+Le hook de garde du plugin fait tenir cette règle (`plugin/hooks/prod-ssh.mjs`), avant chaque commande
+Bash ou PowerShell. **Une ceinture de plus, pas une preuve de sûreté.**
+
+- **L'activer** : deux variables d'environnement, posées sur le poste avant d'ouvrir la session.
+  `LUN_PROD_SSH_HOSTS` : les hôtes de prod, séparés par une virgule ou une espace, **sous tous leurs noms**
+  (nom court, nom complet, adresse). `LUN_PROD_SSH_ALLOW_FILE` : le chemin de la liste, un fichier hors de
+  tout dépôt ; son exemple est `plugin/hooks/prod-ssh-allow.example`.
+- **Sans `LUN_PROD_SSH_HOSTS`, la garde est inactive et silencieuse** : rien ne dit qu'elle manque. Des
+  hôtes déclarés sans liste lisible : tout SSH vers la prod est refusé.
+- **Une ligne de la liste** est une commande écrite comme dans un shell : des mots littéraux, des
+  guillemets pour grouper un mot, `|` pour un tube, et quatre jokers d'un seul mot : `<app>`, `<version>`
+  (`1.2.3`), `<int>` (1 à 6 chiffres), `<path>` (un chemin absolu, sans `..`). Une commande ne passe que si
+  elle correspond **en entier** à une ligne ; chaque morceau d'une chaîne (`;`, `&&`, `||`) à la sienne.
+- **Une seconde barrière, dans le code**, refuse même ce qu'une ligne couvrirait : `sudo`, un shell ou un
+  interpréteur, ce qui efface ou écrase, un `docker run`, un `exec` interactif ou d'environnement, une
+  inspection sans format ou dont le format sort autre chose que des champs nommés, la configuration
+  résolue d'une pile, un journal qui n'est pas borné et filtré, un fichier d'environnement, une clé, un
+  transfert de port.
+- **Ce qu'elle ne sait pas lire est refusé** quand la cible est la prod : une variable, une substitution,
+  un échappement, un joker de fichier, une redirection, une cible SSH non résolue (`ssh $HOTE`), une option
+  SSH hors de la courte liste admise, un tube ou un fichier qui alimente la commande. Sont refusés aussi,
+  dès que les hôtes sont déclarés : tout contexte du moteur de conteneurs (`docker context`, `--context`,
+  `DOCKER_CONTEXT`), **même local**, car la garde ne sait pas le résoudre ; et une ligne qui nomme un hôte
+  de prod avec un heredoc, un accent grave ou un guillemet échappé, même dans un message de commit.
+- Le refus nomme le premier mot de la commande, jamais ses arguments, et renvoie ici.
+
+**Ce qu'elle ne voit pas** : une commande lancée par un autre outil que Bash ou PowerShell ; un script
+déjà présent sur l'hôte (elle ne voit que son appel) et ce que fait une commande autorisée une fois lancée ;
+un hôte de prod non déclaré, ou un alias de la configuration SSH qui y mène sous un autre nom ; un alias de
+shell, une fonction ou une variable définis dans une session précédente ; un programme ou un script local
+qui ouvre SSH sans nommer l'hôte, un dépôt git dont le distant est sur la prod ; une ligne maquillée exprès
+pour tromper son découpage ; ce que CrOliX tape dans son propre terminal.
+
 ## Le desktop
 
 - Lun'Luxuria s'y installe et s'y ouvre ; elle se relie au core du NAS par un code d'appairage.

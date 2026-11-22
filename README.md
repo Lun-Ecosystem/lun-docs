@@ -50,7 +50,8 @@ Les gabarits de projet déclarent déjà la marketplace dans `.claude/settings.j
 
 Le plugin apporte les agents spécialisés (recherche, veille, plan, développement par dépôt, tests,
 relecture, livraison ; voir `standards/workflow.md`), les skills `lun-*` et le hook de
-garde qui interdit à l'agent de merger, de pousser sur `main` ou de forcer un push.
+garde qui interdit à l'agent de merger, de pousser sur `main` ou de forcer un push, et, une fois activé, de
+jouer sur la prod par SSH autre chose qu'une liste fermée de commandes (`standards/environnements.md`).
 
 ## Par où commencer
 
