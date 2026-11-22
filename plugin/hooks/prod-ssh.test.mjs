@@ -117,6 +117,17 @@ const dangerous = [
 ];
 const danger = { hosts, patterns: dangerous };
 for (const remote of dangerous) test(`barrier holds over a covering pattern: ${remote}`, () => assertBlocked(ssh(remote), danger));
+// Found while attacking the guard: a filter that keeps every line, a file edited in place.
+for (const remote of ["docker logs --tail 5 api | grep -F ''", 'docker logs --tail 5 api | grep -e .', 'sed -i s/a/b/ /srv/app/compose.yaml']) {
+  test(`barrier holds over a covering pattern: ${remote}`, () => assertBlocked(ssh(remote), { hosts, patterns: [remote] }));
+}
+test('a space of another kind does not hide the call or the chain', () => {
+  // PowerShell cuts at a no-break space, sh does not: the guard reads the call as PowerShell and refuses the rest.
+  assertBlocked('ssh nas-prod "docker volume rm api-data"');
+  assertBlocked(ssh("docker volume ls --format '{{.Name}}'; docker volume rm api-data"));
+  assertBlocked(ssh("docker volume ls --format '{{.Name}}'"));
+  assertBlocked(ssh("docker volume ls --format '{{.Name}}' rm -rf /srv/app"));
+});
 test('barrier: grep of an env file passes only when its output is only counted', () => {
   assertAllowed(ssh('grep ^APP_KEY= /srv/app/app.env | wc -c'), { hosts, patterns: ['grep ^APP_KEY= /srv/app/app.env | wc -c'] });
 });
@@ -196,6 +207,7 @@ const variables = [
   'ssh $env:NAS id', 'HOST=nas-prod; ssh $HOST id', 'ssh nas-prod $CMD', 'ssh nas-prod docker $SUB',
   'ssh nas-prod "docker volume rm $V"', 'ssh nas-prod $(echo docker) ps', '$c = "docker volume rm x"; ssh nas-prod $c',
   'ssh @args', 'ssh nas-prod @args',
+  'ssh $HOST id', // the same form as ssh ${NAS} id: a target the guard cannot resolve is refused, whatever its name
 ];
 for (const c of variables) test(`unresolvable variable refused: ${c}`, () => assertBlocked(c));
 
@@ -258,7 +270,8 @@ test('the refusal does not copy a secret', () => {
 
 // 7. Nothing breaks.
 test('without the host data the guard does what it did before', () => {
-  for (const p of [undefined, { hosts: [], patterns: [] }, { hosts: [], patterns: example }]) {
+  // null, not undefined: undefined would fall back on the default of `on`, the guard switched on.
+  for (const p of [null, { hosts: [], patterns: [] }, { hosts: [], patterns: example }]) {
     assertAllowed('ssh nas-prod "docker volume rm api-data"', p);
     assertAllowed('ssh nas-prod', p);
     assertAllowed('DOCKER_HOST=ssh://nas-prod docker ps', p);
@@ -270,7 +283,7 @@ test('host declared, list empty: every prod ssh is refused, closed by default', 
 const local = ['ls -la', 'docker ps', 'docker compose up -d', 'docker volume rm local-test', 'rm -rf node_modules', 'cat .env',
   'git push origin feat/x', 'npm test', 'echo "ssh nas-prod docker volume rm x"', 'git log | grep "ssh nas-prod"',
   'git commit -m "docs: ssh nas-prod docker volume rm"', 'echo $HOME', 'scp f other-host:/tmp', 'rsync -av f other-host:/x',
-  'ssh other-host docker volume rm x', 'ssh -p 22 pilot@other-host', 'ssh $HOST id', 'echo hi | ssh other-host cat',
+  'ssh other-host docker volume rm x', 'ssh -p 22 pilot@other-host', 'echo hi | ssh other-host cat',
   'ssh -L 8080:localhost:80 other-host', 'DOCKER_HOST=ssh://other-host docker ps', "alias ll='ls -l'"];
 for (const c of local) test(`local or non-prod passes: ${c}`, () => assertAllowed(c));
 test('existing blocks hold with the guard on', () => {
