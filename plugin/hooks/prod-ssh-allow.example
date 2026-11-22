@@ -1,0 +1,41 @@
+# Closed list of the remote commands a session may play on a production host over SSH.
+# Generic example: the real list lives outside the repository, in the file named by LUN_PROD_SSH_ALLOW_FILE.
+#
+# One pattern per line; blank lines and lines starting with # are ignored.
+# A pattern is a command written as in a shell (quotes group a word; an unquoted | is a pipe).
+# Every word is literal, except these placeholders, each standing for exactly one word:
+#   <app>      a name: [a-z0-9][a-z0-9_-]{0,39}
+#   <version>  a version: 1.2.3
+#   <int>      a number: 1 to 6 digits
+#   <path>     an absolute path made of [A-Za-z0-9._/-], without ".."
+# A remote command passes only if all of it matches one line (a pipeline matches a line with its pipes).
+
+# Services, containers, volumes: read.
+docker compose -f /srv/app/compose.yaml config --services
+docker ps --format '{{.Names}} {{.Status}}'
+docker inspect --format '{{.State.Health.Status}}' <app>
+docker volume ls --format '{{.Name}}'
+docker logs --tail <int> <app> | grep -F 'Base copiée'
+
+# Start, stop, restart one named app.
+docker compose -f /srv/app/compose.yaml up -d <app>
+docker compose -f /srv/app/compose.yaml stop <app>
+docker compose -f /srv/app/compose.yaml restart <app>
+
+# Pull the images, then leave the registry.
+docker compose -f /srv/app/compose.yaml pull
+docker logout registry.example.test
+
+# The deployment script: an app and a version, or the rollback.
+/srv/app/deploy.sh <app> <version>
+/srv/app/deploy.sh <app> --rollback
+
+# The time Node reads in a container.
+docker exec <app> node -p 'new Date().toString()'
+
+# The length of one value in an environment file, never its content.
+grep ^APP_KEY= /srv/app/app.env | wc -c
+
+# Create a named volume; the rights of a file.
+docker volume create <app>
+stat -c %a <path>
