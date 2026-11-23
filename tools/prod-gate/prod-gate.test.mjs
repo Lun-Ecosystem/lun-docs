@@ -29,17 +29,20 @@ const gatePath = path.join(here, 'prod-gate.sh');
 const readmePath = path.join(here, 'README.md');
 
 // dash when there is one (strict POSIX, as on a NAS or in a Linux CI), else the sh of the machine.
-const SH = ['dash', 'sh'].find((c) => spawnSync(c, ['-c', 'exit 0']).status === 0) ?? 'sh';
+const SH = process.env.PROD_GATE_SH ?? ['dash', 'sh'].find((c) => spawnSync(c, ['-c', 'exit 0']).status === 0) ?? 'sh';
+// The door starts itself again by the shell named in its header: the same one as the test plays.
+const SH_PATH = spawnSync(SH, ['-c', `command -v ${SH}`], { encoding: 'utf8' }).stdout.trim() || '/bin/sh';
 const toSh = (p) => (process.platform === 'win32' ? p.replace(/\\/g, '/').replace(/^([A-Za-z]):/, (_, d) => `/${d.toLowerCase()}`) : p);
 const gateText = () => fs.readFileSync(gatePath, 'utf8').replace(/\r\n/g, '\n');
 
-const HEADER = ['LUN_PATH', 'LUN_DEPLOY_DIR', 'LUN_COPIES', 'LUN_APPS', 'LUN_VOLUMES', 'LUN_ENV_NAMES', 'LUN_REGISTRY', 'LUN_GATE_LOG'];
+const HEADER = ['LUN_SHELL', 'LUN_PATH', 'LUN_DEPLOY_DIR', 'LUN_DEPLOY_SCRIPT', 'LUN_COPIES', 'LUN_APPS', 'LUN_VOLUMES', 'LUN_ENV_FILE_PREFIX',
+  'LUN_ENV_NAMES', 'LUN_REGISTRY', 'LUN_COPY_LINE', 'LUN_TRIAL_FILE', 'LUN_TRIAL_PREFIX', 'LUN_TRIAL_COPIES', 'LUN_BASE_DIR', 'LUN_BASE_EXT', 'LUN_GATE_LOG'];
 
 const sandboxes = [];
 process.on('exit', () => sandboxes.forEach((d) => fs.rmSync(d, { recursive: true, force: true })));
 
 /** A directory with fake commands that record what they receive, a deploy folder, a copies folder, a journal. */
-function sandbox({ logDir } = {}) {
+function sandbox({ logDir, header = {} } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'gate-'));
   sandboxes.push(dir);
   const s = { dir };
@@ -55,17 +58,26 @@ function sandbox({ logDir } = {}) {
   fake(path.join(dir, 'bin', 'docker'), `${record('docker')}${fail}case " $* " in
   *" ps -q "*) for a in "$@"; do last=$a; done; printf 'id-%s\\n' "$last" ;;
   *" inspect "*) printf 'healthy\\n' ;;
-  *" logs "*) printf '%s\\n' "Aucun client appairé. Code d'appairage du premier client : 123456" "Base copiée : /app/data/backups/x.db" "autre ligne" ;;
+  *" logs "*) printf '%s\\n' "Aucun client appairé. Code d'appairage du premier client : 123456" "Base copied : /app/data/backups/x.db" "autre ligne" ;;
 esac
 `);
   for (const name of ['ls', 'free', 'df']) fake(path.join(dir, 'bin', name), `${record(name)}printf 'fake-${name}\\n'\n`);
   fake(path.join(dir, 'deploy', 'deploy.sh'), record('deploy.sh'));
-  fs.writeFileSync(path.join(dir, 'deploy', '.env.app-a'), 'APP_SECRET_KEY=abc=def\nAPP_OTHER_KEY=xyz\nTS_AUTHKEY=tskey-secret-value\n');
+  fs.writeFileSync(path.join(dir, 'deploy', '.env.app-a'), 'APP_SECRET_KEY=abc=def\nAPP_OTHER_KEY=xyz\nOTHER_TOKEN=tskey-secret-value\n');
   fake(path.join(dir, 'evil', 'docker'), `printf evil > '${toSh(path.join(dir, 'state', 'evil-ran'))}'\n`);
   fake(path.join(dir, 'evil', 'date'), `printf evil > '${toSh(path.join(dir, 'state', 'evil-ran'))}'\n`);
 
   const values = {
+    LUN_SHELL: SH_PATH,
     LUN_PATH: `${toSh(path.join(dir, 'bin'))}:/usr/bin:/bin`,
+    LUN_DEPLOY_SCRIPT: 'deploy.sh',
+    LUN_ENV_FILE_PREFIX: '.env.',
+    LUN_COPY_LINE: 'Base copied',
+    LUN_TRIAL_FILE: 'trial.yaml',
+    LUN_TRIAL_PREFIX: 'trial-',
+    LUN_TRIAL_COPIES: '/copies',
+    LUN_BASE_DIR: 'data',
+    LUN_BASE_EXT: '.db',
     LUN_DEPLOY_DIR: s.deploy,
     LUN_COPIES: s.copies,
     LUN_APPS: 'app-a app-b app-c',
@@ -73,6 +85,7 @@ esac
     LUN_ENV_NAMES: 'APP_SECRET_KEY APP_OTHER_KEY',
     LUN_REGISTRY: 'registry.example.test',
     LUN_GATE_LOG: toSh(logDir ? path.join(logDir, 'gate.log') : s.logFile),
+    ...header,
   };
   let text = gateText();
   for (const name of HEADER) text = text.replace(new RegExp(`^${name}='[^']*'.*$`, 'm'), `${name}='${values[name]}'`);
@@ -111,17 +124,18 @@ const GOOD = { app: 'app-a', version: '1.2.3', date: '2026-11-20', envname: 'APP
 const BAD = {
   app: ['zzz', 'app-d', 'App-a', 'app-a2', 'app', 'app-', '-v', '--volumes', '--rm', '-f', '--help', '..', '.', 'app-a.'],
   version: ['1.2', '1.2.3.4', 'v1.2.3', 'latest', '-1.2.3', '1.2.x', '01', 'Rollback', 'roll-back', '..', '1..2', '1.2.3-rc1'],
-  date: ['2026-1-2', '20261120', '2026-11-20x', 'x2026-11-20', '..', 'latest', '2026-11-20-1', '-2026-11-20'],
-  envname: ['TS_AUTHKEY', 'APP_SECRET', 'app_secret_key', 'APP_SECRET_KEYS', '-v', 'APP_SECRET_KEY.'],
+  date: ['2026-1-2', '20261120', '2026-11-20x', 'x2026-11-20', '..', 'latest', '2026-11-20-1', '-2026-11-20', '2026-19-39', '2026-00-10', '2026-13-01', '2026-11-00', '2026-11-32'],
+  envname: ['OTHER_TOKEN', 'APP_SECRET', 'app_secret_key', 'APP_SECRET_KEYS', '-v', 'APP_SECRET_KEY.'],
 };
 const compose = (...a) => ['docker', 'compose', ...a];
-const trial = (...a) => ['docker', 'compose', '-f', 'essai.yaml', ...a];
+const trial = (...a) => ['docker', 'compose', '-f', 'trial.yaml', ...a];
 const gestures = [
   { name: 'ps', slots: [], calls: () => [['docker', 'ps', '--format', '{{.Names}} {{.Status}}']] },
   { name: 'health', slots: ['app'], calls: (s, [a]) => [compose('ps', '-q', a), ['docker', 'inspect', '--format', '{{.State.Health.Status}}', `id-${a}`]], out: /healthy/ },
   { name: 'volumes', slots: [], calls: () => [['docker', 'volume', 'ls', '--format', '{{.Name}}']] },
   { name: 'versions', slots: [], calls: () => [['docker', 'version', '--format', '{{.Server.Version}}'], compose('version', '--short')] },
   { name: 'memory', slots: [], calls: () => [['free', '-m']] },
+  { name: 'container-memory', slots: [], calls: () => [['docker', 'stats', '--no-stream', '--format', '{{.Name}} {{.MemUsage}}']] },
   { name: 'space', slots: [], calls: (s) => [['df', '-h', s.deploy, s.copies]] },
   { name: 'services', slots: [], calls: () => [compose('config', '--services')] },
   { name: 'copy-line', slots: ['app'], calls: (s, [a]) => [compose('logs', '--tail', '500', a)] },
@@ -136,9 +150,9 @@ const gestures = [
   { name: 'pull', slots: [], calls: (s) => [compose('pull'), ['docker', 'logout', 'registry.example.test']] },
   { name: 'volumes-create', slots: [], calls: () => ['app-a-data', 'app-b-data', 'app-c-data'].map((v) => ['docker', 'volume', 'create', v]) },
   { name: 'deploy', slots: ['app', 'version'], calls: (s, [a, v]) => [['deploy.sh', a, v]] },
-  { name: 'trial-load', slots: ['app', 'date'], calls: (s, [a, d]) => [trial('run', '--rm', '--entrypoint', 'cp', `essai-${a}`, `/copies/${a}-${d}.db`, `data/${a}.db`)] },
-  { name: 'trial-up', slots: ['app'], calls: (s, [a]) => [trial('up', '-d', `essai-${a}`)] },
-  { name: 'trial-health', slots: ['app'], calls: (s, [a]) => [trial('ps', '-q', `essai-${a}`), ['docker', 'inspect', '--format', '{{.State.Health.Status}}', `id-essai-${a}`]] },
+  { name: 'trial-load', slots: ['app', 'date'], calls: (s, [a, d]) => [trial('run', '--rm', '--entrypoint', 'cp', `trial-${a}`, `/copies/${a}-${d}.db`, `data/${a}.db`)] },
+  { name: 'trial-up', slots: ['app'], calls: (s, [a]) => [trial('up', '-d', `trial-${a}`)] },
+  { name: 'trial-health', slots: ['app'], calls: (s, [a]) => [trial('ps', '-q', `trial-${a}`), ['docker', 'inspect', '--format', '{{.State.Health.Status}}', `id-trial-${a}`]] },
 ];
 const goodArgs = (g) => g.slots.map((k) => GOOD[k]);
 const requestOf = (g, args = goodArgs(g)) => [g.name, ...args].join(' ');
@@ -181,7 +195,7 @@ test('gesture copy-line: only the fixed line of the log, never the pairing code'
   const s = sandbox();
   const r = play(s, 'copy-line app-a');
   assert.equal(r.status, 0, r.err);
-  assert.match(r.out, /Base copiée/);
+  assert.match(r.out, /Base copied/);
   assert.doesNotMatch(r.out + r.err, /123456|appairage|autre ligne/);
 });
 test('gesture pull: the registry is left even when the pull fails, and the pull code is returned', () => {
@@ -216,7 +230,7 @@ test('gestes lists the names and the arguments of the gestures, runs nothing, an
     assert.equal((names.get(g.name).match(/<[^>]+>/g) ?? []).length, g.slots.length, names.get(g.name));
   }
   for (const n of names.keys()) assert.ok(gestures.some((g) => g.name === n) || ['gestes', 'version'].includes(n), `unexpected gesture ${n}`);
-  assert.doesNotMatch(r.out, /registry\.example|\/srv\/|app-a|essai\.yaml|sandbox|gate-/);
+  assert.doesNotMatch(r.out, /registry\.example|\/srv\/|app-a|trial\.yaml|sandbox|gate-/);
   assert.equal(logLines(s).length, 1);
 });
 test('version prints one number, runs nothing, and is journaled', () => {
@@ -335,11 +349,11 @@ test('the values of the instance are in the door: the environment changes none, 
   const s = sandbox();
   const env = {
     LUN_APPS: 'zzz', LUN_DEPLOY_DIR: '/tmp/evil', LUN_COPIES: '/tmp/evil', LUN_GATE_LOG: '/tmp/evil.log', LUN_PATH: '/tmp/evil', LUN_VOLUMES: 'evil',
-    LUN_ENV_NAMES: 'TS_AUTHKEY', LUN_REGISTRY: 'evil.example.test', PATH: `${path.join(s.dir, 'evil')}${path.delimiter}${process.env.PATH}`,
+    LUN_ENV_NAMES: 'OTHER_TOKEN', LUN_REGISTRY: 'evil.example.test', PATH: `${path.join(s.dir, 'evil')}${path.delimiter}${process.env.PATH}`,
     IFS: 'a-', ENV: '/tmp/evil.sh', BASH_ENV: '/tmp/evil.sh', CDPATH: '/tmp', SHELLOPTS: 'xtrace', POSIXLY_CORRECT: '1',
   };
   assert.equal(play(s, 'start zzz', { env }).status, 66);
-  assert.equal(play(s, 'env-length app-a TS_AUTHKEY', { env }).status, 66);
+  assert.equal(play(s, 'env-length app-a OTHER_TOKEN', { env }).status, 66);
   assert.equal(play(s, 'start app-a', { env }).status, 0);
   assert.equal(play(s, 'pull', { env }).status, 0);
   assert.deepEqual(shape(s), [compose('up', '-d', 'app-a'), compose('pull'), ['docker', 'logout', 'registry.example.test']]);
@@ -401,7 +415,9 @@ test('the journal is appended to, not rewritten', () => {
 const codeLines = () => gateText().split('\n')
   .map((l) => l.replace(/(^|\s)#.*$/, '$1'))
   .filter((l) => l.trim())
-  .map((l) => l.replace(/--entrypoint cp\b/g, '--entrypoint ENTRY'));
+  .map((l) => l.replace(/--entrypoint cp\b/g, '--entrypoint ENTRY'))
+  // The door starts itself again under an empty environment: that one line, and no other use of env.
+  .map((l) => l.replace(/^(\s*exec) \/usr\/bin\/env -i (HOME=)/, '$1 EMPTY-ENVIRONMENT $2'));
 const FORBIDDEN = [
   [/\beval\b/, 'eval'],
   [/(^|[\s;|&(`$])(sudo|su|doas|pkexec)(\s|$)/, 'privilege'],
@@ -430,7 +446,8 @@ test('the text of the door: every docker inspect has a format, every config is -
   const code = codeLines();
   for (const l of code.filter((x) => /\binspect\b/.test(x))) assert.match(l, /--format\s+'[^']*'/, l);
   for (const l of code.filter((x) => /\bconfig\b/.test(x))) assert.match(l, /config --services/, l);
-  for (const l of code.filter((x) => /\blogs\b/.test(x))) assert.match(l, /logs --tail \d+ .*\| *grep -F '[^']{3,}'/, l);
+  for (const l of code.filter((x) => /\blogs\b/.test(x))) assert.match(l, /logs --tail \d+ "\$2" 2>&1 \| *grep -F -e "\$LUN_COPY_LINE"$/, l);
+  assert.match(gateText(), /^LUN_COPY_LINE='[^']{3,}'/m, 'the fixed text of the log is at least three characters');
   for (const l of code.filter((x) => /\bexec\b.*\bnode\b/.test(x))) assert.match(l, /node -p 'new Date\(\)\.toString\(\)'/, l);
 });
 test('the text of the door: the values of the request are always quoted, and read once, with globbing off', () => {
@@ -467,7 +484,7 @@ test('the text of the door: a POSIX sh script, readable at a glance, a header of
   assert.match(text, /^#!\/bin\/sh\n/);
   const bashisms = codeLines().filter((l) => /\[\[|<<<|\bdeclare\b|(^|\s)local\s|\bmapfile\b|\$'|\bfunction\s+\w+|\becho\s+-e\b|\[[^\]]*==|<\(|\bselect\s+\w+\s+in\b/.test(l));
   assert.deepEqual(bashisms, [], 'POSIX sh only');
-  assert.ok(text.split('\n').length <= 260, 'short enough to be read at a glance');
+  assert.ok(text.split('\n').length <= 280, 'short enough to be read at a glance');
   const lines = text.split('\n');
   const firstUse = lines.findIndex((l) => /SSH_ORIGINAL_COMMAND/.test(l) && !/^\s*#/.test(l));
   assert.ok(firstUse > 0, 'the door reads SSH_ORIGINAL_COMMAND');
@@ -578,4 +595,135 @@ test('twenty requests at once leave twenty whole lines in the journal', async ()
   const lines = logLines(s);
   assert.equal(lines.length, 20);
   for (const l of lines) assert.match(l, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ version accepted$/);
+});
+
+// ---------------------------------------------------------------------------------------------------
+// 8. After the second attack of the door: a cut connection, an empty environment, errors kept on the host.
+// ---------------------------------------------------------------------------------------------------
+const stateOf = (s, name) => path.join(s.dir, 'state', name);
+const fakeIn = (s, where, name, body) => fs.writeFileSync(path.join(s.dir, where, name), `#!/bin/sh\n${body}`, { mode: 0o755 });
+/** Plays the door and closes its output as soon as it has written once; resolves when the door has ended. */
+async function cutWhileRunning(s, request) {
+  const { spawn } = await import('node:child_process');
+  return new Promise((resolve) => {
+    const child = spawn(SH, [toSh(s.gate)], { cwd: path.join(s.dir, 'state'), env: { PATH: process.env.PATH, SSH_ORIGINAL_COMMAND: request }, stdio: ['ignore', 'pipe', 'pipe'] });
+    child.stdout.once('data', () => { child.stdout.destroy(); child.stderr.destroy(); });
+    child.on('close', (code) => resolve(code));
+  });
+}
+const SLOW_WRITES = "i=0\nwhile [ \"$i\" -ne 40 ]; do echo \"line $i\"; sleep 0.1; i=$((i + 1)); done\n";
+
+test('a connection cut during a deployment: the deploy script reaches its own recovery', async () => {
+  const s = sandbox();
+  fakeIn(s, 'deploy', 'deploy.sh', `set -e\ntrap 'printf rescued > "${toSh(stateOf(s, 'rescued'))}"' EXIT\n${SLOW_WRITES}printf finished > "${toSh(stateOf(s, 'finished'))}"\n`);
+  await cutWhileRunning(s, 'deploy app-a 1.2.3');
+  assert.ok(fs.existsSync(stateOf(s, 'rescued')), 'the recovery of the deploy script ran');
+  assert.ok(!fs.existsSync(stateOf(s, 'finished')), 'it left by its error path, at the failed write');
+});
+test('a connection cut during a pull: the registry is left all the same', async () => {
+  const s = sandbox();
+  const calls = toSh(stateOf(s, 'calls'));
+  fakeIn(s, 'bin', 'docker', `printf '@@ docker x\\n' >> '${calls}'\nfor a in "$@"; do printf '%s\\n' "$a" >> '${calls}'; done\ncase " $* " in *" pull "*) set -e\n${SLOW_WRITES};; esac\n`);
+  await cutWhileRunning(s, 'pull');
+  assert.deepEqual(shape(s), [compose('pull'), ['docker', 'logout', 'registry.example.test']]);
+});
+
+test('the commands get an empty environment: the search path of the door, the home folder, nothing of the session', () => {
+  const s = sandbox();
+  const dump = toSh(stateOf(s, 'env'));
+  fakeIn(s, 'bin', 'docker', `/usr/bin/env > '${dump}'\n`);
+  fakeIn(s, 'deploy', 'deploy.sh', `/usr/bin/env >> '${dump}'\n`);
+  const env = {
+    HOME: '/home/example', DOCKER_HOST: 'tcp://evil.example.test:2375', DOCKER_CONTEXT: 'evil', DOCKER_CONFIG: '/tmp/evil', DOCKER_TLS_VERIFY: '1',
+    COMPOSE_FILE: '/tmp/evil.yaml', COMPOSE_PROJECT_NAME: 'evil', APP_A_TAG: '0.0.1', DEPLOY_TRIES: '1', DEPLOY_PAUSE: '0', LANG: 'fr_FR.UTF-8',
+    // Not LD_PRELOAD: it acts on the first shell, before the door reads a line; sshd keeps it out (README).
+    LC_MESSAGES: 'fr_FR.UTF-8', LD_LIBRARY_PATH: '/tmp/evil', BUILDKIT_HOST: 'tcp://evil', SSH_AUTH_SOCK: '/tmp/evil.sock',
+    LUN_GATE_CLEAN: '1', TZ: 'Evil/Zone',
+  };
+  assert.equal(play(s, 'stop app-a', { env }).status, 0);
+  assert.equal(play(s, 'deploy app-a 1.2.3', { env }).status, 0);
+  const seen = fs.readFileSync(stateOf(s, 'env'), 'utf8').split('\n').filter(Boolean).map((l) => l.split('=')[0]);
+  // What a shell sets by itself is allowed; nothing else, and not the request.
+  const allowed = new Set(['PATH', 'LC_ALL', 'HOME', 'PWD', 'OLDPWD', 'SHLVL', '_']);
+  const leaked = [...new Set(seen)].filter((n) => !allowed.has(n) && !/^(SYSTEMROOT|WINDIR|TERM|TMP|TEMP|MSYS.*|!.*|COMSPEC|PATHEXT|[A-Za-z]:.*)$/i.test(n));
+  assert.deepEqual(leaked, [], 'no variable of the session reaches a command');
+  assert.match(fs.readFileSync(stateOf(s, 'env'), 'utf8'), /^HOME=\/home\/example$/m);
+});
+test('the door cannot be told it is already clean by the environment', () => {
+  const s = sandbox();
+  const dump = toSh(stateOf(s, 'env'));
+  fakeIn(s, 'bin', 'docker', `/usr/bin/env > '${dump}'\n`);
+  play(s, 'ps', { env: { LUN_GATE_CLEAN: '1', DOCKER_HOST: 'tcp://evil.example.test:2375' } });
+  assert.doesNotMatch(fs.readFileSync(stateOf(s, 'env'), 'utf8'), /DOCKER_HOST|LUN_GATE_CLEAN/);
+});
+
+test('an error of the stack tool or of the deploy script stays on the host: one fixed line and the code', () => {
+  const s = sandbox();
+  const noise = "printf '%s\\n' 'failed to read .env.app-a: line 3: unexpected character in variable name APP_SECRET_KEY=hunter2secret' >&2\n";
+  // Only the stack tool reads the environment files: the plain engine commands keep their own errors.
+  fakeIn(s, 'bin', 'docker', `[ "$1" = compose ] || exit 0\n${noise}exit 14\n`);
+  fakeIn(s, 'deploy', 'deploy.sh', `${noise}printf '%s\\n' 'Pairing code of the first client: 123456' >&2\nprintf '%s\\n' 'step done'\nexit 3\n`);
+  for (const [req, code] of [['up', 14], ['start app-a', 14], ['stop app-a', 14], ['restart app-a', 14], ['services', 14], ['node-time app-a', 14],
+    ['image-digest app-a', 14], ['trial-up app-a', 14], ['trial-load app-a 2026-11-20', 14], ['deploy app-a 1.2.3', 3]]) {
+    const r = play(s, req);
+    assert.equal(r.status, code, req);
+    assert.doesNotMatch(r.out + r.err, /hunter2secret|APP_SECRET_KEY|123456|Pairing/, req);
+    assert.match(r.err, /^prod-gate: the gesture failed \(\d+\): see the errors file on the host\n$/, req);
+  }
+  for (const req of ['health app-a', 'trial-health app-a', 'pull', 'versions']) {
+    const r = play(s, req);
+    assert.notEqual(r.status, 0, req);
+    assert.doesNotMatch(r.out + r.err, /hunter2secret|APP_SECRET_KEY/, req);
+  }
+  assert.equal(play(s, 'deploy app-a 1.2.3').out, 'step done\n', 'what the deploy script prints on its output still comes');
+  assert.match(fs.readFileSync(`${s.logFile}.errors`, 'utf8'), /hunter2secret/, 'the error is kept on the host, next to the journal');
+  assert.doesNotMatch(logLines(s).join('\n'), /hunter2secret|123456/);
+});
+
+test('the deploy folder cannot be entered: nothing runs, 68, and the journal says refused', () => {
+  const s = sandbox({ header: { LUN_DEPLOY_DIR: '/no/such/folder' } });
+  for (const req of ['ps', 'start app-a', 'deploy app-a 1.2.3']) assert.equal(play(s, req).status, 68, req);
+  assert.deepEqual(shape(s), []);
+  const lines = logLines(s);
+  assert.equal(lines.length, 3);
+  for (const l of lines) assert.match(l, / refused$/);
+});
+test('env-length: the first line of that name, the value as written, quotes counted', () => {
+  const s = sandbox();
+  fs.writeFileSync(path.join(s.dir, 'deploy', '.env.app-b'), 'APP_SECRET_KEY="abcd"\nAPP_SECRET_KEY=abcdefghijkl\nAPP_OTHER_KEY=\n');
+  assert.equal(play(s, 'env-length app-b APP_SECRET_KEY').out.trim(), '6');
+  assert.equal(play(s, 'env-length app-b APP_OTHER_KEY').out.trim(), '0');
+  assert.match(play(s, 'gestes').out, /^env-length <app> <name>.*quotes counted.*first line/m);
+});
+test('the fixed text of the log is refused when it is shorter than three characters: nothing runs, 69', () => {
+  const s = sandbox({ header: { LUN_COPY_LINE: 'ab' } });
+  assert.equal(play(s, 'copy-line app-a').status, 69);
+  assert.deepEqual(shape(s), []);
+});
+test('the fixed text of the log is searched as it is, even when it looks like an option or a pattern', () => {
+  const s = sandbox({ header: { LUN_COPY_LINE: '-v .*' } });
+  const r = play(s, 'copy-line app-a');
+  assert.equal(r.out, '', 'no line of the fake log holds that text');
+  assert.doesNotMatch(r.out + r.err, /123456|appairage/);
+});
+test('gestes says what image-digest and container-memory give', () => {
+  const s = sandbox();
+  const out = play(s, 'gestes').out;
+  assert.match(out, /^image-digest <app>.*identifier, on the host, of the image/m);
+  assert.match(out, /^container-memory\s.*memory of each container/m);
+});
+test('the text of the door: a command in a container, or another entry point, only with the trial stack', () => {
+  const code = codeLines();
+  const inContainer = code.filter((l) => /\b(docker|compose)\b.*\s(exec|run)\s|--entrypoint/.test(l));
+  assert.ok(inContainer.length >= 2, 'the time gesture and the trial load are there');
+  for (const l of inContainer) {
+    const time = /^\s*compose exec -T "\$2" node -p 'new Date\(\)\.toString\(\)'$/.test(l);
+    const trialOnly = /^\s*compose -f "\$LUN_TRIAL_FILE" run --rm --entrypoint ENTRY "\$LUN_TRIAL_PREFIX\$2" /.test(l);
+    assert.ok(time || trialOnly, l);
+  }
+  // The names of the stack are values of the header, not text of the door.
+  for (const name of ['LUN_TRIAL_FILE', 'LUN_TRIAL_PREFIX', 'LUN_TRIAL_COPIES', 'LUN_ENV_FILE_PREFIX', 'LUN_BASE_DIR', 'LUN_BASE_EXT', 'LUN_COPY_LINE', 'LUN_DEPLOY_SCRIPT']) {
+    assert.ok(code.some((l) => l.includes(`$${name}`)), `${name} is used`);
+  }
+  assert.doesNotMatch(code.filter((l) => !/^LUN_[A-Z_]+='/.test(l)).join('\n'), /\.ya?ml|\.db\b|\/copies|\.env\b/, 'no file name of the stack outside the header');
 });

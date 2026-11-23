@@ -5,30 +5,45 @@
 # it looks the gesture up in the table below, checks each argument, and runs the command written here.
 # Anything else is refused and nothing runs.
 # Exit codes: the code of the command when a gesture ran; 64 request unreadable; 65 unknown gesture;
-# 66 argument out of form; 67 the journal cannot be written; 68 the deploy folder cannot be entered.
+# 66 argument out of form; 67 the journal cannot be written; 68 the deploy folder cannot be entered;
+# 69 a value of the header is out of form.
 
 # ---- The values of the instance: fill them in, nothing else changes them ------------------------------
+LUN_SHELL='/bin/sh'
 LUN_PATH='/usr/local/bin:/usr/bin:/bin'
 LUN_DEPLOY_DIR='/srv/example/deploy'
+LUN_DEPLOY_SCRIPT='deploy.sh'
 LUN_COPIES='/srv/example/copies'
 LUN_APPS='app-a app-b app-c'
 LUN_VOLUMES='app-a-data app-b-data app-c-data'
+LUN_ENV_FILE_PREFIX='.env.'
 LUN_ENV_NAMES='APP_SECRET_KEY APP_OTHER_KEY'
 LUN_REGISTRY='registry.example.test'
+LUN_COPY_LINE='Base copied'
+LUN_TRIAL_FILE='trial.yaml'
+LUN_TRIAL_PREFIX='trial-'
+LUN_TRIAL_COPIES='/copies'
+LUN_BASE_DIR='data'
+LUN_BASE_EXT='.db'
 LUN_GATE_LOG='/var/log/example/prod-gate.log'
 
 # ---- Nothing inherited from the session ------------------------------------------------------------
+# The door starts itself again under an empty environment: the request and the home folder, nothing else.
+if [ "${1-}" != clean ]; then
+  exec /usr/bin/env -i HOME="${HOME-}" SSH_ORIGINAL_COMMAND="${SSH_ORIGINAL_COMMAND-}" "$LUN_SHELL" "$0" clean
+fi
 PATH=$LUN_PATH
 LC_ALL=C
 export PATH LC_ALL
-unset IFS ENV BASH_ENV CDPATH
-# What would point the container engine elsewhere, and the input of the session.
-unset DOCKER_HOST DOCKER_CONTEXT DOCKER_CONFIG COMPOSE_FILE COMPOSE_PROJECT_NAME COMPOSE_ENV_FILES COMPOSE_PROFILES
+# A connection cut in the middle of a gesture kills nothing: a failed write is an error the command
+# sees, so a deployment reaches its own recovery and a pull is followed by leaving the registry.
+trap '' PIPE HUP
 exec < /dev/null
 set -u
 set -f
 
 request=${SSH_ORIGINAL_COMMAND-}
+unset SSH_ORIGINAL_COMMAND
 # The journal shows the first word only, cut short, its odd characters hidden.
 name=${request%% *}
 name=$(printf '%s' "$name" | tr -c 'A-Za-z0-9._-' '?' | cut -c1-32)
@@ -42,16 +57,29 @@ refuse() {
   printf 'prod-gate: refused (%s)\n' "$1" >&2
   exit "$1"
 }
-# Journaled first, then run from the deploy folder.
+# Run from the deploy folder, and journaled once it is entered.
 accept() {
+  cd "$LUN_DEPLOY_DIR" 2>/dev/null || refuse 68
   journal accepted
-  cd "$LUN_DEPLOY_DIR" || exit 68
 }
+# The errors of the stack tool and of the deploy script may quote a line of an environment file or of a
+# log: they stay on the host, next to the journal, and the session gets one fixed line and the code.
+quiet() {
+  "$@" 2>> "$LUN_GATE_LOG.errors"
+  code=$?
+  [ "$code" -eq 0 ] || printf 'prod-gate: the gesture failed (%s): see the errors file on the host\n' "$code" >&2
+  return "$code"
+}
+compose() { quiet docker compose "$@"; }
 # The number of words of the request: the gesture and its arguments.
 words() { [ "$2" -eq "$1" ] || refuse 66; }
 is_app() { case " $LUN_APPS " in *" $1 "*) ;; *) refuse 66 ;; esac; }
 is_env_name() { case " $LUN_ENV_NAMES " in *" $1 "*) ;; *) refuse 66 ;; esac; }
-is_date() { case "$1" in [0-9][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]) ;; *) refuse 66 ;; esac; }
+is_date() {
+  case "$1" in [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;; *) refuse 66 ;; esac
+  case "$1" in ?????0[1-9]??? | ?????1[0-2]???) ;; *) refuse 66 ;; esac
+  case "$1" in ????????0[1-9] | ????????[12][0-9] | ????????3[01]) ;; *) refuse 66 ;; esac
+}
 is_version() {
   case "$1" in
     rollback) ;;
@@ -73,137 +101,165 @@ gesture=$1
 # ---- The table of gestures: reading first, then acting ------------------------------------------------
 case "$gesture" in
 
-  gestes) # the names of the gestures and their arguments
+  gestes) # the names of the gestures, their arguments, what they give
     words 1 "$#"; accept
-    printf '%s\n' 'gestes' 'version' 'ps' 'health <app>' 'volumes' 'versions' 'memory' 'space' 'services' \
-      'copy-line <app>' 'copies <app>' 'node-time <app>' 'image-digest <app>' 'env-length <app> <name>' \
-      'up' 'start <app>' 'stop <app>' 'restart <app>' 'pull' 'volumes-create' 'deploy <app> <version|rollback>' \
-      'trial-load <app> <date>' 'trial-up <app>' 'trial-health <app>'
+    printf '%s\n' \
+      'gestes                           this list' \
+      'version                          the version of the door' \
+      'ps                               the containers and their state' \
+      'health <app>                     the health of one app' \
+      'volumes                          the names of the volumes' \
+      'versions                         the versions of the container engine and of the stack tool' \
+      'memory                           the memory of the host' \
+      'container-memory                 the memory of each container, now' \
+      'space                            the free space of the deploy folder and of the copies' \
+      'services                         the names of the services of the stack' \
+      'copy-line <app>                  the lines of the log of one app that say its base was copied' \
+      'copies <app>                     the names and dates of the copies of one app' \
+      'node-time <app>                  the time one app reads' \
+      'image-digest <app>               the identifier, on the host, of the image one app runs' \
+      'env-length <app> <name>          the length of a value as written, quotes counted, first line of that name' \
+      'up                               start the whole stack' \
+      'start <app>                      start one app' \
+      'stop <app>                       stop one app' \
+      'restart <app>                    restart one app' \
+      'pull                             pull the images, then leave the registry' \
+      'volumes-create                   create the volumes of the bases' \
+      'deploy <app> <version|rollback>  put one app at a version, or back at the one before' \
+      'trial-load <app> <date>          load the copy of a day into the trial of one app' \
+      'trial-up <app>                   start the trial of one app' \
+      'trial-health <app>               the health of the trial of one app'
     ;;
 
-  version) # the version of this door
+  version)
     words 1 "$#"; accept
-    printf '%s\n' '1'
+    printf '%s\n' '2'
     ;;
 
-  ps) # the containers and their state
+  ps)
     words 1 "$#"; accept
     docker ps --format '{{.Names}} {{.Status}}'
     ;;
 
-  health) # the health of one app
+  health)
     words 2 "$#"; is_app "$2"; accept
-    id=$(docker compose ps -q "$2")
+    id=$(compose ps -q "$2")
     [ -n "$id" ] || exit 1
     docker inspect --format '{{.State.Health.Status}}' "$id"
     ;;
 
-  volumes) # the names of the volumes
+  volumes)
     words 1 "$#"; accept
     docker volume ls --format '{{.Name}}'
     ;;
 
-  versions) # the versions of the container engine and of compose
+  versions)
     words 1 "$#"; accept
     docker version --format '{{.Server.Version}}'
-    docker compose version --short
+    compose version --short
     ;;
 
-  memory) # the memory of the host
+  memory)
     words 1 "$#"; accept
     free -m
     ;;
 
-  space) # the free space of the deploy folder and of the copies
+  container-memory)
+    words 1 "$#"; accept
+    docker stats --no-stream --format '{{.Name}} {{.MemUsage}}'
+    ;;
+
+  space)
     words 1 "$#"; accept
     df -h "$LUN_DEPLOY_DIR" "$LUN_COPIES"
     ;;
 
-  services) # the names of the services of the stack
+  services)
     words 1 "$#"; accept
-    docker compose config --services
+    compose config --services
     ;;
 
-  copy-line) # the lines of the log of one app that say its base was copied, and no other line
+  copy-line) # one fixed text, searched as it is: no other line of the log comes out
     words 2 "$#"; is_app "$2"; accept
-    docker compose logs --tail 500 "$2" 2>&1 | grep -F 'Base copiée'
+    [ "${#LUN_COPY_LINE}" -ge 3 ] || exit 69
+    docker compose logs --tail 500 "$2" 2>&1 | grep -F -e "$LUN_COPY_LINE"
     ;;
 
-  copies) # the names and dates of the copies of one app
+  copies)
     words 2 "$#"; is_app "$2"; accept
     ls -l "$LUN_COPIES/$2"
     ;;
 
-  node-time) # the time one app reads
+  node-time)
     words 2 "$#"; is_app "$2"; accept
-    docker compose exec -T "$2" node -p 'new Date().toString()'
+    compose exec -T "$2" node -p 'new Date().toString()'
     ;;
 
-  image-digest) # the image one app runs
+  image-digest)
     words 2 "$#"; is_app "$2"; accept
-    docker compose images -q "$2"
+    compose images -q "$2"
     ;;
 
-  env-length) # the length of one value of the environment file of one app, never the value
+  env-length) # the length, never the value
     words 3 "$#"; is_app "$2"; is_env_name "$3"; accept
-    line=$(grep "^$3=" "$LUN_DEPLOY_DIR/.env.$2") || exit 1
+    line=$(grep -m 1 "^$3=" "$LUN_DEPLOY_DIR/$LUN_ENV_FILE_PREFIX$2") || exit 1
     value=${line#*=}
     printf '%s\n' "${#value}"
     ;;
 
-  up) # start the whole stack
+  up)
     words 1 "$#"; accept
-    docker compose up -d
+    compose up -d
     ;;
 
-  start) # start one app
+  start)
     words 2 "$#"; is_app "$2"; accept
-    docker compose up -d "$2"
+    compose up -d "$2"
     ;;
 
-  stop) # stop one app
+  stop)
     words 2 "$#"; is_app "$2"; accept
-    docker compose stop "$2"
+    compose stop "$2"
     ;;
 
-  restart) # restart one app
+  restart)
     words 2 "$#"; is_app "$2"; accept
-    docker compose restart "$2"
+    compose restart "$2"
     ;;
 
-  pull) # pull the images, then leave the registry, whatever the pull gave
+  pull) # the registry is left whatever the pull gave
     words 1 "$#"; accept
-    docker compose pull
-    code=$?
+    compose pull
+    pulled=$?
     docker logout "$LUN_REGISTRY"
-    exit "$code"
+    exit "$pulled"
     ;;
 
-  volumes-create) # create the volumes of the bases (creating one that exists changes nothing)
+  volumes-create) # creating a volume that exists changes nothing
     words 1 "$#"; accept
     for volume in $LUN_VOLUMES; do
       docker volume create "$volume" || exit 1
     done
     ;;
 
-  deploy) # put one app at a version, or back at the version before: the deploy script of the stack
+  deploy) # the deploy script of the stack
     words 3 "$#"; is_app "$2"; is_version "$3"; accept
-    "$LUN_DEPLOY_DIR/deploy.sh" "$2" "$3"
+    quiet "$LUN_DEPLOY_DIR/$LUN_DEPLOY_SCRIPT" "$2" "$3"
     ;;
 
-  trial-load) # load the copy of a day into the trial volume of one app, apart from its real base
+  trial-load) # apart from the real base: the trial stack only
     words 3 "$#"; is_app "$2"; is_date "$3"; accept
-    docker compose -f essai.yaml run --rm --entrypoint cp "essai-$2" "/copies/$2-$3.db" "data/$2.db"
+    compose -f "$LUN_TRIAL_FILE" run --rm --entrypoint cp "$LUN_TRIAL_PREFIX$2" "$LUN_TRIAL_COPIES/$2-$3$LUN_BASE_EXT" "$LUN_BASE_DIR/$2$LUN_BASE_EXT"
     ;;
 
-  trial-up) # start the trial of one app
+  trial-up)
     words 2 "$#"; is_app "$2"; accept
-    docker compose -f essai.yaml up -d "essai-$2"
+    compose -f "$LUN_TRIAL_FILE" up -d "$LUN_TRIAL_PREFIX$2"
     ;;
 
-  trial-health) # the health of the trial of one app
+  trial-health)
     words 2 "$#"; is_app "$2"; accept
-    id=$(docker compose -f essai.yaml ps -q "essai-$2")
+    id=$(compose -f "$LUN_TRIAL_FILE" ps -q "$LUN_TRIAL_PREFIX$2")
     [ -n "$id" ] || exit 1
     docker inspect --format '{{.State.Health.Status}}' "$id"
     ;;
