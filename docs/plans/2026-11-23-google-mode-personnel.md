@@ -8,7 +8,7 @@
 >
 > **État : rédigé le 23/11 ; contesté le 23/11 (« à amender ») ; amendé le 23/11 avec deux décisions de CrOliX ;
 > validé par CrOliX le 23/11.**
-> Tâches 6 et 7 faites le 23/11.
+> **PR qui livre : Lun-Ecosystem/lun-acedia#85.** Tâches 1 à 4, 6 et 7 faites le 23/11 (client de l’essai reconnecté à 15 h 43 ; envoi et adresses d’envoi constatés par CrOliX). Tâche 5 à constater à partir du 01/12, 15 h 43.
 >
 > Code relu sur `main` de Lun'Acedia (`46aff46`, la 0.2.0) ; le graphe d'abord, puis chaque point dans le code. Le
 > plan du NAS relu sur `main` de lun-docs (`d59451a`). Lun'Acedia est public : ce plan ne porte ni identifiant de
@@ -108,7 +108,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit éch
 **L'ordre.** **1, 2, 3, 6 et 7 partent en parallèle** (aucun fichier commun : 1 la page, 2 la carte, 3 la console et
 le `.env`, 6 le plan du NAS, 7 une issue). 4 attend 3. 5 se constate au moins 8 jours après 3, avant l'arrêt C.
 
-1. - [ ] **La page « Brancher Google »** (la session, `docs/brancher-google.md` de Lun'Acedia ; pas de code).
+1. - [x] **La page « Brancher Google »** (la session, `docs/brancher-google.md` de Lun'Acedia ; pas de code).
    - **La section 1 devient le mode Personnel**, dans l'ordre des gestes de l'essai du 23/11 : se connecter à la
      console avec le compte qu'Acedia servira (en développement, le compte de test) ; créer le projet depuis la page
      `https://console.cloud.google.com/auth/overview/personal` ; activer les API Gmail, Google Calendar et Google
@@ -128,7 +128,7 @@ le `.env`, 6 le plan du NAS, 7 une issue). 4 attend 3. 5 se constate au moins 8 
      noms réels) ; tout texte sur ce que Google montre à un autre compte (non constaté).
    - **Preuve** : la page relue contre le critère 1, phrase par phrase ; `npm run format:check` au vert.
 
-2. - [ ] **La carte du compte dit le compte attendu** (testeur, puis `dev-front` ;
+2. - [x] **La carte du compte dit le compte attendu** (testeur, puis `dev-front` ;
    `views/src/lib/settings/GoogleAccount.svelte` et `Settings.test.ts`).
    - **Sans compte**, la ligne « Aucun compte » (`:66`) dit aussi, avant tout clic : « Seul le compte Google qui a
      créé le projet d'Acedia peut se connecter. » Texte à relire par CrOliX dans la PR.
@@ -140,14 +140,14 @@ le `.env`, 6 le plan du NAS, 7 une issue). 4 attend 3. 5 se constate au moins 8 
    - **Exclu** : le retour de Google (`oauth.ts`), aucun code pour `error=` ; les droits ; lun-acedia#55.
    - **Preuve** : les barrières au vert ; une capture de la carte sans compte, prise dans Chrome sur Acedia locale.
 
-3. - [ ] **Le client de l'essai en service** (CrOliX ; la session lit l'écran).
+3. - [x] **Le client de l'essai en service** (CrOliX ; la session lit l'écran).
    - CrOliX met l'identifiant et le secret du client de l'essai dans le `.env` de son Acedia locale sur le laptop
      (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`), puis la relance. Ces valeurs ne sortent pas du `.env`.
    - **Déconnecter puis reconnecter le compte de test** dans Réglages › Compte Google : le jeton rangé appartient à
      l'ancien client. On attend : aucun écran d'avertissement, la carte « Connecté », la synchronisation qui reprend.
    - **Relevé** : la date et l'heure de la reconnexion (point de départ de la tâche 5).
 
-4. - [ ] **L'envoi et les adresses d'envoi, prouvés** (CrOliX ; la session lit l'écran dans Chrome, en lecture, et ne
+4. - [x] **L'envoi et les adresses d'envoi, prouvés** (CrOliX ; la session lit l'écran dans Chrome, en lecture, et ne
    clique « Envoyer » que sur son accord). Après la tâche 3.
    - **Les adresses d'envoi** : l'éditeur ouvert, le champ « De » liste les adresses du compte (`GET /api/send-as` en
      200 dans le réseau de l'onglet). C'est `gmail.settings.basic` à l'œuvre.
