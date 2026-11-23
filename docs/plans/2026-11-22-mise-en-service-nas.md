@@ -618,7 +618,7 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
   **dernière**. **Si aucun écran ne montre le code, le
   critère « sans terminal » n'est pas tenu sur le NAS** : c'est un écart ouvert, écrit dans la page et dans l'issue ;
   CrOliX lit alors le code par sa propre session SSH. La session ne le lit jamais : aucun geste ne le montre.
-- [ ] Le téléphone, par un code donné par l'appareil appairé (Atelier › Appareils, Réglages › Appareils et
+- [x] Le téléphone, par un code donné par l'appareil appairé (Atelier › Appareils, Réglages › Appareils et
   applications) : sans terminal.
 - [x] **Relier Acedia et Avaritia au core, par l'écran**, et l'adresse de leur page dans Atelier › Postes.
 - **Écart du 23/11** : le code de premier appareil d'un satellite part dans sa liaison au core ; le navigateur s'appaire ensuite par une commande sur le NAS. Le critère « sans terminal » ne tient pas ici (lun-docs#199).
@@ -714,7 +714,7 @@ lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, a
 
 *Au retour de CrOliX chez lui.*
 
-- [ ] Le client du réseau privé ; la PWA du core installée depuis son adresse HTTPS ; les notifications autorisées.
+- [x] Le client du réseau privé ; la PWA du core installée depuis son adresse HTTPS ; les notifications autorisées.
   Acedia et Avaritia de même s'il les veut. **Point d'attention** : sur Android, le client du réseau privé peut ne
   laisser passer que les applications d'une liste blanche. Le navigateur doit y être : hors de la liste, les adresses
   des apps sont introuvables alors que le téléphone est joint (constaté le 23/11 ; côté nœud, les octets reçus de ce
