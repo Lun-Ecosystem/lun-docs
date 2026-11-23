@@ -16,10 +16,15 @@
 > **Révision du 23/11.** Aucune décision ne change ; seuls changent qui fait quoi et par quel moyen. Le 22/11 au
 > soir, CrOliX a choisi « la garde sur le NAS, et le laptop au minimum » (décision 2) : la session ne joue plus de
 > commande libre par SSH. Sa clé est restreinte, par une commande forcée, à **la porte** de l'hôte
-> (`tools/prod-gate/README.md`, en brouillon dans Lun-Ecosystem/lun-docs#193), qui ne joue que des
+> (`tools/prod-gate/README.md`, Lun-Ecosystem/lun-docs#193), qui ne joue que des
 > gestes nommés. Chaque étape de la session nomme donc son geste ; une étape sans geste revient à CrOliX. La session ne
 > copie rien vers le NAS et n'y écrit aucun fichier. La porte et la clé restreinte se posent avant toute séance (P9).
 > L'état des lieux a été fait le 23/11 par CrOliX lui-même (tâche 1).
+>
+> **État au 23/11.** Remplace l'état du 22/11 ci-dessus. Les correctifs des satellites sont fusionnés. La porte est
+> fusionnée (Lun-Ecosystem/lun-docs#193), pas encore posée. Le moteur Docker du laptop tourne : la première moitié
+> de la répétition est jouée (tâche 5). Restent les versions `0.2.0`, puis le second temps de la répétition avec les
+> images publiées. Aucune commande n'a été jouée sur le NAS par la session.
 >
 > Code relu sur `main` : Lun'Anima `365c7e6`, Lun'Acedia `bf724e3`, Lun'Avaritia `9c53768` ; le graphe d'abord, puis
 > les fichiers. Lun'Anima est privé : ce plan dit les gestes, les critères, les risques et les décisions, en
@@ -342,7 +347,7 @@ Dans l'ordre. Lui seul : cela touche ses comptes et ses accès. La session ne fa
 - [ ] **P5. L'agent de la séance** : il lance l'agent de Git Bash sur l'emplacement de la part privée, charge la clé
   avec une durée de vie, puis essaie une connexion. *Bon quand* : `ssh-add -l` montre la clé avec sa durée, et le
   lanceur obtient `gestes` sans mot de passe (après P9). Si la durée de vie est refusée, il le dit.
-- [ ] **P6. Le moteur Docker du laptop**, démarré, pour la répétition. *Bon quand* : `docker info` répond.
+- [x] **P6. Le moteur Docker du laptop**, démarré, pour la répétition. *Bon quand* : `docker info` répond.
 - [ ] **P7. Le client du réseau privé sur le laptop**, connecté, pour joindre les apps en HTTPS. *Bon quand* :
   `tailscale status` répond. Chaque appareil qui ouvre les écrans doit y être : sans son client, le laptop
   n'atteignait pas le site (constaté le 23/11).
@@ -488,7 +493,7 @@ Pour chaque dépôt :
 | La liaison | le core joint les satellites par leurs adresses |
 | La clé vidée | les trois nœuds sains sous les mêmes noms, aucun nouveau ; les liaisons tiennent |
 
-La pile entière sur le moteur Docker du laptop, **démarré par CrOliX** : c'est le verrou d'aujourd'hui. Elle se joue
+La pile entière sur le moteur Docker du laptop, **démarré par CrOliX** (fait le 23/11). Elle se joue
 **avant le NAS, en deux temps** : d'abord en entier, avec des images **construites localement**, sur la pile de la
 tâche 3 encore en brouillon ; puis, une fois les `0.2.0` publiées, **plus court**, avec les images **tirées du
 registre** : la première installation, le déploiement, le HTTPS, les empreintes. Un relevé écrit, lu à l'arrêt B.
