@@ -53,7 +53,10 @@ même utilisateur que la session, qui peut les défaire.
 
 - **Le lanceur** : `node <plugin>/hooks/prod-run.mjs <geste> [arguments]` (`gestes` en donne la liste). Il
   envoie le nom du geste et ses arguments, rien d'autre, par `ssh` lancé sans shell, sans la configuration
-  SSH du poste, sans terminal ni transfert, vers le premier hôte déclaré. La porte vérifie pour de bon.
+  SSH du poste, sans terminal ni transfert, vers le premier hôte déclaré. Sous Windows il prend le client
+  SSH de Git quand il existe : c'est lui qui joint l'agent de clés de Git Bash, où la clé est chargée (la
+  variable de l'agent doit être dans l'environnement de la session). La porte vérifie pour de bon. Un geste
+  long (`deploy`, `pull`) se lance avec un délai long ou en arrière-plan : le lanceur ne coupe rien lui-même.
 - **Le filet** : quand des hôtes de prod sont déclarés, le hook du plugin refuse une ligne de commande ou
   un texte écrit qui en nomme un, un client SSH dont la cible n'est pas lisible (une variable, une
   substitution), une commande encodée, un contexte distant du moteur de conteneurs. Ses refus sont fixes,

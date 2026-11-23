@@ -388,3 +388,25 @@ test('hooks.json runs guard.mjs for the shell tools and the write tools', () => 
   const tools = new Set(cfg.hooks.PreToolUse.filter((e) => e.hooks.some((h) => h.command.includes('guard.mjs'))).flatMap((e) => e.matcher.split('|')));
   for (const t of ['Bash', 'PowerShell', 'Write', 'Edit', 'MultiEdit', 'NotebookEdit']) assert.ok(tools.has(t), `${t} in ${[...tools]}`);
 });
+
+// ---------------------------------------------------------------------------------------------------
+// 6. The SSH client of the launcher: the one that reaches the key agent of Git Bash.
+// ---------------------------------------------------------------------------------------------------
+test('on Windows the launcher takes the SSH client of Git when it is there, and lets the key agent through', () => {
+  const { file, args, opts } = launch(['ps']).calls[0];
+  const ignored = args[args.indexOf('-F') + 1];
+  const gitSsh = 'C:\\Program Files\\Git\\usr\\bin\\ssh.exe';
+  if (process.platform !== 'win32') {
+    assert.equal(file, '/usr/bin/ssh');
+    assert.equal(ignored, '/dev/null');
+  } else if (fs.existsSync(gitSsh)) {
+    assert.equal(file, gitSsh);
+    assert.equal(ignored, '/dev/null', 'the client of Git reads paths as a POSIX program');
+  } else {
+    assert.match(file, /\\OpenSSH\\ssh\.exe$/);
+    assert.equal(ignored, 'NUL');
+  }
+  // No environment of its own: ssh inherits the one of the session, with the variable of the key agent.
+  assert.equal(opts.env, undefined);
+  assert.equal(opts.timeout, undefined, 'the launcher does not cut a long gesture itself');
+});

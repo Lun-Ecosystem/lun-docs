@@ -4,16 +4,19 @@
 // is the guard, it checks them for real and runs the command written there. Here, a narrow set of
 // characters refuses a typo early, and ssh is started without a shell, by a fixed path, without the SSH
 // configuration of the machine, with the user, the port and the key of the instance, toward its first host.
+import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { loadProdConfig } from './prod-ssh.mjs';
 
-const WINDOWS = process.platform === 'win32';
-// Not found on the search path, and no variable changes it.
-const SSH = WINDOWS ? 'C:\\Windows\\System32\\OpenSSH\\ssh.exe' : '/usr/bin/ssh';
+// A fixed path, not found on the search path, and no variable changes it. On Windows, the client of Git
+// when it is there: it reaches the key agent of Git Bash (SSH_AUTH_SOCK), which the client of Windows cannot.
+const GIT_SSH = 'C:\\Program Files\\Git\\usr\\bin\\ssh.exe';
+const WINDOWS_SSH = 'C:\\Windows\\System32\\OpenSSH\\ssh.exe';
+const SSH = process.platform !== 'win32' ? '/usr/bin/ssh' : fs.existsSync(GIT_SSH) ? GIT_SSH : WINDOWS_SSH;
 // No configuration file, no terminal, no input, nothing forwarded, no question asked, one key only.
-const SSH_OPTIONS = ['-F', WINDOWS ? 'NUL' : '/dev/null', '-T', '-n', '-a', '-x', '-o', 'ClearAllForwardings=yes', '-o', 'BatchMode=yes',
+const SSH_OPTIONS = ['-F', SSH === WINDOWS_SSH ? 'NUL' : '/dev/null', '-T', '-n', '-a', '-x', '-o', 'ClearAllForwardings=yes', '-o', 'BatchMode=yes',
   '-o', 'IdentitiesOnly=yes', '-o', 'ConnectTimeout=10', '-o', 'RequestTTY=no'];
 
 const GESTURE = /^[a-z][a-z0-9-]{0,31}$/;
