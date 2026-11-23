@@ -58,7 +58,7 @@ function sandbox({ logDir, header = {} } = {}) {
   fake(path.join(dir, 'bin', 'docker'), `${record('docker')}${fail}case " $* " in
   *" ps -q "*) for a in "$@"; do last=$a; done; printf 'id-%s\\n' "$last" ;;
   *" inspect "*) printf 'healthy\\n' ;;
-  *" logs "*) printf '%s\\n' "Aucun client appairé. Code d'appairage du premier client : 123456" "Base copied : /app/data/backups/x.db" "autre ligne" ;;
+  *" logs "*) printf '%s\\n' "No device yet. Pairing code: 123456" "Base copied : /data/x.db" "another line" ;;
 esac
 `);
   for (const name of ['ls', 'free', 'df']) fake(path.join(dir, 'bin', name), `${record(name)}printf 'fake-${name}\\n'\n`);
@@ -196,7 +196,7 @@ test('gesture copy-line: only the fixed line of the log, never the pairing code'
   const r = play(s, 'copy-line app-a');
   assert.equal(r.status, 0, r.err);
   assert.match(r.out, /Base copied/);
-  assert.doesNotMatch(r.out + r.err, /123456|appairage|autre ligne/);
+  assert.doesNotMatch(r.out + r.err, /123456|Pairing|another line/);
 });
 test('gesture pull: the registry is left even when the pull fails, and the pull code is returned', () => {
   const s = sandbox();
@@ -704,7 +704,7 @@ test('the fixed text of the log is searched as it is, even when it looks like an
   const s = sandbox({ header: { LUN_COPY_LINE: '-v .*' } });
   const r = play(s, 'copy-line app-a');
   assert.equal(r.out, '', 'no line of the fake log holds that text');
-  assert.doesNotMatch(r.out + r.err, /123456|appairage/);
+  assert.doesNotMatch(r.out + r.err, /123456|Pairing/);
 });
 test('gestes says what image-digest and container-memory give', () => {
   const s = sandbox();
