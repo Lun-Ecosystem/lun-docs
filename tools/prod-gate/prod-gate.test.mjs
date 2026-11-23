@@ -35,7 +35,7 @@ const SH_PATH = spawnSync(SH, ['-c', `command -v ${SH}`], { encoding: 'utf8' }).
 const toSh = (p) => (process.platform === 'win32' ? p.replace(/\\/g, '/').replace(/^([A-Za-z]):/, (_, d) => `/${d.toLowerCase()}`) : p);
 const gateText = () => fs.readFileSync(gatePath, 'utf8').replace(/\r\n/g, '\n');
 
-const HEADER = ['LUN_SHELL', 'LUN_PATH', 'LUN_DEPLOY_DIR', 'LUN_DEPLOY_SCRIPT', 'LUN_COPIES', 'LUN_APPS', 'LUN_VOLUMES', 'LUN_ENV_FILE_PREFIX',
+const HEADER = ['LUN_SHELL', 'LUN_HOME', 'LUN_PATH', 'LUN_DEPLOY_DIR', 'LUN_DEPLOY_SCRIPT', 'LUN_COPIES', 'LUN_APPS', 'LUN_VOLUMES', 'LUN_ENV_FILE_PREFIX',
   'LUN_ENV_NAMES', 'LUN_REGISTRY', 'LUN_COPY_LINE', 'LUN_TRIAL_FILE', 'LUN_TRIAL_PREFIX', 'LUN_TRIAL_COPIES', 'LUN_BASE_DIR', 'LUN_BASE_EXT', 'LUN_GATE_LOG'];
 
 const sandboxes = [];
@@ -69,6 +69,7 @@ esac
 
   const values = {
     LUN_SHELL: SH_PATH,
+    LUN_HOME: '/home/from-the-header',
     LUN_PATH: `${toSh(path.join(dir, 'bin'))}:/usr/bin:/bin`,
     LUN_DEPLOY_SCRIPT: 'deploy.sh',
     LUN_ENV_FILE_PREFIX: '.env.',
@@ -634,7 +635,7 @@ test('the commands get an empty environment: the search path of the door, the ho
   fakeIn(s, 'bin', 'docker', `/usr/bin/env > '${dump}'\n`);
   fakeIn(s, 'deploy', 'deploy.sh', `/usr/bin/env >> '${dump}'\n`);
   const env = {
-    HOME: '/home/example', DOCKER_HOST: 'tcp://evil.example.test:2375', DOCKER_CONTEXT: 'evil', DOCKER_CONFIG: '/tmp/evil', DOCKER_TLS_VERIFY: '1',
+    HOME: '/home/evil', DOCKER_HOST: 'tcp://evil.example.test:2375', DOCKER_CONTEXT: 'evil', DOCKER_CONFIG: '/tmp/evil', DOCKER_TLS_VERIFY: '1',
     COMPOSE_FILE: '/tmp/evil.yaml', COMPOSE_PROJECT_NAME: 'evil', APP_A_TAG: '0.0.1', DEPLOY_TRIES: '1', DEPLOY_PAUSE: '0', LANG: 'fr_FR.UTF-8',
     // Not LD_PRELOAD: it acts on the first shell, before the door reads a line; sshd keeps it out (README).
     LC_MESSAGES: 'fr_FR.UTF-8', LD_LIBRARY_PATH: '/tmp/evil', BUILDKIT_HOST: 'tcp://evil', SSH_AUTH_SOCK: '/tmp/evil.sock',
@@ -647,7 +648,9 @@ test('the commands get an empty environment: the search path of the door, the ho
   const allowed = new Set(['PATH', 'LC_ALL', 'HOME', 'PWD', 'OLDPWD', 'SHLVL', '_']);
   const leaked = [...new Set(seen)].filter((n) => !allowed.has(n) && !/^(SYSTEMROOT|WINDIR|TERM|TMP|TEMP|MSYS.*|!.*|COMSPEC|PATHEXT|[A-Za-z]:.*)$/i.test(n));
   assert.deepEqual(leaked, [], 'no variable of the session reaches a command');
-  assert.match(fs.readFileSync(stateOf(s, 'env'), 'utf8'), /^HOME=\/home\/example$/m);
+  // The home folder is a value of the header: the one of the session would choose the configuration of the engine.
+  const homes = fs.readFileSync(stateOf(s, 'env'), 'utf8').split('\n').filter((l) => l.startsWith('HOME='));
+  assert.deepEqual([...new Set(homes)], ['HOME=/home/from-the-header']);
 });
 test('the door cannot be told it is already clean by the environment', () => {
   const s = sandbox();
@@ -725,5 +728,55 @@ test('the text of the door: a command in a container, or another entry point, on
   for (const name of ['LUN_TRIAL_FILE', 'LUN_TRIAL_PREFIX', 'LUN_TRIAL_COPIES', 'LUN_ENV_FILE_PREFIX', 'LUN_BASE_DIR', 'LUN_BASE_EXT', 'LUN_COPY_LINE', 'LUN_DEPLOY_SCRIPT']) {
     assert.ok(code.some((l) => l.includes(`$${name}`)), `${name} is used`);
   }
-  assert.doesNotMatch(code.filter((l) => !/^LUN_[A-Z_]+='/.test(l)).join('\n'), /\.ya?ml|\.db\b|\/copies|\.env\b/, 'no file name of the stack outside the header');
+  // One line names the default stack files of the tool, to refuse them as a trial file: they are no instance value.
+  const defaults = /^\s*'' \| compose\.yaml \| compose\.yml \| docker-compose\.yaml \| docker-compose\.yml \| \*\/compose\.yaml \| \*\/compose\.yml \| \*\/docker-compose\.yaml \| \*\/docker-compose\.yml\) refuse 69 ;;$/;
+  assert.equal(code.filter((l) => defaults.test(l)).length, 1, 'the default stack files are refused as a trial file, in one line');
+  assert.doesNotMatch(code.filter((l) => !/^LUN_[A-Z_]+='/.test(l) && !defaults.test(l)).join('\n'), /\.ya?ml|\.db\b|\/copies|\.env\b/, 'no file name of the stack outside the header');
+});
+
+// ---------------------------------------------------------------------------------------------------
+// 9. A header badly filled in must not turn a trial gesture against the real stack; an errors file that
+//    cannot be written must not be journaled as accepted.
+// ---------------------------------------------------------------------------------------------------
+const TRIAL_REQUESTS = ['trial-load app-a 2026-11-20', 'trial-up app-a', 'trial-health app-a'];
+for (const [why, header] of [
+  ['an empty trial prefix', { LUN_TRIAL_PREFIX: '' }],
+  ['an empty trial file', { LUN_TRIAL_FILE: '' }],
+  ...['compose.yaml', 'compose.yml', 'docker-compose.yaml', 'docker-compose.yml', './compose.yaml', '/srv/example/deploy/docker-compose.yml']
+    .map((f) => [`a default stack file as the trial file (${f})`, { LUN_TRIAL_FILE: f }]),
+]) {
+  test(`the header of the trial is checked before any trial gesture: ${why} runs nothing, 69`, () => {
+    const s = sandbox({ header });
+    for (const req of TRIAL_REQUESTS) {
+      const r = play(s, req);
+      assert.equal(r.status, 69, req);
+      assert.equal(r.out, '');
+    }
+    assert.deepEqual(shape(s), [], 'nothing ran');
+    for (const l of logLines(s)) assert.match(l, / refused$/);
+    assert.equal(logLines(s).length, TRIAL_REQUESTS.length);
+    // The other gestures do not depend on the trial header.
+    assert.equal(play(s, 'ps').status, 0);
+  });
+}
+test('a trial file with a name of its own passes, in a folder or not', () => {
+  for (const f of ['trial.yaml', 'compose.trial.yaml', 'trial/compose-trial.yml']) {
+    const s = sandbox({ header: { LUN_TRIAL_FILE: f } });
+    assert.equal(play(s, 'trial-up app-a').status, 0, f);
+    assert.deepEqual(shape(s), [['docker', 'compose', '-f', f, 'up', '-d', 'trial-app-a']]);
+  }
+});
+test('the errors file cannot be written: nothing runs, the journal says refused, 67', () => {
+  const s = sandbox();
+  fs.mkdirSync(`${s.logFile}.errors`); // a folder where the file should be
+  for (const req of ['up', 'deploy app-a 1.2.3', 'ps', 'gestes']) {
+    const r = play(s, req);
+    assert.equal(r.status, 67, req);
+    assert.equal(r.out, '');
+    assert.doesNotMatch(r.err, /see the errors file/);
+  }
+  assert.deepEqual(shape(s), [], 'nothing ran');
+  const lines = logLines(s);
+  assert.equal(lines.length, 4);
+  for (const l of lines) assert.match(l, / refused$/);
 });

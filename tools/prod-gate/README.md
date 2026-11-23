@@ -33,21 +33,20 @@ Une demande tient en 200 caractères et quatre mots, séparés par une seule esp
 | 64 | demande illisible : vide (une session interactive), un caractère hors du jeu, trop longue |
 | 65 | geste inconnu (toute commande ordinaire, une copie de fichier) |
 | 66 | argument hors de sa forme, ou leur nombre |
-| 67 | le journal ne s'écrit pas : rien n'est joué |
+| 67 | le journal ou le fichier d'erreurs ne s'écrit pas : rien n'est joué |
 | 68 | le dossier de déploiement est inaccessible : rien n'est joué |
-| 69 | une valeur de l'en-tête est hors de sa forme : rien n'est joué |
+| 69 | une valeur de l'en-tête est hors de sa forme : rien n'est joué. Le texte de `copy-line` fait moins de trois caractères ; pour un geste `trial-*`, le préfixe d'essai est vide, ou le fichier d'essai est vide ou porte un des noms par défaut d'un fichier de pile (`compose.yaml`, `docker-compose.yml`…) : il viserait la vraie pile |
 
 - **Le journal** reçoit une ligne par demande : la date en UTC, le premier mot (32 caractères au plus, ses
   caractères inattendus masqués), `accepted` ou `refused` ; jamais la demande entière.
-- **Les erreurs** de l'outil de pile et du script de déploiement peuvent citer une ligne d'un fichier
-  d'environnement ou d'un journal : elles restent sur l'hôte, dans `<journal>.errors`. La session reçoit le
-  code de sortie et une ligne fixe ; c'est CrOliX qui lit ce fichier. Rien ne borne ces deux fichiers : les
-  faire tourner à la main ou par l'outil de l'hôte.
-- **L'environnement** : la porte se relance sous un environnement vide (la demande et le dossier personnel
-  seuls), fixe son chemin de recherche et coupe l'entrée de la session.
-- **Une connexion coupée** pendant un geste ne tue rien : le script de déploiement sort par son chemin
-  d'erreur à sa prochaine écriture, donc avec son rattrapage ; un tirage est toujours suivi de la
-  déconnexion du registre.
+- **Le fichier d'erreurs**, `<journal>.errors`, garde sur l'hôte la sortie d'erreur de l'outil de pile et
+  du script de déploiement. **Il peut contenir un secret** : une ligne d'un fichier d'environnement ou d'un
+  journal, citée par un outil. Droits restreints, lu par CrOliX seul. La session reçoit le code de sortie
+  et une ligne fixe. Rien ne borne ces deux fichiers : les faire tourner, à la main ou par l'outil de l'hôte.
+- **L'environnement** : la porte se relance sous un environnement vide (la demande, et le dossier personnel
+  écrit dans son en-tête), fixe son chemin de recherche et coupe l'entrée de la session.
+- **Une connexion coupée** pendant un geste ne tue rien : le script de déploiement va au bout, ou à son
+  rattrapage s'il échoue ; un tirage est toujours suivi de la déconnexion du registre.
 
 ## La poser
 
@@ -70,18 +69,24 @@ avec son propre compte.
    ```
 
 2. **L'en-tête.** Remplir les valeurs en tête du script, entre guillemets simples ; rien d'autre ne les
-   change. `LUN_SHELL` (le shell qui relance la porte), `LUN_PATH` (les dossiers où chercher les commandes,
-   celui du moteur de conteneurs compris), `LUN_DEPLOY_DIR` et `LUN_DEPLOY_SCRIPT` (le dossier de la pile,
-   le nom de son script de déploiement), `LUN_COPIES` (le dossier des copies des bases), `LUN_APPS`,
-   `LUN_VOLUMES`, `LUN_ENV_FILE_PREFIX` (le début du nom du fichier d'environnement d'une app),
-   `LUN_ENV_NAMES` (les seuls noms dont `env-length` donne la longueur), `LUN_REGISTRY`, `LUN_COPY_LINE` (le
-   texte fixe, d'au moins trois caractères, que `copy-line` cherche tel quel dans le journal d'une app),
-   `LUN_TRIAL_FILE`, `LUN_TRIAL_PREFIX`, `LUN_TRIAL_COPIES`, `LUN_BASE_DIR`, `LUN_BASE_EXT` (la pile
-   d'essai : son fichier, le préfixe de ses services, où elle monte les copies, le dossier et l'extension
-   d'une base), `LUN_GATE_LOG` (le journal).
-3. **Le journal.** Créer le journal et `<journal>.errors` dans un dossier de root, puis les donner au
-   compte de la session (`chmod 600`) : il y ajoute des lignes, il ne peut pas remplacer le dossier. En
-   option, si le système de fichiers le permet, les passer en ajout seul (`chattr +a`).
+   change. `LUN_SHELL` (le shell qui relance la porte), `LUN_HOME` (le dossier personnel du compte de la
+   session : la porte le fixe elle-même, elle ne reprend pas celui de l'environnement, car c'est là que le
+   moteur de conteneurs lit sa configuration), `LUN_PATH` (les dossiers où chercher les commandes, celui du
+   moteur compris), `LUN_DEPLOY_DIR` et `LUN_DEPLOY_SCRIPT` (le dossier de la pile, le nom de son script de
+   déploiement), `LUN_COPIES` (le dossier des copies des bases), `LUN_APPS`, `LUN_VOLUMES`,
+   `LUN_ENV_FILE_PREFIX` (le début du nom du fichier d'environnement d'une app), `LUN_ENV_NAMES` (les seuls
+   noms dont `env-length` donne la longueur), `LUN_REGISTRY`, `LUN_GATE_LOG` (le journal).
+   - `LUN_COPY_LINE` : le texte fixe que `copy-line` cherche tel quel dans le journal d'une app. Un texte
+     **précis**, d'au moins trois caractères, qui ne peut pas se trouver sur la ligne du code du premier
+     appareil : toute ligne qui le contient sort entière.
+   - `LUN_TRIAL_FILE`, `LUN_TRIAL_PREFIX`, `LUN_TRIAL_COPIES`, `LUN_BASE_DIR`, `LUN_BASE_EXT` : la pile
+     d'essai (son fichier, le préfixe de ses services, où elle monte les copies, le dossier et l'extension
+     d'une base). La porte refuse tout geste `trial-*` (69) si le préfixe est vide, ou si le fichier est vide
+     ou porte un nom par défaut d'un fichier de pile : l'essai ne doit jamais viser la vraie pile.
+3. **Le journal et le fichier d'erreurs.** Les créer dans un dossier de root, puis les donner au compte de
+   la session (`chmod 600`, le fichier d'erreurs peut contenir un secret) : il y ajoute des lignes, il ne
+   peut pas remplacer le dossier. Si l'un des deux ne s'écrit pas, la porte ne joue rien (67). En option,
+   si le système de fichiers le permet, les passer en ajout seul (`chattr +a`).
 4. **Le compte de la session.** Sans mot de passe utilisable (`passwd -l`). Son dossier personnel
    appartient à root et ne garde **aucun fichier de clés** ni fichier de démarrage du shell ; seul le dossier
    de configuration du moteur de conteneurs y appartient au compte (le tirage s'y connecte et s'en
@@ -118,8 +123,10 @@ avec son propre compte.
    sshd -T -C user=session-example,host=example,addr=192.0.2.10 | grep -i -E '^(authorizedkeysfile|forcecommand|authenticationmethods|passwordauthentication|kbdinteractiveauthentication|permittty|disableforwarding|permittunnel|permituserrc|permituserenvironment|acceptenv)'
    ```
 
-   Elle doit montrer les valeurs du bloc, et `permituserenvironment no`. La rejouer avec le compte de
-   CrOliX : son `authorizedkeysfile` et ses droits n'ont pas changé.
+   Elle doit montrer les valeurs du bloc, et `permituserenvironment no`. Elle montre aussi que le serveur
+   accepte du client ses variables de langue (`acceptenv LANG LC_*` sur Debian) : c'est attendu, et sans
+   effet, puisque la porte repart sous un environnement vide. La rejouer avec le compte de CrOliX : son
+   `authorizedkeysfile` et ses droits n'ont pas changé.
 7. **Les fichiers d'environnement.** CrOliX les contrôle lui-même avant le premier geste : une ligne mal
    formée ferait échouer l'outil de pile. Dans le dossier de la pile, cette commande ne doit rien afficher :
    `grep -n -v -E '^([A-Za-z_][A-Za-z0-9_]*=.*|#.*|)$' <chaque fichier d'environnement>`.

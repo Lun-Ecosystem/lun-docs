@@ -10,6 +10,7 @@
 
 # ---- The values of the instance: fill them in, nothing else changes them ------------------------------
 LUN_SHELL='/bin/sh'
+LUN_HOME='/home/session-example'
 LUN_PATH='/usr/local/bin:/usr/bin:/bin'
 LUN_DEPLOY_DIR='/srv/example/deploy'
 LUN_DEPLOY_SCRIPT='deploy.sh'
@@ -28,9 +29,9 @@ LUN_BASE_EXT='.db'
 LUN_GATE_LOG='/var/log/example/prod-gate.log'
 
 # ---- Nothing inherited from the session ------------------------------------------------------------
-# The door starts itself again under an empty environment: the request and the home folder, nothing else.
+# The door starts itself again under an empty environment: the request, and the home folder of the header.
 if [ "${1-}" != clean ]; then
-  exec /usr/bin/env -i HOME="${HOME-}" SSH_ORIGINAL_COMMAND="${SSH_ORIGINAL_COMMAND-}" "$LUN_SHELL" "$0" clean
+  exec /usr/bin/env -i HOME="$LUN_HOME" SSH_ORIGINAL_COMMAND="${SSH_ORIGINAL_COMMAND-}" "$LUN_SHELL" "$0" clean
 fi
 PATH=$LUN_PATH
 LC_ALL=C
@@ -57,9 +58,10 @@ refuse() {
   printf 'prod-gate: refused (%s)\n' "$1" >&2
   exit "$1"
 }
-# Run from the deploy folder, and journaled once it is entered.
+# Run from the deploy folder, and journaled once it is entered and the errors file can be written.
 accept() {
   cd "$LUN_DEPLOY_DIR" 2>/dev/null || refuse 68
+  { printf '' >> "$LUN_GATE_LOG.errors"; } 2>/dev/null || refuse 67
   journal accepted
 }
 # The errors of the stack tool and of the deploy script may quote a line of an environment file or of a
@@ -75,6 +77,13 @@ compose() { quiet docker compose "$@"; }
 words() { [ "$2" -eq "$1" ] || refuse 66; }
 is_app() { case " $LUN_APPS " in *" $1 "*) ;; *) refuse 66 ;; esac; }
 is_env_name() { case " $LUN_ENV_NAMES " in *" $1 "*) ;; *) refuse 66 ;; esac; }
+# A trial gesture must not reach the real stack: a prefix, and a file that is not a default stack file.
+is_trial() {
+  [ -n "$LUN_TRIAL_PREFIX" ] || refuse 69
+  case "$LUN_TRIAL_FILE" in
+    '' | compose.yaml | compose.yml | docker-compose.yaml | docker-compose.yml | */compose.yaml | */compose.yml | */docker-compose.yaml | */docker-compose.yml) refuse 69 ;;
+  esac
+}
 is_date() {
   case "$1" in [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;; *) refuse 66 ;; esac
   case "$1" in ?????0[1-9]??? | ?????1[0-2]???) ;; *) refuse 66 ;; esac
@@ -133,7 +142,7 @@ case "$gesture" in
 
   version)
     words 1 "$#"; accept
-    printf '%s\n' '2'
+    printf '%s\n' '3'
     ;;
 
   ps)
@@ -248,17 +257,17 @@ case "$gesture" in
     ;;
 
   trial-load) # apart from the real base: the trial stack only
-    words 3 "$#"; is_app "$2"; is_date "$3"; accept
+    words 3 "$#"; is_app "$2"; is_date "$3"; is_trial; accept
     compose -f "$LUN_TRIAL_FILE" run --rm --entrypoint cp "$LUN_TRIAL_PREFIX$2" "$LUN_TRIAL_COPIES/$2-$3$LUN_BASE_EXT" "$LUN_BASE_DIR/$2$LUN_BASE_EXT"
     ;;
 
   trial-up)
-    words 2 "$#"; is_app "$2"; accept
+    words 2 "$#"; is_app "$2"; is_trial; accept
     compose -f "$LUN_TRIAL_FILE" up -d "$LUN_TRIAL_PREFIX$2"
     ;;
 
   trial-health)
-    words 2 "$#"; is_app "$2"; accept
+    words 2 "$#"; is_app "$2"; is_trial; accept
     id=$(compose -f "$LUN_TRIAL_FILE" ps -q "$LUN_TRIAL_PREFIX$2")
     [ -n "$id" ] || exit 1
     docker inspect --format '{{.State.Health.Status}}' "$id"
