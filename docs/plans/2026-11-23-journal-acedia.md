@@ -6,7 +6,7 @@
 > **Issue :** Lun-Ecosystem/lun-acedia#86 (`niveau:standard`, public). Périmètre figé par CrOliX le 23/11, dans les
 > commentaires de l'issue.
 >
-> **État : rédigé le 23/11 ; contesté le 23/11 (« à amender ») ; amendé le 23/11 avec deux décisions de CrOliX.**
+> **État : rédigé le 23/11 ; contesté le 23/11 (« à amender ») ; amendé le 23/11 avec deux décisions de CrOliX ; validé par CrOliX le 23/11 (« Archivé, proposition de l’IA validée » compris).**
 > Les textes du tableau sont validés par CrOliX (décision 1).
 >
 > Code relu sur `main` de Lun'Acedia (`f00c2a8`) ; le graphe d'abord, puis chaque point dans le code. Lun'Acedia est
