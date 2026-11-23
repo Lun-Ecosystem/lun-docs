@@ -342,6 +342,34 @@ dernier. Le contrat du message est la seule chose que 3 et 4 partagent : il ne b
    - Les chiffres s'écrivent dans ce plan. Si le taux tombe en conversation longue, le dire à CrOliX avant de rien
      changer (« Risques »).
 
+   **Mesures du 23/11.** Modèle du rodage, raisonnement coupé, par le vrai service ; postes simulés (aucun satellite).
+   Une conversation « avant » (l'état d'aujourd'hui) et trois « après », 26 tours chacune : 23 répliques dites,
+   2 rituels, 1 tour écrit, 2 à 4 délégations ; fil de départ de 45 messages sans étiquette. Chaque mesure est un
+   petit échantillon (de 76 à 83 phrases par conversation « après »).
+   - **Le taux d'étiquettes valides par phrase tombe.** Sur les trois conversations « après » : 36,8 %, 31,3 % et
+     38,3 % de toutes les phrases (85 sur 240, soit 35,4 %). Début de fil (cinq premiers tours dits) : 40,0 %, 57,9 %
+     et 70,6 % (29 sur 51, soit 56,9 %). Fin de fil (cinq derniers) : 53,3 %, 26,7 % et 53,8 % (19 sur 43, soit
+     44,2 %). Au milieu du fil, plusieurs tours de suite n'ont aucune étiquette. **Rien n'a été changé** : le sujet
+     est à décider par CrOliX (« Risques »).
+   - **La répartition des 85 étiquettes valides** : neutre 38, douce 24, sèche 16, gênée 4, inquiète 3, amusée 0,
+     vexée 0. Les trames de parole portent une émotion dans 10 à 14 tours dits sur 25 selon la conversation.
+   - **Les fuites : zéro** dans les trois conversations, dans le fil, le texte gardé, les trames, les journaux et la
+     base, et aucune étiquette dans l'historique rejoué au modèle.
+   - **Le coût.** Entrée du premier tour dit, à fil identique : 4 454 jetons avant, 4 824 à 4 829 après, soit environ
+     375 de plus (8 %) pour la consigne et ses exemples. Sur le premier mot (30 appels, requête parlée type) : 5 041
+     jetons avant, 5 425 après. Coût moyen d'un tour dit d'après le décompte du cerveau : 0,84 milli-dollar avant ;
+     0,74, 0,86 et 0,82 après (les fils divergent, car les réponses diffèrent : l'écart ne se lit pas comme un
+     surcoût). Coût d'une conversation : 0,0209 $ avant, de 0,0186 à 0,0214 $ après.
+   - **Le tour écrit est inchangé** : le préfixe du prompt est identique, au signe près, dans les quatre
+     conversations (mêmes empreintes) ; ses jetons d'entrée varient avec le fil (6 179 à 7 135), pas avec la consigne.
+   - **Le premier mot** (alternance avant et après, 29 appels gardés par bras) : premier signe propre, médiane 503 ms
+     avant et 688 ms après (+185 ms) ; première phrase, 632 ms avant et 710 ms après (+79 ms). Outil de premier mot
+     de la branche seul, 19 appels : 652 ms au premier signe, 705 ms à la première phrase. Dans les conversations :
+     602 ms avant, 678 à 714 ms après. La cible de 2,5 s tient largement.
+   - **Le coût de la mesure** : environ 0,14 $ en tout, sous le plafond de 0,25 $ ; les conversations ont coûté de
+     1,5 à 1,7 fois l'estimation haute (0,0125 $ et 0,0138 $), car le décompte réel en jetons est près de deux fois
+     celui d'un compte à quatre signes par jeton.
+
 7. - [ ] **La livraison** (livreur). Une PR en brouillon par dépôt : Lun'Anima (ferme Lun-Ecosystem/lun-anima#130),
    Lun'Luxuria (ferme Lun-Ecosystem/lun-luxuria#107), et celle de ce plan, cochée au fil des tâches.
 
