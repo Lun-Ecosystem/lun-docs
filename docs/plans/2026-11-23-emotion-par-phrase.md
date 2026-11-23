@@ -372,7 +372,7 @@ dernier. Le contrat du message est la seule chose que 3 et 4 partagent : il ne b
      1,5 à 1,7 fois l'estimation haute (0,0125 $ et 0,0138 $), car le décompte réel en jetons est près de deux fois
      celui d'un compte à quatre signes par jeton.
 
-7. - [ ] **La livraison** (livreur). Une PR en brouillon par dépôt : Lun'Anima (ferme Lun-Ecosystem/lun-anima#130),
+7. - [x] **La livraison** (livreur). Une PR en brouillon par dépôt : Lun'Anima (ferme Lun-Ecosystem/lun-anima#130),
    Lun'Luxuria (ferme Lun-Ecosystem/lun-luxuria#107), et celle de ce plan, cochée au fil des tâches.
 
 ## Risques
