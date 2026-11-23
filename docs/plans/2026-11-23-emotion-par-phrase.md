@@ -7,7 +7,7 @@
 > publique Lun-Ecosystem/lun-luxuria#107. **PR :** Lun-Ecosystem/lun-docs#198 (brouillon).
 >
 > **État : rédigé le 23/11 ; contesté le 23/11 (« à amender ») ; amendé le 23/11 avec les décisions de CrOliX du
-> 23/11** (« Les décisions de CrOliX, le 23/11 »). **Pas encore validé.**
+> 23/11** (« Les décisions de CrOliX, le 23/11 »). **Validé par CrOliX le 23/11.**
 >
 > Code relu sur `main` de Lun'Anima (`0a3f411`) et de Lun'Luxuria (`0b4f4a4`), le graphe d'abord, puis chaque point
 > dans le code. Le code d'OpenAmika relu dans un clone en lecture seule. Lun'Anima est privé : ce plan dit le
