@@ -150,7 +150,7 @@ const gestures = [
   { name: 'restart', slots: ['app'], calls: (s, [a]) => [compose('restart', a)] },
   { name: 'pull', slots: [], calls: (s) => [compose('pull'), ['docker', 'logout', 'registry.example.test']] },
   { name: 'volumes-create', slots: [], calls: () => ['app-a-data', 'app-b-data', 'app-c-data'].map((v) => ['docker', 'volume', 'create', v]) },
-  { name: 'deploy', slots: ['app', 'version'], calls: (s, [a, v]) => [['deploy.sh', a, v]] },
+  { name: 'deploy', slots: ['app', 'version'], calls: (s, [a, v]) => [['deploy.sh', a, v], ['docker', 'logout', 'registry.example.test']] },
   { name: 'trial-load', slots: ['app', 'date'], calls: (s, [a, d]) => [trial('run', '--rm', '--entrypoint', 'cp', `trial-${a}`, `/copies/${a}-${d}.db`, `data/${a}.db`)] },
   { name: 'trial-up', slots: ['app'], calls: (s, [a]) => [trial('up', '-d', `trial-${a}`)] },
   { name: 'trial-health', slots: ['app'], calls: (s, [a]) => [trial('ps', '-q', `trial-${a}`), ['docker', 'inspect', '--format', '{{.State.Health.Status}}', `id-trial-${a}`]] },
@@ -175,11 +175,11 @@ test('gesture deploy: the word rollback, on each app of the list', () => {
   for (const a of ['app-a', 'app-b', 'app-c']) {
     const s = sandbox();
     assert.equal(play(s, `deploy ${a} rollback`).status, 0);
-    assert.deepEqual(shape(s), [['deploy.sh', a, 'rollback']]);
+    assert.deepEqual(shape(s), [['deploy.sh', a, 'rollback'], ['docker', 'logout', 'registry.example.test']]);
   }
   const s = sandbox();
   assert.equal(play(s, 'deploy app-b 10.20.30').status, 0);
-  assert.deepEqual(shape(s), [['deploy.sh', 'app-b', '10.20.30']]);
+  assert.deepEqual(shape(s), [['deploy.sh', 'app-b', '10.20.30'], ['docker', 'logout', 'registry.example.test']]);
 });
 test('gesture env-length: the length of one value, never the value', () => {
   const s = sandbox();
@@ -779,4 +779,35 @@ test('the errors file cannot be written: nothing runs, the journal says refused,
   const lines = logLines(s);
   assert.equal(lines.length, 4);
   for (const l of lines) assert.match(l, / refused$/);
+});
+
+// ---------------------------------------------------------------------------------------------------
+// 10. A deployment may pull an image: the registry is left whatever it gave, as after a pull.
+// ---------------------------------------------------------------------------------------------------
+const LOGOUT = ['docker', 'logout', 'registry.example.test'];
+test('gesture deploy: the registry is left after a deployment that succeeds, and its code is returned', () => {
+  const s = sandbox();
+  assert.equal(play(s, 'deploy app-a 1.2.3').status, 0);
+  assert.deepEqual(shape(s), [['deploy.sh', 'app-a', '1.2.3'], LOGOUT]);
+});
+test('gesture deploy: the registry is left after a deployment that fails, and the code of the deployment is returned', () => {
+  const s = sandbox();
+  const calls = toSh(s.callsFile);
+  fakeIn(s, 'deploy', 'deploy.sh', `printf '@@ deploy.sh x\\n' >> '${calls}'\nfor a in "$@"; do printf '%s\\n' "$a" >> '${calls}'; done\nexit 3\n`);
+  assert.equal(play(s, 'deploy app-a rollback').status, 3);
+  assert.deepEqual(shape(s), [['deploy.sh', 'app-a', 'rollback'], LOGOUT]);
+  // The code of the deployment, not the one of leaving the registry.
+  fs.writeFileSync(path.join(s.dir, 'state', 'fail-logout-registry.example.test'), '9');
+  assert.equal(play(s, 'deploy app-a 1.2.3').status, 3);
+});
+test('gesture deploy: the registry is left even when the connection is cut during the deployment', async () => {
+  const s = sandbox();
+  fakeIn(s, 'deploy', 'deploy.sh', `set -e\n${SLOW_WRITES}`);
+  await cutWhileRunning(s, 'deploy app-a 1.2.3');
+  assert.deepEqual(shape(s), [LOGOUT]);
+});
+test('gestes says that deploy leaves the registry, and the door is at version 4', () => {
+  const s = sandbox();
+  assert.match(play(s, 'gestes').out, /^deploy <app> <version\|rollback>.*then leave the registry/m);
+  assert.equal(play(s, 'version').out.trim(), '4');
 });

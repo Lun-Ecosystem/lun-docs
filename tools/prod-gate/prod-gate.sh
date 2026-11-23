@@ -36,8 +36,7 @@ fi
 PATH=$LUN_PATH
 LC_ALL=C
 export PATH LC_ALL
-# A connection cut in the middle of a gesture kills nothing: a failed write is an error the command
-# sees, so a deployment reaches its own recovery and a pull is followed by leaving the registry.
+# A cut connection kills nothing: a failed write is an error the command sees, and what follows still runs.
 trap '' PIPE HUP
 exec < /dev/null
 set -u
@@ -134,7 +133,7 @@ case "$gesture" in
       'restart <app>                    restart one app' \
       'pull                             pull the images, then leave the registry' \
       'volumes-create                   create the volumes of the bases' \
-      'deploy <app> <version|rollback>  put one app at a version, or back at the one before' \
+      'deploy <app> <version|rollback>  put one app at a version, or back at the one before, then leave the registry' \
       'trial-load <app> <date>          load the copy of a day into the trial of one app' \
       'trial-up <app>                   start the trial of one app' \
       'trial-health <app>               the health of the trial of one app'
@@ -142,7 +141,7 @@ case "$gesture" in
 
   version)
     words 1 "$#"; accept
-    printf '%s\n' '3'
+    printf '%s\n' '4'
     ;;
 
   ps)
@@ -251,9 +250,12 @@ case "$gesture" in
     done
     ;;
 
-  deploy) # the deploy script of the stack
+  deploy) # the deploy script of the stack; it may pull: the registry is left whatever it gave
     words 3 "$#"; is_app "$2"; is_version "$3"; accept
     quiet "$LUN_DEPLOY_DIR/$LUN_DEPLOY_SCRIPT" "$2" "$3"
+    deployed=$?
+    docker logout "$LUN_REGISTRY"
+    exit "$deployed"
     ;;
 
   trial-load) # apart from the real base: the trial stack only

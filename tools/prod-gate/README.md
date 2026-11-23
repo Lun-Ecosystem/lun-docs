@@ -46,7 +46,9 @@ Une demande tient en 200 caractères et quatre mots, séparés par une seule esp
 - **L'environnement** : la porte se relance sous un environnement vide (la demande, et le dossier personnel
   écrit dans son en-tête), fixe son chemin de recherche et coupe l'entrée de la session.
 - **Une connexion coupée** pendant un geste ne tue rien : le script de déploiement va au bout, ou à son
-  rattrapage s'il échoue ; un tirage est toujours suivi de la déconnexion du registre.
+  rattrapage s'il échoue.
+- **Le registre est toujours quitté** après `pull` et après `deploy` (qui peut tirer une image), quoi que le
+  geste ait rendu : son code de sortie reste celui du tirage ou du déploiement.
 
 ## La poser
 
