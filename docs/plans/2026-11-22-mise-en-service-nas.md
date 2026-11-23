@@ -472,17 +472,20 @@ Pour chaque dépôt :
   (lun-acedia#81, lun-avaritia#44, en brouillon). `LLM_PRICES` dans leur `.env.example` : dans ces PR ou à la tâche 17.
 - **Ce qui reste** : le second temps de la répétition (tâche 5). La pile est fusionnée (lun-anima#126).
 
-### Tâche 4. L'adresse de retour de Google, essayée dans la console (CrOliX, avant l'arrêt B)
+### Tâche 4. Le projet Google de prod, créé dans la console (CrOliX, avant l'arrêt B)
 
-- [ ] Dans la console Google, un projet propre à la prod (décision 4), son écran de consentement en « Production », les
-  API Gmail, Agenda et Tasks activées, les cinq droits du code déclarés.
-- [ ] Un client OAuth « Application Web » dont l'adresse de retour autorisée est celle d'Acedia dans le réseau privé,
-  suivie de `/oauth/callback`. Le nom est connu d'avance : le nom du nœud et celui du réseau. Aucun secret n'est copié
-  ailleurs : l'identifiant et le secret restent dans la console jusqu'à la tâche 13.
+- [ ] **Le vrai compte** crée, dans la console Google seulement, le projet de prod **en mode Personnel** (décision 4),
+  par les gestes de `docs/brancher-google.md` de Lun'Acedia : les API Gmail, Agenda et Tasks activées, les cinq
+  droits du code déclarés dans « Accès aux données ». Le mode est définitif et lie le projet au compte qui le crée.
+- [ ] Un client OAuth « Application Web » dont l'adresse de retour autorisée est celle d'Acedia en HTTPS dans le
+  réseau privé, suivie de `/oauth/callback`. Le nom est connu d'avance : le nom du nœud et celui du réseau. Aucun
+  secret n'est copié ailleurs : l'identifiant et le secret restent dans la console jusqu'à la tâche 13. Le vrai
+  compte n'entre pas dans Acedia avant l'arrêt C.
 - **On attend** : la console enregistre l'adresse (règles de Google : HTTPS, pas d'adresse IP, un domaine de la liste
   des suffixes publics, [règles](https://developers.google.com/identity/protocols/oauth2/web-server)).
-- **Arrêt** si la console refuse l'adresse, ou si l'écran de consentement bloque l'app pour ses droits (Gmail en
-  modification est un droit restreint) : le plan revient à CrOliX.
+- **Arrêt** si la console refuse l'adresse ; si elle refuse le mode Personnel au vrai compte (compte Workspace,
+  protection avancée) ; ou si elle bloque l'app pour ses droits (Gmail en modification est un droit restreint) : le
+  plan revient à CrOliX.
 
 ### Tâche 5. La répétition sur le laptop (la session ; CrOliX pour la clé et les codes) : première moitié jouée le 23/11
 
@@ -696,12 +699,12 @@ lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, a
 *Au retour de CrOliX chez lui.*
 
 - [ ] L'identifiant et le secret du client de la tâche 4 dans le fichier d'Acedia ; Acedia redémarrée.
-- [ ] **Le vrai compte**, connecté par CrOliX dans Acedia, Réglages › Compte Google. L'avertissement « Google n'a pas
-  validé cette application » s'affiche (lun-acedia#55) : il le passe, c'est son propre client. La validation par
-  Google : hors du MVP.
+- [ ] **Le vrai compte**, connecté par CrOliX dans Acedia, Réglages › Compte Google, au projet en mode Personnel de
+  la tâche 4.
 - [ ] **Les gardes du premier jour**, tenues jusqu'à la fin de la semaine de rodage (décision 7) : le seuil reste à
   100 ; aucune règle avant qu'il en crée une ; la première synchronisation ne trie pas l'historique.
-- **Vérifier** : Acedia dit Google connecté ; aucun mail ancien n'entre en file ; un mail arrivé après la connexion
+- **Vérifier** : le consentement n'affiche pas « Google n'a pas validé cette application » ; Acedia dit Google
+  connecté ; aucun mail ancien n'entre en file ; un mail arrivé après la connexion
   donne une proposition qui attend ; **l'heure d'un vrai événement** est juste dans l'agenda et sur une carte.
 - **Revenir en arrière** : déconnecter dans Acedia ; retirer l'accès de l'app dans le compte Google ; vider les deux
   valeurs.
@@ -783,7 +786,10 @@ Les sept recommandations, validées avec le plan :
    « la garde sur le NAS, et le laptop au minimum », le 22/11 au soir) ; la liste fermée est sa table de gestes.
 3. **Le premier appareil** : constater ce que montre l'écran Docker du NAS ; sinon l'écart reste ouvert et écrit.
    Rien n'est codé avant le MVP.
-4. **Google** : un projet et un client propres à la prod, en « Production » non validé.
+4. **Google** (décision de CrOliX du 23/11, Lun-Ecosystem/lun-acedia#83 ; elle remplace « en Production non
+   validé ») : un projet en mode Personnel et son client propres à la prod, créés par le vrai compte dans la console à
+   la tâche 4, avant l'arrêt B. L'identifiant et le secret attendent la tâche 13 ; le vrai compte n'entre dans Acedia
+   qu'après l'arrêt C.
 5. **Les versions** : CrOliX les publie lui-même.
 6. **Les numéros** : `0.2.0` pour les trois serveurs.
 7. **Les gardes du premier jour d'Acedia** (seuil à 100, aucune règle d'office, pas de tri de l'historique) tiennent

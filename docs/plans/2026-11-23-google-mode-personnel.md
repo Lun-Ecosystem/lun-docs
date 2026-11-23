@@ -6,7 +6,9 @@
 > **Issue :** Lun-Ecosystem/lun-acedia#83 (`niveau:standard`, public). Périmètre figé par l'issue ; son critère 2 a
 > été reformulé le 23/11.
 >
-> **État : rédigé le 23/11 ; contesté le 23/11 (« à amender ») ; amendé le 23/11 avec deux décisions de CrOliX.**
+> **État : rédigé le 23/11 ; contesté le 23/11 (« à amender ») ; amendé le 23/11 avec deux décisions de CrOliX ;
+> validé par CrOliX le 23/11.**
+> Tâches 6 et 7 faites le 23/11.
 >
 > Code relu sur `main` de Lun'Acedia (`46aff46`, la 0.2.0) ; le graphe d'abord, puis chaque point dans le code. Le
 > plan du NAS relu sur `main` de lun-docs (`d59451a`). Lun'Acedia est public : ce plan ne porte ni identifiant de
@@ -28,9 +30,9 @@ vus à l'œuvre). L'aide de Google sur le mode Personnel, relue le 23/11 (plus b
 2. **Avant la connexion, la carte du compte Google dit quel compte est attendu** (le compte qui a créé le projet) ;
    prouvé par un test. Tâche 2. Acedia ne code rien pour un retour `client_user_mismatch` qu'on n'a pas vu.
 3. **L'envoi d'un mail et la lecture des adresses d'envoi prouvés avec un projet en mode Personnel.** Tâches 3 et 4.
-4. **La tâche Google du plan du NAS dit** : projet de prod en mode Personnel, créé par le vrai compte, à l'arrêt C.
-   Tâche 6. Avec la décision de CrOliX du 23/11, cela se lit ainsi : le projet naît tôt, dans la console seulement ;
-   le vrai compte n'entre dans Acedia qu'après l'arrêt C.
+4. **La tâche Google du plan du NAS dit** : projet de prod en mode Personnel, créé par le vrai compte dans la console
+   à la tâche 4, avant l'arrêt B (décision du 23/11) ; le vrai compte n'entre dans Acedia qu'après l'arrêt C.
+   Tâche 6. *Reformulé dans l'issue le 23/11, dans le sens de la décision 1.*
 
 La tâche 5 (les jetons au-delà de 7 jours) prouve une phrase de la page (critère 1). La tâche 7 ouvre l'issue de suite.
 
@@ -166,7 +168,7 @@ le `.env`, 6 le plan du NAS, 7 une issue). 4 attend 3. 5 se constate au moins 8 
    - **Arrêt** si `google-reauth` apparaît : la phrase de la page est fausse pour nous ; le plan revient à CrOliX
      avant l'arrêt C.
 
-6. - [ ] **Le plan du NAS** (la session, `docs/plans/2026-11-22-mise-en-service-nas.md` de lun-docs, sur cette
+6. - [x] **Le plan du NAS** (la session, `docs/plans/2026-11-22-mise-en-service-nas.md` de lun-docs, sur cette
    branche).
    - **Décision 4, réécrite et datée du 23/11** (décision nouvelle de CrOliX, pas une conséquence) : « Google : un
      projet en mode Personnel et son client propres à la prod, créés par le vrai compte dans la console à la tâche 4,
@@ -180,7 +182,8 @@ le `.env`, 6 le plan du NAS, 7 une issue). 4 attend 3. 5 se constate au moins 8 
      qu'il ne s'affiche pas. Le reste tient.
    - **Preuve** : le diff relu contre le critère 4 ; `npm run check` de lun-docs au vert.
 
-7. - [ ] **L'issue de suite** (la session ouvre l'issue, label `inbox`, dans Lun-Ecosystem/lun-acedia).
+7. - [x] **L'issue de suite** (la session ouvre l'issue, label `inbox`, dans Lun-Ecosystem/lun-acedia). Ouverte le
+   23/11 : [Lun-Ecosystem/lun-acedia#84](https://github.com/Lun-Ecosystem/lun-acedia/issues/84).
    - **Titre** : « Retour de Google : un refus affiche du JSON brut ». **Corps** : les trois cas, avec leurs lignes
      sur `main` : `?error=` non lu, donc un refus de l'utilisateur (`access_denied`) tombe sur « Retour Google invalide
      ou expiré » en JSON (`oauth.ts:140`) ; un `state` invalide, même JSON ; un échange de code refusé (`:154-156`).
