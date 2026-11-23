@@ -8,7 +8,7 @@
 >
 > **État : rédigé le 23/11 ; contesté le 23/11 (« à amender ») ; amendé le 23/11 avec deux décisions de CrOliX ;
 > validé par CrOliX le 23/11.**
-> **PR qui livre : Lun-Ecosystem/lun-acedia#85.** Tâches 1 à 4, 6 et 7 faites le 23/11 (client de l’essai reconnecté à 15 h 43 ; envoi et adresses d’envoi constatés par CrOliX). Tâche 5 à constater à partir du 01/12, 15 h 43.
+> **PR qui livre : Lun-Ecosystem/lun-acedia#85.** Tâches 1 à 4, 6 et 7 faites le 23/11 (client de l’essai reconnecté à 15 h 43 ; envoi et adresses d’envoi constatés par CrOliX). **Tâche 5 sortie du chantier le 23/11 à la demande de CrOliX**, pour le clore sans attendre le temps : Lun-Ecosystem/lun-acedia#87, à constater à partir du 01/12, 15 h 43, avant l’arrêt C.
 >
 > Code relu sur `main` de Lun'Acedia (`46aff46`, la 0.2.0) ; le graphe d'abord, puis chaque point dans le code. Le
 > plan du NAS relu sur `main` de lun-docs (`d59451a`). Lun'Acedia est public : ce plan ne porte ni identifiant de
