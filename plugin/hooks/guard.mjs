@@ -2,8 +2,9 @@
 // main or master, force-pushing - and a PR opened out of the norm: not a draft, or a title the CI
 // refuses. Exit code 2 blocks the tool call and shows the reason to the agent.
 // Fails open on anything it cannot parse: the GitHub ruleset and the pre-push hook stay behind it.
-// One exception, closed: the prod guard (prod-ssh.mjs), active only when the instance declares its prod
-// hosts. It refuses a line that names one and a write to its own files; an error then is a refusal.
+// One exception, closed: the prod belt (prod-ssh.mjs), active only when the instance declares its prod
+// hosts. It refuses a line or a written text that names one; an error then is a refusal. It is a belt
+// against a mistake: the guard proper is the door on the prod host (tools/prod-gate/).
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -183,9 +184,9 @@ export function evaluateCommand(command, context = {}) {
   return { block: false };
 }
 
-/** A write tool (Write, Edit, NotebookEdit): no file of the prod guard, no text that names a prod host. */
+/** A write tool (Write, Edit, NotebookEdit): no path and no text that names a prod host. */
 export function evaluateWrite(filePath, context = {}, written = []) {
-  const reason = writeReason(filePath, context.cwd, context.prod, written);
+  const reason = writeReason(filePath, context.prod, written);
   return reason ? { block: true, reason } : { block: false };
 }
 

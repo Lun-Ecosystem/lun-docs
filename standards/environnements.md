@@ -40,61 +40,33 @@ Le vrai compte Google n'entre que là. Les copies de chaque base y restent, à c
 
 ## Jouer une commande sur la prod
 
-Une session d'agent ne joue sur la prod qu'une **liste fermée** de commandes écrite d'avance. Lui sont
-interdits : ce qui efface, ce qui peut afficher un secret ou un code d'appairage, l'élévation de privilège,
-tout réglage du système. Devant un imprévu elle s'arrête et CrOliX tranche. Une garde technique fait tenir
-cette règle : un lanceur et le hook de garde du plugin. **Une ceinture de plus, pas une preuve de sûreté** :
-la vraie borne est côté hôte (une clé qui n'autorise qu'une commande), hors de cette garde.
+Une session d'agent ne joue sur la prod que des **gestes écrits d'avance**. Lui sont interdits : ce qui
+efface, ce qui peut afficher un secret ou un code d'appairage, l'élévation de privilège, tout réglage du
+système. Devant un imprévu elle s'arrête et CrOliX tranche.
 
-**Le lanceur**, `plugin/hooks/prod-run.mjs`, est le seul chemin vers la prod :
+**La garde est la porte, sur l'hôte** : la clé de la session n'y autorise qu'un programme, posé par CrOliX
+hors d'atteinte du compte de la session, qui ne joue que les gestes de sa propre table. Comment la poser, la
+vérifier, ce qu'elle ne ferme pas : [`tools/prod-gate/README.md`](../tools/prod-gate/README.md).
 
-- `node <plugin>/hooks/prod-run.mjs --list` montre les lignes de la liste, chacune sous son numéro (celui de
-  sa ligne dans le fichier) ; `<numéro> [arguments]` en joue une ; `--dry <numéro> [arguments]` montre la
-  commande sans la jouer ; `--check` dit si la garde est configurée (`hosts: n`, `lines: n`).
-- À chaque appel il relit et contrôle **toute** la liste : une ligne mal écrite, ou refusée par la barrière
-  écrite dans son code, l'arrête, nommée par son numéro. Il valide chaque argument contre le joker de la
-  ligne, compose la commande depuis la ligne et lance `ssh` lui-même : sans shell, par un chemin absolu
-  (celui du système, ou `LUN_PROD_SSH_BIN`), avec des options fixes (ni terminal, ni saisie, ni agent, ni
-  port transféré, un délai de connexion), vers le premier hôte déclaré. L'hôte n'est jamais sur la ligne de
-  la session ni dans ce qu'il affiche.
-- **Une ligne de la liste** : des mots simples, des guillemets simples pour grouper un mot, `|` vers `grep`
-  ou `wc -c`, et quatre jokers seuls dans leur mot : `<app>`, `<version>` (`1.2.3`), `<int>` (1 à 6
-  chiffres), `<path>` (un chemin absolu sans `..`, derrière `stat` seulement). Ni `;`, ni `&&`, ni
-  redirection, ni variable. La barrière refuse `sudo`, un shell, ce qui efface ou écrase, un `docker run`,
-  une inspection sans format de champs nommés, un journal ni borné ni filtré, un fichier d'environnement ou
-  une clé, un réglage du système. Exemple : `plugin/hooks/prod-ssh-allow.example`.
+**Sur le laptop, un lanceur et un filet contre l'erreur, qui n'est pas la garde** : ils tournent sous le
+même utilisateur que la session, qui peut les défaire.
 
-**Le hook**, quand des hôtes de prod sont déclarés, refuse : une ligne de commande (Bash, PowerShell) qui
-contient le nom d'un hôte de prod, où qu'il soit ; un texte écrit par un outil d'écriture qui le contient ;
-un client SSH sans cible lisible (une variable, une substitution, une expression) ; une commande encodée ;
-un contexte du moteur de conteneurs ; une ligne qui nomme un réglage de la garde, sa liste ou un chemin
-protégé ; une écriture dans la liste, le dossier des crochets ou un chemin protégé. Ses refus sont fixes par
-catégorie, sans un mot de la commande.
-
-**L'activer** : des variables d'environnement, posées sur le poste **avant** d'ouvrir la session.
-
-- `LUN_PROD_SSH_HOSTS` : les hôtes de prod sous **tous leurs noms** (nom court, nom complet, adresse),
-  séparés par une virgule ou une espace ; le premier est celui que le lanceur appelle. Un nom de moins de
-  4 caractères ou trop commun (`localhost`, `docker`…) est une configuration invalide : le hook **refuse
-  alors tout**, en disant quoi corriger. C'est voulu : s'ouvrir en silence désactiverait la garde.
-- `LUN_PROD_SSH_ALLOW_FILE` : le chemin de la liste, hors de tout dépôt, sous un nom qui ne sert qu'à elle.
-- `LUN_PROD_SSH_PROTECT` (facultatif) : d'autres chemins à protéger, séparés comme un `PATH` : le fichier de
-  réglages qui déclare le hook, la configuration SSH du poste (les options fixes n'y annulent pas un relais).
-
-**Vérifier qu'elle est active** : `--check`, puis ouvrir la séance par un refus attendu : la session tente
-`echo` suivi du nom de l'hôte, et doit recevoir le refus de `lun guard`. **Sans `LUN_PROD_SSH_HOSTS`, la
-garde est inactive et silencieuse** : rien ne dit qu'elle manque.
-
-**Son prix**, sur le poste où elle est active : toute ligne ou tout fichier écrit qui cite un hôte de prod
-est refusé, même un message de commit ; un client SSH avec une variable, une parenthèse ou une accolade sur
-sa ligne, même vers un autre hôte ; tout contexte du moteur de conteneurs, même local ; `powershell -e…` ;
-toute écriture dans le dossier des crochets, donc le travail sur le plugin lui-même.
-
-**Ce qu'elle ne voit pas** : un nom d'hôte construit sans que le nom entier paraisse ; un alias, une
-fonction ou un script défini avant ; un programme qui lit l'hôte dans sa propre configuration (un alias de
-la configuration SSH, un distant git) ; un autre outil que ceux que le hook couvre ; un script déjà présent
-sur l'hôte, et ce que fait une commande autorisée une fois lancée ; un hôte non déclaré ; un fichier de la
-garde écrit par un programme lancé, ou nommé par un chemin relatif ou un joker.
+- **Le lanceur** : `node <plugin>/hooks/prod-run.mjs <geste> [arguments]` (`gestes` en donne la liste). Il
+  envoie le nom du geste et ses arguments, rien d'autre, par `ssh` lancé sans shell, sans la configuration
+  SSH du poste, sans terminal ni transfert, vers le premier hôte déclaré. La porte vérifie pour de bon.
+- **Le filet** : quand des hôtes de prod sont déclarés, le hook du plugin refuse une ligne de commande ou
+  un texte écrit qui en nomme un, un client SSH dont la cible n'est pas lisible (une variable, une
+  substitution), une commande encodée, un contexte distant du moteur de conteneurs. Ses refus sont fixes,
+  sans un mot de la commande.
+- **Son prix**, sur le poste où il est actif : citer un hôte de prod est refusé partout, même dans un
+  message de commit ou une note ; un client SSH avec une variable ou une parenthèse sur sa ligne, même vers
+  un autre hôte ; tout contexte du moteur de conteneurs, même local.
+- **L'activer** : des variables d'environnement, posées avant d'ouvrir la session. `LUN_PROD_SSH_HOSTS` :
+  les hôtes de prod sous tous leurs noms, le premier étant celui que le lanceur appelle ;
+  `LUN_PROD_SSH_USER`, `LUN_PROD_SSH_IDENTITY` (le fichier de la clé de la session) et, au besoin,
+  `LUN_PROD_SSH_PORT`. Un nom d'hôte de moins de 4 caractères ou trop commun fait refuser **tout** par le
+  hook, qui dit quoi corriger : s'ouvrir en silence éteindrait le filet. Sans `LUN_PROD_SSH_HOSTS`, le filet
+  est inactif et silencieux.
 
 ## Le desktop
 

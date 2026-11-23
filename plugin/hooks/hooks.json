@@ -1,5 +1,5 @@
 {
-  "description": "Garde lun : bloque le merge de PR, le push vers main et les push forcés, réservés à CrOliX (Bash, PowerShell). Quand des hôtes de prod sont déclarés : refuse une ligne qui en nomme un et toute écriture dans les fichiers de la garde (Write, Edit, NotebookEdit).",
+  "description": "Garde lun : bloque le merge de PR, le push vers main et les push forcés, réservés à CrOliX (Bash, PowerShell). Quand des hôtes de prod sont déclarés, un filet contre l'erreur : refuse une ligne ou un texte écrit qui en nomme un (Write, Edit, NotebookEdit). La garde de la prod est la porte posée sur l'hôte (tools/prod-gate).",
   "hooks": {
     "PreToolUse": [
       {
