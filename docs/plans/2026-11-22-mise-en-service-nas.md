@@ -26,6 +26,13 @@
 > de la répétition est jouée (tâche 5). Restent les versions `0.2.0`, puis le second temps de la répétition avec les
 > images publiées. Aucune commande n'a été jouée sur le NAS par la session.
 >
+> **Pause de l'hôte, le 23/11.** La partie sur l'hôte est mise de côté. Les séances restent sur le réseau local de
+> CrOliX (décision du 22/11, maintenue le 23/11 : pas d'ouverture par le réseau privé depuis l'extérieur), et il
+> s'absente de chez lui. Ce qui s'y joue attend son retour, marqué « au retour de CrOliX chez lui ». Fait depuis : la
+> pile fusionnée (lun-anima#126) ; les `0.2.0` d'Acedia et d'Avaritia publiées ; celle du core fusionnée ou en cours
+> de publication (lun-anima#127). Avance sans l'hôte, sur le laptop : le second temps de la répétition (tâche 5), le
+> client du réseau privé (P7), la pose de la porte préparée (P9 : CrOliX peut relire son README d'avance).
+>
 > Code relu sur `main` : Lun'Anima `365c7e6`, Lun'Acedia `bf724e3`, Lun'Avaritia `9c53768` ; le graphe d'abord, puis
 > les fichiers. Lun'Anima est privé : ce plan dit les gestes, les critères, les risques et les décisions, en
 > comportement. Ses fichiers, ses commandes, ses variables, son déploiement et ses lignes sont dans la part privée du
@@ -254,6 +261,8 @@ la table fermée des gestes ; des interdits écrits ; une fin écrite (tâche 18
 demander, pas le compte (son README, « Ce qu'elle ne ferme pas »).
 
 **Où.** Sur le réseau local, quand CrOliX est chez lui. Le réglage d'UGOS qui limite SSH au réseau local est mis.
+Avant la première séance, CrOliX vérifie qu'il est sur son réseau local : la session refuse de jouer sur le NAS sans
+lui. Une séance commencée chez lui se termine avant qu'il parte, la clé retirée.
 Aucun nœud du réseau privé pour le NAS lui-même (option écartée, « À trancher »).
 
 **La durée.** Le service d'agent SSH de Windows garde les clés chargées d'un redémarrage à l'autre (rangées dans le
@@ -360,7 +369,7 @@ Dans l'ordre. Lui seul : cela touche ses comptes et ses accès. La session ne fa
   la configuration effective relue, les fichiers d'environnement contrôlés. *Bon quand* : les essais de « Vérifier
   qu'elle tient » donnent leurs codes (65, 64, une copie refusée, un transfert refusé), `gestes` et `version`
   répondent, et le journal a une ligne par essai. À refaire après chaque changement de la porte, des clés, du serveur
-  SSH ou d'un réglage SSH dans UGOS.
+  SSH ou d'un réglage SSH dans UGOS. Son README se relit d'avance, sur le laptop. *Au retour de CrOliX chez lui.*
 
 ## Les tâches
 
@@ -381,13 +390,13 @@ tout du long. 18 en dernier, après l'**arrêt D**.
   fait par lui le 23/11 ; restent ouverts les points d'UGOS de la tâche 1.
 - **B**, avant la première écriture sur le NAS (avant la tâche 6) : les versions sont publiées, la pile corrigée, la
   répétition faite et son relevé lu, l'adresse de retour acceptée par Google (tâche 4), la porte posée et vérifiée
-  (P9), les gestes de chaque tâche relus.
+  (P9), les gestes de chaque tâche relus. *Au retour de CrOliX chez lui.*
 - **C**, avant d'entrer le vrai compte Google (avant la tâche 13) : les trois serveurs tournent, les appareils et la
   liaison sont faits, la règle de copie hors du NAS est posée et vue, une restauration a été essayée, la mise à jour
-  et le retour arrière joués.
-- **D**, avant de refermer l'accès (tâche 18) : il dit ce qui reste ouvert et pourquoi.
+  et le retour arrière joués. *Au retour de CrOliX chez lui.*
+- **D**, avant de refermer l'accès (tâche 18) : il dit ce qui reste ouvert et pourquoi. *Au retour de CrOliX chez lui.*
 - **E**, chaque fois qu'une base est effacée, remplacée ou mise de côté, même dans une tâche de la session : la
-  session s'arrête, CrOliX dit « vas-y ».
+  session s'arrête, CrOliX dit « vas-y ». *Au retour de CrOliX chez lui.*
 
 **Pour chaque geste sur le NAS** : le geste de la porte, ce qu'on attend, comment on le vérifie, comment on revient en
 arrière. Les arguments sont dans la part privée, par numéro de tâche. Une sortie qui surprend, un refus ou un échec
@@ -399,6 +408,7 @@ arrête la tâche : la session n'a qu'un code et une ligne fixe, CrOliX lit le f
 - [ ] **Restent ouverts**, que lui seul voit dans les écrans d'UGOS : ce que montre l'écran des conteneurs (un projet
   Compose, son journal, la relance) ; s'il notifie l'arrêt d'un conteneur ; ses mises à jour automatiques et si elles
   redémarrent le moteur ; SSH pour un compte standard ; un dossier hors partage et hors sauvegarde.
+  *Au retour de CrOliX chez lui.*
 - Après la porte, la session peut relire une part du système par ses gestes de lecture : `versions`, `memory`,
   `space`, `ps`, `volumes`. Le reste de la liste ci-dessous n'a pas de geste : c'est le relevé de CrOliX.
 
@@ -458,7 +468,7 @@ Pour chaque dépôt :
   tourné.**
 - [x] **Lun'Acedia et Lun'Avaritia** : une variable vide vaut absente, la sonde lit le port comme le serveur
   (lun-acedia#81, lun-avaritia#44, en brouillon). `LLM_PRICES` dans leur `.env.example` : dans ces PR ou à la tâche 17.
-- **Ce qui reste** : la répétition (tâche 5) ; la PR de la pile sort du brouillon après elle.
+- **Ce qui reste** : le second temps de la répétition (tâche 5). La pile est fusionnée (lun-anima#126).
 
 ### Tâche 4. L'adresse de retour de Google, essayée dans la console (CrOliX, avant l'arrêt B)
 
@@ -530,6 +540,8 @@ automatiques ; sa mémoire ; Google sur le vrai compte ; la limite des onglets d
 
 ### Tâche 6. Préparer le NAS, sans secret (CrOliX pour les fichiers ; la session, par la porte) ; **arrêt B avant**
 
+*Au retour de CrOliX chez lui.*
+
 - [ ] **CrOliX** copie la pile depuis `main`, au commit de la PR de la pile, dans le dossier du déploiement, et compare
   l'empreinte des fichiers à celle du dépôt (aucun geste ne la lit).
 - [ ] **CrOliX** crée les fichiers d'environnement depuis leur modèle, **sans aucun secret** : les versions, le dossier
@@ -544,6 +556,8 @@ automatiques ; sa mémoire ; Google sur le vrai compte ; la limite des onglets d
 - **Exclu** : démarrer un conteneur, se connecter au registre.
 
 ### Tâche 7. Les secrets (CrOliX)
+
+*Au retour de CrOliX chez lui.*
 
 Chaque secret est saisi par CrOliX : sur le NAS, par l'éditeur de fichiers d'UGOS ou une session SSH à lui ; ou par
 l'écran de l'app. **Jamais** dans la conversation, dans un dépôt, dans une ligne de commande (l'historique du shell),
@@ -570,6 +584,8 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
 
 ### Tâche 8. Le premier démarrage (la session, par la porte ; CrOliX pour le registre et la console)
 
+*Au retour de CrOliX chez lui.*
+
 - [ ] CrOliX se connecte au registre ; la session tire les trois images par `pull`, qui se déconnecte ensuite ; elle
   lit l'empreinte de chaque image par `image-digest <app>` et la compare à celle de la répétition ; puis tout démarre
   par `up`.
@@ -587,6 +603,8 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
   pas avec elles. Arrêter les nœuds ou la pile entière : aucun geste, c'est CrOliX.
 
 ### Tâche 9. Les premiers appareils et la liaison (CrOliX)
+
+*Au retour de CrOliX chez lui.*
 
 - [ ] **Le premier appareil de chaque app** : CrOliX lit le code dans l'écran Docker d'UGOS, s'il montre le journal
   (tâche 1). Le navigateur du laptop d'abord : le core, Acedia, Avaritia, chacun à son nom HTTPS. Un code expiré (dix
@@ -607,6 +625,8 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
 
 ### Tâche 10. Le fournisseur de modèle, par l'écran (CrOliX)
 
+*Au retour de CrOliX chez lui.*
+
 - [ ] **Avant la clé**, une phrase au core : l'écran dit qu'aucune clé n'est enregistrée pour le fournisseur. De même
   dans Acedia et Avaritia avant leur clé d'IA. C'est « l'alerte quand une clé manque ».
 - [ ] **La clé d'Anthropic**, saisie dans l'écran du core, avec son échéance ; le fournisseur Anthropic et le modèle
@@ -619,6 +639,8 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
 - **Revenir en arrière** : la clé retirée de l'écran et révoquée chez le fournisseur.
 
 ### Tâche 11. Copies, sauvegarde hors du NAS, restauration essayée (la session, par la porte ; CrOliX ; arrêt E)
+
+*Au retour de CrOliX chez lui.*
 
 - [ ] **Les copies** : celle du jour de chaque base, dans son dossier de copies (`copies <app>`), avec sa ligne au
   journal (`copy-line <app>`).
@@ -644,6 +666,8 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
 
 ### Tâche 12. Une mise à jour, puis un retour arrière (la session, par `deploy` ; CrOliX pour la base ; arrêt E)
 
+*Au retour de CrOliX chez lui.*
+
 Avaritia a deux migrations depuis `v0.1.0`, deux ajouts. Le geste dit donc qu'un retour arrière tolère une migration
 qui ajoute, rien de plus : **la vraie parade reste la copie d'avant la mise à jour**, que le geste fait désormais
 lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, avant toute vraie donnée.
@@ -667,6 +691,8 @@ lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, a
 
 ### Tâche 13. Google en production (CrOliX) ; **arrêt C avant**
 
+*Au retour de CrOliX chez lui.*
+
 - [ ] L'identifiant et le secret du client de la tâche 4 dans le fichier d'Acedia ; Acedia redémarrée.
 - [ ] **Le vrai compte**, connecté par CrOliX dans Acedia, Réglages › Compte Google. L'avertissement « Google n'a pas
   validé cette application » s'affiche (lun-acedia#55) : il le passe, c'est son propre client. La validation par
@@ -680,6 +706,8 @@ lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, a
 
 ### Tâche 14. Le téléphone (CrOliX)
 
+*Au retour de CrOliX chez lui.*
+
 - [ ] Le client du réseau privé ; la PWA du core installée depuis son adresse HTTPS ; les notifications autorisées.
   Acedia et Avaritia de même s'il les veut. **Point d'attention** : sur Android, le client du réseau privé peut ne
   laisser passer que les applications d'une liste blanche. Le navigateur doit y être : hors de la liste, les adresses
@@ -690,6 +718,8 @@ lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, a
 - **Revenir en arrière** : se désabonner ; révoquer l'appareil.
 
 ### Tâche 15. Un redémarrage du NAS, une nuit rattrapée, et la surveillance (CrOliX ; la session vérifie)
+
+*Au retour de CrOliX chez lui.*
 
 - [ ] Un soir, CrOliX éteint le NAS par UGOS et le rallume le lendemain après 5 h.
 - **On attend** : sans rien taper, les six conteneurs repartent, chaque nœud avant son app ; les trois apps répondent ;
@@ -705,6 +735,8 @@ lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, a
 - **Revenir en arrière** : rien à défaire ; un conteneur resté arrêté se relance depuis l'écran, et l'écart s'écrit.
 
 ### Tâche 16. Les trois vérifications de #185 (CrOliX, sur le téléphone et le vrai compte)
+
+*Au retour de CrOliX chez lui.*
 
 - [ ] **Les chevauchements** : deux vrais événements de son agenda principal qui se chevauchent, dont il est le seul
   organisateur ; la carte propose d'en déplacer un ; acceptée, l'événement bouge dans Google, à la bonne heure. Un
@@ -725,6 +757,8 @@ lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, a
 - **Vérifier** : `npm run check`, `npm test`, `npm run sync:check` ; la page relue par le `reviewer`.
 
 ### Tâche 18. Refermer l'accès (CrOliX, après l'arrêt D)
+
+*Au retour de CrOliX chez lui.*
 
 - [ ] SSH désactivé dans UGOS ; la clé retirée du fichier de clés du compte, puis la porte retirée ou gardée (README
   de la porte, « La retirer ») ; le compte de pilotage désactivé, ou gardé avec sa raison écrite (les mises à jour de
@@ -815,8 +849,8 @@ issue s'ouvre). Tout correctif de code applicatif.
   d'UGOS (journal, relance, projets Compose) ; la notification d'un conteneur arrêté ; les mises à jour automatiques ;
   un dossier hors sauvegarde, instantanés et corbeille. Tout cela se lit à la tâche 1, dans les écrans d'UGOS, par
   CrOliX : encore ouvert au 23/11.
-- **La porte est en brouillon** (lun-docs#193) : sa table peut changer avant d'être posée. Les gestes nommés ici sont
-  ceux de sa version 2 ; une tâche dont le geste change se relit à l'arrêt B.
+- **La porte est fusionnée, pas posée** (lun-docs#193) : sa table peut changer avant d'être posée. Les gestes
+  nommés ici sont ceux de sa version 2 ; une tâche dont le geste change se relit à l'arrêt B.
 - **Ce que la porte n'a pas encore** : le contrôle d'intégrité de la base d'essai et la lecture de l'entrée repère
   (tâche 11) ; les lignes de la nuit, du matin et des erreurs au journal (tâche 15) ; la version écrite par le
   déploiement (tâche 12) ; les droits des fichiers et l'empreinte de la pile (tâches 6 et 7). En attendant, CrOliX.
