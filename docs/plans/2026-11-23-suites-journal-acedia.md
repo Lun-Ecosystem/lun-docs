@@ -8,7 +8,7 @@
 > Journal (Lun-Ecosystem/lun-acedia#86, fusionné le 23/11 par Lun-Ecosystem/lun-acedia#91). Dépôt public.
 >
 > **État : rédigé le 23/11 ; contesté le 23/11 (« à amender ») ; amendé le 23/11 avec quatre décisions de CrOliX et
-> les objections du contradicteur. Pas encore validé.**
+> les objections du contradicteur. Validé par CrOliX le 23/11 (niveau `standard`).**
 >
 > Code relu sur `main` de Lun'Acedia (`1cd0c56`) ; le graphe d'abord, puis chaque point dans le code. Lun'Acedia est
 > public : ce plan ne porte ni adresse, ni compte, ni nom d'hôte.
