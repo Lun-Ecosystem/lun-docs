@@ -62,7 +62,8 @@ C'est CrOliX qui la pose, avec un compte d'administration de l'hôte, jamais la 
 
    Puis recharger `sshd`, et contrôler ce qu'il applique (`sshd -T`) : `authorizedkeysfile` est le chemin
    posé, `permituserenvironment no`, aucun `acceptenv`. Le compte n'a ni mot de passe utilisable ni autre
-   clé. Une mise à jour du système de l'hôte peut récrire cette configuration : la recontrôler après.
+   clé ; son shell de connexion est un `sh` (c'est lui qui lance la porte). Une mise à jour du système de
+   l'hôte peut récrire cette configuration : la recontrôler après.
 5. **Le laptop.** Les variables du lanceur et du filet : `standards/environnements.md`.
 
 Ce que dit la documentation d'OpenSSH (`sshd(8)`, « AUTHORIZED_KEYS FILE FORMAT » ; `sshd_config(5)` ;
@@ -90,10 +91,14 @@ Depuis le terminal de CrOliX, avec la clé de la session :
 ## Ce qu'elle ne ferme pas
 
 - **Ce que fait un geste autorisé une fois lancé** : `deploy` joue le script de déploiement de la pile, les
-  gestes `trial-*` écrivent dans le volume d'essai ; la porte ne voit que leur appel.
+  gestes `trial-*` écrivent dans le volume d'essai ; la porte ne voit que leur appel. Si ce script affiche
+  des lignes brutes d'un journal quand un déploiement échoue, elles arrivent à la session : c'est à lui de
+  les filtrer.
 - **Un script déjà sur l'hôte**, et les fichiers de la pile : s'ils changent, les gestes changent de sens.
 - **Une porte mal posée** : un dossier ou un fichier de clés que le compte peut écrire, une seconde clé sans
-  options, un mot de passe, `PermitUserEnvironment` ouvert.
+  options, un mot de passe, `PermitUserEnvironment` ou `AcceptEnv` ouverts (la porte fixe son chemin de
+  recherche, coupe l'entrée de la session et retire les variables qui détournent le moteur de conteneurs,
+  pas toutes les autres), un fichier de démarrage du shell du compte, lu avant elle.
 - **Le compte, s'il est atteint autrement**. La porte borne la clé, pas le compte : il lance le moteur de
   conteneurs, ce qui vaut tous les droits sur l'hôte par une autre voie.
 - La longueur d'une valeur (`env-length`) et les noms et dates des copies (`copies`) sont montrés : rien de

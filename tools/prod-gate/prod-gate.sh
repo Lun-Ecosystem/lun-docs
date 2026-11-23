@@ -22,6 +22,9 @@ PATH=$LUN_PATH
 LC_ALL=C
 export PATH LC_ALL
 unset IFS ENV BASH_ENV CDPATH
+# What would point the container engine elsewhere, and the input of the session.
+unset DOCKER_HOST DOCKER_CONTEXT DOCKER_CONFIG COMPOSE_FILE COMPOSE_PROJECT_NAME COMPOSE_ENV_FILES COMPOSE_PROFILES
+exec < /dev/null
 set -u
 set -f
 
@@ -48,7 +51,7 @@ accept() {
 words() { [ "$2" -eq "$1" ] || refuse 66; }
 is_app() { case " $LUN_APPS " in *" $1 "*) ;; *) refuse 66 ;; esac; }
 is_env_name() { case " $LUN_ENV_NAMES " in *" $1 "*) ;; *) refuse 66 ;; esac; }
-is_date() { case "$1" in [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;; *) refuse 66 ;; esac; }
+is_date() { case "$1" in [0-9][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]) ;; *) refuse 66 ;; esac; }
 is_version() {
   case "$1" in
     rollback) ;;

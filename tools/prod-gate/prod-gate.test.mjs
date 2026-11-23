@@ -519,3 +519,63 @@ test('the README says how to put the door, how to check it holds, what it does n
   assert.match(doc, /filet/i, 'the laptop belt is said not to be the guard');
   assert.match(doc, /hors d'atteinte|hors de portée/i, 'the door sits out of reach of the account of the session');
 });
+
+// ---------------------------------------------------------------------------------------------------
+// 7. Found while attacking the door.
+// ---------------------------------------------------------------------------------------------------
+/** A sandbox whose fake docker also records two variables of its environment and one line of its input. */
+function probing() {
+  const s = sandbox();
+  const probe = toSh(path.join(s.dir, 'state', 'probe'));
+  fs.writeFileSync(path.join(s.dir, 'bin', 'docker'),
+    `#!/bin/sh\nprintf 'host=%s file=%s project=%s input=' "\${DOCKER_HOST-}" "\${COMPOSE_FILE-}" "\${COMPOSE_PROJECT_NAME-}" >> '${probe}'\nif read -r l; then printf '%s' "$l" >> '${probe}'; fi\nprintf '\\n' >> '${probe}'\n`,
+    { mode: 0o755 });
+  s.probe = () => fs.readFileSync(path.join(s.dir, 'state', 'probe'), 'utf8');
+  return s;
+}
+test('the container engine is not pointed elsewhere by the environment', () => {
+  const s = probing();
+  const env = { DOCKER_HOST: 'tcp://evil.example.test:2375', DOCKER_CONTEXT: 'evil', COMPOSE_FILE: '/tmp/evil.yaml', COMPOSE_PROJECT_NAME: 'evil' };
+  assert.equal(play(s, 'stop app-a', { env }).status, 0);
+  assert.equal(s.probe(), 'host= file= project= input=\n');
+});
+test('the input of the session reaches no command', () => {
+  const s = probing();
+  const r = spawnSync(SH, [toSh(s.gate)], { cwd: path.join(s.dir, 'state'), env: { PATH: process.env.PATH, SSH_ORIGINAL_COMMAND: 'stop app-a' }, input: 'a line from the session\n', encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(s.probe(), 'host= file= project= input=\n');
+});
+test('a date out of the calendar is out of form', () => {
+  const s = sandbox();
+  for (const d of ['9999-99-99', '2026-20-01', '2026-11-40']) assert.equal(play(s, `trial-load app-a ${d}`).status, 66, d);
+  assert.deepEqual(shape(s), []);
+});
+test('an app that is a piece of another, the word --, a joker that matches a file: nothing runs', () => {
+  const s = sandbox();
+  fs.writeFileSync(path.join(s.dir, 'state', 'app-a'), '');
+  for (const [req, code] of [['stop app', 66], ['stop a', 66], ['stop app-ab', 66], ['stop app-a.app-b', 66], ['stop --', 66], ['stop -- app-a', 66],
+    ['-- ps', 65], ['stop app-?', 64], ['stop app-*', 64], ['env-length ../app-a APP_SECRET_KEY', 66], ['env-length app-a .', 66],
+    ['trial-load app-a 2026-11-20/..', 66], ['deploy app-a ...', 66], ['deploy app-a 1.2.3/x', 66]]) {
+    assert.equal(play(s, req).status, code, req);
+  }
+  assert.deepEqual(shape(s), []);
+});
+test('a command the host does not have: its own failure, journaled, nothing else', () => {
+  const s = sandbox();
+  fs.rmSync(path.join(s.dir, 'bin', 'free'));
+  const r = play(s, 'memory');
+  // 127 when no `free` exists at all; the machine of the test may have its own in /usr/bin.
+  assert.ok(r.status === 127 || r.status === 0, String(r.status));
+  assert.deepEqual(shape(s), []);
+  assert.match(logLines(s)[0], / memory accepted$/);
+});
+test('twenty requests at once leave twenty whole lines in the journal', async () => {
+  const s = sandbox();
+  const { spawn } = await import('node:child_process');
+  await Promise.all(Array.from({ length: 20 }, () => new Promise((resolve) => {
+    spawn(SH, [toSh(s.gate)], { env: { PATH: process.env.PATH, SSH_ORIGINAL_COMMAND: 'version' }, stdio: 'ignore' }).on('close', resolve);
+  })));
+  const lines = logLines(s);
+  assert.equal(lines.length, 20);
+  for (const l of lines) assert.match(l, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ version accepted$/);
+});
