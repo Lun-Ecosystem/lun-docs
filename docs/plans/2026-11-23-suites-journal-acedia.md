@@ -3,6 +3,8 @@
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
+> **PR du code :** Lun-Ecosystem/lun-acedia#94 (brouillon, branche `feat/journal-refus`).
+>
 > **Issues :** Lun-Ecosystem/lun-acedia#88 (refuser une proposition), Lun-Ecosystem/lun-acedia#89 (les compteurs du
 > tri), Lun-Ecosystem/lun-acedia#90 (la corbeille reste en réception dans la démo). Toutes trois nées du chantier du
 > Journal (Lun-Ecosystem/lun-acedia#86, fusionné le 23/11 par Lun-Ecosystem/lun-acedia#91). Dépôt public.
@@ -165,7 +167,7 @@ d'Acedia** : la tâche 3 revient à la session, ou à un agent général à qui 
 **L'ordre.** **1 et 2 partent en parallèle** (aucun fichier commun : 1 les tests du serveur, 2 ceux des vues et le
 faux client). 3 attend 1. 4 attend 2 et 3 (les types recopiés). 5 attend 3 et 4.
 
-1. - [ ] **Les tests du serveur, rouges** (testeur ; fichiers de test du serveur seulement).
+1. - [x] **Les tests du serveur, rouges** (testeur ; fichiers de test du serveur seulement).
    - `server/src/triage/pipeline.test.ts` ou `journal.test.ts`, avec le harnais existant :
      - `POST /api/mail/:id/refuse` sur une proposition en attente vers une boîte : 200 ; les libellés du mail
        inchangés dans le faux Gmail ; la proposition en `refused` ; une ligne `origin: 'user'`, `action: 'refuse'`,
@@ -195,7 +197,7 @@ faux client). 3 attend 1. 4 attend 2 et 3 (les types recopiés). 5 attend 3 et 4
    - **Exclu** : le code ; les tests des vues.
    - **Preuve** : chaque nouveau test échoue sur `main` pour la bonne raison (route absente, champ absent, mail listé).
 
-2. - [ ] **Les tests des vues, rouges** (testeur ; `views/src/lib/mail/Pending.test.ts`, `Journal.test.ts`,
+2. - [x] **Les tests des vues, rouges** (testeur ; `views/src/lib/mail/Pending.test.ts`, `Journal.test.ts`,
    `views/src/testing/fake-client.ts`).
    - **Le bouton** : chaque carte proposée vers une boîte, la corbeille ou le spam a un bouton « Refuser la
      proposition » (nom accessible) ; un clic appelle `client.refuse(id)`, retire la carte, montre le toast
@@ -215,7 +217,7 @@ faux client). 3 attend 1. 4 attend 2 et 3 (les types recopiés). 5 attend 3 et 4
    - **Exclu** : le code ; `Mailbox.test.ts` sauf la forme de `todayStats` (`:40`) ; le lecteur de mail.
    - **Preuve** : les nouveaux tests échouent sur `main` pour la bonne raison.
 
-3. - [ ] **Le serveur** (la session ou un agent général). Après 1.
+3. - [x] **Le serveur** (la session ou un agent général). Après 1.
    - `server/src/types.ts` : `'refused'` dans `ProposalView.status` ; `TodayStats` prend `ai`, `rule`, `refused`,
      `agent`, garde `autoFiled`, `validated`, `corrected`, chacun avec sa doc. Puis
      `npm run sync-types -w @lun-ecosystem/lunacedia-views`.
@@ -242,7 +244,7 @@ faux client). 3 attend 1. 4 attend 2 et 3 (les types recopiés). 5 attend 3 et 4
      l'évaluation est dans le `.env`, `npm run pina:eval -w @lun-acedia/server`, sans jamais afficher la clé ; sinon,
      le dire.
 
-4. - [ ] **Les écrans** (`dev-front` ; `views/src/lib/client.ts`, `Pending.svelte`, `Journal.svelte`,
+4. - [x] **Les écrans** (`dev-front` ; `views/src/lib/client.ts`, `Pending.svelte`, `Journal.svelte`,
    `views/src/lib/pina/cards.ts`, `views/src/lib/ui/Icon.ts`). Après 2 et 3.
    - `client.ts` : `refuse(id)` vers `POST /api/mail/:id/refuse`, à côté de `validate`.
    - `Pending.svelte` : un `IconButton` du kit (nom « Refuser la proposition ») dans `.actions` de chaque carte dont
@@ -261,7 +263,7 @@ faux client). 3 attend 1. 4 attend 2 et 3 (les types recopiés). 5 attend 3 et 4
      composant ; la DA.
    - **Preuve** : les tests de la tâche 2 au vert ; les barrières au vert.
 
-5. - [ ] **La preuve dans Chrome sur la démo** (`dev-front`). Après 3 et 4.
+5. - [x] **La preuve dans Chrome sur la démo** (`dev-front`). Après 3 et 4.
    - `npm run demo`, puis Chrome : **au bureau** (largeur par défaut) et **au téléphone**, par l'émulation d'appareil
      des DevTools ou Chrome sans interface à 390 px de large. Pas une fenêtre redimensionnée.
    - **On attend** : dans « À valider », le bouton sur chaque carte proposée vers une boîte ; un refus de `m02` retire
@@ -306,3 +308,15 @@ faux client). 3 attend 1. 4 attend 2 et 3 (les types recopiés). 5 attend 3 et 4
 - **Non vérifié sur un vrai compte** : ce que `messages.trash` fait à `INBOX`. La documentation ne le dit pas ; le
   choix des vues tient dans les deux cas.
 - L'évaluation de l'agent n'a pas été lancée pour ce plan.
+
+## Écarts à l'exécution (23/11)
+
+- **Branche** : `feat/journal-refus`, non `feat/suites-journal`.
+- **Téléphone** : « Corriger » devient un crayon sur toutes les cartes, choix de CrOliX sur capture, au lieu de la règle
+  « seulement si la rangée déborde ». Le nom reste en infobulle et en `aria-label`. Le bouton de refus (cercle barré) et
+  les six tuiles, zéros masqués, sont validés par CrOliX sur capture le 23/11.
+- **Hors liste** : un clic remontant à la carte redonnait le focus à une carte retirée ; corrigé (« Valider » en profite).
+- **Course** : le refus relit la proposition après la lecture de Gmail ; le même défaut sur `validate` et `correct` est
+  suivi dans Lun-Ecosystem/lun-acedia#93.
+- **Test renommé** : celui du faux client.
+- **Non fait** : `pina:eval` (clé hors d'atteinte) ; l'effet de `mail.refuse` sur les choix de l'agent n'est pas mesuré.
