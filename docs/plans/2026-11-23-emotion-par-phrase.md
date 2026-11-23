@@ -47,7 +47,7 @@ phrase, inconnue traitée comme neutre, tenue jusqu'à la lecture, ni affichée 
 | Dépôt | Branche | Issue | Niveau |
 |---|---|---|---|
 | `lun-anima` : 3 tâches (1, 3, 6) | dans l'issue privée | Lun-Ecosystem/lun-anima#130 | `critique` |
-| `lun-luxuria` : la réception, son scénario, ses tests | `feat/emotion-par-phrase` | Lun-Ecosystem/lun-luxuria#107 | `critique` |
+| `lun-luxuria` : réception, scénario, tests | `feat/emotion-par-phrase` | Lun-Ecosystem/lun-luxuria#107 | `critique` |
 | `lun-docs` : ce plan, ses coches, ses chiffres | `docs/emotion-par-phrase` | les deux | `trivial` |
 
 **Le niveau.** `critique`, décidé par CrOliX : le chantier change le message de parole entre le cerveau et le corps,
