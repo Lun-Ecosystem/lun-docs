@@ -3,6 +3,8 @@
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
+> **PR du chantier :** Lun-Ecosystem/lun-anima#132 (privé, brouillon) ; Lun-Ecosystem/lun-luxuria#108 (brouillon).
+>
 > **Issues :** Lun-Ecosystem/lun-anima#130 (`niveau:critique`, privé), critères figés par CrOliX le 23/11 ; sa part
 > publique Lun-Ecosystem/lun-luxuria#107. **PR :** Lun-Ecosystem/lun-docs#198 (brouillon).
 >
@@ -264,7 +266,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit éch
 après 1, 4 après 2. **5 et 6 partent en parallèle** : 5 après 4 (faux cerveau, sans le core), 6 après 3. 7 en
 dernier. Le contrat du message est la seule chose que 3 et 4 partagent : il ne bouge pas sans ce plan.
 
-1. - [ ] **Les tests du cerveau, rouges** (testeur, Lun'Anima ; fichiers dans l'issue privée).
+1. - [x] **Les tests du cerveau, rouges** (testeur, Lun'Anima ; fichiers dans l'issue privée).
    - **Le retrait** : une étiquette en tête, deux étiquettes dans une réponse, une étiquette coupée entre deux
      morceaux du flux, **une étiquette au milieu d'un morceau** (le morceau se coupe à l'étiquette), `{Gênée}` sans
      casse ni accents, une inconnue retirée, `{mot}` au milieu d'une phrase laissé tel quel, un `{` sans fin et
@@ -288,7 +290,7 @@ dernier. Le contrat du message est la seule chose que 3 et 4 partagent : il ne b
      `neutre`, dans le code du cerveau.
    - Exclu : tout test de voix ou de visage ; tout changement d'un attendu existant sans le nommer dans la PR.
 
-2. - [ ] **Les tests de Luxuria, rouges** (testeur, Lun'Luxuria ; `src/conversation.test.ts`,
+2. - [x] **Les tests de Luxuria, rouges** (testeur, Lun'Luxuria ; `src/conversation.test.ts`,
    `src/speech/speaker.test.ts`, la session).
    - Un `speech` avec `emotion: 'douce'` : `speaker.add` la reçoit avec la phrase ; `subtitle` la porte au début réel
      de la lecture de **cette** phrase, pas à sa réception ; le `subtitle` muet (voix en échec) aussi.
@@ -300,7 +302,7 @@ dernier. Le contrat du message est la seule chose que 3 et 4 partagent : il ne b
    - La trace (`phrase_recue`, `son`) n'écrit pas l'émotion ; le sous-titre affiché reste le texte seul.
    - Exclu : `src/local.ts`.
 
-3. - [ ] **Le cerveau** (`dev-core`, Lun'Anima ; étapes dans l'issue privée). Après 1.
+3. - [x] **Le cerveau** (`dev-core`, Lun'Anima ; étapes dans l'issue privée). Après 1.
    - La liste lue des données de l'instance, validée à la lecture, avec le seul neutre en défaut (décision 1) ; la
      consigne selon le tableau ; le retrait au seul point de lecture du flux ; l'émotion dans l'événement de morceau ;
      le champ `emotion` sur `speech`, absent au neutre ; les émotions de la parole d'elle-même gardées jusqu'à ce
@@ -309,7 +311,7 @@ dernier. Le contrat du message est la seule chose que 3 et 4 partagent : il ne b
    - Les sept émotions écrites sur la base de test de recette.
    - Exclu : un écran ; l'humeur (décision 3) ; un cache du prompt ; le tempérament.
 
-4. - [ ] **La réception dans Luxuria** (`dev-luxuria`, Lun'Luxuria). Après 2, en parallèle de 3.
+4. - [x] **La réception dans Luxuria** (`dev-luxuria`, Lun'Luxuria). Après 2, en parallèle de 3.
    - `src/brain.ts` : `emotion?: string` sur `speech`, et une petite fonction qui garde une valeur de forme `[a-z_]`,
      24 signes au plus, sinon `undefined`.
    - `src/conversation.ts` (`onLive`) : passe l'émotion filtrée à `speaker.add(id, text, urgent, emotion)` ; la trace
@@ -320,14 +322,14 @@ dernier. Le contrat du message est la seule chose que 3 et 4 partagent : il ne b
      point où la voix et le visage la liront (§ 5.1, `setMood(...)`).
    - Exclu : jouer l'émotion ; la synthèse (`#synth`) ne la reçoit pas encore ; aucun réglage, aucun texte à l'écran.
 
-5. - [ ] **Le critère 5 de bout en bout, dans Chrome** (testeur, Lun'Luxuria). Après 4.
+5. - [x] **Le critère 5 de bout en bout, dans Chrome** (testeur, Lun'Luxuria). Après 4.
    - Un scénario de la chaîne (`src/presence/scenarios/`) dont le faux cerveau (`src/presence/fakes.ts`) publie des
      phrases étiquetées : deux émotions, une phrase neutre sans champ, une émotion mal formée.
    - Joué par `npm run chaine` dans Chrome sans interface. La sonde vérifie que la session tient l'émotion de la
      phrase lue, et qu'aucun sous-titre ni aucun texte passé à la voix ne porte d'accolade. Comment la sonde lit
      l'état de la session sans rien afficher reste à trouver par le développeur, sans écrire l'émotion dans la trace.
 
-6. - [ ] **La preuve en local, avec le vrai modèle** (testeur ou session ; commandes dans l'issue privée). Après 3.
+6. - [x] **La preuve en local, avec le vrai modèle** (testeur ou session ; commandes dans l'issue privée). Après 3.
    - Le cerveau en local sur une base de test amorcée avec les sept émotions, le modèle du rodage, raisonnement
      coupé, par le vrai service, avec les vraies consignes. Le budget de la mesure se dit à CrOliX avant de lancer.
    - **Une conversation parlée longue** (au moins 20 tours, fil plein), avec **au moins une délégation et un
@@ -400,3 +402,12 @@ de parole par client.
   par un test de la tâche 1) ; comment la sonde de la chaîne lira l'état de la session (tâche 5).
 - Le geste qui range les sept émotions dans l'instance du NAS est à confirmer avec CrOliX.
 - OpenAmika relu dans les passages cités seulement, pas lancé (sa voix demande une RTX).
+
+## Écarts à l'exécution
+
+- Trois données de tests existants ont été ajustées, sans changer leur intention.
+- Un delta vide d'un tour écrit n'est plus émis.
+- La garde « rien en dur » a des limites connues.
+- Luxuria : une sonde de test lit l'émotion tenue par la session, sans rien afficher ni tracer ; la session oublie l'émotion
+  au silence, avant que le sous-titre s'efface ; la chaîne passe par le serveur de chaîne du cerveau.
+- Mesure du 23/11 : le taux d'étiquettes valides est de 35 %. CrOliX a décidé de livrer tel quel, avec un remède à part.
