@@ -356,6 +356,8 @@ Dans l'ordre. Lui seul : cela touche ses comptes et ses accès. La session ne fa
 - [ ] **P5. L'agent de la séance** : il lance l'agent de Git Bash sur l'emplacement de la part privée, charge la clé
   avec une durée de vie, puis essaie une connexion. *Bon quand* : `ssh-add -l` montre la clé avec sa durée, et le
   lanceur obtient `gestes` sans mot de passe (après P9). Si la durée de vie est refusée, il le dit.
+  *Au retour de CrOliX chez lui* pour l'essai de connexion. P1 à P3 se règlent dans UGOS par CrOliX : il choisit de
+  les faire d'avance ou à son retour.
 - [x] **P6. Le moteur Docker du laptop**, démarré, pour la répétition. *Bon quand* : `docker info` répond.
 - [ ] **P7. Le client du réseau privé sur le laptop**, connecté, pour joindre les apps en HTTPS. *Bon quand* :
   `tailscale status` répond. Chaque appareil qui ouvre les écrans doit y être : sans son client, le laptop
