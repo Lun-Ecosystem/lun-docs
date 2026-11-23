@@ -7,36 +7,42 @@
 > tri), Lun-Ecosystem/lun-acedia#90 (la corbeille reste en réception dans la démo). Toutes trois nées du chantier du
 > Journal (Lun-Ecosystem/lun-acedia#86, fusionné le 23/11 par Lun-Ecosystem/lun-acedia#91). Dépôt public.
 >
-> **État : rédigé le 23/11 ; périmètre à figer par CrOliX** (critères, niveau et six décisions ci-dessous, une à une).
+> **État : rédigé le 23/11 ; contesté le 23/11 (« à amender ») ; amendé le 23/11 avec quatre décisions de CrOliX et
+> les objections du contradicteur. Pas encore validé.**
 >
 > Code relu sur `main` de Lun'Acedia (`1cd0c56`) ; le graphe d'abord, puis chaque point dans le code. Lun'Acedia est
 > public : ce plan ne porte ni adresse, ni compte, ni nom d'hôte.
 
-**But :** dans « À valider », CrOliX peut laisser un mail où il est sans le ranger, et le Journal le dit. Les
-compteurs du jour suivent le découpage du Journal. Un mail mis à la corbeille ne s'affiche plus en boîte de réception.
+**But :** dans « À valider », CrOliX peut dire « non, pas ça » à une proposition sans ranger le mail, et le Journal le
+dit. Les compteurs du jour suivent le découpage du Journal. Un mail mis à la corbeille ou en spam ne s'affiche plus en
+boîte de réception ni dans « À valider ».
 
 **Source :** les trois issues ; le plan fusionné du Journal (`docs/plans/2026-11-23-journal-acedia.md`) et ses deux
-décisions : la règle courte des textes (`{verbe} {boîte}, proposition de l’IA validée|corrigée[ par {agent}]`) et un
-seul filtre par ligne, celui du décideur, l'agent sous son nom ; la documentation officielle de l'API Gmail.
+décisions (la règle courte des textes, un seul filtre par ligne, l'agent sous son nom) ; les décisions de CrOliX et
+la contestation du 23/11 ; la documentation officielle de l'API Gmail.
 
 ## Critères de fin proposés
 
 Chacun se prouve en local, sur la démo et par les tests.
 
-1. **Refuser une proposition** depuis « À valider » : le mail ne bouge pas dans Gmail, la proposition sort de la file,
-   un toast offre d'annuler, l'annulation la remet en attente. Tâches 1 à 4.
-2. **Le Journal dit le refus** sous la règle courte, sous le filtre de son décideur (décisions 1 et 2), et la ligne
-   s'annule comme les autres. Tâches 1 à 4.
-3. **Les compteurs de « Rien à valider »** suivent le découpage du Journal : « rangés seuls » ne compte plus les règles,
-   les gestes de l'agent sont comptés à son nom (décision 5). Tâches 1 à 4.
-4. **Un mail à la corbeille ou en spam n'est plus listé en boîte de réception ni dans « À valider »**, dans la démo
-   comme dans les tests (décision 6). Les préconditions de l'évaluation de l'agent tiennent. Tâches 1, 3.
-5. **Un test par cas, rouge puis vert ; l'écran vérifié dans Chrome sur la démo**, bureau et téléphone en émulation à
-   390 px. Tâches 1 à 5.
+1. **Refuser une proposition** depuis « À valider » : le mail ne bouge pas dans Gmail, la proposition passe à
+   `refused` et sort de la file, **aucun exemple n'est écrit** pour le classeur. Un toast offre d'annuler ;
+   l'annulation remet la proposition en attente. Une carte sans boîte proposée n'a pas le bouton. Tâches 1 à 4.
+2. **Le Journal dit le refus** : « Laissé en boîte de réception, proposition de l’IA refusée », suivi de « par {agent} »
+   quand c'est lui ; sous À la main, ou sous l'agent quand c'est lui. La ligne s'annule. Tâches 1 à 4.
+3. **L'agent peut refuser** par `mail.refuse`, sous une carte comme ses autres gestes. Tâches 1, 3.
+4. **Les compteurs de « Rien à valider »** : six tuiles, celles à zéro masquées, « aujourd’hui » gardé ; « rangés
+   seuls » ne compte plus les règles ; l'agent compte ses validations, corrections et refus seulement. **CrOliX valide
+   le rendu sur capture avant la fusion.** Tâches 1 à 5.
+5. **Un mail à la corbeille ou en spam n'est plus listé** en boîte de réception ni dans « À valider », côté serveur
+   comme dans le faux client des vues. **La boîte de `createDemo({ pina: false })`, celle de l'évaluation de l'agent,
+   est inchangée, prouvé par un test.** Tâches 1 à 3.
+6. **Un test par cas, rouge puis vert ; l'écran vérifié dans Chrome sur la démo**, bureau et téléphone en émulation à
+   390 px ; l'icône du bouton validée par CrOliX sur capture. Tâches 1 à 5.
 
-**Niveau proposé : `standard`.** Une action nouvelle de bout en bout (statut, route, parité, Journal, écran), un champ
-de plus au contrat (`stats.today`), une vue de la boîte corrigée. Rien de sécurité, pas de schéma de base touché
-(`proposals.status` est un `TEXT` sans contrainte, `server/src/db.ts:80-87`).
+**Niveau proposé : `standard`.** Une action nouvelle de bout en bout (statut, route, parité, catalogue, Journal,
+écran), des champs ajoutés au contrat (`stats.today`), deux vues de la boîte corrigées. Rien de sécurité, pas de
+migration : `proposals.status` est un `TEXT` sans contrainte (`server/src/db.ts:80-87`), `refused` s'y écrit tel quel.
 
 | Dépôt | Branche | Issues | Niveau |
 |---|---|---|---|
@@ -48,43 +54,37 @@ Une PR par dépôt. Celle de Lun'Acedia ferme les trois issues ; celle de lun-do
 **Les trois issues tiennent ensemble.** Chacune est petite, elles touchent les mêmes fichiers (`types.ts`,
 `journal.ts`, `Pending.svelte`, la démo) et la même preuve dans Chrome. Aucune n'est à sortir.
 
-## Les décisions à poser à CrOliX, une à une
+## Les décisions de CrOliX, le 23/11
 
-1. **Le filtre d'une ligne de refus.** *Recommandé : À la main ; celui de l'agent quand c'est lui.* Refuser, c'est
-   dire non à l'IA : c'est CrOliX qui décide, comme pour une correction. La décision 2 du Journal (un seul filtre,
-   celui du décideur) s'applique telle quelle. Le code n'a rien à ajouter : `decider()` rend déjà `origin` pour toute
-   action autre que `validate` (`views/src/lib/mail/Journal.svelte:62`). Autre choix possible : le filtre IA, mais il
-   mêlerait ce que l'IA a fait et ce qu'on lui a refusé.
-2. **Le texte de la ligne de refus.** *Recommandé : « Laissé en boîte de réception, proposition de l’IA refusée » ;
-   pour l'agent, « …, proposition de l’IA refusée par Agent ».* C'est la règle courte avec un troisième mot. Le verbe
-   « Laissé en boîte de réception » sort déjà de `where()` quand `INBOX` reste dans `after` (`Journal.svelte:143`) ;
-   seul `by()` (`:148-152`) prend `refusée`. La lecture d'écran suit (`rowLabel`, `:155-159`).
-3. **Ce qu'un refus fait au mail.** *Recommandé : rien dans Gmail ; la proposition passe à `refused` ; le mail
-   devient un exemple « aucune boîte ».* Pas de libellé : ce serait une trace dans Gmail que rien d'autre ne lit, et
-   le Journal la porte déjà. L'exemple, c'est ce que fait déjà une validation d'une proposition sans boîte
-   (`remember(…, 'none', …)`, `pipeline.ts:380-383`) : sans lui, l'IA reproposera la même boîte pour ce genre de mail.
-   L'annulation le retire avec le reste (`snapshot`, `pipeline.ts:386-388` ; `restoreExample`, `journal.ts:172`).
-   Autre choix : pas d'exemple, si CrOliX veut pouvoir refuser « par doute » sans rien apprendre à l'IA.
-4. **L'agent peut-il refuser ?** *Recommandé : oui, par une action `mail.refuse` du catalogue.* Il valide et corrige
-   déjà (`server/src/contract/catalog.ts:140-148`) ; sans le refus, il ne peut vider la file qu'en rangeant quelque
-   part. Le geste ne déplace rien et s'annule : la carte reste le garde-fou (bretelles par les cartes). L'inverse
-   vient seul : toute réponse qui porte un `journalId` s'annule par `journal.undo` (`server/src/pina/agent.test.ts:404`)
-   et `markPina` passe la ligne à son nom (`server/src/pina/agent.ts:114-116`). Coût : la ligne du catalogue, son
-   texte de carte (`server/src/pina/wording.ts`, recopié dans les vues), son icône (`views/src/lib/pina/cards.ts`).
-   Autre choix : non, et la route est marquée « à la main seulement » dans `PARITY`.
-5. **Le découpage et les libellés des compteurs.** *Recommandé : six tuiles dans « Rien à valider », dans cet ordre :
-   « rangés seuls par l’IA », « par une règle », « validés », « corrigés », « refusés », « par Agent » (le nom réglé).*
-   Les validations, corrections et refus de l'agent ne comptent que sous sa tuile (décision 2 du Journal). Les gestes
-   directs ne sont pas comptés ici : l'écran parle des propositions. Le champ `autoFiled` (règles et IA) reste, car la
-   phrase de la boîte de réception le lit (« Le tri a rangé N mails aujourd’hui », `Mailbox.svelte:437-441`) et il
-   est juste pour « le tri ». Autre choix : quatre tuiles, une par filtre du Journal (IA, À la main, Règles, agent),
-   plus courtes mais sans « validés » ni « corrigés », qui sont le sujet de l'écran.
-6. **Où se règle la corbeille en réception.** *Recommandé : dans la vue, pas dans le faux Gmail.* Les vues `inbox` et
-   `pending` excluent `TRASH` et `SPAM` (`server/src/gmail/store.ts:125-137`). La documentation de Gmail ne dit pas si
-   `messages.trash` retire `INBOX` (voir plus bas) ; elle dit en revanche que la liste exclut la corbeille et le spam
-   par défaut. La vue suit donc la liste de Gmail, quel que soit le sort d'`INBOX`. Le faux Gmail garde `INBOX` à la
-   corbeille : c'est le cas difficile, les tests le gardent. Autre choix : retirer `INBOX` dans le faux Gmail, mais ce
-   serait affirmer un comportement que la documentation ne donne pas.
+1. **Refuser, c'est « non, pas ça », sans leçon.** Le mail ne bouge pas, la proposition passe à `refused` et sort de la
+   file. **Aucun exemple n'est écrit** pour le classeur : l'annulation n'a rien à effacer, elle remet la proposition
+   en attente. Texte du Journal : « Laissé en boîte de réception, proposition de l’IA refusée », et « …, proposition de
+   l’IA refusée par {agent} » quand c'est l'agent. **Le bouton dit le refus** (« Refuser la proposition »), pas un
+   ordre de rangement ; son icône est validée par CrOliX sur capture (un `X` peut se lire « fermer »).
+2. **Le filtre** : À la main, ou celui de l'agent quand c'est lui. Un seul filtre par ligne, celui du décideur.
+3. **L'agent peut refuser**, par une action `mail.refuse` du catalogue.
+4. **Les compteurs** : six tuiles dans « Rien à valider », dans cet ordre : « rangés seuls par l’IA », « par une
+   règle », « validés », « corrigés », « refusés », « par {agent} » (le nom réglé). **Les tuiles à zéro sont
+   masquées**, « aujourd’hui » est gardé. CrOliX valide le rendu sur capture avant la fusion.
+
+**Choix de la session, retenu avec l'accord du contradicteur** : #90 se règle dans les vues `inbox` et `pending`, qui
+excluent `TRASH` et `SPAM`, pas dans le faux Gmail. La documentation de Gmail ne dit pas si la corbeille retire
+`INBOX` ; elle dit que la liste de Gmail exclut la corbeille et le spam par défaut. La vue suit cette liste, quel que
+soit le sort d'`INBOX`. Le faux Gmail garde `INBOX` à la corbeille : c'est le cas difficile, les tests le gardent.
+
+### Les règles qui en découlent
+
+- **Une proposition sans boîte n'a pas de bouton de refus.** La valider laisse déjà le mail en boîte de réception ;
+  seules ses étiquettes l'en distinguent (`applyTarget`, `pipeline.ts:83-104`). Deux boutons qui font presque la même
+  chose se confondraient. Le serveur refuse aussi un tel refus (400), pour l'agent.
+- **Le compteur de l'agent** ne compte que ses lignes `validate`, `correct` et `refuse` : l'écran parle des
+  propositions. Ses gestes directs (le rangement de `m12` dans la démo) ne comptent dans aucune tuile. De même, les
+  gestes directs de CrOliX ne sont pas comptés.
+- **« Plus en boîte de réception »** suit la définition des vues : `INBOX` sans `TRASH` ni `SPAM`. Le serveur relit
+  le mail dans Gmail (`fetchMetadata`, comme l'annulation, `journal.ts:151-153`) avant d'écrire quoi que ce soit, et
+  refuse (409) sinon.
+- **`autoFiled`** (règles et IA) reste dans `stats.today` : la phrase de la boîte de réception le lit (« Le tri a rangé
+  N mails aujourd’hui », `Mailbox.svelte:437-441`), et il est juste pour « le tri ».
 
 ## Ce que dit la documentation de Gmail
 
@@ -114,36 +114,44 @@ Le code d'Acedia suppose déjà qu'`INBOX` peut survivre à la corbeille : `file
   changement vide (mêmes libellés avant et après) quand rien n'a bougé : c'est ce que le refus écrira.
 - **L'annulation** (`journal.ts:144-182`) relit Gmail, refuse si le mail a changé, remet les libellés, puis
   `previous.proposalStatus` et l'exemple. Pour une ligne vide, aucun libellé ne bouge : le refus s'annule sans code de
-  plus. `UserAction` (`journal.ts:19`) n'a pas `refuse`.
+  plus. L'exemple remis est celui du `snapshot`, inchangé par un refus. `UserAction` (`journal.ts:19`) n'a pas
+  `refuse`.
 - **Les routes.** `POST /api/mail/:id/validate` et `/correct` (`server/src/triage/routes.ts:95-114`). Chaque route
   d'écran doit figurer dans `PARITY` (`server/src/contract/parity.ts:13-75`), servie par une action ou exclue avec sa
   raison ; `missingFromParity` (`:85-87`) le vérifie.
 - **L'agent** valide et corrige par le catalogue (`catalog.ts:140-148`, `catalog.test.ts:7-24`) ; ses cartes ont un
   texte (`server/src/pina/wording.ts:132-162`, copie dans `views/src/lib/pina/wording.ts`) et une icône
-  (`views/src/lib/pina/cards.ts:18-23`).
+  (`views/src/lib/pina/cards.ts:18-23`). Toute réponse qui porte un `journalId` s'annule par `journal.undo`
+  (`server/src/pina/agent.test.ts:404-410`) ; `markPina` passe la ligne à son nom (`server/src/pina/agent.ts:114-116`).
+- **Le bilan `day.digest`** (`catalog.ts:411-472`) liste chaque ligne non annulée du Journal sous `journal.{action}`
+  (`:435-455`) et compte en attente toute proposition `pending` (`:467-469`).
 - **« À valider »** (`views/src/lib/mail/Pending.svelte`). Une carte a « Valider » et « Corriger » (`:549-565`) ; un
   lot a « Valider les N » et « Tout corriger… » (`:469-482`). `act()` (`:196-233`) retire les mails de la file, puis
-  offre d'annuler par le toast, ligne par ligne du Journal. Le toast d'une validation sans boîte dit déjà « Gardé en
-  réception » (`done()`, `:184-190`). Au téléphone, la carte montre la pastille, « Corriger » et « Valider »
-  (`:962-985`) ; glisser à droite valide, à gauche ouvre la correction (`:281-300`).
+  offre d'annuler par le toast, ligne par ligne du Journal. Au téléphone, la carte montre la pastille, « Corriger » et
+  « Valider » (`:962-985`) ; glisser à droite valide, à gauche ouvre la correction (`:281-300`).
 - **Les compteurs.** `todayStats` (`journal.ts:222-241`) rend `{ autoFiled, validated, corrected }` : `autoFiled`
   compte toute ligne qui n'est ni de CrOliX ni de l'agent, donc les règles et l'IA (`:238`) ; `validated` et
-  `corrected` ne comptent que CrOliX (`:235-237`) ; l'agent n'est compté nulle part. « Rien à valider » affiche
-  `autoFiled` sous « rangés seuls aujourd’hui » (`Pending.svelte:435-443`). La même donnée sert la route
+  `corrected` ne comptent que CrOliX (`:235-237`) ; l'agent n'est compté nulle part. « Rien à valider » affiche les
+  trois tuiles, même à zéro (`Pending.svelte:435-443`, style `.stats` `:855-874`). La même donnée sert la route
   `GET /api/stats/today` (`routes.ts:93`) et l'action `stats.today` du contrat (`catalog.ts:407-409`). Tests :
   `server/src/triage/journal.test.ts:293-318`, `views/src/lib/mail/Pending.test.ts:141-152`,
   `views/src/lib/mail/Mailbox.test.ts:40`, la fabrique `views/src/testing/fake-client.ts:159`.
 - **Les vues de la boîte.** `viewFilter` (`server/src/gmail/store.ts:123-154`) : `inbox` garde tout mail portant
   `INBOX`, `pending` tout mail portant `INBOX` avec une proposition en attente. Les vues `box:` et `sent` excluent déjà
   `TRASH`. Le faux Gmail ajoute `TRASH` sans retirer `INBOX` (`fake-gmail.ts:297-306`). La même vue sert l'écran
-  (`server/src/gmail/read.ts:153`) et l'action `mail.list` de l'agent (`catalog.ts:237`).
-- **La démo** (`server/src/demo/demo.ts:535-556`), en mode écrans seulement : `m16` livré après le tri ; validations
-  de `m01` et `m17`, correction de `m15` vers la corbeille, corbeille à la main de `m16`, annulation de la règle de
-  `m08`. Il reste quatre propositions en attente : `m02`, `m03`, `m06`, `m11` (`demo.test.ts:11`). `m15` et `m16`
-  restent listés en boîte de réception : c'est #90.
+  (`server/src/gmail/read.ts:153`) et l'action `mail.list` de l'agent (`catalog.ts:237`). Le faux client des vues a
+  sa propre règle, sur `INBOX` seul (`views/src/testing/fake-client.ts:92-95`).
+- **La démo** (`server/src/demo/demo.ts`). `JOURNAL_MAILS` (`:195-217`) ne sert qu'aux écrans : `m17` est livré avec
+  les autres avant le tri (`:535`), `m16` après (`:538-540`). Le classeur scripté lit l'entrée `ai` d'un mail par son
+  objet (`:223-235`). Gestes en mode écrans (`:549-556`) : validations de `m01` et `m17`, correction de `m15` vers la
+  corbeille, corbeille à la main de `m16`, annulation de la règle de `m08`. Restent en attente `m02`, `m03`, `m06`,
+  `m11` (`demo.test.ts:11`). `m15` et `m16` restent listés en boîte de réception : c'est #90. `m12` est rangé par
+  l'agent (`:543-547`).
 - **L'évaluation de l'agent** (`server/scripts/pina-eval.ts:66-95`) part de `createDemo({ pina: false })` : aucun geste
   du Journal n'y est joué (`demo.test.ts:76`). Sa précondition lit `label_ids` en base, pas la vue `inbox`
-  (`pina-eval.ts:84-95`). Exclure la corbeille de la vue ne change donc ni la précondition ni le départ des scénarios.
+  (`pina-eval.ts:84-95`).
+- **Deux noms déjà pris dans `Journal.svelte`.** `refused` (`:88`) et la classe `.refuse` (`:292`, `:494-497`)
+  désignent une **annulation refusée** par le serveur, pas un refus de proposition.
 
 ## Tâches
 
@@ -154,88 +162,101 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit éch
 **Qui écrit le code.** `dev-front` fait les écrans (tâches 4 et 5). **Aucun agent de métier ne couvre le serveur
 d'Acedia** : la tâche 3 revient à la session, ou à un agent général à qui l'on donne ce plan.
 
-**L'ordre.** **1 et 2 partent en parallèle** (aucun fichier commun : 1 les tests du serveur, 2 ceux des vues). 3
-attend 1. 4 attend 2 et 3 (les types recopiés). 5 attend 3 et 4.
-
-Les tâches suivent les recommandations. Une décision tranchée autrement change la tâche qu'elle nomme, avant le code.
+**L'ordre.** **1 et 2 partent en parallèle** (aucun fichier commun : 1 les tests du serveur, 2 ceux des vues et le
+faux client). 3 attend 1. 4 attend 2 et 3 (les types recopiés). 5 attend 3 et 4.
 
 1. - [ ] **Les tests du serveur, rouges** (testeur ; fichiers de test du serveur seulement).
    - `server/src/triage/pipeline.test.ts` ou `journal.test.ts`, avec le harnais existant :
-     - `POST /api/mail/:id/refuse` sur une proposition en attente : 200 ; les libellés du mail inchangés dans le faux
-       Gmail ; la proposition en `refused` ; une ligne `origin: 'user'`, `action: 'refuse'`, `before` égal à `after`,
-       `INBOX` dedans ; un exemple « aucune boîte » (décision 3) ;
-     - 404 sans proposition ; 409 sur une proposition déjà traitée ; 409 si le mail n'est plus en boîte de réception
-       (le texte « Laissé en boîte de réception » doit rester vrai) ;
-     - l'annulation de la ligne : la proposition repasse en `pending`, l'exemple disparaît, aucun appel de
-       modification à Gmail.
+     - `POST /api/mail/:id/refuse` sur une proposition en attente vers une boîte : 200 ; les libellés du mail
+       inchangés dans le faux Gmail ; la proposition en `refused` ; une ligne `origin: 'user'`, `action: 'refuse'`,
+       `before` égal à `after`, `INBOX` dedans ; **aucun exemple écrit** (`getExample` rend ce qu'il rendait avant) ;
+     - 404 sans proposition ; 409 sur une proposition déjà traitée ; 400 sur une proposition sans boîte ;
+     - 409 si Gmail dit le mail hors de la boîte de réception, **le cache local disant le contraire** : sans `INBOX`,
+       ou avec `INBOX` et `TRASH`, ou avec `INBOX` et `SPAM` (changer les libellés dans le faux Gmail seulement) ;
+       aucune ligne au Journal, la proposition toujours en attente ;
+     - l'annulation de la ligne : la proposition repasse en `pending`, aucun appel de modification à Gmail.
    - **La parité** : le test qui appelle `missingFromParity` échoue tant que la route manque.
-   - **Le catalogue** (décision 4) : `mail.refuse` dans `NAMES` de `catalog.test.ts` ; l'action rend un `journalId` ;
-     `inverseOf('mail.refuse', …)` rend `journal.undo` (`agent.test.ts:404-410`, ajouter l'action à la boucle) ; une
-     carte de l'agent passée par `runCard` laisse une ligne `origin: 'pina'`.
+   - **Le catalogue** : `mail.refuse` dans `NAMES` de `catalog.test.ts` ; l'action rend un `journalId` ;
+     `inverseOf('mail.refuse', …)` rend `journal.undo` (ajouter l'action à la boucle de `agent.test.ts:404-410`) ; une
+     carte de l'agent passée par `runCard` laisse une ligne `origin: 'pina'`, `action: 'refuse'`.
    - **Les compteurs** (`journal.test.ts:293-318`) : le même jeu de lignes, plus une ligne `refuse` de CrOliX et des
-     lignes `pina` (`file`, `validate`, `refuse`), rend
+     lignes `pina` (`file`, `archive`, `validate`, `correct`, `refuse`), rend
      `{ autoFiled, ai, rule, validated, corrected, refused, agent }` ; `autoFiled` garde sa valeur d'aujourd'hui (2) ;
-     une ligne annulée ne compte pas ; un geste direct (`archive`) n'est dans aucun champ.
+     `agent` vaut 3 (ses gestes directs exclus) ; une ligne annulée ne compte pas ; un geste direct de CrOliX
+     (`archive`) n'est dans aucun champ.
    - **Les vues** (`server/src/gmail/routes.test.ts:48-65`) : un mail `['INBOX', 'TRASH']` et un `['INBOX', 'SPAM']`
      ne sont ni dans `inbox` ni dans `pending` (même avec une proposition en attente), et restent dans `trash` et
      `spam`.
    - **La démo** (`server/src/demo/demo.test.ts`) : une ligne `refuse` pour `m18` ; `m18` n'est plus en attente ; la
-     file reste `m02`, `m03`, `m06`, `m11` ; `m15` et `m16` absents de `GET /api/mail?view=inbox` ; `m02`, `m03`, `m11`
-     portent encore `INBOX` (`:73`, inchangé).
+     file reste `m02`, `m03`, `m06`, `m11` ; `m15` et `m16` absents de `GET /api/mail?view=inbox` et présents dans
+     `view=trash` ; `m02`, `m03`, `m11` portent encore `INBOX` (`:73`, inchangé) ; **la boîte de
+     `createDemo({ pina: false })` est inchangée** : le test de `:76-90` garde sa liste d'identifiants
+     (`m01`, `m02`, `m03`, `m06`, `m11`, `m15`), sans `m18`, et attend aussi qu'aucune ligne `refuse` n'y soit.
    - **Exclu** : le code ; les tests des vues.
    - **Preuve** : chaque nouveau test échoue sur `main` pour la bonne raison (route absente, champ absent, mail listé).
 
 2. - [ ] **Les tests des vues, rouges** (testeur ; `views/src/lib/mail/Pending.test.ts`, `Journal.test.ts`,
    `views/src/testing/fake-client.ts`).
-   - **Le bouton** : chaque carte a un bouton de refus, nommé « Laisser en boîte de réception » pour la lecture
-     d'écran ; un clic appelle `client.refuse(id)`, retire la carte, montre le toast « Laissé en boîte de réception :
-     {expéditeur} » ; « Annuler » appelle `client.undo(journalId)` et recharge la file. Le clavier passe à la carte
-     suivante, comme après V (`Pending.test.ts`, le test « after V »).
+   - **Le bouton** : chaque carte proposée vers une boîte, la corbeille ou le spam a un bouton « Refuser la
+     proposition » (nom accessible) ; un clic appelle `client.refuse(id)`, retire la carte, montre le toast
+     « Proposition refusée : {expéditeur} » ; « Annuler » appelle `client.undo(journalId)` et recharge la file. Le
+     clavier passe à la carte suivante, comme après V (le test « after V »).
+   - **Une carte sans boîte proposée n'a pas le bouton** ; « Valider » et « Corriger » y restent.
    - **Au téléphone**, le bouton existe aussi (le test vérifie qu'il est dans la carte ; la largeur se voit en tâche 5).
-   - **Les compteurs** (`Pending.test.ts:141-152`) : les six tuiles de la décision 5, dans l'ordre, au singulier et au
-     pluriel ; la dernière porte le nom réglé de l'agent (régler `agentIdentity.name` dans le test, puis le remettre).
+   - **Les compteurs** (`Pending.test.ts:141-152`) : les six tuiles dans l'ordre, au singulier et au pluriel ; une
+     tuile à zéro n'est pas rendue ; « aujourd’hui » reste sur la première tuile rendue ; la tuile de l'agent porte le
+     nom réglé (régler `agentIdentity.name` dans le test, puis le remettre) ; tout à zéro, aucune tuile.
    - **Le Journal** (`Journal.test.ts`, fabrique `entry()`) : `user` `refuse`, `before` et `after` à `['INBOX']`, dit
      « Laissé en boîte de réception, proposition de l’IA refusée », icône main, sous À la main seulement ; `pina`
      `refuse` dit « …, proposition de l’IA refusée par Agent », sous la puce de l'agent seulement ; l'`aria-label` mot
      pour mot ; une ligne annulée reste sous son filtre et sous Annulés.
-   - `fake-client.ts` : `refuse` dans le faux client, `todayStats` rend la nouvelle forme.
+   - `fake-client.ts` : `refuse` dans le faux client ; `todayStats` rend la nouvelle forme ; **`inView` suit les vues
+     du serveur** : `inbox` et `pending` excluent `TRASH` et `SPAM`.
    - **Exclu** : le code ; `Mailbox.test.ts` sauf la forme de `todayStats` (`:40`) ; le lecteur de mail.
    - **Preuve** : les nouveaux tests échouent sur `main` pour la bonne raison.
 
 3. - [ ] **Le serveur** (la session ou un agent général). Après 1.
    - `server/src/types.ts` : `'refused'` dans `ProposalView.status` ; `TodayStats` prend `ai`, `rule`, `refused`,
-     `agent`, garde `autoFiled`, `validated`, `corrected` avec leur doc. Puis `npm run sync-types -w
-     @lun-ecosystem/lunacedia-views`.
-   - `server/src/triage/journal.ts` : `'refuse'` dans `UserAction` ; `todayStats` compte par `origin` et `action` :
-     `ai`, `rule`, `autoFiled = ai + rule`, `validated`, `corrected`, `refused` pour CrOliX, `agent` pour toute ligne
-     `pina`.
-   - `server/src/triage/pipeline.ts` : `refuse(deps, id)` sur le modèle de `validate` : `pendingProposal`, le mail en
-     boîte de réception sinon `ConflictError`, `snapshot`, statut `refused`, `remember(…, null, tags actuels)`,
-     `logUser(changeOf(deps, id, undefined), 'refuse', …)`, rend la proposition et son `journalId`. Aucun appel à Gmail.
+     `agent`, garde `autoFiled`, `validated`, `corrected`, chacun avec sa doc. Puis
+     `npm run sync-types -w @lun-ecosystem/lunacedia-views`.
+   - `server/src/triage/journal.ts` : `'refuse'` dans `UserAction` ; `todayStats` : `ai`, `rule`,
+     `autoFiled = ai + rule`, `validated`, `corrected`, `refused` pour CrOliX, `agent` pour les lignes `pina` dont
+     l'action est `validate`, `correct` ou `refuse`.
+   - `server/src/triage/pipeline.ts` : `refuse(deps, id)` sur le modèle de `validate` : `pendingProposal` ;
+     `BadRequestError` si `boxId` est nul ; `fetchMetadata` puis `upsertMessage`, et `ConflictError` (« Ce mail n’est
+     plus en boîte de réception ») si les libellés relus n'ont pas `INBOX` ou ont `TRASH` ou `SPAM` ; `snapshot` ;
+     statut `refused` ; **pas de `remember`** ; `logUser(changeOf(deps, id, undefined), 'refuse', …)`. Rend la
+     proposition et son `journalId`. Aucun appel de modification à Gmail.
    - `server/src/triage/routes.ts` : `POST /mail/:id/refuse`. `parity.ts` : `{ action: 'mail.refuse' }`.
-   - `server/src/contract/catalog.ts` : `mail.refuse` (`write`), « Laisse un mail en boîte de réception et refuse la
-     proposition de tri. » ; `server/src/pina/wording.ts` : titre « Refuser la proposition de tri », fait
-     « Proposition refusée » ; `npm run sync-types` recopie le texte.
+   - `server/src/contract/catalog.ts` : `mail.refuse` (`write`), « Refuse la proposition de tri d’un mail : il reste en
+     boîte de réception. » ; `server/src/pina/wording.ts` : titre « Refuser la proposition de tri », fait « Proposition
+     refusée » ; `npm run sync-types` recopie le texte dans les vues.
    - `server/src/gmail/store.ts` : `inbox` et `pending` ajoutent `NOT has('TRASH') AND NOT has('SPAM')`. `viewQuery`
      ne change pas (Gmail exclut déjà la corbeille de la liste).
-   - `server/src/demo/demo.ts` : un mail `m18` livré avec les autres, proposé à confiance moyenne par le classeur
-     scripté, puis `POST /api/mail/m18/refuse` en mode écrans. Aucun mail de `seedPina` ni des scénarios touché.
-   - **Exclu** : le front ; un libellé Gmail ; le refus en lot ; le bilan `day.digest` (`catalog.ts:468`).
+   - `server/src/demo/demo.ts` : `m18` dans `JOURNAL_MAILS`, avec son entrée `ai` vers une boîte à une confiance sous
+     95 (le seuil de la démo, `demo.test.ts:14`) ; livré explicitement pour les écrans avec `m17`, avant le tri
+     (`:535`) ; puis `POST /api/mail/m18/refuse` avec les autres gestes (`:549-556`). Aucun mail de `seedPina` ni des
+     scénarios touché.
+   - **Exclu** : le front ; un libellé Gmail ; le refus en lot ; `day.digest` (Lun-Ecosystem/lun-acedia#92).
    - **Preuve** : les tests de la tâche 1 au vert ; les barrières au vert ; `npm run demo` démarre. Si la clé de
      l'évaluation est dans le `.env`, `npm run pina:eval -w @lun-acedia/server`, sans jamais afficher la clé ; sinon,
      le dire.
 
 4. - [ ] **Les écrans** (`dev-front` ; `views/src/lib/client.ts`, `Pending.svelte`, `Journal.svelte`,
-   `views/src/lib/pina/cards.ts`). Après 2 et 3.
-   - `client.ts` : `refuse(id)` vers `POST /api/mail/:id/refuse`, à côté de `validate` (`:338` et alentour).
-   - `Pending.svelte` : un `IconButton` (icône `X` du kit, libellé « Laisser en boîte de réception ») dans `.actions`
-     de chaque carte, avant « Corriger » ; il passe par `act()` avec le message de `done(m, null)` ramené à « Laissé en
-     boîte de réception : … ». Au téléphone, il reste dans la rangée, icône seule. Pas de raccourci ni de geste de
-     glisse nouveau.
-   - `Pending.svelte` : les six tuiles de la décision 5 avec `plural()` ; la tuile de l'agent suit `agentIdentity`.
+   `views/src/lib/pina/cards.ts`, `views/src/lib/ui/Icon.ts`). Après 2 et 3.
+   - `client.ts` : `refuse(id)` vers `POST /api/mail/:id/refuse`, à côté de `validate`.
+   - `Pending.svelte` : un `IconButton` du kit (nom « Refuser la proposition ») dans `.actions` de chaque carte dont
+     la proposition a une boîte, avant « Corriger » ; il passe par `act()` avec le message « Proposition refusée :
+     … ». Au téléphone, il reste dans la rangée, icône seule. Pas de raccourci ni de glisse nouveau. **L'icône est une
+     proposition**, montrée à CrOliX sur capture en tâche 5 : plutôt qu'un `X`, une icône Lucide ajoutée à
+     `views/src/lib/ui/Icon.ts` (par exemple `circle-slash`, une ligne d'export). `Ban`, le seul voisin déjà exporté
+     (`Icon.ts:18`), sert au groupe du spam (`Pending.svelte:458`) : à ne pas reprendre.
+   - `Pending.svelte` : les six tuiles avec `plural()`, celles à zéro masquées, « aujourd’hui » sur la première rendue ;
+     la tuile de l'agent suit `agentIdentity`.
    - `Journal.svelte` : `by()` (`:148-152`) prend `refuse` → « refusée ». Rien d'autre : `where()` et `decider()` en
-     donnent déjà le verbe et le filtre.
-   - `cards.ts` : une icône pour `mail.refuse`, celle du bouton.
+     donnent déjà le verbe et le filtre. **Attention aux noms** : `refused` et `.refuse` y désignent une annulation
+     refusée ; ne pas les réutiliser pour le refus d'une proposition, ni les renommer dans ce chantier.
+   - `cards.ts` : pour `mail.refuse`, l'icône du bouton.
    - **Exclu** : le serveur ; le lecteur de mail et la boîte (`MailReader.svelte`, `Mailbox.svelte`) ; tout nouveau
      composant ; la DA.
    - **Preuve** : les tests de la tâche 2 au vert ; les barrières au vert.
@@ -243,38 +264,45 @@ Les tâches suivent les recommandations. Une décision tranchée autrement chang
 5. - [ ] **La preuve dans Chrome sur la démo** (`dev-front`). Après 3 et 4.
    - `npm run demo`, puis Chrome : **au bureau** (largeur par défaut) et **au téléphone**, par l'émulation d'appareil
      des DevTools ou Chrome sans interface à 390 px de large. Pas une fenêtre redimensionnée.
-   - **On attend** : dans « À valider », le bouton sur chaque carte ; un refus de `m02` retire la carte, le toast
-     l'annule et la carte revient ; au Journal, la ligne de `m18` sous son texte et sous À la main ; « Rien à valider »
-     (après avoir vidé la file) montre les six tuiles ; la boîte de réception ne liste plus `m15` ni `m16`, la corbeille
-     les liste ; au téléphone, la rangée de la carte tient sans déborder et les tuiles passent à la ligne.
-   - **Relevé** dans la PR : captures à chaque largeur (« À valider », Journal filtre À la main, « Rien à valider »,
-     boîte de réception), sans donnée réelle.
+   - **On attend** : dans « À valider », le bouton sur chaque carte proposée vers une boîte ; un refus de `m02` retire
+     la carte, le toast l'annule et la carte revient ; au Journal, la ligne de `m18` sous son texte et sous À la main ;
+     « Rien à valider » (après avoir vidé la file) montre les tuiles non nulles ; la boîte de réception ne liste plus
+     `m15` ni `m16`, la corbeille les liste ; au téléphone, la rangée de la carte tient sans déborder et les tuiles
+     passent à la ligne.
+   - **Relevé** dans la PR : captures à chaque largeur (« À valider » avec le bouton, Journal filtre À la main, « Rien
+     à valider », boîte de réception), sans donnée réelle. **CrOliX valide l'icône du bouton et le rendu des tuiles
+     sur ces captures avant la fusion.**
    - **Exclu** : une vraie base ; un vrai compte Gmail.
 
 ## Risques
 
+- **Le core relaie le catalogue.** Une action ajoutée au catalogue d'Acedia est offerte à tout agent qui le lit :
+  Natsume aura aussi `mail.refuse`.
+- **La carte ne protège qu'en mode validation.** En mode immédiat, l'agent refuse seul, sans que CrOliX le voie avant
+  (`runCard`, `server/src/pina/agent.ts`). Le geste ne déplace rien et s'annule depuis le Journal.
+- **Le bilan de la nuit** : `day.digest` listera les refus sous `journal.refuse` (`catalog.ts:450`), un type qu'il ne
+  rendait pas. Un lecteur qui ne connaît que les types d'aujourd'hui doit le laisser passer.
+- **Une action de plus pour l'agent** allonge la liste de ses outils et peut changer ses choix dans les scénarios de la
+  file. Prouvé seulement si `pina:eval` tourne.
 - **La rangée de la carte au téléphone.** Pastille, « Corriger », « Valider » et un bouton de plus à 390 px. La tâche 5
   le regarde ; si elle déborde, « Corriger » perd son texte au profit de l'icône, sans nouveau composant sans CrOliX.
 - **Le contrat `stats.today` change de forme.** Les champs gardés gardent leur sens, les nouveaux s'ajoutent : un
   lecteur d'aujourd'hui ne casse pas. `validated` et `corrected` comptaient déjà CrOliX seul.
 - **L'agent voit moins de mails en réception.** `mail.list` sur `inbox` ne rend plus la corbeille ni le spam : c'est
-  plus juste, mais c'est un changement de ce qu'il lit. L'évaluation ne joue pas ces gestes ; son comportement n'est
-  prouvé que si `pina:eval` tourne.
-- **Une action de plus pour l'agent** (décision 4) allonge la liste de ses outils et peut changer ses choix dans les
-  scénarios de la file.
-- **Un refus apprend à l'IA** (décision 3) : refuser « par doute » la pousse vers « aucune boîte » pour ce genre de
-  mail. L'annulation l'efface.
+  plus juste, mais c'est un changement de ce qu'il lit.
+- **Un refus n'apprend rien** : l'IA peut reproposer la même boîte pour un mail semblable. C'est voulu (décision 1).
 
 ## Hors périmètre
 
-Le refus depuis le lecteur de mail et la boîte (`MailReader.svelte:51`, `Mailbox.svelte:267`), et le refus d'un lot
-(« Tout refuser »). Un raccourci clavier ou un geste de glisse pour le refus. Le compte des propositions en attente de
-`day.digest` (`catalog.ts:468`), qui compte aussi celles d'un mail sorti de la réception. La planche 04 de la maquette,
-qui n'est pas réécrite. L'archivage du Journal (Lun-Ecosystem/lun-acedia#33).
+- **Une proposition en attente d'un mail sorti de la réception par un geste direct** (archive, corbeille, spam) :
+  invisible dans « À valider », mais comptée par `day.digest`. Ouvert en Lun-Ecosystem/lun-acedia#92.
+- Le refus depuis le lecteur de mail et la boîte (`MailReader.svelte:51`, `Mailbox.svelte:267`), et le refus d'un lot
+  (« Tout refuser »). Un raccourci clavier ou un geste de glisse pour le refus.
+- Le renommage de `refused` et `.refuse` dans `Journal.svelte`.
+- La planche 04 de la maquette, qui n'est pas réécrite. L'archivage du Journal (Lun-Ecosystem/lun-acedia#33).
 
 ## Limites
 
-- **Non vérifié sur un vrai compte** : ce que `messages.trash` fait à `INBOX`. La documentation ne le dit pas ; la
-  décision 6 tient dans les deux cas.
-- **Non lu** : le classeur scripté de la démo, pour l'entrée de `m18` (la tâche 3 la pose à côté des autres).
+- **Non vérifié sur un vrai compte** : ce que `messages.trash` fait à `INBOX`. La documentation ne le dit pas ; le
+  choix des vues tient dans les deux cas.
 - L'évaluation de l'agent n'a pas été lancée pour ce plan.
