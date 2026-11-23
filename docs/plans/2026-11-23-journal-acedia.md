@@ -3,6 +3,8 @@
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
+> **PR :** Lun-Ecosystem/lun-acedia#91 (brouillon) ; tâches 1 à 4 cochées le 23/11.
+>
 > **Issue :** Lun-Ecosystem/lun-acedia#86 (`niveau:standard`, public). Périmètre figé par CrOliX le 23/11, dans les
 > commentaires de l'issue.
 >
@@ -178,7 +180,7 @@ donne ce plan.
 **L'ordre.** **1 et 3 partent en parallèle** (aucun fichier commun : 1 les tests du Journal et `journal.test.ts`, 3
 la démo et `demo.test.ts`). 2 attend 1. 4 attend 2 et 3.
 
-1. - [ ] **Les tests du Journal, rouges** (testeur ; `views/src/lib/mail/Journal.test.ts` et
+1. - [x] **Les tests du Journal, rouges** (testeur ; `views/src/lib/mail/Journal.test.ts` et
    `server/src/triage/journal.test.ts`).
    - Avec la fabrique `entry()` (`:17-28`), un test par ligne du tableau des textes, sur le texte de la ligne
      (`toHaveTextContent`) et le nom de l'icône (`getByRole('img', { name })`).
@@ -199,7 +201,7 @@ la démo et `demo.test.ts`). 2 attend 1. 4 attend 2 et 3.
    - **Exclu** : le code ; tout autre fichier de test.
    - **Preuve** : les nouveaux tests du front échouent sur `main` pour la bonne raison (texte ou filtre absent).
 
-2. - [ ] **Le Journal dit qui a décidé** (`dev-front` ; `views/src/lib/mail/Journal.svelte` seulement). Après 1.
+2. - [x] **Le Journal dit qui a décidé** (`dev-front` ; `views/src/lib/mail/Journal.svelte` seulement). Après 1.
    - Une fonction qui rend **qui a décidé** d'après `origin` et `action` (tableau « Qui décide »). `ORIGINS` devient
      indexé par elle : libellé, « par … », icône. La classe de l'icône (`origine`, `:248`) suit, pour la couleur de
      l'IA et de l'agent (`:404-405`).
@@ -213,7 +215,7 @@ la démo et `demo.test.ts`). 2 attend 1. 4 attend 2 et 3.
    - **Exclu** : le serveur ; les compteurs ; l'archivage du Journal ; tout nouveau composant.
    - **Preuve** : les tests de la tâche 1 au vert ; les barrières au vert.
 
-3. - [ ] **La démo montre chaque cas** (testeur pour `demo.test.ts`, puis la session pour `server/src/demo/demo.ts`).
+3. - [x] **La démo montre chaque cas** (testeur pour `demo.test.ts`, puis la session pour `server/src/demo/demo.ts`).
    - **Deux mails ajoutés** à la démo : `m16`, livré et synchronisé **après** le tri (`syncGmail` sans `triageNew`,
      comme `pina-eval.ts:70-81`), donc sans proposition ; `m17`, un spam proposé à confiance moyenne (80), livré avec
      les autres, donc en attente.
@@ -237,7 +239,7 @@ la démo et `demo.test.ts`). 2 attend 1. 4 attend 2 et 3.
      et `m11` portent encore `INBOX` après la démo (une assertion dans `demo.test.ts`). Si la clé de l'évaluation est
      dans le `.env`, `npm run pina:eval -w @lun-acedia/server` en plus, sans jamais afficher la clé ; sinon, le dire.
 
-4. - [ ] **L'écran vérifié dans Chrome sur la démo** (`dev-front`). Après 2 et 3.
+4. - [x] **L'écran vérifié dans Chrome sur la démo** (`dev-front`). Après 2 et 3.
    - `npm run demo`, puis Chrome sur le Journal : **au bureau** (largeur par défaut) et **au téléphone**, par
      l'émulation d'appareil des DevTools ou Chrome sans interface à 390 px de large. Pas une fenêtre redimensionnée.
    - **On attend** : chaque ligne de la démo sous son texte du tableau ; aucun « Archivé » pour `m15` ni `m17` ; les
