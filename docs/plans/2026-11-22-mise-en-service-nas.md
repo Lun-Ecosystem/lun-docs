@@ -344,7 +344,8 @@ Dans l'ordre. Lui seul : cela touche ses comptes et ses accès. La session ne fa
   lanceur obtient `gestes` sans mot de passe (après P9). Si la durée de vie est refusée, il le dit.
 - [ ] **P6. Le moteur Docker du laptop**, démarré, pour la répétition. *Bon quand* : `docker info` répond.
 - [ ] **P7. Le client du réseau privé sur le laptop**, connecté, pour joindre les apps en HTTPS. *Bon quand* :
-  `tailscale status` répond.
+  `tailscale status` répond. Chaque appareil qui ouvre les écrans doit y être : sans son client, le laptop
+  n'atteignait pas le site (constaté le 23/11).
 - [ ] **P8. Les valeurs de l'instance**, dans la part privée : le nom du NAS, le compte de pilotage, le dossier du
   déploiement, le port SSH. Elles ne vont dans aucun dépôt. Sur le laptop, il en pose les variables du lanceur et du
   filet avant d'ouvrir la session (`environnements.md`, « Jouer une commande sur la prod »).
@@ -466,7 +467,26 @@ Pour chaque dépôt :
 - **Arrêt** si la console refuse l'adresse, ou si l'écran de consentement bloque l'app pour ses droits (Gmail en
   modification est un droit restreint) : le plan revient à CrOliX.
 
-### Tâche 5. La répétition complète sur le laptop (la session ; CrOliX pour la clé et les codes)
+### Tâche 5. La répétition sur le laptop (la session ; CrOliX pour la clé et les codes) : première moitié jouée le 23/11
+
+**Ce que la première moitié a prouvé**, images construites sur le laptop, sans Google :
+
+| Le geste | Le constat |
+|---|---|
+| Le premier démarrage | les nœuds sains en 16 s, puis les apps |
+| La base | dans son volume, à l'utilisateur des images |
+| La copie du jour | écrite, avec sa ligne au journal |
+| Le fuseau | l'heure de Paris dans les trois apps |
+| La mémoire | environ 400 Mo pour les six conteneurs |
+| La mise à jour | sa copie d'avant complète, fichiers annexes compris |
+| Le retour arrière | sans registre |
+| Une version déjà en place, une image introuvable | rien ne change |
+| Une interruption | rattrapée (jouée par un signal d'arrêt, pas par Ctrl-C) |
+| L'essai de restauration | sain ; son effacement ne touche pas les vrais volumes |
+| Un nœud relancé seul | l'app se dit saine mais ne répond plus ; la relancer la remet |
+| Le HTTPS | les trois apps, certificat contrôlé |
+| La liaison | le core joint les satellites par leurs adresses |
+| La clé vidée | les trois nœuds sains sous les mêmes noms, aucun nouveau ; les liaisons tiennent |
 
 La pile entière sur le moteur Docker du laptop, **démarré par CrOliX** : c'est le verrou d'aujourd'hui. Elle se joue
 **avant le NAS, en deux temps** : d'abord en entier, avec des images **construites localement**, sur la pile de la
@@ -550,8 +570,9 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
   par `up`.
 - **On attend** : chaque nœud sain, puis chaque app saine (`ps`, `health <app>`) ; trois nœuds en ligne, étiquetés, à
   leur nom de prod, pas un nom suffixé (la console, par CrOliX) ; depuis le laptop, chaque app en HTTPS avec un
-  certificat valide ; « Base copiée : » par `copy-line <app>`, avec un chemin dans le dossier des copies, et le
-  fichier visible par `copies <app>`.
+  certificat valide (la première visite de chaque adresse échoue environ 35 s, « connexion non sécurisée » : le
+  certificat n'est demandé qu'à elle ; ensuite tout passe) ; « Base copiée : » par `copy-line <app>`, avec un
+  chemin dans le dossier des copies, et le fichier visible par `copies <app>`.
 - [ ] **La clé d'inscription** vidée par CrOliX puis révoquée dans la console ; le démarrage suivant, par `up`, recrée
   les nœuds et redémarre les apps. **On attend** : les six conteneurs sains de nouveau (`ps`) ; dans la console, les
   trois mêmes nœuds, aucun nouveau.
@@ -565,7 +586,8 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
 - [ ] **Le premier appareil de chaque app** : CrOliX lit le code dans l'écran Docker d'UGOS, s'il montre le journal
   (tâche 1). Le navigateur du laptop d'abord : le core, Acedia, Avaritia, chacun à son nom HTTPS. Un code expiré (dix
   minutes) : un redémarrage de l'app, depuis l'écran d'UGOS ou par le geste `restart <app>` de la session, en donne
-  un neuf. **Si aucun écran ne montre le code, le
+  un neuf ; un code encore valide est redonné tel quel. Chaque démarrage écrit sa ligne : CrOliX prend la
+  **dernière**. **Si aucun écran ne montre le code, le
   critère « sans terminal » n'est pas tenu sur le NAS** : c'est un écart ouvert, écrit dans la page et dans l'issue ;
   CrOliX lit alors le code par sa propre session SSH. La session ne le lit jamais : aucun geste ne le montre.
 - [ ] Le téléphone, par un code donné par l'appareil appairé (Atelier › Appareils, Réglages › Appareils et
@@ -634,6 +656,9 @@ lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, a
   simple laisse une base que `0.2.0` ne lit pas.
 - **On attend** : ou `0.1.0` répond, puis le retour arrière remet `0.2.0` ; ou `0.1.0` ne répond pas et le geste remet
   seul `0.2.0`, en le disant. Dans les deux cas la liaison tient et l'entrée repère est là.
+- [ ] **Restés ouverts après la répétition, à jouer sur l'hôte** : une vraie interruption au clavier (sur le laptop,
+  jouée par un signal d'arrêt) ; les droits des fichiers (le disque du laptop ne les distingue pas) ; le retour
+  automatique sur une version qui ne démarre pas (il faut une image cassée exprès) ; la pile jouée à travers la porte.
 
 ### Tâche 13. Google en production (CrOliX) ; **arrêt C avant**
 
@@ -651,7 +676,10 @@ lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, a
 ### Tâche 14. Le téléphone (CrOliX)
 
 - [ ] Le client du réseau privé ; la PWA du core installée depuis son adresse HTTPS ; les notifications autorisées.
-  Acedia et Avaritia de même s'il les veut.
+  Acedia et Avaritia de même s'il les veut. **Point d'attention** : sur Android, le client du réseau privé peut ne
+  laisser passer que les applications d'une liste blanche. Le navigateur doit y être : hors de la liste, les adresses
+  des apps sont introuvables alors que le téléphone est joint (constaté le 23/11 ; côté nœud, les octets reçus de ce
+  pair ne bougent pas).
 - [ ] **Une notification de bout en bout** : un événement qui en mérite une arrive sur le téléphone verrouillé, et son
   toucher ouvre le bon écran.
 - **Revenir en arrière** : se désabonner ; révoquer l'appareil.
@@ -776,8 +804,8 @@ issue s'ouvre). Tout correctif de code applicatif.
 
 ## Limites
 
-- **Rien n'a tourné** : ni la PR de la pile, ni les correctifs des satellites hors de leurs tests ; le moteur Docker
-  du laptop est arrêté. La répétition les joue.
+- **Rien n'a tourné sur le NAS.** La pile a tourné sur le laptop le 23/11, images construites localement : la
+  première moitié de la répétition (tâche 5). Le second temps, sur les images publiées, reste à jouer.
 - **Non confirmé dans la documentation d'UGREEN** : SSH pour un compte standard ; le groupe `docker` ; l'écran Docker
   d'UGOS (journal, relance, projets Compose) ; la notification d'un conteneur arrêté ; les mises à jour automatiques ;
   un dossier hors sauvegarde, instantanés et corbeille. Tout cela se lit à la tâche 1, dans les écrans d'UGOS, par
