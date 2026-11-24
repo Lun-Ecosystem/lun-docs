@@ -232,7 +232,7 @@ général à qui l'on donne ce plan.
 **L'ordre.** **1, 2, 5, 7 et 8 partent en parallèle** : aucun fichier commun (serveur d'Avaritia, écran d'Avaritia,
 core, Acedia, lun-docs). 3 attend 1. 4 attend 2 et 3. 6 attend 5. 9 attend 3, 4 et 6. 10 ferme le chantier.
 
-1. - [ ] **Les tests du serveur d'Avaritia, rouges** (testeur ; `server/src/brain/drafts.test.ts`,
+1. - [x] **Les tests du serveur d'Avaritia, rouges** (testeur ; `server/src/brain/drafts.test.ts`,
    `server/src/brain/fiches.test.ts`).
    - **Les liens** (`drafts.test.ts:290-314`) : une nouvelle fiche porte `link` `/valider?brouillon=<id>`, un import
      aussi ; une fiche enrichie, une contradiction et un doublon gardent `/memoire?fiche=<id>`. Le test « a new fiche
@@ -247,7 +247,7 @@ core, Acedia, lun-docs). 3 attend 1. 4 attend 2 et 3. 6 attend 5. 9 attend 3, 4 
    - **Exclu** : le code ; les tests de l'écran.
    - **Preuve** : chaque nouveau test échoue sur `main` pour la bonne raison (lien absent, fonction ou route absente).
 
-2. - [ ] **Les tests de l'écran d'Avaritia, rouges** (testeur ; `app/src/screens/Valider.test.ts`,
+2. - [x] **Les tests de l'écran d'Avaritia, rouges** (testeur ; `app/src/screens/Valider.test.ts`,
    `app/src/App.test.ts`).
    - **Le focus** : au chargement, V et R n'envoient rien et aucune carte ne montre les touches V R ; le focus dans
      la deuxième carte, R refuse la deuxième ; le focus sorti des cartes (clic sur la page), V n'envoie rien ;
@@ -263,20 +263,20 @@ core, Acedia, lun-docs). 3 attend 1. 4 attend 2 et 3. 6 attend 5. 9 attend 3, 4 
    - **Exclu** : le code ; le serveur.
    - **Preuve** : les nouveaux tests échouent sur `main` pour la bonne raison.
 
-3. - [ ] **Le serveur d'Avaritia** (la session ou un agent général ; `server/src/brain/drafts.ts`,
+3. - [x] **Le serveur d'Avaritia** (la session ou un agent général ; `server/src/brain/drafts.ts`,
    `server/src/brain/routes.ts`, `server/src/demo/main.ts`). Après 1.
    - `drafts.ts` : `cardOf` donne `/valider?brouillon=${d.id}` quand il n'y a pas de cible (`:418`) ; le commentaire
      de `Card.link` (`:97`) le dit. `restoreDraft(db, id, now)` : un seul `UPDATE … SET status = 'pending',
-     decided_at = NULL WHERE id = ? AND status = 'refused' AND decided_at >= ?`, à `now` moins `UNDO_MS` ; sans ligne
-     changée, `ConflictError` ou `NotFoundError`, comme `refuseDraft`. `UNDO_MS = 30_000`, avec une ligne qui dit
-     pourquoi (le toast de 5 s et le réseau).
+     decided_at = NULL WHERE id = ? AND status = 'refused' AND decided_at > ?`, à `now` moins `UNDO_MS` (strict) ;
+     sans ligne changée, `ConflictError` ou `NotFoundError`, comme `refuseDraft`. `UNDO_MS = 30_000`, avec une ligne
+     qui dit pourquoi (le toast de 5 s et le réseau).
    - `routes.ts` : `POST /drafts/:id/restore` rend `{ draft: draftView(…) }` ; 404 et 409 mappés, le 409 dit
      « Trop tard pour annuler : le refus est fait. ».
    - `demo/main.ts` : un brouillon de nouvelle fiche, inventé, d'un type que la démo a déjà, origine `core`.
    - **Exclu** : le contrat et ses routes ; Valider ; l'écran ; `contrat-satellite.md`.
    - **Preuve** : les tests de la tâche 1 au vert ; les barrières au vert ; `npm run demo` démarre.
 
-4. - [ ] **L'écran d'Avaritia** (`dev-front` ; `app/src/App.svelte`, `app/src/screens/Valider.svelte`,
+4. - [x] **L'écran d'Avaritia** (`dev-front` ; `app/src/App.svelte`, `app/src/screens/Valider.svelte`,
    `app/src/valider/DraftItem.svelte`). Après 2 et 3.
    - `App.svelte` : lit `brouillon` comme `filtre` (`:24-38`) et le passe à Valider.
    - `Valider.svelte` : `active` est la carte au focus, sans repli sur la première (`:50`) ; V et R n'agissent que
@@ -291,7 +291,7 @@ core, Acedia, lun-docs). 3 attend 1. 4 attend 2 et 3. 6 attend 5. 9 attend 3, 4 
    - **Exclu** : le kit et ses copies ; le serveur ; Modifier ; le tableau de bord ; les textes du plafond (audit B7).
    - **Preuve** : les tests de la tâche 2 au vert ; les barrières au vert.
 
-5. - [ ] **Les tests du core, rouges** (testeur, Lun'Anima ; fichiers dans l'issue privée). En parallèle de 1, 2,
+5. - [x] **Les tests du core, rouges** (testeur, Lun'Anima ; fichiers dans l'issue privée). En parallèle de 1, 2,
    7 et 8.
    - La carte dépliée d'une nouvelle fiche de Lun'Avaritia, dont le lien est `/valider?brouillon=<id>`, offre
      « Ouvrir le brouillon » : un lien, nouvel onglet, sans référent, vers le front du poste à ce chemin. Le même
@@ -307,14 +307,14 @@ core, Acedia, lun-docs). 3 attend 1. 4 attend 2 et 3. 6 attend 5. 9 attend 3, 4 
    - **Exclu** : le code.
    - **Preuve** : les nouveaux tests échouent sur `main` pour la bonne raison.
 
-6. - [ ] **Le core** (`dev-core`, Lun'Anima ; étapes dans l'issue privée). Après 5.
+6. - [x] **Le core** (`dev-core`, Lun'Anima ; étapes dans l'issue privée). Après 5.
    - La carte dépliée montre le lien sortant pour toute carte qui en a un, hors question et hors carte qui envoie.
      Son libellé nomme la cible, par la règle de l'urgence, avec « Ouvrir le brouillon » en plus pour
      `/valider?brouillon=`. L'infobulle de prudence dit le poste, pas le mail.
    - **Exclu** : Modifier dans le core ; les questions ; la pile ; le lot ; le Journal ; le contrat.
    - **Preuve** : les tests de la tâche 5 au vert ; les barrières du core au vert.
 
-7. - [ ] **Les tests de la pause d'Acedia** (testeur ; `server/src/pina/routes.test.ts`,
+7. - [x] **Les tests de la pause d'Acedia** (testeur ; `server/src/pina/routes.test.ts`,
    `server/src/triage/pipeline.test.ts`). En parallèle.
    - **Pina sous chaque pause** : sous une pause du core, puis sous une pause locale, `POST /api/pina/messages` mène
      son tour (le modèle est appelé, la réponse ou la carte arrive).
@@ -339,7 +339,7 @@ core, Acedia, lun-docs). 3 attend 1. 4 attend 2 et 3. 6 attend 5. 9 attend 3, 4 
    - **Exclu** : les autres specs ; le contrat.
    - **Preuve** : `npm run check` au vert dans lun-docs ; les barrières d'Acedia au vert.
 
-9. - [ ] **La preuve dans Chrome** (`dev-front`). Après 3, 4 et 6.
+9. - [x] **La preuve dans Chrome** (`dev-front`). Après 3, 4 et 6.
    - **Avaritia**, `npm run demo`, au bureau puis au téléphone (émulation des DevTools à 390 px, pas une fenêtre
      redimensionnée). On attend : au chargement de À valider, R ne fait rien ; Tab jusqu'à une carte, elle s'éclaire
      avec V R ; R la refuse, le toast offre Annuler ; Ctrl Z la ramène ; le compteur du rail suit ;
@@ -353,7 +353,7 @@ core, Acedia, lun-docs). 3 attend 1. 4 attend 2 et 3. 6 attend 5. 9 attend 3, 4 
    - **Relevé** dans chaque PR : captures à chaque largeur, sans donnée réelle.
    - **Exclu** : la prod ; une vraie base. Acedia : rien à voir à l'écran, ses tests suffisent.
 
-10. - [ ] **La livraison** (livreur). Une PR en brouillon par dépôt, au gabarit de `lun-livrer` : Lun'Avaritia,
+10. - [x] **La livraison** (livreur). Une PR en brouillon par dépôt, au gabarit de `lun-livrer` : Lun'Avaritia,
     Lun'Anima (ferme Lun-Ecosystem/lun-anima#137), Lun'Acedia (ses tests et son `CLAUDE.md`), et lun-docs (ce
     plan, ses coches, la spec J1). Chacune porte
     `Refs Lun-Ecosystem/lun-docs#203` ; la PR lun-docs ferme le chapeau.
