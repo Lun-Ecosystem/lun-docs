@@ -186,13 +186,17 @@ d'un poste (l'objection de la contestation). Celles qui citent une alerte urgent
 d'abord et sont rouges sur `main` ; les gardes, vertes sur `main`, fixent ce qui ne doit pas bouger. Chaque test dit
 lequel il est.
 
-0. - [ ] **Anthropic impose-t-il les longueurs de texte ?** (`testeur`, depuis le laptop ; appel et clé dans l'issue
+0. - [x] **Anthropic impose-t-il les longueurs de texte ?** (`testeur`, depuis le laptop ; appel et clé dans l'issue
    privée). **Préalable à la tâche 1. Attend que CrOliX remplace la clé de mesure**, refusée aujourd'hui (401).
    - Un vrai appel, une forme qui borne une chaîne à cinq signes, une consigne qui en demande quarante. Une réponse
      de plus de cinq signes dit que la borne n'est pas imposée. Moins d'un dixième de centime.
    - Le résultat s'écrit ici, sous la tâche. Imposée : rien de plus à faire. Pas imposée : CrOliX dit si la phrase du
      jour (240 signes) entre dans ce chantier ; les autres longueurs vont dans une issue.
    - Exclu : tout changement de code.
+   - **Résultat, le 24/11** (Haiku 5.5, raisonnement coupé) : la borne n'est **pas** imposée. Borne de 5 signes,
+     réponse de 32 ; borne de 240, réponse de 446. **Décision de CrOliX** : le chantier couvre les trois longueurs du
+     contexte chaud (un nom de recherche, la phrase du jour, le contexte) ; les autres réponses bornées vont dans une
+     issue, après le VIP.
 1. - [ ] **Le contexte chaud tient plus de trois noms** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers dans
    l'issue privée). **Après la tâche 0 ; en parallèle de la tâche 2.**
    - Test rouge sur `main` : sur Anthropic, une réponse à quatre noms. Le contexte chaud s'écrit ; trois recherches
@@ -202,9 +206,13 @@ lequel il est.
      vide parmi les trois premiers fait toujours échouer la vérification.
    - Code : la vérification des recherches garde les trois premiers noms avant de vérifier la forme. La forme
      envoyée ne change pas. Une ligne de commentaire dit pourquoi.
-   - Exclu : le module d'Anthropic, les consignes du matin, les cinq autres formes ; les longueurs de texte, sauf si
-     CrOliX en décide autrement après la tâche 0.
-2. - [ ] **La nuit n'envoie que les messages de CrOliX** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers dans
+   - **Les longueurs** (décision de CrOliX après la tâche 0) : tests rouges sur `main`, sur Anthropic, un nom de
+     recherche, une phrase du jour et un contexte plus longs que leur borne. Le contexte chaud s'écrit quand même.
+     Code, choix de la session : avant la vérification, un nom trop long est coupé à sa borne ; la phrase du jour et
+     le contexte sont coupés au dernier espace avant leur borne, suivis de « … ». Une garde : un texte dans sa borne
+     passe tel quel.
+   - Exclu : le module d'Anthropic, les consignes du matin, les cinq autres formes.
+2. - [x] **La nuit n'envoie que les messages de CrOliX** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers dans
    l'issue privée). **En parallèle des tâches 0 et 1.**
    - Tests rouges sur `main` :
      - une journée avec un message de CrOliX, un message de Natsume, une alerte urgente d'Acedia et un bilan ; le tri
