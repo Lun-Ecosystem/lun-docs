@@ -146,3 +146,5 @@ Un écran ou un composant de front est **vérifié dans Chrome**, en largeur bur
 (390 px), contre sa planche ou la galerie du kit (`npm run galerie`, dans `design/` de lun-docs : chaque
 composant commun dans ses états et dans les cinq mondes), avant l’ouverture de la PR. Les captures
 ne contiennent aucune donnée réelle.
+Il l’est aussi en hauteur courte, une page de 630 px (une fenêtre de 1366 × 720) : ce qui déborde y défile.
+Les 390 px se prennent par l’émulation d’appareil ou Chrome sans interface : une fenêtre ne descend pas si bas.
