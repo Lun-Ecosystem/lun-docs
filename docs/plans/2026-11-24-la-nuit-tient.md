@@ -6,8 +6,8 @@
 > **Issues :** Lun-Ecosystem/lun-anima#139 (porteuse) et Lun-Ecosystem/lun-anima#119, `niveau:standard`, privées.
 > Chantier choisi par CrOliX le 24/11 au soir, après « [La nuit et la mémoire](2026-11-24-nuit-et-memoire.md) ».
 >
-> **État : rédigé le 24/11 ; contesté le 24/11 ; amendé le 24/11** (« Ce que la contestation a changé »). **Une
-> décision attend CrOliX** : le tempérament trop long (« La décision de CrOliX »). À valider par CrOliX.
+> **État : rédigé le 24/11 ; contesté le 24/11 ; amendé le 24/11** (« Ce que la contestation a changé »). **CrOliX a
+> tranché le 24/11** : (c), garder le refus du tempérament trop long (« La décision de CrOliX »). À valider par CrOliX.
 >
 > Code relu sur `main` de Lun'Anima (`164e794`, la 0.3.0 en service sur le NAS). Le graphe d'abord, puis chaque point
 > dans le code ; les six formes de réponse du core relues une à une, et chaque point de la contestation vérifié dans
@@ -79,8 +79,8 @@ décide aujourd'hui, sans le texte : il arrive au Journal comme celui d'une nouv
 recommandées avec (b) comme avec (c) ; avec (a), c'est l'événement « coupée ». Il dit toute pesée perdue sur une
 réponse illisible, trop longue ou tronquée.
 
-Les tâches sont écrites pour (c) avec l'événement. Si CrOliX choisit (b), la tâche 1 ajoute la coupe du tempérament et
-la vérification des balises, et le test du critère 2 reste le même.
+**Tranché par CrOliX le 24/11 : (c), garder le refus**, avec l'événement qui dit la pesée perdue. Les tâches sont
+écrites ainsi.
 
 ## Ce que le code fait aujourd'hui
 
@@ -202,7 +202,7 @@ d'abord et sont rouges sur `main` ; les gardes, vertes sur `main`, fixent ce qui
 lequel il est.
 
 1. - [ ] **Le portrait coupé, le tempérament refusé à voix haute** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers
-   dans l'issue privée). **Après la décision de CrOliX ; en parallèle de la tâche 2.** Écrite pour (c).
+   dans l'issue privée). **En parallèle de la tâche 2.** Écrite pour (c), tranché le 24/11.
    - Tests rouges sur `main` :
      - la coupe partagée : un secret qui chevauche la borne est masqué en entier ; une coupe qui ne garde que des
        blancs rend un texte vide ;
@@ -236,9 +236,8 @@ lequel il est.
    Lun-Ecosystem/lun-anima#119, avec la sortie des tests rouges devenus verts, la suite entière et les barrières.
    Ce plan coché dans la PR lun-docs du chantier. Après la fusion, le graphe mis à jour.
 
-**L'ordre.** La tâche 2 part tout de suite : elle ne dépend pas de la décision. La tâche 1 attend la décision de
-CrOliX sur le tempérament. Le testeur écrit les tests de chaque tâche avant son code ; elles ne partagent aucun
-fichier. Dans un même worktree, un seul `dev-core` les enchaîne, plus simple que deux worktrees pour quelques lignes.
+**L'ordre.** Les tâches 1 et 2 partent ensemble. Le testeur écrit les tests de chaque tâche avant son code ; elles ne
+partagent aucun fichier. Dans un même worktree, un seul `dev-core` les enchaîne, plus simple que deux worktrees pour quelques lignes.
 Puis la revue, puis le livreur.
 
 ## Ensuite, hors du chantier
@@ -273,5 +272,4 @@ Puis la revue, puis le livreur.
 
 ## Questions à CrOliX
 
-1. **Le tempérament trop long** : (a), (b) ou (c) ? Recommandé : (c), avec l'événement qui dit la pesée perdue. La
-   tâche 1 l'attend ; la tâche 2 part sans elle.
+Aucune : le tempérament trop long est tranché, (c) (« La décision de CrOliX »).
