@@ -316,7 +316,7 @@ test unitaire : jsdom ne calcule aucune mise en page. Sa garde est la mesure dan
    - Preuve : la page des réglages (`npm run dev`), à 1366 × 630, inchangée. La CI passe au vert après la fusion de la
      PR lun-docs (« L'ordre des fusions »).
    - Exclu : tout autre fichier.
-6. - [ ] **Le semis du core local** (`dev-core` ; Lun'Anima, hors du dépôt, commandes dans l'issue privée).
+6. - [x] **Le semis du core local** (`dev-core` ; Lun'Anima, hors du dépôt, commandes dans l'issue privée).
    **En parallèle de 1 à 4 et de 8 ; avant 7.**
    - Une base jetable, hors du dépôt. Le jeton d'appareil de l'app par un code d'appairage sur cette base.
    - Un semis écrit hors du dépôt, dans le dossier de travail de la session, qui passe par les fonctions du core : des
@@ -325,7 +325,7 @@ test unitaire : jsdom ne calcule aucune mise en page. Sa garde est la mesure dan
      Bureau, À trancher et le Journal défilent. Données inventées, rien de réel.
    - Rend : le chemin du semis et la suite de commandes, qui rejouent la base depuis zéro.
    - Exclu : tout fichier du dépôt ; un vrai satellite ; une vraie base.
-7. - [ ] **La mesure de `main`** (`dev-front` ; Lun'Anima). **Après 6 ; avant 9 et 10.**
+7. - [x] **La mesure de `main`** (`dev-front` ; Lun'Anima). **Après 6 ; avant 9 et 10.**
    - Sur `main`, l'app construite et servie par le core local, Chrome sans interface à 390 × 844 :
      - le Bureau : chaque élément qui dépasse la largeur de la page, et de combien ; « Voir les N » parmi eux ou non ;
      - en fin de défilement du Bureau, d'À trancher et du Journal : ce que la barre « Écrire à Natsume » couvre ;
@@ -335,7 +335,7 @@ test unitaire : jsdom ne calcule aucune mise en page. Sa garde est la mesure dan
    - Les chiffres et les captures vont dans la tâche, avant tout code.
    - **Si ce qui déborde n'est pas « Voir les N »**, ou pas seulement lui, la tâche 9 attend : la session complète le
      plan, puisque `border-box` ne ferme pas alors le critère 3.
-8. - [ ] **Les filtres du Journal en feuille, au téléphone** (`testeur`, puis `dev-front` ; Lun'Anima, fichiers dans
+8. - [x] **Les filtres du Journal en feuille, au téléphone** (`testeur`, puis `dev-front` ; Lun'Anima, fichiers dans
    l'issue privée). **En parallèle de 6 et 7.**
    - Tests d'abord, en mode téléphone :
      - « Filtres » ouvre une fenêtre modale nommée « Filtres » ; la période, les postes et le type y sont, sans « Plus
@@ -359,17 +359,20 @@ test unitaire : jsdom ne calcule aucune mise en page. Sa garde est la mesure dan
    - Code : la feuille du panneau de détail, au téléphone seulement. Elle reçoit les trois rangées dans leur
      enveloppe en grille ; « Plus de filtres » n'y est pas. Rien de neuf dans le kit.
    - Exclu : la recherche, les filtres au bureau, leurs textes, la feuille elle-même.
-9. - [ ] **Le Bureau du téléphone : « Voir les N » et la place sous la barre** (`dev-front` ; Lun'Anima, fichiers dans
+9. - [x] **Le Bureau du téléphone : « Voir les N » et la place sous la barre** (`dev-front` ; Lun'Anima, fichiers dans
    l'issue privée). **Après 7.**
    - « Voir les N » ne dépasse plus sa colonne (choix 3), si la tâche 7 l'a désigné.
    - Au téléphone, le Bureau, À trancher et le Journal à hauteur libre ; la marge propre du bas du Bureau et d'À
      trancher à 24 px (choix 4).
    - Des règles CSS : pas de test unitaire, les tests du téléphone restent verts. La mesure est à la tâche 11.
    - Exclu : la barre « Écrire à Natsume » (sa place, sa hauteur, ses textes), la navigation du bas, la Constellation.
-10. - [ ] **Le vide sous une ligne du Journal** (`dev-front` ; Lun'Anima). **Après 7 et 8**, même fichier que la 8.
+   - **Écart, mesuré à la tâche 11** : au téléphone, « 14 résultats » chevauchait le bouton des filtres de 24 px, déjà
+     sur `main` ; le champ de recherche du Journal peut maintenant céder de la place (deux lignes dans la règle du
+     téléphone), il reste 10 px d'écart. Aucun autre changement de mise en page.
+10. - [x] **Le vide sous une ligne du Journal** (`dev-front` ; Lun'Anima). **Après 7 et 8**, même fichier que la 8.
     - Au téléphone, les lignes du Journal sans hauteur minimale (choix 5). Au bureau, rien ne change.
     - Exclu : `ListRow`, le texte des lignes, la densité du Journal au bureau.
-11. - [ ] **La copie du kit du core, et la preuve dans Chrome** (`dev-front` ; Lun'Anima, commandes dans l'issue
+11. - [x] **La copie du kit du core, et la preuve dans Chrome** (`dev-front` ; Lun'Anima, commandes dans l'issue
     privée). **Après 1 relue, 8, 9 et 10.**
     - La copie du kit régénérée par `sync-kit` depuis la branche de la tâche 1 : le diff ne porte que `NavLink.svelte`.
     - La base du semis rejouée depuis zéro ; l'app construite, servie par le core local.
@@ -384,7 +387,7 @@ test unitaire : jsdom ne calcule aucune mise en page. Sa garde est la mesure dan
     - À 1366 × 630 : le Journal et le Bureau du bureau comme aux captures de la tâche 7 ; un coup d'œil à la
       Constellation et à l'Atelier.
     - Captures dans la PR, sans donnée réelle.
-12. - [ ] **La revue et la livraison** (`reviewer`, puis `livreur`). **À la fin.** Chaque diff relu contre sa tâche et
+12. - [x] **La revue et la livraison** (`reviewer`, puis `livreur`). **À la fin.** Chaque diff relu contre sa tâche et
     les standards ; une PR en brouillon par dépôt ; les fusions dans « L'ordre des fusions ». Ce plan coché dans la PR
     lun-docs avant sa fusion. Les issues `inbox` de « Hors périmètre » ouvertes par la session. Après la dernière
     fusion, le graphe mis à jour, la base et le semis jetables effacés.
