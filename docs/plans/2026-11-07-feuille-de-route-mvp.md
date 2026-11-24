@@ -503,6 +503,24 @@ terme, sans date. L'ordre, jusqu'à la porte :
 Le § 4 ci-dessous garde sa liste telle qu'elle a été écrite, au fil des chantiers, pour une session sur le desktop :
 ce qui y touche l'hôte (B10, B11, B12, K, la mise en service sur des bases neuves) se lit maintenant pour le NAS.
 
+### Le recadrage du 24/11 : après la première nuit
+
+Tranché par CrOliX le 24/11 ([recadrage](../specs/2026-11-24-recadrage-premiere-nuit.md)), après la première nuit de
+la prod sur le NAS et l'audit des trois apps. Les jours depuis le 23/11 sont une répétition ; la semaine de rodage
+part d'un jour fixe, après ce panier :
+
+1. **Trois chantiers en parallèle** : la nuit et la mémoire (le contexte chaud, Lun-Ecosystem/lun-anima#133 ; la
+   bibliothèque nourrie par la conversation seule, Lun-Ecosystem/lun-avaritia#46) ; trancher sans risque (la fiche
+   ouverte depuis sa carte dans le core, un refus qui s'annule dans Avaritia, la pause d'Acedia cohérente) ; les
+   écrans qui gênent (Lun-Ecosystem/lun-docs#201, Lun-Ecosystem/lun-anima#134).
+2. **À la main de CrOliX, en parallèle** : Acedia 0.2.1 publiée et déployée ; les tâches 10 à 12 de la mise en
+   service.
+3. **Puis** les versions publiées et déployées, la session du desktop pour la voix (point 2 de l'ordre du 20/11), et
+   la semaine de rodage (B8), d'un jour fixe : elle juge les cinq promesses d'un coup.
+
+Le reste de l'audit (design, finitions, vocabulaire, l'urgence et ce qui remonte d'Acedia, Lun-Ecosystem/lun-anima#135,
+les mails dans la bibliothèque) passe après le VIP.
+
 ### La session sur le desktop, puis le rodage et la bascule
 
 Remplacé par le recadrage du 20/11, ci-dessus. Ce paragraphe disait, du 12 au 20/11 : la session du § 4, puis la
