@@ -275,8 +275,9 @@ clé hors du dossier de service, par exemple dans un gestionnaire de mots de pas
 des copies.
 
 - **`acedia.db`**, clé `ACEDIA_SECRET_KEY` : elle protège les jetons Google et les clés d'IA saisies dans Réglages.
-  Avec une autre clé, à éviter : les clés d'IA se ressaisissent, mais l'écran du compte Google reste sur
-  « Vérification… », sans proposer de connecter (lun-acedia#62). Garder la même clé.
+  Avec une autre clé, à éviter : les clés d'IA se ressaisissent, et la carte Compte Google dit que le compte
+  enregistré ne se lit pas (« Compte illisible », « Non connecté »). Remettre l'ancienne clé dans `.env` et relancer,
+  ou reconnecter le compte. Garder la même clé.
 - **`avaritia.db`**, clé `AVARITIA_SECRET_KEY` : elle protège les clés d'IA saisies dans Réglages. Avec une autre clé,
   ressaisir les clés.
 - **La base du core** : sa clé et ce qu'elle protège sont dans son dépôt. Garder la même clé.

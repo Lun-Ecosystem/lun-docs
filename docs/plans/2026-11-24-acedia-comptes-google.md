@@ -7,7 +7,7 @@
 > Lun-Ecosystem/lun-acedia#84 (le retour de Google en JSON brut) et Lun-Ecosystem/lun-acedia#62 (un jeton Google
 > illisible), `niveau:standard`. Pas de chapeau : tout le code est dans Lun'Acedia.
 >
-> **PR qui livre :** à ouvrir (tâche 7).
+> **Livré par :** [lun-acedia#105](https://github.com/Lun-Ecosystem/lun-acedia/pull/105) (brouillon).
 >
 > **État : rédigé, contesté et amendé le 24/11** (« Ce que la contestation a changé »), à valider. Choisi par CrOliX
 > le 24/11 au soir. **CrOliX a tranché #92 le 24/11 : B**, ne compter que la réception (« La décision de CrOliX »).
@@ -313,7 +313,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
 pas ; la table des codes et le champ `unreadable` sont leur seul accord). 5 attend 3 et 4,
 6 attend 5, 7 ferme le chantier.
 
-1. - [ ] **Les tests du serveur, rouges** (`testeur` ; `server/src/contract/digest.test.ts`,
+1. - [x] **Les tests du serveur, rouges** (`testeur` ; `server/src/contract/digest.test.ts`,
    `server/src/google/oauth.test.ts`, `server/src/google/client.test.ts`, `server/src/demo/demo.test.ts`).
    - **Le bilan (#92)**, dans `digest.test.ts` (son `setup()`, `:8-34`, et l'`INSERT` de `:57-61`) : des propositions
      `pending` pour un mail en réception, un mail archivé (`labelIds` sans `INBOX`), un en corbeille (`INBOX` et
@@ -361,7 +361,7 @@ pas ; la table des codes et le champ `unreadable` sont leur seul accord). 5 atte
    - **Preuve** : chaque nouveau test échoue sur `main` pour la bonne raison (un JSON 400 ou un 500 au lieu d'un 302,
      un 500 au lieu de `connected: false`, un jeton rangé remplacé, 5 au lieu de 1).
 
-2. - [ ] **Les tests de l'écran, rouges** (`testeur` ; `app/src/App.test.ts`,
+2. - [x] **Les tests de l'écran, rouges** (`testeur` ; `app/src/App.test.ts`,
    `views/src/lib/settings/Settings.test.ts`).
    - **L'app** (son `fakeServer()`, le jeton posé comme `App.test.ts:266-267`) : `/?google=refused`, `failed`,
      `expired` ouvrent la page Compte Google (le `h2`) et son message, dans la carte « Compte Google » ;
@@ -378,7 +378,7 @@ pas ; la table des codes et le champ `unreadable` sont leur seul accord). 5 atte
    - **Exclu** : le code ; le serveur ; le style et le téléphone (Chrome, tâche 6).
    - **Preuve** : les nouveaux tests échouent sur `main` (les Réglages s'ouvrent sur « Tri par l'IA », aucun message).
 
-3. - [ ] **Le serveur** (`dev-core`, ici pour le serveur d'Acedia). Après 1. Un seul développeur : #84 et #62
+3. - [x] **Le serveur** (`dev-core`, ici pour le serveur d'Acedia). Après 1. Un seul développeur : #84 et #62
    touchent tous deux `oauth.ts`.
    - **#92** (`server/src/contract/catalog.ts`) : à `:474-476`, la première requête compte les `messages` qui passent
      `viewFilter('pending')`, sans renommer la table et avec ses `params` (choix 1). Rien d'autre dans le bilan.
@@ -408,7 +408,7 @@ pas ; la table des codes et le champ `unreadable` sont leur seul accord). 5 atte
      Google n'est pas branché ; les clés d'IA avec une clé mal formée ; l'écran.
    - **Preuve** : les tests de la tâche 1 au vert ; les barrières au vert.
 
-4. - [ ] **L'écran** (`dev-front` ; `app/src/App.svelte`, `views/src/lib/settings/Settings.svelte`,
+4. - [x] **L'écran** (`dev-front` ; `app/src/App.svelte`, `views/src/lib/settings/Settings.svelte`,
    `views/src/lib/settings/GoogleAccount.svelte`, `server/src/types.ts` et sa copie `views/src/lib/types.ts`). Après 2.
    Avec la DA de `lun-design`.
    - **Le type** : `GoogleStatus` gagne `unreadable?: boolean` dans `server/src/types.ts:189-192`, puis
@@ -425,14 +425,14 @@ pas ; la table des codes et le champ `unreadable` sont leur seul accord). 5 atte
      rail et son état de service ; les autres pages des Réglages ; le reste du serveur.
    - **Preuve** : les tests de la tâche 2 au vert ; les barrières au vert.
 
-5. - [ ] **La relecture** (`reviewer`). Après 3 et 4. Le diff entier contre ce plan et `standards/` : rien de ce que
+5. - [x] **La relecture** (`reviewer`). Après 3 et 4. Le diff entier contre ce plan et `standards/` : rien de ce que
    Google envoie dans une adresse, un corps ou le journal du serveur ; un code inconnu n'affiche rien ; aucun jeton
    enregistré avant le profil, et le profil lu avec le jeton reçu ; une adresse exigée ; le journal du serveur ne
    garde qu'un code qui passe le motif ; une clé mal formée n'est pas prise pour un jeton illisible ; `loadTokens` ne
    rattrape que le déchiffrement ; #92 ne touche que le compte ; aucune couleur en dur. Les corrections reviennent au
    développeur de la tâche, tests relancés.
 
-6. - [ ] **La preuve dans Chrome** (`dev-front`). Après 5.
+6. - [x] **La preuve dans Chrome** (`dev-front`). Après 5.
    - **La démo**, dans le worktree d'Acedia : `npm run build`, puis `npm run demo` (`README.md:42-50`). Base en
      mémoire, faux Gmail, aucun réseau côté serveur, port 8797 ; coller dans la console le jeton qu'elle affiche.
      **Jamais la prod** : elle a les vrais mails de CrOliX. **Ne pas cliquer « Connecter un compte Google »** dans la
@@ -461,7 +461,7 @@ pas ; la table des codes et le champ `unreadable` sont leur seul accord). 5 atte
      les remet.
    - **Relevé** dans la PR : captures à chaque largeur, données de la démo seulement.
 
-7. - [ ] **La livraison** (`livreur`). Une PR en brouillon par dépôt, au gabarit de `lun-livrer` : Lun'Acedia (ferme
+7. - [x] **La livraison** (`livreur`). Une PR en brouillon par dépôt, au gabarit de `lun-livrer` : Lun'Acedia (ferme
    lun-acedia#92, lun-acedia#84 et lun-acedia#62) et lun-docs (ce plan, ses coches ; la ligne de lun-acedia#62 dans
    la feuille de route, `2026-11-07-feuille-de-route-mvp.md:432`, renvoie à ce plan).
    - **La page vivante** `docs/mise-en-service-desktop.md:277-279` (lun-docs) : avec une autre clé, les clés d'IA se
@@ -493,6 +493,9 @@ pas ; la table des codes et le champ `unreadable` sont leur seul accord). 5 atte
 - **Une synchro déjà en vol** pendant un changement de compte (partie avec les jetons d'avant, l'appel à Gmail en
   cours) peut écrire après `forgetAccountData`. Plus aucun `await` ne sépare l'écriture des jetons du ménage ; ce
   reste-là n'est pas traité. Une erreur de la base entre `saveTokens` et `putSetting` laisserait le même mélange.
+  De même, si l'écriture des jetons réussit mais que la levée de l'état dégradé qui la suit échoue (une erreur de la
+  base), le retour dit « échec, rien n'a changé » alors que les nouveaux jetons sont déjà écrits : cas théorique,
+  relevé à la relecture.
 - **Une clé mal formée** coupe Google ; les clés d'IA saisies dans Réglages ne s'enregistrent pas non plus. Le
   démarrage le dit.
 - **Le format des erreurs d'API de Google** (`error.errors[].reason`) vient de leur doc, pas d'un essai :
