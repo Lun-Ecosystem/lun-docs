@@ -327,7 +327,7 @@ core, Acedia, lun-docs). 3 attend 1. 4 attend 2 et 3. 6 attend 5. 9 attend 3, 4 
      le dit à CrOliX avant de le corriger dans la même PR.
    - **Preuve** : les nouveaux tests passent sur `main` ; c'est attendu, ils figent la spec. Les barrières au vert.
 
-8. - [ ] **Les textes de la pause remis d'accord** (la session ; `docs/specs/2026-10-19-j1-acedia-design.md` dans
+8. - [x] **Les textes de la pause remis d'accord** (la session ; `docs/specs/2026-10-19-j1-acedia-design.md` dans
    lun-docs, `CLAUDE.md` dans Lun'Acedia). En parallèle.
    - § 6.2, point 1 : « En pause posée dans Lun'Acedia, comme tout l'automatique, elles s'arrêtent ; sous une pause du
      core, elles seules continuent, sans modèle (contrat v1.4, « Deux pauses »). »

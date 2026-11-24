@@ -81,7 +81,9 @@ est le **tri automatique des mails avec validation**.
 ### 6.2 Comment Acedia décide
 
 1. **Règles de CrOliX d'abord** (ex. « expéditeur = école → École »). Confiance 100 %, gratuites,
-   actives même crédit épuisé. En pause, comme tout l'automatique, elles s'arrêtent (contrat).
+   actives même crédit épuisé. En pause posée dans Lun'Acedia, comme tout l'automatique, elles
+   s'arrêtent ; sous une pause du core, elles seules continuent, sans modèle (contrat v1.4, « Deux
+   pauses »).
 2. **L'IA pour le reste** : elle lit le mail et propose une boîte, des étiquettes, un niveau
    d'urgence et une confiance (0 à 100 %).
 3. **Le seuil de confiance** (réglage de CrOliX) décide : au-dessus, Acedia range seule et l'inscrit
@@ -193,7 +195,8 @@ Prouvés en local avec le compte de test, captures ou enregistrements dans la PR
 8. Seuil abaissé : un mail au-dessus est rangé seul, au journal, annulable ; un mail en dessous
    attend.
 9. Une correction est réutilisée : un mail semblable reçu ensuite obtient la boîte corrigée.
-10. Pause : aucun tri automatique, la lecture et les gestes manuels marchent.
+10. Pause posée dans Lun'Acedia : aucun tri automatique ; pause du core : les règles seules ; dans les deux, la
+    lecture, les gestes manuels et Pina marchent.
 11. Crédit IA épuisé (simulé) : `health` `degraded`, les règles tournent, le reste attend, rien ne
     plante.
 12. Vue agenda jour / semaine / mois avec événements et tâches mêlés ; un rappel émet un événement.
