@@ -8,7 +8,9 @@
 > chantier prolonge [Trancher sans risque](2026-11-24-trancher-sans-risque.md) (lun-docs#203, fusionné), qui a
 > corrigé le même clavier dans Lun'Avaritia (lun-avaritia#47) et rangé ce défaut-ci dans son hors périmètre.
 >
-> **État : rédigé le 24/11 ; contesté le 24/11 ; amendé le 24/11** avec les objections du contradicteur, relues
+> **PR qui livre :** Lun-Ecosystem/lun-acedia#102 (brouillon).
+>
+> **État : exécuté le 24/11** (rédigé, contesté et amendé le même jour) avec les objections du contradicteur, relues
 > dans le code (« Ce que la contestation a changé »). Choisi par CrOliX le 24/11 au soir, en attendant la preuve de
 > la première nuit avec la 0.3.0.
 >
@@ -187,7 +189,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
 **L'ordre.** **1 et 2 partent en parallèle** (serveur, écran : aucun fichier commun). 3 attend 1, 4 attend 2 ; **3 et
 4 partent en parallèle** (aucun fichier commun). 5 attend 3 et 4. 6 ferme le chantier.
 
-1. - [ ] **Les tests du serveur, rouges** (`testeur` ; `server/src/triage/journal.test.ts`, dans « refuse a
+1. - [x] **Les tests du serveur, rouges** (`testeur` ; `server/src/triage/journal.test.ts`, dans « refuse a
    proposal » (`:356`) ou un bloc voisin qui reprend son `pending()`, `writes` et `lines` (`:362-379`)).
    - **Gmail retenu pendant l'appel** : l'enrobage de `google.request` du test du refus (`:437-453`), devant le faux
      Gmail (`server/src/testing/fake-gmail.ts`). Au premier appel du geste A, il attend le geste B, puis laisse
@@ -210,7 +212,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
    - **Exclu** : le code ; l'écran ; un test propre de l'agent (il appelle les mêmes fonctions).
    - **Preuve** : chaque test de course échoue sur `main` pour la bonne raison (un 200 au lieu de 409, deux lignes).
 
-2. - [ ] **Les tests de l'écran, rouges** (`testeur` ; `views/src/lib/mail/Pending.test.ts`).
+2. - [x] **Les tests de l'écran, rouges** (`testeur` ; `views/src/lib/mail/Pending.test.ts`).
    - **Au chargement** : aucune carte n'a `aria-current` ; V, Maj+V et C n'appellent rien et n'ouvrent pas
      « Corriger ».
    - **J et K sans focus** : J donne le focus à la première carte de la file (Sujet 2) sans rien appeler ; K de même.
@@ -235,7 +237,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
      `Pending.test.ts:57`) : Chrome.
    - **Preuve** : les nouveaux tests du clavier et des indications échouent sur `main` pour la bonne raison.
 
-3. - [ ] **Le serveur** (`dev-core`, ici pour le serveur d'Acedia ; `server/src/triage/pipeline.ts` seul). Après 1.
+3. - [x] **Le serveur** (`dev-core`, ici pour le serveur d'Acedia ; `server/src/triage/pipeline.ts` seul). Après 1.
    - Un `Set` des mails en cours, au niveau du module, avec une ligne qui dit pourquoi (comme `agent.ts:97-99`).
    - `validate` (`:399-407`), `correct` (`:448-469`) et `refuse` (`:410-426`) : si le mail est dans le `Set`,
      `ConflictError('Un geste est déjà en cours sur ce mail')` ; sinon l'y mettre, avant le premier `await`, et l'en
@@ -245,7 +247,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
      déjà) ; le contrat ; l'arrêt du serveur ; l'écran.
    - **Preuve** : les tests de la tâche 1 au vert ; les barrières au vert.
 
-4. - [ ] **L'écran** (`dev-front` ; `views/src/lib/mail/Pending.svelte` seul). Après 2.
+4. - [x] **L'écran** (`dev-front` ; `views/src/lib/mail/Pending.svelte` seul). Après 2.
    - `bindShortcuts` (`:306-312`) ne garde que J et K. Avec le focus dans une carte, `move` en part ; sans, le focus
      à la carte de l'arrêt de Tab (`current`, sinon la première), rien d'autre.
    - Le `onkeydown` de la carte (`:544`) : V, Maj+V et C par `comboOf`, d'où qu'ils viennent dans la carte, sauf
@@ -259,7 +261,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
      `CorrectPanel` ; la boîte ; le serveur ; le texte du 409.
    - **Preuve** : les tests de la tâche 2 au vert ; les barrières au vert.
 
-5. - [ ] **La preuve dans Chrome** (`dev-front`). Après 3 et 4.
+5. - [x] **La preuve dans Chrome** (`dev-front`). Après 3 et 4.
    - **La démo**, dans le worktree d'Acedia : `npm run build`, puis `npm run demo` (`README.md:42-50`,
      `server/src/demo/main.ts`). Base en mémoire, faux Gmail, aucun réseau, port 8797 ; coller dans la console le
      jeton qu'elle affiche. **Jamais la prod** : elle a les vrais mails de CrOliX.
@@ -277,7 +279,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
      le tiennent.
    - **Relevé** dans la PR : captures à chaque largeur, données de la démo seulement.
 
-6. - [ ] **La livraison** (`livreur`). Une PR en brouillon par dépôt, au gabarit de `lun-livrer` : Lun'Acedia (ferme
+6. - [x] **La livraison** (`livreur`). Une PR en brouillon par dépôt, au gabarit de `lun-livrer` : Lun'Acedia (ferme
    lun-acedia#95 et lun-acedia#93) et lun-docs (ce plan, ses coches).
 
 ## Hors périmètre
@@ -291,7 +293,15 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
 
 ## Limites
 
-- **Rien n'a été lancé** pour ce plan : ni test, ni démo, ni Chrome.
+- **Lancé le 24/11** : `npm test` (87 fichiers, 1048 tests), lint, typage, format, couleurs ; démo locale dans Chrome
+  (base en mémoire, faux Gmail). **Simulés** : V tenu (événements `repeat` par script), l'onglet quitté puis revenu
+  (événements rejoués), le téléphone (390 px, toucher émulé). L'arrêt du serveur pendant l'appel Gmail : lu dans le
+  code, pas testé.
+- **Écarts au plan, après relecture** : un test prouve que le verrou est par mail, et les tests du serveur sont
+  regroupés ; six tests de l'écran en plus ; le « ↵ » de l'œil n'est annoncé que depuis la carte ou l'œil (le plan
+  disait « dans la carte »).
+- **Issues ouvertes en chemin** : lun-acedia#100 (rien ne montre la carte en cours de correction), lun-acedia#101
+  (`Ctrl Z` dans le toast au téléphone).
 - **Après un rangement partiel** (Gmail range, puis refuse les étiquettes, `pipeline.ts:91-104`), ou un arrêt après
   le rangement : le mail est rangé sans ligne, la proposition reste `pending`, et le core la compte encore
   (`catalog.ts:475`). Déjà le cas sur `main`.
@@ -305,4 +315,3 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
 - **Le verrou vaut pour un seul processus** : Acedia n'en lance qu'un.
 - **L'agent n'a pas de test à lui** : il appelle les mêmes fonctions (`catalog.ts:140-156`), et une erreur y devient
   une carte `failed` (`agent.ts:86-95`).
-- Les quatre propositions de la démo sont lues dans son test, pas vues.
