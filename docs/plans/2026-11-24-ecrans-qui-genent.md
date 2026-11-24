@@ -8,7 +8,7 @@
 > la part du core est Lun-Ecosystem/lun-anima#134 (privée).
 >
 > **État : rédigé le 24/11 ; contesté le 24/11 ; amendé le 24/11** avec trois décisions de CrOliX et les points
-> tranchés par la session après la contestation (« Les décisions de CrOliX, le 24/11 »). À valider par CrOliX.
+> tranchés par la session après la contestation (« Les décisions de CrOliX, le 24/11 »). Validé par CrOliX le 24/11.
 >
 > Code relu sur `main` : lun-docs `41fd6f3`, lun-acedia `b255045`, lun-avaritia `adef252`, lun-luxuria `c99f96f`,
 > Lun'Anima `cb075d4`. La prod tourne sur les 0.2.0 : aucun fichier touché ici n'a changé depuis, sauf `Icon.ts` dans
@@ -293,7 +293,7 @@ test unitaire : jsdom ne calcule aucune mise en page. Sa garde est la mesure dan
      `.liens` défile (`scrollHeight` plus grand que `clientHeight`). Sur `main`, le même script donne des liens sous
      34 px. Capture avant et après.
    - Exclu : `Rail`, `NavGroup`, `ListRow`, `Button`, le code de la galerie et son inventaire.
-2. - [ ] **La hauteur courte et les 390 px dans le standard** (la session ; lun-docs). **En parallèle de tout.**
+2. - [x] **La hauteur courte et les 390 px dans le standard** (la session ; lun-docs). **En parallèle de tout.**
    - `standards/design.md:142-147` : les deux lignes du choix 7.
    - `npm run sync`, puis `npm run check` et `npm run sync:check` au vert.
    - Exclu : toute autre règle du standard.
