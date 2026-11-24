@@ -3,6 +3,8 @@
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
+> **Livré par :** https://github.com/Lun-Ecosystem/lun-anima/pull/145 (brouillon, privée).
+>
 > **Issues :** Lun-Ecosystem/lun-anima#139 (porteuse) et Lun-Ecosystem/lun-anima#119, `niveau:standard`, privées.
 > Chantier choisi par CrOliX le 24/11 au soir, après « [La nuit et la mémoire](2026-11-24-nuit-et-memoire.md) ».
 >
@@ -201,7 +203,7 @@ avant la vérification, la mesure de l'écart pour le total, les tâches 1 et 2 
 d'abord et sont rouges sur `main` ; les gardes, vertes sur `main`, fixent ce qui ne doit pas bouger. Chaque test dit
 lequel il est.
 
-1. - [ ] **Le portrait coupé, le tempérament refusé à voix haute** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers
+1. - [x] **Le portrait coupé, le tempérament refusé à voix haute** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers
    dans l'issue privée). **En parallèle de la tâche 2.** Écrite pour (c), tranché le 24/11.
    - Tests rouges sur `main` :
      - la coupe partagée : un secret qui chevauche la borne est masqué en entier ; une coupe qui ne garde que des
@@ -219,7 +221,7 @@ lequel il est.
      événement, sans le texte. La forme envoyée ne change pas.
    - Exclu : le module d'Anthropic, les consignes, le budget de jetons du portrait, le verdict des scènes, l'outil de
      délégation. Aucune attente existante ne change.
-2. - [ ] **Le total d'un passage compte ce qu'il a payé** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers dans
+2. - [x] **Le total d'un passage compte ce qu'il a payé** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers dans
    l'issue privée). **Tout de suite ; en parallèle de la tâche 1.**
    - Test rouge sur `main` : avant le passage, un coût du matin sur le jour couvert et un coût de conversation. Puis
      une nuit jouée en vrai, sur un faux fournisseur qui répond à chaque forme, où le tri, le portrait, le tempérament
@@ -231,7 +233,7 @@ lequel il est.
      comme le matin, et ajoute l'écart à son total. Les étapes ne changent pas.
    - Exclu : les passages déjà notés, le matin, ce que le core inscrit de chaque appel, les plafonds, l'écran des
      dépenses.
-3. - [ ] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 1 et 2.** Le diff relu contre ce plan et
+3. - [x] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 1 et 2.** Le diff relu contre ce plan et
    les standards. Une PR Lun'Anima en brouillon, qui ferme Lun-Ecosystem/lun-anima#139 et
    Lun-Ecosystem/lun-anima#119, avec la sortie des tests rouges devenus verts, la suite entière et les barrières.
    Ce plan coché dans la PR lun-docs du chantier. Après la fusion, le graphe mis à jour.
