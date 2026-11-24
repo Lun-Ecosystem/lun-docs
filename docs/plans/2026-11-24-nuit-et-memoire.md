@@ -211,7 +211,12 @@ lequel il est.
      Code, choix de la session : avant la vérification, un nom trop long est coupé à sa borne ; la phrase du jour et
      le contexte sont coupés au dernier espace avant leur borne, suivis de « … ». Une garde : un texte dans sa borne
      passe tel quel.
-   - Exclu : le module d'Anthropic, les consignes du matin, les cinq autres formes.
+   - **Le tri aussi** (décision de CrOliX, le 24/11, à la revue) : une observation, un souvenir, sa réaction ou le
+     récit de la nuit plus long que sa borne (2000 signes) est coupé de la même façon, et la nuit réussit. Tests
+     rouges d'abord, sur Anthropic ; la règle de coupe est partagée par le matin et la nuit ; les longueurs se
+     comptent en signes, comme la vérification, jamais en unités de code.
+   - Exclu : le module d'Anthropic, les consignes du matin et de la nuit, les autres formes (le portrait, dans
+     Lun-Ecosystem/lun-anima#139).
 2. - [x] **La nuit n'envoie que les messages de CrOliX** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers dans
    l'issue privée). **En parallèle des tâches 0 et 1.**
    - Tests rouges sur `main` :
@@ -276,9 +281,9 @@ de mesure. Les tâches 1 et 2 ne touchent ni les mêmes fichiers ni les mêmes t
   qui cite un message de CrOliX. Le brouillon attend sa validation.
 - **Une borne de tableau à venir** reviendrait au même défaut : le module d'Anthropic la retire sans le dire à
   l'appelant. Le commentaire de la tâche 1 le rappelle.
-- **Les longueurs de texte**, tant que la tâche 0 n'a pas joué : une phrase du jour, un nom, une observation, un
-  souvenir ou un récit trop long ferait encore tomber le contexte chaud ou le tri d'une journée, si Anthropic ne les
-  impose pas.
+- **Les longueurs de texte** : la tâche 0 a montré qu'Anthropic ne les impose pas. Le contexte chaud et le tri de la
+  nuit sont couverts (comptés en signes) ; le portrait et les autres formes bornées restent exposés. Suivi dans
+  Lun-Ecosystem/lun-anima#139, après le VIP.
 
 ## Questions à CrOliX
 
