@@ -285,7 +285,7 @@ tant qu'elle n'est pas fusionnée.
 Un comportement neuf a ses tests, écrits d'abord par le testeur, rouges sur `main`. Une règle CSS seule n'a pas de
 test unitaire : jsdom ne calcule aucune mise en page. Sa garde est la mesure dans Chrome, avant puis après.
 
-1. - [ ] **Le lien du kit garde sa hauteur** (`dev-front` ; lun-docs). **En parallèle de 2, 3, 4, 6 et 8.**
+1. - [x] **Le lien du kit garde sa hauteur** (`dev-front` ; lun-docs). **En parallèle de 2, 3, 4, 6 et 8.**
    - Fichier : `design/kit/NavLink.svelte`. Dans `.lien`, `flex: none;`, avec un commentaire d'une ligne : un lien
      garde sa hauteur quand le rail déborde, la liste défile.
    - Preuve dans la galerie, Chrome sans interface, à 1440 et à 390 px de large : la pièce « Rail, principal, avec
@@ -297,7 +297,7 @@ test unitaire : jsdom ne calcule aucune mise en page. Sa garde est la mesure dan
    - `standards/design.md:142-147` : les deux lignes du choix 7.
    - `npm run sync`, puis `npm run check` et `npm run sync:check` au vert.
    - Exclu : toute autre règle du standard.
-3. - [ ] **La copie d'Acedia** (`dev-front` ; lun-acedia). **En parallèle de 1.**
+3. - [x] **La copie d'Acedia** (`dev-front` ; lun-acedia). **En parallèle de 1.**
    - Fichier : `views/src/lib/ui/NavLink.svelte`, la même déclaration et le même commentaire, à la main. À la fin, le
      diff avec `design/kit/NavLink.svelte` de la branche de la tâche 1 est vide.
    - Preuve : `npm run demo`, Chrome sans interface à 1366 × 630 puis à 1366 × 536, sur Réception puis sur l'Agenda :
@@ -305,12 +305,12 @@ test unitaire : jsdom ne calcule aucune mise en page. Sa garde est la mesure dan
      défaut là où la colonne déborde ; si elle ne déborde à aucune des deux hauteurs avec la démo, la PR le dit et
      descend jusqu'à ce qu'elle déborde. Sur l'Agenda, relever si le lien courant reste en vue (« Limites »).
    - Exclu : la place du mini-calendrier, le `Rail` d'Acedia, la barre du bas au téléphone.
-4. - [ ] **La copie d'Avaritia** (`dev-front` ; lun-avaritia). **En parallèle de 1.**
+4. - [x] **La copie d'Avaritia** (`dev-front` ; lun-avaritia). **En parallèle de 1.**
    - Fichier : `app/src/lib/ui/NavLink.svelte`, à la main ; diff vide avec le kit de la tâche 1.
    - Preuve : `npm run demo`, à 1366 × 630, la barre inchangée ; puis la barre forcée plus courte par le script : les
      liens à 34 px, la liste défile.
    - Exclu : tout autre fichier.
-5. - [ ] **La copie de Lun'Luxuria** (`dev-front` ; lun-luxuria). **Après 1, relue.**
+5. - [x] **La copie de Lun'Luxuria** (`dev-front` ; lun-luxuria). **Après 1, relue.**
    - `node <lun-docs>/tools/sync-kit.mjs src/lib/ui`, lun-docs sur la branche de la tâche 1 : le diff ne porte que
      `src/lib/ui/NavLink.svelte`. `--check` répond « kit: OK » contre cette branche.
    - Preuve : la page des réglages (`npm run dev`), à 1366 × 630, inchangée. La CI passe au vert après la fusion de la
