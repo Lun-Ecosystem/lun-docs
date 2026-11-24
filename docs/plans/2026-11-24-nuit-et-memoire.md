@@ -197,7 +197,7 @@ lequel il est.
      réponse de 32 ; borne de 240, réponse de 446. **Décision de CrOliX** : le chantier couvre les trois longueurs du
      contexte chaud (un nom de recherche, la phrase du jour, le contexte) ; les autres réponses bornées vont dans une
      issue, après le VIP.
-1. - [ ] **Le contexte chaud tient plus de trois noms** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers dans
+1. - [x] **Le contexte chaud tient plus de trois noms** (`testeur`, puis `dev-core` ; Lun'Anima, fichiers dans
    l'issue privée). **Après la tâche 0 ; en parallèle de la tâche 2.**
    - Test rouge sur `main` : sur Anthropic, une réponse à quatre noms. Le contexte chaud s'écrit ; trois recherches
      partent, les trois premiers noms, dans l'ordre. Le faux serveur d'Anthropic refuse une taille maximale de
@@ -234,7 +234,7 @@ lequel il est.
      observation ». Le tri, ses consignes et ce qu'il range ne changent pas.
    - Exclu : les souvenirs et le récit, qui gardent toutes leurs sources ; Lun'Avaritia ; le matin ; le rejeu sur
      Anthropic, fait par la tâche 3.
-3. - [ ] **La preuve de bout en bout, rejouée** (`testeur` ; Lun'Anima, fichier et commande dans l'issue privée).
+3. - [x] **La preuve de bout en bout, rejouée** (`testeur` ; Lun'Anima, fichier et commande dans l'issue privée).
    **Il peut s'écrire dès le début ; il se joue vert après 1 et 2.**
    - Un test joue la vraie nuit d'un jour, puis le vrai matin du lendemain, sur le module d'Anthropic face à son faux
      serveur. Un faux Acedia rend le bilan de deux mails inventés ; un faux Avaritia garde ce qu'il reçoit et répond
@@ -246,7 +246,7 @@ lequel il est.
      Rouge sur `main`, sur ses deux défauts.
    - La sortie du test va dans la PR comme preuve, avec la suite entière et les barrières au vert.
    - Exclu : un vrai modèle (option B), le NAS (option C).
-4. - [ ] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 3.** Le diff relu contre ce plan et les
+4. - [x] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 3.** Le diff relu contre ce plan et les
    standards. Une PR Lun'Anima en brouillon, qui ferme Lun-Ecosystem/lun-anima#136 et Lun-Ecosystem/lun-anima#133.
    Ce plan coché dans la PR lun-docs du chantier. Après la fusion, le graphe mis à jour.
 
