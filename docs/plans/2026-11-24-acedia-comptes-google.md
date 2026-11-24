@@ -10,7 +10,7 @@
 > **PR qui livre :** à ouvrir (tâche 7).
 >
 > **État : rédigé, contesté et amendé le 24/11** (« Ce que la contestation a changé »), à valider. Choisi par CrOliX
-> le 24/11 au soir. Une décision lui reste (#92, « La décision de CrOliX »).
+> le 24/11 au soir. **CrOliX a tranché #92 le 24/11 : B**, ne compter que la réception (« La décision de CrOliX »).
 >
 > Code relu sur `main` : lun-acedia `c3ab7f1` (avec « trancher sans risque, la suite », fusionné le 24/11 ; la prod
 > tourne en 0.3.0, `864b6b6`), lun-docs `e18f5e4`. Le graphe d'abord, puis chaque ligne citée. Lun'Acedia est
@@ -31,8 +31,7 @@ ligne de #62 dans la [feuille de route](2026-11-07-feuille-de-route-mvp.md) ; RF
 
 1. **Le bilan ne compte plus une proposition dont le mail a quitté la réception** : archivé, en corbeille, en spam
    dans Acedia ; sorti de la réception ou supprimé côté Gmail, vu par la synchro. Revenu en réception, il compte de
-   nouveau. `received` et `done` ne changent pas. Un test par chemin. Tâches 1, 3. (Selon le choix B ; avec A, voir
-   la décision.)
+   nouveau. `received` et `done` ne changent pas. Un test par chemin. Tâches 1, 3. (Choix B, tranché le 24/11.)
 2. **Chaque retour de Google en erreur ramène à Réglages › Compte Google** avec un message clair : un refus, un
    `state` inconnu, rejoué ou périmé, un échange refusé ou impossible, un profil illisible ou sans adresse. La
    redirection est l'une de quatre adresses fixes ; rien de ce que Google envoie n'est recopié à l'écran. Un retour
@@ -247,9 +246,8 @@ archivage reste à fixer. L'annulation remet `pending` (l'état d'avant est pris
 - Reste la puce dans les autres vues (« Hors périmètre »), et des lignes `pending` en base pour des mails archivés,
   sans effet : un changement de compte les efface (`oauth.ts:66-92`).
 
-**Recommandation : B.** C'est le seul choix qui tient sans geste, et il ne touche que le compte. Les tâches sont
-écrites pour B. Avec A : la tâche 1 teste le statut après chaque geste et après son annulation ; la tâche 3 touche
-`afterUserAction` (`pipeline.ts:515-521`) au lieu de `catalog.ts`. Le reste du plan ne dépend pas de ce choix.
+**Tranché par CrOliX le 24/11 : B**, la recommandation. C'est le seul choix qui tient sans geste, et il ne touche que
+le compte. Les tâches sont écrites pour B.
 
 ## Les choix retenus
 
@@ -313,8 +311,7 @@ Chaque tâche de code : le **testeur** écrit d'abord les tests et les voit roug
 **L'ordre.** **1 et 2 partent en parallèle** (serveur, écran : aucun fichier commun). 3 attend 1, 4 attend 2 ; **3 et
 4 partent en parallèle** (aucun fichier commun : `GoogleStatus` est à la tâche 4, et la route du statut ne l'utilise
 pas ; la table des codes et le champ `unreadable` sont leur seul accord). 5 attend 3 et 4,
-6 attend 5, 7 ferme le chantier. **Seuls les tests du bilan attendent la décision de CrOliX** : #84 et #62 peuvent
-partir avant.
+6 attend 5, 7 ferme le chantier.
 
 1. - [ ] **Les tests du serveur, rouges** (`testeur` ; `server/src/contract/digest.test.ts`,
    `server/src/google/oauth.test.ts`, `server/src/google/client.test.ts`, `server/src/demo/demo.test.ts`).
