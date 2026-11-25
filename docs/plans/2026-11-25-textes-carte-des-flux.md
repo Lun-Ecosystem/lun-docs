@@ -380,7 +380,7 @@ par ligne au plus, les mots du dictionnaire.
    - **Fait.** `wc -l` : 150 avant, 150 après. « 1.5 » aux lignes 5, 41, 109, 111, 114, 150 ; « en lot » et « ne
      retient du flux » : 0 ; `boxes` aux lignes 113, 114, 150 ; `values` aux lignes 32, 112, 132, 150 ; « double »
      aux lignes 111 et 150. `npm run check` : OK.
-2. - [ ] **Le standard de l'écriture** (`standards/ecriture.md` nouveau, `standards/design.md`,
+2. - [x] **Le standard de l'écriture** (`standards/ecriture.md` nouveau, `standards/design.md`,
    `tools/standards-map.json`, `README.md`). **En parallèle de 1 et 3.** Écrite pour (a) (forme 9).
    - `ecriture.md`, avec la tête des autres standards (titre, une citation qui dit son champ) :
      - « La voix » : un texte est écrit par le modèle, à la première personne, ou par le code, dans le registre
@@ -408,6 +408,11 @@ par ligne au plus, les mots du dictionnaire.
      - la règle de la voix : `grep -n "jamais « je » ni « tu »"` dans `ecriture.md`.
    - Exclu : la table « par famille » du § 5.5 (question 7) ; les quatre phrases fixes du core et celles des agents
      de poste (du code) ; la règle de fluidité (P2).
+   - **Fait.** `ecriture.md`, 50 lignes. « Les huit règles », lignes 34 à 50 : 8 règles comptées. « Rangé dans » : 0 ;
+     « Rangé en » aux lignes 32 et 39-40. « jamais « je » ni « tu » » aux lignes 13 et 30. `ecriture.md` cité dans
+     `design.md:76` (150 lignes), `README.md:28` et la carte des copies (`lun-ecosysteme`, `lun-design`). Le
+     contre-exemple de la règle 1 dit « La lettre du matin est postée » : le mot « point du matin » ne s'écrit plus.
+     `npm run check` : OK ; la retouche du dictionnaire et les copies sont à la tâche 4.
 3. - [ ] **La porte d'attention dans les notifications** (`standards/notifications.md` seul). **En parallèle de 1
    et 2.**
    - « Principe » : « Le core fixe le rendu » devient « Le core rend tout par sa porte d'attention ». Le satellite
