@@ -36,6 +36,7 @@ const ABSENT: Record<string, string[]> = {
   TextArea: [ACEDIA],
   DecisionCard: [ACEDIA, AVARITIA],
   PermissionCard: [ACEDIA, AVARITIA],
+  DecisionGroup: [ACEDIA, AVARITIA],
 };
 
 const commun = (famille: Famille, ...noms: string[]): Element[] =>
@@ -121,7 +122,7 @@ export const INVENTAIRE: Element[] = [
   ...variante('navigation', ACEDIA, KIT_ACEDIA, 'Rail'),
 
   // The card of the dictionary (a proposal that waits): the kit has its sheet; each project still draws its own.
-  ...commun('cartes', 'DecisionCard', 'PermissionCard'),
+  ...commun('cartes', 'DecisionCard', 'DecisionGroup', 'PermissionCard'),
   propre(
     'cartes',
     ACEDIA,
@@ -150,7 +151,13 @@ export const INVENTAIRE: Element[] = [
     'DraftCard',
     'La carte d’un brouillon de réponse.',
   ),
-  propre('cartes', ANIMA, DANS_LE_CORE, 'File', 'La file « À trancher », avec Pile, Lot, Rangee, Depliee.'),
+  propre(
+    'cartes',
+    ANIMA,
+    DANS_LE_CORE,
+    'File',
+    'La file « À trancher », avec Pile, Lot, Rangee, Depliee ; son groupe « Valider ensemble » sera remplacé par DecisionGroup.',
+  ),
   propre('cartes', ANIMA, DANS_LE_CORE, 'CarteReduite', 'La carte dans la conversation.'),
   propre(
     'cartes',
