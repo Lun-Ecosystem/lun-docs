@@ -1,6 +1,6 @@
 {
-  "lun-ecosysteme": ["vision.md", "standards/essentiel.md", "standards/contrat-satellite.md", "standards/notifications.md", "standards/dictionnaire.md"],
-  "lun-design": ["standards/design.md"],
+  "lun-ecosysteme": ["vision.md", "standards/essentiel.md", "standards/contrat-satellite.md", "standards/notifications.md", "standards/dictionnaire.md", "standards/ecriture.md"],
+  "lun-design": ["standards/design.md", "standards/ecriture.md"],
   "lun-chantier": ["standards/workflow.md", "standards/essentiel.md"],
   "lun-inbox": ["standards/workflow.md"],
   "lun-livrer": ["standards/git.md", "standards/qualite.md"]

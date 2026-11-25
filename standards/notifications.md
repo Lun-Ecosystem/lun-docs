@@ -8,13 +8,26 @@
 
 - **Le satellite fixe le palier**, selon la nature de l'information, par des règles déterministes.
   Un LLM peut étiqueter (« urgent ») ; il ne fixe jamais le palier à lui seul.
-- **Le core fixe le rendu**, selon le palier, la sourdine du bureau et la plage de nuit. Le satellite ne connaît ni
-  l'une ni l'autre. Les modes (assistante, focus, silence) viendront après le MVP, sous forme de rôles éditables qui
-  diront ce qui passe ; jusque-là, il n'y en a pas.
+- **Le core rend tout par sa porte d'attention** (ci-dessous), selon le palier et les entrées de rendu. Le satellite ne
+  connaît ni la porte ni ses entrées. Les modes (assistante, focus, silence) viendront après le MVP, sous forme de rôles
+  éditables qui diront ce qui passe ; jusque-là, il n'y en a pas.
 - **Le core est le seul à notifier** CrOliX sur ses appareils. Un front autonome peut notifier pour
   qui l'utilise sans Lun' ; ce n'est pas le parcours de CrOliX.
 - **Annoncer est le rôle de Natsume** : par la voix au bureau, par une notification sur le téléphone.
   Le desktop n'a pas de notification système. Les compteurs sont communs à tous les supports.
+
+## La porte d'attention
+
+Un seul endroit du core, en code, sans modèle. **Tout ce qui peut parvenir à CrOliX y passe** : rien ne se dit, ne se
+notifie ni ne s'écrit au Journal par un autre chemin.
+
+- **Ce qu'elle reçoit** : les événements des postes et du core (contrôle compris), les cartes des postes avec leur
+  palier, les échéances lues par le core (agenda, tâches, bibliothèque).
+- **Ses entrées de rendu** : la sourdine, la pause, un appel en cours au bureau, la plage de nuit, la présence.
+- **Ses cinq sorties** : dire (à voix haute au bureau), notifier (sur le téléphone), attendre le bon moment, la lettre
+  du matin, le Journal. Elle choisit selon le palier (tableau ci-dessous) et ses entrées.
+- **Chaque choix est tracé** : ce qui est arrivé, la sortie choisie et l'entrée qui l'a décidée.
+- **Attendre** partage un budget avec la parole spontanée : les deux se comptent ensemble.
 
 ## Les paliers
 
@@ -41,17 +54,20 @@ Un client qui ne connaît pas `low` ou `log` les traite comme `info` : rien n'in
 | Une décision attendue sur une demande de CrOliX | carte à valider issue d'une délégation | P1 |
 | Un avis de l'IA, sans règle | mail jugé urgent par le tri | P1, jamais P0 |
 | Ce qui est dû dans la journée | tâche à échéance aujourd'hui | P2, en tête de la lettre du matin |
-| Ce qui attend un geste, sans heure | tri à valider, question de la bibliothèque, proposition de la nuit | P2 |
+| Ce qui attend un geste, sans heure | proposition de tri, carte ou événement (P1 si le tri la juge urgente), question de la bibliothèque, proposition de la nuit | P2 |
 | Ce qui s'est fait seul | mail rangé par une règle, fiche créée, veille tech | P3 |
 | Un état technique | boîte ou agenda mis à jour, clé rétablie, prix inconnu | P4 |
 
-Un nouveau type d'événement se classe par sa **nature** dans ce tableau, jamais par son émetteur.
+Un nouveau type d'événement se classe par sa **nature** dans ce tableau, jamais par son émetteur. Une carte porte son
+palier dans `importance` ([contrat](contrat-satellite.md)) ; sans `importance`, elle vaut P1.
 
 ## Rendu
 
 - **Regroupement** : plusieurs événements d'un même type et d'un même palier, à moins de quelques
-  minutes d'écart, donnent une seule notification (« 5 tris à valider »).
+  minutes d'écart, donnent une seule notification (« 5 propositions à trancher »).
 - **Pas de chevauchement** : une seule file dans le core ; deux notifications ou deux prises de parole
   ne se recouvrent jamais.
+- **La plage de nuit** (23 h à 7 h, réglable), une urgence part en notification sans son, quelle que soit l'entrée qui
+  la porte.
 - **Une seule fois** : un événement déjà notifié ne l'est pas de nouveau après un redémarrage.
 - **La lettre du matin** reprend les P3 de la nuit et rappelle les P2 encore en attente.

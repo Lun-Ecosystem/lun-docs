@@ -25,6 +25,7 @@ aucun code applicatif.
 | Local et prod | [`standards/environnements.md`](standards/environnements.md) |
 | Paliers et rendu des notifications | [`standards/notifications.md`](standards/notifications.md) |
 | Les mots de l'écosystème | [`standards/dictionnaire.md`](standards/dictionnaire.md) |
+| La voix et l'écriture des textes | [`standards/ecriture.md`](standards/ecriture.md) |
 | Structure d'un projet | [`standards/structure-projet.md`](standards/structure-projet.md) |
 | Qualité, sécurité, stack, design | [`standards/`](standards/) |
 | Variables de design de référence (copiées dans chaque dépôt) | [`design/tokens.css`](design/tokens.css) |
