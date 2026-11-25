@@ -60,10 +60,10 @@ de la [carte des flux](../specs/2026-11-25-carte-des-flux-design.md) : § 5.2, �
 12. **Le standard des notifications dit ce que fait le code** : les deux cas où le code l'emporte, la plage de nuit,
     la pause et « attendre ». Dans la PR lun-docs.
 
-| Dépôt | Branche | Issue | Niveau |
-|---|---|---|---|
-| `lun-anima` : 11 tâches (0 à 10), une PR | dans l'issue privée | Lun-Ecosystem/lun-anima#152 | `critique` |
-| `lun-docs` : ce plan, le standard, la feuille de route | `docs/plan-porte-attention` | la même | `standard` |
+| Dépôt                                                  | Branche                     | Issue                       | Niveau     |
+| ------------------------------------------------------ | --------------------------- | --------------------------- | ---------- |
+| `lun-anima` : 11 tâches (0 à 10), une PR               | dans l'issue privée         | Lun-Ecosystem/lun-anima#152 | `critique` |
+| `lun-docs` : ce plan, le standard, la feuille de route | `docs/plan-porte-attention` | la même                     | `standard` |
 
 **Le niveau.** `critique`, celui de l'issue. Le core tourne en continu sur le NAS : une régression empêcherait une
 urgence de partir, ou ferait sonner le téléphone pendant la plage de nuit. Chaque comportement changé a son test,
@@ -152,20 +152,20 @@ horloge, ni réseau.
 
 Lu de haut en bas : la première ligne qui s'applique décide.
 
-| Palier | Entrées | Voix | Notification | Autres sorties | Entrée décisive |
-|---|---|---|---|---|---|
-| P4 | toutes | rien | rien | rien | le palier |
-| P1, P2, P3, sauf une alerte de santé du core | pause | rien | rien | Journal | la pause |
-| P0 | plage de nuit | écrite au fil | sans son | Journal | la plage de nuit |
-| P0 | au bureau, en appel | écrite au fil | avec son | Journal | l'appel |
-| P0 | au bureau, « Dit à voix haute : P0 » coupé | écrite au fil | avec son | Journal | le réglage P0 |
-| P0 | au bureau, arrivée ancienne | écrite au fil | rien | Journal | l'ancienneté |
-| P0 | au bureau, sourdine ou non | dite | rien | Journal | la présence |
-| P0 | absent | rien | avec son | Journal | l'absence |
-| P1 | au bureau, sourdine ou non | rien | rien | Journal | la présence |
-| P1 | absent | rien | sans son | Journal | le palier |
-| P2 | toutes | rien | rien | attendre, Journal | le palier |
-| P3 | toutes | rien | rien | lettre, Journal | le palier |
+| Palier                                       | Entrées                                    | Voix          | Notification | Autres sorties    | Entrée décisive  |
+| -------------------------------------------- | ------------------------------------------ | ------------- | ------------ | ----------------- | ---------------- |
+| P4                                           | toutes                                     | rien          | rien         | rien              | le palier        |
+| P1, P2, P3, sauf une alerte de santé du core | pause                                      | rien          | rien         | Journal           | la pause         |
+| P0                                           | plage de nuit                              | écrite au fil | sans son     | Journal           | la plage de nuit |
+| P0                                           | au bureau, en appel                        | écrite au fil | avec son     | Journal           | l'appel          |
+| P0                                           | au bureau, « Dit à voix haute : P0 » coupé | écrite au fil | avec son     | Journal           | le réglage P0    |
+| P0                                           | au bureau, arrivée ancienne                | écrite au fil | rien         | Journal           | l'ancienneté     |
+| P0                                           | au bureau, sourdine ou non                 | dite          | rien         | Journal           | la présence      |
+| P0                                           | absent                                     | rien          | avec son     | Journal           | l'absence        |
+| P1                                           | au bureau, sourdine ou non                 | rien          | rien         | Journal           | la présence      |
+| P1                                           | absent                                     | rien          | sans son     | Journal           | le palier        |
+| P2                                           | toutes                                     | rien          | rien         | attendre, Journal | le palier        |
+| P3                                           | toutes                                     | rien          | rien         | lettre, Journal   | le palier        |
 
 **Une alerte de santé du core** : un crash, une sauvegarde ratée, une clé refusée ou un crédit épuisé, une clé qui
 expire, un poste injoignable, un plafond atteint. En pause, elle suit le tableau comme hors pause. **Il n'y a qu'une
@@ -270,20 +270,20 @@ les entrées de rendu, et qui écrit au Journal.
 
 Toutes passent au chantier 7, qui récrit le Journal. Aucune ne notifie ni ne parle.
 
-| Écriture | Pourquoi elle reste directe |
-|---|---|
-| Un changement de pause | Un état du core, souvent un geste de CrOliX ; rien n'arrive de dehors |
-| Une routine passée ou sautée | Le travail de Natsume, pour « Ce que j'ai fait » |
-| Un geste « plus tard » | Le geste de CrOliX lui-même |
-| Une délégation, et les cartes qu'elle rend | Le travail de Natsume, avec son coût |
-| Un réglage | Le geste de CrOliX lui-même |
-| Une liaison, une déliaison | Le geste de CrOliX lui-même |
-| Un geste ignoré | La trace d'un geste de CrOliX, sans un mot de son message |
-| Un geste sur une carte, avec ou sans entrée | Le geste de CrOliX ; l'entrée de la carte se crée avec lui au besoin |
-| Une carte tranchée dans le front de son poste | Une étape de la carte, pas une arrivée |
-| Une urgence vue | Une étape de l'urgence, son geste à lui |
-| La reprise de l'historique | Une reprise unique d'anciennes lignes, à l'installation |
-| La parole spontanée | Pas une arrivée : elle vient de Natsume ; elle passe à la porte au chantier 8 (P2) |
+| Écriture                                      | Pourquoi elle reste directe                                                        |
+| --------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Un changement de pause                        | Un état du core, souvent un geste de CrOliX ; rien n'arrive de dehors              |
+| Une routine passée ou sautée                  | Le travail de Natsume, pour « Ce que j'ai fait »                                   |
+| Un geste « plus tard »                        | Le geste de CrOliX lui-même                                                        |
+| Une délégation, et les cartes qu'elle rend    | Le travail de Natsume, avec son coût                                               |
+| Un réglage                                    | Le geste de CrOliX lui-même                                                        |
+| Une liaison, une déliaison                    | Le geste de CrOliX lui-même                                                        |
+| Un geste ignoré                               | La trace d'un geste de CrOliX, sans un mot de son message                          |
+| Un geste sur une carte, avec ou sans entrée   | Le geste de CrOliX ; l'entrée de la carte se crée avec lui au besoin               |
+| Une carte tranchée dans le front de son poste | Une étape de la carte, pas une arrivée                                             |
+| Une urgence vue                               | Une étape de l'urgence, son geste à lui                                            |
+| La reprise de l'historique                    | Une reprise unique d'anciennes lignes, à l'installation                            |
+| La parole spontanée                           | Pas une arrivée : elle vient de Natsume ; elle passe à la porte au chantier 8 (P2) |
 
 **P4 reste hors du Journal**, comme aujourd'hui, sauf pour une carte (choix de la session, gardé).
 
@@ -358,7 +358,7 @@ noms et le détail des tests sont dans l'issue privée.
    - Code : le signal d'une urgence neuve porte la voix décidée ; l'annonce l'exécute, sans plus rien relire.
    - Exclu : la parole spontanée, le rituel, la file, le texte des deux phrases.
 5. - [ ] **La file des notifications par la porte** (`testeur`, puis `dev-core`). **Après la tâche 2. Voie B, en
-   parallèle des voies A et D.**
+         parallèle des voies A et D.**
    - Tests rouges sur `main` : une urgence pendant la plage de nuit, au bureau : part sans son ; en pause, un
      `normal` ne part pas, une urgence et une alerte de santé partent ; chaque ligne terminée laisse sa trace d'envoi
      avec sa propre raison ; **le repli** : relevé illisible, une urgence part avec son, ou sans son si la plage de
@@ -368,7 +368,7 @@ noms et le détail des tests sont dans l'issue privée.
      le son de la décision, et écrit sa trace d'envoi. Ses contrôles de validité ne bougent pas.
    - Exclu : le regroupement par type, les textes des notifications, le poste injoignable.
 6. - [ ] **Les cartes lues avec leur palier** (`testeur`, puis `dev-core`). **6a en parallèle de la tâche 1 ; 6b
-   après la tâche 5, voie B.**
+         après la tâche 5, voie B.**
    - **6a, la lecture.** Tests rouges sur `main` : une carte lue, puis relue là où le core la garde, porte
      `importance` et `bulk` ; une valeur inconnue ou mal formée de l'un d'eux est absente, sans faire échouer la
      lecture des autres cartes. Garde : une carte d'un poste 1.4, sans ces champs, se garde comme aujourd'hui. Code :
@@ -398,10 +398,10 @@ noms et le détail des tests sont dans l'issue privée.
    - Le test du § « Le rejeu local », sur le banc de la tâche 0. Sa sortie, lisible, va dans la PR.
    - Exclu : tout code de production.
 10. - [ ] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 0 à 9.** Le diff relu contre ce plan
-    et les standards ; le diff de la matrice de la tâche 0 relu case par case. Une PR Lun'Anima en brouillon, qui
-    ferme Lun-Ecosystem/lun-anima#152, avec les tests rouges devenus verts, la suite entière, les barrières et la
-    sortie du rejeu. Ce plan coché, le standard et la feuille de route dans la PR lun-docs du chantier. Après la
-    fusion, le graphe mis à jour.
+          et les standards ; le diff de la matrice de la tâche 0 relu case par case. Une PR Lun'Anima en brouillon, qui
+          ferme Lun-Ecosystem/lun-anima#152, avec les tests rouges devenus verts, la suite entière, les barrières et la
+          sortie du rejeu. Ce plan coché, le standard et la feuille de route dans la PR lun-docs du chantier. Après la
+          fusion, le graphe mis à jour.
 
 **L'ordre et le parallèle.**
 
@@ -488,6 +488,10 @@ n'est jamais dite ; **« groupable »** veut dire la validation groupée, que le
 
 ## Limites
 
+- **En pause, une P3 n'ira pas à la lettre** quand le chantier 6 la branchera : la pause retient tout ce qui n'est ni
+  urgence ni alerte de santé.
+- **Une carte en attente plus longtemps que la purge du registre** reçoit une seconde trace d'arrivée. C'est sans
+  effet sur ce qui part.
 - **« Attendre » et « la lettre » sont décidés et tracés, sans lecteur.** Rien ne parle plus tard d'un P2 ; la lettre
   du matin ne lit pas les P3. Les chantiers 8 et 6 les brancheront.
 - **La décision de la file est prise au moment de l'envoi**, pas à l'arrivée : c'est le comportement d'aujourd'hui.
