@@ -1,6 +1,8 @@
 # Acedia au contrat 1.5 : propositions en cartes, synthèse masquée, bilan par boîte. Plan
 
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
+>
+> **PR :** [lun-acedia#114](https://github.com/Lun-Ecosystem/lun-acedia/pull/114) (brouillon ; ni release ni déploiement avant que le core lise le contrat 1.5).
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
 > **Issue :** Lun-Ecosystem/lun-acedia#107, `niveau:critique`, validé par CrOliX. Chantier de la carte des flux,
@@ -329,7 +331,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
 - **10** attend 9. **11 et 12** attendent 10, et partent ensemble (11 : `views/` ; 12 : `demo/`).
 - **13** attend tout. **14** ferme.
 
-1. - [ ] **La voix neutre** (`testeur`, puis `dev-core` ; `contract/routes.ts:39`, `pina/agent.ts:51-61`,
+1. - [x] **La voix neutre** (`testeur`, puis `dev-core` ; `contract/routes.ts:39`, `pina/agent.ts:51-61`,
    `pina/wording.ts:321`). Parallèle.
    - **Tests d'abord** : un test lit les neuf textes (`PAUSED`, `CAP`, `TOO_LONG`, `EMPTY`, les quatre de `FAILED`,
      la raison `not-mine`) et refuse `je`, `j'`, `me`, `m'`, `ma`, `mon`, `mes`, `moi`, `tu`, `te`, `t'`, `toi`,
@@ -350,7 +352,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Exclu** : les consignes au modèle (`REFUSED`, `LATE`…, `pina/prompt.ts`) ; les écrans ; Avaritia.
    - **Preuve** : le test de la voix rouge sur `main`, vert après.
 
-2. - [ ] **Le masque et le filtre de copie** (`testeur`, puis `dev-core` ; nouveau `triage/mask.ts` et son test).
+2. - [x] **Le masque et le filtre de copie** (`testeur`, puis `dev-core` ; nouveau `triage/mask.ts` et son test).
    Parallèle.
    - **Tests d'abord**, un corpus fixe et un générateur à graine fixe (pas de dépendance nouvelle : une boucle et un
      petit générateur pseudo-aléatoire dans le test). Le corpus n'a la forme d'aucune clé de fournisseur réel, pour
@@ -371,7 +373,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Exclu** : tout appel du masque ailleurs (tâches 4 à 6, 9, 10) ; Avaritia.
    - **Preuve** : le test vert ; aucun faux positif du corpus « ce qui reste ».
 
-3. - [ ] **Les tests de fuite, en `it.fails`** (`testeur` seul ; nouveau `contract/leak.test.ts`). Parallèle.
+3. - [x] **Les tests de fuite, en `it.fails`** (`testeur` seul ; nouveau `contract/leak.test.ts`). Parallèle.
    - **L'outillage**, vert dès cette tâche : le mail canari dans le faux Gmail (`testing/fake-gmail.ts`,
      `testing/harness.ts`), un objet « Votre code 482917 », un corps qui porte les secrets du corpus de la tâche 2 et
      une phrase unique (« Le canari bleu chante sous la lune de novembre près du vieux moulin ») ; un classeur
@@ -394,7 +396,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Preuve** : `npm test` vert ; chaque partie échoue sur `main` pour la bonne raison (le snippet dans
      l'événement, l'objet en clair, l'absence de carte), ce que `it.fails` constate.
 
-4. - [ ] **La synthèse dans l'appel de tri** (`testeur`, puis `dev-core` ; `triage/classifier.ts`,
+4. - [x] **La synthèse dans l'appel de tri** (`testeur`, puis `dev-core` ; `triage/classifier.ts`,
    `triage/llm-classifier.ts`, `triage/proposals.ts`, `triage/pipeline.ts:286-294`, `db.ts`, `demo/demo.ts`).
    Après 2 et 3.
    - **Tests d'abord** (`triage/llm-classifier.test.ts`, `triage/pipeline.test.ts`) : le schéma envoyé porte
@@ -413,7 +415,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Exclu** : `withProposal` et `ProposalView` (tâche 6) ; les sorties ; la synthèse à la demande.
    - **Preuve** : tests et typage verts ; une proposition de la démo a sa synthèse masquée en base.
 
-5. - [ ] **Un seul signal, des événements sans fuite** (`testeur`, puis `dev-core` ; `triage/pipeline.ts`,
+5. - [x] **Un seul signal, des événements sans fuite** (`testeur`, puis `dev-core` ; `triage/pipeline.ts`,
    `contract/events.ts`, `db.ts`). Après 4.
    - **Tests d'abord** (`triage/pipeline.test.ts`, `contract/events.test.ts`) : une proposition qui attend n'émet
      aucun événement à elle seule, quelle que soit son importance ; une passe qui en crée émet un seul `mail.changed`,
@@ -431,7 +433,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Exclu** : la synchro ; l'écran (il suit déjà `mail.*`).
    - **Preuve** : tests et typage verts ; la partie « événements » de la tâche 3 en `it`.
 
-6. - [ ] **Les propositions dans `/cards`** (`testeur`, puis `dev-core` ; `contract/routes.ts:41-58`, `:193-201`,
+6. - [x] **Les propositions dans `/cards`** (`testeur`, puis `dev-core` ; `contract/routes.ts:41-58`, `:193-201`,
    `triage/proposals.ts`, `triage/pipeline.ts:524-527`, `types.ts`, `views/src/lib/types.ts` par
    `npm run sync-types`). Après 5.
    - **Tests d'abord** (`contract/cards.test.ts`) : `/cards` répond sans agent (le test fige l'existant) ; chaque
@@ -448,7 +450,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Exclu** : le geste (tâche 7) ; l'écran (tâche 8) ; le Journal.
    - **Preuve** : tests et typage verts ; la partie « cartes » de la tâche 3 en `it`.
 
-7. - [ ] **Le geste sur une proposition** (`testeur`, puis `dev-core` ; `contract/routes.ts:31`, `:203-237`). Après 6.
+7. - [x] **Le geste sur une proposition** (`testeur`, puis `dev-core` ; `contract/routes.ts:31`, `:203-237`). Après 6.
    - **Tests d'abord** (`contract/cards.test.ts`) : `accept` sans corps range comme `mail.validate` (statut
      `accepted`, une ligne au Journal, la carte rendue `done`) ; `accept { values }` égal à la proposition appelle
      `validate` (statut `accepted`) ; `accept { values: { box: ['b2'] } }` range comme `mail.correct` (statut
@@ -464,7 +466,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Exclu** : `rememberSender` (pas dans le contrat) ; la validation groupée (côté core) ; l'écran.
    - **Preuve** : tests et typage verts ; la partie « gestes » de la tâche 3 en `it`.
 
-8. - [ ] **L'écran lit `bulk`** (`testeur`, puis `dev-front` ; `views/src/lib/mail/Pending.svelte`,
+8. - [x] **L'écran lit `bulk`** (`testeur`, puis `dev-front` ; `views/src/lib/mail/Pending.svelte`,
    `views/src/testing/fake-client.ts`, `app/src/catalogue/Catalogue.svelte`). Après 6, en parallèle de 7 et 9.
    - **Tests d'abord** (`views/src/lib/mail/Pending.test.ts`) : « Tout valider » ne valide que les mails dont
      `proposal.bulk` est vrai, même quand leur confiance dit autre chose ; désactivé sans aucun `bulk` ; le libellé
@@ -475,7 +477,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
      plafond (tâche 11).
    - **Preuve** : tests et typage verts ; Chrome à la tâche 13.
 
-9. - [ ] **Le bilan filtré par boîte** (`testeur`, puis `dev-core` ; `contract/catalog.ts:418-482`,
+9. - [x] **Le bilan filtré par boîte** (`testeur`, puis `dev-core` ; `contract/catalog.ts:418-482`,
    `triage/pipeline.ts:495-501`). Après 6, en parallèle de 7 et 8.
    - **Tests d'abord** (`contract/digest.test.ts`) : sans `boxes`, la réponse est celle de `main`, textes masqués
      (instantané) ; avec `boxes`, un mail par cas : rangé par une règle (gardé), proposition validée (gardé),
@@ -491,7 +493,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Exclu** : la synthèse à la demande (tâche 10) ; la mesure par boîte (D3) ; les règles à plusieurs valeurs (#106).
    - **Preuve** : tests et typage verts ; la partie « bilan » de la tâche 3 en `it`.
 
-10. - [ ] **La synthèse à la demande, B1** (`testeur`, puis `dev-core` ; `triage/classifier.ts`,
+10. - [x] **La synthèse à la demande, B1** (`testeur`, puis `dev-core` ; `triage/classifier.ts`,
     `triage/llm-classifier.ts`, `contract/catalog.ts`, `contract/costs.ts`, `llm/models.ts:137`, `triage/routes.ts`,
     `app.ts`, `main.ts`). Après 9.
     - **Tests d'abord** (`contract/digest.test.ts`) : avec `boxes`, un mail de règle sans synthèse en reçoit une,
@@ -511,7 +513,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
     - **Preuve** : tests et typage verts ; les parties « bilan à la demande » et « tirage » de la tâche 3 en `it` :
       plus aucun `it.fails` dans `leak.test.ts`.
 
-11. - [ ] **Le plafond des synthèses à l'écran** (`testeur`, puis `dev-front` ;
+11. - [x] **Le plafond des synthèses à l'écran** (`testeur`, puis `dev-front` ;
     `views/src/lib/settings/Threshold.svelte`, son test, `views/src/lib/client.ts`). Après 10, en parallèle de 12.
     - **Tests d'abord** : un champ « Plafond du jour des synthèses » (en dollars) dans Réglages › Tri lit
       `digestDailyCapUsd` par `getSettings` et l'écrit par `putSettings` ; une valeur hors de 0 à 5 montre l'erreur
@@ -521,7 +523,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
     - **Exclu** : le kit ; les seuils ; le serveur.
     - **Preuve** : tests et typage verts ; Chrome à la tâche 13.
 
-12. - [ ] **La démo suit** (`testeur`, puis `dev-core` ; `demo/demo.ts`, `demo/demo.test.ts`). Après 10, en parallèle
+12. - [x] **La démo suit** (`testeur`, puis `dev-core` ; `demo/demo.ts`, `demo/demo.test.ts`). Après 10, en parallèle
     de 11.
     - **Tests d'abord** (`demo/demo.test.ts`) : le classeur de la démo passe par `createApp`, par la dépendance
       `classifier` (la démo ne lit pas de `.env` et n'a pas de `llmEnv`, `demo/demo.ts:4`) ; il a sa `summarize` ;
@@ -530,7 +532,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
     - **Exclu** : `main.ts` (la route n'existe pas hors de la démo) ; le faux Gmail lui-même.
     - **Preuve** : tests et typage verts.
 
-13. - [ ] **Le contrat 1.5 et la preuve** (`dev-core` pour `identity.ts`, puis `dev-front` pour Chrome). Après tout.
+13. - [x] **Le contrat 1.5 et la preuve** (`dev-core` pour `identity.ts`, puis `dev-front` pour Chrome). Après tout.
     - `CONTRACT = '1.5'` (`identity.ts:2`) ; `contract/health.test.ts` le dit. Le passage se fait en dernier : un core
       qui lit 1.5 passe `boxes` et lit les propositions dans `/cards`.
     - **La démo**, dans le worktree d'Acedia : `npm run build`, puis `npm run demo` (`README.md:42-50`). Base en
