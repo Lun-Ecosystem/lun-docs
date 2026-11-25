@@ -46,7 +46,7 @@ Ceux de l'issue, recopiés sans changement. Chaque tâche dit lesquels elle tien
 5. **A5.** La carte porte `bulk: true` quand la confiance atteint le seuil de validation groupée et le seuil de tri.
    C'est le serveur qui le calcule. Jamais avec `sends` ni `options`. Tâches 6, 8.
 6. **A6.** La carte porte `fields` (la boîte, les étiquettes), avec la valeur proposée et les choix. `accept
-   { values }` range selon ces valeurs. Les erreurs `400` du contrat sont respectées. Tâches 6, 7.
+{ values }` range selon ces valeurs. Les erreurs `400` du contrat sont respectées. Tâches 6, 7.
 7. **A7.** Le tri écrit une synthèse de deux lignes au plus, masquée des secrets, servie dans `lines`. Le corps d'un
    mail ne quitte jamais le poste. Des tests de fuite le prouvent : aucun secret et aucun extrait du corps dans
    `/cards`, dans le bilan ni dans les événements. Tâches 2 à 7, 9, 10.
@@ -59,10 +59,10 @@ Ceux de l'issue, recopiés sans changement. Chaque tâche dit lesquels elle tien
 11. **Barrières vertes, et l'écran des propositions marche toujours**, vérifié dans Chrome sur la démo.
     Tâches 8, 12, 13.
 
-| Dépôt | Branche | Issue | Niveau |
-|---|---|---|---|
-| `lun-acedia` : le serveur, l'écran, la démo | `feat/acedia-contrat-15` | lun-acedia#107 | `critique` |
-| `lun-docs` : ce plan, ses coches | `docs/plan-acedia-contrat-15` | lun-acedia#107 | `trivial` |
+| Dépôt                                       | Branche                       | Issue          | Niveau     |
+| ------------------------------------------- | ----------------------------- | -------------- | ---------- |
+| `lun-acedia` : le serveur, l'écran, la démo | `feat/acedia-contrat-15`      | lun-acedia#107 | `critique` |
+| `lun-docs` : ce plan, ses coches            | `docs/plan-acedia-contrat-15` | lun-acedia#107 | `trivial`  |
 
 **Le niveau.** `critique` : le contrat change de version, et le contenu des mails sort du poste par la synthèse. Le
 standard demande les cas limites testés et une preuve de bout en bout décrite dans la PR (`workflow.md:39`). Les tests
@@ -166,10 +166,10 @@ D9 le dit (« dans son appel existant, pas d'appel de plus »). Le chiffre le co
 un appel de tri coûte environ 1 800 jetons en entrée (consigne, boîtes, exemples, corps de 4 000 signes) et 80 en
 sortie, soit 0,00022 $ avec Haiku 5.5.
 
-| Façon | Jetons en plus par mail | Coût en plus par mail | Pour 100 propositions par jour |
-|---|---|---|---|
-| **Un champ de plus dans l'appel de tri (retenu)** | ~80 en entrée, ~80 en sortie | ~0,00005 $ | ~0,005 $ par jour |
-| Un second appel, le corps renvoyé | ~1 600 en entrée, ~80 en sortie | ~0,0002 $ | ~0,02 $ par jour |
+| Façon                                             | Jetons en plus par mail         | Coût en plus par mail | Pour 100 propositions par jour |
+| ------------------------------------------------- | ------------------------------- | --------------------- | ------------------------------ |
+| **Un champ de plus dans l'appel de tri (retenu)** | ~80 en entrée, ~80 en sortie    | ~0,00005 $            | ~0,005 $ par jour              |
+| Un second appel, le corps renvoyé                 | ~1 600 en entrée, ~80 en sortie | ~0,0002 $             | ~0,02 $ par jour               |
 
 - Le champ `synthesis` : un tableau de chaînes, deux au plus, 140 signes chacune au plus, coupé dans le code (pas de
   `maxItems` dans le schéma : tous les fournisseurs ne le prennent pas en mode strict). Absent ou illisible, il vaut
@@ -239,18 +239,18 @@ U+202F) comptent comme des espaces partout. Les motifs, dans cet ordre :
 
 ### 5. La carte d'une proposition
 
-| Champ | Valeur |
-|---|---|
-| `id` | `mail:<id du mail>`, distinct des cartes de l'agent (des nombres) |
-| `action`, `effect` | `mail.validate`, `write` |
-| `kind` | « Proposition de tri » |
-| `title` | l'objet du mail, masqué |
-| `lines` | la synthèse, masquée, deux lignes au plus ; `[]` pour une proposition d'avant ce chantier |
-| `reason` | la raison du tri, masquée |
-| `importance` | `normal` si le tri la juge urgente (`proposals.importance = 'urgent'`), sinon `low` |
-| `bulk` | `true` selon `isBulk`, sinon absent ; jamais `sends`, jamais `options` |
-| `fields` | `box` (« Boîte », un choix) et `tags` (« Étiquettes », `multiple`), détaillés sous le tableau |
-| `status`, `at`, `link` | `pending` ; `proposals.created_at` ; `mailLink(id)` |
+| Champ                  | Valeur                                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| `id`                   | `mail:<id du mail>`, distinct des cartes de l'agent (des nombres)                             |
+| `action`, `effect`     | `mail.validate`, `write`                                                                      |
+| `kind`                 | « Proposition de tri »                                                                        |
+| `title`                | l'objet du mail, masqué                                                                       |
+| `lines`                | la synthèse, masquée, deux lignes au plus ; `[]` pour une proposition d'avant ce chantier     |
+| `reason`               | la raison du tri, masquée                                                                     |
+| `importance`           | `normal` si le tri la juge urgente (`proposals.importance = 'urgent'`), sinon `low`           |
+| `bulk`                 | `true` selon `isBulk`, sinon absent ; jamais `sends`, jamais `options`                        |
+| `fields`               | `box` (« Boîte », un choix) et `tags` (« Étiquettes », `multiple`), détaillés sous le tableau |
+| `status`, `at`, `link` | `pending` ; `proposals.created_at` ; `mailLink(id)`                                           |
 
 - **`fields`** : `box` a pour choix les boîtes, `trash` « Corbeille » et `spam` « Spam », et pour `value` la boîte
   proposée ; `tags` a pour choix les étiquettes, et pour `value` les étiquettes proposées. **Une proposition sans
@@ -332,7 +332,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
 - **13** attend tout. **14** ferme.
 
 1. - [x] **La voix neutre** (`testeur`, puis `dev-core` ; `contract/routes.ts:39`, `pina/agent.ts:51-61`,
-   `pina/wording.ts:321`). Parallèle.
+         `pina/wording.ts:321`). Parallèle.
    - **Tests d'abord** : un test lit les neuf textes (`PAUSED`, `CAP`, `TOO_LONG`, `EMPTY`, les quatre de `FAILED`,
      la raison `not-mine`) et refuse `je`, `j'`, `me`, `m'`, `ma`, `mon`, `mes`, `moi`, `tu`, `te`, `t'`, `toi`,
      `ton`, `ta`, `tes`, et les impératifs `dis-moi`, `réessaie`, `choisis`, `reformule` (mots entiers, apostrophe
@@ -353,7 +353,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Preuve** : le test de la voix rouge sur `main`, vert après.
 
 2. - [x] **Le masque et le filtre de copie** (`testeur`, puis `dev-core` ; nouveau `triage/mask.ts` et son test).
-   Parallèle.
+         Parallèle.
    - **Tests d'abord**, un corpus fixe et un générateur à graine fixe (pas de dépendance nouvelle : une boucle et un
      petit générateur pseudo-aléatoire dans le test). Le corpus n'a la forme d'aucune clé de fournisseur réel, pour
      ne pas déclencher la protection des secrets de GitHub : des jetons `jeton-faux-…`, jamais `sk-`, `ghp_`, `AKIA`.
@@ -397,8 +397,8 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
      l'événement, l'objet en clair, l'absence de carte), ce que `it.fails` constate.
 
 4. - [x] **La synthèse dans l'appel de tri** (`testeur`, puis `dev-core` ; `triage/classifier.ts`,
-   `triage/llm-classifier.ts`, `triage/proposals.ts`, `triage/pipeline.ts:286-294`, `db.ts`, `demo/demo.ts`).
-   Après 2 et 3.
+         `triage/llm-classifier.ts`, `triage/proposals.ts`, `triage/pipeline.ts:286-294`, `db.ts`, `demo/demo.ts`).
+         Après 2 et 3.
    - **Tests d'abord** (`triage/llm-classifier.test.ts`, `triage/pipeline.test.ts`) : le schéma envoyé porte
      `synthesis`, requis ; la consigne la demande ; trois lignes rendues en gardent deux ; une ligne de 300 signes est
      coupée à 140 ; une `synthesis` absente ou d'un autre type vaut `[]` sans faire échouer le tri ; une réponse
@@ -416,7 +416,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Preuve** : tests et typage verts ; une proposition de la démo a sa synthèse masquée en base.
 
 5. - [x] **Un seul signal, des événements sans fuite** (`testeur`, puis `dev-core` ; `triage/pipeline.ts`,
-   `contract/events.ts`, `db.ts`). Après 4.
+         `contract/events.ts`, `db.ts`). Après 4.
    - **Tests d'abord** (`triage/pipeline.test.ts`, `contract/events.test.ts`) : une proposition qui attend n'émet
      aucun événement à elle seule, quelle que soit son importance ; une passe qui en crée émet un seul `mail.changed`,
      `log`, « Boîte mise à jour », `data: { added: [], changed: [ids], removed: [] }`, sans `lines` ; une passe sans
@@ -434,8 +434,8 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Preuve** : tests et typage verts ; la partie « événements » de la tâche 3 en `it`.
 
 6. - [x] **Les propositions dans `/cards`** (`testeur`, puis `dev-core` ; `contract/routes.ts:41-58`, `:193-201`,
-   `triage/proposals.ts`, `triage/pipeline.ts:524-527`, `types.ts`, `views/src/lib/types.ts` par
-   `npm run sync-types`). Après 5.
+         `triage/proposals.ts`, `triage/pipeline.ts:524-527`, `types.ts`, `views/src/lib/types.ts` par
+         `npm run sync-types`). Après 5.
    - **Tests d'abord** (`contract/cards.test.ts`) : `/cards` répond sans agent (le test fige l'existant) ; chaque
      proposition de l'À valider sort en carte, avec le tableau du choix 5 ; un mail sorti de la boîte de réception
      n'y est plus ; une proposition `auto` ou `refused` non plus ; `importance` `normal` pour une urgente, `low`
@@ -467,7 +467,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Preuve** : tests et typage verts ; la partie « gestes » de la tâche 3 en `it`.
 
 8. - [x] **L'écran lit `bulk`** (`testeur`, puis `dev-front` ; `views/src/lib/mail/Pending.svelte`,
-   `views/src/testing/fake-client.ts`, `app/src/catalogue/Catalogue.svelte`). Après 6, en parallèle de 7 et 9.
+         `views/src/testing/fake-client.ts`, `app/src/catalogue/Catalogue.svelte`). Après 6, en parallèle de 7 et 9.
    - **Tests d'abord** (`views/src/lib/mail/Pending.test.ts`) : « Tout valider » ne valide que les mails dont
      `proposal.bulk` est vrai, même quand leur confiance dit autre chose ; désactivé sans aucun `bulk` ; le libellé
      garde le seuil des réglages. Les tests de `:40` et `:291` ajoutent `bulk` à leurs propositions.
@@ -478,7 +478,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Preuve** : tests et typage verts ; Chrome à la tâche 13.
 
 9. - [x] **Le bilan filtré par boîte** (`testeur`, puis `dev-core` ; `contract/catalog.ts:418-482`,
-   `triage/pipeline.ts:495-501`). Après 6, en parallèle de 7 et 8.
+         `triage/pipeline.ts:495-501`). Après 6, en parallèle de 7 et 8.
    - **Tests d'abord** (`contract/digest.test.ts`) : sans `boxes`, la réponse est celle de `main`, textes masqués
      (instantané) ; avec `boxes`, un mail par cas : rangé par une règle (gardé), proposition validée (gardé),
      corrigée (gardé), rangé seul par l'IA (jeté), rangé seul par l'IA puis à la main dans la boîte proposée
@@ -494,8 +494,8 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
    - **Preuve** : tests et typage verts ; la partie « bilan » de la tâche 3 en `it`.
 
 10. - [x] **La synthèse à la demande, B1** (`testeur`, puis `dev-core` ; `triage/classifier.ts`,
-    `triage/llm-classifier.ts`, `contract/catalog.ts`, `contract/costs.ts`, `llm/models.ts:137`, `triage/routes.ts`,
-    `app.ts`, `main.ts`). Après 9.
+          `triage/llm-classifier.ts`, `contract/catalog.ts`, `contract/costs.ts`, `llm/models.ts:137`, `triage/routes.ts`,
+          `app.ts`, `main.ts`). Après 9.
     - **Tests d'abord** (`contract/digest.test.ts`) : avec `boxes`, un mail de règle sans synthèse en reçoit une,
       filtrée, masquée, écrite en base, servie ; un mail gardé avec `[]` aussi ; le second appel n'en refait pas ;
       15 mails : 10 synthèses, les plus anciens d'abord, puis 5 à l'appel suivant ; une horloge qui dépasse
@@ -514,7 +514,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
       plus aucun `it.fails` dans `leak.test.ts`.
 
 11. - [x] **Le plafond des synthèses à l'écran** (`testeur`, puis `dev-front` ;
-    `views/src/lib/settings/Threshold.svelte`, son test, `views/src/lib/client.ts`). Après 10, en parallèle de 12.
+          `views/src/lib/settings/Threshold.svelte`, son test, `views/src/lib/client.ts`). Après 10, en parallèle de 12.
     - **Tests d'abord** : un champ « Plafond du jour des synthèses » (en dollars) dans Réglages › Tri lit
       `digestDailyCapUsd` par `getSettings` et l'écrit par `putSettings` ; une valeur hors de 0 à 5 montre l'erreur
       du serveur ; le reste de l'écran ne bouge pas.
@@ -524,7 +524,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
     - **Preuve** : tests et typage verts ; Chrome à la tâche 13.
 
 12. - [x] **La démo suit** (`testeur`, puis `dev-core` ; `demo/demo.ts`, `demo/demo.test.ts`). Après 10, en parallèle
-    de 11.
+          de 11.
     - **Tests d'abord** (`demo/demo.test.ts`) : le classeur de la démo passe par `createApp`, par la dépendance
       `classifier` (la démo ne lit pas de `.env` et n'a pas de `llmEnv`, `demo/demo.ts:4`) ; il a sa `summarize` ;
       une route propre à la démo, `POST /api/demo/deliver`, montée par la démo seule, livre le mail suivant au faux
@@ -550,8 +550,8 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
       bout en bout décrite, comme le demande le niveau.
 
 14. - [ ] **La livraison** (`livreur`). Une PR en brouillon par dépôt, au gabarit de `lun-livrer` : Lun'Acedia (ferme
-    lun-acedia#107) et lun-docs (ce plan, ses coches). La PR d'Acedia dit : **ni release ni déploiement d'Acedia 1.5
-    tant que le core ne lit pas le 1.5** (choix 9).
+          lun-acedia#107) et lun-docs (ce plan, ses coches). La PR d'Acedia dit : **ni release ni déploiement d'Acedia 1.5
+          tant que le core ne lit pas le 1.5** (choix 9).
 
 ## Réponses du 25/11
 
