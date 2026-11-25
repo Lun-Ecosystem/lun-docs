@@ -2,9 +2,10 @@
   import Button from '../../kit/Button.svelte';
   import Chip from '../../kit/Chip.svelte';
   import DecisionCard from '../../kit/DecisionCard.svelte';
+  import DecisionGroup from '../../kit/DecisionGroup.svelte';
   import PermissionCard from '../../kit/PermissionCard.svelte';
   import { ChevronLeft, ChevronRight } from '../../kit/Icon.ts';
-  import { CARTES, FILE, type CarteDemo } from '../cartes.ts';
+  import { CARTES, FILE, RANGEMENTS, type CarteDemo } from '../cartes.ts';
   import Groupe from '../Groupe.svelte';
   import Piece from '../Piece.svelte';
   import Section from '../Section.svelte';
@@ -15,6 +16,12 @@
    */
   const rien = () => {};
   const rangement = CARTES[0]!;
+  const corrigeable = RANGEMENTS[0]!;
+  const GROUPES = [
+    ['ouvert', {}],
+    ['occupé', { busy: true }],
+    ['lecture seule', { off: 'Indisponible tant que le poste ne répond pas.' }],
+  ] as const;
   const PERMISSION = {
     what: 'Ouvrir le dossier Téléchargements',
     target: 'C:\\Users\\…\\Downloads',
@@ -99,6 +106,45 @@
     </Piece>
   </Groupe>
 
+  <Groupe
+    titre="Corriger en place"
+    sens="Les valeurs proposées se lisent sur la carte ; « Corriger » déplie les choix dans la carte, et « Urgent » passe en tête."
+    colonnes={2}
+  >
+    <Piece nom="DecisionCard" etat="avec champs">
+      {@render carte(corrigeable, { fields: corrigeable.fields, oncorrect: rien })}
+    </Piece>
+    <Piece nom="DecisionCard" etat="correction ouverte">
+      {@render carte(corrigeable, { fields: corrigeable.fields, oncorrect: rien, correcting: true })}
+    </Piece>
+    <Piece nom="DecisionCard" etat="urgente">{@render carte(rangement, { importance: 'urgent' })}</Piece>
+    <Piece nom="DecisionCard" etat="urgente sans sourcil">
+      {@render carte(rangement, { importance: 'urgent', kind: undefined, meta: [] })}
+    </Piece>
+  </Groupe>
+
+  <Groupe
+    titre="Valider ensemble"
+    sens="Les cartes groupables, toutes cochées : un geste pour celles qui le restent, et une carte corrigée part seule."
+    colonne
+  >
+    {#each GROUPES as [etat, plus] (etat)}
+      <Piece nom="DecisionGroup" {etat} large>
+        <div class="groupe">
+          <DecisionGroup
+            cards={RANGEMENTS}
+            one="proposition"
+            many="propositions"
+            onaccept={rien}
+            oncorrect={rien}
+            onclose={rien}
+            {...plus}
+          />
+        </div>
+      </Piece>
+    {/each}
+  </Groupe>
+
   <Groupe titre="Tranchée" sens="Un statut final replie la feuille en une ligne." colonnes={2}>
     <Piece nom="DecisionCard" etat="faite">{@render carte(rangement, { status: 'done', onundo: rien })}</Piece
     >
@@ -166,6 +212,9 @@
 <style>
   .etroit {
     max-width: 340px;
+  }
+  .groupe {
+    max-width: 680px;
   }
   .file {
     display: grid;

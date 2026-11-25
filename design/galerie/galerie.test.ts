@@ -62,7 +62,7 @@ describe('the gallery shows the whole kit', () => {
     render(Galerie);
     expect(screen.getAllByText("Dans le kit, mais pas encore dans Lun'Acedia.")).toHaveLength(3);
     expect(screen.getAllByText("Dans le kit, mais pas encore dans Lun'Acedia, Lun'Avaritia.")).toHaveLength(
-      2,
+      3,
     );
   });
 });

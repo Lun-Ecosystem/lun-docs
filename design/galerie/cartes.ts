@@ -1,3 +1,5 @@
+import type { CardField, CardImportance } from '../kit/types.ts';
+
 /*
  * The cards the gallery shows: one of each sort, and a long queue to try the load. Invented, in the neutral voice
  * of a tool, in the shape of the contract of the posts: lines of text, a reason, answers for a question.
@@ -16,6 +18,11 @@ export interface CarteDemo {
   note?: string;
   acceptLabel?: string;
   doneText: string;
+  importance?: CardImportance;
+  /** The values the post proposes, corrected in place. */
+  fields?: CardField[];
+  /** Can be decided with others, in one gesture. */
+  bulk?: true;
 }
 
 const POSTE = "Lun'Acedia";
@@ -99,3 +106,46 @@ export const FILE: CarteDemo[] = Array.from({ length: 54 }, (_, i) => {
     };
   return { ...carte, title: `Mettre à la corbeille ${6 + (i % 9)} lettres d’information` };
 });
+
+/** Invented fields of a tidying: one box, zero or more labels. */
+const champs = (boite: string, etiquettes: string[]): CardField[] => [
+  {
+    name: 'boite',
+    label: 'Boîte',
+    value: [boite],
+    choices: [
+      { value: 'factures', label: 'Factures' },
+      { value: 'banque', label: 'Banque' },
+      { value: 'achats', label: 'Achats' },
+    ],
+  },
+  {
+    name: 'etiquettes',
+    label: 'Étiquettes',
+    value: etiquettes,
+    multiple: true,
+    choices: [
+      { value: 'a-payer', label: 'À payer' },
+      { value: 'pro', label: 'Pro' },
+      { value: 'perso', label: 'Perso' },
+    ],
+  },
+];
+
+/** Four tidyings that can be decided together, with their proposed values. */
+const LOT: [objet: string, de: string, boite: string, etiquettes: string[]][] = [
+  ['Votre facture d’octobre', 'De : Opérateur mobile', 'factures', ['a-payer']],
+  ['Relevé de compte de novembre', 'De : Banque en ligne', 'banque', []],
+  ['Confirmation de commande', 'De : Librairie', 'achats', ['perso']],
+  ['Avis d’échéance', 'De : Assurance habitation', 'factures', ['a-payer', 'pro']],
+];
+export const RANGEMENTS: CarteDemo[] = LOT.map(([objet, de, boite, etiquettes], i) => ({
+  ...CARTES[0]!,
+  id: `rangement-groupe-${i}`,
+  meta: [POSTE, `11:0${i}`],
+  title: `Ranger « ${objet} »`,
+  lines: [de],
+  reason: 'Même expéditeur que d’autres mails déjà rangés.',
+  fields: champs(boite, etiquettes),
+  bulk: true,
+}));
