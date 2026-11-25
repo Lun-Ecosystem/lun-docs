@@ -49,6 +49,8 @@ export {
 } from './toasts.svelte.ts';
 export type {
   ButtonVariant,
+  CardField,
+  CardImportance,
   DemoState,
   NavItem,
   Option,

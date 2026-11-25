@@ -52,3 +52,17 @@ export interface NavItem {
   /** `ia`: counts what waits for a validation. */
   countTone?: 'neutre' | 'ia' | undefined;
 }
+
+/** How much a card matters, as the contract of the posts says it. Only `urgent` shows. */
+export type CardImportance = 'urgent' | 'normal' | 'low' | 'info' | 'log';
+
+/** A value the post proposes on a card, which the card can correct in place (contract 1.5). */
+export interface CardField {
+  name: string;
+  label: string;
+  /** The proposed choices, by their `value`. */
+  value: string[];
+  choices: { value: string; label: string }[];
+  /** Zero or more choices; without it, exactly one. */
+  multiple?: true;
+}

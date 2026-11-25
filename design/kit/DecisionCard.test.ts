@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
-import { createRawSnippet } from 'svelte';
+import { type ComponentProps, createRawSnippet } from 'svelte';
 import { describe, expect, it, vi } from 'vitest';
 import DecisionCard from './DecisionCard.svelte';
 import { X } from './Icon.ts';
@@ -179,14 +179,9 @@ describe('DecisionCard, decided', () => {
   });
 });
 
-/*
- * Plan lun-docs#222, task 0: the cases below say what the card learns (`fields`, `importance`, the correction).
- * They are red on `main`: the props do not exist yet. `aFaire` keeps the tree green until task 1; task 1 turns it
- * into `it`. Props go through an untyped call because `Props` does not know them yet.
- */
-const aFaire = it.fails;
-const rendre = (props: Record<string, unknown>) =>
-  render(DecisionCard as never, { props: { ...base, ...props } as never });
+// Plan lun-docs#222: what the card learns (`fields`, `importance`, the correction).
+type Props = Partial<ComponentProps<typeof DecisionCard>>;
+const rendre = (props: Props) => render(DecisionCard, { props: { ...base, ...props } });
 
 const champs = () => [
   {
@@ -211,7 +206,7 @@ const champs = () => [
     ],
   },
 ];
-const corrigeable = (extra: Record<string, unknown> = {}) => ({
+const corrigeable = (extra: Props = {}): Props => ({
   fields: champs(),
   oncorrect: vi.fn(),
   onaccept: vi.fn(),
@@ -220,7 +215,7 @@ const corrigeable = (extra: Record<string, unknown> = {}) => ({
 const ouvrir = async () => userEvent.click(bouton('Corriger'));
 
 describe('DecisionCard, fields', () => {
-  aFaire('shows each field label and the label of each proposed value', () => {
+  it('shows each field label and the label of each proposed value', () => {
     rendre(corrigeable());
     const carte = screen.getByRole('article');
     expect(carte).toHaveTextContent('Boîte');
@@ -230,7 +225,7 @@ describe('DecisionCard, fields', () => {
     expect(carte.querySelector('dl')).not.toBeNull();
   });
 
-  aFaire('joins the labels of a multiple field with commas, and says "aucun choix" when it is empty', () => {
+  it('joins the labels of a multiple field with commas, and says "aucun choix" when it is empty', () => {
     const f = champs();
     f[1]!.value = ['a-payer', 'pro'];
     const { unmount } = rendre({ fields: f });
@@ -241,7 +236,7 @@ describe('DecisionCard, fields', () => {
     expect(screen.getByRole('article')).toHaveTextContent('aucun choix');
   });
 
-  aFaire('a value outside the choices is shown as it is', () => {
+  it('a value outside the choices is shown as it is', () => {
     const f = champs();
     f[0]!.value = ['inconnue'];
     rendre({ fields: f });
@@ -258,15 +253,16 @@ describe('DecisionCard, fields', () => {
     expect(screen.queryByRole('button', { name: 'Corriger' })).toBeNull();
   });
 
-  aFaire('fields and options together: only the options show, no values, no "Corriger"', () => {
+  it('fields and options together: only the options show, no values, no "Corriger"', () => {
     rendre(corrigeable({ options: ['Mardi', 'Jeudi'] }));
     expect(bouton('Mardi')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Corriger' })).toBeNull();
     expect(screen.getByRole('article')).not.toHaveTextContent('Boîte');
-    expect(screen.getByRole('article')).not.toHaveTextContent('Factures');
+    // The base title already says « Factures »: the values are looked for in their list.
+    expect(screen.getByRole('article').querySelector('dl')).toBeNull();
   });
 
-  aFaire('"Corriger" follows "Valider", before "Modifier", and waits when locked', () => {
+  it('"Corriger" follows "Valider", before "Modifier", and waits when locked', () => {
     const { unmount } = rendre(corrigeable({ onedit: vi.fn() }));
     const noms = screen.getAllByRole('button').map((b) => b.textContent?.trim());
     expect(noms.indexOf('Valider')).toBeLessThan(noms.indexOf('Corriger'));
@@ -278,23 +274,20 @@ describe('DecisionCard, fields', () => {
 });
 
 describe('DecisionCard, correcting', () => {
-  aFaire(
-    '"Corriger" unfolds: aria-expanded true, a radiogroup per single field, a group of checkboxes per multiple',
-    async () => {
-      rendre(corrigeable());
-      const corriger = bouton('Corriger');
-      expect(corriger).toHaveAttribute('aria-expanded', 'false');
-      expect(corriger).toHaveAttribute('aria-controls');
-      await ouvrir();
-      expect(bouton('Corriger')).toHaveAttribute('aria-expanded', 'true');
-      const unique = screen.getByRole('radiogroup', { name: 'Boîte' });
-      expect(within(unique).getAllByRole('radio')).toHaveLength(3);
-      const multiple = screen.getByRole('group', { name: 'Étiquettes' });
-      expect(within(multiple).getAllByRole('checkbox')).toHaveLength(3);
-    },
-  );
+  it('"Corriger" unfolds: aria-expanded true, a radiogroup per single field, a group of checkboxes per multiple', async () => {
+    rendre(corrigeable());
+    const corriger = bouton('Corriger');
+    expect(corriger).toHaveAttribute('aria-expanded', 'false');
+    expect(corriger).toHaveAttribute('aria-controls');
+    await ouvrir();
+    expect(bouton('Corriger')).toHaveAttribute('aria-expanded', 'true');
+    const unique = screen.getByRole('radiogroup', { name: 'Boîte' });
+    expect(within(unique).getAllByRole('radio')).toHaveLength(3);
+    const multiple = screen.getByRole('group', { name: 'Étiquettes' });
+    expect(within(multiple).getAllByRole('checkbox')).toHaveLength(3);
+  });
 
-  aFaire('the choices start from value; the gestures are "Valider ainsi" and "Annuler"', async () => {
+  it('the choices start from value; the gestures are "Valider ainsi" and "Annuler"', async () => {
     rendre(corrigeable());
     await ouvrir();
     expect(screen.getByRole('radio', { name: 'Factures' })).toBeChecked();
@@ -306,29 +299,26 @@ describe('DecisionCard, correcting', () => {
     expect(screen.queryByRole('button', { name: 'Valider' })).toBeNull();
   });
 
-  aFaire('no choice chip carries aria-pressed', async () => {
+  it('no choice chip carries aria-pressed', async () => {
     rendre(corrigeable());
     await ouvrir();
     expect(screen.getAllByRole('radio').length).toBeGreaterThan(0);
     for (const r of screen.getAllByRole('radio')) expect(r).not.toHaveAttribute('aria-pressed');
   });
 
-  aFaire(
-    'single: clicking another chip checks it and unchecks the first; an arrow changes the choice',
-    async () => {
-      rendre(corrigeable());
-      await ouvrir();
-      await userEvent.click(screen.getByRole('radio', { name: 'Banque' }));
-      expect(screen.getByRole('radio', { name: 'Banque' })).toBeChecked();
-      expect(screen.getByRole('radio', { name: 'Factures' })).not.toBeChecked();
-      screen.getByRole('radio', { name: 'Banque' }).focus();
-      await userEvent.keyboard('{ArrowDown}');
-      expect(screen.getByRole('radio', { name: 'Achats' })).toBeChecked();
-      expect(screen.getByRole('radio', { name: 'Banque' })).not.toBeChecked();
-    },
-  );
+  it('single: clicking another chip checks it and unchecks the first; an arrow changes the choice', async () => {
+    rendre(corrigeable());
+    await ouvrir();
+    await userEvent.click(screen.getByRole('radio', { name: 'Banque' }));
+    expect(screen.getByRole('radio', { name: 'Banque' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Factures' })).not.toBeChecked();
+    screen.getByRole('radio', { name: 'Banque' }).focus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByRole('radio', { name: 'Achats' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Banque' })).not.toBeChecked();
+  });
 
-  aFaire('"Valider ainsi" calls oncorrect once with the changed fields only, and folds', async () => {
+  it('"Valider ainsi" calls oncorrect once with the changed fields only, and folds', async () => {
     const oncorrect = vi.fn();
     rendre(corrigeable({ oncorrect }));
     await ouvrir();
@@ -340,7 +330,7 @@ describe('DecisionCard, correcting', () => {
     expect(bouton('Corriger')).toHaveAttribute('aria-expanded', 'false');
   });
 
-  aFaire('multiple: unchecking everything then "Valider ainsi" gives an empty list', async () => {
+  it('multiple: unchecking everything then "Valider ainsi" gives an empty list', async () => {
     const oncorrect = vi.fn();
     rendre(corrigeable({ oncorrect }));
     await ouvrir();
@@ -349,7 +339,7 @@ describe('DecisionCard, correcting', () => {
     expect(oncorrect).toHaveBeenCalledWith({ etiquettes: [] });
   });
 
-  aFaire('"Valider ainsi" waits while nothing differs, or while a single field has no choice', async () => {
+  it('"Valider ainsi" waits while nothing differs, or while a single field has no choice', async () => {
     const { unmount } = rendre(corrigeable());
     await ouvrir();
     expect(bouton('Valider ainsi')).toBeDisabled();
@@ -362,7 +352,7 @@ describe('DecisionCard, correcting', () => {
     expect(bouton('Valider ainsi')).toBeDisabled();
   });
 
-  aFaire('"Annuler" folds without calling oncorrect and gives the focus back to "Corriger"', async () => {
+  it('"Annuler" folds without calling oncorrect and gives the focus back to "Corriger"', async () => {
     const oncorrect = vi.fn();
     rendre(corrigeable({ oncorrect }));
     await ouvrir();
@@ -374,30 +364,27 @@ describe('DecisionCard, correcting', () => {
     expect(screen.getByRole('radio', { name: 'Factures' })).toBeChecked();
   });
 
-  aFaire(
-    'Escape while correcting folds, calls nothing, is taken and does not rise; focus goes to "Corriger"',
-    async () => {
-      const oncorrect = vi.fn();
-      const parent = vi.fn();
-      document.body.addEventListener('keydown', parent);
-      try {
-        rendre(corrigeable({ oncorrect }));
-        await ouvrir();
-        const libre = await fireEvent.keyDown(screen.getByRole('radio', { name: 'Factures' }), {
-          key: 'Escape',
-        });
-        expect(libre).toBe(false);
-        expect(parent).not.toHaveBeenCalled();
-        expect(oncorrect).not.toHaveBeenCalled();
-        expect(screen.queryByRole('radiogroup')).toBeNull();
-        expect(bouton('Corriger')).toHaveFocus();
-      } finally {
-        document.body.removeEventListener('keydown', parent);
-      }
-    },
-  );
+  it('Escape while correcting folds, calls nothing, is taken and does not rise; focus goes to "Corriger"', async () => {
+    const oncorrect = vi.fn();
+    const parent = vi.fn();
+    document.body.addEventListener('keydown', parent);
+    try {
+      rendre(corrigeable({ oncorrect }));
+      await ouvrir();
+      const libre = await fireEvent.keyDown(screen.getByRole('radio', { name: 'Factures' }), {
+        key: 'Escape',
+      });
+      expect(libre).toBe(false);
+      expect(parent).not.toHaveBeenCalled();
+      expect(oncorrect).not.toHaveBeenCalled();
+      expect(screen.queryByRole('radiogroup')).toBeNull();
+      expect(bouton('Corriger')).toHaveFocus();
+    } finally {
+      document.body.removeEventListener('keydown', parent);
+    }
+  });
 
-  aFaire('Escape on a folded card is left alone', async () => {
+  it('Escape on a folded card is left alone', async () => {
     const parent = vi.fn();
     document.body.addEventListener('keydown', parent);
     try {
@@ -410,7 +397,7 @@ describe('DecisionCard, correcting', () => {
     }
   });
 
-  aFaire('the app’s onkeydown is still called, folded or unfolded', async () => {
+  it('the app’s onkeydown is still called, folded or unfolded', async () => {
     const onkeydown = vi.fn();
     rendre(corrigeable({ onkeydown }));
     await fireEvent.keyDown(bouton('Corriger'), { key: 'x' });
@@ -420,20 +407,20 @@ describe('DecisionCard, correcting', () => {
     expect(onkeydown).toHaveBeenCalledTimes(2);
   });
 
-  aFaire('opening puts the focus on the checked choice of the first field', async () => {
+  it('opening puts the focus on the checked choice of the first field', async () => {
     rendre(corrigeable());
     await ouvrir();
     expect(screen.getByRole('radio', { name: 'Factures' })).toHaveFocus();
   });
 
-  aFaire('mounted with correcting: unfolded, and the focus does not move', () => {
+  it('mounted with correcting: unfolded, and the focus does not move', () => {
     rendre(corrigeable({ correcting: true }));
     expect(screen.getByRole('radiogroup', { name: 'Boîte' })).toBeInTheDocument();
     expect(bouton('Corriger')).toHaveAttribute('aria-expanded', 'true');
     expect(document.body).toHaveFocus();
   });
 
-  aFaire('after "Valider ainsi" the card sets neither tabindex nor focus', async () => {
+  it('after "Valider ainsi" the card sets neither tabindex nor focus', async () => {
     rendre(corrigeable());
     await ouvrir();
     await userEvent.click(screen.getByRole('radio', { name: 'Banque' }));
@@ -442,23 +429,20 @@ describe('DecisionCard, correcting', () => {
     expect(screen.getByRole('article')).not.toContainElement(document.activeElement as HTMLElement);
   });
 
-  aFaire(
-    'a failure: rendered again with error, the card waits folded with the alert and "Corriger" back',
-    async () => {
-      const view = rendre(corrigeable());
-      await ouvrir();
-      await userEvent.click(screen.getByRole('radio', { name: 'Banque' }));
-      await userEvent.click(bouton('Valider ainsi'));
-      await view.rerender({ ...base, ...corrigeable(), error: 'le poste ne répond pas.' } as never);
-      expect(screen.getByRole('alert')).toHaveTextContent('N’a pas abouti : le poste ne répond pas.');
-      expect(screen.queryByRole('radiogroup')).toBeNull();
-      expect(bouton('Corriger')).toHaveAttribute('aria-expanded', 'false');
-      await ouvrir();
-      expect(screen.getByRole('radio', { name: 'Factures' })).toBeChecked();
-    },
-  );
+  it('a failure: rendered again with error, the card waits folded with the alert and "Corriger" back', async () => {
+    const view = rendre(corrigeable());
+    await ouvrir();
+    await userEvent.click(screen.getByRole('radio', { name: 'Banque' }));
+    await userEvent.click(bouton('Valider ainsi'));
+    await view.rerender({ ...base, ...corrigeable(), error: 'le poste ne répond pas.' });
+    expect(screen.getByRole('alert')).toHaveTextContent('N’a pas abouti : le poste ne répond pas.');
+    expect(screen.queryByRole('radiogroup')).toBeNull();
+    expect(bouton('Corriger')).toHaveAttribute('aria-expanded', 'false');
+    await ouvrir();
+    expect(screen.getByRole('radio', { name: 'Factures' })).toBeChecked();
+  });
 
-  aFaire('speaks neither in "je" nor in "tu"', async () => {
+  it('speaks neither in "je" nor in "tu"', async () => {
     rendre(corrigeable());
     await ouvrir();
     expect(screen.getByRole('article').textContent).toContain('Valider ainsi');
@@ -467,7 +451,7 @@ describe('DecisionCard, correcting', () => {
 });
 
 describe('DecisionCard, importance', () => {
-  aFaire('urgent shows "Urgent", even without kind or meta', () => {
+  it('urgent shows "Urgent", even without kind or meta', () => {
     const { unmount } = rendre({ importance: 'urgent' });
     expect(screen.getByRole('article')).toHaveTextContent('Urgent');
     unmount();
@@ -475,14 +459,14 @@ describe('DecisionCard, importance', () => {
     expect(screen.getByRole('article')).toHaveTextContent('Urgent');
   });
 
-  aFaire('urgent comes before the kind', () => {
+  it('urgent comes before the kind', () => {
     rendre({ importance: 'urgent' });
     const sourcil = screen.getByRole('article').querySelector('.eyebrow')!;
     expect(sourcil.textContent!.indexOf('Urgent')).toBeGreaterThanOrEqual(0);
     expect(sourcil.textContent!.indexOf('Urgent')).toBeLessThan(sourcil.textContent!.indexOf('Rangement'));
   });
 
-  describe.each(['normal', 'low', 'info', 'log', undefined])('importance %s', (importance) => {
+  describe.each(['normal', 'low', 'info', 'log', undefined] as const)('importance %s', (importance) => {
     // Green on `main` too: the prop is ignored. A guard, not a red case.
     it('shows nothing', () => {
       rendre({ importance });
