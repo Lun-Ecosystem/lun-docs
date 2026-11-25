@@ -2,7 +2,7 @@
 
 > Ce que tout satellite expose pour être piloté par Lun'Anima sans que le core connaisse son métier.
 > Décision : [ADR 0004](../adr/0004-delegation-aux-agents.md), qui remplace l'[ADR 0003](../adr/0003-contrat-satellite.md).
-> Version du contrat : **v1.4**.
+> Version du contrat : **v1.5**.
 
 ## Principe
 
@@ -28,8 +28,8 @@ l'API métier du satellite.
 | `GET /lun/v1/actions` | actions disponibles | `{ actions }` |
 | `POST /lun/v1/actions/:name` | invoque une action, corps validé par son schéma | `{ ok, result?, error? }` |
 | `POST /lun/v1/agent` `{ request, context? }` | confie une demande à l'agent du satellite | `AgentReply` |
-| `GET /lun/v1/cards?status=pending` | cartes du satellite (par défaut, en attente) | `{ cards: Card[] }` |
-| `POST /lun/v1/cards/:id/accept` `{ input? }` | valide une carte, `input` remplace l'entrée (« Modifier »), ou porte `{ answer }` pour une carte qui a des `options` | `{ card: Card }` |
+| `GET /lun/v1/cards?status=pending` | cartes du satellite (par défaut, en attente), de son agent comme de son tri | `{ cards: Card[] }` |
+| `POST /lun/v1/cards/:id/accept` `{ input?, values? }` | valide une carte, `input` remplace l'entrée (« Modifier »), ou porte `{ answer }` pour une carte qui a des `options` ; `values` corrige ses `fields` avant de valider | `{ card: Card }` |
 | `POST /lun/v1/cards/:id/refuse` | refuse une carte | `{ card: Card }` |
 
 ## Types
@@ -38,7 +38,7 @@ l'API métier du satellite.
 type Status = 'ok' | 'paused' | 'degraded';
 type Importance = 'urgent' | 'normal' | 'low' | 'info' | 'log'; // paliers P0 à P4 : standards/notifications.md
 
-interface Health { status: Status; reason?: string; version: string; contract?: string; paused?: true; pausedBy?: 'core' | 'local'; agent?: true; agentName?: string } // contract : version du contrat servie, `'1.4'` ; paused : en pause alors que l'état affiché est degraded ; pausedBy : qui a posé la pause ; agent : sert agent et cards ; agentName : nom de l'agent, absent tant que le réglage est vide
+interface Health { status: Status; reason?: string; version: string; contract?: string; paused?: true; pausedBy?: 'core' | 'local'; agent?: true; agentName?: string } // contract : version du contrat servie, `'1.5'` ; paused : en pause alors que l'état affiché est degraded ; pausedBy : qui a posé la pause ; agent : sert `/agent` ; agentName : nom de l'agent, absent tant que le réglage est vide
 interface CostItem { provider: string; model?: string; amount: number; calls: number }
 interface Costs { currency: 'USD'; since: string; until: string; total: number; items: CostItem[] }
 interface LunEvent { id: string; type: string; importance: Importance; at: string; title: string; data?: unknown; link?: string; lines?: string[] } // link : chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse ; lines : contenu montré à l'urgence dépliée ; data.due : heure limite ISO, quand le poste la connaît
@@ -49,8 +49,9 @@ interface AgentRequest { request: string; context?: Record<string, string> } // 
 interface AgentReply { summary: string; cards: Card[]; refs: Ref[]; cost: { currency: 'USD'; amount: number } }
 interface Ref { type: string; id: string; title: string } // ce que la réponse cite : un mail, un événement…
 type CardStatus = 'pending' | 'done' | 'refused' | 'failed' | 'expired';
-interface Card { id: string; action: string; effect: 'write' | 'delete'; title: string; lines: string[]; status: CardStatus; at: string; error?: string; link?: string; kind?: string; reason?: string; sends?: true; options?: string[] } // lines : cible et nouvelles valeurs, rédigées pour un humain ; link : chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse ; kind : libellé court du type (« Nouvelle fiche ») ; reason : la raison, à la troisième personne ; sends : valider envoie quelque chose hors de chez CrOliX ; options : réponses proposées d'une question
-interface DigestItem { type: string; title: string; at: string; ref?: Ref }
+interface Card { id: string; action: string; effect: 'write' | 'delete'; title: string; lines: string[]; status: CardStatus; at: string; error?: string; link?: string; kind?: string; reason?: string; sends?: true; options?: string[]; importance?: Importance; bulk?: true; fields?: CardField[] } // lines : cible et nouvelles valeurs, rédigées pour un humain ; link : chemin dans le front du poste (`/…` ou `#/…`), jamais une adresse ; kind : libellé court du type (« Nouvelle fiche ») ; reason : la raison, à la troisième personne ; sends : valider envoie quelque chose hors de chez CrOliX ; options : réponses proposées d'une question ; importance : palier de la carte, fixé par le poste, absent il vaut `normal` ; bulk : la carte entre dans la validation groupée ; fields : ce que CrOliX peut corriger avant de valider
+interface CardField { name: string; label: string; value: string[]; choices: { value: string; label: string }[]; multiple?: true } // value : le choix proposé ; multiple : plusieurs choix permis, sinon exactement un
+interface DigestItem { type: string; title: string; at: string; ref?: Ref; box?: { id: string; name: string }; synthesis?: string } // box : la boîte actuelle d'un mail rangé ; synthesis : deux lignes au plus, masquées des secrets
 interface Digest { since: string; until: string; received: DigestItem[]; done: DigestItem[]; pending: number }
 ```
 
@@ -105,15 +106,14 @@ avant toute action. Plusieurs autorisations peuvent être en attente, chacune av
 - **Nom d'agent** : `Health.agentName`, tiré d'un réglage du poste, **vide par défaut** ; vide ou absent, il n'est pas envoyé et aucune ligne Agent n'apparaît.
 - **Importance** : fixée par le satellite selon [`notifications.md`](notifications.md) (paliers P0 à P4).
   Le core rend selon le mode ; le satellite ne connaît pas les modes. `low` et `log` inconnus d'un client valent `info`.
-- **Délégation** (`agent`, `cards` : seulement si `health` porte `agent: true`) : l'agent applique ses
-  règles. Écriture = carte ; suppression = toujours une carte, quel que soit le mode ; jamais d'envoi
-  de message. Une lecture simple peut passer par une action du catalogue, sans agent.
-- **Cartes** : elles vivent chez le satellite, qui garde la décision et le journal. Le core les
-  affiche et transmet le geste ; une carte qui n'est plus en attente ne se valide ni ne se refuse. Sans `kind`, le core écrit « Carte ». Une carte qui a `sends` ou `options` ne se valide jamais en lot. Une réponse libre (hors `options`) qu'une carte ne sait pas prendre vaut `400`.
-- **Bilan du jour** : tout satellite à données sert l'action de lecture `day.digest` `{ since, until }` (ISO UTC) qui rend un `Digest`.
-  Le core choisit la période ; le satellite ne connaît pas la journée de Natsume.
+- **Délégation et cartes** : `/agent` seulement si `health` porte `agent: true` ; `/cards` toujours pour un poste qui déclare `contract` `1.5` ou plus (liste vide s'il n'a rien), seulement avec `agent: true` en dessous. L'agent applique ses règles. Écriture = carte ; suppression = toujours une carte, quel que soit le mode ; jamais d'envoi de message. Une lecture simple peut passer par une action du catalogue, sans agent.
+- **Cartes** : elles vivent chez le satellite, qui garde la décision et le journal. Le core les affiche et transmet le geste ; une carte qui n'est plus en attente ne se valide ni ne se refuse. Sans `kind`, le core écrit « Carte ». Une carte qui a `sends` ou `options` n'entre jamais dans la validation groupée : un poste ne pose jamais `bulk` sur elle. Une réponse libre (hors `options`) qu'une carte ne sait pas prendre vaut `400`.
+- **Propositions** : une proposition qui attend un geste de CrOliX est une carte, qu'elle vienne de l'agent du poste ou de son tri ; elle sort par `/cards` et se tranche par le même geste, la décision et son journal restent au poste. Sa raison va dans `reason`, sa synthèse dans `lines`. Un poste 1.5 ne double pas une carte d'un événement « en attente » : la carte porte le palier (`importance`).
+- **Correction** (`fields`, `values`) : chaque clé de `values` est le `name` d'un champ, chaque valeur prise dans ses `choices` ; une clé absente garde `value` ; un champ sans `multiple` attend exactement un choix. Une carte n'a jamais à la fois `fields` et `options`. Le core n'envoie `values` qu'à une carte qui porte `fields` ; le poste le traduit dans son métier.
+- **Bilan du jour** : tout satellite à données sert l'action de lecture `day.digest` `{ since, until, boxes? }` (ISO UTC) qui rend un `Digest`. Le core choisit la période ; le satellite ne connaît pas la journée de Natsume.
+- **Filtre par boîte** (`boxes`, identifiants de boîtes, posé par le core) : `received` et `done` ne gardent que les mails rangés, dans leur boîte actuelle, dans l'une d'elles avec l'accord de CrOliX au moment du bilan (une règle, une proposition validée ou corrigée) ; `pending` ne change pas ; un poste sans boîtes l'ignore. Avec `boxes`, le poste écrit la synthèse qui manque (une petite requête par mail, comptée comme tout appel payant, bornée en nombre par appel du bilan), jamais en pause, en mode dégradé ou au plafond : l'élément reste alors sans `synthesis`. Le core ne passe `boxes` qu'à un poste qui déclare `contract` `1.5` ou plus. Pour la bibliothèque, rien n'entre d'un poste en dessous de 1.5 ; un élément dont `box.id` manque ou sort des `boxes` est jeté, un élément sans `synthesis` n'est pas envoyé, et les doublons sont retirés par `ref.id`.
 - **Alertes** : `urgent` est réservé aux alertes issues de règles déterministes, pour joindre CrOliX
-  en direct. Le core ne retient du flux que `urgent` et les événements de contrôle (clé, état).
+  en direct. Le core reçoit tout le flux et le rend par sa porte d'attention ([`notifications.md`](notifications.md)) : le poste fixe le palier, la porte choisit la sortie.
 - **Coûts** : chaque appel payant (LLM, API) est compté par le satellite lui-même.
 - **Crédit épuisé** : `health` passe en `degraded` avec la raison ; les lectures continuent.
 - **Clé de service** : types d'événement recommandés pour un satellite qui dépend d'une clé d'API.
@@ -129,9 +129,9 @@ avant toute action. Plusieurs autorisations peuvent être en attente, chacune av
 
 | Code | Cas |
 |---|---|
-| 400 | corps invalide (schéma de l'action, `since` illisible) |
+| 400 | corps invalide (schéma de l'action, `since` illisible) ; dans `values`, une clé inconnue, un choix hors des `choices`, un champ sans `multiple` qui n'a pas un seul choix ; `values` avec `input` ou `answer`, ou sur une carte sans `fields` |
 | 401 | jeton absent, invalide ou révoqué ; code d'appairage expiré |
-| 404 | action inconnue ; carte inconnue ; `/agent` ou `/cards` sur un satellite sans agent |
+| 404 | action inconnue ; carte inconnue ; `/agent` sur un satellite sans agent ; `/cards` sur un poste de contrat 1.4 ou moins sans agent |
 | 409 | `pause` alors que déjà en pause, `resume` alors que déjà actif ; carte qui n'est plus en attente |
 | 503 | service `degraded` pour l'opération demandée |
 
@@ -147,4 +147,4 @@ le core et n'intègrent jamais ceux d'un satellite : se ressembler n'est pas un 
 
 Une rupture (route retirée, champ renommé ou rendu obligatoire) crée `/lun/v2`. La v1 reste servie
 jusqu'à ce que le core soit migré. Ajouter un champ optionnel ou une route (comme `authorize`) n'est pas une rupture.
-Sans rupture de route ni de champ, la v1.1 ajoute `agent`, `cards`, `day.digest`, `Health.agent`, les importances `low`, `log`, la v1.2 `brain.due` (Avaritia §4.2), la v1.3 `link` sur `Card` et `LunEvent`. La v1.4 ajoute `by`, `pausedBy`, `agentName`, `contract`, `kind`, `reason`, `sends`, `options`, `answer`, `lines` et `data.due`, et **change le comportement en pause** : un poste qui ne déclare pas `contract` `1.4` ou plus est muet pour le core.
+Sans rupture de route ni de champ, la v1.1 ajoute `agent`, `cards`, `day.digest`, `Health.agent`, les importances `low`, `log`, la v1.2 `brain.due` (Avaritia §4.2), la v1.3 `link` sur `Card` et `LunEvent`. La v1.4 ajoute `by`, `pausedBy`, `agentName`, `contract`, `kind`, `reason`, `sends`, `options`, `answer`, `lines` et `data.due`, et **change le comportement en pause** : un poste qui ne déclare pas `contract` `1.4` ou plus est muet pour le core. La v1.5 ajoute `importance`, `bulk` et `fields` sur `Card`, `values` au geste, `boxes` à `day.digest`, `box` et `synthesis` sur `DigestItem`, et **change deux comportements** pour un poste qui déclare `1.5` : `/cards` ne dépend plus de `agent`, et une proposition de tri est une carte, sans événement « en attente » en double ; le core ne passe `boxes` qu'à un tel poste.

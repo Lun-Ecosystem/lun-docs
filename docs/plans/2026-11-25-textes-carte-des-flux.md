@@ -4,8 +4,10 @@
 >
 > **Issue :** Lun-Ecosystem/lun-docs#217, `niveau:standard`. Premier chantier de la carte des flux (§ 11, étape 1).
 >
-> **État : rédigé le 25/11 ; contesté le 25/11 ; amendé le 25/11** (« Ce que la contestation a changé »). À valider
-> par CrOliX.
+> **Validé par CrOliX le 25/11** (« validé »).
+>
+> **État : rédigé le 25/11 ; contesté le 25/11 ; amendé le 25/11** (« Ce que la contestation a changé ») ; exécuté
+> le 25/11 (tâches 1 à 4), après la fusion de lun-docs#216 dans la branche.
 >
 > **Réponses de CrOliX aux questions, le 25/11** (détail dans « Les réponses de CrOliX ») : (1) lecture (a), le code
 > ne dit jamais « tu » sur une surface, seul le modèle s'adresse à CrOliX ; (2) la règle de la voix vaut pour tous
@@ -344,7 +346,7 @@ Le résumé d'une délégation (`AgentReply.summary`) porte ces phrases jusqu'au
 écrit ses preuves par `grep` dans le compte rendu. Le texte : français, phrases courtes, sans tiret long, 120 signes
 par ligne au plus, les mots du dictionnaire.
 
-1. - [ ] **Le contrat 1.5 et son historique** (`standards/contrat-satellite.md` seul). **En parallèle de 2 et 3.**
+1. - [x] **Le contrat 1.5 et son historique** (`standards/contrat-satellite.md` seul). **En parallèle de 2 et 3.**
    - Écrire « v1.5 » en tête (`:5`) et `'1.5'` dans le commentaire de `Health` (`:41`) ; ce commentaire dit
      désormais « agent : sert `/agent` ».
    - Ajouter à `Card` `importance?`, `bulk?`, `fields?`, avec leurs commentaires (formes 1 à 3) ; `CardField` sur la
@@ -375,6 +377,9 @@ par ligne au plus, les mots du dictionnaire.
      - `grep -n "values"` montre la route, les règles du geste et les `400` ;
      - `grep -n "double"` montre la règle du signal unique.
    - Exclu : tout `/lun/v2` ; le masquage lui-même (il vit dans Acedia, spec § 5.1) ; la mesure par boîte (D3).
+   - **Fait.** `wc -l` : 150 avant, 150 après. « 1.5 » aux lignes 5, 41, 109, 111, 114, 150 ; « en lot » et « ne
+     retient du flux » : 0 ; `boxes` aux lignes 113, 114, 150 ; `values` aux lignes 32, 112, 132, 150 ; « double »
+     aux lignes 111 et 150. `npm run check` : OK.
 2. - [ ] **Le standard de l'écriture** (`standards/ecriture.md` nouveau, `standards/design.md`,
    `tools/standards-map.json`, `README.md`). **En parallèle de 1 et 3.** Écrite pour (a) (forme 9).
    - `ecriture.md`, avec la tête des autres standards (titre, une citation qui dit son champ) :
