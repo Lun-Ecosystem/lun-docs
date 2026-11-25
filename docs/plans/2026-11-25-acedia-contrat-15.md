@@ -203,11 +203,12 @@ U+202F) comptent comme des espaces partout. Les motifs, dans cet ordre :
 - **Ce qui reste** : les dates (`25/11/2026`, `2026-11-25`), les heures, les montants courts (`12,50 €`), les années,
   les adresses mail, les adresses postales. Une adresse n'est pas un secret, et l'urgence d'une règle dit « De : … ».
 - **Ce qui passe par le masque : ce qui vient d'un mail** (I2). Les événements `mail.*`, masqués dans `toEvent`
-  (`contract/events.ts:23-35`), qui sert le direct comme le rejeu (I3) ; les cartes de proposition ; les cartes de
-  brouillon de l'agent (`draft.*`) ; tout le bilan (`title`, `ref.title`, `synthesis`). Les événements d'agenda, de
-  prix et de clé n'y passent pas, ni les autres cartes de l'agent.
-- **Aucun extrait du corps** vaut pour les propositions, la synthèse, le bilan et les événements. **Les brouillons
-  de l'agent en sont exemptés** (I5) : ils gardent le masque, mais peuvent citer le mail.
+  (`contract/events.ts:23-35`), qui sert le direct comme le rejeu (I3) ; les cartes de proposition ; **toutes les
+  cartes de l'agent qui viennent d'un mail**, `mail.*` et `draft.*`, qui portent l'objet et des lignes tirées du
+  mail ; tout le bilan (`title`, `ref.title`, `synthesis`). Les événements d'agenda, de prix et de clé n'y passent
+  pas, ni les cartes de l'agent qui ne viennent pas d'un mail (l'agenda, les tâches).
+- **Aucun extrait du corps** (la règle des six mots) vaut pour les propositions de tri, la synthèse, le bilan et les
+  événements. **Les cartes de l'agent en sont exemptées** (I5) : elles gardent le masque, mais peuvent citer le mail.
 - **Pas partagé avec Avaritia** (réponse 9).
 
 ### 3. La borne de A10, et le plafond
@@ -387,7 +388,7 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
      - « tirage » (tâche 10) : 50 mails tirés, secrets du générateur de la tâche 2 dans le corps, recopiés par le
        classeur, sur toutes les sorties. Leur objet ne partage aucune fenêtre de six mots avec leur corps.
    - **Les assertions** : aucun secret du corpus, ni ses chiffres collés ; aucune fenêtre de six mots du corps (casse,
-     accents et espaces ramenés). Une carte de brouillon de l'agent ne vérifie que les secrets (I5).
+     accents et espaces ramenés). Une carte de l'agent ne vérifie que les secrets (I5).
    - **Exclu** : `mail.read`, `mail.list` et `mail.search`, qui servent le mail au core par une lecture demandée (la
      spec, § 5.1 : « On ne retire rien ») ; le code.
    - **Preuve** : `npm test` vert ; chaque partie échoue sur `main` pour la bonne raison (le snippet dans
@@ -439,11 +440,11 @@ barrières : `npm run lint`, `npm run format:check`, `npm run check:colors`, et 
      sinon, `none` compris ; `bulk` à 84, 85 et 86 contre `bulkThreshold` 85, et quand `threshold` passe sous
      `bulkThreshold` ; `bulk` absent d'une carte qui a `sends` ; `fields` : choix des boîtes, Corbeille, Spam, des
      étiquettes, `multiple` sur `tags` seulement, pas de `box` pour une proposition sans boîte ; `title`, `lines`,
-     `reason` masqués, et ceux d'une carte de brouillon de l'agent aussi ; une carte d'agenda de l'agent non masquée ;
+     `reason` masqués, et ceux des cartes `mail.*` et `draft.*` de l'agent aussi ; une carte d'agenda non masquée ;
      l'ordre par `at` ; `status=done` ne sert que l'agent ; `ProposalView.bulk` dans `GET /api/mail?view=pending`.
    - **Le code** : `isBulk` dans `proposals.ts` ; `proposalView` pose `bulk` ; un `proposalCard(db, proposal)` à côté
      de `toContractCard` ; `ContractCard` gagne `reason`, `importance`, `bulk`, `fields` ; `toContractCard` masque les
-     cartes `draft.*` ; `/cards` fusionne les deux listes pour `pending`.
+     cartes `mail.*` et `draft.*` ; `/cards` fusionne les deux listes pour `pending`.
    - **Exclu** : le geste (tâche 7) ; l'écran (tâche 8) ; le Journal.
    - **Preuve** : tests et typage verts ; la partie « cartes » de la tâche 3 en `it`.
 
@@ -557,8 +558,8 @@ Les questions du plan, tranchées après la contestation. Il n'en reste aucune d
 1. **Le plafond de la synthèse à la demande** : un usage `digest` à part, avec son plafond du jour. Un seul réglage
    d'instance, le plafond en dollars ; la borne par appel devient une constante (I8).
 2. **Le réglage à l'écran** : un champ dans Réglages › Tri, pour le plafond seul (tâche 11).
-3. **Le masque** ne couvre que ce qui vient d'un mail : événements `mail.*`, cartes de proposition, brouillons de
-   l'agent, bilan (I2). Les brouillons de l'agent sont exemptés de la règle « aucun extrait du corps » (I5).
+3. **Le masque** ne couvre que ce qui vient d'un mail : événements `mail.*`, cartes de proposition, cartes `mail.*`
+   et `draft.*` de l'agent, bilan (I2). Les cartes de l'agent sont exemptées de la règle des six mots (I5).
 4. **Le signal de l'écran** : un seul `mail.changed`, posé dans un `finally`, à la forme de celui de la synchro (I7).
 5. **Rangé seul par l'IA, puis rangé à la main** : accord. `accepted` dans la boîte proposée, `corrected` ailleurs.
 6. **L'urgence d'une règle** : « De : … » sans extrait.
@@ -583,8 +584,8 @@ Contestation du 25/11, relue dans le code.
 - **I2 et I3. Le masque recentré sur le mail**, posé dans `toEvent` pour le direct et le rejeu ; une migration retire
   les `Extrait :` déjà en base, et la fuite est testée sur une base remplie à l'ancienne.
 - **I4. Ni release ni déploiement** avant que le core lise le 1.5 (choix 9, tâche 14).
-- **I5. Les brouillons de l'agent** gardent le masque mais peuvent citer le mail ; `pina/wording.ts:321` entre à la
-  tâche 1.
+- **I5. Les cartes de l'agent** (`mail.*`, `draft.*`) gardent le masque mais peuvent citer le mail ;
+  `pina/wording.ts:321` entre à la tâche 1.
 - **I6. L'ordre** : la tâche 6 passe après la 5 ; `ProposalView` sort de la tâche 4 ; l'écran du réglage passe après
   la 10 (tâche 11).
 - **I7. Le `mail.changed` de fin de passe** dans un `finally`, au titre et à la forme de la synchro ; un test sur une
