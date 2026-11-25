@@ -6,8 +6,8 @@
 > **Issue :** Lun-Ecosystem/lun-anima#147, `niveau:standard`, privée. Chantier de la carte des flux, étape 2 du
 > découpage.
 >
-> **État : rédigé le 25/11 ; contesté le 25/11 ; amendé le 25/11** (« Ce que la contestation a changé »). À valider
-> par CrOliX (« Questions à CrOliX »).
+> **État : rédigé le 25/11 ; contesté le 25/11 ; amendé le 25/11** (« Ce que la contestation a changé »). **CrOliX
+> a répondu le 25/11** (« Réponses de CrOliX, le 25/11 ») : les tâches sont écrites ainsi.
 >
 > Code relu sur `main` de Lun'Anima (`7595342`). Le graphe d'abord, puis chaque point dans le code. Lun'Anima est
 > privé : ce plan dit le comportement, les critères, les tâches et les preuves. Les fichiers, les lignes, les noms,
@@ -47,8 +47,8 @@ nous. La contestation du 25/11.
 | `lun-docs` : ce plan et ses coches | `docs/plan-gestes-presence` | la même | `trivial` |
 
 **Le niveau.** `standard`, celui de l'issue. Du code du core seul, sans dépendance au contrat 1.5. Aucun écran ne
-change de forme, aucune route, aucun contrat. Un changement de base seulement si CrOliX choisit de garder la marque de
-coupure hors des écrans (question 3). Chaque comportement changé a son test, écrit d'abord par le testeur
+change de forme, aucune route, aucun contrat, aucune base : la marque de coupure reste dans le texte gardé (réponse
+3). Chaque comportement changé a son test, écrit d'abord par le testeur
 ([`workflow.md`](../../standards/workflow.md)). Une PR dans Lun'Anima ; ce plan va dans la PR lun-docs du chantier.
 Pas de Chrome.
 
@@ -78,7 +78,7 @@ Pas de Chrome.
   rejoué au modèle comme ses propres mots. Un poste injoignable ; une carte qu'elle n'a pas pu relire ; sa journée
   qu'elle n'a pas pu relire ; une carte que son message ne tranche pas. La première sert aussi de raison sur l'accueil.
 - **Deux autres phrases** parlent à la première personne, hors des quatre de l'issue : une carte qui attend un choix
-  (« dis-moi »), une carte qui a changé depuis qu'elle l'a lue (« je »). Voir la question 2.
+  (« dis-moi »), une carte qui a changé depuis qu'elle l'a lue (« je »). Elles entrent dans ce chantier (réponse 2).
 - L'annonce d'une urgence est déjà neutre. Les « je » des commandes de recette, des scènes, des tics et des exemples
   du socle ne sont pas des phrases du code : ils sont hors de la règle.
 
@@ -131,7 +131,7 @@ Pas de Chrome.
 - **A. Dans le texte gardé (recommandé).** La réécriture d'une coupure ajoute « (coupée ici) » après ce qui a été
   entendu. Une ligne, pour les cinq chemins. Le rejeu, la relecture de sa journée et le tri la lisent sans changer.
   Ce qu'elle laisse : la marque se lit aussi dans l'écran de conversation et dans la fenêtre de Lun'Luxuria
-  (question 3).
+  (réponse 3 : tenu).
 - **B. Au rejeu seulement.** Le message garde le texte entendu ; une marque de coupure est gardée à part, et le rejeu
   l'ajoute. Un changement de base, un champ, et le tri ne la voit pas.
 
@@ -160,7 +160,7 @@ pour toujours, sans que personne le voie, ni le corrige (la relation n'est pas s
 probable d'un échec n'est pas l'invention, c'est une citation à peine reformulée : un mot changé, une transcription de
 la voix recopiée de travers. « Déduit » existe pour ce cas, et tout ce qui lit les souvenirs le tient déjà pour une
 hypothèse. Le risque de A : un souvenir inventé survit, marqué hypothèse. Le risque de B : des souvenirs vrais
-disparaissent. Question 1.
+disparaissent. Tranché par CrOliX : A (réponse 1).
 
 **Comment vérifier.**
 
@@ -258,12 +258,14 @@ lequel il est. Les fichiers et les noms sont dans l'issue privée.
    - Ensuite, chaque tâche change ces attentes de ce qu'elle veut, et de rien d'autre ; leur diff se relit à la revue.
    - Exclu : tout code de production.
 1. - [ ] **P4, une seule voix** (`testeur`, puis `dev-core`). **En parallèle de la tâche 4.**
-   - Tests rouges sur `main` : pour chacune des quatre phrases, son texte exact, et aucune première personne (« je »,
-     « moi », « me », « mon »…) dans le texte replié. Les textes proposés sont dans l'issue privée.
+   - Tests rouges sur `main` : pour chacune des six phrases, son texte exact, validé par CrOliX (dans l'issue
+     privée), et ni première ni deuxième personne (« je », « moi », « mon », « tu », « toi », « ton »…) dans le
+     texte replié.
    - Gardes : les tests existants qui importent ces phrases restent verts ; ceux qui en gardent une copie littérale
      la suivent. L'annonce d'une urgence ne change pas.
-   - Code : les quatre phrases nomment le poste ou disent « tu ». Leur emploi ne change pas.
-   - Exclu : les deux autres phrases (question 2), le standard de la voix (étape 1 du découpage), la lettre du matin,
+   - Code : les six phrases nomment, sans « je » ni « tu » (règle validée le 25/11, Lun-Ecosystem/lun-docs#218).
+     Leur emploi ne change pas.
+   - Exclu : les autres textes du code, le standard de la voix (étape 1 du découpage), la lettre du matin,
      le Journal, « Ce que j'ai fait ».
 2. - [ ] **P3, la coupure** (`testeur`, puis `dev-core`). **Après la tâche 1, dans le même worktree.** Écrite pour A.
    - Tests rouges sur `main` :
@@ -382,14 +384,15 @@ lequel il est. Les fichiers et les noms sont dans l'issue privée.
 - **La ligne de temps écoulé suit l'heure de création des messages**, pas la fin de sa voix. À 20 min, l'écart est
   négligeable.
 
-## Questions à CrOliX
+## Réponses de CrOliX, le 25/11
 
-1. **P6 : un « dit » mal cité passe en « déduit » (recommandé), ou il est refusé ?** La raison : un refus perd un
-   souvenir vrai pour toujours, et la cause probable d'un échec est une citation à peine reformulée (« Les choix »).
-2. **P4 : deux autres phrases du code parlent à la première personne**, une carte qui attend un choix et une carte qui
-   a changé depuis sa lecture. Les rendre neutres dans ce chantier, avec le même test (recommandé : deux lignes), ou
-   les laisser au chantier de l'écriture du core ?
-3. **P3 : la marque « (coupée ici) » se lira aussi dans les écrans**, la conversation du core et le fil de la fenêtre
-   de Lun'Luxuria. L'accepter (recommandé : une ligne, et les écrans disent vrai), ou la garder hors des écrans (un
-   changement de base et un champ) ?
-4. **P4 : les quatre phrases neutres proposées**, dans l'issue privée : à valider telles quelles, ou à reprendre ?
+1. **P6 : un « dit » mal cité passe en « déduit ».** L'option A, recommandée. Un souvenir vrai mal cité n'est jamais
+   perdu ; il reste comme hypothèse.
+2. **P4 : les deux autres phrases entrent dans ce chantier.** Six phrases deviennent neutres : les quatre de l'issue,
+   la carte qui attend un choix, la carte qui a changé depuis sa lecture. Un test garde chacune.
+3. **P3 : la marque reste visible à l'écran**, dans la conversation du core comme dans la fenêtre de Lun'Luxuria.
+   L'option A : aucun changement de base.
+4. **P4 : le texte des six phrases est validé par CrOliX**, et il n'est pas celui proposé d'abord. Il ne tutoie
+   jamais : le code nomme, il ne dit ni « je » ni « tu » (règle validée le 25/11, Lun-Ecosystem/lun-docs#218). Ce
+   chantier l'applique aux six phrases ; le critère de l'issue, « le code dit tu ou nomme », est tenu par « nomme ».
+   Les textes sont dans l'issue privée.
