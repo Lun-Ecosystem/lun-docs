@@ -5,7 +5,8 @@
 > recherche de la veille, jamais validée), choisi par CrOliX le 25/11 et corrigé ici décision par décision. Toutes les
 > décisions de ce texte sont de CrOliX, prises une à une le 25/11 ; elles sont citées par leur numéro (D1 à D16, B1, P1
 > à P8 pour la présence). Ce texte n'en ajoute aucune. Ce qui est marqué **[lecture du rédacteur]** est une lecture,
-> à contester ; ce qui reste ouvert est au § 10, sans réponse tranchée.
+> à contester ; ce qui reste ouvert est au § 10, sans réponse tranchée. D6 a été révisé par CrOliX le même jour, et
+> les règles d'écriture du core (§ 5.5) ont été validées par lui.
 >
 > Il cadre Lun-Ecosystem/lun-anima#135 (ce qui remonte d'Acedia au core). Ce n'est pas un plan : aucun chantier de code
 > ne part avant sa validation. Les références au code privé du core sont dans une annexe privée, postée sur
@@ -193,9 +194,9 @@ flowchart LR
         CC["Cartes relayées<br/>à l'unité ou groupées"]
         CV["Conversation · N2<br/>répond depuis la synthèse"]
         NI["La nuit · N2"]
-        FX["Faits préparés par le code"] --> W["Le modèle écrit une fois,<br/>à heure fixe · N2"]
+        FX["Faits préparés par le code"] --> W["Le modèle écrit la lettre,<br/>à heure fixe · N2"]
         W --> LE
-        W --> MOT["« Ce que j'ai fait »"]
+        JO --> MOT["« Ce que j'ai fait »<br/>règles d'écriture · N0"]
         SP["Parole spontanée et ouverture<br/>budget commun avec la porte"]
         AT --> SP
         RD["Lectures : agenda, tâches,<br/>échéances, coûts"]
@@ -245,7 +246,8 @@ Les changements, par rapport à l'existant :
    ouvre lui-même. Tout reste dans Acedia.
 4. **La validation groupée entre au core** (D5), bornée aux propositions sans envoi ni options, au-dessus du seuil de
    validation groupée d'Acedia.
-5. **Une seule voix** (D6, P4) : le « je » est au modèle, qui écrit une fois à heure fixe ; le reste est neutre.
+5. **Une seule voix** (D6, P4) : le « je » est au modèle, qui écrit surtout la lettre du matin ; le Journal et
+   « Ce que j'ai fait » suivent des règles d'écriture appliquées par le code, dans le registre neutre (§ 5.5).
 6. **La proposition porte une synthèse** (D9) ; le corps du mail ne quitte jamais Acedia.
 7. **Des mails entrent dans la bibliothèque, filtrés** (la nuit vers Avaritia, rouvert en partie, et B1), par un
    réglage du core passé en paramètre au bilan d'Acedia.
@@ -277,8 +279,8 @@ Les changements, par rapport à l'existant :
 | 18 | Entrées de la porte : sourdine, pause, appel, nuit | Luxuria, CrOliX, l'heure | leur changement | N0 | aucune | règlent les cinq sorties | aucune | fait, à réunir dans la porte | D2, D11 |
 | 19 | Événement de contrôle (poste, plafond, routine) | le core, un poste | l'incident | N0 | aucune | notifier | neutre | fait (porte unique : à faire) | D2, D6 |
 | 20 | Lettre du matin | le core | l'heure fixe | N2 (aujourd'hui N0) | aucune | lettre du matin | « je », modèle, écrit une fois, sous le plafond | à faire | D6 |
-| 21 | « Ce que j'ai fait » | le core | un moment fixe (§ 10) | N2 | aucune | Bureau, relu de ce texte | « je », modèle, écrit une fois | à faire | D6 |
-| 22 | Journal | le core | chaque choix de la porte | N0 | aucune | Journal | neutre, sans « je » | fait, à mettre d'accord avec D2 | D2, D6 |
+| 21 | « Ce que j'ai fait » | le core | chaque action, au fil de l'eau | N0 | aucune | Bureau, depuis le Journal | registre neutre, règles d'écriture | à faire | D6 révisé, § 5.5 |
+| 22 | Journal | le core | chaque action et chaque choix de la porte, à l'instant | N0 | aucune | Journal | registre neutre, règles d'écriture | fait ; écriture à revoir, à mettre d'accord avec D2 | D2, D6 révisé, § 5.5 |
 | 23 | La nuit, depuis la conversation | le core | 5 h | N2 | carte de fiche | cartes de fiches | « je » au récit, neutre aux observations | fait | décision du 24/11 |
 | 24 | La nuit, depuis les mails | Acedia, par le bilan | 5 h | N0 (filtre), N2 (la nuit) | carte de fiche | cartes de fiches | neutre | à faire | Nuit vers Avaritia, B1 |
 | 25 | Rappel des souvenirs au tour | le core | chaque tour | N0 | aucune | contexte du tour | donnée | à faire | P1 |
@@ -336,9 +338,13 @@ leur côté, et lisent chacune la sourdine, la pause, l'appel et la nuit (flux 1
 La règle vient d'une crainte de CrOliX : une Natsume froide côté code et émotive côté modèle.
 
 - Le « je » est réservé au modèle. Le code prépare les faits : des comptes, des regroupements.
-- Le modèle écrit une fois, à un moment fixe : la lettre du matin, « Ce que j'ai fait ». L'affichage relit ce texte ;
-  il ne le recompose pas.
-- Le Journal reste un registre neutre, sans « je ».
+- **D6, révisé par CrOliX le 25/11.** Le modèle sert surtout à la lettre du matin : il l'écrit une fois, à heure
+  fixe, depuis les faits préparés par le code, et l'affichage relit ce texte.
+- « Ce que j'ai fait » n'est **pas** écrit par le modèle.
+- Le Journal est la preuve horodatée des actions. Il reste synchrone : une ligne s'écrit quand l'action a lieu, jamais
+  d'un coup à un moment donné.
+- Le Journal et « Ce que j'ai fait » suivent des règles d'écriture appliquées par le code, dans le registre neutre
+  d'un assistant : un entre-deux entre le froid et le personnel (§ 5.5). Ni l'un ni l'autre ne dit « je ».
 - L'annonce d'une urgence reste une phrase fixe sans « je ».
 - **P4.** La règle « le code dit tu ou nomme, seul le modèle dit je » s'écrit dans un standard. Les quatre phrases fixes
   du code en « je » deviennent neutres.
@@ -360,6 +366,62 @@ Rouvert en partie, dès le VIP.
   de boîtes, et seulement si elle manque.
 - Le bilan change donc de type : chaque mail porte sa boîte et sa synthèse (§ 10, question 9).
 - Le reste de la conversation continue d'entrer comme le 24/11.
+
+### 5.5 L'écriture du core
+
+Validée par CrOliX le 25/11, depuis un inventaire de tout ce que le core écrit : le Journal, le détail d'une ligne, le
+Bureau, les notifications, la voix fixe, les compteurs.
+
+**Le constat**
+
+- Aucun texte rendu n'est écrit par un modèle : le Journal, les titres d'événements et les notifications viennent tous
+  du code.
+- La donnée existe mais n'est pas montrée : les éléments de la lettre du matin, la période couverte par la nuit, ses
+  souvenirs et ses observations, la réponse d'un poste à une délégation et sa durée, le montant d'un plafond, le poste
+  d'origine dans une notification.
+- Le détail d'une ligne du Journal est vide la plupart du temps : il ne montre que le titre, le poste, l'issue, et
+  parfois le coût et la durée. Les références et le lien vers la conversation ne sont jamais remplis.
+- La nuit laisse cinq traces séparées : l'envoi des observations, le passage de la nuit, la lettre du matin (une ligne
+  de plus à chaque relance), l'annonce « Le point du matin est posté », et une correction de la lettre hors Journal.
+  Aucune ne dit ce que la nuit a couvert ni ce que la lettre a dit.
+- On compte quinze incohérences entre surfaces : un même fait écrit de plusieurs façons (le plafond, l'échec d'une
+  routine, un rappel), quatre formes de titre, deux apostrophes, des pluriels en « (s) », « point du matin » contre
+  « lettre du matin », une notification d'échec sans sa raison, des champs du détail qui ne s'affichent jamais.
+
+**Les huit règles**
+
+1. **Une ligne dit le fait, pas l'état du système.** On écrit « Lettre du matin : 3 cartes, 1 échéance, 2 mails
+   rangés », pas « Le point du matin est posté ».
+2. **Un fait, une ligne.** Une action en plusieurs étapes reste une seule ligne ; ses étapes vont dans le détail. La
+   nuit fait une seule ligne : « Veille du 24/11 : 2 souvenirs, 1 observation envoyée, lettre écrite ».
+3. **Le détail n'est jamais vide** : ce qui a été couvert, le résultat, la raison d'un échec, le coût et la durée, les
+   références, le lien vers la conversation ou le mail.
+4. **Une seule forme par fait**, au Journal, en notification et à la voix. La notification reprend le titre de la
+   ligne ; son corps est la première ligne du détail.
+5. **Le registre neutre d'un assistant** : présent ou passé composé, sans « je » ni sujet inutile. On écrit « Rangé
+   dans Facture par une règle ».
+6. **Le satellite donne le fait, le core le complète** avec ce qu'il sait : l'expéditeur, la boîte, la synthèse,
+   l'échéance.
+7. **Un échec dit toujours sa raison**, en une ligne, partout.
+8. **Le même vocabulaire partout**, celui du dictionnaire : « lettre du matin », une seule apostrophe, des pluriels
+   écrits en entier.
+
+**Par famille**
+
+| Famille | Ligne du Journal | Détail | Notification |
+|---|---|---|---|
+| Mail reçu | « Facture EDF, de edf.fr : proposé en Facture » | la synthèse, la boîte, les étiquettes, la confiance, un lien vers la carte | seulement si P1 ou plus, avec l'expéditeur |
+| Mail rangé par une règle | « Rangé en Jeux vidéo par une règle : Steam » | la règle | aucune |
+| Carte ou proposition | « À trancher : … » | ce qu'elle propose, le poste, Valider ou Corriger | regroupée, selon la porte |
+| Geste | « Validé : … (depuis le téléphone) » | le résultat du poste, ou « Échec : raison » | aucune |
+| Délégation | la demande | la réponse du poste, sa durée, le lien vers la conversation | aucune |
+| Veille | une seule ligne, « Veille du 24/11 : … » | la période, les souvenirs, les observations, les fiches proposées, le coût et la durée | seulement en cas d'échec, avec la raison |
+| Lettre du matin | « Lettre du matin : … » | ses éléments en entier | le titre et le premier élément |
+| Coûts et plafonds | une seule ligne, « Plafond du jour atteint : 0,50 $ » | ce qui a été mis en pause | oui |
+| Santé (clé, sauvegarde, satellite injoignable) | le fait et sa raison | l'action à faire | selon l'importance |
+
+Le mot « veille » de ce tableau est celui de la décision. Le dictionnaire nomme cette routine « la nuit » : voir la
+question 16 du § 10.
 
 ## 6. La présence, et où elle entre dans les flux
 
@@ -490,10 +552,11 @@ traitement différé, le point du soir.
 - **Le contrat satellite** dit encore « le core ne retient du flux que `urgent` et les événements de contrôle »
   ([contrat](../../standards/contrat-satellite.md), ligne 116), comme la
   [liaison du 27/10](2026-10-27-liaison-core-satellites-design.md) (§ 4). Le core retient déjà tout ; la porte (D2)
-  rend ce choix explicite. Le contrat sert aussi `/cards` seulement si `health.agent` vaut true (lignes 108 et 134) ; les
-  propositions dépendent du tri, pas de l'agent. La version suivante du contrat doit reprendre les deux.
-- **Le retour du 24/11** demandait un Journal à la première personne. D6 tranche : le Journal reste neutre ; c'est
-  « Ce que j'ai fait » qui parle à la première personne, écrit par le modèle.
+  rend ce choix explicite. Le contrat sert aussi `/cards` seulement si `health.agent` vaut true (lignes 108 et 134) ;
+  les propositions dépendent du tri, pas de l'agent. La version suivante du contrat doit reprendre les deux.
+- **Le retour du 24/11** demandait un Journal et « Ce que j'ai fait » à la première personne, par la voix de Natsume.
+  D6 révisé tranche autrement : les deux restent écrits par le code, dans le registre neutre d'un assistant, selon
+  les règles du § 5.5 ; ils disent l'action ou la proposition, plus l'objet brut du mail.
 
 ## 10. Laissé au plan
 
@@ -510,10 +573,10 @@ Les questions sont ouvertes. Pour certaines, la contestation du 25/11 a jugé un
 3. Comment une correction (choisir une autre boîte, d'autres étiquettes) passe par le geste du contrat. Piste : un
    mécanisme générique du contrat, plutôt qu'un champ propre à Acedia.
 4. La forme de la mesure par boîte et par étiquette (D3), et où CrOliX la lit.
-5. Le moment fixe où le modèle écrit « Ce que j'ai fait », et ce qu'il relit des faits préparés. Piste : écrit une
-   fois, ce qui fige le Bureau entre deux écritures ; à montrer à CrOliX.
+5. Ce que « Ce que j'ai fait » retient des lignes du Journal (les actions de Natsume seulement, ou aussi les gestes
+   et les réglages de CrOliX), et sous quel intitulé, puisqu'il ne dit pas « je ».
 6. Si la validation groupée passe aussi par Natsume, depuis la conversation (flux 10).
-7. Ce que nomme une ligne neutre du Journal : l'action, la proposition, l'objet du mail.
+7. La forme exacte de chaque ligne du Journal, famille par famille, depuis le tableau du § 5.5.
 8. Le nom et la forme du paramètre de filtre du bilan du jour, et la manière dont Acedia sait qu'un mail a été rangé
    avec l'accord de CrOliX.
 9. Le nouveau type d'un élément du bilan : la boîte et la synthèse par mail, à côté de `{ type, title, at, ref }`.
@@ -522,12 +585,14 @@ Les questions sont ouvertes. Pour certaines, la contestation du 25/11 a jugé un
 11. La règle de fluidité (P2) : le brouillon que le plan écrit, à faire valider par CrOliX.
 12. Le nouveau plafond de la parole spontanée, et la forme du budget commun.
 13. Le standard où s'écrit la règle de la voix (P4).
-14. Le repli quand le modèle n'a pas pu écrire la lettre du matin ou « Ce que j'ai fait ».
+14. Le repli quand le modèle n'a pas pu écrire la lettre du matin.
 15. L'ordre des chantiers : voir le § 11.
+16. « Veille du 24/11 » dans le tableau du § 5.5 contre « la nuit » du dictionnaire, qui écarte « la veille » pour
+    cette routine : quel mot porte la ligne.
 
 ## 11. Découpage proposé
 
-Une proposition, non tranchée, pour environ cinq PR :
+Une proposition, non tranchée, pour environ six PR :
 
 1. **Les textes d'abord** : le dictionnaire (déjà dans cette PR), le contrat 1.5, le standard de la voix, le standard
    des notifications.
@@ -536,15 +601,21 @@ Une proposition, non tranchée, pour environ cinq PR :
    filtré et son nouveau type, la synthèse à la demande (B1).
 4. **La porte d'attention au core**, le chantier critique.
 5. **Les propositions au core** : les cartes de tri, la validation groupée, la correction.
-6. **La voix du modèle** : la lettre du matin et « Ce que j'ai fait », avec un repli neutre.
-7. **P2** : l'ouverture, la règle de fluidité, le budget commun, la ligne de coût.
-8. **La nuit vers Avaritia** : le réglage des boîtes dans l'Atelier, le filtre au bilan.
-9. **Le seuil par boîte**, pendant le rodage, quand la mesure le permet.
+6. **La voix du modèle** : la lettre du matin, avec un repli neutre.
+7. **L'écriture du core**, un chantier du core : les huit règles du § 5.5 appliquées au Journal, au détail d'une
+   ligne, à « Ce que j'ai fait », aux notifications et à la voix fixe ; la nuit en une seule ligne.
+8. **P2** : l'ouverture, la règle de fluidité, le budget commun, la ligne de coût.
+9. **La nuit vers Avaritia** : le réglage des boîtes dans l'Atelier, le filtre au bilan.
+10. **Le seuil par boîte**, pendant le rodage, quand la mesure le permet.
 
 ## 12. Preuve
 
 Chaque flux du § 5 marqué « à faire » aura, dans le plan, son critère vérifiable : un test, un rejeu ou une mesure
 qui montre le comportement, sans dépendre du NAS.
+
+Pour l'écriture du core (§ 5.5), la preuve porte sur chaque famille du tableau : un test fixe le texte de sa ligne,
+vérifie que son détail n'est jamais vide, et que la notification reprend le titre de la ligne et la première ligne du
+détail. Un rejeu d'une nuit montre une seule ligne de veille au Journal.
 
 ## 13. Ce qui n'a pas été vérifié
 
