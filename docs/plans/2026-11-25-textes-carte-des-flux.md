@@ -5,7 +5,12 @@
 > **Issue :** Lun-Ecosystem/lun-docs#217, `niveau:standard`. Premier chantier de la carte des flux (§ 11, étape 1).
 >
 > **État : rédigé le 25/11 ; contesté le 25/11 ; amendé le 25/11** (« Ce que la contestation a changé »). À valider
-> par CrOliX. Les questions sont en fin de plan, une à une.
+> par CrOliX.
+>
+> **Réponses de CrOliX aux questions, le 25/11** (détail dans « Les réponses de CrOliX ») : (1) lecture (a), le code
+> ne dit jamais « tu » sur une surface, seul le modèle s'adresse à CrOliX ; (2) la règle de la voix vaut pour tous
+> les satellites ; (3) ce que la porte reçoit devient une règle ; (4) un nouveau `standards/ecriture.md` ; (5) une
+> proposition `corrected` compte comme un accord.
 >
 > Relu sur `main` : lun-docs (`origin/main` de la branche), Lun'Acedia (`0386afa`), Lun'Avaritia (`e51132d`),
 > Lun'Luxuria (`98eaf36`). Le graphe d'abord, puis chaque fichier. Le core est décrit par ses comportements, comme
@@ -93,7 +98,7 @@ termes contre le dictionnaire fusionné.
   neutre ; la spec écrit les huit règles (§ 5.5).
 - `design.md`, « Ton des textes » (`:71-78`) : « Deux voix : CrOliX à la première personne […] ; Natsume dans son
   personnage. Les écrans d'outil […] parlent d'une voix technique neutre : phrases courtes, pas de « tu » ». Le
-  registre neutre du dictionnaire, lui, « dit « tu » ou nomme ». Les deux se lisent ensemble : voir la question 1.
+  registre neutre du dictionnaire, lui, « dit « tu » ou nomme ». CrOliX a tranché (réponse 1).
 - Les standards copiés dans le plugin sont listés dans `tools/standards-map.json` ; `npm run sync` les écrit sous
   `plugin/skills/<skill>/references/`, `npm run sync:check` échoue sur une copie absente, différente ou orpheline.
   `lun-ecosysteme` reçoit `contrat-satellite.md`, `notifications.md`, `dictionnaire.md` ; `lun-design`, `design.md`.
@@ -196,7 +201,7 @@ interface Card { /* … */ fields?: CardField[] }
   rangé seul, ou `accepted`, ou `corrected`. Un mail rangé seul par le tri au-dessus d'un seuil n'en est pas (§ 5.4).
   - **`corrected` élargit la spec.** Le § 5.4 dit « une règle, ou une proposition validée ». Une proposition
     corrigée est rangée par le geste de CrOliX, dans la boîte qu'il a choisie : ce plan la compte comme un accord.
-    À confirmer par CrOliX (question 5).
+    Accepté par CrOliX le 25/11 (réponse 5).
   - **La boîte retenue est la boîte actuelle**, et le statut celui du moment du bilan. Un mail déplacé depuis compte
     pour sa boîte d'arrivée ; un mail sorti des boîtes autorisées n'y est plus.
   - **Rangé seul par l'IA, puis rangé à la main.** Le geste de CrOliX vaut accord pour la boîte où il l'a mis. Que
@@ -242,9 +247,9 @@ Remplacée par : « Le core reçoit tout le flux et le rend par sa porte d'atten
 
 Trois places possibles :
 
-- **(a) Un nouveau standard, `standards/ecriture.md` (recommandé).** La voix, le registre neutre, les huit règles.
-  Copié dans le plugin pour `lun-ecosysteme` et `lun-design`. « Ton des textes » de `design.md` y renvoie. Une
-  place pour une règle qui vaut pour le core, les écrans et la voix fixe.
+- **(a) Un nouveau standard, `standards/ecriture.md` (retenu par CrOliX, réponse 4).** La voix, le registre
+  neutre, les huit règles. Copié dans le plugin pour `lun-ecosysteme` et `lun-design`. « Ton des textes » de
+  `design.md` y renvoie. Une place pour une règle qui vaut pour le core, les écrans et la voix fixe.
 - **(b) Dans `design.md`, « Ton des textes ».** Déjà la voix des écrans, mais un standard de design pour une règle
   qui vaut aussi pour les consignes du modèle et la voix fixe ; il n'est copié que pour `lun-design`.
 - **(c) Dans `notifications.md`.** Ne couvre ni le Journal, ni « Ce que j'ai fait », ni les consignes.
@@ -314,10 +319,9 @@ Le contrat 1.5 ne lui demande rien. Sa `src/lib/ui/DecisionCard.svelte` est une 
 
 ### Les phrases fixes en « je » des agents de poste
 
-Si la règle de la voix vaut aussi pour les satellites (question 2) :
-
-Dix phrases, six chez Acedia et quatre chez Avaritia. « Tutoie » marque celles qui s'adressent aussi à CrOliX en
-« tu » (question 1).
+La règle de la voix vaut pour tous les satellites (réponse 2). Dix phrases, six chez Acedia et quatre chez
+Avaritia, deviennent neutres, chacune dans le chantier de son satellite. « Tutoie » marque les sept qui s'adressent
+aussi à CrOliX en « tu » : elles cessent aussi de tutoyer (réponse 1).
 
 - Acedia, `server/src/` :
   - `contract/routes.ts:39`, « je ne fais rien tant qu'elle n'est pas reprise » ;
@@ -375,19 +379,18 @@ par ligne au plus, les mots du dictionnaire.
    `tools/standards-map.json`, `README.md`). **En parallèle de 1 et 3.** Écrite pour (a) (forme 9).
    - `ecriture.md`, avec la tête des autres standards (titre, une citation qui dit son champ) :
      - « La voix » : un texte est écrit par le modèle, à la première personne, ou par le code, dans le registre
-       neutre. Le code dit « tu » ou nomme, jamais « je » ; seul le modèle dit « je » (P4). La crainte qu'elle
-       prévient : une Natsume froide côté code et émotive côté modèle (§ 5.3).
+       neutre. Seul le modèle dit « je » et s'adresse à CrOliX (P4). Le code ne dit « tu » que dans ses consignes
+       au modèle ; sur toute surface, il nomme ou s'écrit sans sujet, jamais « je » ni « tu » (réponse 1). La
+       crainte qu'elle prévient : une Natsume froide côté code et émotive côté modèle (§ 5.3).
+     - « Le champ » : la règle vaut pour le core et pour tous les satellites (réponse 2).
      - Où va chaque texte : la lettre du matin au modèle (D6) ; le Journal, « Ce que j'ai fait », les notifications,
        la voix fixe au code. L'annonce d'une urgence reste une phrase fixe sans « je ».
      - « Le registre neutre » : la définition du dictionnaire, et la règle 5.
      - « Les huit règles », mot pour mot du § 5.5, avec leurs exemples. Une seule forme pour le rangement :
        « Rangé en Facture » (la règle 5 de la spec écrit « dans », son tableau « en » ; on garde « en »).
-     - La réponse aux questions 1 et 2 : où le « tu » s'emploie, et si la règle vaut pour les satellites.
-   - La retouche qui suit la question 1 :
-     - avec (a), le « tu » seulement dans les consignes : le dictionnaire, entrée « le registre neutre », précise
-       « il dit « tu » au modèle, et nomme sur les surfaces » ; `design.md` ne change pas de sens ;
-     - avec (b), le tutoiement au Journal et dans les notifications : `design.md`, « Ton des textes », nomme cette
-       exception à « pas de « tu » » ; le dictionnaire ne change pas.
+   - La retouche du dictionnaire qui suit la réponse 1 : l'entrée « le registre neutre » dit « nomme ou s'écrit
+     sans sujet, jamais « je » ni « tu » ». Ce fichier vit encore sur la branche de lun-docs#216 : la tâche 4 fait
+     la retouche après le rebase. `design.md` ne change pas de sens.
    - `design.md`, « Ton des textes » : une ligne qui renvoie à `ecriture.md` pour la voix du code et du modèle. La
      règle des écrans d'outil reste.
    - `tools/standards-map.json` : `standards/ecriture.md` pour `lun-ecosysteme` et `lun-design`.
@@ -397,8 +400,7 @@ par ligne au plus, les mots du dictionnaire.
        `grep -c "^[1-8]\. "` vaut 8 ;
      - `grep -n "Rangé dans"` ne rend rien ; `grep -n "Rangé en"` rend la forme gardée ;
      - `grep -n "ecriture.md"` dans `design.md`, `README.md` et `tools/standards-map.json` ;
-     - la retouche de la question 1 : `grep -n "registre neutre"` dans le dictionnaire, ou la ligne d'exception
-       dans « Ton des textes ».
+     - la règle de la voix : `grep -n "jamais « je » ni « tu »"` dans `ecriture.md`.
    - Exclu : la table « par famille » du § 5.5 (question 7) ; les quatre phrases fixes du core et celles des agents
      de poste (du code) ; la règle de fluidité (P2).
 3. - [ ] **La porte d'attention dans les notifications** (`standards/notifications.md` seul). **En parallèle de 1
@@ -410,8 +412,8 @@ par ligne au plus, les mots du dictionnaire.
      plage de nuit, la présence. Elle choisit une sortie parmi cinq : dire, notifier, attendre le bon moment, la
      lettre du matin, le Journal. Chaque choix est tracé. « Attendre » partage un budget avec la parole spontanée
      (P2) ; sa forme n'est pas écrite ici.
-   - Une ligne sur ce que la spec marque **[lecture du rédacteur]** (ce que la porte reçoit), écrite comme lecture
-     tant que CrOliX ne l'a pas confirmée (question 3).
+   - Ce que la porte reçoit est une règle (réponse 3) : tout ce qui peut parvenir à CrOliX passe par la porte, et la
+     liste de ses entrées est écrite (événements, cartes, échéances ; sourdine, pause, appel, nuit, présence).
    - « Classement » : la ligne P1 dit « carte à valider issue d'une délégation » ; la ligne P2 dit « proposition de
      tri, carte ou événement (P1 si le tri la juge urgente) ». Une phrase : une carte porte son palier dans
      `importance` ; absent, elle vaut P1.
@@ -430,6 +432,8 @@ par ligne au plus, les mots du dictionnaire.
      - `grep -nF "(s)"` ne rend rien (pluriels en entier) ;
      - `grep -n "tris à valider"` ne rend rien ;
      - `grep -n "veille"` : chaque ligne trouvée parle de suivre des sources, jamais de la routine de 5 h.
+   - Retoucher l'entrée « le registre neutre » du dictionnaire fusionné (réponse 1, tâche 2) ; preuve :
+     `grep -n "jamais « je » ni « tu »" standards/dictionnaire.md`.
    - `npm run sync`, puis `npm run sync:check`, `npm run check`, `npm test`, tous verts. Les copies attendues :
      `plugin/skills/lun-ecosysteme/references/{contrat-satellite,notifications,ecriture}.md`,
      `plugin/skills/lun-design/references/ecriture.md`.
@@ -474,27 +478,20 @@ qu'elles se citent (le champ `importance` entre 1 et 3). Puis 4, qui attend lun-
 - Que la PR lun-docs#216 fusionne telle quelle : le dictionnaire et la spec sont lus sur sa branche (`8271453`).
 - Le statut d'une proposition rangée seule par l'IA, puis rangée à la main (forme 6).
 
-## Questions à CrOliX
+## Les réponses de CrOliX
 
-Une à la fois, chacune au moment où sa tâche part.
+Le 25/11, aux cinq questions du plan amendé.
 
-1. **Où le code dit « tu ».** Le registre neutre « dit « tu » ou nomme » ; `design.md` interdit « tu » sur les écrans
-   d'outil. Deux lectures :
-   - (a) le « tu » ne sert que dans les consignes au modèle (le socle : « Tu tiens à lui… ») ; le Journal, les
-     notifications et la voix fixe nomment ou écrivent sans sujet (« Rangé en Facture par une règle ») ;
-   - (b) le code tutoie CrOliX au Journal et dans les notifications ; `design.md` nomme cette exception.
-
-   (Tâche 2.)
-2. **La règle de la voix vaut-elle pour les satellites ?** Les agents d'Acedia et d'Avaritia ont dix phrases fixes en
-   « je », que le résumé d'une délégation porte jusqu'au core. Recommandé : oui, le standard vaut pour tout
-   l'écosystème ; ces phrases deviennent neutres dans le chantier de chaque satellite. (Tâche 2.)
-3. **Ce que la porte reçoit.** La spec le marque comme une lecture : les événements, les cartes, les échéances, et
-   les entrées sourdine, pause, appel, nuit, présence. Recommandé : l'écrire comme règle dans `notifications.md`.
-   (Tâche 3.)
-4. **La place du standard de la voix.** Recommandé : (a), un nouveau standard `standards/ecriture.md` (forme 9).
-   (Tâche 2.)
-5. **L'accord étendu à `corrected`.** Le § 5.4 dit « une règle, ou une proposition validée ». Ce plan compte aussi
-   une proposition corrigée : CrOliX l'a rangée lui-même. Recommandé : l'accepter. (Tâche 1.)
+1. **Le « tu » : la lecture (a).** Le code nomme et ne dit jamais « tu » ; seul le modèle s'adresse à CrOliX. Le
+   « tu » du code ne reste que dans ses consignes au modèle. Le dictionnaire se corrige : le registre neutre
+   « nomme ou s'écrit sans sujet, jamais je ni tu » (tâche 2, faite à la tâche 4 après le rebase). Le critère 2 de
+   l'issue (« le code dit « tu » ou nomme ») s'écrit donc avec ce « tu » réservé aux consignes.
+2. **La règle de la voix vaut pour tous les satellites.** Les dix phrases deviennent neutres, chacune dans le
+   chantier de son satellite ; les sept qui tutoient cessent aussi de tutoyer.
+3. **Ce que la porte reçoit devient une règle** dans `notifications.md` : tout ce qui peut parvenir à CrOliX passe
+   par la porte, et la liste de ses entrées est écrite (tâche 3).
+4. **Le standard vit dans un nouveau `standards/ecriture.md`** (forme 9, tâche 2).
+5. **Une proposition `corrected` compte comme un accord** : l'élargissement de la spec est accepté (forme 6).
 
 ## Ce que la contestation a changé
 
