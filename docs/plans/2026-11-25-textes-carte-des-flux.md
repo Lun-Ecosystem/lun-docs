@@ -4,7 +4,8 @@
 >
 > **Issue :** Lun-Ecosystem/lun-docs#217, `niveau:standard`. Premier chantier de la carte des flux (§ 11, étape 1).
 >
-> **État : rédigé le 25/11.** À contester, puis à valider par CrOliX. Les questions sont en fin de plan, une à une.
+> **État : rédigé le 25/11 ; contesté le 25/11 ; amendé le 25/11** (« Ce que la contestation a changé »). À valider
+> par CrOliX. Les questions sont en fin de plan, une à une.
 >
 > Relu sur `main` : lun-docs (`origin/main` de la branche), Lun'Acedia (`0386afa`), Lun'Avaritia (`e51132d`),
 > Lun'Luxuria (`98eaf36`). Le graphe d'abord, puis chaque fichier. Le core est décrit par ses comportements, comme
@@ -143,8 +144,14 @@ interface Card { /* … */ fields?: CardField[] }
 ```
 
 - Route : `POST /lun/v1/cards/:id/accept` accepte aussi `{ values: Record<string, string[]> }`. Chaque clé est le
-  `name` d'un champ de la carte, chaque valeur est prise dans ses `choices`. Sinon `400`. `values` et `input` ne
-  vont jamais ensemble (`400`).
+  `name` d'un champ de la carte, chaque valeur est prise dans ses `choices`.
+- **Les règles du geste**, toutes écrites au contrat :
+  - une clé absente de `values` garde la valeur proposée (`value`) ;
+  - un champ sans `multiple` attend exactement un choix ;
+  - une carte n'a jamais à la fois `fields` et `options` ;
+  - le core n'envoie `values` qu'à une carte qui porte `fields` ;
+  - `400` pour une clé inconnue, un choix hors des `choices`, un champ sans `multiple` qui n'a pas un seul choix,
+    `values` avec `input`, `values` avec `answer`, `values` sur une carte sans `fields`.
 - Le poste traduit `values` dans son métier. Pour Acedia : la boîte (un seul choix, avec `trash` et `spam`) et les
   étiquettes (`multiple`) d'une proposition ; valider avec `values` fait ce que fait `mail.correct`
   (`lun-acedia/server/src/contract/catalog.ts:143-149`).
@@ -168,6 +175,10 @@ interface Card { /* … */ fields?: CardField[] }
   (`lun-avaritia/server/src/brain/drafts.ts:405`). Pas de champ de plus.
 - `id` reste une chaîne unique dans le poste : Acedia choisit comment distinguer une proposition d'une carte de son
   agent (chantier d'Acedia).
+- **Un seul signal par proposition.** Une proposition servie en carte n'émet plus d'événement « en attente »
+  (`mail.pending` chez Acedia) : son palier est celui de la carte (`importance`). Le contrat l'écrit : « Un poste
+  1.5 ne double pas une carte d'un événement ; la carte porte le palier. » Les événements d'un rangement fait
+  (`mail.triaged`) ne changent pas.
 
 ### 6. Le filtre du bilan du jour (question 8 du § 10)
 
@@ -183,11 +194,24 @@ interface Card { /* … */ fields?: CardField[] }
 - **L'accord de CrOliX**, Acedia le sait déjà : chaque proposition garde sa `source` (`rule`, `ai`) et son statut
   (`auto`, `accepted`, `corrected`…) (`lun-acedia/server/src/types.ts:16`, `triage/proposals.ts`). Accord = `rule`
   rangé seul, ou `accepted`, ou `corrected`. Un mail rangé seul par le tri au-dessus d'un seuil n'en est pas (§ 5.4).
+  - **`corrected` élargit la spec.** Le § 5.4 dit « une règle, ou une proposition validée ». Une proposition
+    corrigée est rangée par le geste de CrOliX, dans la boîte qu'il a choisie : ce plan la compte comme un accord.
+    À confirmer par CrOliX (question 5).
+  - **La boîte retenue est la boîte actuelle**, et le statut celui du moment du bilan. Un mail déplacé depuis compte
+    pour sa boîte d'arrivée ; un mail sorti des boîtes autorisées n'y est plus.
+  - **Rangé seul par l'IA, puis rangé à la main.** Le geste de CrOliX vaut accord pour la boîte où il l'a mis. Que
+    le statut de la proposition le dise après ce geste n'est pas vérifié dans le code : le chantier d'Acedia le
+    prouve par un test, ou fait passer le statut à `corrected`.
 - **Avec le filtre**, `received` et `done` ne gardent que ces mails ; `pending` ne change pas. Sans le filtre, le
   bilan ne change pas.
 - **Le danger.** Acedia 1.4 valide l'entrée par un objet `zod` qui retire les clés inconnues
   (`catalog.ts:422-425`) : elle ignorerait `boxes` sans erreur et rendrait tous les mails. Le contrat le dit : **le
   core ne passe `boxes` qu'à un poste qui déclare `contract` 1.5 ou plus.**
+- **Les règles du core**, écrites au contrat, pour ce qui entre dans la bibliothèque :
+  - un poste de contrat inférieur à 1.5 ne fait entrer aucun mail ;
+  - un élément dont la `box.id` est absente, ou hors des `boxes` demandées, est jeté ;
+  - un élément sans `synthesis` n'est pas envoyé ;
+  - les doublons sont retirés par `ref.id` avant l'envoi (un mail peut être dans `received` et dans `done`).
 
 ### 7. Le type d'un élément du bilan (question 9 du § 10)
 
@@ -200,6 +224,12 @@ interface DigestItem { type: string; title: string; at: string; ref?: Ref; box?:
 - `box` porte l'identifiant (celui du filtre) et le nom (celui des textes : « Rangé en Facture »).
 - `synthesis` est présente quand le poste l'a. **B1** : avec `boxes`, le poste écrit la synthèse qui manque à un
   mail rangé par une règle, par un petit appel, seulement pour ces mails. Sans `boxes`, aucun appel de plus.
+- **Les bornes de B1**, écrites au contrat :
+  - en pause, en mode dégradé ou au plafond de dépense, le bilan sort sans écrire de synthèse : les éléments qui
+    n'en ont pas restent sans `synthesis` ;
+  - chaque appel est compté par le poste, comme tout appel payant (« Coûts ») ;
+  - le nombre de synthèses écrites par appel du bilan est borné par le poste ; au-delà, les éléments restent sans
+    `synthesis` et l'appel suivant reprend.
 - Le bilan reste la seule sortie d'une synthèse hors des cartes. Le corps du mail ne quitte jamais le poste (D9).
 
 ### 8. La phrase de la ligne 116
@@ -231,12 +261,13 @@ Ce que le code de `main` fait, contre le contrat 1.5. Pour les chantiers suivant
 Chemins sous `server/src/` sauf mention. Pour chaque écart : ce que dit le 1.5, puis ce que fait le code.
 
 - **A1.** `contract` `'1.5'`. Le code : `CONTRACT = '1.4'` (`identity.ts:2`).
-- **A2.** Les propositions de tri sont des cartes. Le code : `/cards` ne lit que les cartes de l'agent, `pina_cards`
-  (`contract/routes.ts:193-201`) ; les propositions vivent dans `proposals`.
+- **A2.** Les propositions de tri sont des cartes, sans événement « en attente ». Le code : `/cards` ne lit que les
+  cartes de l'agent, `pina_cards` (`contract/routes.ts:193-201`) ; les propositions vivent dans `proposals`, et
+  chacune émet `mail.pending` (`triage/pipeline.ts:300`), à retirer pour une proposition servie en carte.
 - **A3.** Le geste d'une proposition passe par la carte. Le code : `mail.validate`, `mail.correct` et `mail.refuse`
   existent en actions (`contract/catalog.ts:140-156`), pas en cartes.
-- **A4.** `importance` sur la carte. Le code : `toContractCard` n'en pose pas (`contract/routes.ts:41-58`) ;
-  l'événement `mail.pending` a déjà `low` ou `normal` (`triage/pipeline.ts:301`).
+- **A4.** `importance` sur la carte, qui reprend le palier de l'événement retiré. Le code : `toContractCard` n'en
+  pose pas (`contract/routes.ts:41-58`) ; l'événement `mail.pending` a `low` ou `normal` (`triage/pipeline.ts:301`).
 - **A5.** `bulk`, calculé par le poste. Le code : le groupe se calcule dans le front seul
   (`views/src/lib/mail/Pending.svelte:98`, `:144`) ; le serveur ne sert que les deux seuils
   (`triage/routes.ts:41-45`).
@@ -248,11 +279,10 @@ Chemins sous `server/src/` sauf mention. Pour chaque écart : ce que dit le 1.5,
   erreur (`contract/catalog.ts:422-425`).
 - **A9.** `box` et `synthesis` sur un élément du bilan. Le code : les éléments sont `{ type, title, at, ref }`, par
   l'objet du mail (`contract/catalog.ts:440`, `:456-461`) ; ceux des cartes n'ont pas de `ref` (`:470`).
-- **A10.** B1, la synthèse à la demande. Le code : absente.
+- **A10.** B1, la synthèse à la demande, sans synthèse en pause, en mode dégradé ou au plafond, comptée, bornée par
+  appel. Le code : absente.
 
-Deux points touchent la porte, pas le contrat : une proposition donnera une carte **et** un événement `mail.pending`.
-La porte (§ 11 étape 4) doit n'en faire qu'un fait (règle 2 du § 5.5). Et une proposition rangée seule par le tri
-n'aura pas de carte : seul son événement `mail.triaged` reste.
+Une proposition rangée seule par le tri n'a pas de carte : seul son événement `mail.triaged` reste.
 
 ### Lun'Avaritia
 
@@ -267,22 +297,40 @@ Chemins sous `server/src/`.
   faire.
 - **V5.** `bulk`, `fields`, `box`, `synthesis` : optionnels, aucun ne s'applique à un brouillon. Rien à faire.
 
-Seul V1 et V2 font un petit chantier. Un écart au standard de l'écriture, hors contrat : le bilan écrit
+Seuls V1 et V2 font un petit chantier. Un écart au standard de l'écriture, hors contrat : le bilan écrit
 « Lot de n observation(s) » (`digest.ts:22`), contre la règle 8 (pluriels en entier).
 
 ### Lun'Luxuria
 
 Luxuria n'est pas un poste : elle ne sert aucune route `/lun/v1` (relu par recherche dans `src/` et `src-tauri/`).
-Le contrat 1.5 ne lui demande rien. Elle affiche des cartes relayées par le core
-(`src/lib/ui/DecisionCard.svelte:33-52` : `lines`, `sends`, `options`) : les champs nouveaux y sont ignorés, et la
-correction par `fields` n'y apparaît pas tant que le chantier des propositions au core ne l'ajoute pas (§ 11 étape 5).
+Le contrat 1.5 ne lui demande rien. Sa `src/lib/ui/DecisionCard.svelte` est une copie générée du kit de lun-docs
+(sa première ligne le dit) : rien à faire chez elle, la copie suit le kit.
+
+### Le kit de lun-docs
+
+- **K1.** `design/kit/DecisionCard.svelte` montre `lines`, `sends` et `options`, et ne connaît ni `fields`, ni
+  `importance`, ni `bulk`. Un chantier du kit, avec sa vitrine dans la galerie (`design/galerie/sections/`,
+  `design/galerie/inventaire.ts`), passe avant l'étape 5 du § 11 (les propositions au core), qui en a besoin.
 
 ### Les phrases fixes en « je » des agents de poste
 
 Si la règle de la voix vaut aussi pour les satellites (question 2) :
 
-- Acedia : `server/src/contract/routes.ts:39` (« je ne fais rien »), `server/src/pina/agent.ts:52`, `:54`, `:55`.
-- Avaritia : `server/src/brain/agent.ts:21-23`, `server/src/contract/routes.ts:215`.
+Dix phrases, six chez Acedia et quatre chez Avaritia. « Tutoie » marque celles qui s'adressent aussi à CrOliX en
+« tu » (question 1).
+
+- Acedia, `server/src/` :
+  - `contract/routes.ts:39`, « je ne fais rien tant qu'elle n'est pas reprise » ;
+  - `pina/agent.ts:52`, « J'ai atteint mon plafond […] ou tu peux le relever » : tutoie ;
+  - `pina/agent.ts:54`, « Je m'arrête là […] Dis-moi par où reprendre » : tutoie ;
+  - `pina/agent.ts:55`, « Je n'ai rien de clair à te répondre […] Tu peux reformuler ? » : tutoie ;
+  - `pina/agent.ts:57`, « Le fournisseur d'IA refuse ma clé » ;
+  - `pina/agent.ts:61`, « Le fournisseur d'IA m'a renvoyé une réponse illisible. Réessaie […] » : tutoie.
+- Avaritia, `server/src/` :
+  - `brain/agent.ts:21`, « je ne peux pas répondre avant le mois prochain, ou relève-le » : tutoie ;
+  - `brain/agent.ts:22`, « Je me suis arrêté […] reformule pour continuer » : tutoie ;
+  - `brain/agent.ts:23`, « Je n'ai rien de clair à répondre là-dessus » ;
+  - `contract/routes.ts:215`, « je ne fais rien tant qu'elle n'est pas reprise ».
 
 Le résumé d'une délégation (`AgentReply.summary`) porte ces phrases jusqu'au core.
 
@@ -295,22 +343,33 @@ par ligne au plus, les mots du dictionnaire.
 1. - [ ] **Le contrat 1.5 et son historique** (`standards/contrat-satellite.md` seul). **En parallèle de 2 et 3.**
    - Écrire « v1.5 » en tête (`:5`) et `'1.5'` dans le commentaire de `Health` (`:41`) ; ce commentaire dit
      désormais « agent : sert `/agent` ».
-   - Ajouter à `Card` `importance?`, `bulk?`, `fields?` et le type `CardField`, avec leurs commentaires (formes 1 à
-     3). Ajouter `box?` et `synthesis?` à `DigestItem` (forme 7).
+   - Ajouter à `Card` `importance?`, `bulk?`, `fields?`, avec leurs commentaires (formes 1 à 3) ; `CardField` sur la
+     ligne de `Card` ou juste après. Ajouter `box?` et `synthesis?` à `DigestItem` (forme 7).
    - Routes : `accept` accepte `{ values }` (forme 3) ; `/cards` est servi par tout poste 1.5 (forme 4).
-   - Comportements : la proposition de tri est une carte (forme 5) ; « Délégation » ne garde que `agent` ; la phrase
-     du lot (`:112`) passe en validation groupée et dit `bulk` (forme 2) ; « Bilan du jour » dit `boxes`, l'accord de
-     CrOliX, B1, et « le core ne passe `boxes` qu'à un poste 1.5 » (forme 6) ; la ligne 116 reprise (forme 8).
-   - Erreurs : `400` pour un `values` hors des choix, ou avec `input` ; `404` de `/cards` réservé à un poste 1.4 sans
-     agent.
-   - Versionnement : une phrase pour la v1.5, à la suite de la v1.4. Elle liste les champs ajoutés et les deux
-     changements de comportement (`/cards` sans agent, les propositions en cartes), puis la règle du filtre.
-   - Preuves : `grep -n "1\.5"` montre la tête, `Health` et l'historique ; `grep -n "en lot"` ne rend plus rien ;
-     `grep -n "ne retient du flux"` ne rend plus rien ; `grep -n "boxes"` montre la route et la règle du 1.5.
-   - **La place.** Le contrat fait déjà 150 lignes, la limite d'un standard (`npm run check`). Chaque ajout se paie
-     par une ligne regagnée : les commentaires des types restent sur la ligne de leur type, comme en v1.4 ;
-     l'historique de la v1.5 remplace en une phrase le détail des v1.1 à v1.3, qui reste dans git. Si cela ne
-     suffit pas, le tableau des clés de service passe en liste courte. Rien de la v1.4 ne se perd en sens.
+   - Comportements :
+     - « Délégation » et la règle de `/cards` fusionnent en une seule puce : `agent` seulement avec `agent: true` ;
+       `/cards` toujours pour un poste 1.5, seulement avec `agent: true` en dessous (forme 4) ;
+     - la proposition de tri est une carte, et un poste 1.5 ne la double pas d'un événement (forme 5) ;
+     - la phrase du lot (`:112`) passe en validation groupée et dit `bulk` (forme 2) ;
+     - les règles du geste par `values` (forme 3) ;
+     - « Bilan du jour » : `boxes`, l'accord de CrOliX, la boîte actuelle, B1 et ses bornes, « le core ne passe
+       `boxes` qu'à un poste 1.5 », et les règles du core pour la bibliothèque (formes 6 et 7) ;
+     - la ligne 116 reprise (forme 8).
+   - Erreurs : chaque `400` de la forme 3 ; `404` de `/cards` réservé à un poste 1.4 sans agent.
+   - Versionnement : l'historique ne se condense pas. La v1.5 s'ajoute au bout de la ligne existante (`:150`) : les
+     champs ajoutés, les deux changements de comportement (`/cards` sans agent, les propositions en cartes sans
+     événement double), puis la règle du filtre.
+   - **La place.** Le contrat fait déjà 150 lignes, la limite d'un standard (`npm run check`). La limite de 120
+     signes de ce plan ne vaut pas pour le contrat : ses lignes de types et de règles restent longues, comme en
+     v1.4. Les ajouts se logent sur les lignes existantes (types, puce fusionnée, historique). Rien de la v1.4 ne se
+     perd en sens.
+   - Preuves :
+     - `wc -l standards/contrat-satellite.md` avant et après : 150, puis 150 au plus ;
+     - `grep -n "1\.5"` montre la tête, `Health` et l'historique ;
+     - `grep -n "en lot"` et `grep -n "ne retient du flux"` ne rendent plus rien ;
+     - `grep -n "boxes"` montre la route, la règle du 1.5 et les règles du core ;
+     - `grep -n "values"` montre la route, les règles du geste et les `400` ;
+     - `grep -n "double"` montre la règle du signal unique.
    - Exclu : tout `/lun/v2` ; le masquage lui-même (il vit dans Acedia, spec § 5.1) ; la mesure par boîte (D3).
 2. - [ ] **Le standard de l'écriture** (`standards/ecriture.md` nouveau, `standards/design.md`,
    `tools/standards-map.json`, `README.md`). **En parallèle de 1 et 3.** Écrite pour (a) (forme 9).
@@ -321,14 +380,25 @@ par ligne au plus, les mots du dictionnaire.
      - Où va chaque texte : la lettre du matin au modèle (D6) ; le Journal, « Ce que j'ai fait », les notifications,
        la voix fixe au code. L'annonce d'une urgence reste une phrase fixe sans « je ».
      - « Le registre neutre » : la définition du dictionnaire, et la règle 5.
-     - « Les huit règles », mot pour mot du § 5.5, avec leurs exemples.
+     - « Les huit règles », mot pour mot du § 5.5, avec leurs exemples. Une seule forme pour le rangement :
+       « Rangé en Facture » (la règle 5 de la spec écrit « dans », son tableau « en » ; on garde « en »).
      - La réponse aux questions 1 et 2 : où le « tu » s'emploie, et si la règle vaut pour les satellites.
+   - La retouche qui suit la question 1 :
+     - avec (a), le « tu » seulement dans les consignes : le dictionnaire, entrée « le registre neutre », précise
+       « il dit « tu » au modèle, et nomme sur les surfaces » ; `design.md` ne change pas de sens ;
+     - avec (b), le tutoiement au Journal et dans les notifications : `design.md`, « Ton des textes », nomme cette
+       exception à « pas de « tu » » ; le dictionnaire ne change pas.
    - `design.md`, « Ton des textes » : une ligne qui renvoie à `ecriture.md` pour la voix du code et du modèle. La
      règle des écrans d'outil reste.
    - `tools/standards-map.json` : `standards/ecriture.md` pour `lun-ecosysteme` et `lun-design`.
    - `README.md`, « Quoi fait foi » : une ligne « La voix et l'écriture des textes ».
-   - Preuves : `grep -c "^[1-8]\. "` vaut 8 dans « Les huit règles » ; `grep -n "je"` sur la règle de la voix ;
-     `grep -n "ecriture.md"` dans `design.md`, `README.md` et la carte des copies.
+   - Preuves :
+     - les règles se comptent sur la plage de lignes de « Les huit règles » : `sed -n '<début>,<fin>p'`, puis
+       `grep -c "^[1-8]\. "` vaut 8 ;
+     - `grep -n "Rangé dans"` ne rend rien ; `grep -n "Rangé en"` rend la forme gardée ;
+     - `grep -n "ecriture.md"` dans `design.md`, `README.md` et `tools/standards-map.json` ;
+     - la retouche de la question 1 : `grep -n "registre neutre"` dans le dictionnaire, ou la ligne d'exception
+       dans « Ton des textes ».
    - Exclu : la table « par famille » du § 5.5 (question 7) ; les quatre phrases fixes du core et celles des agents
      de poste (du code) ; la règle de fluidité (P2).
 3. - [ ] **La porte d'attention dans les notifications** (`standards/notifications.md` seul). **En parallèle de 1
@@ -347,14 +417,19 @@ par ligne au plus, les mots du dictionnaire.
      `importance` ; absent, elle vaut P1.
    - « Rendu » : la nuit, une urgence part en notification sans son (D11), quelle que soit l'entrée qui la porte. Le
      regroupement dit « 5 propositions à trancher ».
-   - Preuves : `grep -n "porte d'attention"`, `grep -n "sans son"`, `grep -n "importance"`.
+   - Preuves : `grep -n "porte d'attention"`, `grep -n "sans son"`, `grep -n "importance"` ;
+     `grep -n "tris à valider"` ne rend plus rien (le regroupement dit « propositions à trancher »).
    - Exclu : les paliers eux-mêmes ; le seuil par boîte ; le budget commun et son plafond (question 12 du § 10).
 4. - [ ] **Les copies, les termes, les barrières** (session principale). **Après 1, 2 et 3, et après la fusion de
    lun-docs#216.**
    - Rebaser la branche sur `main` à jour.
-   - Relire les trois textes contre le dictionnaire fusionné : « validation groupée », jamais « lot » pour un geste ;
-     « la nuit », jamais « la veille » pour la routine ; « lettre du matin » ; « carte », « geste », « poste »,
-     « synthèse », « registre neutre », « porte d'attention ».
+   - Relire les trois textes contre le dictionnaire fusionné, par des termes exacts, sur `contrat-satellite.md`,
+     `notifications.md` et `ecriture.md` :
+     - `grep -n "en lot"` ne rend rien (on écrit « validation groupée ») ;
+     - `grep -n "point du matin"` ne rend rien (on écrit « lettre du matin ») ;
+     - `grep -nF "(s)"` ne rend rien (pluriels en entier) ;
+     - `grep -n "tris à valider"` ne rend rien ;
+     - `grep -n "veille"` : chaque ligne trouvée parle de suivre des sources, jamais de la routine de 5 h.
    - `npm run sync`, puis `npm run sync:check`, `npm run check`, `npm test`, tous verts. Les copies attendues :
      `plugin/skills/lun-ecosysteme/references/{contrat-satellite,notifications,ecriture}.md`,
      `plugin/skills/lun-design/references/ecriture.md`.
@@ -380,13 +455,15 @@ qu'elles se citent (le champ `importance` entre 1 et 3). Puis 4, qui attend lun-
 
 - **Le contrat est à sa limite de lignes** (150 sur 150), et `design.md` à 149 : la ligne de renvoi de la tâche 2
   l'amène à 150. Le prochain ajout à l'un ou l'autre devra en retirer.
-
 - **Les choix d'un champ voyagent avec chaque carte.** Une boîte et ses étiquettes, une vingtaine de choix, se
   répètent sur chaque proposition. Assez pour une file courte ; une liste partagée viendra si la file grandit.
 - **Absent vaut P1.** Un poste qui oublie `importance` sur une proposition la fait notifier. C'est le comportement
   d'aujourd'hui, pas une régression.
-- **Le filtre ignoré par un poste 1.4** rend tous les mails. Seul le core l'empêche, en lisant `contract` avant
-  d'envoyer `boxes`. Le chantier de la nuit vers Avaritia devra le tester.
+- **Le filtre ignoré par un poste 1.4** rend tous les mails. Le core l'empêche deux fois : il ne passe `boxes` qu'à
+  un poste 1.5, et rien d'un poste inférieur à 1.5 n'entre dans la bibliothèque. Il jette aussi un élément sans
+  `box.id` dans les `boxes` demandées, ou sans `synthesis`. Le chantier de la nuit vers Avaritia teste les trois.
+- **Une synthèse peut manquer** : en pause, en mode dégradé, au plafond, ou au-delà de la borne par appel. Le mail
+  n'entre pas dans la bibliothèque cette nuit-là ; il y entre au bilan suivant qui le couvre, s'il y en a un.
 - **L'accord de CrOliX exclut le rangement seul par seuil.** Le jour où CrOliX ouvre un seuil par boîte, ces mails
   n'entreront pas dans la bibliothèque. C'est la spec (§ 5.4) ; à rouvrir si CrOliX le veut.
 
@@ -395,21 +472,46 @@ qu'elles se citent (le champ `importance` entre 1 et 3). Puis 4, qui attend lun-
 - Le comportement du core : il est décrit d'après la spec (§ 3), pas relu dans son code. En particulier, qu'il
   notifie toute carte en attente, et qu'il ne lit `/cards` qu'avec `agent: true`.
 - Que la PR lun-docs#216 fusionne telle quelle : le dictionnaire et la spec sont lus sur sa branche (`8271453`).
+- Le statut d'une proposition rangée seule par l'IA, puis rangée à la main (forme 6).
 
 ## Questions à CrOliX
 
 Une à la fois, chacune au moment où sa tâche part.
 
 1. **Où le code dit « tu ».** Le registre neutre « dit « tu » ou nomme » ; `design.md` interdit « tu » sur les écrans
-   d'outil. Recommandé : le code dit « tu » à Natsume dans ses consignes (le socle : « Tu tiens à lui… ») ; sur les
-   écrans, les notifications et la voix fixe, il nomme ou écrit sans sujet (« Rangé dans Facture par une règle »),
-   et la règle des écrans d'outil reste. (Tâche 2.)
-2. **La règle de la voix vaut-elle pour les satellites ?** Les agents d'Acedia et d'Avaritia ont sept phrases fixes
-   en « je » (« Acedia est en pause : je ne fais rien… »), que le résumé d'une délégation porte jusqu'au core.
-   Recommandé : oui, le standard vaut pour tout l'écosystème ; ces phrases deviennent neutres dans le chantier de
-   chaque satellite. (Tâche 2.)
+   d'outil. Deux lectures :
+   - (a) le « tu » ne sert que dans les consignes au modèle (le socle : « Tu tiens à lui… ») ; le Journal, les
+     notifications et la voix fixe nomment ou écrivent sans sujet (« Rangé en Facture par une règle ») ;
+   - (b) le code tutoie CrOliX au Journal et dans les notifications ; `design.md` nomme cette exception.
+
+   (Tâche 2.)
+2. **La règle de la voix vaut-elle pour les satellites ?** Les agents d'Acedia et d'Avaritia ont dix phrases fixes en
+   « je », que le résumé d'une délégation porte jusqu'au core. Recommandé : oui, le standard vaut pour tout
+   l'écosystème ; ces phrases deviennent neutres dans le chantier de chaque satellite. (Tâche 2.)
 3. **Ce que la porte reçoit.** La spec le marque comme une lecture : les événements, les cartes, les échéances, et
    les entrées sourdine, pause, appel, nuit, présence. Recommandé : l'écrire comme règle dans `notifications.md`.
    (Tâche 3.)
 4. **La place du standard de la voix.** Recommandé : (a), un nouveau standard `standards/ecriture.md` (forme 9).
    (Tâche 2.)
+5. **L'accord étendu à `corrected`.** Le § 5.4 dit « une règle, ou une proposition validée ». Ce plan compte aussi
+   une proposition corrigée : CrOliX l'a rangée lui-même. Recommandé : l'accepter. (Tâche 1.)
+
+## Ce que la contestation a changé
+
+Toutes les objections du 25/11 sont reprises.
+
+1. **B1** : trois règles du core pour la bibliothèque (forme 6, tâche 1, Limites).
+2. **B2** : Luxuria n'a rien à faire, sa `DecisionCard` est une copie du kit ; l'écart K1 va au kit de lun-docs.
+3. **I1** : l'historique ne se condense plus ; `CardField` sur la ligne de `Card` ; « Délégation » fusionnée avec
+   `/cards` ; la limite de 120 signes ne vaut pas pour le contrat ; le compte des lignes en preuve.
+4. **I2** : la question 1 donne deux lectures, sans recommandation ; la tâche 2 dit la retouche de chacune.
+5. **I3** : les bornes de B1 (pause, mode dégradé, plafond, coût compté, borne par appel), forme 7, tâche 1, A10.
+6. **I4** : les règles du geste par `values` et leurs `400` (forme 3).
+7. **I5** : une proposition en carte n'émet plus `mail.pending` ; le palier est celui de la carte (forme 5, A2, A4).
+8. **I6** : dix phrases en « je », dont `pina/agent.ts:57` et `:61` ; celles qui tutoient sont marquées.
+9. **M1** : `corrected` marqué comme élargissement de la spec (question 5) ; la boîte actuelle et le statut du
+   moment du bilan ; le cas « rangé seul par l'IA puis rangé à la main ».
+10. **M2** : les doublons retirés par `ref.id`.
+11. **M3** : les preuves par termes exacts, les règles comptées sur une plage de lignes.
+12. **M4** : une seule forme, « Rangé en Facture ».
+13. **M5** : gardé tel quel.
