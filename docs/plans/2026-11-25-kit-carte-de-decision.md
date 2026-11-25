@@ -3,6 +3,8 @@
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
+> **PR :** https://github.com/Lun-Ecosystem/lun-docs/pull/223
+>
 > **Issue :** Lun-Ecosystem/lun-docs#222, `niveau:standard`. K1 de la carte des flux (lun-docs#216, § 11). Il passe
 > avant le chantier des propositions au core, qui en a besoin.
 >
@@ -268,7 +270,7 @@ précédente. Quand la dernière sort, le groupe reste dessiné (en-tête, bouto
 `npm run build`. À la racine : `npm test`, `npm run check`, `npm run sync:check`. Les tests s'écrivent d'abord et sont
 rouges sur `main` ([`workflow.md`](../../standards/workflow.md)).
 
-0. - [ ] **Les tests d'abord** (`testeur`). **D'abord.** Deux fichiers, que deux testeurs peuvent écrire en
+0. - [x] **Les tests d'abord** (`testeur`). **D'abord.** Deux fichiers, que deux testeurs peuvent écrire en
    parallèle : ils ne dépendent que de ce plan.
    - `design/kit/DecisionCard.test.ts`, cas ajoutés, rouges sur `main` :
      - `fields` : chaque `label` et le libellé de chaque valeur se lisent ; un `multiple` vide dit « aucun choix » ;
@@ -303,7 +305,7 @@ rouges sur `main` ([`workflow.md`](../../standards/workflow.md)).
      - `busy` : le bouton tourne et garde le focus ; `off` : tout désactivé, la ligne lue une seule fois ;
      - monté, le groupe ne prend pas le focus ; monté sans carte prise, il ne dessine rien.
    - Exclu : tout code de production.
-1. - [ ] **La carte** (`dev-front`). **Après la tâche 0.**
+1. - [x] **La carte** (`dev-front`). **Après la tâche 0.**
    - **Essai d'abord, court** : un `RadioGroup` de bits-ui dont chaque item est dessiné par `Chip`, par sa forme
      `child`. Il tient si les rôles `radiogroup` et `radio`, `aria-checked` et les flèches marchent, et si `Chip`
      change au plus d'une ligne : avec un `role` donné, pas d'`aria-pressed`. Dans ce cas, une garde s'ajoute à
@@ -315,14 +317,14 @@ rouges sur `main` ([`workflow.md`](../../standards/workflow.md)).
    - Comportement : « La carte, ce qui s'ajoute », ci-dessus.
    - Preuve : les tests de la tâche 0 pour la carte, verts ; les gardes, vertes ; les barrières.
    - Exclu : le groupe, la galerie, `PermissionCard`, un nouveau geste au contrat, une fenêtre par-dessus.
-2. - [ ] **Le groupe** (`dev-front`). **Après la tâche 1, dans le même worktree** : il emploie la correction de la
+2. - [x] **Le groupe** (`dev-front`). **Après la tâche 1, dans le même worktree** : il emploie la correction de la
    carte.
    - Fichier : `design/kit/DecisionGroup.svelte` (et ses types dans `types.ts`).
    - Comportement : « Le groupe, `DecisionGroup` », ci-dessus.
    - Preuve : `DecisionGroup.test.ts` vert ; les barrières.
    - Exclu : refuser ou repousser une carte du groupe, un état par carte (l'app retire une carte tranchée de `cards`),
      un seuil, un raccourci clavier, l'ouverture du groupe.
-3. - [ ] **La galerie et le standard** (`dev-front`). **Après la tâche 2.** Les données de `cartes.ts` peuvent
+3. - [x] **La galerie et le standard** (`dev-front`). **Après la tâche 2.** Les données de `cartes.ts` peuvent
    s'écrire en parallèle des tâches 1 et 2.
    - `design/galerie/cartes.ts` : `CarteDemo` prend `importance`, `fields`, `bulk`. Des champs inventés : « Boîte »
      (unique : Factures, Banque, Achats) et « Étiquettes » (multiple : À payer, Pro, Perso). Quatre rangements `bulk`.
@@ -339,7 +341,7 @@ rouges sur `main` ([`workflow.md`](../../standards/workflow.md)).
      mondes ; à 390 px, les pastilles de 28 px passent à la ligne et restent touchables, rien ne déborde. Captures
      dans la PR, sans donnée réelle.
    - Exclu : réécrire les sections existantes.
-4. - [ ] **La revue et la PR de lun-docs** (`reviewer`, puis `livreur`). **Après la tâche 3.**
+4. - [x] **La revue et la PR de lun-docs** (`reviewer`, puis `livreur`). **Après la tâche 3.**
    - Une PR : ce plan, le kit, la galerie, `design.md` et ses copies. Titre `feat(kit): …`.
 5. - [ ] **La copie de Lun'Anima** (`dev-front`). **Après la fusion de la PR de lun-docs. En parallèle de la tâche 6.**
    - Le dossier, la commande et les gardes sont dans l'issue privée de lun-anima, à ouvrir.
