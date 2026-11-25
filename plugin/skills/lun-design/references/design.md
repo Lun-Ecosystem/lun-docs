@@ -74,6 +74,7 @@ Polices auto-hébergées (pas d'appel à un CDN tiers). Repli : Georgia pour le 
 - **Deux voix** : CrOliX à la première personne et décontracté ; Natsume dans son personnage. Les
   écrans d'outil (panel, réglages) parlent d'une **voix technique neutre** : phrases courtes, pas de
   « tu », pas de franglais inutile ; les termes techniques (LLM, WebSocket, OAuth2) restent.
+- **La voix du code et du modèle** : qui dit « je », le registre neutre et les huit règles d'écriture sont dans [`ecriture.md`](ecriture.md).
 - **Noms affichés** : toujours « Lun'Xxx ». Les devises des projets restent en anglais.
 - **Pas de tiret cadratin** dans les textes.
 - **Honnêteté** : un état affiché correspond à la réalité ; ce qui n'est pas vérifié n'est pas « fait ».

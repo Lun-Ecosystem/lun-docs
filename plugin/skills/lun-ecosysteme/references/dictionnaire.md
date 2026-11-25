@@ -58,7 +58,7 @@
 | **une urgence** | Un événement de palier P0 : il interrompt, et se dit malgré la sourdine | tout ce qui presse |
 | **le bilan du jour** | Ce qu'un poste a reçu, fait et laissé en attente dans la journée | la lettre du matin |
 | **la porte d'attention** | L'endroit unique du core, en code et sans modèle, qui rend ce qui arrive : dire, notifier, attendre le bon moment, la lettre du matin, le Journal ; chaque choix est tracé (25/11) | un modèle qui décide de parler |
-| **le registre neutre** | La façon d'écrire du code : il dit « tu » ou nomme, jamais « je » ; le « je » est au modèle (25/11) | un texte froid ; un texte écrit par Natsume |
+| **le registre neutre** | La façon d'écrire du code : il nomme ou s'écrit sans sujet, jamais « je » ni « tu » ; le « je » est au modèle ([`ecriture.md`](ecriture.md), 25/11) | un texte froid ; un texte écrit par Natsume |
 | **un plafond** | La dépense au-delà de laquelle un service s'arrête, par jour ou par mois | un budget indicatif |
 | **la pause** | L'arrêt de toute action automatique de l'écosystème, sauf les urgences ; CrOliX peut toujours écrire | la sourdine |
 | **la sourdine** | Le silence du corps seul : ses sens et sa voix coupés, sauf une urgence | « le mute » ; la pause |

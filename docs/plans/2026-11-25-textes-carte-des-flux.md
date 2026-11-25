@@ -435,7 +435,7 @@ par ligne au plus, les mots du dictionnaire.
    - **Fait.** `notifications.md`, 73 lignes. « porte d'attention » aux lignes 11 et 19 (la section, avec ce qu'elle
      reçoit, ses entrées, ses sorties, la trace) ; « sans son » aux lignes 36 (P0) et 70 (« Rendu ») ; `importance`
      à la ligne 62 (absent, P1) ; « tris à valider » : 0. `npm run check` : OK.
-4. - [ ] **Les copies, les termes, les barrières** (session principale). **Après 1, 2 et 3, et après la fusion de
+4. - [x] **Les copies, les termes, les barrières** (session principale). **Après 1, 2 et 3, et après la fusion de
    lun-docs#216.**
    - Rebaser la branche sur `main` à jour.
    - Relire les trois textes contre le dictionnaire fusionné, par des termes exacts, sur `contrat-satellite.md`,
@@ -451,6 +451,12 @@ par ligne au plus, les mots du dictionnaire.
      `plugin/skills/lun-ecosysteme/references/{contrat-satellite,notifications,ecriture}.md`,
      `plugin/skills/lun-design/references/ecriture.md`.
    - Preuves : la sortie des quatre commandes ; `git diff --stat` qui montre les copies.
+   - **Fait.** lun-docs#216 fusionnée dans la branche par `git merge origin/main` (pas de rebase : la branche est
+     poussée). Dictionnaire, entrée « le registre neutre » : « nomme ou s'écrit sans sujet, jamais « je » ni « tu » »
+     (ligne 60). Termes exacts sur les trois textes : « en lot », « point du matin », « (s) », « tris à valider » :
+     0 ; « veille » : une ligne, « veille tech » (`notifications.md:58`), des sources suivies. `npm run sync` :
+     6 fichiers écrits, dont les deux copies d'`ecriture.md` ; `sync:check` : OK ; `check` : OK ; `npm test` :
+     486 tests, 486 réussis, 0 échec.
 5. - [ ] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 4.** Le diff relu contre ce plan, les
    critères de l'issue et le dictionnaire. Une PR lun-docs en brouillon, qui ferme Lun-Ecosystem/lun-docs#217, avec
    ce plan coché et la sortie des barrières.
