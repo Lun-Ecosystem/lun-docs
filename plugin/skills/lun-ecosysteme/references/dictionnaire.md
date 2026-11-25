@@ -45,14 +45,20 @@
 
 | Terme | Désigne | Ne désigne pas, ne s'écrit pas |
 |---|---|---|
-| **une carte** | Une proposition de traitement préparée par un agent, qui attend dans une file que CrOliX la tranche. Elle appartient au poste qui l'a créée ; le core la relaie | la validation d'une action immédiate |
+| **une carte** | Une proposition de traitement préparée par un agent, ou par le tri d'un poste, qui attend dans une file que CrOliX la tranche. Elle appartient au poste qui l'a créée ; le core la relaie | la validation d'une action immédiate |
 | **une permission** | La validation d'une action immédiate sur le poste : elle bloque l'action tant que CrOliX n'a pas répondu (une fois, toujours, refuser) | une carte ; les accès Google d'Acedia |
 | **un geste** | Ce que CrOliX fait sur une carte : valider, modifier, refuser | une action d'un agent |
+| **la validation groupée** | Un geste qui valide plusieurs cartes d'un coup, au-dessus du seuil de validation groupée ; elle s'ouvre pour corriger une carte (25/11) | « le lot » (le traitement quotidien de la bibliothèque) ; une carte qui envoie ou qui a des options |
+| **le seuil de validation groupée** | La confiance au-dessus de laquelle une proposition de tri entre dans la validation groupée ; jamais au-dessus du seuil par boîte (dans le code d'Acedia : `bulkThreshold`) | « le seuil de lot » |
+| **le seuil par boîte** | La confiance au-dessus de laquelle Acedia range seule un mail dans une boîte ; CrOliX l'ouvre lui-même, après la mesure (25/11) | un seuil commun à toutes les boîtes |
+| **la synthèse** | Les deux lignes qu'Acedia écrit d'un mail, masquées des secrets : ce que le core en sait (25/11) | le corps du mail ; un résumé écrit par le core |
 | **la délégation** | Natsume confie une demande à l'agent d'un poste, qui fait le travail et rend un résumé et des cartes | refaire le travail au core |
 | **un événement** | Ce qu'un poste signale au core, avec son importance | une notification (son rendu) |
 | **l'importance** | Le palier d'un événement, de P0 à P4 : interrompre, prévenir, signaler, résumer, journal ([`notifications.md`](notifications.md)) | |
 | **une urgence** | Un événement de palier P0 : il interrompt, et se dit malgré la sourdine | tout ce qui presse |
 | **le bilan du jour** | Ce qu'un poste a reçu, fait et laissé en attente dans la journée | la lettre du matin |
+| **la porte d'attention** | L'endroit unique du core, en code et sans modèle, qui rend ce qui arrive : dire, notifier, attendre le bon moment, la lettre du matin, le Journal ; chaque choix est tracé (25/11) | un modèle qui décide de parler |
+| **le registre neutre** | La façon d'écrire du code : il dit « tu » ou nomme, jamais « je » ; le « je » est au modèle (25/11) | un texte froid ; un texte écrit par Natsume |
 | **un plafond** | La dépense au-delà de laquelle un service s'arrête, par jour ou par mois | un budget indicatif |
 | **la pause** | L'arrêt de toute action automatique de l'écosystème, sauf les urgences ; CrOliX peut toujours écrire | la sourdine |
 | **la sourdine** | Le silence du corps seul : ses sens et sa voix coupés, sauf une urgence | « le mute » ; la pause |
