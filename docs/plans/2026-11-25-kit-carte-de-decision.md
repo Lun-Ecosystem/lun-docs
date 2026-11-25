@@ -5,6 +5,8 @@
 >
 > **PR :** https://github.com/Lun-Ecosystem/lun-docs/pull/223
 >
+> **Copies :** https://github.com/Lun-Ecosystem/lun-luxuria/pull/111 ; celle de Lun'Anima, dépôt privé, suit la même tâche.
+>
 > **Issue :** Lun-Ecosystem/lun-docs#222, `niveau:standard`. K1 de la carte des flux (lun-docs#216, § 11). Il passe
 > avant le chantier des propositions au core, qui en a besoin.
 >
@@ -343,12 +345,12 @@ rouges sur `main` ([`workflow.md`](../../standards/workflow.md)).
    - Exclu : réécrire les sections existantes.
 4. - [x] **La revue et la PR de lun-docs** (`reviewer`, puis `livreur`). **Après la tâche 3.**
    - Une PR : ce plan, le kit, la galerie, `design.md` et ses copies. Titre `feat(kit): …`.
-5. - [ ] **La copie de Lun'Anima** (`dev-front`). **Après la fusion de la PR de lun-docs. En parallèle de la tâche 6.**
+5. - [x] **La copie de Lun'Anima** (`dev-front`). **Après la fusion de la PR de lun-docs. En parallèle de la tâche 6.**
    - Le dossier, la commande et les gardes sont dans l'issue privée de lun-anima, à ouvrir.
    - Preuve : la vérification du kit répond `kit: OK` ; les barrières de Lun'Anima vertes ; la file du core se
      comporte comme avant (ses tests, inchangés) ; Échap y ferme toujours la ligne dépliée.
    - Exclu : brancher `fields`, `importance` ou `DecisionGroup` dans le core.
-6. - [ ] **La copie de Lun'Luxuria** (`dev-front`). **Après la fusion de la PR de lun-docs. En parallèle de la
+6. - [x] **La copie de Lun'Luxuria** (`dev-front`). **Après la fusion de la PR de lun-docs. En parallèle de la
    tâche 5.**
    - `node <lun-docs>/tools/sync-kit.mjs src/lib/ui`, depuis `main` de lun-docs à jour. Branche
      `chore/sync-kit-decision`, titre `chore: sync the kit's decision card from lun-docs`.
