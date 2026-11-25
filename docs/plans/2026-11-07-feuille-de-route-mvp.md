@@ -521,6 +521,9 @@ part d'un jour fixe, après ce panier :
 Le reste de l'audit (design, finitions, vocabulaire, l'urgence et ce qui remonte d'Acedia, Lun-Ecosystem/lun-anima#135,
 les mails dans la bibliothèque) passe après le VIP.
 
+**L'ordre de déploiement de la porte d'attention** (CrOliX, le 25/11, [plan](2026-11-25-porte-d-attention.md)) : le
+core d'abord (Lun-Ecosystem/lun-anima#152), Acedia 1.5 ensuite. Sinon, chaque proposition de tri notifierait.
+
 ### La session sur le desktop, puis le rodage et la bascule
 
 Remplacé par le recadrage du 20/11, ci-dessus. Ce paragraphe disait, du 12 au 20/11 : la session du § 4, puis la
