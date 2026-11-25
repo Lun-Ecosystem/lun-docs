@@ -433,8 +433,8 @@ l'ordre : CrOliX la leur donne.
 | `standard` | L'appairage, suites | lun-acedia#74, lun-avaritia#41, lun-anima#112, lun-docs#178 point 2 | chaque point fait ; la route des satellites refuse un corps qui n'est pas du JSON ; leur module d'appairage se recopie comme le kit |
 | `standard` | La carte du kit, ses gestes et son accessibilité | lun-docs#143 | une ancre `data-` stable, le focus gardé, la permission annoncée ; au branchement de la permission |
 | `standard` | La CI épinglée | lun-docs#168 | les actions épinglées par SHA, Dependabot réglé par CrOliX |
-| `trivial` | Les textes et les standards | lun-docs#130, #169 (sauf l'ADR), #170, #171 (les textes) ; lun-acedia#69, lun-avaritia#36, lun-anima#79 | chaque case faite, lun-docs#170 d'abord ; `vision.md` dit la bibliothèque et le MVP (lun-docs#130) |
-| `trivial` | Le kit, retouches | lun-docs#124, #134, #135 | une erreur garde ses 5 s, `box-sizing` commun, le format fixé, les copies resynchronisées |
+| `trivial` | Les textes et les standards | lun-docs#130, #169 (l'ADR 0007 par une note de statut, l'ADR 0008 étant remplacée par 0014), #170, #171 (les textes) ; lun-acedia#69, lun-avaritia#36, lun-anima#79 | chaque case faite, lun-docs#170 d'abord ; `vision.md` dit la bibliothèque et le MVP (lun-docs#130) |
+| `trivial` | Le kit, retouches | lun-docs#124, #134 (avec #207), #135, #181, #215 | une erreur garde ses 5 s, `box-sizing` commun, le format fixé ; `SettingsRow` : aide qui se coupe, aide gardée sous l'erreur, `aria-invalid` et `aria-describedby` ; les copies resynchronisées |
 | `trivial` | Le libellé « Relier un appareil » | lun-acedia#71, lun-avaritia#38 | le libellé choisi par CrOliX, repris dans les deux apps et les pages de mise en service |
 | `trivial` | Les tests instables | lun-acedia#67 et lun-avaritia#34, le premier point de chacune | stables sur 50 passages |
 
