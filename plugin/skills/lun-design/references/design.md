@@ -118,7 +118,7 @@ avant d’être reprise ailleurs.
   kit), marque « rangé seul » (à verser au kit), ton IA dédié (violet).
 - **Cartes** : la carte à trancher, une feuille qui dit tout sans un geste, se corrige en place et se replie une
   fois tranchée (`DecisionCard`) ; le corps, les gestes en plus et les touches restent à l’écran qui la pose. Le
-  groupe valide d’un geste (`DecisionGroup`) ; la permission reprend la feuille dans la couleur du monde (`PermissionCard`).
+  groupe valide d’un geste (`DecisionGroup`) ; la permission reprend la feuille dans la couleur du monde, avec trois réponses (`PermissionCard`).
 - **Calques** : menus avec filtre et raccourcis (à verser au kit), bulle de détail (à verser au kit),
   info-bulle, fenêtre de dialogue et de confirmation, toast avec annulation, bannière d’état.
 - **Structures** : rangée de liste avec actions au survol, groupe par jour (à verser au kit), carte de réglages faite

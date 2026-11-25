@@ -287,8 +287,9 @@ describe('DecisionCard, correcting', () => {
     expect(within(multiple).getAllByRole('checkbox')).toHaveLength(3);
   });
 
-  it('the choices start from value; the gestures are "Valider ainsi" and "Annuler"', async () => {
-    rendre(corrigeable());
+  it('the choices start from value; the gestures are "Valider ainsi", "Corriger" and "Annuler"', async () => {
+    rendre(corrigeable({ onrefuse: vi.fn(), onedit: vi.fn(), onlater: vi.fn(), shortcuts: ['V', 'R'] }));
+    expect(screen.getByRole('article').querySelector('.keys')).not.toBeNull();
     await ouvrir();
     expect(screen.getByRole('radio', { name: 'Factures' })).toBeChecked();
     expect(screen.getByRole('radio', { name: 'Banque' })).not.toBeChecked();
@@ -297,6 +298,26 @@ describe('DecisionCard, correcting', () => {
     expect(bouton('Valider ainsi')).toBeInTheDocument();
     expect(bouton('Annuler')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Valider' })).toBeNull();
+    for (const name of ['Modifier', 'Refuser', 'Plus tard'])
+      expect(screen.queryByRole('button', { name })).toBeNull();
+    expect(screen.getByRole('article').querySelector('.keys')).toBeNull();
+    const noms = screen.getAllByRole('button').map((b) => b.textContent?.trim());
+    expect(noms.filter((n) => ['Valider ainsi', 'Corriger', 'Annuler'].includes(n ?? ''))).toEqual([
+      'Valider ainsi',
+      'Corriger',
+      'Annuler',
+    ]);
+  });
+
+  it('values keep only the choices: a proposed value outside them does not go back', async () => {
+    const oncorrect = vi.fn();
+    const f = champs();
+    f[1]!.value = ['x'];
+    rendre(corrigeable({ fields: f, oncorrect }));
+    await ouvrir();
+    await userEvent.click(screen.getByRole('checkbox', { name: 'Pro' }));
+    await userEvent.click(bouton('Valider ainsi'));
+    expect(oncorrect).toHaveBeenCalledWith({ etiquettes: ['pro'] });
   });
 
   it('no choice chip carries aria-pressed', async () => {

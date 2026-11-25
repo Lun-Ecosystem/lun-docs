@@ -1,6 +1,6 @@
 <script lang="ts">
   import { RadioGroup } from 'bits-ui';
-  import { type Snippet, tick } from 'svelte';
+  import { type Snippet, tick, untrack } from 'svelte';
   import type { HTMLAttributes } from 'svelte/elements';
   import Badge from './Badge.svelte';
   import Button from './Button.svelte';
@@ -133,7 +133,7 @@
   const proposed = () => Object.fromEntries(fields.map((f) => [f.name, [...f.value]]));
 
   // Read once, as the prop says: the card folds and unfolds itself afterwards.
-  const initial = (() => correcting)();
+  const initial = untrack(() => correcting);
   let open = $state(initial);
   let draft = $state<Record<string, string[]>>(initial ? proposed() : {});
   let sheet = $state<HTMLElement>();
@@ -169,7 +169,9 @@
   };
   // No focus afterwards: the card is about to change status or place, the app decides.
   const correct = () => {
-    const values = Object.fromEntries(changed.map((f) => [f.name, [...picked(f)]]));
+    // The contract takes only values among the choices: a proposed one outside them does not go back.
+    const among = (f: CardField) => picked(f).filter((v) => f.choices.some((c) => c.value === v));
+    const values = Object.fromEntries(changed.map((f) => [f.name, among(f)]));
     open = false;
     oncorrect?.(values);
   };

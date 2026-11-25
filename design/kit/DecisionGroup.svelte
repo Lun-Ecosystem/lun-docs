@@ -98,7 +98,7 @@
       <p class="hint">Décocher une {one} pour la laisser à trancher.</p>
       {#if off}<p class="off">{off}</p>{/if}
     </header>
-    <fieldset disabled={locked}>
+    <fieldset disabled={locked} aria-labelledby="{uid}-titre">
       <ul>
         {#each rows as c (c.id)}
           <li data-id={c.id}>

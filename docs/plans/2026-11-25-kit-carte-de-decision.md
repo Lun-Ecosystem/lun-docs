@@ -7,7 +7,8 @@
 > avant le chantier des propositions au core, qui en a besoin.
 >
 > **État : rédigé le 25/11 ; contesté le 25/11 ; amendé le 25/11** (« Ce que la contestation a changé »), avec la
-> réponse de CrOliX sur le groupe. À valider.
+> réponse de CrOliX sur le groupe ; validé par CrOliX le 25/11.** Les tâches 1 à 3 ont leurs écarts plus bas
+> (« Écarts à l'exécution »).
 >
 > Code relu sur `main` : lun-docs (`95a52fa`), Lun'Luxuria (`98eaf36`), Lun'Acedia (`29f63e0`, en référence
 > seulement). Lun'Anima (`c7d5325`) est privé : ce plan n'en dit que le comportement
@@ -176,7 +177,9 @@ restent tels quels.
 - **Dépliée** : la liste de paires laisse la place aux choix, dans la carte. Un champ sans `multiple` : un
   `radiogroup` nommé par son `label`, une pastille par choix, exactement un choix. Un champ `multiple` : un `group`
   nommé par son `label`, une case par choix, zéro ou plusieurs. Les choix partent de `value`. Les gestes de la carte
-  laissent la place à deux : « Valider ainsi » (principal) et « Annuler » (fantôme).
+  laissent la place à trois : « Valider ainsi » (principal), « Corriger » en bascule (`aria-expanded` à `true` ; le
+  recliquer replie) et « Annuler » (fantôme). « Modifier », « Refuser », « Plus tard », `actions` et les touches
+  s'effacent.
 - **« Valider ainsi »** replie et appelle `oncorrect(values)`, avec les seuls champs changés. Il est désactivé tant
   que rien ne diffère de la proposition, ou qu'un champ sans `multiple` n'a aucun choix. Après lui, la carte ne pose
   ni `tabindex` ni focus : l'app décide, puisque la carte va changer de statut ou de place.
@@ -244,6 +247,20 @@ précédente. Quand la dernière sort, le groupe reste dessiné (en-tête, bouto
 - **I6.** `correcting` est un état initial, sans focus.
 - **M1 à M8** : mémoire des avertissements par instance, `level` borné à 4, focus quand la dernière carte sort, `off`
   sur le groupe seul, « Urgent » sans `kind` ni `meta`, `design.md`, pastilles vues à 390 px, le risque de la CI.
+
+## Écarts à l'exécution
+
+- **« Corriger » reste en vue, dépliée**, en bascule : les tests de la tâche 0 le veulent présent avec
+  `aria-expanded` à `true`. La section « La carte, ce qui s'ajoute » le dit.
+- **`values` ne garde que des valeurs des `choices`** : une valeur proposée hors des choix ne repart pas
+  (`contrat-satellite.md:112`). Un test le garde.
+- **Le groupe désactive ses lignes par un `fieldset disabled`**, nommé par son en-tête, sous `busy` ou `off` :
+  passer `off` à chaque carte aurait répété sa ligne.
+- **Un `svelte-ignore a11y_no_noninteractive_element_interactions`** sur la `section` du groupe : elle écoute
+  Échap qui remonte de ses contrôles, sans en être un.
+- **La ligne de `design.md` est réécrite** dans ses trois lignes : la carte « se corrige en place », et « Le groupe
+  valide d'un geste (`DecisionGroup`) ».
+- **`DecisionGroup` n'est pas exporté par `index.ts`**, comme le plan le dit ; seuls ses types le sont.
 
 ## Tâches
 
