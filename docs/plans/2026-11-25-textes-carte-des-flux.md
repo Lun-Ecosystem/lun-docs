@@ -413,7 +413,7 @@ par ligne au plus, les mots du dictionnaire.
      `design.md:76` (150 lignes), `README.md:28` et la carte des copies (`lun-ecosysteme`, `lun-design`). Le
      contre-exemple de la règle 1 dit « La lettre du matin est postée » : le mot « point du matin » ne s'écrit plus.
      `npm run check` : OK ; la retouche du dictionnaire et les copies sont à la tâche 4.
-3. - [ ] **La porte d'attention dans les notifications** (`standards/notifications.md` seul). **En parallèle de 1
+3. - [x] **La porte d'attention dans les notifications** (`standards/notifications.md` seul). **En parallèle de 1
    et 2.**
    - « Principe » : « Le core fixe le rendu » devient « Le core rend tout par sa porte d'attention ». Le satellite
      fixe toujours le palier.
@@ -432,6 +432,9 @@ par ligne au plus, les mots du dictionnaire.
    - Preuves : `grep -n "porte d'attention"`, `grep -n "sans son"`, `grep -n "importance"` ;
      `grep -n "tris à valider"` ne rend plus rien (le regroupement dit « propositions à trancher »).
    - Exclu : les paliers eux-mêmes ; le seuil par boîte ; le budget commun et son plafond (question 12 du § 10).
+   - **Fait.** `notifications.md`, 73 lignes. « porte d'attention » aux lignes 11 et 19 (la section, avec ce qu'elle
+     reçoit, ses entrées, ses sorties, la trace) ; « sans son » aux lignes 36 (P0) et 70 (« Rendu ») ; `importance`
+     à la ligne 62 (absent, P1) ; « tris à valider » : 0. `npm run check` : OK.
 4. - [ ] **Les copies, les termes, les barrières** (session principale). **Après 1, 2 et 3, et après la fusion de
    lun-docs#216.**
    - Rebaser la branche sur `main` à jour.
