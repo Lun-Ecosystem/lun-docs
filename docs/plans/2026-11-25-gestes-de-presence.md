@@ -3,6 +3,8 @@
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
+> **PR :** Lun-Ecosystem/lun-anima#150 (brouillon). **Validé par CrOliX le 25/11.**
+>
 > **Issue :** Lun-Ecosystem/lun-anima#147, `niveau:standard`, privée. Chantier de la carte des flux, étape 2 du
 > découpage.
 >
@@ -245,7 +247,7 @@ Chaque point repris tel quel, et vérifié dans le code quand il en parle.
 d'abord et sont rouges sur `main` ; les gardes, vertes sur `main`, fixent ce qui ne doit pas bouger. Chaque test dit
 lequel il est. Les fichiers et les noms sont dans l'issue privée.
 
-0. - [ ] **La garde de la forme envoyée** (`testeur`). **D'abord, avant toute autre tâche.**
+0. - [x] **La garde de la forme envoyée** (`testeur`). **D'abord, avant toute autre tâche.**
    - **Une garde de la conversation**, au niveau de l'interface du fournisseur, verte sur `main` : ce que le core
      passe au fournisseur, comparé en entier, pour un tour écrit, un tour dit, un tour à outil (ses deux appels), un
      tour qu'elle prend d'elle-même. Les parties stables (le préfixe, les règles) se comparent à ce qui les fabrique ;
@@ -257,7 +259,7 @@ lequel il est. Les fichiers et les noms sont dans l'issue privée.
    - **Un test par fournisseur** : deux tours de CrOliX de suite passent tels quels dans la requête (P5).
    - Ensuite, chaque tâche change ces attentes de ce qu'elle veut, et de rien d'autre ; leur diff se relit à la revue.
    - Exclu : tout code de production.
-1. - [ ] **P4, une seule voix** (`testeur`, puis `dev-core`). **En parallèle de la tâche 4.**
+1. - [x] **P4, une seule voix** (`testeur`, puis `dev-core`). **En parallèle de la tâche 4.**
    - Tests rouges sur `main` : pour chacune des six phrases, son texte exact, validé par CrOliX (dans l'issue
      privée), et ni première ni deuxième personne (« je », « moi », « mon », « tu », « toi », « ton »…) dans le
      texte replié.
@@ -267,7 +269,7 @@ lequel il est. Les fichiers et les noms sont dans l'issue privée.
      Leur emploi ne change pas.
    - Exclu : les autres textes du code, le standard de la voix (étape 1 du découpage), la lettre du matin,
      le Journal, « Ce que j'ai fait ».
-2. - [ ] **P3, la coupure** (`testeur`, puis `dev-core`). **Après la tâche 1, dans le même worktree.** Écrite pour A.
+2. - [x] **P3, la coupure** (`testeur`, puis `dev-core`). **Après la tâche 1, dans le même worktree.** Écrite pour A.
    - Tests rouges sur `main` :
      - une réponse coupée en cours de route, puis un tour : le fil envoyé porte ce qui a été entendu, suivi de
        « (coupée ici) », et aucun mot du non-dit ;
@@ -279,7 +281,7 @@ lequel il est. Les fichiers et les noms sont dans l'issue privée.
    - Code : la réécriture d'une coupure ajoute la marque après le texte entendu, quand une part n'a pas été entendue.
      Une seule fonction, pour les cinq chemins. La marque recopiée par le modèle est retirée de sa réponse.
    - Exclu : la coupure côté Luxuria, le cas des cartes déjà préparées, le tri de nuit.
-3. - [ ] **P5, le temps écoulé** (`testeur`, puis `dev-core`). **Après la tâche 2, dans le même worktree.** Écrite
+3. - [x] **P5, le temps écoulé** (`testeur`, puis `dev-core`). **Après la tâche 2, dans le même worktree.** Écrite
    pour A.
    - Tests rouges sur `main`, sur la forme seule (fonction pure), puis sur le fil envoyé :
      - deux messages à 20 min et 1 s : une ligne ; à 20 min tout juste : aucune ; à 19 min : aucune ;
@@ -293,7 +295,7 @@ lequel il est. Les fichiers et les noms sont dans l'issue privée.
    - Code : le rejeu du fil ajoute la ligne là où deux messages consécutifs sont à plus de 20 min. La situation ne
      change pas.
    - Exclu : l'heure du tour, la situation, le temps depuis la fin de sa voix.
-4. - [ ] **P6, la citation** (`testeur`, puis `dev-core`). **En parallèle des tâches 1 à 3 et 5 : aucun fichier
+4. - [x] **P6, la citation** (`testeur`, puis `dev-core`). **En parallèle des tâches 1 à 3 et 5 : aucun fichier
    commun.** Écrite pour A ; avec B, « passe en déduit » devient « n'est pas écrit ».
    - Tests rouges sur `main`, sur une nuit au tri scripté :
      - un « dit » dont la citation se trouve en suite de mots dans le message de sa référence (casse, accents,
@@ -310,7 +312,7 @@ lequel il est. Les fichiers et les noms sont dans l'issue privée.
      champs. La consigne gagne une phrase. Au moment d'écrire les souvenirs, le code vérifie la citation contre le
      message de sa référence, et compte au journal du core les souvenirs passés en « déduit ».
    - Exclu : garder la citation, réécrire les souvenirs déjà écrits, le portrait, le tempérament.
-5. - [ ] **P1, les souvenirs à chaque tour** (`testeur`, puis `dev-core`). **Après la tâche 3, dans le même
+5. - [x] **P1, les souvenirs à chaque tour** (`testeur`, puis `dev-core`). **Après la tâche 3, dans le même
    worktree.** Écrite pour A.
    - Tests rouges sur `main` :
      - la recherche seule : les souvenirs qui touchent le plus de mots d'abord, puis le mot le plus rare, puis le plus
@@ -331,7 +333,7 @@ lequel il est. Les fichiers et les noms sont dans l'issue privée.
      bloc s'ajoute à la fin du contexte du tour, sur les mots stockés du message de CrOliX auquel le tour répond.
    - Exclu : la recherche par le sens (Lun-Ecosystem/lun-anima#146), un rappel ancré sur les tours d'avant, la
      relecture de sa journée, le contexte chaud.
-6. - [ ] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 0 à 5.** Le diff relu contre ce plan et les
+6. - [x] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 0 à 5.** Le diff relu contre ce plan et les
    standards, et le diff des gardes de la tâche 0 relu ligne à ligne. Une PR Lun'Anima en brouillon, qui ferme
    Lun-Ecosystem/lun-anima#147, avec la sortie des tests rouges devenus verts, la suite entière, les barrières et le
    relevé de la tâche 5. Ce plan coché dans la PR lun-docs du chantier. Après la fusion, le graphe mis à jour.
