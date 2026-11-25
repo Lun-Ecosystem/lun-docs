@@ -393,7 +393,7 @@ Bureau, les notifications, la voix fixe, les compteurs.
 1. **Une ligne dit le fait, pas l'état du système.** On écrit « Lettre du matin : 3 cartes, 1 échéance, 2 mails
    rangés », pas « Le point du matin est posté ».
 2. **Un fait, une ligne.** Une action en plusieurs étapes reste une seule ligne ; ses étapes vont dans le détail. La
-   nuit fait une seule ligne : « Veille du 24/11 : 2 souvenirs, 1 observation envoyée, lettre écrite ».
+   nuit fait une seule ligne : « Nuit du 24/11 : 2 souvenirs, 1 observation envoyée, lettre écrite ».
 3. **Le détail n'est jamais vide** : ce qui a été couvert, le résultat, la raison d'un échec, le coût et la durée, les
    références, le lien vers la conversation ou le mail.
 4. **Une seule forme par fait**, au Journal, en notification et à la voix. La notification reprend le titre de la
@@ -415,7 +415,7 @@ Bureau, les notifications, la voix fixe, les compteurs.
 | Carte ou proposition | « À trancher : … » | ce qu'elle propose, le poste, Valider ou Corriger | regroupée, selon la porte |
 | Geste | « Validé : … (depuis le téléphone) » | le résultat du poste, ou « Échec : raison » | aucune |
 | Délégation | la demande | la réponse du poste, sa durée, le lien vers la conversation | aucune |
-| Veille | une seule ligne, « Veille du 24/11 : … » | la période, les souvenirs, les observations, les fiches proposées, le coût et la durée | seulement en cas d'échec, avec la raison |
+| La nuit | une seule ligne, « Nuit du 24/11 : … » | la période, les souvenirs, les observations, les fiches proposées, le coût et la durée | seulement en cas d'échec, avec la raison |
 | Lettre du matin | « Lettre du matin : … » | ses éléments en entier | le titre et le premier élément |
 | Coûts et plafonds | une seule ligne, « Plafond du jour atteint : 0,50 $ » | ce qui a été mis en pause | oui |
 | Santé (clé, sauvegarde, satellite injoignable) | le fait et sa raison | l'action à faire | selon l'importance |
@@ -587,8 +587,6 @@ Les questions sont ouvertes. Pour certaines, la contestation du 25/11 a jugé un
 13. Le standard où s'écrit la règle de la voix (P4).
 14. Le repli quand le modèle n'a pas pu écrire la lettre du matin.
 15. L'ordre des chantiers : voir le § 11.
-16. « Veille du 24/11 » dans le tableau du § 5.5 contre « la nuit » du dictionnaire, qui écarte « la veille » pour
-    cette routine : quel mot porte la ligne.
 
 ## 11. Découpage proposé
 
