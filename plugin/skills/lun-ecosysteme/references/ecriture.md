@@ -8,7 +8,8 @@
 
 ## La voix
 
-- **Un texte a un seul auteur** : le modèle, à la première personne, ou le code, dans le registre neutre.
+- **Un texte rendu par l'écosystème a un seul auteur** : le modèle, à la première personne, ou le code, dans le registre
+  neutre.
 - **Seul le modèle dit « je »** et s'adresse à CrOliX (P4). Le code prépare les faits : des comptes, des
   regroupements.
 - **Le code ne dit jamais « je » ni « tu »** sur une surface : il nomme ou s'écrit sans sujet. Son seul « tu » est
@@ -25,6 +26,9 @@
 | « Ce que j'ai fait » | le code, depuis le Journal ; jamais le modèle |
 | Les notifications, l'annonce d'une urgence, la voix fixe | le code ; l'urgence reste une phrase fixe |
 | Les phrases fixes d'un satellite, son agent compris | le code du satellite |
+
+L'intitulé du panneau « Ce que j'ai fait » reste ouvert, puisque le code ne dit pas « je » :
+à trancher ([carte des flux](../docs/specs/2026-11-25-carte-des-flux-design.md), § 10, question 5).
 
 ## Le registre neutre
 

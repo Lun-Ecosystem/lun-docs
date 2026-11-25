@@ -411,7 +411,8 @@ par ligne au plus, les mots du dictionnaire.
    - **Fait.** `ecriture.md`, 50 lignes. « Les huit règles », lignes 34 à 50 : 8 règles comptées. « Rangé dans » : 0 ;
      « Rangé en » aux lignes 32 et 39-40. « jamais « je » ni « tu » » aux lignes 13 et 30. `ecriture.md` cité dans
      `design.md:76` (150 lignes), `README.md:28` et la carte des copies (`lun-ecosysteme`, `lun-design`). Le
-     contre-exemple de la règle 1 dit « La lettre du matin est postée » : le mot « point du matin » ne s'écrit plus.
+     contre-exemple de la règle 1 diffère volontairement de la spec : « La lettre du matin est postée » au lieu de
+     « Le point du matin est posté », pour que le mot écarté par le dictionnaire ne s'écrive plus.
      `npm run check` : OK ; la retouche du dictionnaire et les copies sont à la tâche 4.
 3. - [x] **La porte d'attention dans les notifications** (`standards/notifications.md` seul). **En parallèle de 1
    et 2.**
@@ -457,6 +458,10 @@ par ligne au plus, les mots du dictionnaire.
      0 ; « veille » : une ligne, « veille tech » (`notifications.md:58`), des sources suivies. `npm run sync` :
      6 fichiers écrits, dont les deux copies d'`ecriture.md` ; `sync:check` : OK ; `check` : OK ; `npm test` :
      486 tests, 486 réussis, 0 échec.
+   - **Relecture du 25/11, corrigée** : la synthèse et le corps du mail dans « Propositions » ; le type de `values` ;
+     la validation groupée par une suite de `accept` ; la phrase des mails gardés, sans synthèse sans `boxes`, la
+     reprise au-delà de la borne ; « La plage de nuit » ; l'intitulé de « Ce que j'ai fait » laissé ouvert ; « Un
+     texte rendu par l'écosystème » ; `notifications.md:11-13` et `design.md:76` à 120 signes au plus.
 5. - [ ] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 4.** Le diff relu contre ce plan, les
    critères de l'issue et le dictionnaire. Une PR lun-docs en brouillon, qui ferme Lun-Ecosystem/lun-docs#217, avec
    ce plan coché et la sortie des barrières.

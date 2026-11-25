@@ -8,9 +8,9 @@
 
 - **Le satellite fixe le palier**, selon la nature de l'information, par des règles déterministes.
   Un LLM peut étiqueter (« urgent ») ; il ne fixe jamais le palier à lui seul.
-- **Le core rend tout par sa porte d'attention** (ci-dessous), selon le palier et les entrées de rendu. Le satellite
-  ne connaît ni la porte ni ses entrées. Les modes (assistante, focus, silence) viendront après le MVP, sous forme de rôles éditables qui
-  diront ce qui passe ; jusque-là, il n'y en a pas.
+- **Le core rend tout par sa porte d'attention** (ci-dessous), selon le palier et les entrées de rendu. Le satellite ne
+  connaît ni la porte ni ses entrées. Les modes (assistante, focus, silence) viendront après le MVP, sous forme de rôles
+  éditables qui diront ce qui passe ; jusque-là, il n'y en a pas.
 - **Le core est le seul à notifier** CrOliX sur ses appareils. Un front autonome peut notifier pour
   qui l'utilise sans Lun' ; ce n'est pas le parcours de CrOliX.
 - **Annoncer est le rôle de Natsume** : par la voix au bureau, par une notification sur le téléphone.
@@ -67,7 +67,7 @@ palier dans `importance` ([contrat](contrat-satellite.md)) ; sans `importance`, 
   minutes d'écart, donnent une seule notification (« 5 propositions à trancher »).
 - **Pas de chevauchement** : une seule file dans le core ; deux notifications ou deux prises de parole
   ne se recouvrent jamais.
-- **La nuit** (23 h à 7 h, réglable), une urgence part en notification sans son, quelle que soit l'entrée qui la
-  porte.
+- **La plage de nuit** (23 h à 7 h, réglable), une urgence part en notification sans son, quelle que soit l'entrée qui
+  la porte.
 - **Une seule fois** : un événement déjà notifié ne l'est pas de nouveau après un redémarrage.
 - **La lettre du matin** reprend les P3 de la nuit et rappelle les P2 encore en attente.
