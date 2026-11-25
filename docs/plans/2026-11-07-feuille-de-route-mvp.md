@@ -429,7 +429,7 @@ l'ordre : CrOliX la leur donne.
 | `standard` | Les erreurs qui restent à l'écran | lun-luxuria#81 : Q7, Q8 et R2, `attempt.dropped`, la phrase remplacée, le message de la garde de 60 s, les cinq cases du 16/11, la garde désarmée, le sondage tardif, `#micChanges` | une erreur ne bloque plus la file, ne donne qu'un message, et s'efface quand le service revient |
 | `standard` | Une réponse coupée | lun-anima#101, et le point 2 de #114 | les cas des deux issues réglés |
 | `standard` | Les filets du core, suites | lun-anima#108 | les six points faits ou écartés ; les points 1 et 3 avant B8 |
-| `standard` | Un jeton Google illisible | lun-acedia#62 | il compte comme « Non connecté » et l'écran propose de connecter de nouveau ; avant la restauration essayée (§ 4) |
+| `standard` | Un jeton Google illisible | lun-acedia#62 | il compte comme « Non connecté » et l'écran propose de connecter de nouveau ; avant la restauration essayée (§ 4) ; plan : [acedia-comptes-google](2026-11-24-acedia-comptes-google.md) |
 | `standard` | L'appairage, suites | lun-acedia#74, lun-avaritia#41, lun-anima#112, lun-docs#178 point 2 | chaque point fait ; la route des satellites refuse un corps qui n'est pas du JSON ; leur module d'appairage se recopie comme le kit |
 | `standard` | La carte du kit, ses gestes et son accessibilité | lun-docs#143 | une ancre `data-` stable, le focus gardé, la permission annoncée ; au branchement de la permission |
 | `standard` | La CI épinglée | lun-docs#168 | les actions épinglées par SHA, Dependabot réglé par CrOliX |
