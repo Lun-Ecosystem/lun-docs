@@ -52,6 +52,7 @@ export type {
   CardField,
   CardImportance,
   DemoState,
+  GroupCard,
   NavItem,
   Option,
   PaletteCommand,

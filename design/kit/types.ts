@@ -66,3 +66,21 @@ export interface CardField {
   /** Zero or more choices; without it, exactly one. */
   multiple?: true;
 }
+
+/** What a group of cards shows of a card of the contract. */
+export interface GroupCard {
+  id: string;
+  title: string;
+  kind?: string | undefined;
+  meta?: string[] | undefined;
+  lines?: string[] | undefined;
+  reason?: string | undefined;
+  importance?: CardImportance | undefined;
+  fields?: CardField[] | undefined;
+  /** Can be decided with others, in one gesture. */
+  bulk?: boolean | undefined;
+  /** What accepting sends out of the post: never in a group. */
+  sends?: string | undefined;
+  /** The answers of a question: never in a group. */
+  options?: string[] | undefined;
+}
