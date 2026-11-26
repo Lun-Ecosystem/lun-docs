@@ -608,6 +608,30 @@ semaine de rodage sur le desktop, puis la bascule vers la machine dédiée (ADR 
 
 Quand CrOliX y est ; aucun relevé n'est demandé avant. Proposition d'ordre, en une ou plusieurs fois :
 
+**D'abord, l'essai de Pocket TTS** ([replanification du 26/11](#la-replanification-du-2611--le-périmètre-gelé)). Un
+essai à part, hors de Lun'Luxuria et sans code : il dit seulement si la piste vaut un chantier. La marche est lue
+dans le README du dépôt `kyutai-labs/pocket-tts` le 26/11 (version 4.0.1 du 21/10/2026, code sous licence MIT) ; rien
+n'a été lancé. C'est CrOliX qui télécharge et lance.
+
+1. Depuis la page des versions du dépôt, prendre l'archive Windows (`…-x86_64-pc-windows-msvc.zip`) et le fichier
+   `SHA256SUMS`, comparer l'empreinte (`Get-FileHash`), puis décompresser à côté des dépôts, comme Piper. Le binaire
+   n'a besoin ni de Python ni de PyTorch ; il lui faut un processeur avec AVX2, sinon l'archive `-v2`.
+2. Le français, avec la voix fournie : `pocket-tts generate --language french --voice estelle --text "…"`. La commande
+   écrit `tts_output.wav` et affiche ses temps ; le premier lancement télécharge le modèle. Rejouer avec
+   `--language french_24l`, la variante plus lente et de meilleure qualité.
+3. Écouter contre la chaîne d'aujourd'hui (Piper puis RVC), sur les trois mêmes phrases : une courte, une longue,
+   une avec un chiffre, une date et un mot anglais.
+4. Le clonage : `--voice chemin\vers\voix.wav` ; `export-voice` en fait un fichier qui se charge vite. Le dépôt
+   interdit de cloner une voix sans consentement explicite : l'essai se fait sur une voix dont CrOliX a le droit, et
+   la voix du personnage d'aujourd'hui se tranche avant, pas après.
+5. Noter le temps jusqu'au premier son et la vitesse affichés (le dépôt annonce environ 200 ms et six fois le temps
+   réel, sur un autre processeur et deux cœurs), puis le français à l'oreille et la voix clonée contre celle de RVC.
+
+Si le français et la voix clonée conviennent, l'étage RVC peut tomber (B3) et la question de la langue se repose
+(B2) : le brancher dans le service voix serait un chantier à cadrer, mesuré contre les 2,5 s, et le périmètre est
+gelé jusqu'à la porte. Sinon la chaîne d'aujourd'hui reste, et la session continue. Non vérifié : la licence des
+poids et des voix (à lire sur leur fiche avant tout usage public), et le français, que personne n'a écouté.
+
 1. Mettre le poste à jour depuis `origin` ; activer le plugin `lun` à la racine (Q10), et le mettre à jour (les
    agents de dev y sont depuis lun-docs#163 : un manager et dix agents par métier). Reprendre la mémoire de la session
    du laptop, déposée le 10/11 sur le Drive de CrOliX (`memoire-lun-2026-11-10.zip`), dans le dossier de mémoire du
