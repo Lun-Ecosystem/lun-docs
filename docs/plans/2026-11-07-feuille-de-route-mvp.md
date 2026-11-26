@@ -7,6 +7,10 @@
 
 ## 1. Où on en est
 
+**Au 26/11.** La porte d'attention est fusionnée (lun-anima#157, lun-docs#225), pas publiée. CrOliX gèle le
+périmètre : les chantiers de flux qui restent passent après le VIP, et l'ordre à jour est au § 3,
+« La replanification du 26/11 ».
+
 **Au 20/11, le soir.** CrOliX corrige l'hôte du MVP ([ADR 0014](../../adr/0014-mvp-sur-le-nas.md)) : le core, Acedia et
 Avaritia tournent sur le NAS, en continu ; Lun'Luxuria est une application du desktop. L'ADR 0012 (12/11) avait pris
 son « à terme, un serveur dédié » pour une décision présente, et tout ce qui suit dans ce document entre le 12 et le
@@ -525,6 +529,75 @@ les mails dans la bibliothèque) passe après le VIP.
 core d'abord (Lun-Ecosystem/lun-anima#152), Acedia 1.5 ensuite. Sinon, chaque proposition de tri notifierait. La
 porte est livrée en brouillon le 26/11 (Lun-Ecosystem/lun-anima#157), son plan coché et le standard dans
 Lun-Ecosystem/lun-docs#225.
+
+### La replanification du 26/11 : le périmètre gelé
+
+Validée par CrOliX le 26/11. Elle fait foi pour l'ordre jusqu'à la porte, et remplace sur ce point les recadrages du
+24/11 et du 25/11.
+
+**Le constat.** Il reste 35 jours avant le 31/12. La semaine de rodage et sa marge en prennent quatorze : elle part
+le 08/12, le 15/12 au plus tard. Depuis le 24/11 le périmètre grossissait : la
+[carte des flux](../specs/2026-11-25-carte-des-flux-design.md) a ajouté dix chantiers (§ 11), dont quatre sont faits
+(les textes, les gestes de présence, Acedia au contrat 1.5, la porte d'attention), et rouvert deux points rangés
+« après le VIP » le 24/11. Aucune des cinq promesses de [`vision.md`](../../vision.md) ne demande les six autres.
+
+**Le gel.** Les six chantiers de flux restants passent après le VIP. Tout le reste se classe par une question : est-ce
+que cela casse la semaine ?
+
+**Rang 1, le chemin critique, quand CrOliX est chez lui.** Rien ne le remplace, et c'est lui qui fixe la date.
+
+1. Publier et déployer le core avec la porte d'attention, puis Lun'Acedia depuis `main` (l'ordre du 25/11). Les
+   propositions de tri arrivent alors au core en cartes d'importance basse, une par une ; la validation par lot reste
+   dans l'écran d'Acedia.
+2. Finir la [mise en service du NAS](2026-11-22-mise-en-service-nas.md) : le fournisseur de modèle par l'écran, les
+   copies hors du NAS et une restauration essayée, une mise à jour et un retour arrière, Google en production, le
+   téléphone, un redémarrage et une nuit rattrapée, les trois vérifications de #185, l'accès refermé.
+3. La session du desktop, pour la voix seule (§ 4, resserrée) : l'essai d'une synthèse française sur le processeur
+   avec clonage de voix (Pocket TTS, relevé par la veille du 26/11), en premier, car il peut faire tomber l'étage RVC
+   (B3) et peser sur la langue (B2) ; puis le délai mesuré contre les 2,5 s ; l'exe, le corps, le service voix.
+4. La semaine de rodage (B8), d'un jour fixe.
+
+**Rang 2, sur le laptop, avant la semaine.** Dans cet ordre :
+
+1. **La garde** ([plan](2026-11-26-garde-avant-la-semaine.md), Lun-Ecosystem/lun-docs#226), avant que les images
+   soient publiées : le texte d'un mail nettoyé avant le modèle, la quarantaine npm, les actions épinglées, Hono.
+2. **La voix ne tranche aucune carte pendant le VIP.** Le verrou de l'ADR 0011 reste : les cartes se tranchent à
+   l'écran et au téléphone. La règle des mots des gestes (B1, lun-luxuria#6) passe après le VIP, et la mesure des
+   gestes sort de la session du desktop. La veille du 26/11 conteste d'ailleurs la voie prévue, une barre de
+   confiance par brique : la confiance d'une transcription n'est pas calibrée sur les mots courts, et le relevé du
+   10/11 perdait déjà « oui », « annule » et « envoie » à 0,7. La règle d'après partira d'une liste fermée de mots.
+   Le garde-fou des cartes qui répondait en boucle (lun-anima#97, recette du 10/11) a été relu contre `main` le
+   26/11 : l'heure est donnée et sa phrase a changé depuis ; ce qui reste se réentend sur le desktop, sans chantier
+   avant. Ce point change le § 6.1 du [recadrage du 19/11](../specs/2026-11-19-recadrage-vip.md).
+3. **Le tri des issues en `inbox`**, contre la seule question de la semaine : fait le 26/11, en lecture seule, sur
+   les 50 issues étiquetées et trois autres. **Proposé, à trancher par CrOliX** :
+   - à corriger avant la semaine : lun-acedia#112 (« Ranger dans », au survol d'un mail, ne répond pas et bloque le
+     survol), un geste de chaque jour ;
+   - à constater chez lui : lun-docs#199 (les points restants de la mise en service), lun-acedia#87 (les jetons
+     Google au-delà de sept jours, à partir du 01/12), lun-luxuria#88 (le service voix passe par le proxy du système
+     pour la boucle locale : une ligne à corriger sur le laptop, le risque à lire sur le desktop) ;
+   - à observer pendant la semaine, sans corriger avant : lun-anima#101, #135 et #154, lun-acedia#104 et #113,
+     lun-luxuria#97 à #100 ;
+   - après le VIP : les 40 autres. Aucune n'est à fermer.
+4. **Cette replanification**, écrite ici.
+
+**Rang 3, pendant la semaine.** Aucun code. Les tensions se notent, les questions restées sans fiche aussi ; la part
+de propositions validées sans correction s'accumule par boîte.
+
+**Rang 4, après le VIP.** Dans l'ordre :
+
+1. les propositions au core (validation par lot, correction), la moitié qui manque à Acedia 1.5 ;
+2. l'écriture du core, puis la lettre du matin écrite par le modèle ;
+3. la parole spontanée et son ouverture (P2), avec un garde-fou en code : se taire après deux relances sans
+   réponse ;
+4. la nuit vers Avaritia, puis le seuil par boîte ;
+5. la recherche par le sens, que `vision.md` place en premier : l'ordre avec les flux reste à trancher ;
+6. l'installation et la mise à jour de Lun'Luxuria.
+
+**Sans date, hors chantier.** Écrire à Live2D sur la licence d'une application publique qui charge le modèle de
+chacun (l'avatar vient après le VIP, la réponse peut être longue). Lire en janvier l'avenant de Google sur les agents,
+qui s'applique le 01/02/2027. La RTX, quand elle viendra : les modèles de voix récents demandent 16 Go, ce qui écarte
+une carte de 12 Go.
 
 ### La session sur le desktop, puis le rodage et la bascule
 
