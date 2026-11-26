@@ -3,10 +3,12 @@
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
 > **Issue :** le chapeau Lun-Ecosystem/lun-docs#231 (`niveau:standard`) ; la part privée dans
-> Lun-Ecosystem/lun-anima#161. **PR du plan :** Lun-Ecosystem/lun-docs#232.
+> Lun-Ecosystem/lun-anima#161. **PR :** Lun-Ecosystem/lun-docs#232 (ce plan, la feuille de route) et
+> Lun-Ecosystem/lun-anima#162 (le code), en brouillon.
 >
-> **État : rédigé, contesté (« à amender ») et amendé le 26/11 (« Ce que la contestation a changé »). **Validé par
-> CrOliX le 26/11** : A, B et C ; les décisions 2 à 4 selon l'avis proposé, qu'il n'a pas commentées.
+> **État :** rédigé, contesté (« à amender ») et amendé le 26/11 (« Ce que la contestation a changé »). **Validé par
+> CrOliX le 26/11** : A, B et C ; les décisions 2 à 4 selon l'avis proposé, qu'il n'a pas commentées. **Exécuté, relu et mesuré le 26/11**
+> (« Ce que l'exécution a trouvé »).
 >
 > Code relu sur `main` le 26/11 : Lun'Anima `510f4d8` (0.4.0), lun-acedia `0.4.0`, lun-docs `802c770`. Le graphe
 > d'abord, puis chaque point dans le code. Lun'Anima est privé : ce plan dit le comportement, les critères, les tâches
@@ -162,25 +164,25 @@ Journal dit « Corrigée » et ce qui a changé. Une carte corrigée ne part jam
 
 ## Tâches
 
-- [ ] **1. Lire `fields`** (core). Le schéma, le type du core et celui de l'écran, l'empreinte sur les valeurs ; un
+- [x] **1. Lire `fields`** (core). Le schéma, le type du core et celui de l'écran, l'empreinte sur les valeurs ; un
       champ mal formé tombe seul. Tests : lu, mal formé, empreinte qui change avec une valeur et pas avec un choix.
-- [ ] **2. Le dire dans le chat** (core). La lecture d'une carte porte une ligne par champ. Test.
-- [ ] **3. Le montrer** (écran). La carte dépliée passe `fields` à la carte du kit. Test, et une capture aux deux
+- [x] **2. Le dire dans le chat** (core). La lecture d'une carte porte une ligne par champ. Test.
+- [x] **3. Le montrer** (écran). La carte dépliée passe `fields` à la carte du kit. Test, et une capture aux deux
       largeurs.
-- [ ] **4. Relayer la correction** (core). `values` à part de la réponse, dans le geste reçu, sa retenue, son relais
+- [x] **4. Relayer la correction** (core). `values` à part de la réponse, dans le geste reçu, sa retenue, son relais
       vers le poste et son Journal ; borné en forme et en taille ; jamais en lot. Tests : la forme exacte du corps
       envoyé (le faux poste des tests ne la vérifie pas : le test le fait), le refus du poste rendu comme raison,
       l'annulation.
-- [ ] **5. « Corriger »** (écran). `oncorrect` sur la carte de la file, le geste de l'écran, les textes du bandeau
+- [x] **5. « Corriger »** (écran). `oncorrect` sur la carte de la file, le geste de l'écran, les textes du bandeau
       d'annulation et du Journal. Test, et une capture.
-- [ ] **6. La règle : le titre et la demande** (core). Les tests d'abord : le tableau, puis les refus du critère 4.
-- [ ] **7. La règle : le refus montre la carte** (core). Les tests d'abord : une carte simple, une carte à choix, une
+- [x] **6. La règle : le titre et la demande** (core). Les tests d'abord : le tableau, puis les refus du critère 4.
+- [x] **7. La règle : le refus montre la carte** (core). Les tests d'abord : une carte simple, une carte à choix, une
       carte qui envoie, une carte en lecture seule, une carte changée ; le texte rangé comme une lecture ; la
       consigne alignée.
-- [ ] **8. La mesure** par le vrai service, avec les vraies consignes et Haiku 5.5 : cinq formulations, trois fois
+- [x] **8. La mesure** par le vrai service, avec les vraies consignes et Haiku 5.5 : cinq formulations, trois fois
       chacune ; le relevé dit combien aboutissent, en combien de messages. Aucun seuil : un constat.
-- [ ] **9. La relecture** du diff contre ce plan et les standards, puis la PR du core en brouillon.
-- [ ] **10. La feuille de route** : le rang 4 dit ce qui reste (le lot, corriger par le chat, les piles), le verrou de
+- [x] **9. La relecture** du diff contre ce plan et les standards, puis la PR du core en brouillon.
+- [x] **10. La feuille de route** : le rang 4 dit ce qui reste (le lot, corriger par le chat, les piles), le verrou de
       la voix selon la décision 2. Ce plan coché.
 
 ## Preuves
@@ -233,6 +235,48 @@ Contesté le 26/11, verdict « à amender ». Chaque point relu dans le code ava
 - **Le core ne revérifie pas les choix** (repris) : il borne la forme, le poste vérifie.
 - **Les piles** (réfuté pour ce chantier) : hors périmètre, écrit comme tel, avec ce que cela laisse.
 - **Une version plus petite, sans B** (laissé à CrOliX) : décision 1.
+
+## Ce que l'exécution a trouvé
+
+Exécuté le 26/11 au soir, tâches 1 à 9. Les barrières du core sont vertes (3 906 tests), la CI aussi.
+
+**La relecture** (« à corriger », aucun point bloquant de sécurité), reprise avant la PR :
+
+- « tu peux » était retiré de tout le message, pas seulement de ce qui précède le verbe : « oui tu peux » et « valide
+  tu peux » étaient devenus des gestes. Corrigé, avec leurs tests ;
+- une carte était montrée même sur un message qui n'est pas un geste (« et la météo ? ») : elle ne l'est plus ;
+- sur une carte à choix, « valide ou refuse » trompait : la carte liste ses choix, sans cette phrase. De même une
+  carte qui envoie ou en lecture seule garde sa propre règle.
+
+**La mesure** (tâche 8), par le vrai service, Haiku 5.5, raisonnement coupé, un faux poste au contrat 1.5, trois
+conversations neuves par formulation. Messages de CrOliX nécessaires pour que la carte voulue soit tranchée :
+
+| Formulation                                                               | Résultat          |
+| ------------------------------------------------------------------------- | ----------------- |
+| « valide la carte » suivi du titre exact                                  | 1, 1, 1           |
+| « tu peux valider la carte » suivi du titre exact                         | 1, 1, 2           |
+| « tu peux valider la carte de proposition de trie », une carte en attente | 2, 2, 2           |
+| la même, deux cartes en attente, puis « la première »                     | 3, 3, 4           |
+| « montre-moi la carte » suivi du titre, puis « oui »                      | 2, 2, 2           |
+| « refuse la proposition de tri sur les achats AliExpress »                | 2, échec, 4       |
+| « qu'est-ce que j'ai à trancher », puis « valide la première »            | échec, trois fois |
+
+- **Aucune mauvaise carte, aucun mauvais geste**, sur trente conversations.
+- **Nommer la carte par son titre suffit**, d'un seul message : c'était refusé le 26/11 sur l'instance.
+- **Ce qui échoue encore** : après que le code a montré la carte, le « valide » suivant n'est pas toujours suivi d'un
+  appel de l'outil. Le modèle répond alors de lui-même, et dit parfois à tort que la carte est déjà tranchée. Dire au
+  modèle quelle carte vient d'être montrée (ajouté à la consigne après une première passe) a fait passer la première
+  formulation de l'échec à la réussite, pas la dernière.
+- **Un remède sans le modèle existe, non codé** : trancher dès la réception quand le code vient de montrer la carte
+  et que le message suivant est un geste seul, comme « annule » est déjà traité. C'est un changement de la règle de
+  garde, hors de ce plan : à trancher par CrOliX.
+
+**Les captures** de la carte, aux largeurs du desktop et du téléphone : ce qui est proposé se lit, « Corriger » déplie
+les choix, rien ne déborde. Elles montrent aussi des défauts de design, d'avant le chantier ou du kit, rangés en
+`inbox` (Lun-Ecosystem/lun-docs#233, et une issue privée du core).
+
+**Écarts au plan** : aucune tâche abandonnée. Les captures ont été faites sur une carte d'essai servie par le faux
+poste des tests, pas sur l'instance.
 
 ## Limites
 
