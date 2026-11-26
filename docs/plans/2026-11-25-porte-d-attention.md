@@ -3,13 +3,14 @@
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **PR :** à ouvrir dans Lun'Anima, en brouillon. **Validé par CrOliX le 26/11.**
+> **PR :** Lun-Ecosystem/lun-anima#157, en brouillon. **Validé par CrOliX le 26/11.**
 >
 > **Issue :** Lun-Ecosystem/lun-anima#152, `niveau:critique`, privée. Chantier 4 du découpage de la carte des flux.
 >
 > **État : rédigé le 25/11 ; contesté le 25/11 ; amendé le 25/11** (« Ce que la contestation a changé »). **CrOliX
 > a répondu le 25/11** (« Réponses de CrOliX, le 25/11 ») : les tâches sont écrites ainsi. **Relu contre le code le
-> 26/11**, version amendée comprise (« Ce que la relecture du 26/11 a changé »).
+> 26/11**, version amendée comprise (« Ce que la relecture du 26/11 a changé »). **Exécuté le 26/11** (« Ce que
+> l'exécution a trouvé »).
 >
 > Code relu sur `main` de Lun'Anima (`d3afbf5`). Le graphe d'abord, puis chaque point dans le code. Lun'Anima est
 > privé : ce plan dit le comportement, les critères, les tâches et les preuves. Les fichiers, les lignes, les noms,
@@ -322,7 +323,7 @@ de comportement s'écrivent d'abord et sont rouges sur `main` ; les gardes, vert
 pas bouger. Chaque test dit lequel il est. Chaque tâche passe par le `reviewer` avant la suivante. Les fichiers, les
 noms et le détail des tests sont dans l'issue privée.
 
-0. - [ ] **La matrice d'aujourd'hui** (`testeur`). **D'abord, avant toute autre tâche.**
+0. - [x] **La matrice d'aujourd'hui** (`testeur`). **D'abord, avant toute autre tâche.**
    - **Une garde verte sur `main`**, sur les seuls relevés atteignables (l'appel, le réglage P0 et la sourdine
      n'existent qu'au bureau) : pour chaque palier, d'un poste et du core, elle relève la ligne du fil et sa voix, la
      notification (titre, corps, lien, son) et la ligne du Journal (titre, étapes). Les cartes, avec et sans présence.
@@ -341,7 +342,7 @@ noms et le détail des tests sont dans l'issue privée.
    - Le banc de cette tâche, rangé avec les aides de test, sert au rejeu de la tâche 9. Seule la voie A le retouche,
      pour le signal de l'annonce.
    - Exclu : tout code de production.
-1. - [ ] **La fonction pure et son tableau** (`testeur`, puis `dev-core`). **En parallèle de la tâche 6a.**
+1. - [x] **La fonction pure et son tableau** (`testeur`, puis `dev-core`). **En parallèle de la tâche 6a.**
    - Tests rouges sur `main` : chaque ligne du tableau de la porte, pour chaque combinaison atteignable des entrées,
      avec sa voix, sa notification, ses autres sorties, sa mention au rituel et son entrée décisive. Les quatre règles
      d'après le tableau. Une alerte de santé du core en pause. Une urgence ancienne, au bureau et absent. Le palier
@@ -349,7 +350,7 @@ noms et le détail des tests sont dans l'issue privée.
    - Garde : la fonction ne lit ni base, ni horloge ; deux appels égaux rendent la même décision.
    - Code : la fonction pure et ses types, dans un module à elle. Rien ne l'appelle encore.
    - Exclu : le relevé, la trace, tout branchement.
-2. - [ ] **Le relevé, le registre et sa lecture** (`testeur`, puis `dev-core`). **Après la tâche 1, même worktree.**
+2. - [x] **Le relevé, le registre et sa lecture** (`testeur`, puis `dev-core`). **Après la tâche 1, même worktree.**
    - Tests rouges sur `main` : le relevé lit chaque entrée depuis la base, la plage de nuit comprise à cheval sur
      minuit, la pause quelle que soit sa cause ; la trace écrit une ligne par arrivée et par étape, une seule même
      appelée deux fois, sans titre ni texte ; les lignes trop anciennes partent ; la migration ajoute la table sur une
@@ -359,7 +360,7 @@ noms et le détail des tests sont dans l'issue privée.
      viser par son numéro d'ordre.
    - Code : le relevé des entrées, l'écriture de trace, la migration, la commande de lecture.
    - Exclu : tout branchement aux sorties.
-3. - [ ] **Le Journal des événements par la porte** (`testeur`, puis `dev-core`). **Après la tâche 2. Voie A.**
+3. - [x] **Le Journal des événements par la porte** (`testeur`, puis `dev-core`). **Après la tâche 2. Voie A.**
    - Tests rouges sur `main` : un événement reçu et un événement du core laissent une ligne de trace d'arrivée ; en
      pause, un événement `normal` entre au Journal et la trace dit « la pause » ; une alerte de santé en pause dit
      autre chose ; une panne de la trace ne coûte ni l'événement, ni sa ligne au Journal, ni le flux du poste, et va
@@ -372,7 +373,7 @@ noms et le détail des tests sont dans l'issue privée.
      un rejeu. Celui qui reçoit le flux d'un poste suit ce retour dans la même tâche, sans changer de comportement :
      le typage reste vert.
    - Exclu : l'annonce, la file, les cartes, les textes du Journal.
-4. - [ ] **L'annonce par la porte** (`testeur`, puis `dev-core`). **Après la tâche 3, même worktree.**
+4. - [x] **L'annonce par la porte** (`testeur`, puis `dev-core`). **Après la tâche 3, même worktree.**
    - Tests rouges sur `main` : une urgence pendant la plage de nuit, au bureau puis absent : écrite au fil, pas dite ;
      un rappel d'agenda pendant la plage de nuit, pareil ; une urgence ancienne au bureau : écrite au fil, pas dite ;
      une panne à l'insertion : écrite au fil, pas dite ; au matin, une urgence arrivée après 5 h et écrite au fil au
@@ -385,7 +386,7 @@ noms et le détail des tests sont dans l'issue privée.
      Natsume a dit en dernier écarte les lignes d'urgence écrites pendant la plage de nuit : sans cela, la ligne
      écrite la nuit ferait compter l'urgence au matin au lieu de la nommer. Le banc de la tâche 0 suit le signal.
    - Exclu : la parole spontanée, ce que le rituel nomme ou compte (tâche 7), la file, le texte des deux phrases.
-5. - [ ] **La file des notifications par la porte** (`testeur`, puis `dev-core`). **Après la tâche 2. Voie B, en
+5. - [x] **La file des notifications par la porte** (`testeur`, puis `dev-core`). **Après la tâche 2. Voie B, en
          parallèle de la voie A.**
    - Tests rouges sur `main` : une urgence pendant la plage de nuit, au bureau : part sans son ; en pause, un
      `normal` ne part pas, une urgence et une alerte de santé partent ; chaque ligne terminée laisse sa trace d'envoi
@@ -396,7 +397,7 @@ noms et le détail des tests sont dans l'issue privée.
    - Code : la file prend ce que la porte classe P0 ou P1, retire ce dont la décision du moment ne notifie plus, tient
      le son de la décision, et écrit sa trace d'envoi. Ses contrôles de validité ne bougent pas.
    - Exclu : le regroupement par type, les textes des notifications, le poste injoignable.
-6. - [ ] **Les cartes lues avec leur palier** (`testeur`, puis `dev-core`). **6a en parallèle de la tâche 1 ; 6b
+6. - [x] **Les cartes lues avec leur palier** (`testeur`, puis `dev-core`). **6a en parallèle de la tâche 1 ; 6b
          après la tâche 5, voie B.**
    - **6a, la lecture.** Tests rouges sur `main` : une carte lue, puis relue là où le core la garde, porte
      `importance` et `bulk` ; une valeur inconnue ou mal formée de l'un d'eux est absente, sans faire échouer la
@@ -411,7 +412,7 @@ noms et le détail des tests sont dans l'issue privée.
    - Code de 6b : la première lecture d'une carte demande la décision et la trace ; l'entrée au Journal ne change pas.
      La file prend les cartes que la porte classe P0 ou P1.
    - Exclu : la validation groupée et la correction (chantier 5), la forme des piles à l'écran.
-7. - [ ] **Le rituel par la porte** (`testeur`, puis `dev-core`). **Après la tâche 4, même worktree, et après 6a.
+7. - [x] **Le rituel par la porte** (`testeur`, puis `dev-core`). **Après la tâche 4, même worktree, et après 6a.
          Voie A.**
    - Tests rouges sur `main` : pendant la plage de nuit, une urgence est comptée, pas nommée ; une carte P2 est
      comptée, pas nommée.
@@ -419,15 +420,15 @@ noms et le détail des tests sont dans l'issue privée.
      tous paliers ; le retour rapide ne change pas ; le matin de la tâche 4 ne bouge pas.
    - Code : le rituel demande à la porte, pour chaque urgence et chaque carte, nommée ou comptée.
    - Exclu : la consigne du rituel, son texte, les échéances à venir.
-8. - [ ] **La garde de la porte** (`testeur`). **En dernier, après les tâches 3 à 7.**
+8. - [x] **La garde de la porte** (`testeur`). **En dernier, après les tâches 3 à 7.**
    - La garde du § « La garde », sur les sources du core seules. Chaque fichier permis dit sa raison dans le test.
      Elle échoue sur une liste vide, un fichier permis disparu, aucun fichier lu. Pour l'annonce, elle vérifie
      qu'aucune entrée n'y est lue et que la voix vient du signal.
    - Exclu : tout code de production.
-9. - [ ] **Le rejeu local** (`testeur`). **Après les tâches 3 à 7, en parallèle de la tâche 8.**
+9. - [x] **Le rejeu local** (`testeur`). **Après les tâches 3 à 7, en parallèle de la tâche 8.**
    - Le test du § « Le rejeu local », sur le banc de la tâche 0. Sa sortie, lisible, va dans la PR.
    - Exclu : tout code de production.
-10. - [ ] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 0 à 9.** Le diff relu contre ce plan
+10. - [x] **La revue et la livraison** (`reviewer`, puis `livreur`). **Après 0 à 9.** Le diff relu contre ce plan
           et les standards ; le diff de la matrice de la tâche 0 relu case par case, la case « urgence de nuit, au
           bureau » après la fusion des voies A et B. Une PR Lun'Anima en brouillon, qui
           ferme Lun-Ecosystem/lun-anima#152, avec les tests rouges devenus verts, la suite entière, les barrières et la
@@ -524,6 +525,38 @@ Les cinq points que l'annexe disait ne pas avoir vérifiés le sont : la lecture
 type de la carte s'élargit sans casser de test ; le rituel reçoit son heure ; la reprise de l'historique reste une
 exception nommée ; la commande de lecture se lance sur le NAS comme les autres.
 
+## Ce que l'exécution a trouvé
+
+Exécuté le 26/11, tâche par tâche : le testeur d'abord, le développeur ensuite, une relecture après chaque tâche. Les
+tâches 0 à 9 sont faites telles qu'écrites. Ce qui s'y est ajouté :
+
+1. **Une consolidation après la fusion des deux voies**, sept points venus des relectures et des épreuves par
+   mutation. L'échec du relevé à la file s'écrit une seule fois **par poste**. Le rituel **nomme** les urgences et les
+   cartes quand le relevé ne se lit pas, comme de jour, et l'échec va au journal du core : sans cela, le bloc entier
+   disparaissait en silence. L'arrivée d'une carte se bâtit en **un seul endroit**, qui dit si elle envoie quelque
+   chose ou porte des options : deux des trois sorties l'oubliaient, et une carte groupée qui envoie était dite
+   groupable. Le rejeu, écrit d'après ce plan seul, a trouvé le même défaut de son côté.
+2. **La revue de toute la branche** : quatre lectures (les critères un par un, la matrice case par case, le chemin de
+   l'urgence sur ses scénarios de panne, la qualité), puis une contre-vérification de chaque constat dans le code.
+   Les douze critères tiennent. Deux défauts ont été corrigés, tests d'abord :
+   - **Une panne de la porte à la première lecture d'une carte** annulait tout ce que la lecture écrivait au Journal,
+     l'étape « Tranchée » d'une carte partie comprise, perdue pour de bon. La carte suit maintenant le repli des
+     événements : son entrée au Journal et l'étape s'écrivent malgré la panne, l'échec va au journal du core. C'est un
+     choix de la session, à renverser si CrOliX préfère tout annuler et reprendre à la lecture suivante.
+   - **La garde ne voyait pas les deux lectures que la porte offre** (le relevé, la plage de nuit). Elles sont
+     maintenant une liste fermée : la porte, la file et le rituel, chacun avec sa raison.
+3. **Un écart avec « La garde »**, tenu : la file et le rituel ne lisent toujours aucune entrée à sa source, mais ils
+   appellent la lecture de la porte. La file lui passe le relevé pour décider, et lit la plage de nuit seule dans son
+   repli. Le rituel lui passe le relevé, et lit la plage de nuit pour savoir si une ligne écrite au fil compte comme
+   le dernier mot de Natsume (tâche 4).
+4. **Le standard** gagne deux précisions que ce plan portait déjà : trois entrées de rendu qu'il ne listait pas (le
+   réglage « Dit à voix haute : P0 », le réglage « les alertes urgentes en direct », l'ancienneté d'une urgence), et
+   les deux sorties directes.
+5. **Signalé à part** : un test d'avant le chantier qui frôle son délai sous charge (Lun-Ecosystem/lun-anima#155) ;
+   les limites et les points mineurs relevés en route (Lun-Ecosystem/lun-anima#156).
+
+Reste après la fusion : le graphe mis à jour.
+
 ## Réponses de CrOliX, le 25/11
 
 1. **Le rituel d'accueil passe par la porte.** Pendant la plage de nuit, il ne dit pas une urgence à voix haute,
@@ -589,3 +622,11 @@ n'est jamais dite ; **« groupable »** veut dire la validation groupée, que le
 - **Une carte vue avant la mise à jour** n'a pas de trace d'arrivée : elle est arrivée avant la porte.
 - **Le registre ne dit pas le titre** : pour savoir de quel mail il s'agit, il faut remonter à l'événement par sa clé.
 - **Revenir en arrière** se fait par l'image d'avant, jamais en retirant la migration du code.
+- **La file ne sait pas si l'insertion a dit l'urgence.** Une urgence écrite au fil dans les dernières secondes de la
+  plage de nuit, ou pendant un repli de la porte, puis vue au bureau au passage suivant de la file, reste écrite au
+  fil : ni dite, ni notifiée. Signalé à part (Lun-Ecosystem/lun-anima#156).
+- **Une carte lue pour la première fois pendant une panne de la porte** entre au Journal sans ligne d'arrivée au
+  registre. Le repli à l'insertion d'un événement ne laisse pas de trace non plus.
+- **En pause, ce que la porte retient ne notifie pas après coup** : il reste au Journal et dans les compteurs.
+- **Au rituel, pendant la plage de nuit, une carte `urgent` est comptée comme une urgence**, pas nommée. Aucun poste
+  n'en envoie aujourd'hui.

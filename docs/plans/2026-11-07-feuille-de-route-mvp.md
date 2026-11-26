@@ -522,7 +522,9 @@ Le reste de l'audit (design, finitions, vocabulaire, l'urgence et ce qui remonte
 les mails dans la bibliothèque) passe après le VIP.
 
 **L'ordre de déploiement de la porte d'attention** (CrOliX, le 25/11, [plan](2026-11-25-porte-d-attention.md)) : le
-core d'abord (Lun-Ecosystem/lun-anima#152), Acedia 1.5 ensuite. Sinon, chaque proposition de tri notifierait.
+core d'abord (Lun-Ecosystem/lun-anima#152), Acedia 1.5 ensuite. Sinon, chaque proposition de tri notifierait. La
+porte est livrée en brouillon le 26/11 (Lun-Ecosystem/lun-anima#157), son plan coché et le standard dans
+Lun-Ecosystem/lun-docs#225.
 
 ### La session sur le desktop, puis le rodage et la bascule
 
