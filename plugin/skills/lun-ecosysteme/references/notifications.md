@@ -24,18 +24,29 @@ notifie ni ne s'écrit au Journal par un autre chemin.
 
 - **Ce qu'elle reçoit** : les événements des postes et du core (contrôle compris), les cartes des postes avec leur
   palier, les échéances lues par le core (agenda, tâches, bibliothèque).
-- **Ses entrées de rendu** : la sourdine, la pause, un appel en cours au bureau, la plage de nuit, la présence.
+- **Ses entrées de rendu** : la sourdine, la pause, un appel en cours au bureau, la plage de nuit, la présence, le
+  réglage « Dit à voix haute : P0 », le réglage « les alertes urgentes en direct » du poste source (coupé, une urgence
+  de ce poste ne notifie pas) et l'ancienneté d'une urgence.
 - **Ses cinq sorties** : dire (à voix haute au bureau), notifier (sur le téléphone), attendre le bon moment, la lettre
   du matin, le Journal. Elle choisit selon le palier (tableau ci-dessous) et ses entrées.
 - **Chaque choix est tracé** : ce qui est arrivé, la sortie choisie et l'entrée qui l'a décidée.
-- **Attendre** partage un budget avec la parole spontanée : les deux se comptent ensemble.
+- **Attendre** est nommé et tracé, sans budget au MVP. Son budget, partagé avec la parole spontanée, viendra avec
+  elle : les deux se compteront ensemble.
+- **En pause**, seules les urgences et les alertes de santé du core sortent : crash, sauvegarde ratée, clé refusée ou
+  crédit épuisé, conversation qui ne peut plus répondre, clé qui expire, poste injoignable, plafond atteint. Le reste
+  attend, au Journal et dans les compteurs. Il n'y a qu'une pause, quelle que soit la personne ou la règle qui l'a
+  posée.
+- **Au MVP, trois choses n'y passent pas encore** : la parole spontanée, les échéances lues par le core, et les
+  écritures au Journal d'un acte de CrOliX ou de Natsume. « Attendre » et la lettre sont décidés et tracés, sans
+  lecteur encore. Deux réponses à un geste de CrOliX restent directes : la phrase du retour rapide et l'essai de
+  notification.
 
 ## Les paliers
 
 | Palier | `importance` | Rendu | Au MVP |
 |---|---|---|---|
-| **P0 · Interrompre** | `urgent` | vibration et son, notification en haut de l'écran | dit malgré la sourdine si « Dit à voix haute : P0 » est activé (le défaut), sinon en silence dans le fil et sur le téléphone ; jamais dit en appel ; la nuit (23 h à 7 h, réglable), sans son |
-| **P1 · Prévenir** | `normal` | notification silencieuse dans le tiroir et pastille | la sourdine ne la touche pas : le téléphone la reçoit |
+| **P0 · Interrompre** | `urgent` | vibration et son, notification en haut de l'écran | dit malgré la sourdine si « Dit à voix haute : P0 » est activé (le défaut) ; sinon écrit au fil sans être dit, et il sonne quand même sur le téléphone ; jamais dit en appel ; ancien de quelques minutes au bureau, écrit au fil sans être dit ; pendant la plage de nuit (23 h à 7 h, réglable), écrit au fil sans être dit, et sans son |
+| **P1 · Prévenir** | `normal` | notification silencieuse dans le tiroir et pastille | la sourdine ne la touche pas ; le téléphone la reçoit, sauf quand CrOliX est au bureau |
 | **P2 · Signaler** | `low` | pastille ou compteur dans l'app, pas de notification système | — |
 | **P3 · Résumer** | `info` | seulement dans la lettre du matin ou le point du soir | — |
 | **P4 · Journal** | `log` | rien, visible dans l'historique | — |
@@ -68,7 +79,9 @@ palier dans `importance` ([contrat](contrat-satellite.md)) ; sans `importance`, 
   minutes d'écart, donnent une seule notification (« 5 propositions à trancher »).
 - **Pas de chevauchement** : une seule file dans le core ; deux notifications ou deux prises de parole
   ne se recouvrent jamais.
-- **La plage de nuit** (23 h à 7 h, réglable), une urgence part en notification sans son, quelle que soit l'entrée qui
-  la porte.
+- **La plage de nuit** (23 h à 7 h, réglable) : un événement urgent s'écrit au fil sans être dit, et part en
+  notification sans son, quelle que soit la présence. Le rituel d'accueil ne le dit pas non plus.
+- **Une carte urgente** n'est ni dite ni écrite au fil : elle sonne sur le téléphone, au bureau compris, sans son
+  pendant la plage de nuit.
 - **Une seule fois** : un événement déjà notifié ne l'est pas de nouveau après un redémarrage.
 - **La lettre du matin** reprend les P3 de la nuit et rappelle les P2 encore en attente.
