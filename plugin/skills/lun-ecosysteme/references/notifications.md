@@ -24,7 +24,9 @@ notifie ni ne s'écrit au Journal par un autre chemin.
 
 - **Ce qu'elle reçoit** : les événements des postes et du core (contrôle compris), les cartes des postes avec leur
   palier, les échéances lues par le core (agenda, tâches, bibliothèque).
-- **Ses entrées de rendu** : la sourdine, la pause, un appel en cours au bureau, la plage de nuit, la présence.
+- **Ses entrées de rendu** : la sourdine, la pause, un appel en cours au bureau, la plage de nuit, la présence, le
+  réglage « Dit à voix haute : P0 », le réglage « les alertes urgentes en direct » du poste source (coupé, une urgence
+  de ce poste ne notifie pas) et l'ancienneté d'une urgence.
 - **Ses cinq sorties** : dire (à voix haute au bureau), notifier (sur le téléphone), attendre le bon moment, la lettre
   du matin, le Journal. Elle choisit selon le palier (tableau ci-dessous) et ses entrées.
 - **Chaque choix est tracé** : ce qui est arrivé, la sortie choisie et l'entrée qui l'a décidée.
@@ -36,7 +38,8 @@ notifie ni ne s'écrit au Journal par un autre chemin.
   posée.
 - **Au MVP, trois choses n'y passent pas encore** : la parole spontanée, les échéances lues par le core, et les
   écritures au Journal d'un acte de CrOliX ou de Natsume. « Attendre » et la lettre sont décidés et tracés, sans
-  lecteur encore.
+  lecteur encore. Deux réponses à un geste de CrOliX restent directes : la phrase du retour rapide et l'essai de
+  notification.
 
 ## Les paliers
 
