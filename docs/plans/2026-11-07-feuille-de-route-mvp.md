@@ -11,6 +11,15 @@
 périmètre : les chantiers de flux qui restent passent après le VIP, et l'ordre à jour est au § 3,
 « La replanification du 26/11 ».
 
+**Au 26/11, le soir.** Les trois versions sont publiées et en service sur le NAS : le core 0.4.0, Lun'Acedia 0.4.0
+(après le core), Lun'Avaritia 0.3.1. Sur le NAS, le retour arrière et la restauration à part sont joués, le
+fournisseur de modèle est réglé par l'écran. En essayant, CrOliX constate que la carte d'une proposition de tri ne
+dit pas ce qui est proposé, ne se corrige pas, et que le chat écrit ne la tranche pas. Il rappelle son usage : sur
+le desktop tout passe par Natsume, par la voix d'abord et le panneau en secours ; en déplacement, sans voix, tout
+passe par le panneau. Le gel est rouvert sur ce point :
+[trancher depuis le core](2026-11-26-trancher-depuis-le-core.md) (Lun-Ecosystem/lun-docs#231), codé le soir même, en
+brouillon.
+
 **Au 20/11, le soir.** CrOliX corrige l'hôte du MVP ([ADR 0014](../../adr/0014-mvp-sur-le-nas.md)) : le core, Acedia et
 Avaritia tournent sur le NAS, en continu ; Lun'Luxuria est une application du desktop. L'ADR 0012 (12/11) avait pris
 son « à terme, un serveur dédié » pour une décision présente, et tout ce qui suit dans ce document entre le 12 et le
@@ -580,13 +589,20 @@ que cela casse la semaine ?
      lun-luxuria#97 à #100 ;
    - après le VIP : les 40 autres. Aucune n'est à fermer.
 4. **Cette replanification**, écrite ici.
+5. **Trancher depuis le core** ([plan](2026-11-26-trancher-depuis-le-core.md), Lun-Ecosystem/lun-docs#231), ajouté le
+   26/11 au soir après l'essai sur le NAS : la carte du core montre ce qui est proposé et se corrige, le chat écrit
+   tranche une carte nommée par son titre. Une version 0.4.1 du core à publier et déployer avant la semaine. Le
+   verrou de la voix (point 2) reste ; sa levée se décide à la session du desktop, sur les mesures des gestes, et
+   non plus après le VIP d'office : la voix est le premier chemin sur le desktop.
 
 **Rang 3, pendant la semaine.** Aucun code. Les tensions se notent, les questions restées sans fiche aussi ; la part
 de propositions validées sans correction s'accumule par boîte.
 
 **Rang 4, après le VIP.** Dans l'ordre :
 
-1. les propositions au core (validation par lot, correction), la moitié qui manque à Acedia 1.5 ;
+1. les propositions au core : la validation par lot, corriger par le chat, et les piles (deux propositions de même
+   sujet peuvent proposer deux boîtes, et « valider tout » les tranche sans les montrer). Voir et corriger sur la
+   carte sont faits par le chantier du 26/11 au soir ;
 2. l'écriture du core, puis la lettre du matin écrite par le modèle ;
 3. la parole spontanée et son ouverture (P2), avec un garde-fou en code : se taire après deux relances sans
    réponse ;
