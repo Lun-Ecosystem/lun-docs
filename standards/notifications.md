@@ -30,8 +30,12 @@ notifie ni ne s'écrit au Journal par un autre chemin.
 - **Attendre** est nommé et tracé, sans budget au MVP. Son budget, partagé avec la parole spontanée, viendra avec
   elle : les deux se compteront ensemble.
 - **En pause**, seules les urgences et les alertes de santé du core sortent : crash, sauvegarde ratée, clé refusée ou
-  crédit épuisé, clé qui expire, poste injoignable, plafond atteint. Le reste attend, au Journal et dans les
-  compteurs. Il n'y a qu'une pause, quelle que soit la personne ou la règle qui l'a posée.
+  crédit épuisé, conversation qui ne peut plus répondre, clé qui expire, poste injoignable, plafond atteint. Le reste
+  attend, au Journal et dans les compteurs. Il n'y a qu'une pause, quelle que soit la personne ou la règle qui l'a
+  posée.
+- **Au MVP, trois choses n'y passent pas encore** : la parole spontanée, les échéances lues par le core, et les
+  écritures au Journal d'un acte de CrOliX ou de Natsume. « Attendre » et la lettre sont décidés et tracés, sans
+  lecteur encore.
 
 ## Les paliers
 
@@ -71,7 +75,9 @@ palier dans `importance` ([contrat](contrat-satellite.md)) ; sans `importance`, 
   minutes d'écart, donnent une seule notification (« 5 propositions à trancher »).
 - **Pas de chevauchement** : une seule file dans le core ; deux notifications ou deux prises de parole
   ne se recouvrent jamais.
-- **La plage de nuit** (23 h à 7 h, réglable) : une urgence s'écrit au fil sans être dite, et part en notification
-  sans son, quelle que soit la présence et l'entrée qui la porte. Le rituel d'accueil ne la dit pas non plus.
+- **La plage de nuit** (23 h à 7 h, réglable) : un événement urgent s'écrit au fil sans être dit, et part en
+  notification sans son, quelle que soit la présence. Le rituel d'accueil ne le dit pas non plus.
+- **Une carte urgente** n'est ni dite ni écrite au fil : elle sonne sur le téléphone, au bureau compris, sans son
+  pendant la plage de nuit.
 - **Une seule fois** : un événement déjà notifié ne l'est pas de nouveau après un redémarrage.
 - **La lettre du matin** reprend les P3 de la nuit et rappelle les P2 encore en attente.
