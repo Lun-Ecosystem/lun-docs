@@ -40,8 +40,8 @@ nom propre au dépôt ; pour un modèle, « petit, libre, nécessaire ».
 
 ## Dépendances et CI
 
-- **Quarantaine npm** : un `.npmrc` avec `min-release-age=7`, à côté de chaque `package.json` qui a des dépendances.
-  Une version publiée depuis moins de sept jours ne s'installe pas. Elle joue sur le poste où le verrou s'écrit ; la
+- **Quarantaine npm** : un `.npmrc` avec `min-release-age=7` à la racine de chaque projet npm, à côté de son
+  `package-lock.json`. Une version publiée depuis moins de sept jours ne s'installe pas. Elle joue sur le poste où le verrou s'écrit ; la
   CI et les images installent depuis le verrou (`npm ci`). Elle ne couvre que npm, ni cargo ni uv.
 - **Un correctif de sécurité urgent** passe pour une seule installation, la version écrite en entier :
   `npm install <paquet>@<version> --min-release-age=0`. Le délai ne se lève pas dans le `.npmrc` ; le diff du verrou

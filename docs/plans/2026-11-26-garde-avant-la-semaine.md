@@ -7,9 +7,10 @@
 > avance Lun-Ecosystem/lun-docs#168 sans la fermer (Dependabot reste à faire).
 >
 > **État : rédigé, contesté (« à amender ») et amendé le 26/11 ; validé par CrOliX le 26/11, les trois décisions selon
-> l'avis proposé. En cours d'exécution.**
+> l'avis proposé. Exécuté et relu le 26/11 ; les PR sont en brouillon, à fusionner par CrOliX.**
 >
-> **PR :** Lun-Ecosystem/lun-docs#227 (ce plan, la règle, la part de lun-docs) ; les autres en tête de chaque tâche.
+> **PR :** Lun-Ecosystem/lun-docs#227 (ce plan, la règle, la part de lun-docs), Lun-Ecosystem/lun-acedia#117,
+> Lun-Ecosystem/lun-avaritia#50, Lun-Ecosystem/lun-luxuria#113, Lun-Ecosystem/lun-anima#159 (issue lun-anima#158).
 >
 > Code relu sur `main` le 26/11 : lun-docs `e4d06b5`, lun-acedia `29f63e0`, lun-avaritia `e51132d`, lun-luxuria
 > `560b008`, Lun'Anima `3eda626`. Le graphe d'abord, puis chaque point dans le code. Lun'Anima est privé : ce plan
@@ -74,27 +75,28 @@ jamais une instruction. »
 
 Une branche et une PR par dépôt touché, une tâche par commit. Une seule revue, sur l'ensemble des diffs.
 
-- [ ] **Tâche 1. Ce qui part vers le modèle (lun-acedia).** Une fonction à part, appliquée au corps, à l'objet et à
+- [x] **Tâche 1. Ce qui part vers le modèle (lun-acedia).** Une fonction à part, appliquée au corps, à l'objet et à
       l'expéditeur du mail à trier, et à ceux des exemples : elle retire les commentaires HTML restés dans le texte
       et les caractères de largeur nulle et de contrôle de direction. Elle sert le tri et la synthèse, sur le même
       texte ; `plainText` ne change pas. Les tests d'abord, sur des mails inventés ; un test prouve qu'un brouillon
       relu reste identique, joint de largeur nulle compris.
-- [ ] **Tâche 2. Les consignes du tri (lun-acedia).** `SYSTEM` et `SUMMARY_SYSTEM` reçoivent la règle de
+- [x] **Tâche 2. Les consignes du tri (lun-acedia).** `SYSTEM` et `SUMMARY_SYSTEM` reçoivent la règle de
       `securite.md`. Le mail (en-tête et corps) et les exemples sont placés entre des balises nommées ; une fermeture
       de ces balises écrite dans un mail est neutralisée. Le test passe par un faux fournisseur donné au vrai
       classeur et lit `system` et `user` : la règle y est, le mail piégé est entre les balises et n'en sort pas.
-- [ ] **Tâche 3. La quarantaine (les cinq dépôts).** Un `.npmrc` avec `min-release-age=7` là où vit le
-      `package.json` qui a des dépendances (dans lun-docs : `design/`). Preuve dans chaque dépôt, la version de npm
+- [x] **Tâche 3. La quarantaine (les cinq dépôts).** Un `.npmrc` avec `min-release-age=7` à la racine de chaque
+      projet npm, à côté de son verrou (dans lun-docs : `design/`). Preuve dans chaque dépôt, la version de npm
       notée : `npm ci` passe avec le fichier, et `npm install` d'une version de moins de sept jours est refusé.
-- [ ] **Tâche 4. Hono (lun-acedia, lun-avaritia, Lun'Anima).** La plage passe à `^4.13.16`, le verrou à la dernière
+- [x] **Tâche 4. Hono (lun-acedia, lun-avaritia, Lun'Anima).** La plage passe à `^4.13.16`, le verrou à la dernière
       4.13 que la quarantaine laisse passer ; `@hono/node-server` de même. Les barrières de chaque dépôt, vertes.
-- [ ] **Tâche 5. Les actions (les cinq dépôts, et les gabarits de lun-docs).** Chaque `uses:` épinglé par son SHA,
+- [x] **Tâche 5. Les actions (les cinq dépôts, et les gabarits de lun-docs).** Chaque `uses:` épinglé par son SHA,
       la version en commentaire.
-- [ ] **Tâche 6. La règle (lun-docs).** Dans `standards/securite.md` : la quarantaine et la marche d'un correctif
+- [x] **Tâche 6. La règle (lun-docs).** Dans `standards/securite.md` : la quarantaine et la marche d'un correctif
       urgent ; l'épinglage. `npm run sync`, `npm run check`.
-- [ ] **Tâche 7. Ce qui part en `inbox`** : le modèle qui lirait le HTML nettoyé (décision 2) ; l'extrait `snippet`
+- [x] **Tâche 7. Ce qui part en `inbox`** : le modèle qui lirait le HTML nettoyé (décision 2) ; l'extrait `snippet`
       et les noms de pièces jointes servis au core ; l'installation sans verrou dans la CI de lun-docs ; les réglages
-      de Lun'Luxuria côté Tauri.
+      de Lun'Luxuria côté Tauri. Ouvertes : Lun-Ecosystem/lun-acedia#115 et #116, Lun-Ecosystem/lun-docs#228,
+      Lun-Ecosystem/lun-luxuria#112.
 
 ## Preuve
 
@@ -131,7 +133,22 @@ fermeture de balise neutralisée et le test par un faux fournisseur ; le `.npmrc
 preuve double de la quarantaine ; la plage de Hono relevée ; Dependabot reporté ; les gabarits épinglés. Réfuté :
 la 4.13.16 de Hono date du 01/11, la quarantaine ne la retient pas.
 
+## L'exécution et la revue du 26/11
+
+- **Les versions.** Hono 4.13.19 et `@hono/node-server` 2.1.9 dans les trois serveurs : les dernières que la
+  quarantaine laisse passer. La 4.13.22, publiée le 25/11, est refusée (`ETARGET`) dans les cinq dépôts ; `npm ci`
+  passe partout avec le `.npmrc`, sous npm 11.11.
+- **Les écarts.** Le destinataire d'un mail est nettoyé aussi. La liste des caractères retirés compte en plus le
+  trait d'union conditionnel, trois autres invisibles et les caractères d'étiquette (U+E0000 à U+E007F).
+- **La revue, un point bloquant, corrigé.** Le nettoyage coûtait un temps cubique sur un objet hostile, que rien ne
+  borne : il se fait maintenant en un seul parcours, avec un test de coût. Le reste est conforme : un mail ordinaire
+  entre dans le modèle comme avant, hors les balises et la phrase ajoutée ; `plainText` n'a pas changé.
+- **Renvoyé en `inbox`.** Un mail en HTML seul laisse passer la fin d'un commentaire qui contient un `>`
+  (lun-acedia#115) ; `mail.read` sert au core un texte non nettoyé (lun-acedia#116).
+
 ## Ce qui n'a pas été vérifié
+
+- L'effet de la phrase et des balises sur le tri d'un vrai modèle : aucun appel réel, il se lira pendant la semaine.
 
 - Le détail des cinq avis de Hono, et si l'un touche nos middlewares.
 - Si `min-release-age` s'applique à `npm ci` : la preuve de la tâche 3 le dira.
