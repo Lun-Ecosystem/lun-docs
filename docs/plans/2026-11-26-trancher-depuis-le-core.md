@@ -2,11 +2,11 @@
 
 > **Pour l'exécution :** superpowers:executing-plans, tâche par tâche. Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **Issue :** le chapeau Lun-Ecosystem/lun-docs#231 ; la part privée dans Lun-Ecosystem/lun-anima#161. Niveau
-> proposé : `standard` (à fixer par CrOliX, décision 4).
+> **Issue :** le chapeau Lun-Ecosystem/lun-docs#231 (`niveau:standard`) ; la part privée dans
+> Lun-Ecosystem/lun-anima#161. **PR du plan :** Lun-Ecosystem/lun-docs#232.
 >
-> **État : rédigé, contesté (« à amender ») et amendé le 26/11 (« Ce que la contestation a changé »). Pas encore
-> validé par CrOliX. Aucun code avant.**
+> **État : rédigé, contesté (« à amender ») et amendé le 26/11 (« Ce que la contestation a changé »). **Validé par
+> CrOliX le 26/11** : A, B et C ; les décisions 2 à 4 selon l'avis proposé, qu'il n'a pas commentées.
 >
 > Code relu sur `main` le 26/11 : Lun'Anima `510f4d8` (0.4.0), lun-acedia `0.4.0`, lun-docs `802c770`. Le graphe
 > d'abord, puis chaque point dans le code. Lun'Anima est privé : ce plan dit le comportement, les critères, les tâches
