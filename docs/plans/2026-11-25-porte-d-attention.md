@@ -3,7 +3,7 @@
 > **Pour l'exécution :** superpowers:subagent-driven-development ou superpowers:executing-plans, tâche par tâche.
 > Cases à cocher (`- [ ]`) pour le suivi.
 >
-> **PR :** à ouvrir dans Lun'Anima, en brouillon. **À valider par CrOliX.**
+> **PR :** à ouvrir dans Lun'Anima, en brouillon. **Validé par CrOliX le 26/11.**
 >
 > **Issue :** Lun-Ecosystem/lun-anima#152, `niveau:critique`, privée. Chantier 4 du découpage de la carte des flux.
 >
