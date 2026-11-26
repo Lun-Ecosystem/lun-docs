@@ -38,6 +38,17 @@ l'historique de git garde de toute façon ce qui a été publié.
 Restent à la relecture : les commandes, les tables, les colonnes et les variables, qu'aucun motif ne distingue d'un
 nom propre au dépôt ; pour un modèle, « petit, libre, nécessaire ».
 
+## Dépendances et CI
+
+- **Quarantaine npm** : un `.npmrc` avec `min-release-age=7`, à côté de chaque `package.json` qui a des dépendances.
+  Une version publiée depuis moins de sept jours ne s'installe pas. Elle joue sur le poste où le verrou s'écrit ; la
+  CI et les images installent depuis le verrou (`npm ci`). Elle ne couvre que npm, ni cargo ni uv.
+- **Un correctif de sécurité urgent** passe pour une seule installation, la version écrite en entier :
+  `npm install <paquet>@<version> --min-release-age=0`. Le délai ne se lève pas dans le `.npmrc` ; le diff du verrou
+  se relit (seul ce paquet doit bouger), et la PR dit l'avis de sécurité qui le justifie.
+- **Les actions de CI** s'épinglent par leur SHA de 40 caractères, la version en commentaire :
+  `uses: actions/checkout@<sha> # v4.4.0`. Une étiquette (`@v4`) peut changer sous le workflow.
+
 ## Comptes et accès
 
 - En local : le compte Google de test, jamais le vrai compte.

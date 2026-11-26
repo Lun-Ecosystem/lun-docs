@@ -9,7 +9,7 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       # À compléter selon la stack (standards/stack.md de lun-docs) :
       # format, lint, typage, tests, vérification des adresses internes (dépôts publics).
       - name: Placeholder

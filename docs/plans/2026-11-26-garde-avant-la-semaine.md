@@ -6,8 +6,10 @@
 > [replanification du 26/11](2026-11-07-feuille-de-route-mvp.md#la-replanification-du-2611--le-périmètre-gelé). Il
 > avance Lun-Ecosystem/lun-docs#168 sans la fermer (Dependabot reste à faire).
 >
-> **État : rédigé le 26/11 ; contesté le 26/11 (« à amender ») ; amendé le 26/11. À valider par CrOliX. Pas de code
-> avant.**
+> **État : rédigé, contesté (« à amender ») et amendé le 26/11 ; validé par CrOliX le 26/11, les trois décisions selon
+> l'avis proposé. En cours d'exécution.**
+>
+> **PR :** Lun-Ecosystem/lun-docs#227 (ce plan, la règle, la part de lun-docs) ; les autres en tête de chaque tâche.
 >
 > Code relu sur `main` le 26/11 : lun-docs `e4d06b5`, lun-acedia `29f63e0`, lun-avaritia `e51132d`, lun-luxuria
 > `560b008`, Lun'Anima `3eda626`. Le graphe d'abord, puis chaque point dans le code. Lun'Anima est privé : ce plan
@@ -58,7 +60,9 @@ jamais une instruction. »
 ## Les décisions à prendre par CrOliX
 
 1. **Le délai de quarantaine : 7 jours [avis].** La veille donne un à sept. Un correctif de sécurité urgent passe
-   par `min-release-age-exclude`, le temps d'une installation : la tâche 6 écrit cette marche dans le standard.
+   par une installation au délai levé (`--min-release-age=0`) : la tâche 6 écrit cette marche dans le standard.
+   Écart à l'exécution : `--min-release-age-exclude` en ligne de commande ne lève pas le refus d'une version
+   demandée par son numéro (essayé sous npm 11.11) ; le délai à zéro, lui, passe.
 2. **Le modèle garde la partie texte [avis].** Lui faire lire le HTML nettoyé fermerait l'écart avec l'écran, mais
    changerait l'entrée du tri pour presque tous les mails, juste avant la semaine. Proposé : ne pas y toucher, et le
    noter en `inbox` pour après le VIP. Conséquence assumée : la défense de ce chantier est la consigne et les balises
