@@ -16,6 +16,11 @@ quand elle n'a pas tourné ; sa ligne se lit au Journal du core. Restent à reli
 du jour par la porte, et ses trois gestes sur la carte (voir, corriger, trancher par le chat). Le
 [plan du NAS](2026-11-22-mise-en-service-nas.md) est coché de ce qui a été joué le 26/11.
 
+Le même jour, CrOliX constate dans Lun'Acedia que « Non lus » est vide au téléphone hors d'une boîte qui en a, que
+« Proposés » ne se comprend pas, et que les boîtes ne disent pas leurs non lus. Il demande un tour d'ensemble avant
+tout plan : il est dans Lun-Ecosystem/lun-acedia#120, avec ses quatre décisions. Le gel est rouvert sur ce point,
+[les filtres et les compteurs de Lun'Acedia](2026-11-27-acedia-filtres-compteurs.md), au rang 2.
+
 **Au 26/11.** La porte d'attention est fusionnée (lun-anima#157, lun-docs#225), pas publiée. CrOliX gèle le
 périmètre : les chantiers de flux qui restent passent après le VIP, et l'ordre à jour est au § 3,
 « La replanification du 26/11 ».
@@ -604,6 +609,11 @@ que cela casse la semaine ?
    tranche une carte nommée par son titre. La version 0.4.1 du core est en service depuis le 26/11 au soir. Le
    verrou de la voix (point 2) reste ; sa levée se décide à la session du desktop, sur les mesures des gestes, et
    non plus après le VIP d'office : la voix est le premier chemin sur le desktop.
+6. **Les filtres et les compteurs de Lun'Acedia** ([plan](2026-11-27-acedia-filtres-compteurs.md),
+   Lun-Ecosystem/lun-acedia#120), ajouté le 27/11 après ses constats en prod : une zone et un filtre « Tout / Non
+   lus », les mêmes au bureau et au téléphone, filtrés par le serveur ; « Proposés » retiré ; le nombre de non lus sur
+   chaque boîte. Une version 0.4.1 de Lun'Acedia à publier et déployer avant la semaine. Le reste du tour attend
+   l'après-VIP (Lun-Ecosystem/lun-acedia#121).
 
 **Rang 3, pendant la semaine.** Aucun code. Les tensions se notent, les questions restées sans fiche aussi ; la part
 de propositions validées sans correction s'accumule par boîte.
