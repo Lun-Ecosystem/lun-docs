@@ -419,7 +419,7 @@ aujourd'hui : [document des échanges](../flux/README.md), fiches S8.8, S8.9 et 
 champs obligatoires, servis par `GET /lun/v1/actions` ; Natsume ne les lit pas, et sa consigne lui demande une
 demande « complète » sans jamais demander de confirmation.
 
-**Ouvert** : la question 11 (le tri du reste en issues).
+La question 11 (le tri) est au § 11.
 
 ## 10. Ce que le document complet corrige ici
 
@@ -464,3 +464,29 @@ le dixième et les trous nouveaux viennent des chapitres, relus par leur vérifi
   bougé ; une information « à prévenir » n'a pas de compteur : elle n'est ni affichée ni comptée (famille 9).
 - **T41.** L'écran de Lun'Acedia affiche « Connecté » pour Google alors que l'autorisation est à renouveler
   (famille 11).
+
+## 11. Le tri : cinq chantiers et sept issues isolées
+
+Découpage validé par CrOliX le 27/11. Chaque chantier a son issue ; il s'ouvre par ses critères de fin, son niveau
+et son plan. L'ordre entre eux n'est pas encore fixé.
+
+| Chantier | Décisions | Trous | Issue |
+|---|---|---|---|
+| Le suivi d'une action | F1, F5 | T1, T2, T5, T6, T17, T18, T35, T39 | #238 |
+| La nuit et la lettre du matin | F2, F3 | T3, T21, T29, T30, T31, T33 | #239 |
+| L'attention sur plusieurs surfaces | F4, F10 | T16, T20, T26, T37, T38, T40 | #240 |
+| La parole rend compte | F8, F9 | T4, T11, T22, T25, T36 | #241 |
+| Ce qu'il faut pour lancer une action (cadrage d'abord) | F6, F7, F11, la table des ordres | T7, T8, T9, T10, T12, T15, T19 | #242 |
+
+Hors chantier, en issues `inbox` :
+
+| Trou | Issue |
+|---|---|
+| T13, T14 : deux pauses, six plafonds | #243 |
+| T23 : Google sans compte ou avec un jeton illisible | Lun-Ecosystem/lun-acedia#124 |
+| T34 : un mail abandonné par le tri | Lun-Ecosystem/lun-acedia#125 |
+| T41 : « Connecté » alors que l'autorisation est à renouveler | Lun-Ecosystem/lun-acedia#104, déjà ouverte |
+| T24 : plafond de la bibliothèque atteint, santé bonne | Lun-Ecosystem/lun-avaritia#52 |
+| T28 : cartes au-delà du plafond de la file | Lun-Ecosystem/lun-avaritia#53 |
+| T27 : une carte illisible arrête la lecture du poste | Lun-Ecosystem/lun-anima#167 |
+| T32 : santé dégradée montrée nulle part | Lun-Ecosystem/lun-anima#168 |
