@@ -5,8 +5,9 @@
 > Ce texte complète la [carte du 25/11](2026-11-25-carte-des-flux-design.md) ; il ne remplace aucune de ses
 > décisions (D1 à D16, B1, P1 à P8).
 >
-> **Ce texte ne tranche rien.** Il dit ce que le code fait, où une information se perd et où une décision se joue
-> deux fois. Les questions du § 8 sont à CrOliX, une à une. Aucun correctif ne part avant.
+> **Le relevé (§ 1 à § 7) ne tranche rien.** Il dit ce que le code fait, où une information se perd et où une
+> décision se joue deux fois. Les questions du § 8 sont à CrOliX ; ses réponses du 27/11 sont au § 9 (F1 à F7).
+> Aucun correctif ne part avant un plan.
 >
 > Les références au code privé du core sont dans une annexe privée (Lun-Ecosystem/lun-anima#135) ; ici le core est
 > décrit par ses comportements.
@@ -328,7 +329,8 @@ Chaque trou porte un repère (T1 à T31) pour les issues à venir.
 
 ## 8. Ce qui reste à trancher
 
-Sans réponse ici. Une question à la fois, dans cet ordre proposé : il part de ce que CrOliX a vu le 27/11.
+Les questions telles que posées avant les réponses ; celles-ci sont au § 9. L'ordre part de ce que CrOliX a vu
+le 27/11.
 
 1. **La question d'un poste.** Faut-il un canal du contrat pour une question ou une réserve, et où CrOliX la lit-il
    (T1, § 4.2) ?
@@ -346,3 +348,49 @@ Sans réponse ici. Une question à la fois, dans cet ordre proposé : il part de
 9. **Qui peut parler.** Un seul endroit décide-t-il, et Lun'Luxuria rend-elle un accusé (T4, T11) ?
 10. **Le brouillon.** L'envoi reste-t-il dans l'écran de Lun'Acedia (§ 4.7) ?
 11. **Le reste** (T12 à T19, T21 à T28, T30, T31) : à trier après, en issues.
+
+## 9. Les décisions de CrOliX, le 27/11
+
+Prises une à une sur les questions du § 8, et citées dans ses mots sur Lun-Ecosystem/lun-docs#236. Elles
+s'appellent F1 à F7, pour ne pas se mêler aux décisions de la carte du 25/11.
+
+- **F1. L'entrée unique** (question 4, reformulée par lui en « le suivi de l'action »). Le suivi d'une action vit
+  dans une seule entrée du Journal, de sa demande à son résultat. La chaîne dit chaque étape avec son vrai lieu :
+  demandé (voix ou conversation), confié au poste, proposé, validé (depuis le Bureau, la conversation ou la voix),
+  puis fait, ou échec avec son motif. La pastille porte l'état. La conversation ne reçoit que l'échec. Son constat
+  de départ : une chaîne fausse, « Tranchée dans Lun'Acedia » pour une carte validée depuis le Bureau du core.
+- **F2. La lettre du matin** (question 5). Écrite par le modèle, elle résume « le traitement d'Avaritia durant la
+  nuit, ce qui m'attend pour la journée et ce qui demande mon attention ». La nuit ne retraite ni les mails ni leurs
+  propositions de rangement, qui remontent déjà en cartes dans la journée. Elle vérifie l'urgent resté sans
+  suite : les mails encore non lus portant certaines étiquettes. La liste des étiquettes est un réglage (ses
+  exemples : urgent, à répondre, échéance).
+- **F3. La lecture à l'heure de la lettre** (question 7). En écrivant la lettre, le core lit chez Lun'Avaritia un
+  bilan du lot de la nuit : observations reçues, fiches proposées, questions posées, ce qui a été écarté et
+  pourquoi, et l'état du lot. Pas d'événement poussé. Lun'Avaritia garde donc la trace de ce qu'elle écarte.
+- **F4. Le rattrapage** (question 6). Une information « à prévenir » (P1) reçue quand CrOliX est au bureau, ou
+  pendant une pause, allume une pastille sur le panneau de Natsume ; s'il part sans l'avoir vue, la notification
+  part sur son téléphone. La voix « au bon moment » reste pour après, avec la parole spontanée. Proposé avec, non
+  contredit : la lettre reçoit le nombre de mails rangés seuls, sans les lister.
+- **F5. Le signal** (question 8). Un satellite émet un signal discret quand une carte est tranchée dans son écran.
+  Le core relit aussitôt et écrit au Journal le vrai résultat et le vrai lieu.
+- **F6. L'envoi depuis Natsume** (question 10). Un brouillon prêt donne une carte d'envoi dans le core, que CrOliX
+  seul valide, à la main ou par le mot « envoie ». Aucun modèle n'envoie seul. La carte de création cesse
+  d'annoncer un envoi. Sa raison : sans cela, « on casse ma volonté de pouvoir tout piloter depuis le core ».
+- **F7. Les droits.** « En standalone, chaque satellite gère ses droits (lire, écrire, brouillon, action directe).
+  Relié au core, ce sont les droits de Natsume qui prennent le contrôle sur les agents, comme un principe de droit
+  global d'organisation supérieur aux droits d'un projet. » Sa remarque : quand on dit à Natsume qu'elle peut
+  valider et envoyer le brouillon, c'est Lun'Acedia qui doit avoir le droit sur l'action.
+
+**Ce que F6 et F7 rencontrent dans le code** (relevé, sans décision) :
+
+- L'envoi n'est pas dans le catalogue de Lun'Acedia : il n'existe que dans son écran.
+- Pour toute demande venue du core, Lun'Acedia force aujourd'hui « à valider », en dur
+  (`server/src/contract/routes.ts:390`), quel que soit son propre réglage. Avec F7, ce droit vient du core.
+- `POST /lun/v1/actions/:name` exécute déjà tout de suite, suppressions comprises (relevé de Lun'Acedia).
+
+**Retenu, pas encore validé** (questions 1 à 3) : la direction de CrOliX sur les demandes confiées à un poste.
+Natsume demande ce qui manque avant de lancer, au lieu de le déduire ; chaque action a ses prérequis ; un
+prérequis manquant ouvre une question à CrOliX, jamais une erreur. Ses mots sont sur #236.
+
+**Ouvert** : la question 9 (qui peut parler), à trancher sur le document complet des échanges, Lun'Luxuria
+comprise ; la question 11 (le tri du reste en issues).
