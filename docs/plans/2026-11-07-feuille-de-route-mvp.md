@@ -7,6 +7,15 @@
 
 ## 1. Où on en est
 
+**Au 27/11.** « Trancher depuis le core » est fusionné (lun-anima#162, lun-docs#232) et le core 0.4.1 est en service
+sur le NAS depuis le 26/11 à 22 h 37, les trois applis saines. Première nuit avec la porte d'attention : la lettre du
+matin est écrite à 7 h 30. Elle dit une nuit sans urgence, trois cartes proposées par Lun'Acedia, rien d'urgent, et
+les deux rendez-vous du jour ; CrOliX confirme que les trois cartes sont des propositions de tri, sur des promotions
+et des annonces de jeu. Ce que la lettre ne prouve pas : elle se tait quand la veille de la nuit a réussi, et aussi
+quand elle n'a pas tourné ; sa ligne se lit au Journal du core. Restent à relire, chez lui : cette ligne, les copies
+du jour par la porte, et ses trois gestes sur la carte (voir, corriger, trancher par le chat). Le
+[plan du NAS](2026-11-22-mise-en-service-nas.md) est coché de ce qui a été joué le 26/11.
+
 **Au 26/11.** La porte d'attention est fusionnée (lun-anima#157, lun-docs#225), pas publiée. CrOliX gèle le
 périmètre : les chantiers de flux qui restent passent après le VIP, et l'ordre à jour est au § 3,
 « La replanification du 26/11 ».
@@ -557,7 +566,8 @@ que cela casse la semaine ?
 
 1. Publier et déployer le core avec la porte d'attention, puis Lun'Acedia depuis `main` (l'ordre du 25/11). Les
    propositions de tri arrivent alors au core en cartes d'importance basse, une par une ; la validation par lot reste
-   dans l'écran d'Acedia.
+   dans l'écran d'Acedia. **Fait le 26/11** : le core 0.4.0 puis 0.4.1, Lun'Acedia 0.4.0, Lun'Avaritia 0.3.1 ; la
+   lettre du 27/11 compte ces cartes sans urgence.
 2. Finir la [mise en service du NAS](2026-11-22-mise-en-service-nas.md) : le fournisseur de modèle par l'écran, les
    copies hors du NAS et une restauration essayée, une mise à jour et un retour arrière, Google en production, le
    téléphone, un redémarrage et une nuit rattrapée, les trois vérifications de #185, l'accès refermé.
@@ -591,7 +601,7 @@ que cela casse la semaine ?
 4. **Cette replanification**, écrite ici.
 5. **Trancher depuis le core** ([plan](2026-11-26-trancher-depuis-le-core.md), Lun-Ecosystem/lun-docs#231), ajouté le
    26/11 au soir après l'essai sur le NAS : la carte du core montre ce qui est proposé et se corrige, le chat écrit
-   tranche une carte nommée par son titre. Une version 0.4.1 du core à publier et déployer avant la semaine. Le
+   tranche une carte nommée par son titre. La version 0.4.1 du core est en service depuis le 26/11 au soir. Le
    verrou de la voix (point 2) reste ; sa levée se décide à la session du desktop, sur les mesures des gestes, et
    non plus après le VIP d'office : la voix est le premier chemin sur le desktop.
 

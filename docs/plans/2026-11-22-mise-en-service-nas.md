@@ -33,6 +33,12 @@
 > de publication (lun-anima#127). Avance sans l'hôte, sur le laptop : le second temps de la répétition (tâche 5), le
 > client du réseau privé (P7), la pose de la porte préparée (P9 : CrOliX peut relire son README d'avance).
 >
+> **État au 27/11.** L'hôte a repris le 26/11 au soir : les versions du jour déployées par la porte (le core 0.4.0
+> puis 0.4.1, Lun'Acedia 0.4.0, Lun'Avaritia 0.3.1), le fournisseur de modèle réglé par l'écran (tâche 10, en
+> partie), la restauration à part et le retour arrière joués (tâches 11 et 12, en partie). La lettre du matin du
+> 27/11 est écrite à 7 h 30. Chaque case dit ce qui a été relevé et ce qui ne l'a pas été ; les relevés bruts sont
+> dans l'issue privée.
+>
 > Code relu sur `main` : Lun'Anima `365c7e6`, Lun'Acedia `bf724e3`, Lun'Avaritia `9c53768` ; le graphe d'abord, puis
 > les fichiers. Lun'Anima est privé : ce plan dit les gestes, les critères, les risques et les décisions, en
 > comportement. Ses fichiers, ses commandes, ses variables, son déploiement et ses lignes sont dans la part privée du
@@ -637,9 +643,12 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
   dans Acedia et Avaritia avant leur clé d'IA. C'est « l'alerte quand une clé manque ».
 - [ ] **La clé d'Anthropic**, saisie dans l'écran du core, avec son échéance ; le fournisseur Anthropic et le modèle
   Claude Haiku 5.5 choisis dans l'écran (raisonnement coupé : le réglage par défaut du core pour ce modèle) ; les
-  plafonds du jour et de la nuit relus.
+  plafonds du jour et de la nuit relus. *Le 26/11, par CrOliX : le modèle est réglé par l'écran. Non relevés :
+  l'échéance de la clé, les plafonds.*
 - [ ] **Un premier tour de conversation** : une réponse en flux, puis un outil (« relis ma journée ») ; l'écran des
-  dépenses dit le fournisseur et un coût non nul.
+  dépenses dit le fournisseur et un coût non nul. *Le 26/11, par CrOliX : la réponse arrive et l'outil a lu la
+  journée ; une proposition de tri validée depuis le core est appliquée dans Acedia. Non relevé : l'écran des
+  dépenses.*
 - [ ] Les clés d'IA d'Acedia et d'Avaritia, par leurs Réglages, avec un modèle qui a un prix.
 - **Vérifier** : la mise à jour de la tâche 12, ou un redémarrage, garde la clé et le choix.
 - **Revenir en arrière** : la clé retirée de l'écran et révoquée chez le fournisseur.
@@ -649,10 +658,15 @@ ni dans un journal. Les clés maîtresses ont leur copie dans son gestionnaire d
 *Au retour de CrOliX chez lui.*
 
 - [ ] **Les copies** : celle du jour de chaque base, dans son dossier de copies (`copies <app>`), avec sa ligne au
-  journal (`copy-line <app>`).
+  journal (`copy-line <app>`). *Le 26/11 : quatre nuits de copies par app ; `copy-line` ne rend rien, les conteneurs
+  venant d'être recréés. À relire après une nuit.*
 - [ ] **La copie hors du NAS** : la règle posée par CrOliX dans UGOS, sur les seuls dossiers des copies et les seuls
   fichiers `<nom>-AAAA-MM-JJ.db`, vers un autre support ; sa première exécution vue. Avant l'arrêt C.
-- [ ] **Une restauration à part** : pour chaque app, **une entrée repère** créée par l'écran avant la copie (une règle
+- [x] **Une restauration à part, jouée le 26/11** sur la copie du jour : les trois essais démarrent sains, sans
+  réseau ; le contrôle d'intégrité répond `ok` dans les trois bases restaurées, lu par CrOliX ; les trois conteneurs
+  et volumes d'essai retirés par lui, les apps en service intactes.
+- [ ] **Reste ouvert** : l'entrée repère, non jouée (la copie du 26/11 date d'avant toute entrée créée exprès).
+  L'étape entière, telle qu'écrite : pour chaque app, **une entrée repère** créée par l'écran avant la copie (une règle
   nommée dans Acedia, une fiche dans Avaritia, une phrase dans le core) ; la copie faite ; la copie recopiée dans un
   volume jetable **avec l'image de l'app elle-même** (`trial-load <app> <date>`) ; l'app démarrée sur ce volume **sans
   aucun réseau**, par la pile (un fichier d'essai qui lit l'environnement comme elle, guillemets compris :
@@ -678,13 +692,19 @@ Avaritia a deux migrations depuis `v0.1.0`, deux ajouts. Le geste dit donc qu'un
 qui ajoute, rien de plus : **la vraie parade reste la copie d'avant la mise à jour**, que le geste fait désormais
 lui-même. Joué dans la répétition, puis une fois sur le NAS, sur Avaritia, avant toute vraie donnée.
 
-- [ ] `deploy <app> 0.1.0` passe Avaritia à `0.1.0`. CrOliX se connecte au registre avant, et s'en déconnecte
-  après : la porte ne quitte le registre qu'après `pull`, pas après `deploy`.
+**Joué le 26/11 sur le NAS, aux versions du jour et dans l'autre sens** : Avaritia en `0.3.1`, ramenée à `0.3.0` par
+le retour arrière, puis remise en `0.3.1` par `deploy`. Aucune migration entre ces deux versions : le retour sur une
+base migrée reste prouvé par la répétition seule.
+
+- [x] `deploy <app> 0.1.0` passe Avaritia à `0.1.0`. CrOliX se connecte au registre avant, et s'en déconnecte
+  après : la porte ne quitte le registre qu'après `pull`, pas après `deploy`. *Le 26/11 : `deploy avaritia 0.3.1`
+  depuis `0.3.0`, saine ; l'image d'un satellite se tire sans connexion au registre.*
 - [ ] **La copie d'avant, vérifiée** : elle existe dans le dossier des copies, entière (la base et ses fichiers
   annexes), sous son nom définitif (`copies <app>`) ; la version écrite n'a changé qu'une fois l'app saine (aucun
-  geste ne lit la version écrite : CrOliX, ou la sortie ordinaire de `deploy`).
-- [ ] **Le retour arrière** remet `0.2.0`, sans le registre (`deploy <app> rollback`). Il dit que la base n'est
-  pas remise.
+  geste ne lit la version écrite : CrOliX, ou la sortie ordinaire de `deploy`). *Le 26/11 : une copie d'avant par
+  geste, sous son nom définitif. Non relevé : qu'elle est entière.*
+- [x] **Le retour arrière** remet `0.2.0`, sans le registre (`deploy <app> rollback`). Il dit que la base n'est
+  pas remise. *Le 26/11 : il remet `0.3.0`, saine, et le dit.*
 - [ ] **Revenir avec la base**, dans l'ordre (arrêt E) : l'app arrêtée (`stop <app>`) ; la base courante mise de
   côté et la copie d'avant remise, **par CrOliX** (aucun geste) ; **puis** le retour à la version
   (`deploy <app> rollback`). Joué dans la répétition ; sur le NAS seulement si le retour arrière
