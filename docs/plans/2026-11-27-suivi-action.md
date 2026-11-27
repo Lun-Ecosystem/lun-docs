@@ -4,7 +4,7 @@
 >
 > **Issue :** Lun-Ecosystem/lun-docs#238 (`niveau:critique`) ; la part privée dans Lun-Ecosystem/lun-anima#169.
 >
-> **État :** rédigé le 27/11, à contester puis à valider par CrOliX.
+> **État :** rédigé puis contesté le 27/11 (voir « La contestation »), à valider par CrOliX.
 >
 > **Source :** la [carte des flux relevée](../specs/2026-11-27-carte-des-flux-relevee.md), décisions F1 et F5 (§ 9),
 > trous T1, T2, T5, T6, T17, T18, T35, T39 ; le constat de prod du 27/11 (Lun-Ecosystem/lun-anima#166).
@@ -47,8 +47,11 @@ Validés le 27/11, périmètre figé.
 | lun-acedia | `feat/suivi-action` | à ouvrir, liée à #238 | `critique` | A1 |
 | lun-avaritia | `feat/suivi-action` | à ouvrir, liée à #238 | `critique` | V1 |
 
-Une PR par dépôt, en brouillon. Ordre de fusion : lun-docs (le contrat 1.6), les deux satellites, puis le core. Chaque
-ordre de déploiement tient (voir « Le contrat change »).
+Une PR par dépôt, en brouillon. Ordre de fusion : lun-docs (le contrat 1.6), les deux satellites, puis le core.
+
+**Ordre de déploiement : le core d'abord, ou le même soir que Lun'Acedia. Jamais Lun'Acedia 1.6 seule** (voir « Le
+contrat change »). Seul `main` fusionné se déploie : ce chantier et #239 ajoutent chacun au schéma du core, et la
+seconde PR se rebase sur la première.
 
 ## Ce que le code fait aujourd'hui
 
@@ -117,9 +120,16 @@ Le core garde l'identifiant de chaque carte rendue par une délégation, et lie 
 cartes. La lecture qui trouve ensuite la carte en attente reconnaît l'entrée : aucune seconde entrée ne naît. Le
 passage de la carte par la porte d'attention, lui, reste une fois par carte, comme aujourd'hui.
 
-Le lien est un ajout au schéma du core, par une migration qui ne réécrit rien. **Les entrées déjà écrites restent
-telles quelles** : les anciennes paires et les anciens « Tranchée dans » se lisent comme avant. Le domaine des
-issues n'est pas élargi : le reconstruire sur la base en service est un risque que ce chantier ne prend pas.
+**La lecture peut passer avant la réponse.** Une délégation attend son poste jusqu'à 120 s, et une lecture peut
+tomber pendant ce temps : la carte a alors déjà son entrée « propose ». À sa réponse, la délégation reprend cette
+entrée au lieu d'en ouvrir une seconde, et y écrit ses étapes à leur date.
+
+Le lien est un ajout au schéma du core, par une migration qui ne réécrit rien. **Les entrées déjà écrites ne sont
+pas réécrites** : les anciennes paires et les anciens « Tranchée dans » se lisent comme avant. Une exception, dite
+ici : à la première lecture après le déploiement, une ancienne entrée encore à trancher dont la carte n'attend plus
+reçoit l'étape de son état réel. Le domaine des issues n'est pas élargi : le reconstruire sur la base en service
+est un risque que ce chantier ne prend pas. Le retour à la version d'avant tient : les ajouts sont ignorés par
+l'ancien code.
 
 Une délégation qui rend une carte est à trancher tant que sa carte attend. Une délégation qui rend plusieurs cartes
 reste à trancher tant que l'une attend. Une délégation sans carte reste « Fait ».
@@ -128,14 +138,17 @@ reste à trancher tant que l'une attend. Une délégation sans carte reste « Fa
 
 Le core ne déduit plus. Quand une carte attendue manque à sa lecture :
 
-1. un geste du core est en vol sur elle : il ne fait rien, le relais écrira ;
+1. un geste du core est en vol sur elle : il ne fait rien, le relais écrira. Ce test se refait au moment d'écrire,
+   après la lecture chez le poste, pas seulement en dressant la liste ;
 2. sinon, il lit la carte chez le poste, par la route nouvelle du contrat 1.6, et écrit ce qu'elle est devenue :
    validée ou refusée dans le poste, en échec, retirée sans décision, ou encore en attente (cachée par le plafond de
    la file du poste) ;
 3. un poste sous 1.6 : « Plus en attente chez <poste>. », sans pastille. Vrai, et sans rien affirmer.
 
 La liste des cartes manquantes part des entrées encore à trancher, pas de la comparaison de deux lectures : une carte
-laissée au relais pendant une lecture n'est pas perdue à la suivante.
+laissée au relais pendant une lecture n'est pas perdue à la suivante. Une entrée retirée ou « plus en attente »
+quitte « à trancher » : elle n'est pas relue à chaque passe. Les cartes encore en attente mais cachées par le plafond
+du poste sont relues à tour de rôle, un nombre borné par passe.
 
 ### Le signal (F5)
 
@@ -144,6 +157,9 @@ core, de son écran, d'une action du catalogue, ou qu'elle soit retirée. L'év�
 relit déjà tout poste dans les 50 ms qui suivent un événement : aucun flux nouveau, et un événement `log` n'entre
 pas au Journal. Lun'Acedia réutilise `mail.changed` pour les propositions, comme aujourd'hui pour un geste du core.
 
+Le signal part quand une carte a changé d'état, jamais à chaque lecture : sinon une lecture du core en déclencherait
+une autre, sans fin.
+
 ### Le geste, son lieu, son résultat
 
 Le Journal dit le lieu tel que le geste l'a gardé : le Bureau, À trancher, la conversation, la voix. Deux étapes : le
@@ -151,7 +167,9 @@ geste, daté du geste, puis le résultat, daté de la réponse. Sur un délai, u
 lecture suivante écrit le résultat, avec le lieu du geste du core, pas « dans le poste ».
 
 Un échec part dans la conversation, une phrase par geste (un lot de trois cartes dont deux échouent : une phrase).
-Écrite, publiée à toutes les surfaces, sans voix. Un succès n'y écrit rien.
+Écrite, sans voix, elle arrive dans le fil de chaque surface : le panneau, et le fil de la fenêtre de Lun'Luxuria
+(`src/session.svelte.ts:470` recharge le fil à chaque message). Fil fermé, la scène de Lun'Luxuria ne montre que ce
+qui est dit : l'échec dit à voix haute appartient à #241. Un succès n'écrit rien.
 
 ### La pastille
 
@@ -217,9 +235,10 @@ Additif, sans rupture. Le texte à modifier dans [`contrat-satellite.md`](../../
 - **Versionnement**, à la fin : « La v1.6 ajoute `GET /lun/v1/cards/:id` et l'événement `log` d'une carte qui quitte
   l'attente. Un poste qui déclare `1.6` tient aussi tout ce que demande la 1.5. »
 
-**Un core plus ancien** face à un poste 1.6 : il ne connaît pas la route ; il relit à chaque événement, comme
-aujourd'hui, et écrit encore « Tranchée dans » quand la carte manque. C'est désormais vrai pour une décision prise
-dans l'écran, faux comme avant pour la course : rien ne se dégrade.
+**Un core plus ancien** face à un poste 1.6 : il ne connaît pas la route ; il relit à chaque événement et écrit
+encore « Tranchée dans » quand la carte manque. **Cet ordre dégrade** : Lun'Acedia 1.6 signale chaque carte de son
+agent avant de relancer son modèle, donc avant de répondre. Face à l'ancien core, la course de lun-anima#166
+toucherait toutes les cartes de l'agent, plus seulement celles de l'agenda. D'où l'ordre de déploiement.
 
 **Un poste plus ancien** face au core nouveau : le core ne l'appelle pas sur la route ; une carte qui manque écrit
 « Plus en attente chez <poste>. ». La course de lun-anima#166 est réglée sans lui : le core ne regarde plus une carte
@@ -264,7 +283,8 @@ la preuve de bout en bout ; la relecture.
 
 - [ ] **A1. Lire une carte, et signaler qu'elle part.** Agent ordinaire pour le serveur, tests par `lun:testeur`.
   - Fichiers : `server/src/contract/routes.ts`, `server/src/triage/pipeline.ts`, `server/src/pina/agent.ts`,
-    `server/src/identity.ts`, `server/src/contract/parity.ts` si la route y entre, leurs tests.
+    `server/src/pina/store.ts` si l'expiration y vit, `server/src/identity.ts`, `server/src/contract/parity.ts`
+    si la route y entre, leurs tests.
   - Comportement :
     - `GET /lun/v1/cards/:id`. `mail:<id>` : la proposition, `pending` si elle est servie en attente, `done` si
       acceptée ou corrigée, `refused` si refusée, `expired` si elle est encore en attente mais que son mail a quitté
@@ -274,12 +294,21 @@ la preuve de bout en bout ; la relecture.
       succès ; celui de `decideProposal` (`routes.ts:166-178`) est retiré, pour un seul signal par décision. L'écran,
       le catalogue et le core passent ainsi tous par lui.
     - Le signal d'une carte de l'agent : un événement `log`, émis par `decideCard` dès la décision prise, avant la
-      relance du modèle (`agent.ts:191-196`). Titre neutre, sans la décision.
+      relance du modèle (`agent.ts:191-196`). Titre neutre, sans la décision. Une carte exécutée en échec
+      (`failed`) a quitté l'attente : elle signale. Un geste refusé par une erreur 4xx n'a rien changé : rien.
+    - Un mail rangé à la main tranche sa proposition sans passer par `validate` (`onManualFile`,
+      `pipeline.ts:534-541`, appelé par l'écran et par `mail.file` du catalogue) : le même signal, seulement si
+      la proposition a changé d'état.
+    - L'expiration (`expireCards`, au rangement du jour et dans `GET /lun/v1/cards`, `routes.ts:320`) : un signal
+      seulement si une carte a réellement expiré. Jamais à chaque lecture : ce serait une boucle avec le core.
     - `CONTRACT = '1.6'`.
   - Tests : la route sur chaque statut, une proposition dont le mail est parti, une carte inconnue, un jeton
     absent ; une proposition validée, corrigée, refusée dans l'écran : un signal chacune ; la même par le contrat :
-    un seul signal ; une carte de l'agent tranchée dans l'écran : un signal, émis avant la reprise du modèle.
-  - Cas limites : une carte de l'agent d'un autre jour se lit `expired` ; une décision en échec n'émet rien.
+    un seul signal ; une carte de l'agent tranchée dans l'écran : un signal, émis avant la reprise du modèle ; un
+    mail rangé à la main : un signal ; une carte exécutée en `failed` : un signal ; un geste en 4xx : aucun ; deux
+    lectures de `/cards` de suite sans carte à expirer : aucun signal.
+  - Cas limites : une carte de l'agent d'un autre jour se lit `expired` ; une proposition repassée en rangement
+    seul se lit 404.
   - Exclu : T1 (la phrase de l'agent) ; l'annulation d'une décision ; le seuil de la validation groupée.
   - Preuve : `npm test` vert, sortie dans la PR.
 
@@ -294,6 +323,7 @@ la preuve de bout en bout ; la relecture.
       (`restoreDraft`, `:334`) émet aussi, la fiche revenant en attente.
     - Ce que la 1.5 demande, vérifié un à un : `values` au geste vaut 400 (aucune fiche n'a de `fields`) ; `/cards`
       ne dépend pas de `agent` ; `boxes` est ignoré par `day.digest` ; aucun événement « en attente » en double.
+      C'est du périmètre que la 1.6 entraîne, nommé ici : petit (un corps de geste strict), pas un chantier.
     - `CONTRACT = '1.6'`.
   - Tests : la route ; une fiche acceptée et une refusée : un signal chacune ; une reprise : un signal ; `values` :
     400 ; `health` dit `1.6`.
@@ -325,6 +355,32 @@ la preuve de bout en bout ; la relecture.
   l'entrée ; trancher une proposition dans l'écran de Lun'Acedia et une fiche dans celui de Lun'Avaritia, lire le
   Journal du core.
 
+## La contestation, le 27/11
+
+Le plan a été attaqué par `lun:plan-challenger`, code relu. Chaque objection est intégrée ou réfutée ici ; le
+détail des objections qui touchent le core est dans lun-anima#169.
+
+| Objection | Réponse |
+|---|---|
+| Une lecture pendant la délégation donne deux entrées | Intégrée : la délégation reprend l'entrée déjà née |
+| Lun'Acedia 1.6 seule aggrave la course face à l'ancien core | Intégrée : ordre de déploiement |
+| A1 n'émet pas partout où le contrat le promet | Intégrée : rangement à la main, expiration, carte en échec |
+| La garde « geste en vol » doit se tester au moment d'écrire | Intégrée |
+| Une entrée retirée serait relue et réécrite à chaque passe | Intégrée : elle quitte « à trancher » |
+| La première passe touche d'anciennes entrées | Intégrée : dit dans « Une entrée par action » |
+| Le plafond d'un poste cache toujours les mêmes cartes | Intégrée : relecture à tour de rôle ; limite nommée |
+| Le contrat 1.6 n'est pas indispensable | Réfutée : lire les cartes tranchées par listes grossit sans fin, et |
+| | Lun'Acedia ne sert pas ses propositions tranchées. La route d'une carte reste le plus petit ajout |
+| Le critère 6 n'est tenu que dans le fil pour Lun'Luxuria | Intégrée, et posée à CrOliX : voir « Limites » |
+| Deux chantiers, deux ajouts au schéma | Intégrée : seul `main` fusionné se déploie |
+| La feuille de route (D2) peut sortir | Réfutée : promise à CrOliX avec ce plan, et c'est un texte |
+| « Demandé depuis le Bureau » peut sortir | Réfutée : c'est une vraie troisième entrée, la taire serait faux |
+| Le compte « depuis la lettre » appartient à #239 | Réfutée : sans lui, une carte liée sortirait du compte |
+| | affiché aujourd'hui. Une ligne, que #239 reprendra |
+| Un redémarrage pendant un geste attribue mal le lieu | Nommée dans « Limites » : le core ne redémarre pas |
+| | en service courant |
+| Dix tests de cas limites manquent | Intégrés dans les tâches |
+
 ## Hors périmètre
 
 - La phrase de l'agent après une carte tranchée (T1) et « valide » dit trop tôt (T18) : en `inbox`.
@@ -339,6 +395,13 @@ la preuve de bout en bout ; la relecture.
 - Le Journal d'une délégation ne s'écrit qu'à la réponse du poste : « En cours » ne couvre pas l'attente d'une
   délégation, seulement celle d'un geste.
 - Une relance après un délai peut toujours faire un doublon chez le poste.
-- La fenêtre de Lun'Luxuria n'a pas été relue : qu'elle montre une phrase écrite sans voix n'est pas vérifié.
+- **Le critère 6 dans Lun'Luxuria** : l'échec arrive dans son fil. Fil fermé, la scène ne le montre pas, et il
+  n'est pas dit : c'est #241. À accepter par CrOliX avec ce plan, ou à traiter en plus.
+- Un redémarrage du core pendant un geste : le geste est rejoué ; si le poste l'avait déjà exécuté, la chaîne dit
+  « dans le poste » pour un geste parti du core.
+- Une carte en attente au-delà du plafond de la file d'un poste reste « À trancher » sans être visible dans la
+  file (lun-avaritia#53).
+- Après un rangement à la main ou une expiration, un poste resté sous 1.6 n'est relu qu'à la lecture suivante,
+  deux minutes au plus.
 - Une proposition qui sort de la file au-delà de son plafond chez Lun'Avaritia n'a jamais d'entrée : inchangé.
 - Rien n'a été rejoué sur l'instance : la course du 27/11 vient du constat de CrOliX et du code.
