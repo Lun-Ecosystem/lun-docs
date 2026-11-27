@@ -6,7 +6,7 @@
 > décisions (D1 à D16, B1, P1 à P8).
 >
 > **Le relevé (§ 1 à § 7) ne tranche rien.** Il dit ce que le code fait, où une information se perd et où une
-> décision se joue deux fois. Les questions du § 8 sont à CrOliX ; ses réponses du 27/11 sont au § 9 (F1 à F10).
+> décision se joue deux fois. Les questions du § 8 sont à CrOliX ; ses réponses du 27/11 sont au § 9 (F1 à F11).
 > Aucun correctif ne part avant un plan.
 >
 > **Le § 10 corrige ce relevé sur dix points** (dont T6, T14, T17, T21, T23, T28, T29) et ajoute dix trous
@@ -356,7 +356,7 @@ le 27/11.
 ## 9. Les décisions de CrOliX, le 27/11
 
 Prises une à une sur les questions du § 8, et citées dans ses mots sur Lun-Ecosystem/lun-docs#236. Elles
-s'appellent F1 à F10, pour ne pas se mêler aux décisions de la carte du 25/11.
+s'appellent F1 à F11, pour ne pas se mêler aux décisions de la carte du 25/11.
 
 - **F1. L'entrée unique** (question 4, reformulée par lui en « le suivi de l'action »). Le suivi d'une action vit
   dans une seule entrée du Journal, de sa demande à son résultat. La chaîne dit chaque étape avec son vrai lieu :
@@ -406,11 +406,20 @@ aujourd'hui : [document des échanges](../flux/README.md), fiches S8.8, S8.9 et 
   (`server/src/contract/routes.ts:390`), quel que soit son propre réglage. Avec F7, ce droit vient du core.
 - `POST /lun/v1/actions/:name` exécute déjà tout de suite, suppressions comprises (relevé de Lun'Acedia).
 
-**Retenu, pas encore validé** (questions 1 à 3) : la direction de CrOliX sur les demandes confiées à un poste.
-Natsume demande ce qui manque avant de lancer, au lieu de le déduire ; chaque action a ses prérequis ; un
-prérequis manquant ouvre une question à CrOliX, jamais une erreur. Ses mots sont sur #236.
+- **F11. Les prérequis avant l'action** (questions 1 à 3), validé comme principe. Dans ses mots : « Le vrai flux
+  serait que le core me demande les infos complémentaires avant de lancer toute la procédure avec des infos
+  incomplètes ou inventées. » « Associer une action à un nombre de prérequis avant de pouvoir lancer l'action. Des
+  prérequis incomplets ne doivent pas amener à une erreur mais à cette boucle moi ↔ core pour compléter les
+  infos. » Et entre agents : « renforcer les flux plus que multiplier les canaux », par « des micro-boucles très
+  légères de vérification », à borner. Son cadrage est un chantier à part, avec la table des ordres et F7 : les
+  trois disent ce qu'il faut pour lancer une action. Reste ouvert, posé par lui : la carte est-elle un brouillon
+  modifiable en route ou un produit fini ?
 
-**Ouvert** : la direction ci-dessus, à valider ; la question 11 (le tri du reste en issues).
+**Ce que F11 rencontre dans le code** (relevé, sans décision) : chaque action d'un catalogue déclare déjà ses
+champs obligatoires, servis par `GET /lun/v1/actions` ; Natsume ne les lit pas, et sa consigne lui demande une
+demande « complète » sans jamais demander de confirmation.
+
+**Ouvert** : la question 11 (le tri du reste en issues).
 
 ## 10. Ce que le document complet corrige ici
 

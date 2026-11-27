@@ -4,7 +4,7 @@
 > revient, ce que CrOliX en voit. Relevé dans le code le 27/11/2026, à la demande de CrOliX (lun-docs#236), pour
 > avoir une version unique et structurée des flux, et non une partie ciblée.
 >
-> **Ce document décrit ce que le code fait, pas ce qui est voulu.** Les décisions prises le même jour (F1 à F10,
+> **Ce document décrit ce que le code fait, pas ce qui est voulu.** Les décisions prises le même jour (F1 à F11,
 > [carte des flux relevée](../specs/2026-11-27-carte-des-flux-relevee.md), § 9) ne sont pas codées : chaque fiche dit
 > où l'existant s'en écarte.
 
