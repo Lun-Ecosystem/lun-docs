@@ -4,7 +4,7 @@
 > revient, ce que CrOliX en voit. Relevé dans le code le 27/11/2026, à la demande de CrOliX (lun-docs#236), pour
 > avoir une version unique et structurée des flux, et non une partie ciblée.
 >
-> **Ce document décrit ce que le code fait, pas ce qui est voulu.** Les décisions prises le même jour (F1 à F7,
+> **Ce document décrit ce que le code fait, pas ce qui est voulu.** Les décisions prises le même jour (F1 à F10,
 > [carte des flux relevée](../specs/2026-11-27-carte-des-flux-relevee.md), § 9) ne sont pas codées : chaque fiche dit
 > où l'existant s'en écarte.
 
@@ -19,6 +19,8 @@ fiche a la même forme :
 - **Ce que CrOliX voit, et où** ; **ce qui s'écrit** ; **qui décide** (du code, un modèle, CrOliX).
 - **Erreurs et cas limites**.
 - **Écart avec les décisions** : F1 à F7, la direction « prérequis », ou un trou T1 à T31 de la carte.
+  Les décisions F8 à F10, prises après la rédaction, portent sur les fiches S8.8, S8.9 et S9.10, qui ne les
+  citent pas.
 - **Non vérifié** : ce qui n'a pas pu être lu ou confirmé dans le code.
 
 Les identifiants (`S3.7`) sont stables : ils servent à citer un scénario dans une issue ou un plan.

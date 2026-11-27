@@ -6,7 +6,7 @@
 > décisions (D1 à D16, B1, P1 à P8).
 >
 > **Le relevé (§ 1 à § 7) ne tranche rien.** Il dit ce que le code fait, où une information se perd et où une
-> décision se joue deux fois. Les questions du § 8 sont à CrOliX ; ses réponses du 27/11 sont au § 9 (F1 à F7).
+> décision se joue deux fois. Les questions du § 8 sont à CrOliX ; ses réponses du 27/11 sont au § 9 (F1 à F10).
 > Aucun correctif ne part avant un plan.
 >
 > **Le § 10 corrige ce relevé sur dix points** (dont T6, T14, T17, T21, T23, T28, T29) et ajoute dix trous
@@ -356,7 +356,7 @@ le 27/11.
 ## 9. Les décisions de CrOliX, le 27/11
 
 Prises une à une sur les questions du § 8, et citées dans ses mots sur Lun-Ecosystem/lun-docs#236. Elles
-s'appellent F1 à F7, pour ne pas se mêler aux décisions de la carte du 25/11.
+s'appellent F1 à F10, pour ne pas se mêler aux décisions de la carte du 25/11.
 
 - **F1. L'entrée unique** (question 4, reformulée par lui en « le suivi de l'action »). Le suivi d'une action vit
   dans une seule entrée du Journal, de sa demande à son résultat. La chaîne dit chaque étape avec son vrai lieu :
@@ -384,6 +384,20 @@ s'appellent F1 à F7, pour ne pas se mêler aux décisions de la carte du 25/11.
   Relié au core, ce sont les droits de Natsume qui prennent le contrôle sur les agents, comme un principe de droit
   global d'organisation supérieur aux droits d'un projet. » Sa remarque : quand on dit à Natsume qu'elle peut
   valider et envoyer le brouillon, c'est Lun'Acedia qui doit avoir le droit sur l'action.
+- **F8. L'accusé de parole** (question 9). Pour chaque parole que le core envoie, Lun'Luxuria rend un accusé :
+  dite, coupée (déjà là), ou pas dite avec sa raison (sourdine, voix en panne, flux coupé). Sans accusé au bout
+  d'un délai, le core la tient pour non dite. Une urgence non dite part en notification sur le téléphone.
+- **F9. La parole spontanée se décide au core** (question 9). Reliée, Lun'Luxuria ne redécide plus : seul le
+  réglage du core compte. Son propre réglage ne vaut que pour son mode seul. C'est F7 appliqué à la parole.
+- **F10. La dernière surface dit où est CrOliX** (question 9). Un message ou un geste depuis le panneau du
+  téléphone le place « au téléphone » jusqu'à son prochain geste au bureau : les notifications y vont, et une
+  urgence n'est plus dite dans une pièce vide.
+
+F8 à F10 s'appuient sur la référence de CrOliX pour la présence, OpenAmika (code lu le 27/11, commit `b40dfe2`) :
+son écran signale chaque phrase qui commence à jouer et un seul « fini » par tour ; sa parole d'elle-même se
+décide entièrement dans le cerveau (30 s de silence comptées depuis la fin de sa voix, une fois par silence, deux
+ouvertures sans réponse au plus) ; le canal du dernier message de la personne dit où elle est. Ce que le code fait
+aujourd'hui : [document des échanges](../flux/README.md), fiches S8.8, S8.9 et S9.10.
 
 **Ce que F6 et F7 rencontrent dans le code** (relevé, sans décision) :
 
@@ -396,8 +410,7 @@ s'appellent F1 à F7, pour ne pas se mêler aux décisions de la carte du 25/11.
 Natsume demande ce qui manque avant de lancer, au lieu de le déduire ; chaque action a ses prérequis ; un
 prérequis manquant ouvre une question à CrOliX, jamais une erreur. Ses mots sont sur #236.
 
-**Ouvert** : la question 9 (qui peut parler), à trancher sur le document complet des échanges, Lun'Luxuria
-comprise ; la question 11 (le tri du reste en issues).
+**Ouvert** : la direction ci-dessus, à valider ; la question 11 (le tri du reste en issues).
 
 ## 10. Ce que le document complet corrige ici
 
