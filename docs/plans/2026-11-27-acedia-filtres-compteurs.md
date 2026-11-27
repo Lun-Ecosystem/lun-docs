@@ -4,8 +4,8 @@
 >
 > **Issue :** Lun-Ecosystem/lun-acedia#120 (`niveau:standard`). Les suites, hors périmètre : lun-acedia#121.
 >
-> **État :** rédigé le 27/11, contesté et amendé le même jour (« Ce que la contestation a changé »), **à valider
-> par CrOliX**, avec trois points à trancher. Pas de code avant.
+> **État :** rédigé, contesté et amendé le 27/11, **validé par CrOliX le 27/11** avec les trois avis de « À
+> trancher ». Exécuté le même jour : Lun-Ecosystem/lun-acedia#123 (voir « Exécution »). Reste la tâche 7.
 >
 > **Source :** le tour des filtres et des compteurs du 27/11 et les quatre décisions de CrOliX du même jour, dans
 > les commentaires de #120. Elles ne se rouvrent pas ici.
@@ -19,22 +19,17 @@ Lun'Acedia. Chaque boîte porte son nombre de non lus.
 
 ## Critères de fin
 
-Recopiés de #120.
+Ceux de #120, à jour de la validation du 27/11 (les critères 2 et 5 ont changé avec le point 2 de « À trancher »).
 
-- [ ] Les filtres de la liste des mails sont « Tout / Non lus », les mêmes au bureau et au téléphone. « Proposés »
+- [x] Les filtres de la liste des mails sont « Tout / Non lus », les mêmes au bureau et au téléphone. « Proposés »
       n'existe plus.
-- [ ] « Non lus » filtre la zone ouverte (la Réception ou une boîte), et c'est le serveur qui filtre : un non lu
-      situé au-delà de la première page de la zone s'affiche sans charger la suite.
-- [ ] Au téléphone, « Non lus » n'est plus dans la rangée des zones, et une seule zone est allumée à la fois.
-- [ ] Chaque boîte porte son nombre de non lus, dans le rail et en pastille ; pas de nombre à zéro. Le nombre suit
+- [x] « Non lus » filtre la zone ouverte (la Réception ou une boîte), et c'est le serveur qui filtre : un non lu
+      de la base situé au-delà de la première page de la zone s'affiche sans charger la suite.
+- [x] Au téléphone, « Non lus » n'est plus dans la rangée des zones, et une seule zone est allumée à la fois.
+- [x] Chaque boîte porte son nombre de non lus, dans le rail et en pastille ; pas de nombre à zéro. Le nombre suit
       une lecture, un « marquer non lu » et l'arrivée d'un mail.
-- [ ] Les nombres de la Réception, de « Non lus » et des boîtes sont comptés dans la base de Lun'Acedia ; un « + »
-      les suit tant que la reprise complète n'est pas finie.
-- [ ] Prouvé en local : les tests, et la démo rejouée au bureau et à 390 px (captures).
-
-Les critères 2 et 5 reposaient sur une reprise de la messagerie qui finit un jour. Elle ne finit pas (« À
-trancher », point 2). Si l'avis est retenu, ils se réécrivent dans #120 : « un non lu de la base situé au-delà de
-la première page s'affiche sans charger la suite », et « les nombres sont comptés dans la base, sans "+" ».
+- [x] Les nombres de la Réception, de « Non lus » et des boîtes sont comptés dans la base de Lun'Acedia, sans « + ».
+- [x] Prouvé en local : les tests, et la démo rejouée au bureau et à 390 px.
 
 | Dépôt | Branche | Issue | Niveau |
 | --- | --- | --- | --- |
@@ -121,6 +116,8 @@ la première page s'affiche sans charger la suite », et « les nombres sont com
 
 ## À trancher par CrOliX
 
+**Tranché le 27/11 : les trois avis sont retenus.**
+
 1. **La place de « Non lus » au téléphone.** Avis : les mêmes onglets qu'au bureau, sous les pastilles des
    zones (choix 7). C'est le seul composant déjà là qui dise « filtre » et pas « destination ». L'autre voie :
    une pastille « Non lus » à part, au bout de la rangée, séparée par un trait.
@@ -142,7 +139,7 @@ la première page s'affiche sans charger la suite », et « les nombres sont com
 Les tests d'abord, vus en échec, puis le code (`standards/qualite.md`, « Tests »). Les tâches 1 et 2 partent en
 parallèle : la forme de la route est fixée par le choix 2. Les tâches 3 et 4 partent en parallèle après la 2.
 
-- [ ] **1. Le serveur : filtrer et compter.** Tests : agent `testeur`. Code : un agent développeur généraliste.
+- [x] **1. Le serveur : filtrer et compter.** Tests : agent `testeur`. Code : un agent développeur généraliste.
   - Fichiers : `server/src/gmail/store.ts`, `read.ts`, `routes.ts`, `server/src/contract/parity.ts`.
   - Comportement : `listMail(…, { unread })` ; `GET /api/mail` lit `unread=1` ; `GET /counts` déclarée avant
     `GET /:id` ; une fonction de comptage dans `store.ts`, une requête groupée, sur la condition de `viewFilter`.
@@ -152,7 +149,7 @@ parallèle : la forme de la route est fixée par le choix 2. Les tâches 3 et 4 
     `parity.test.ts` passe avec l'entrée exclue.
   - Exclu : le catalogue, `mail.list`, la recherche.
   - Preuve : `npm test` vert, sortie dans la PR.
-- [ ] **2. Le client, les types, le faux client, le formateur.** Agent `dev-front`, tests par `testeur`.
+- [x] **2. Le client, les types, le faux client, le formateur.** Agent `dev-front`, tests par `testeur`.
   - Fichiers : `views/src/lib/client.ts`, `views/src/lib/types.ts`, `views/src/testing/fake-client.ts`,
     `views/src/lib/mail/format.ts`, `views/src/lib/index.ts`.
   - Comportement : `listMail(view, { q, cursor, unread })`, `mailCounts()` ; le type `MailCounts` ; le faux
@@ -161,7 +158,7 @@ parallèle : la forme de la route est fixée par le choix 2. Les tâches 3 et 4 
     `Mailbox`, `Pending` ou `readStatus` casse : il vient en premier.
   - Tests : le formateur (0 rend `undefined`, sinon le nombre) ; l'adresse appelée avec `unread=1`.
   - Preuve : `npm test` vert.
-- [ ] **3. L'écran des mails.** Agent `dev-front`, tests d'abord par `testeur` (`Mailbox.test.ts`).
+- [x] **3. L'écran des mails.** Agent `dev-front`, tests d'abord par `testeur` (`Mailbox.test.ts`).
   - Fichiers : `Mailbox.svelte`, `MailboxNav.svelte`, `Pending.svelte`, `MailList.svelte` si besoin.
   - Comportement : choix 5 à 10. Les onglets « Tout / Non lus » rechargent la zone par le serveur ; « Mails plus
     anciens » suit le curseur filtré. Les boîtes du rail et leurs pastilles portent leur nombre, la pastille
@@ -171,20 +168,39 @@ parallèle : la forme de la route est fixée par le choix 2. Les tâches 3 et 4 
     `markRead` répondu, et remonte après « marquer non lu » ; un événement `mail.changed` relit les nombres ;
     changer de zone remet « Tout » ; pendant une recherche, pas d'onglets.
   - Preuve : `npm test` vert ; la vérification à 390 px se fait en tâche 5.
-- [ ] **4. Le rail « Réception ».** Agent `dev-front`, tests par `testeur` (`app/src/shell/status.test.ts`).
+- [x] **4. Le rail « Réception ».** Agent `dev-front`, tests par `testeur` (`app/src/shell/status.test.ts`).
   - Fichiers : `app/src/shell/status.ts`, son test.
   - Comportement : `counts.inbox` vient de `mailCounts()`, par le formateur. `counts.pending` et `counts.tasks`
     ne changent pas. Une lecture qui échoue garde la dernière valeur, comme aujourd'hui.
   - Tests : les deux premiers cas existants réécrits sur la route ; rien à zéro.
   - Preuve : `npm test` vert.
-- [ ] **5. La preuve sur la démo.** Agent `dev-front`.
+- [x] **5. La preuve sur la démo.** Agent `dev-front`.
   - `npm run build`, puis `npm run demo` (port 8797), dans Chrome, au bureau (1280 px) et à 390 px.
   - Rejouer : « Non lus » dans la Réception, puis dans une boîte sans non lu ; ouvrir un non lu et voir le nombre
     baisser ; « marquer non lu » ; changer de zone sous « Non lus ».
   - Captures dans la PR : les deux largeurs, un rail avec des nombres, une boîte sans nombre. Sur la démo du
     27/11, « Voyages » n'a aucun non lu et les quatre autres boîtes en ont un : à revérifier après le tri.
-- [ ] **6. La relecture** du diff contre ce plan et les standards (agent `reviewer`), puis la PR en brouillon.
+- [x] **6. La relecture** du diff contre ce plan et les standards (agent `reviewer`), puis la PR en brouillon.
 - [ ] **7. La version 0.4.1**, préparée seulement à la demande de CrOliX. Il la publie et la déploie lui-même.
+
+## Exécution
+
+Le 27/11, dans Lun-Ecosystem/lun-acedia#123. Écarts avec les tâches écrites :
+
+- **Pas d'agent `testeur` à part.** Chaque développeur a écrit ses tests d'abord, vus en échec, puis son code ;
+  une seule relecture à la fin. Deux agents en parallèle : le serveur, puis le client, l'écran et le rail.
+- **`MailCounts` vit dans `server/src/types.ts`**, et `views/src/lib/types.ts` en est la copie
+  (`npm run sync-types`). La tâche 2 le rangeait parmi les fichiers écrits à la main : un test veut la copie
+  exacte.
+- **Les boîtes du faux client n'excluaient pas la corbeille**, contrairement à ce que dit la tâche 2 : corrigé.
+- **Pendant une recherche**, la ligne « Résultats pour… » garde la place des onglets ; le raccourci C y trouve
+  toujours son repli.
+- **La relecture** n'a rien trouvé de bloquant. Corrigé : un clic sur « Mails plus anciens » pendant le
+  chargement de « Non lus » renvoyait le curseur de « Tout » et mêlait deux listes (test ajouté) ; la lecture
+  des nombres ne garde que la dernière demandée.
+- **La preuve sur la démo** est un relevé du DOM à 1280 px et à 390 px, dans la PR, sans capture jointe.
+  « Marquer non lu » n'y est pas rejoué : il tient par ses tests.
+- Barrières : 1274 tests verts, lint, typage, format, couleurs, build.
 
 ## Ce qui casse si on se trompe
 
