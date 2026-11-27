@@ -4,7 +4,8 @@
 >
 > **Issue :** Lun-Ecosystem/lun-docs#238 (`niveau:critique`) ; la part privée dans Lun-Ecosystem/lun-anima#169.
 >
-> **État :** rédigé puis contesté le 27/11 (voir « La contestation »), à valider par CrOliX.
+> **État :** rédigé puis contesté le 27/11 (voir « La contestation »). Réponses de CrOliX du 27/11 intégrées : les
+> noms d'agent, les pastilles « Refusée » et « Retirée », la limite du critère 6 acceptée.
 >
 > **Source :** la [carte des flux relevée](../specs/2026-11-27-carte-des-flux-relevee.md), décisions F1 et F5 (§ 9),
 > trous T1, T2, T5, T6, T17, T18, T35, T39 ; le constat de prod du 27/11 (Lun-Ecosystem/lun-anima#166).
@@ -127,9 +128,12 @@ entrée au lieu d'en ouvrir une seconde, et y écrit ses étapes à leur date.
 Le lien est un ajout au schéma du core, par une migration qui ne réécrit rien. **Les entrées déjà écrites ne sont
 pas réécrites** : les anciennes paires et les anciens « Tranchée dans » se lisent comme avant. Une exception, dite
 ici : à la première lecture après le déploiement, une ancienne entrée encore à trancher dont la carte n'attend plus
-reçoit l'étape de son état réel. Le domaine des issues n'est pas élargi : le reconstruire sur la base en service
-est un risque que ce chantier ne prend pas. Le retour à la version d'avant tient : les ajouts sont ignorés par
-l'ancien code.
+reçoit l'étape de son état réel.
+
+Le domaine des issues s'élargit (voir « La pastille ») : la migration reconstruit la table du Journal, entrées et
+étapes gardées. Le retour à la version d'avant reste possible, l'ancien code ignorant les ajouts, mais il
+afficherait mal une entrée « Refusée » ou « Retirée ». Une copie de la base avant le déploiement fait partie de la
+marche.
 
 Une délégation qui rend une carte est à trancher tant que sa carte attend. Une délégation qui rend plusieurs cartes
 reste à trancher tant que l'une attend. Une délégation sans carte reste « Fait ».
@@ -179,42 +183,47 @@ qui est dit : l'échec dit à voix haute appartient à #241. Un succès n'écrit
 | En cours | « En cours » | un geste du core est en vol (calculé à la lecture, rien n'est écrit) |
 | Fait | « Fait » | validée, corrigée, réponse donnée, brouillon créé ; une délégation sans carte |
 | Échec | « Échoué » | le poste a rendu un échec, avec son motif |
-| Refusée | « Tranchée » | issue existante, gardée faute d'élargir le domaine ; la chaîne dit « Refusée » |
-| Retirée | aucune | la chaîne dit pourquoi |
+| Refusée | « Refusée » | refusée, au core ou dans le poste |
+| Retirée | « Retirée » | retirée par le poste, sans décision |
+| Inconnu | aucune | un poste sous 1.6 : « Plus en attente chez <poste>. » |
 
-À valider par CrOliX : une refusée sous « Tranchée », une retirée sans pastille. L'autre voie ajoute « Refusée » et
-« Retirée » et reconstruit le domaine des issues sur la base en service.
+Décidé par CrOliX le 27/11 : « Refusée » et « Retirée » ont leur pastille. Le domaine des issues s'élargit donc, et
+la table du Journal est reconstruite sur la base en service. Sa raison : la base du NAS sera nettoyée une fois le
+MVP propre, avant une version 1.0.0 de chaque projet. « Tranchée » reste pour les entrées déjà écrites.
 
 ## Les mots, étape par étape
 
-**Un conflit à trancher d'abord.** La règle du 24/11 demandait un Journal à la première personne de Natsume.
-[`ecriture.md`](../../standards/ecriture.md), décidé par CrOliX le 25/11 (D6 révisé), la remplace : « le code ne dit
-jamais je ni tu », registre neutre. Le Journal et la phrase d'échec sont écrits par le code. Le plan propose donc les
-mots du registre neutre, en vigueur, et donne la première personne en regard. Choisir la seconde colonne rouvre
-`ecriture.md` : ce serait une tâche de plus, hors de ce chantier.
+**Le registre** est neutre : le Journal et la phrase d'échec sont écrits par le code, qui ne dit jamais « je » ni
+« tu » ([`ecriture.md`](../../standards/ecriture.md), décidé le 25/11).
 
-| Étape | Registre neutre (proposé) | Première personne (si `ecriture.md` change) |
-|---|---|---|
-| Demandé, à la voix | Demandé à la voix. | Tu me l'as demandé à la voix. |
-| Demandé, par écrit | Demandé par écrit. | Tu me l'as demandé par écrit. |
-| Demandé, « C'est fait » au Bureau | Demandé depuis le Bureau. | Tu me l'as demandé depuis le Bureau. |
-| Confié | Confié à Lun'Acedia. | Je l'ai confié à Lun'Acedia. |
-| Proposé, après une demande | Proposé par Lun'Acedia : <titre>. | Lun'Acedia me propose : <titre>. |
-| Proposé, sans demande | Lun'Acedia propose. (inchangé) | Lun'Acedia propose. |
-| Geste au core | Validée depuis le Bureau. | Tu l'as validée depuis le Bureau. |
-| (autres lieux) | … depuis À trancher. / … dans la conversation. / … à la voix. | (de même) |
-| Corrigée | Corrigée depuis le Bureau (Boîte : Factures). | Tu l'as corrigée depuis le Bureau. |
-| Refusée | Refusée depuis le Bureau. | Tu l'as refusée depuis le Bureau. |
-| Réponse donnée | Réponse donnée depuis le Bureau : <réponse>. | Tu as répondu : <réponse>. |
-| Geste chez le poste | Validée dans Lun'Acedia. / Refusée dans Lun'Acedia. | Tu l'as validée dans Lun'Acedia. |
-| Fait | Fait. / Brouillon créé. | C'est fait. / J'ai créé le brouillon. |
-| Échec | Échec : <motif>. | Je n'ai pas pu : <motif>. |
-| Délai du geste | Sans réponse de Lun'Acedia à temps : résultat à relire. | Lun'Acedia ne m'a pas répondu à temps. |
-| Retirée | Retirée par Lun'Acedia, sans décision. | Lun'Acedia l'a retirée sans décision. |
-| Poste sous 1.6 | Plus en attente chez Lun'Avaritia. | (de même) |
-| Délégation, délai | Lun'Acedia n'a pas répondu à temps : rien n'est confirmé. | Lun'Acedia ne m'a pas répondu. |
-| Conversation, un échec | Échec sur « <titre> » : <motif>. | Je n'ai pas pu faire « <titre> » : <motif>. |
-| Conversation, plusieurs | Échec sur 2 cartes : « <titre> » (<motif>) ; « <titre> » (<motif>). | (de même, au « je ») |
+**Les noms**, décidés par CrOliX le 27/11 : « plus nommer l'agent et non le satellite (si mon agent est John alors
+c'est proposé par John) ». Qui agit porte le nom de son agent, tel que le poste le déclare dans sa santé
+(`agentName`) ; sans nom déclaré, le nom du poste. Lu ainsi, à confirmer à la recette : un lieu garde le nom du
+poste (« Validée dans Lun'Acedia » : c'est son écran), comme un poste injoignable.
+
+| Étape | Mots |
+|---|---|
+| Demandé, à la voix | Demandé à la voix. |
+| Demandé, par écrit | Demandé par écrit. |
+| Demandé, « C'est fait » au Bureau | Demandé depuis le Bureau. |
+| Confié | Confié à <agent>. |
+| Proposé, après une demande | Proposé par <agent> : <titre>. |
+| Proposé, sans demande | <agent> propose. |
+| Geste au core | Validée depuis le Bureau. / … depuis À trancher. / … dans la conversation. / … à la voix. |
+| Corrigée | Corrigée depuis le Bureau (Boîte : Factures). |
+| Refusée | Refusée depuis le Bureau. |
+| Réponse donnée | Réponse donnée depuis le Bureau : <réponse>. |
+| Geste chez le poste | Validée dans <poste>. / Refusée dans <poste>. |
+| Fait | Fait. / Brouillon créé. |
+| Échec | Échec : <motif>. |
+| Délai du geste | Sans réponse de <agent> à temps : résultat à relire. |
+| Retirée | Retirée par <agent>, sans décision. |
+| Poste sous 1.6 | Plus en attente chez <poste>. |
+| Délégation, délai | <agent> n'a pas répondu à temps : rien n'est confirmé. |
+| Conversation, un échec | Échec sur « <titre> » : <motif>. |
+| Conversation, plusieurs | Échec sur 2 cartes : « <titre> » (<motif>) ; « <titre> » (<motif>). |
+
+Les entrées déjà écrites gardent leurs mots (« Lun'Acedia propose. »).
 
 Le motif est celui du poste quand il en donne un, sinon celui du core (« Lun'Acedia injoignable »), toujours avec le
 nom du poste. « C'est noté », dit avant l'effet, ne change pas.
@@ -349,7 +358,7 @@ la preuve de bout en bout ; la relecture.
 - **Le core** : la course de lun-anima#166 rejouée par un test, avec un faux poste 1.6 qui émet avant de répondre ;
   une action demandée par écrit, validée depuis le Bureau, relue au Journal : une entrée, ses étapes dans l'ordre ;
   une carte tranchée dans l'écran d'un poste ; une carte retirée ; un échec rendu dans le fil. Les captures du
-  panneau au bureau et à 390 px : à trancher, en cours, fait, échec, retirée.
+  panneau au bureau et à 390 px : à trancher, en cours, fait, échec, refusée, retirée.
 - **Les satellites** : leurs tests, et un relevé du flux d'événements pendant un geste fait dans leur écran.
 - **Sur le NAS, après déploiement** (CrOliX) : demander un créneau à Natsume, le valider depuis le Bureau, lire
   l'entrée ; trancher une proposition dans l'écran de Lun'Acedia et une fiche dans celui de Lun'Avaritia, lire le
@@ -396,7 +405,7 @@ détail des objections qui touchent le core est dans lun-anima#169.
   délégation, seulement celle d'un geste.
 - Une relance après un délai peut toujours faire un doublon chez le poste.
 - **Le critère 6 dans Lun'Luxuria** : l'échec arrive dans son fil. Fil fermé, la scène ne le montre pas, et il
-  n'est pas dit : c'est #241. À accepter par CrOliX avec ce plan, ou à traiter en plus.
+  n'est pas dit : c'est #241. Limite acceptée par CrOliX le 27/11.
 - Un redémarrage du core pendant un geste : le geste est rejoué ; si le poste l'avait déjà exécuté, la chaîne dit
   « dans le poste » pour un geste parti du core.
 - Une carte en attente au-delà du plafond de la file d'un poste reste « À trancher » sans être visible dans la
