@@ -9,6 +9,10 @@
 > décision se joue deux fois. Les questions du § 8 sont à CrOliX ; ses réponses du 27/11 sont au § 9 (F1 à F7).
 > Aucun correctif ne part avant un plan.
 >
+> **Le § 10 corrige ce relevé sur dix points** (dont T6, T14, T17, T21, T23, T28, T29) et ajoute dix trous
+> (T32 à T41), trouvés en écrivant le [document complet des échanges](../flux/README.md). À lire avant de
+> s'appuyer sur l'un d'eux.
+>
 > Les références au code privé du core sont dans une annexe privée (Lun-Ecosystem/lun-anima#135) ; ici le core est
 > décrit par ses comportements.
 
@@ -394,3 +398,47 @@ prérequis manquant ouvre une question à CrOliX, jamais une erreur. Ses mots so
 
 **Ouvert** : la question 9 (qui peut parler), à trancher sur le document complet des échanges, Lun'Luxuria
 comprise ; la question 11 (le tri du reste en issues).
+
+## 10. Ce que le document complet corrige ici
+
+Le [document des échanges](../flux/README.md) a repris tout le code, scénario par scénario. Il confirme la plupart
+des trous, et contredit ce relevé sur les points suivants. Les neuf premiers ont été relus à la source, sans agent ;
+le dixième et les trous nouveaux viennent des chapitres, relus par leur vérificateur.
+
+| Repère | Ce relevé disait | Ce que le code fait | Famille |
+|---|---|---|---|
+| § 1 | Lun'Luxuria n'envoie aucun signal de silence | Elle envoie la sourdine au core à chaque départ et à chaque battement | 8 |
+| § 3 | Lun'Acedia pousse sept sortes d'événements | Il en manque cinq : autorisation Google à renouveler, copie échouée, chevauchement d'agenda, prix de modèle inconnu, clé rétablie | 4 |
+| § 4.1 | Le poste reçoit « la demande seule » | Lun'Acedia y ajoute un contexte par défaut : sa consigne dit que CrOliX regarde la boîte mail, sans mail ouvert | 2 |
+| § 4.5 | Un refus n'est pas retenu | Vrai pour une fiche. Une question (contradiction, doublon) déjà posée, même refusée, ne revient jamais | 7 |
+| § 4.9 | Le core ne connaît pas les réglages de parole de Lun'Luxuria | Il reçoit l'accueil et « urgences dites » avec la présence. Seul le réglage de la parole spontanée lui échappe : il la compose, et le corps la jette | 8 |
+| T6 | 120 s pour une demande | C'est la valeur par défaut d'un réglage du core, par poste | 2 |
+| T14 | Deux plafonds indépendants | Au moins six : le core (jour, mois), un plafond par poste tenu par le core, l'agent et les synthèses de Lun'Acedia, le mois de Lun'Avaritia, Lun'Luxuria seule | 10 |
+| T17 | Une carte est cachée de 5 secondes à 24 heures après le geste | Elle est cachée jusqu'à la première lecture du poste postérieure au geste, que le core relance à la fin du geste | 3, 7 |
+| T21 | Le point du matin n'est lu par personne | Il est donné au modèle dans le contexte du jour. Il n'est montré à CrOliX nulle part | 6 |
+| T23 | Google déconnecté : ni santé ni événement | Vrai sans compte ou avec un jeton illisible. Un renouvellement refusé met la santé en dégradé et émet un événement « à prévenir » | 4, 11, 12 |
+| T28 | 15 cartes au plus | 15 est la valeur par défaut d'un réglage de Lun'Avaritia (1 à 100) | 7 |
+| T29 | Seules les cartes urgentes notifient | Les autres notifient aussi, en silencieux, groupées après deux minutes (« N cartes à valider ») | 9 |
+
+**Trous nouveaux**, absents de T1 à T31 :
+
+- **T32.** La santé dégradée d'un poste (clé, crédit, autorisation Google) est lue et gardée par le core, et montrée
+  nulle part : seul l'événement prévient CrOliX (famille 11).
+- **T33.** À l'envoi du lot de la nuit, le core ne lit que le code de la réponse : un lot « retenu » passe pour envoyé
+  (famille 6).
+- **T34.** Un mail abandonné par le tri après trois essais ne remonte par aucun événement (famille 4).
+- **T35.** Une proposition dont le mail quitte la boîte de réception par Gmail disparaît des cartes ; le Journal écrit
+  « Tranchée dans Lun'Acedia » alors que personne n'a tranché (famille 4). Même cause que le constat de départ de F1.
+- **T36.** Le flux en direct du core n'a ni numéro ni reprise : ce qui est dit pendant une coupure est perdu pour la
+  fenêtre de Lun'Luxuria, qui ne relit pas le fil au retour (familles 8 et 9).
+- **T37.** Le panneau n'envoie aucune présence. Tant que Lun'Luxuria bat, le core croit CrOliX au bureau même
+  téléphone en main : une urgence est dite dans la pièce et pas notifiée, une information « à prévenir » est close
+  (famille 9).
+- **T38.** Les urgences émises par le core lui-même (clé refusée, plafond) ne sont jamais dites à voix haute : seul
+  le signal d'un poste est annoncé (famille 9).
+- **T39.** « Confié à » s'affiche aussi quand rien n'est parti, et la phrase d'échec nomme le poste par son
+  identifiant technique (famille 2).
+- **T40.** Une notification silencieuse est masquée quand le panneau est au premier plan, au motif qu'un compteur a
+  bougé ; une information « à prévenir » n'a pas de compteur : elle n'est ni affichée ni comptée (famille 9).
+- **T41.** L'écran de Lun'Acedia affiche « Connecté » pour Google alors que l'autorisation est à renouveler
+  (famille 11).
