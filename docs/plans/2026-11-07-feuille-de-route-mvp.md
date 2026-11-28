@@ -629,6 +629,10 @@ que cela casse la semaine ?
 8. **La nuit et la lettre du matin** (Lun-Ecosystem/lun-docs#239), à ouvrir après le point 7 : la lettre écrite par
    le modèle, le bilan du lot de la nuit lu chez Lun'Avaritia, l'urgent resté non lu. Il reprend, avant la semaine,
    deux points du rang 4 : la lettre écrite par le modèle et la nuit vers Lun'Avaritia.
+9. **La nuit nourrit la bibliothèque depuis la journée complète** (Lun-Ecosystem/lun-docs#247), collé au point 8,
+   avant la semaine (validé le 28/11) : les règles de forme d'abord (une fiche pour ce qui dure, un fait pour ce
+   qui a eu lieu), puis la source rouverte aux mails des boîtes gardées, les rendez-vous qui ont eu lieu, un refus
+   qui apprend. La règle du 24/11 (la conversation seule) valait pour le VIP ; elle bloque trop d'usage.
 
 **En parallèle, sans code.** Le cadrage de « ce qu'il faut pour lancer une action » (Lun-Ecosystem/lun-docs#242) :
 les prérequis, les droits, la table des ordres.
