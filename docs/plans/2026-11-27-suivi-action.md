@@ -240,7 +240,10 @@ Additif, sans rupture. Le texte à modifier dans [`contrat-satellite.md`](../../
 - **Comportements**, à la fin de « Cartes » : « Un poste 1.6 émet un événement d'importance `log` chaque fois
   qu'une carte quitte l'attente, d'où que vienne la décision (le core, son écran, une action) ou quand il la retire.
   L'événement ne porte pas la décision : le core relit la carte par `GET /lun/v1/cards/:id`. Une carte retirée sans
-  décision (son objet a disparu, son jour est passé) se lit `expired`. »
+  décision (son objet a disparu, son jour est passé) se lit `expired`, ou n'existe plus (404) si le poste ne la
+  garde pas. Un poste peut signaler de même une carte qui revient en attente. » (les deux dernières précisions
+  viennent des relectures du 28/11 : un conflit d'agenda retiré est supprimé chez Lun'Acedia, un refus repris
+  revient en attente chez Lun'Avaritia)
 - **Erreurs**, 404 : « carte inconnue » vaut aussi pour `GET /lun/v1/cards/:id`.
 - **Versionnement**, à la fin : « La v1.6 ajoute `GET /lun/v1/cards/:id` et l'événement `log` d'une carte qui quitte
   l'attente. Un poste qui déclare `1.6` tient aussi tout ce que demande la 1.5. »
