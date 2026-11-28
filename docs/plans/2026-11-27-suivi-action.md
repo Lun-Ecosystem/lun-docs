@@ -5,7 +5,8 @@
 > **Issue :** Lun-Ecosystem/lun-docs#238 (`niveau:critique`) ; la part privée dans Lun-Ecosystem/lun-anima#169.
 >
 > **État :** rédigé puis contesté le 27/11 (voir « La contestation »). Réponses de CrOliX du 27/11 intégrées : les
-> noms d'agent, les pastilles « Refusée » et « Retirée », la limite du critère 6 acceptée.
+> noms d'agent, les pastilles « Refusée » et « Retirée », la limite du critère 6 acceptée. Exécution lancée avec son
+> accord (« tu peux lancer »).
 >
 > **Source :** la [carte des flux relevée](../specs/2026-11-27-carte-des-flux-relevee.md), décisions F1 et F5 (§ 9),
 > trous T1, T2, T5, T6, T17, T18, T35, T39 ; le constat de prod du 27/11 (Lun-Ecosystem/lun-anima#166).
@@ -45,8 +46,8 @@ Validés le 27/11, périmètre figé.
 |---|---|---|---|---|
 | lun-docs | `docs/suivi-action` | #238 | `critique` | D1 à D4 |
 | Lun'Anima | `feat/suivi-action` | lun-anima#169 | `critique` | Lun'Anima : 7 tâches, lun-anima#169 |
-| lun-acedia | `feat/suivi-action` | à ouvrir, liée à #238 | `critique` | A1 |
-| lun-avaritia | `feat/suivi-action` | à ouvrir, liée à #238 | `critique` | V1 |
+| lun-acedia | `feat/suivi-action` | Lun-Ecosystem/lun-acedia#126 | `critique` | A1 |
+| lun-avaritia | `feat/suivi-action` | Lun-Ecosystem/lun-avaritia#54 | `critique` | V1 |
 
 Une PR par dépôt, en brouillon. Ordre de fusion : lun-docs (le contrat 1.6), les deux satellites, puis le core.
 
@@ -262,19 +263,19 @@ D1. Le reste du core suit l'ordre dit dans lun-anima#169.
 
 ### lun-docs
 
-- [ ] **D1. Le contrat 1.6.** Agent ordinaire.
+- [x] **D1. Le contrat 1.6.** Agent ordinaire.
   - Fichiers : `standards/contrat-satellite.md`, puis `npm run sync` (la copie du plugin).
   - Comportement : le texte de « Le contrat change », mot pour mot ou mieux dit, sans changer le sens.
   - Exclu : toute autre retouche du contrat (la phrase sur `agent` et les événements, relevée le 25/11).
   - Preuve : `npm run check` et `npm run sync:check` verts.
-- [ ] **D2. La feuille de route.** Agent ordinaire.
+- [x] **D2. La feuille de route.** Agent ordinaire.
   - Fichier : `docs/plans/2026-11-07-feuille-de-route-mvp.md`.
   - Comportement : au § 1, « Au 27/11 » dit la carte des flux relevée et le tri en cinq chantiers. Au § 3, une
     section de l'ordre décidé par CrOliX le 27/11 : ce chantier (#238) et « la nuit et la lettre du matin » (#239)
     passent avant la semaine de rodage ; « ce qu'il faut pour lancer une action » (#242) se cadre en parallèle ;
     « l'attention sur plusieurs surfaces » (#240) et « la parole rend compte » (#241) attendent le desktop.
   - Exclu : rouvrir un autre rang.
-- [ ] **D3. Les deux issues `inbox`.** Agent ordinaire, après validation du plan.
+- [x] **D3. Les deux issues `inbox`** : #245 (T1) et Lun-Ecosystem/lun-anima#170 (T18).
   - T1, sur lun-docs : la phrase de l'agent du poste après une carte tranchée reste chez lui. Elle touche le contrat
     (la réponse au geste), Lun'Acedia et le core.
   - T18, sur Lun-Ecosystem/lun-anima (privée) : « valide » dit trop tôt sur une carte tout juste préparée.

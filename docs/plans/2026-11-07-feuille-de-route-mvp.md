@@ -7,6 +7,14 @@
 
 ## 1. Où on en est
 
+**Au 28/11.** La carte des flux est relevée source par source
+([carte](../specs/2026-11-27-carte-des-flux-relevee.md), [document des échanges](../flux/README.md), lun-docs#237) :
+41 trous, onze décisions de CrOliX (F1 à F11), et le reste trié en cinq chantiers (lun-docs#238 à #242) et sept
+issues `inbox`. CrOliX fixe l'ordre le 27/11 : deux chantiers entrent avant la semaine de rodage, le gel du 26/11
+est rouvert pour eux (§ 3, rang 2, points 7 et 8). Le premier,
+[le suivi d'une action](2026-11-27-suivi-action.md), est en cours : son plan est validé, le contrat des satellites
+passe en 1.6.
+
 **Au 27/11.** « Trancher depuis le core » est fusionné (lun-anima#162, lun-docs#232) et le core 0.4.1 est en service
 sur le NAS depuis le 26/11 à 22 h 37, les trois applis saines. Première nuit avec la porte d'attention : la lettre du
 matin est écrite à 7 h 30. Elle dit une nuit sans urgence, trois cartes proposées par Lun'Acedia, rien d'urgent, et
@@ -614,6 +622,19 @@ que cela casse la semaine ?
    lus », les mêmes au bureau et au téléphone, filtrés par le serveur ; « Proposés » retiré ; le nombre de non lus sur
    chaque boîte. Une version 0.4.1 de Lun'Acedia à publier et déployer avant la semaine. Le reste du tour attend
    l'après-VIP (Lun-Ecosystem/lun-acedia#121).
+7. **Le suivi d'une action** ([plan](2026-11-27-suivi-action.md), Lun-Ecosystem/lun-docs#238), ajouté le 27/11
+   après la carte des flux : une seule entrée du Journal par action, de la demande au résultat, et une chaîne qui
+   dit vrai sur qui a tranché et où. Le contrat passe en 1.6 ; le core, Lun'Acedia et Lun'Avaritia sont touchés. Au
+   déploiement : le core d'abord, ou le même soir que Lun'Acedia.
+8. **La nuit et la lettre du matin** (Lun-Ecosystem/lun-docs#239), à ouvrir après le point 7 : la lettre écrite par
+   le modèle, le bilan du lot de la nuit lu chez Lun'Avaritia, l'urgent resté non lu. Il reprend, avant la semaine,
+   deux points du rang 4 : la lettre écrite par le modèle et la nuit vers Lun'Avaritia.
+
+**En parallèle, sans code.** Le cadrage de « ce qu'il faut pour lancer une action » (Lun-Ecosystem/lun-docs#242) :
+les prérequis, les droits, la table des ordres.
+
+**Avec le desktop.** « L'attention sur plusieurs surfaces » (Lun-Ecosystem/lun-docs#240) et « la parole rend
+compte » (Lun-Ecosystem/lun-docs#241) : la présence et la parole ne se prouvent que là.
 
 **Rang 3, pendant la semaine.** Aucun code. Les tensions se notent, les questions restées sans fiche aussi ; la part
 de propositions validées sans correction s'accumule par boîte.
